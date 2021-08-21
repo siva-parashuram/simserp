@@ -2,6 +2,42 @@
   color:#000 !important;
 }
 
+.hideLoginInputDiv{
+  display: none;
+}
+
+.showLoginInputDiv{
+  display: block;
+}
+
+.hideloginCompanyListDiv{
+  display: none;
+}
+
+.showloginCompanyListDiv{
+  display: block;
+  transition: 1s;
+}
+
+.hideLoginScreenLoader{
+  display: none;
+}
+.showLoginScreenLoader{
+  display: none;
+  display: block;
+}
+
+.loginCompanyListLink{
+  color:#455a64 !important;
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  text-align: left !important;
+}
+
+.MuiButtonBase-root {
+  justify-content: left !important;
+}
+ 
 
 
 .App {
