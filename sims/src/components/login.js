@@ -1,3 +1,4 @@
+import './loginPage.css';
 import React, { Fragment } from 'react';
 import logo from '../logo.png';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -20,17 +21,16 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 
 import { red } from '@material-ui/core/colors';
-
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import axios from "axios";
-
 import CompanyList from './companyList';
 
-
+ 
+ 
+import * as URLS from "../routes/constants";
+import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cookie"; 
 
 class login extends React.Component {
-
-
 
   constructor(props) {
     super(props);
@@ -51,8 +51,10 @@ class login extends React.Component {
   }
 
   componentDidMount() {
-    this.onloadEvent();
+    
   }
+
+   
 
   onloadEvent() {
     console.log("Hey I am here...");
@@ -65,6 +67,7 @@ class login extends React.Component {
       loginCredentialInputDiv: 'hideLoginInputDiv',
       loginCompanyListDiv: 'showloginCompanyListDiv'
     });
+
 
     console.log("this.state > ", this.state);
   }
@@ -123,7 +126,7 @@ class login extends React.Component {
                 this.showcompanyList();
                 this.setState({ loader: 'hideLoginScreenLoader' });
               });
-
+              createCookie(COOKIE.ID_TOKEN, "ABC", 3);
             } else {
               this.setState({ loader: 'hideLoginScreenLoader' });
               console.error('status !=200 ', response);
@@ -136,6 +139,11 @@ class login extends React.Component {
 
       }
     };
+
+    const logoutUser=(e)=>{
+      deleteCookie(COOKIE.ID_TOKEN, null);
+      this.props.history.push(URLS.URLS.LoginPage);
+    }
 
 
     const menuClick = event => {
@@ -156,12 +164,9 @@ class login extends React.Component {
 
 
     return (
-      <Fragment>
-         
-        <div>&nbsp;</div>
-        <div>&nbsp;</div>
-        <div>&nbsp;</div>
-        <Container maxWidth="sm">
+      <Fragment >         
+        
+        <Container style={{textAlign:'center',marginTop:120}} maxWidth="sm">
           <div>
             <img src={logo} className="App-logo" alt="logo" />
           </div>
@@ -251,11 +256,12 @@ class login extends React.Component {
           }}
         >
           <MenuItem >Profile</MenuItem>         
-          <MenuItem >Log out</MenuItem>
+          <MenuItem onClick={logoutUser}>Log out</MenuItem>
         </Menu>
 
         </Container>
-
+    
+        
       </Fragment>
     );
   }
