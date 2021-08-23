@@ -8,11 +8,11 @@ var cookie = {
   ID_TOKEN: "id_token",
   NAME: "name",
   ROLE: "role",
-  UUID: "uuid",
+  USERID: "userid",
   CHANGE_PASSWORD: "change_password",
   LOGO: "logo",
-  COMPANY_NAME: "company_name",
-   
+  BRANCH_NAME: "branch_name",
+  ISLOGGEDIN:'isLoggedIn' 
 };
 
 // create cookie by name with specific path, domain and expiry time (if paased)

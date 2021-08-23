@@ -9,6 +9,8 @@ import LoginPage from "../components/login";
 //List Of Pages
 import userDashboard from "../components/user/userDashboard";
  
+import testReport from "../components/reports/testReport";
+
 
 
 let routes = ({ location, ...rest }) => {
@@ -18,6 +20,7 @@ let routes = ({ location, ...rest }) => {
     <Switch>
     <Route path={URLS.URLS.LoginPage} exact  component={LoginPage} />
     <Route path={URLS.URLS.userDashboard}  component={userDashboard} />
+    <Route path={URLS.URLS.testReport}  component={testReport} />
     </Switch>
     
       { /*

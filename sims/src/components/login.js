@@ -20,28 +20,34 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
+
 import { red } from '@material-ui/core/colors';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import axios from "axios";
 import CompanyList from './companyList';
 
- 
- 
+
+
 import * as URLS from "../routes/constants";
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cookie"; 
+import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cookie";
 
 class login extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      isLoggedIn: false,
       data: {},
       userID: '',
       password: '',
       userInitial: '',
+      name: '',
       loginCompanyListDiv: 'hideloginCompanyListDiv',
       loginCredentialInputDiv: 'showLoginInputDiv',
-      userCompanyList: [{ compID: 1, compName: "Siva Goa", branch: [{}, {}] }, { compID: 2, compName: "Siva Kandla", branch: [{}, {}] }],
+      userCompanyList: [
+        { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva IOT Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }] },
+        { compID: 2, compName: "Siva Tec", branch: [{ branchID: 4, name: "Siva ITek UK" }] }
+      ],
       loader: 'hideLoginScreenLoader',
       anchorEl: null,
       open: false
@@ -51,29 +57,27 @@ class login extends React.Component {
   }
 
   componentDidMount() {
-    
-  }
+    console.log("Onload state > ", this.state);
+    console.log("Onload getCookie(COOKIE.ID_TOKEN) > ", getCookie(COOKIE.ID_TOKEN));
+    let token=getCookie(COOKIE.ID_TOKEN);
+    console.log("Onload token > ", token);
 
-   
+
+    if(token=="null" || token==null){
+      this.setState({ isLoggedIn: false });
+      this.props.history.push(URLS.URLS.LoginPage);
+    }else{
+      console.log("Onload TOKEN PRESENT> ");
+      let initialName = "A";
+      let Name = "Admin";
+      this.setState({ isLoggedIn: true, userInitial: initialName, name: Name });
+    }
+
+  }
 
   onloadEvent() {
     console.log("Hey I am here...");
-
   }
-
-  showcompanyList() {
-    console.log("About to show next view");
-    this.setState({
-      loginCredentialInputDiv: 'hideLoginInputDiv',
-      loginCompanyListDiv: 'showloginCompanyListDiv'
-    });
-
-
-    console.log("this.state > ", this.state);
-  }
-
-
-
 
   handleChange(event) {
     let id = event.target.id;
@@ -86,7 +90,6 @@ class login extends React.Component {
   }
 
   render() {
-
     const useStyles = makeStyles((theme: Theme) =>
       createStyles({
         root: {
@@ -101,13 +104,9 @@ class login extends React.Component {
       }),
     );
 
-
     const handleClick = (e) => {
-
-
       if (this.state.userID === "" || this.state.password === "") { } else {
         this.setState({ loader: 'showLoginScreenLoader' });
-
         const data = {
           ID: this.state.userID,
           PWD: this.state.password
@@ -122,11 +121,12 @@ class login extends React.Component {
               let data = response.data;
               let name = data.Name;
               let initialName = name.charAt(0);
-              this.setState({ data: data, userInitial: initialName }, function () {
-                this.showcompanyList();
+              this.setState({ data: data, userInitial: initialName, isLoggedIn: true }, function () {              
                 this.setState({ loader: 'hideLoginScreenLoader' });
               });
               createCookie(COOKIE.ID_TOKEN, "ABC", 3);
+              createCookie(COOKIE.ISLOGGEDIN, true, 3);
+              createCookie(COOKIE.USERID, this.state.userID, 3);
             } else {
               this.setState({ loader: 'hideLoginScreenLoader' });
               console.error('status !=200 ', response);
@@ -136,132 +136,117 @@ class login extends React.Component {
             this.setState({ loader: 'hideLoginScreenLoader' });
             console.error('There was an error!', error);
           });
-
       }
     };
-
-    const logoutUser=(e)=>{
-      deleteCookie(COOKIE.ID_TOKEN, null);
+    const logoutUser = (e) => {
+      deleteCookie(COOKIE.ID_TOKEN, null);     
+      this.setState({ anchorEl: null,isLoggedIn: false })
       this.props.history.push(URLS.URLS.LoginPage);
     }
-
-
     const menuClick = event => {
-      try{
+      try {
         this.state.anchorEl
-        ? this.setState({ anchorEl: null })
-        : this.setState({ anchorEl: event.currentTarget });
-      }catch(err){
-        console.log("Error > ",err);
+          ? this.setState({ anchorEl: null })
+          : this.setState({ anchorEl: event.currentTarget });
+      } catch (err) {
+        console.log("Error > ", err);
       }
-      
     };
-
     const menuClose = event => {
       this.setState({ anchorEl: null });
     };
 
-
-
     return (
-      <Fragment >         
-        
-        <Container style={{textAlign:'center',marginTop:120}} maxWidth="sm">
+      <Fragment>
+        <Container style={{ textAlign: 'center', marginTop: 120 }} maxWidth="sm">
           <div>
             <img src={logo} className="App-logo" alt="logo" />
           </div>
-          <div>&nbsp;</div>
-          <div className={this.state.loginCredentialInputDiv}>
+          <div>&nbsp;</div>          
+          {this.state.isLoggedIn ?
             <div>
-              <TextField
-                required
-                id="userID"
-                label="User ID"
-                variant="outlined"
-                size="small"
-                onChange={this.handleChange}
-              />
+              <Card variant="outlined">
+                <CardHeader
+                  style={{ textAlign: 'left', color: '#01579b' }}
+                  avatar={
+                    <Avatar aria-label="recipe">
+                      {this.state.userInitial}
+                    </Avatar>
+                  }
+                  action={
+                    <IconButton key="action-btn" aria-label="settings" aria-controls="logout-menu" aria-haspopup="true" onClick={menuClick}>
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title={"Hi " + this.state.name}
+                  subheader="Choose your Company"
+                />
+                <Divider />
+                <CardContent style={{ textAlign: 'center', marginTop: 5, backgroundColor: '#f5f5f5' }}>
+                  <CompanyList state={this.state} />
+                </CardContent>
+              </Card>
             </div>
-            <div>&nbsp;</div>
+            :
             <div>
-              <TextField
-                required
-                id="password"
-                label="Password"
-                type="password"
-                variant="outlined"
-                size="small"
-                onChange={this.handleChange}
-              />
+              <div>
+                <TextField
+                  required
+                  id="userID"
+                  label="User ID"
+                  variant="outlined"
+                  size="small"
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div>&nbsp;</div>
+              <div>
+                <TextField
+                  required
+                  id="password"
+                  label="Password"
+                  type="password"
+                  variant="outlined"
+                  size="small"
+                  onChange={this.handleChange}
+                />
+              </div>
+              <div>&nbsp;</div>
+              <div>
+                <Button
+                  variant="contained"
+                  className={useStyles.button}
+                  endIcon={<ArrowForward />}
+                  style={{ background: '#1a237e', color: '#fff' }}
+                  onClick={handleClick}
+                >
+                  LOGIN
+                </Button>
+              </div>
             </div>
-            <div>&nbsp;</div>
-            <div>
-              <Button
-                variant="contained"
-                className={useStyles.button}
-                endIcon={<ArrowForward />}
-                style={{ background: '#1a237e', color: '#fff' }}
-                onClick={handleClick}
-              >
-                LOGIN
-              </Button>
-            </div>
-
-          </div>
-
-          <div className={this.state.loginCompanyListDiv}>           
-
-            <Card variant="outlined">
-              <CardHeader
-                style={{ textAlign: 'left', color: '#01579b' }}
-                avatar={
-                  <Avatar aria-label="recipe">
-                    {this.state.userInitial}
-                  </Avatar>
-                }
-                action={
-                  <IconButton aria-label="settings" aria-controls="logout-menu" aria-haspopup="true" onClick={menuClick}>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-
-                title={"Hi " + this.state.data.Name}
-                subheader="Choose your Company"
-              />
-             
-              <Divider />
-              <CardContent style={{ textAlign: 'center', marginTop: 5 }}>
-                <CompanyList state={this.state}/>
-              </CardContent>
-            </Card>
-
-          </div>
+          }
           <div>&nbsp;</div>
           <div className={this.state.loader}>
             <LinearProgress />
           </div>
-
-
           <Menu
-          id="logout-menu"
-          anchorEl={this.state.anchorEl}
-          keepMounted
-          open={Boolean(this.state.anchorEl)}
-          onClose={menuClose}
-          PaperProps={{
-            style: {               
-              width: '15ch',
-              marginLeft:50
-            },
-          }}
-        >
-          <MenuItem >Profile</MenuItem>         
-          <MenuItem onClick={logoutUser}>Log out</MenuItem>
-        </Menu>
-
+            key="u-l-m"
+            id="logout-menu"
+            anchorEl={this.state.anchorEl}
+            keepMounted
+            open={Boolean(this.state.anchorEl)}
+            onClose={menuClose}
+            PaperProps={{
+              style: {
+                width: '15ch',
+                marginLeft: 50
+              },
+            }}
+          >
+            <MenuItem key="profile">Profile</MenuItem>
+            <MenuItem  key="logout" onClick={logoutUser}>Log out</MenuItem>
+          </Menu>
         </Container>
-    
-        
       </Fragment>
     );
   }
