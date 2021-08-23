@@ -1,14 +1,11 @@
 import "./invoice.css";
-import React, { Fragment } from 'react';
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
-import * as URLS from "../../routes/constants";
+import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
 // import ReactDOM from 'react-dom'; 
 // import PrintTemplate from 'react-print';
 
 import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
+ 
 
 
 class testReport extends React.Component {

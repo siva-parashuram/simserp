@@ -8,11 +8,9 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import Avatar from '@material-ui/core/Avatar';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Avatar from '@material-ui/core/Avatar'; 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Divider from '@material-ui/core/Divider';
-import Send from '@material-ui/icons/Send';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -41,9 +39,7 @@ class login extends React.Component {
       userID: '',
       password: '',
       userInitial: '',
-      name: '',
-      loginCompanyListDiv: 'hideloginCompanyListDiv',
-      loginCredentialInputDiv: 'showLoginInputDiv',
+      name: '',    
       userCompanyList: [
         { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva IOT Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }] },
         { compID: 2, compName: "Siva Tec", branch: [{ branchID: 4, name: "Siva ITek UK" }] }

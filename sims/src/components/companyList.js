@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+
 import Button from '@material-ui/core/Button';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -7,8 +7,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-
-import { Route, BrowserRouter as Router, Link, Switch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import * as URLS from "../routes/constants";
