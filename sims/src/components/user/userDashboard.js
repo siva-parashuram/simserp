@@ -1,9 +1,10 @@
+import './dasboard.css';
 import React, { Fragment } from 'react';
- 
+import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
  
 import * as URLS from "../../routes/constants";
-
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie"; 
+import Nav from "./nav"; 
+import Row1 from "./row1"; 
 
 
 class userDashboard extends React.Component {
@@ -23,9 +24,11 @@ class userDashboard extends React.Component {
 
     render() {         
         return (
-            <Fragment>
-               <h1 style={{color:'#000'}}>Hi</h1>  
-            </Fragment>
+             <div className="navDiv">
+               <Nav />
+               <Row1/>
+             </div>
+             
         );
     }
 }
