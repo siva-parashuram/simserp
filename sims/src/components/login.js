@@ -178,7 +178,7 @@ class login extends React.Component {
                   subheader="Choose your Company"
                 />
                 <Divider />
-                <CardContent style={{ textAlign: 'center', marginTop: 5, backgroundColor: '#f5f5f5' }}>
+                <CardContent style={{ textAlign: 'center', marginTop: 5, }}>
                   <CompanyList state={this.state} />
                 </CardContent>
               </Card>

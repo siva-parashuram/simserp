@@ -53,16 +53,20 @@ class CompanyList extends React.Component {
                                     <Typography className={useStyles.heading}>{item.compName}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <Typography>
+                                    <Typography>                                  
+                                    {item.branch.map((branchItem,j)=>(
+                                        <>
                                         <Button
-                                            key={"branch_btn_" + i}
-                                            size="small"
-                                            variant="outlined"
-                                            className={useStyles.button}
-                                            startIcon={<ArrowForwardIosIcon fontSize="small" />}
-                                        >
-                                            <Link to={URLS.URLS.userDashboard} target="_blank">   {item.compName} </Link>
-                                        </Button>
+                                        key={"branch_btn_" + j}
+                                        size="small"
+                                        variant="outlined"
+                                        className={useStyles.button}
+                                        startIcon={<ArrowForwardIosIcon fontSize="small" />}
+                                    >
+                                        <Link to={URLS.URLS.userDashboard} target="_blank">   {branchItem.name} </Link>
+                                    </Button> &nbsp;
+                                    </>
+                                    ))}
                                     </Typography>
                                 </AccordionDetails>
                             </Accordion>
