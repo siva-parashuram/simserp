@@ -64,7 +64,7 @@ class nav extends React.Component {
 
         return (
             <div  className={useStyles.root}>
-                <AppBar  className="navDiv" position="absolute" style={{ width: '100%', margin: 0, backgroundColor: '#000000' }}>
+                <AppBar  className="navDiv" position="absolute" style={{ width: '100%', margin: 0, backgroundColor: '#0072bc' }}>
                     <Toolbar variant="dense">   
                                  
                         <IconButton
