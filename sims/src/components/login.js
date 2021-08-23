@@ -16,7 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import Paper from '@material-ui/core/Paper';
 
 
 import { red } from '@material-ui/core/colors';
@@ -41,7 +41,7 @@ class login extends React.Component {
       userInitial: '',
       name: '',    
       userCompanyList: [
-        { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva IOT Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }] },
+        { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva IOT Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }, { branchID: 3, name: "Siva Noida" }, { branchID: 3, name: "Siva Noida" }] },
         { compID: 2, compName: "Siva Tec", branch: [{ branchID: 4, name: "Siva ITek UK" }] }
       ],
       loader: 'hideLoginScreenLoader',
@@ -115,9 +115,9 @@ class login extends React.Component {
             console.log("response > ", response);
             if (response.status === 200) {
               let data = response.data;
-              let name = data.Name;
+              let name = this.state.userID;
               let initialName = name.charAt(0);
-              this.setState({ data: data, userInitial: initialName, isLoggedIn: true }, function () {              
+              this.setState({ data: data, userInitial: initialName,name:name, isLoggedIn: true }, function () {              
                 this.setState({ loader: 'hideLoginScreenLoader' });
               });
               createCookie(COOKIE.ID_TOKEN, "ABC", 3);
@@ -161,11 +161,12 @@ class login extends React.Component {
           <div>&nbsp;</div>          
           {this.state.isLoggedIn ?
             <div>
+            <Paper> 
               <Card variant="outlined">
                 <CardHeader
                   style={{ textAlign: 'left', color: '#01579b' }}
                   avatar={
-                    <Avatar aria-label="recipe">
+                    <Avatar aria-label="recipe" style={{backgroundColor:'#0072bc'}} >
                       {this.state.userInitial}
                     </Avatar>
                   }
@@ -182,9 +183,11 @@ class login extends React.Component {
                   <CompanyList state={this.state} />
                 </CardContent>
               </Card>
-            </div>
+              </Paper>
+              </div>
             :
             <div>
+            
               <div>
                 <TextField
                   required
@@ -213,13 +216,14 @@ class login extends React.Component {
                   variant="contained"
                   className={useStyles.button}
                   endIcon={<ArrowForward />}
-                  style={{ background: '#1a237e', color: '#fff' }}
+                  style={{ background: '#0072bc', color: '#fff' }}
                   onClick={handleClick}
                 >
                   LOGIN
                 </Button>
               </div>
-            </div>
+             
+              </div>
           }
           <div>&nbsp;</div>
           <div className={this.state.loader}>

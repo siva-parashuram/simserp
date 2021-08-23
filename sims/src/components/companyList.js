@@ -1,5 +1,5 @@
+import './loginPage.css';
 import React, { Fragment } from 'react';
-
 import Button from '@material-ui/core/Button';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -33,7 +33,8 @@ class CompanyList extends React.Component {
                     fontSize: theme.typography.pxToRem(15),
                     fontWeight: theme.typography.fontWeightRegular,
                 }, button: {
-                    margin: theme.spacing(1),
+                    margin: theme.spacing(1)
+                    
                 }
             }),
         );
@@ -48,9 +49,9 @@ class CompanyList extends React.Component {
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
-                                    style={{ backgroundColor: '#00838f ', color: '#fff' }}
+                                    style={{ backgroundColor: '#39b54a  ', color: '#000' }}
                                 >
-                                    <Typography className={useStyles.heading}>{item.compName}</Typography>
+                                    <Typography className="CompanyNameHeader">{item.compName}</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Typography>                                  
@@ -60,11 +61,11 @@ class CompanyList extends React.Component {
                                         key={"branch_btn_" + j}
                                         size="small"
                                         variant="outlined"
-                                        className={useStyles.button}
-                                        startIcon={<ArrowForwardIosIcon fontSize="small" />}
+                                        className="branchListButton"
+                                        // startIcon={<ArrowForwardIosIcon fontSize="small" />}
                                     >
-                                        <Link to={URLS.URLS.userDashboard} target="_blank">   {branchItem.name} </Link>
-                                    </Button> &nbsp;
+                                        <Link className="link" to={URLS.URLS.userDashboard} target="_blank">   {branchItem.name} </Link>
+                                    </Button> 
                                     </>
                                     ))}
                                     </Typography>
