@@ -1,14 +1,14 @@
 import './loginPage.css';
 import React, { Fragment } from 'react';
 import logo from '../logo.png';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+ 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import Avatar from '@material-ui/core/Avatar'; 
+import Avatar from '@material-ui/core/Avatar';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
@@ -17,14 +17,10 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-
-
-import { red } from '@material-ui/core/colors';
+ 
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import axios from "axios";
 import CompanyList from './companyList';
-
-
 
 import * as URLS from "../routes/constants";
 import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cookie";
@@ -39,7 +35,7 @@ class login extends React.Component {
       userID: '',
       password: '',
       userInitial: '',
-      name: '',    
+      name: '',
       userCompanyList: [
         { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva IOT Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }, { branchID: 3, name: "Siva Noida" }, { branchID: 3, name: "Siva Noida" }] },
         { compID: 2, compName: "Siva Tec", branch: [{ branchID: 4, name: "Siva ITek UK" }] }
@@ -55,14 +51,13 @@ class login extends React.Component {
   componentDidMount() {
     console.log("Onload state > ", this.state);
     console.log("Onload getCookie(COOKIE.ID_TOKEN) > ", getCookie(COOKIE.ID_TOKEN));
-    let token=getCookie(COOKIE.ID_TOKEN);
+    let token = getCookie(COOKIE.ID_TOKEN);
     console.log("Onload token > ", token);
 
-
-    if(token=="null" || token==null){
+    if (token == "null" || token == null) {
       this.setState({ isLoggedIn: false });
       this.props.history.push(URLS.URLS.LoginPage);
-    }else{
+    } else {
       console.log("Onload TOKEN PRESENT> ");
       let initialName = "A";
       let Name = "Admin";
@@ -86,19 +81,7 @@ class login extends React.Component {
   }
 
   render() {
-    const useStyles = makeStyles((theme: Theme) =>
-      createStyles({
-        root: {
-          '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: '25ch',
-
-          }, avatar: {
-            backgroundColor: red[500],
-          },
-        },
-      }),
-    );
+     
 
     const handleClick = (e) => {
       if (this.state.userID === "" || this.state.password === "") { } else {
@@ -117,7 +100,7 @@ class login extends React.Component {
               let data = response.data;
               let name = this.state.userID;
               let initialName = name.charAt(0);
-              this.setState({ data: data, userInitial: initialName,name:name, isLoggedIn: true }, function () {              
+              this.setState({ data: data, userInitial: initialName, name: name, isLoggedIn: true }, function () {
                 this.setState({ loader: 'hideLoginScreenLoader' });
               });
               createCookie(COOKIE.ID_TOKEN, "ABC", 3);
@@ -135,8 +118,8 @@ class login extends React.Component {
       }
     };
     const logoutUser = (e) => {
-      deleteCookie(COOKIE.ID_TOKEN, null);     
-      this.setState({ anchorEl: null,isLoggedIn: false })
+      deleteCookie(COOKIE.ID_TOKEN, null);
+      this.setState({ anchorEl: null, isLoggedIn: false })
       this.props.history.push(URLS.URLS.LoginPage);
     }
     const menuClick = event => {
@@ -158,36 +141,36 @@ class login extends React.Component {
           <div>
             <img src={logo} className="App-logo" alt="logo" />
           </div>
-          <div>&nbsp;</div>          
+          <div>&nbsp;</div>
           {this.state.isLoggedIn ?
             <div>
-            <Paper> 
-              <Card variant="outlined">
-                <CardHeader
-                  style={{ textAlign: 'left', color: '#01579b' }}
-                  avatar={
-                    <Avatar aria-label="recipe" style={{backgroundColor:'#0072bc'}} >
-                      {this.state.userInitial}
-                    </Avatar>
-                  }
-                  action={
-                    <IconButton key="action-btn" aria-label="settings" aria-controls="logout-menu" aria-haspopup="true" onClick={menuClick}>
-                      <MoreVertIcon />
-                    </IconButton>
-                  }
-                  title={"Hi " + this.state.name}
-                  subheader="Choose your Company"
-                />
-                <Divider />
-                <CardContent style={{ textAlign: 'center', marginTop: 5, }}>
-                  <CompanyList state={this.state} />
-                </CardContent>
-              </Card>
+              <Paper>
+                <Card variant="outlined">
+                  <CardHeader
+                    style={{ textAlign: 'left', color: '#01579b' }}
+                    avatar={
+                      <Avatar aria-label="recipe" style={{ backgroundColor: '#0072bc' }} >
+                        {this.state.userInitial}
+                      </Avatar>
+                    }
+                    action={
+                      <IconButton key="action-btn" aria-label="settings" aria-controls="logout-menu" aria-haspopup="true" onClick={menuClick}>
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title={"Hi " + this.state.name}
+                    subheader="Choose your Company"
+                  />
+                  <Divider />
+                  <CardContent style={{ textAlign: 'center', marginTop: 5, }}>
+                    <CompanyList state={this.state} />
+                  </CardContent>
+                </Card>
               </Paper>
-              </div>
+            </div>
             :
             <div>
-            
+
               <div>
                 <TextField
                   required
@@ -214,7 +197,7 @@ class login extends React.Component {
               <div>
                 <Button
                   variant="contained"
-                  className={useStyles.button}
+                  // className={useStyles.button}
                   endIcon={<ArrowForward />}
                   style={{ background: '#0072bc', color: '#fff' }}
                   onClick={handleClick}
@@ -222,8 +205,8 @@ class login extends React.Component {
                   LOGIN
                 </Button>
               </div>
-             
-              </div>
+
+            </div>
           }
           <div>&nbsp;</div>
           <div className={this.state.loader}>
@@ -244,7 +227,7 @@ class login extends React.Component {
             }}
           >
             <MenuItem key="profile">Profile</MenuItem>
-            <MenuItem  key="logout" onClick={logoutUser}>Log out</MenuItem>
+            <MenuItem key="logout" onClick={logoutUser}>Log out</MenuItem>
           </Menu>
         </Container>
       </Fragment>
