@@ -41,7 +41,7 @@ class login extends React.Component {
       userInitial: '',
       name: '',
       userCompanyList: [
-        { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva IOT Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }, { branchID: 3, name: "Siva Noida" }, { branchID: 3, name: "Siva Noida" }] },
+        { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva IOT Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }, { branchID: 3, name: "Siva Noida" }] },
         { compID: 2, compName: "Siva Tec", branch: [{ branchID: 4, name: "Siva ITek UK" }] }
       ],
       loader: 'hideLoginScreenLoader',
@@ -56,18 +56,32 @@ class login extends React.Component {
     console.log("Onload state > ", this.state);
 
     let token = getCookie(COOKIE.USERID);
-    console.log("Onload token > ", token);
+      console.log("Onload token > ", token);
 
-    if (token == "null" || token == null) {
-      this.setState({ isLoggedIn: false });
-      this.props.history.push(URLS.URLS.LoginPage);
-    } else {
-      console.log("Onload TOKEN PRESENT> ");
-      let initialName = "A";
-      let Name = "Admin";
-      this.setState({ isLoggedIn: true, userInitial: initialName, name: Name });
-    }
+      if (token == "null" || token == null) {
+        this.setState({ isLoggedIn: false });
+        this.props.history.push(URLS.URLS.LoginPage);
+      } else {
+        console.log("Onload TOKEN PRESENT> ");
+        let initialName = "A";
+        let Name = "Admin";
+        this.setState({ isLoggedIn: true, userInitial: initialName, name: Name });
+      }
 
+    this.interval = setInterval(() => {          
+      let token = getCookie(COOKIE.USERID);
+      if (token == "null" || token == null) { 
+          if(this.state.isLoggedIn==false){}else{
+            this.setState({ isLoggedIn: false });
+            this.props.history.push(URLS.URLS.LoginPage);    
+          }  
+      }
+     
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   onloadEvent() {
@@ -111,12 +125,11 @@ class login extends React.Component {
                 let initialName = name.charAt(0);
                 this.setState({ data: data, userInitial: initialName, name: name, isLoggedIn: true }, function () {
                   this.setState({ loader: 'hideLoginScreenLoader' });
+                  setAllCookies(data);
                 });
-
-                createCookie(COOKIE.USERID, this.state.userID, 3);
-
+                
+                
               }
-
 
             } else {
               this.setState({ loader: 'hideLoginScreenLoader' });
@@ -157,6 +170,10 @@ class login extends React.Component {
 
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
+    }
+
+    function setAllCookies(data){
+      createCookie(COOKIE.USERID, "123");
     }
 
     return (

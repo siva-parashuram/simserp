@@ -14,13 +14,17 @@ import * as URLS from "../routes/constants";
 
 
 class CompanyList extends React.Component {
+    constructor(props) {
+    super(props);
+    this.wrapper = React.createRef();
+  }
 
     componentDidMount() {
 
     }
 
     render() {
-        const useStyles = makeStyles((theme: Theme) =>
+        const useStyles = makeStyles((theme) =>
             createStyles({
                 root: {
                     '& .MuiTextField-root': {
@@ -43,29 +47,29 @@ class CompanyList extends React.Component {
         const openBranchDashboard=(url,branchId,compName,branchName)=>{
               console.log("openBranchDashboard > url > ",url);
               url=url+"?branchId="+branchId+"&compName="+compName+"&branchName="+branchName;
-              window.open(url,"Siva Group",'width=1400,resizable=no, height=900, menubar=no, toolbar=no, location=no, scrollbars=no');
+              window.open(url,"Siva Group",'width=800,resizable=no, height=700, menubar=no, toolbar=no, location=no');
         }
 
         return (
             <Fragment>
                 {
                     this.props.state.userCompanyList.map((item, i) => (
-                        <>
-                            <Accordion key={"branch_" + i}>
+                        <Fragment key={"branch__Frag1_" + item.compName}>
+                            <Accordion key={"branch_" + item.compName}>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
                                     style={{ backgroundColor: '#39b54a  ', color: '#000' }}
                                 >
-                                    <Typography className="CompanyNameHeader">{item.compName}</Typography>
+                                    <Typography key={"branch__Typography1_" + item.compName} className="CompanyNameHeader">{item.compName}</Typography>
                                 </AccordionSummary>
-                                <AccordionDetails>
-                                    <Typography>                                  
+                                <AccordionDetails key={"branch__AccordionDetails_" + i}>
+                                    <Typography key={"branch__Typography_" + item.compName}>                                  
                                     {item.branch.map((branchItem,j)=>(
-                                        <>
+                                        <Fragment key={"branch__Frag_"+j + branchItem.name}>
                                         <Button
-                                        key={"branch_btn_" + j}
+                                        key={"branch_btn_" + branchItem.name}
                                         size="small"
                                         variant="outlined"
                                         className="branchListButton"
@@ -74,12 +78,12 @@ class CompanyList extends React.Component {
                                         
                                         {branchItem.name}
                                     </Button> 
-                                    </>
+                                    </Fragment>
                                     ))}
                                     </Typography>
                                 </AccordionDetails>
                             </Accordion>
-                        </>
+                        </Fragment>
                     ))
                 }
             </Fragment>
