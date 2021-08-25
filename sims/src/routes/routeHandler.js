@@ -12,19 +12,19 @@ import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cooki
  * @description Route parameters must contain layout, component and other props. Layout has to be the master oage.
  */
  export default ({ layout, component, roles, ...rest }) => {
-  let cookie = getCookie(COOKIE.ID_TOKEN);
+  let cookie = getCookie(COOKIE.USERID);
   // //role = getCookie(COOKIE.ROLE);
  
   //var decoded = token ? JWT(token) : "";
   //var role = decoded ? decoded.roles[0] : "";
   if (!cookie ) {
-    deleteCookie(COOKIE.ID_TOKEN);
+    deleteCookie(COOKIE.USERID);
     console.log("Routing cookie empty...");
     return <Redirect to={URLS.URLS.LoginPage} />;
     
   } 
   else {
-    createCookie(COOKIE.ID_TOKEN, getCookie(COOKIE.ID_TOKEN), CTimeOut);
+    createCookie(COOKIE.USERID, getCookie(COOKIE.USERID), CTimeOut);
     console.log("Routing properly...");
     return (
       <Route

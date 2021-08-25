@@ -1,7 +1,7 @@
 import './loginPage.css';
 import React, { Fragment } from 'react';
 import logo from '../logo.png';
- 
+
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -17,7 +17,10 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
- 
+import Snackbar from '@material-ui/core/Snackbar';
+// import Alert from '@material-ui/lab/Alert';
+import MuiAlert from '@material-ui/lab/Alert';
+
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import axios from "axios";
 import CompanyList from './companyList';
@@ -30,6 +33,7 @@ class login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      ErrorPrompt: false,
       isLoggedIn: false,
       data: {},
       userID: '',
@@ -50,8 +54,8 @@ class login extends React.Component {
 
   componentDidMount() {
     console.log("Onload state > ", this.state);
-    console.log("Onload getCookie(COOKIE.ID_TOKEN) > ", getCookie(COOKIE.ID_TOKEN));
-    let token = getCookie(COOKIE.ID_TOKEN);
+
+    let token = getCookie(COOKIE.USERID);
     console.log("Onload token > ", token);
 
     if (token == "null" || token == null) {
@@ -81,7 +85,7 @@ class login extends React.Component {
   }
 
   render() {
-     
+
 
     const handleClick = (e) => {
       if (this.state.userID === "" || this.state.password === "") { } else {
@@ -97,15 +101,23 @@ class login extends React.Component {
           .then(response => {
             console.log("response > ", response);
             if (response.status === 200) {
-              let data = response.data;
-              let name = this.state.userID;
-              let initialName = name.charAt(0);
-              this.setState({ data: data, userInitial: initialName, name: name, isLoggedIn: true }, function () {
-                this.setState({ loader: 'hideLoginScreenLoader' });
-              });
-              createCookie(COOKIE.ID_TOKEN, "ABC", 3);
-              createCookie(COOKIE.ISLOGGEDIN, true, 3);
-              createCookie(COOKIE.USERID, this.state.userID, 3);
+
+              if (response.data.UID === 0) {
+                this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
+                console.log("Error credentials");
+              } else {
+                let data = response.data;
+                let name = this.state.userID;
+                let initialName = name.charAt(0);
+                this.setState({ data: data, userInitial: initialName, name: name, isLoggedIn: true }, function () {
+                  this.setState({ loader: 'hideLoginScreenLoader' });
+                });
+
+                createCookie(COOKIE.USERID, this.state.userID, 3);
+
+              }
+
+
             } else {
               this.setState({ loader: 'hideLoginScreenLoader' });
               console.error('status !=200 ', response);
@@ -118,9 +130,10 @@ class login extends React.Component {
       }
     };
     const logoutUser = (e) => {
-      deleteCookie(COOKIE.ID_TOKEN, null);
+      deleteCookie(COOKIE.USERID, null);
       this.setState({ anchorEl: null, isLoggedIn: false })
-      this.props.history.push(URLS.URLS.LoginPage);
+      // this.props.history.push(URLS.URLS.LoginPage);
+      window.location.reload();
     }
     const menuClick = event => {
       try {
@@ -134,6 +147,17 @@ class login extends React.Component {
     const menuClose = event => {
       this.setState({ anchorEl: null });
     };
+
+    const closeErrorPrompt = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      this.setState({ ErrorPrompt: false });
+    }
+
+    function Alert(props) {
+      return <MuiAlert elevation={6} variant="filled" {...props} />;
+    }
 
     return (
       <Fragment>
@@ -212,6 +236,11 @@ class login extends React.Component {
           <div className={this.state.loader}>
             <LinearProgress />
           </div>
+
+          <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
+            <Alert onClose={closeErrorPrompt} severity="error">Login Failed!</Alert>
+          </Snackbar>
+
           <Menu
             key="u-l-m"
             id="logout-menu"

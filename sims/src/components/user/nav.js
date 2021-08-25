@@ -1,5 +1,6 @@
 import './dasboard.css';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
 import * as URLS from "../../routes/constants";
 
@@ -9,8 +10,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
-
-
 
 class nav extends React.Component {
 
@@ -22,7 +21,7 @@ class nav extends React.Component {
     }
 
     componentDidMount() {
-        let token = getCookie(COOKIE.ID_TOKEN);
+        let token = getCookie(COOKIE.USERID);
         if (token == "null" || token == null) {
             this.setState({ isLoggedIn: false });
             this.props.history.push(URLS.URLS.LoginPage);
@@ -33,7 +32,6 @@ class nav extends React.Component {
 
         }
     }
-
 
 
     render() {

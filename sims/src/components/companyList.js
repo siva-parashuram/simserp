@@ -39,6 +39,13 @@ class CompanyList extends React.Component {
             }),
         );
 
+
+        const openBranchDashboard=(url,branchId,compName,branchName)=>{
+              console.log("openBranchDashboard > url > ",url);
+              url=url+"?branchId="+branchId+"&compName="+compName+"&branchName="+branchName;
+              window.open(url,"Siva Group",'width=1400,resizable=no, height=900, menubar=no, toolbar=no, location=no, scrollbars=no');
+        }
+
         return (
             <Fragment>
                 {
@@ -62,9 +69,10 @@ class CompanyList extends React.Component {
                                         size="small"
                                         variant="outlined"
                                         className="branchListButton"
-                                        // startIcon={<ArrowForwardIosIcon fontSize="small" />}
+                                        onClick={(e)=>openBranchDashboard(URLS.URLS.userDashboard,branchItem.branchID,item.compName,branchItem.name)}
                                     >
-                                        <Link className="link" to={URLS.URLS.userDashboard} target="_blank">   {branchItem.name} </Link>
+                                        
+                                        {branchItem.name}
                                     </Button> 
                                     </>
                                     ))}

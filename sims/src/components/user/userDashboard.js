@@ -9,9 +9,9 @@ import Row1 from "./row1";
 
 class userDashboard extends React.Component {
       componentDidMount() {
-        console.log("COOKIE.ID_TOKEN > ",getCookie(COOKIE.ID_TOKEN));
+         
         if (
-          getCookie(COOKIE.ID_TOKEN) != null 
+          getCookie(COOKIE.USERID) != null 
         ) {
            
         }else{

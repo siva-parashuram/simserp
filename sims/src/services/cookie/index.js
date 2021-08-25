@@ -4,15 +4,18 @@
  * operations related to cookie
  ***************************************/
 
-var cookie = {
-  ID_TOKEN: "id_token",
-  NAME: "name",
-  ROLE: "role",
-  USERID: "userid",
-  CHANGE_PASSWORD: "change_password",
-  LOGO: "logo",
-  BRANCH_NAME: "branch_name",
-  ISLOGGEDIN:'isLoggedIn' 
+var cookie = {  
+  FIRSTNAME: "FIRSTNAME",  
+  LASTNAME: "LASTNAME", 
+  USERID: "USERID",
+  CHANGEPASSWORD: "CHANGEPASSWORD",
+  LOGO: "LOGO",
+  BRANCH_NAME: "BRANCH_NAME",
+  ISADMIN:'ISADMIN',
+  LOGINTIME:'LOGINTIME',
+  COMPANYNAME:'',
+  BRANCHID:'',
+  BRANCHNAME:'' 
 };
 
 // create cookie by name with specific path, domain and expiry time (if paased)
