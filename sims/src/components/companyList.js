@@ -47,7 +47,9 @@ class CompanyList extends React.Component {
         const openBranchDashboard=(url,branchId,compName,branchName)=>{
               console.log("openBranchDashboard > url > ",url);
               url=url+"?branchId="+branchId+"&compName="+compName+"&branchName="+branchName;
-              window.open(url,"Siva Group",'width=800,resizable=no, height=700, menubar=no, toolbar=no, location=no');
+            //   window.open(url,"Siva Group",'width=800,resizable=no, height=700, menubar=no, toolbar=no, location=no');
+            let randomnumber = Math.floor((Math.random()*100)+1); 
+            window.open(url,"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0, toolbar=no,resizable=1,width=500,height=400');
         }
 
         return (

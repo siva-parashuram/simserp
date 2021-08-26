@@ -110,6 +110,7 @@ class login extends React.Component {
         };
         const headers = {
           "Content-Type": "application/json"
+          
         };
         axios.post('http://103.86.176.85:81/WebService.asmx/Login', data, { headers })
           .then(response => {

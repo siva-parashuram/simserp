@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
 
- 
+ import Datagridtest from "./datagridtest";
 
 class nav extends React.Component {
 
@@ -68,6 +68,7 @@ class nav extends React.Component {
                 <Grid item xs={5}>                
                     <div style={{height:300}}>
                       <h4  className="row-1-grid-title"> </h4>
+                      <Datagridtest/>
                      {/*   <Button variant="contained" onClick={showInvoice} >Show Invoice</Button> */   }                   
                     </div>                    
                 </Grid>

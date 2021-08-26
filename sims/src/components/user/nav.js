@@ -19,6 +19,9 @@ import { FormatUnderlined } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+
+import Modules from "./modules";
+
 class nav extends React.Component {
 
     constructor(props) {
@@ -125,6 +128,8 @@ class nav extends React.Component {
                     </Toolbar> 
                 </AppBar>
 
+                
+
                 <Dialog fullScreen open={this.state.FullScreenDialog} onClose={processDialogClose} >
                   <AppBar className={useStyles.appBar} style={{ width: '100%', margin: 0, backgroundColor: '#00838f ' }}>  
                     <Toolbar>
@@ -132,15 +137,13 @@ class nav extends React.Component {
                         <CloseIcon />
                       </IconButton>
                       <Typography variant="h6" className={useStyles.title}>
-                      Module Lists
+                        Modules
                       </Typography>
                      
                     </Toolbar>
                   </AppBar>
-                   <div>
-                    <h4>
-                     Hey.... coming soon
-                    </h4>
+                   <div style={{marginTop:50,marginLeft:50}}>
+                     <Modules/>
                    </div>
                 </Dialog>
 
