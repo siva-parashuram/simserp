@@ -41,8 +41,8 @@ class login extends React.Component {
       userInitial: '',
       name: '',
       userCompanyList: [
-        { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva IOT Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }, { branchID: 3, name: "Siva Noida" }] },
-        { compID: 2, compName: "Siva Tec", branch: [{ branchID: 4, name: "Siva ITek UK" }] }
+        { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }] },
+        { compID: 2, compName: "Siva Tec", branch: [{ branchID: 4, name: "Siva  UK" }] }
       ],
       loader: 'hideLoginScreenLoader',
       anchorEl: null,

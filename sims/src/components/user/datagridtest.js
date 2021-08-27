@@ -6,15 +6,10 @@ import * as URLS from "../../routes/constants";
 import { makeStyles } from '@material-ui/core/styles';
  
 import { DataGrid } from '@material-ui/data-grid';
- 
+import Alert from '@material-ui/lab/Alert';
 
 
-const columns = [
-    { field: 'sno', headerName: 'sno', type: 'number', width: 100, editable: false },
-    { field: 'country', headerName: 'country', width:300,  editable: true }          
-    
-    
-  ];
+
 
   let rows = [
     {
@@ -39,7 +34,12 @@ class datagridtest extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-           countryData:rows
+           countryData:rows,
+           showSavedAlert:false,
+           updatedValue:{
+             id:0,
+             country:""
+           }
         };
          
     
@@ -48,6 +48,8 @@ class datagridtest extends React.Component {
     componentDidMount() {
         
     }
+
+    
 
 
 
@@ -58,26 +60,44 @@ class datagridtest extends React.Component {
 
         }));
 
-         
+        const columns = [
+          { field: 'sno', headerName: 'sno', type: 'number', width: 100, editable: false },
+          { field: 'country', headerName: 'country', width:300,  editable: true }          
+          
+          
+        ];
        
+      
        
 
           const editRowChange=(e)=>{    
                  console.log("e > ",e);
-                  var keys = Object.keys( e );  
-/*
+                 var keys = Object.keys( e );  
+                 if(keys.length===0){
+                  this.setState({showSavedAlert:true});
+                  console.log("updatedValue > ",this.state.updatedValue);
+                  processSave();
+                 
+                 }else{
+                  console.log("================================================");
+                  console.log("this.state.countryData > ",this.state.countryData);                 
                   let value=e[keys[0]].country;                  
                   let index=parseInt(keys[0]);               
                   let countryD=this.state.countryData;
-                  let Stateobj=countryD[index-1];               
-                  Stateobj.country=value.value;              
-                */
-                // countryD.map(function(item,i) {
-                //      console.log("item > ",item);
-                // });
-                
-                //  this.setState({countryData:countryD});
+                  let Stateobj=countryD[index-1];      
+                  console.log("keys > ",keys);
+                  console.log("Stateobj > ",Stateobj);
+                  console.log("================================================");         
+                  Stateobj.country=value.value; 
+                  this.setState({countryData:countryD,updatedValue:{id:Stateobj.id,country:Stateobj.country}});
+                 }
+          }
 
+          const processSave=()=>{
+            //process post request and hideSaved Alert
+            this.setState({showSavedAlert:false});
+           
+           
           }
 
 
@@ -93,10 +113,13 @@ class datagridtest extends React.Component {
             <div style={{ height: 300, width: '100%' }}>
              
             
-               
-            <DataGrid   rows={this.state.countryData} columns={columns} /*onEditRowsModelChange={editRowChange}*/  />
+           
+             
+            <DataGrid   rows={this.state.countryData} columns={columns} onEditRowsModelChange={editRowChange}  />
      
-             <a href="javascript:Void(0)" onClick={checkTableData}>Check Now</a> 
+            {this.state.showSavedAlert===true?(
+              <Alert severity="success">Saved</Alert> 
+            ):null}
 
             </div>
         );

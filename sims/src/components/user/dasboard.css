@@ -5,11 +5,34 @@ body{
     overflow-x: hidden;
 }
 
-
+.nav-title{
+  margin-top: 500px !important;
+}
 
 .navDiv{
     width: 100% !important;
+    background-color: rgb(0, 114, 188) !important;
 }
+
+.sideNav{ 
+  /* background-color: rgb(0, 114, 188) !important; */
+}
+
+.MuiDrawer-paper{
+  background-color: #fafafa  !important;
+}
+
+ 
+.Accordion-background{
+  background-color: #fff !important;
+}
+
+
+.menu-accordion{
+  width:240px !important;
+  color: #000 !important;
+}
+
 .alignSectionItems{
  justify-content: end !important;
  align-items: flex-end !important;
@@ -35,6 +58,13 @@ body{
   min-height: 40px !important;
 }
 
+
+.rightGridSection{
+  border-left-style: solid !important;
+  border-left-width: 1px !important;
+  height:400px !important;
+  overflow-y: scroll;
+}
 
 /**************************************************************************************************************************/
 

@@ -1,18 +1,16 @@
 import './dasboard.css';
-import React, { Fragment } from 'react';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import React, { Fragment } from 'react'; 
 import { makeStyles } from '@material-ui/core/styles';
 import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
-
 import * as URLS from "../../routes/constants";
-import Nav from "./nav";
-import Row1 from "./row1";
-import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
-import Drawer from "./drawer";
+
+import Modules from "./modules";
 
 
-class userDashboard extends React.Component {
+class drawer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,26 +56,35 @@ class userDashboard extends React.Component {
       appBar: {
         zIndex: theme.zIndex.drawer + 1,
       },
-     
+      drawerPaper:{width:'inherit', }
 
     }));
     return (
-      <div className={useStyles.root}>
-        <CssBaseline />
-        <Nav />
-        
-        <Drawer/>
-        
-      
-        <main className={useStyles.content}>
+      <Fragment>
+        <Drawer
+        style={{width:'240px'}}
+        variant="persistent"
+        anchor="left"
+        open={true}
+        classes={{paper:useStyles.drawerPaper}}
+        >
+          <Typography variant="h6" style={{ marginTop: 11, textAlign: 'center' }}>
+            <span style={{
+              letterSpacing: 3,
+              fontWeight: 500, textDecorationLine: 'underline',
+              textDecorationColor: '#39b54a', color: '#000'
+            }}>
+              {this.state.branchName}
+            </span>
+          </Typography>
           <Toolbar />
-          <div style={{ marginLeft: 250 }}>
-            <Row1 />
+          <div className={useStyles.drawerContainer}>
+            <Modules />
           </div>
-        </main>
-      </div>
+        </Drawer>         
+      </Fragment>
     );
   }
 }
 
-export default userDashboard;
+export default drawer;
