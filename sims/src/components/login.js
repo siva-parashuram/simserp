@@ -111,7 +111,25 @@ class login extends React.Component {
 
 
   getLocalIP() {
-   
+    axios.get('https://www.cloudflare.com/cdn-cgi/trace')    
+    .then(function (response) {
+      // handle success
+      console.log("getLocalIP > response >",response);
+      let D=response.data;
+      console.log("getLocalIP > D >",D);
+      // let data = D.trim().split('\n').reduce(function(obj, pair) {
+      //   pair = pair.split('=');
+      //   console.log("getLocalIP > pair >",pair);
+       
+      // }, {});
+    })
+    .catch(function (error) {
+      // handle error
+      console.log("getLocalIP > error >",error);
+    })
+    .then(function () {
+      // always executed
+    });
   }
 
 

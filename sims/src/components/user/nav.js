@@ -168,7 +168,7 @@ class nav extends React.Component {
                     onClose={menuClose}
                     PaperProps={{
                         style: {
-                            width: '30ch',
+                            width: '15ch',
                             marginLeft: 5,
                             marginTop: 40
                         },
