@@ -53,36 +53,67 @@ class login extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Onload state > ", this.state);
+    console.log("===================================");    
+    let browserName=this.getBrowser();
+    let getLocalIP=this.getLocalIP();
+    console.log("browserName > ",browserName);
+    console.log("getIP > ",getLocalIP);
+    let os = navigator.userAgent.slice(13).split(';');
+    os= os[0];
+    console.log("os > ",os);     
+    console.log("===================================");
 
-    let token = getCookie(COOKIE.USERID);
-      console.log("Onload token > ", token);
+    let token = getCookie(COOKIE.USERID); 
 
-      if (token == "null" || token == null) {
-        this.setState({ isLoggedIn: false });
-        this.props.history.push(URLS.URLS.LoginPage);
-      } else {
-        console.log("Onload TOKEN PRESENT> ");
-        let initialName = "A";
-        let Name = "Admin";
-        this.setState({ isLoggedIn: true, userInitial: initialName, name: Name });
-      }
+    if (token == "null" || token == null) {
+      this.setState({ isLoggedIn: false });
+      this.props.history.push(URLS.URLS.LoginPage);
+    } else {
+      console.log("Onload TOKEN PRESENT> ");
+      let initialName = "A";
+      let Name = "Admin";
+      this.setState({ isLoggedIn: true, userInitial: initialName, name: Name });
+    }
 
-    this.interval = setInterval(() => {          
+    this.interval = setInterval(() => {
       let token = getCookie(COOKIE.USERID);
-      if (token == "null" || token == null) { 
-          if(this.state.isLoggedIn==false){}else{
-            this.setState({ isLoggedIn: false });
-            this.props.history.push(URLS.URLS.LoginPage);    
-          }  
+      if (token == "null" || token == null) {
+        if (this.state.isLoggedIn == false) { } else {
+          this.setState({ isLoggedIn: false });
+          this.props.history.push(URLS.URLS.LoginPage);
+        }
       }
-     
+
     }, 1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+
+  getBrowser() {
+    let Bname = "";
+    if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1) {
+      Bname = 'Opera';
+    } else if (navigator.userAgent.indexOf("Chrome") != -1) {
+      Bname = 'Chrome';
+    } else if (navigator.userAgent.indexOf("Safari") != -1) {
+      Bname = 'Safari';
+    } else if (navigator.userAgent.indexOf("Firefox") != -1) {
+      Bname = 'Firefox';
+    } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode == true)) {
+      Bname = 'IE';//crap
+    } else {
+      Bname = 'Unknown';
+    }
+    return Bname;
+  }
+
+
+  getLocalIP() {
+   
+  }
+
 
   onloadEvent() {
     console.log("Hey I am here...");
@@ -100,6 +131,8 @@ class login extends React.Component {
 
   render() {
 
+ 
+
 
     const handleClick = (e) => {
       if (this.state.userID === "" || this.state.password === "") { } else {
@@ -110,7 +143,7 @@ class login extends React.Component {
         };
         const headers = {
           "Content-Type": "application/json"
-          
+
         };
         axios.post('http://103.86.176.85:81/WebService.asmx/Login', data, { headers })
           .then(response => {
@@ -128,8 +161,8 @@ class login extends React.Component {
                   this.setState({ loader: 'hideLoginScreenLoader' });
                   setAllCookies(data);
                 });
-                
-                
+
+
               }
 
             } else {
@@ -173,7 +206,7 @@ class login extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
-    function setAllCookies(data){
+    function setAllCookies(data) {
       createCookie(COOKIE.USERID, "123");
     }
 

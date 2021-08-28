@@ -1,20 +1,19 @@
-import './dasboard.css';
 import React, { Fragment } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { COOKIE, getCookie } from "../../services/cookie";
-import Drawer from '@material-ui/core/Drawer';
-import Typography from '@material-ui/core/Typography';
+import Drawer from "../../user/drawer";
+import Nav from "../../user/nav";
+import BreadCrumb from '../../user/BreadCrumb';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
+import { makeStyles } from '@material-ui/core/styles';
+import '../../user/dasboard.css';
+import { COOKIE, getCookie } from "../../../services/cookie";
 
-import Modules from "./modules";
 
-
-class drawer extends React.Component {
+class companyMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false,
-      ModuleSelected: {},
+     
     };
   }
 
@@ -52,35 +51,26 @@ class drawer extends React.Component {
       appBar: {
         zIndex: theme.zIndex.drawer + 1,
       },
-      drawerPaper: { width: 'inherit', }
 
     }));
     return (
       <Fragment>
-        <Drawer
-          style={{ width: '240px' }}
-          variant="persistent"
-          anchor="left"
-          open={true}
-          classes={{ paper: useStyles.drawerPaper }}
-        >
-          <Typography variant="h6" style={{ marginTop: 11, textAlign: 'center' }}>
-            <span style={{
-              letterSpacing: 3,
-              fontWeight: 500, textDecorationLine: 'underline',
-              textDecorationColor: '#39b54a', color: '#000'
-            }}>
-              {this.state.branchName}
-            </span>
-          </Typography>
+        <CssBaseline />
+        <Nav />
+        <div className="marginTop">
+          <Drawer />
+        </div>
+        <main className={useStyles.content}>
           <Toolbar />
-          <div className={useStyles.drawerContainer}>
-            <Modules />
+          <div style={{ marginLeft: 250 }}>
+            <BreadCrumb data="companyMaster" />
+            <h3>Hi things coming up soon here...</h3>
           </div>
-        </Drawer>
+        </main>
       </Fragment>
     );
   }
-}
 
-export default drawer;
+
+}
+export default companyMaster;

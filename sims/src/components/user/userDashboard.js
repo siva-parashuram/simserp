@@ -1,10 +1,7 @@
 import './dasboard.css';
-import React, { Fragment } from 'react';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import React from 'react'; 
 import { makeStyles } from '@material-ui/core/styles';
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
-
-import * as URLS from "../../routes/constants";
+import { COOKIE, getCookie } from "../../services/cookie"; 
 import Nav from "./nav";
 import Row1 from "./row1";
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,12 +15,9 @@ class userDashboard extends React.Component {
     this.state = {
       isLoggedIn: false,
     };
-
-
   }
 
   componentDidMount() {
-
     if (
       getCookie(COOKIE.USERID) != null
     ) {
@@ -43,14 +37,13 @@ class userDashboard extends React.Component {
 
     this.interval = setInterval(() => {
       let token = getCookie(COOKIE.USERID);
-      if (token == "null" || token == null) {
+      if (token === "null" || token == null) {
         this.setState({ isLoggedIn: false });
       }
     }, 1000);
   }
 
-  render() {
-    const drawerWidth = 900;
+  render() {   
     const useStyles = makeStyles((theme) => ({
       root: {
         display: 'flex',
@@ -58,17 +51,12 @@ class userDashboard extends React.Component {
       appBar: {
         zIndex: theme.zIndex.drawer + 1,
       },
-     
-
     }));
     return (
       <div className={useStyles.root}>
         <CssBaseline />
-        <Nav />
-        
+        <Nav />        
         <Drawer/>
-        
-      
         <main className={useStyles.content}>
           <Toolbar />
           <div style={{ marginLeft: 250 }}>

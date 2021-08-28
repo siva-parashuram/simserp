@@ -6,4 +6,5 @@ export const URLS = {
   LoginPage: "/",  
   testReport:"/testReport",
   redirectLoginPage: "/login",  
+  companyMaster: "/companyMaster",  
 };

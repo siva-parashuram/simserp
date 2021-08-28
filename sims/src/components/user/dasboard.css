@@ -5,6 +5,19 @@ body{
     overflow-x: hidden;
 }
 
+.LINK{
+  text-decoration: none !important;
+}
+
+.LINK:visited{
+  text-decoration: none !important;
+  color: #263238 !important;
+}
+
+.marginTop{
+  margin-top: -30px !important;
+}
+
 .nav-title{
   margin-top: 500px !important;
 }
