@@ -1,8 +1,7 @@
 import './dasboard.css';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
-import * as URLS from "../../routes/constants";
+import React from 'react'; 
+import { COOKIE, deleteCookie, getCookie } from "../../services/cookie";
+ 
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -10,13 +9,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
-import MenuIcon from '@material-ui/icons/Menu';
-import AppsIcon from '@material-ui/icons/Apps';
+ 
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
-import { FormatUnderlined } from '@material-ui/icons';
-import Button from '@material-ui/core/Button';
+ 
 import Grid from '@material-ui/core/Grid';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -40,7 +37,7 @@ class nav extends React.Component {
     componentDidMount() {
         let token = getCookie(COOKIE.USERID);
 
-        if (token == "null" || token == null) {
+        if (token === "null" || token == null) {
             this.setState({ isLoggedIn: false });
             // document.write("Login Expired!");
         } else {

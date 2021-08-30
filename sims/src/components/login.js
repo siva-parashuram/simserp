@@ -1,6 +1,7 @@
 import './loginPage.css';
 import React, { Fragment } from 'react';
 import logo from '../logo.png';
+import * as APIURLS from "../routes/apiconstant";
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -53,17 +54,16 @@ class login extends React.Component {
   }
 
   componentDidMount() {
-    console.log("===================================");    
-    let browserName=this.getBrowser();
-    let getLocalIP=this.getLocalIP();
-    console.log("browserName > ",browserName);
-    console.log("getIP > ",getLocalIP);
+    console.log("===================================");     
+    let getLocalIP = this.getLocalIP();
+   
+    console.log("getIP > ", getLocalIP);
     let os = navigator.userAgent.slice(13).split(';');
-    os= os[0];
-    console.log("os > ",os);     
+    os = os[0];
+    console.log("os > ", os);
     console.log("===================================");
 
-    let token = getCookie(COOKIE.USERID); 
+    let token = getCookie(COOKIE.USERID);
 
     if (token == "null" || token == null) {
       this.setState({ isLoggedIn: false });
@@ -90,46 +90,21 @@ class login extends React.Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
-
-  getBrowser() {
-    let Bname = "";
-    if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1) {
-      Bname = 'Opera';
-    } else if (navigator.userAgent.indexOf("Chrome") != -1) {
-      Bname = 'Chrome';
-    } else if (navigator.userAgent.indexOf("Safari") != -1) {
-      Bname = 'Safari';
-    } else if (navigator.userAgent.indexOf("Firefox") != -1) {
-      Bname = 'Firefox';
-    } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode == true)) {
-      Bname = 'IE';//crap
-    } else {
-      Bname = 'Unknown';
-    }
-    return Bname;
-  }
+ 
 
 
   getLocalIP() {
-    axios.get('https://www.cloudflare.com/cdn-cgi/trace')    
-    .then(function (response) {
-      // handle success
-      console.log("getLocalIP > response >",response);
-      let D=response.data;
-      console.log("getLocalIP > D >",D);
-      // let data = D.trim().split('\n').reduce(function(obj, pair) {
-      //   pair = pair.split('=');
-      //   console.log("getLocalIP > pair >",pair);
-       
-      // }, {});
-    })
-    .catch(function (error) {
-      // handle error
-      console.log("getLocalIP > error >",error);
-    })
-    .then(function () {
-      // always executed
-    });
+    axios.get('https://www.cloudflare.com/cdn-cgi/trace')
+      .then(function (response) {       
+        console.log("getLocalIP > response >", response);
+        let D = response.data;
+        console.log("getLocalIP > D >", D);        
+      })
+      .catch(function (error) {        
+        console.log("getLocalIP > error >", error);
+      })
+      .then(function () {        
+      });
   }
 
 
@@ -148,10 +123,6 @@ class login extends React.Component {
   }
 
   render() {
-
- 
-
-
     const handleClick = (e) => {
       if (this.state.userID === "" || this.state.password === "") { } else {
         this.setState({ loader: 'showLoginScreenLoader' });
@@ -163,7 +134,8 @@ class login extends React.Component {
           "Content-Type": "application/json"
 
         };
-        axios.post('http://103.86.176.85:81/WebService.asmx/Login', data, { headers })
+        let loginUrl = APIURLS.APIURL.Login;
+        axios.post(loginUrl, data, { headers })
           .then(response => {
             console.log("response > ", response);
             if (response.status === 200) {
@@ -177,7 +149,7 @@ class login extends React.Component {
                 let initialName = name.charAt(0);
                 this.setState({ data: data, userInitial: initialName, name: name, isLoggedIn: true }, function () {
                   this.setState({ loader: 'hideLoginScreenLoader' });
-                  setAllCookies(data);
+                  setAllCookiesAndParams(data);
                 });
 
 
@@ -196,8 +168,7 @@ class login extends React.Component {
     };
     const logoutUser = (e) => {
       deleteCookie(COOKIE.USERID, null);
-      this.setState({ anchorEl: null, isLoggedIn: false })
-      // this.props.history.push(URLS.URLS.LoginPage);
+      this.setState({ anchorEl: null, isLoggedIn: false });      
       window.location.reload();
     }
     const menuClick = event => {
@@ -224,7 +195,7 @@ class login extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
-    function setAllCookies(data) {
+    function setAllCookiesAndParams(data) {
       createCookie(COOKIE.USERID, "123");
     }
 
@@ -289,8 +260,7 @@ class login extends React.Component {
               <div>&nbsp;</div>
               <div>
                 <Button
-                  variant="contained"
-                  // className={useStyles.button}
+                  variant="contained"                  
                   endIcon={<ArrowForward />}
                   style={{ background: '#0072bc', color: '#fff' }}
                   onClick={handleClick}
