@@ -54,10 +54,8 @@ class BreadCrumb extends React.Component {
                         Dashboard
                     </Link>
                 ):null}                
-                { this.state.companyMaster?(
-                    <Fragment>                         
-                        <Typography color="textPrimary">Company Master</Typography>
-                    </Fragment>                    
+                { this.state.companyMaster?(                                          
+                    <Typography color="textPrimary">Company Master</Typography>                                     
                 ):null}           
                 
             </Breadcrumbs>              

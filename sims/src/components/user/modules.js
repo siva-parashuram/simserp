@@ -23,6 +23,12 @@ class modules extends React.Component {
         this.state = {
             userID: "",
             urlparams: "",
+            moduleList:[
+                {
+                    moduleName:"Admin",
+                    subMenus:[{name:"Company Master",link:"companyMaster"}]
+                }
+            ]
         };
     }
 
@@ -52,27 +58,35 @@ class modules extends React.Component {
         return (
             <Fragment >
                 <Fragment>
+                {this.state.moduleList.map((item, i) => (
                     <Accordion className="menu-accordion">
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreIcon style={{ color: '#616161' }} />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography style={{ color: '#616161' }}>Admin</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails style={{ color: '#616161' }}>
-                            <List component="nav" aria-label="" style={{ width: '100%' }}>
-                                <ListItem button>
-                                    <Link className="LINK" to={URLS.URLS.companyMaster + this.state.urlparams}>
-                                        <ArrowForwardIosIcon style={{ fontSize: 15 }} /> Company Master
-                                    </Link>
-                                </ListItem>
-                                <ListItem button>
-                                    <ArrowForwardIosIcon style={{ fontSize: 15 }} /> Sub Menu 2
-                                </ListItem>
-                            </List>
-                        </AccordionDetails>
-                    </Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon style={{ color: '#616161' }} />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography style={{ color: '#616161' }}> {item.moduleName} </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails style={{ color: '#616161' }}>
+                        <List component="nav" aria-label="" style={{ width: '100%' }}>
+                        {item.subMenus.map((subitem,j)=>(
+                            <ListItem button>
+                                <Link className="LINK" to={subitem.link + this.state.urlparams}>
+                                    <ArrowForwardIosIcon style={{ fontSize: 15 }} /> {subitem.name}
+                                </Link>
+                            </ListItem>
+                        ))}
+                            
+                        { /*
+                            <ListItem button>
+                                <ArrowForwardIosIcon style={{ fontSize: 15 }} /> Sub Menu 2
+                            </ListItem>
+                        */}
+                        </List>
+                    </AccordionDetails>
+                </Accordion>   
+                ))}
+                    
                 </Fragment>
             </Fragment>
         );

@@ -5,9 +5,11 @@
  ***************************************/
 
 var cookie = {  
+  TOKEN:"TOKEN",
   FIRSTNAME: "FIRSTNAME",  
   LASTNAME: "LASTNAME", 
   USERID: "USERID",
+  LOGINID: "LOGINID",
   CHANGEPASSWORD: "CHANGEPASSWORD",
   LOGO: "LOGO",
   BRANCH_NAME: "BRANCH_NAME",

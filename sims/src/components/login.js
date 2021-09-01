@@ -28,6 +28,9 @@ import CompanyList from './companyList';
 
 import * as URLS from "../routes/constants";
 import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cookie";
+import { FlashOnRounded } from '@material-ui/icons';
+
+let clientlog="";
 
 class login extends React.Component {
 
@@ -47,25 +50,22 @@ class login extends React.Component {
       ],
       loader: 'hideLoginScreenLoader',
       anchorEl: null,
-      open: false
+      open: false,
+      clientlog:""
     };
     this.handleChange = this.handleChange.bind(this);
 
   }
 
   componentDidMount() {
-    console.log("===================================");     
+    console.log("===================================");   
     let getLocalIP = this.getLocalIP();
-   
-    console.log("getIP > ", getLocalIP);
-    let os = navigator.userAgent.slice(13).split(';');
-    os = os[0];
-    console.log("os > ", os);
+    this.setState({clientlog:getLocalIP});
     console.log("===================================");
 
     let token = getCookie(COOKIE.USERID);
 
-    if (token == "null" || token == null) {
+    if (token === "null" || token == null) {
       this.setState({ isLoggedIn: false });
       this.props.history.push(URLS.URLS.LoginPage);
     } else {
@@ -77,8 +77,8 @@ class login extends React.Component {
 
     this.interval = setInterval(() => {
       let token = getCookie(COOKIE.USERID);
-      if (token == "null" || token == null) {
-        if (this.state.isLoggedIn == false) { } else {
+      if (token === "null" || token == null) {
+        if (this.state.isLoggedIn === false) { } else {
           this.setState({ isLoggedIn: false });
           this.props.history.push(URLS.URLS.LoginPage);
         }
@@ -94,17 +94,21 @@ class login extends React.Component {
 
 
   getLocalIP() {
+    let D ="";
     axios.get('https://www.cloudflare.com/cdn-cgi/trace')
       .then(function (response) {       
         console.log("getLocalIP > response >", response);
-        let D = response.data;
-        console.log("getLocalIP > D >", D);        
+         D = response.data;
+         clientlog=D;
+         
       })
       .catch(function (error) {        
         console.log("getLocalIP > error >", error);
       })
       .then(function () {        
       });
+
+      return D;  
   }
 
 
@@ -125,45 +129,53 @@ class login extends React.Component {
   render() {
     const handleClick = (e) => {
       if (this.state.userID === "" || this.state.password === "") { } else {
-        this.setState({ loader: 'showLoginScreenLoader' });
+        this.setState({ loader: 'showLoginScreenLoader' });        
         const data = {
-          ID: this.state.userID,
-          PWD: this.state.password
+          loginId: this.state.userID,
+          password: this.state.password,
+          //  CLIENTLOG:clientlog
         };
+        console.log("IN login POST > data > ",data);
+ 
+        
         const headers = {
           "Content-Type": "application/json"
 
         };
         let loginUrl = APIURLS.APIURL.Login;
+        setAllCookiesAndParams(data);
+        /*
         axios.post(loginUrl, data, { headers })
           .then(response => {
             console.log("response > ", response);
             if (response.status === 200) {
-
               if (response.data.UID === 0) {
                 this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
+                document.getElementById("password").value=null;
                 console.log("Error credentials");
+                
               } else {
                 let data = response.data;
                 let name = this.state.userID;
-                let initialName = name.charAt(0);
+                let initialName = name.charAt(0).toUpperCase();
                 this.setState({ data: data, userInitial: initialName, name: name, isLoggedIn: true }, function () {
                   this.setState({ loader: 'hideLoginScreenLoader' });
                   setAllCookiesAndParams(data);
                 });
-
-
               }
-
             } else {
+              this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
+              document.getElementById("password").value=null;
               this.setState({ loader: 'hideLoginScreenLoader' });
               console.error('status !=200 ', response);
             }
           }
-          ).catch(error => {
-            this.setState({ loader: 'hideLoginScreenLoader' });
+          ).catch(error => {            
+            this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
+            document.getElementById("password").value=null;
             console.error('There was an error!', error);
           });
+          */
       }
     };
     const logoutUser = (e) => {
@@ -196,7 +208,18 @@ class login extends React.Component {
     }
 
     function setAllCookiesAndParams(data) {
+       
+      console.log("setAllCookiesAndParams > data > ",data);
+      createCookie(COOKIE.USERID, "123");//temporary set
+      /*
+      createCookie(COOKIE.TOKEN, data.token);
+      createCookie(COOKIE.ISADMIN, data.isAdmin);
+      createCookie(COOKIE.LOGINTIME, "");
       createCookie(COOKIE.USERID, "123");
+      createCookie(COOKIE.LOGINID, data.loginID);
+      createCookie(COOKIE.FIRSTNAME, "");
+     */
+   
     }
 
     return (
@@ -234,7 +257,6 @@ class login extends React.Component {
             </div>
             :
             <div>
-
               <div>
                 <TextField
                   required

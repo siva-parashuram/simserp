@@ -9,9 +9,19 @@ body{
   text-decoration: none !important;
 }
 
+
+.LINK:hover{
+  text-decoration: underline !important;
+  text-decoration-color: #bdbdbd !important;
+}
+
 .LINK:visited{
   text-decoration: none !important;
   color: #263238 !important;
+}
+
+.tableLink{
+  color: #000 !important;
 }
 
 .marginTop{
@@ -77,6 +87,36 @@ body{
   border-left-width: 1px !important;
   height:400px !important;
   overflow-y: scroll;
+}
+
+.tbl-hdr-css{
+  background-color: #e0e0e0;
+}
+
+.datagrid{
+  padding: "0 30px",
+  
+} 
+
+.MuiDataGrid-selectedRowCount{
+  display:none !important;
+}
+
+.table-header-font{
+  color:rgb(80, 92, 109) !important;
+  font-weight: 545 !important;
+}
+
+.tableBody:hover{
+cursor: pointer;
+}
+
+.table-header-background{
+  background-color: #eeeeee !important;
+}
+
+.selectedRow{
+  background-color: #e0f2f1 !important;
 }
 
 /**************************************************************************************************************************/
