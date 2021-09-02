@@ -282,7 +282,7 @@ class login extends React.Component {
                   style={{ background: '#0072bc', color: '#fff' }}
                   onClick={handleClick}
                 >
-                  LOGIN NOW
+                  LOGIN 
                 </Button>
               </div>
 
