@@ -31,6 +31,9 @@ import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cooki
 import { FlashOnRounded } from '@material-ui/icons';
 
 let clientlog="";
+let companiesList=[
+ 
+];
 
 class login extends React.Component {
 
@@ -44,10 +47,7 @@ class login extends React.Component {
       password: '',
       userInitial: '',
       name: '',
-      userCompanyList: [
-        { compID: 1, compName: "Siva Goa", branch: [{ branchID: 1, name: "Siva Goa" }, { branchID: 2, name: "Siva kandla" }, { branchID: 3, name: "Siva Noida" }] },
-        { compID: 2, compName: "Siva Tec", branch: [{ branchID: 4, name: "Siva  UK" }] }
-      ],
+      userCompanyList: companiesList,
       loader: 'hideLoginScreenLoader',
       anchorEl: null,
       open: false,
@@ -70,9 +70,9 @@ class login extends React.Component {
       this.props.history.push(URLS.URLS.LoginPage);
     } else {
       console.log("Onload TOKEN PRESENT> ");
-      let initialName = "A";
-      let Name = "Admin";
-      this.setState({ isLoggedIn: true, userInitial: initialName, name: Name });
+      // let initialName = "A";
+      // let Name = "Admin";
+      // this.setState({ isLoggedIn: true, userInitial: initialName, name: Name });
     }
 
     this.interval = setInterval(() => {
@@ -112,9 +112,7 @@ class login extends React.Component {
   }
 
 
-  onloadEvent() {
-    console.log("Hey I am here...");
-  }
+  
 
   handleChange(event) {
     let id = event.target.id;
@@ -133,18 +131,14 @@ class login extends React.Component {
         const data = {
           loginId: this.state.userID,
           password: this.state.password,
-          //  CLIENTLOG:clientlog
-        };
-        console.log("IN login POST > data > ",data);
- 
+          ClientInfo:clientlog
+        };        
         
         const headers = {
           "Content-Type": "application/json"
-
         };
-        let loginUrl = APIURLS.APIURL.Login;
-        setAllCookiesAndParams(data);
-        /*
+        let loginUrl = APIURLS.APIURL.Login;       
+       
         axios.post(loginUrl, data, { headers })
           .then(response => {
             console.log("response > ", response);
@@ -152,16 +146,10 @@ class login extends React.Component {
               if (response.data.UID === 0) {
                 this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
                 document.getElementById("password").value=null;
-                console.log("Error credentials");
-                
+                console.log("Error credentials");                
               } else {
-                let data = response.data;
-                let name = this.state.userID;
-                let initialName = name.charAt(0).toUpperCase();
-                this.setState({ data: data, userInitial: initialName, name: name, isLoggedIn: true }, function () {
-                  this.setState({ loader: 'hideLoginScreenLoader' });
-                  setAllCookiesAndParams(data);
-                });
+                let data=response.data;
+                setAllCookiesAndParams(data);               
               }
             } else {
               this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
@@ -171,11 +159,10 @@ class login extends React.Component {
             }
           }
           ).catch(error => {            
-            this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
-            document.getElementById("password").value=null;
+            this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });            
             console.error('There was an error!', error);
           });
-          */
+           
       }
     };
     const logoutUser = (e) => {
@@ -207,18 +194,26 @@ class login extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
-    function setAllCookiesAndParams(data) {
+    const setAllCookiesAndParams=(data) =>{
+      
+      let name = data.head.firstName;
+      let initialName =  data.head.firstName.charAt(0).toUpperCase();     
        
+      
+      createCookie(COOKIE.TOKEN, data.head.token);
+      createCookie(COOKIE.USERID, data.head.userID); 
+      createCookie(COOKIE.ISADMIN, data.head.isAdmin);
+      createCookie(COOKIE.FIRSTNAME, data.head.firstName);
       console.log("setAllCookiesAndParams > data > ",data);
-      createCookie(COOKIE.USERID, "123");//temporary set
-      /*
-      createCookie(COOKIE.TOKEN, data.token);
-      createCookie(COOKIE.ISADMIN, data.isAdmin);
-      createCookie(COOKIE.LOGINTIME, "");
-      createCookie(COOKIE.USERID, "123");
-      createCookie(COOKIE.LOGINID, data.loginID);
-      createCookie(COOKIE.FIRSTNAME, "");
-     */
+      console.log("setAllCookiesAndParams > data.companies > ",data.companies);
+      console.log("setAllCookiesAndParams > data.companies.companyList > ",data.companies.companyList);
+
+      
+      let companyList=data.companies.companyList;
+      console.log("---> setAllCookiesAndParams > companyList > ",companyList);
+      this.setState({ userCompanyList:companyList }, function () {
+        this.setState({ loader: 'hideLoginScreenLoader',data: data, userInitial: initialName, name: name ,isLoggedIn: true});       
+      });
    
     }
 
@@ -316,7 +311,7 @@ class login extends React.Component {
               },
             }}
           >
-            <MenuItem key="profile">Profile</MenuItem>
+         
             <MenuItem key="logout" onClick={logoutUser}>Log out</MenuItem>
           </Menu>
         </Container>

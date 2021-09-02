@@ -54,7 +54,10 @@ class CompanyList extends React.Component {
 
         return (
             <Fragment>
+            {console.log("this.props.state > ",this.props.state)}
+            {console.log("this.props.state.userCompanyList > ",this.props.state.userCompanyList)}
                 {
+                   
                     this.props.state.userCompanyList.map((item, i) => (
                         <Fragment key={"branch__Frag1_" + item.compName}>
                             <Accordion key={"branch_" + item.compName}>
@@ -68,17 +71,17 @@ class CompanyList extends React.Component {
                                 </AccordionSummary>
                                 <AccordionDetails key={"branch__AccordionDetails_" + i}>
                                     <Typography key={"branch__Typography_" + item.compName}>                                  
-                                    {item.branch.map((branchItem,j)=>(
-                                        <Fragment key={"branch__Frag_"+j + branchItem.name}>
+                                    {item.branchList.map((branchItem,j)=>(
+                                        <Fragment key={"branch__Frag_"+j + branchItem.branchName}>
                                         <Button
-                                        key={"branch_btn_" + branchItem.name}
+                                        key={"branch_btn_" + branchItem.branchName}
                                         size="small"
                                         variant="outlined"
                                         className="branchListButton"
-                                        onClick={(e)=>openBranchDashboard(URLS.URLS.userDashboard,branchItem.branchID,item.compName,branchItem.name)}
+                                        onClick={(e)=>openBranchDashboard(URLS.URLS.userDashboard,branchItem.branchID,item.compName,branchItem.branchName)}
                                     >
                                         
-                                        {branchItem.name}
+                                        {branchItem.branchName}
                                     </Button> 
                                     </Fragment>
                                     ))}
