@@ -57,24 +57,79 @@ class login extends React.Component {
 
   }
 
-  componentDidMount() {
-    console.log("===================================");   
+  logoutUser = () => {
+    deleteCookie(COOKIE.USERID, null);
+    deleteCookie(COOKIE.TOKEN, null);
+    deleteCookie(COOKIE.USERID, null); 
+    deleteCookie(COOKIE.ISADMIN, null);
+    deleteCookie(COOKIE.FIRSTNAME, null);
+    this.removeSavedState();
+    this.setState({ anchorEl: null, isLoggedIn: false });      
+    window.location.reload();
+  }
+
+   loadState = () => {
+    try {
+      const serializedState = localStorage.getItem('loginState');
+      if(serializedState === null) {
+        return undefined;
+      }
+      return JSON.parse(serializedState);
+    } catch (e) {
+      return undefined;
+    }
+  };
+  
+   saveState = (state) => {
+    try {
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem('loginState', serializedState);
+    } catch (e) {
+      // Ignore write errors;
+    }
+  };
+
+  removeSavedState=()=>{
+    try {      
+      localStorage.setItem('loginState', null);
+    } catch (e) {
+      // Ignore write errors;
+    }
+  }
+  
+
+  componentDidMount() {    
+     
     let getLocalIP = this.getLocalIP();
     this.setState({clientlog:getLocalIP});
-    console.log("===================================");
-
-    let token = getCookie(COOKIE.USERID);
-
+    let token = getCookie(COOKIE.TOKEN);
     if (token === "null" || token == null) {
       this.setState({ isLoggedIn: false });
       this.props.history.push(URLS.URLS.LoginPage);
-    } else {
-      console.log("Onload TOKEN PRESENT> ");
-      // let initialName = "A";
-      // let Name = "Admin";
-      // this.setState({ isLoggedIn: true, userInitial: initialName, name: Name });
-    }
+    } else {       
+      try{
+        let loginState=this.loadState(); 
+        console.log("loginState > ",loginState);
+        this.setState({
+          ErrorPrompt: loginState.ErrorPrompt,
+          isLoggedIn: true,
+          data: loginState.data,
+          userID: loginState.userID,
+          password: loginState.password,
+          userInitial: loginState.userInitial,
+          name: loginState.name,
+          userCompanyList: loginState.userCompanyList,
+          loader: 'hideLoginScreenLoader',
+          anchorEl: loginState.anchorEl,
+          open: loginState.open,
+          clientlog:loginState.clientlog
+      });
 
+      }catch(ex){
+        this.logoutUser();
+      }
+      
+    }
     this.interval = setInterval(() => {
       let token = getCookie(COOKIE.USERID);
       if (token === "null" || token == null) {
@@ -96,14 +151,11 @@ class login extends React.Component {
   getLocalIP() {
     let D ="";
     axios.get('https://www.cloudflare.com/cdn-cgi/trace')
-      .then(function (response) {       
-        console.log("getLocalIP > response >", response);
+      .then(function (response) { 
          D = response.data;
          clientlog=D;
-         
       })
-      .catch(function (error) {        
-        console.log("getLocalIP > error >", error);
+      .catch(function (error) { 
       })
       .then(function () {        
       });
@@ -141,12 +193,12 @@ class login extends React.Component {
        
         axios.post(loginUrl, data, { headers })
           .then(response => {
-            console.log("response > ", response);
+            
             if (response.status === 200) {
               if (response.data.UID === 0) {
                 this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
                 document.getElementById("password").value=null;
-                console.log("Error credentials");                
+                             
               } else {
                 let data=response.data;
                 setAllCookiesAndParams(data);               
@@ -154,19 +206,22 @@ class login extends React.Component {
             } else {
               this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
               document.getElementById("password").value=null;
-              this.setState({ loader: 'hideLoginScreenLoader' });
-              console.error('status !=200 ', response);
+              this.setState({ loader: 'hideLoginScreenLoader' });              
             }
           }
           ).catch(error => {            
-            this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });            
-            console.error('There was an error!', error);
+            this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
           });
            
       }
     };
     const logoutUser = (e) => {
       deleteCookie(COOKIE.USERID, null);
+      deleteCookie(COOKIE.TOKEN, null);
+      deleteCookie(COOKIE.USERID, null); 
+      deleteCookie(COOKIE.ISADMIN, null);
+      deleteCookie(COOKIE.FIRSTNAME, null);
+      this.removeSavedState();
       this.setState({ anchorEl: null, isLoggedIn: false });      
       window.location.reload();
     }
@@ -176,7 +231,7 @@ class login extends React.Component {
           ? this.setState({ anchorEl: null })
           : this.setState({ anchorEl: event.currentTarget });
       } catch (err) {
-        console.log("Error > ", err);
+        
       }
     };
     const menuClose = event => {
@@ -204,15 +259,19 @@ class login extends React.Component {
       createCookie(COOKIE.USERID, data.head.userID); 
       createCookie(COOKIE.ISADMIN, data.head.isAdmin);
       createCookie(COOKIE.FIRSTNAME, data.head.firstName);
-      console.log("setAllCookiesAndParams > data > ",data);
-      console.log("setAllCookiesAndParams > data.companies > ",data.companies);
-      console.log("setAllCookiesAndParams > data.companies.companyList > ",data.companies.companyList);
+      // console.log("setAllCookiesAndParams > data > ",data);
+      // console.log("setAllCookiesAndParams > data.companies > ",data.companies);
+      // console.log("setAllCookiesAndParams > data.companies.companyList > ",data.companies.companyList);
 
       
       let companyList=data.companies.companyList;
-      console.log("---> setAllCookiesAndParams > companyList > ",companyList);
-      this.setState({ userCompanyList:companyList }, function () {
-        this.setState({ loader: 'hideLoginScreenLoader',data: data, userInitial: initialName, name: name ,isLoggedIn: true});       
+      // createCookie(COOKIE.COMPANYLIST, companyList);
+      // console.log("---> setAllCookiesAndParams > companyList > ",companyList);
+        this.setState({ userCompanyList:companyList }, function () {
+        this.setState({ loader: 'hideLoginScreenLoader',data: data, userInitial: initialName, name: name ,isLoggedIn: true},()=>{
+          this.saveState(this.state);
+        });  
+          //to save state locally   
       });
    
     }

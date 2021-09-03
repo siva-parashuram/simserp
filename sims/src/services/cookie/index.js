@@ -17,7 +17,8 @@ var cookie = {
   LOGINTIME:'LOGINTIME',
   COMPANYNAME:'',
   BRANCHID:'',
-  BRANCHNAME:'' 
+  BRANCHNAME:'' ,
+  COMPANYLIST:[]
 };
 
 // create cookie by name with specific path, domain and expiry time (if paased)

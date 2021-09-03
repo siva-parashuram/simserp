@@ -16,10 +16,25 @@ import * as URLS from "../routes/constants";
 class CompanyList extends React.Component {
     constructor(props) {
     super(props);
+    // this.state = {
+    //     ErrorPrompt: false,
+    //     isLoggedIn: false,
+    //     data: {},
+    //     userID: '',
+    //     password: '',
+    //     userInitial: '',
+    //     name: '',
+    //     userCompanyList: [],
+    //     loader: 'hideLoginScreenLoader',
+    //     anchorEl: null,
+    //     open: false,
+    //     clientlog:""
+    //   };
     this.wrapper = React.createRef();
   }
 
     componentDidMount() {
+       
 
     }
 
@@ -45,7 +60,7 @@ class CompanyList extends React.Component {
 
 
         const openBranchDashboard=(url,branchId,compName,branchName)=>{
-              console.log("openBranchDashboard > url > ",url);
+            
               url=url+"?branchId="+branchId+"&compName="+compName+"&branchName="+branchName;
             //   window.open(url,"Siva Group",'width=800,resizable=no, height=700, menubar=no, toolbar=no, location=no');
             let randomnumber = Math.floor((Math.random()*100)+1); 
@@ -53,9 +68,7 @@ class CompanyList extends React.Component {
         }
 
         return (
-            <Fragment>
-            {console.log("this.props.state > ",this.props.state)}
-            {console.log("this.props.state.userCompanyList > ",this.props.state.userCompanyList)}
+            <Fragment>            
                 {
                    
                     this.props.state.userCompanyList.map((item, i) => (
