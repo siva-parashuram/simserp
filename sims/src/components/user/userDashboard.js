@@ -19,7 +19,7 @@ class userDashboard extends React.Component {
 
   componentDidMount() {
     if (
-      getCookie(COOKIE.USERID) != null
+      getCookie(COOKIE.TOKEN) != null
     ) {
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);

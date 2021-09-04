@@ -40,6 +40,7 @@ class login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      token:"",
       ErrorPrompt: false,
       isLoggedIn: false,
       data: {},
@@ -216,15 +217,38 @@ class login extends React.Component {
       }
     };
     const logoutUser = (e) => {
-      deleteCookie(COOKIE.USERID, null);
-      deleteCookie(COOKIE.TOKEN, null);
-      deleteCookie(COOKIE.USERID, null); 
-      deleteCookie(COOKIE.ISADMIN, null);
-      deleteCookie(COOKIE.FIRSTNAME, null);
-      this.removeSavedState();
-      this.setState({ anchorEl: null, isLoggedIn: false });      
-      window.location.reload();
+      processLogout(getCookie(COOKIE.USERID),this.state.token);      
+      this.setState({ anchorEl: null, isLoggedIn: false },()=>{
+        deleteCookie(COOKIE.USERID, null);
+        deleteCookie(COOKIE.TOKEN, null);
+        deleteCookie(COOKIE.USERID, null); 
+        deleteCookie(COOKIE.ISADMIN, null);
+        deleteCookie(COOKIE.FIRSTNAME, null);
+        this.removeSavedState();
+      });      
+      // window.location.reload();
     }
+
+
+    const processLogout = (userID,token) => {
+      const data = {
+        "UserID": parseInt(userID),
+        "Token": token
+      };
+
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      let logoutUrl = APIURLS.APIURL.Logout;
+      axios.post(logoutUrl, data, { headers })
+        .then(response => {
+         
+        }
+        ).catch(error => {
+
+        });
+    }
+
     const menuClick = event => {
       try {
         this.state.anchorEl
@@ -268,7 +292,7 @@ class login extends React.Component {
       // createCookie(COOKIE.COMPANYLIST, companyList);
       // console.log("---> setAllCookiesAndParams > companyList > ",companyList);
         this.setState({ userCompanyList:companyList }, function () {
-        this.setState({ loader: 'hideLoginScreenLoader',data: data, userInitial: initialName, name: name ,isLoggedIn: true},()=>{
+        this.setState({token:data.head.token, loader: 'hideLoginScreenLoader',data: data, userInitial: initialName, name: name ,isLoggedIn: true},()=>{
           this.saveState(this.state);
         });  
           //to save state locally   

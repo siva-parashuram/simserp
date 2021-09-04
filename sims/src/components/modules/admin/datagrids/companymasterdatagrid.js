@@ -1,7 +1,7 @@
 import '../../../user/dasboard.css';
 import React, { Fragment } from 'react';
 import { COOKIE, createCookie, deleteCookie, getCookie } from "../../../../services/cookie";
-
+import * as URLS from "../../../../routes/constants";
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -66,7 +66,8 @@ class companymasterdatagrid extends React.Component {
             initialCss:initialCss,
             DeleteDisabled:true,
             companyDialogStatus:false,
-            UpdateCompany:true
+            UpdateCompany:true,
+            urlparams:""
         };
 
 
@@ -75,6 +76,14 @@ class companymasterdatagrid extends React.Component {
     componentDidMount() {
         this.getCompanyList();
         this.setColumns();
+        var url = new URL(window.location.href);
+        var branchId = url.searchParams.get("branchId");
+        var branchName = url.searchParams.get("branchName");
+        var compName = url.searchParams.get("compName");
+        let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
+        this.setState({            
+            urlparams: urlparams,
+        });   
     }
 
     handleCheckboxChange = (e, id) => {
@@ -188,7 +197,9 @@ class companymasterdatagrid extends React.Component {
         }
 
         const openCompanyDetail=(e,item)=>{
-            this.setState({UpdateCompany:true,companyDialogStatus:true});
+            console.log("openCompanyDetail > e > ",e);
+            console.log("openCompanyDetail > item > ",item);
+           
         }
 
         const handleClose = (reason) => {
@@ -198,9 +209,16 @@ class companymasterdatagrid extends React.Component {
             
           };
 
+        const updateCompanyMasterDetail=(key,e)=>{
+             console.log("updateCompanyMasterDetail > key > ",key);
+             console.log("updateCompanyMasterDetail > e > ",e.target);
+        }  
+
         return (
             <div style={{ height: 300, width: '100%' }}>
-                <div style={{ height: 20 }}></div>
+                <div style={{ height: 20 }}>
+                   
+                </div>
                 <div style={{ marginLeft: 10 }}>
                     <Grid container spacing={0}>
                         <Grid xs={2}>
@@ -222,9 +240,16 @@ class companymasterdatagrid extends React.Component {
                         />
                         </Grid>
                         <Grid xs={1}>
-                            <Button style={{marginLeft:5}} startIcon={<AddIcon />} 
-                            onClick={(e)=>createNewCompanyRow()}
-                            >New</Button>
+                            <Button 
+                            style={{marginLeft:5}} 
+                            startIcon={<AddIcon />} 
+                           // onClick={(e)=>createNewCompanyRow()}
+                            >
+                            <a className="button-link" href={URLS.URLS.addNewCompany+this.state.urlparams}>
+                              New
+                            </a>
+                            
+                            </Button>
                         </Grid>
                         <Grid xs={1}>
                             <Button style={{marginLeft:-20}} startIcon={<DeleteIcon  />} disabled={this.state.DeleteDisabled}>Delete</Button>
@@ -254,10 +279,10 @@ class companymasterdatagrid extends React.Component {
                                             onClick={(event) => handleRowClick(event,item,"row_"+i)}
                                             >
                                                 <TableCell align="left">
-                                                    <a className="LINK tableLink" href="javascript:Void(0);" onClick={(e)=>openCompanyDetail(e,item)}>{item.id}</a>
+                                                    <a className="LINK tableLink" href={URLS.URLS.editCompany+this.state.urlparams+"&compID="+item.id} onClick={(e)=>openCompanyDetail(e,item)}>{item.id}</a>
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    <a className="LINK tableLink" href="javascript:Void(0);" onClick={(e)=>openCompanyDetail(e,item)}>{item.company}</a>
+                                                    <a className="LINK tableLink" href={URLS.URLS.editCompany+this.state.urlparams+"&compID="+item.id} onClick={(e)=>openCompanyDetail(e,item)}>{item.company}</a>
                                                 </TableCell>
                                                 <TableCell align="left">
                                                     {item.address}
@@ -281,7 +306,7 @@ class companymasterdatagrid extends React.Component {
                 onClose={(e)=>handleClose("NO")}
                 fullWidth="lg"
                 maxWidth="lg"
-                style={{marginTop:-450}}
+                style={{marginTop:-100}}
                 disableEscapeKeyDown
                 >
                  
@@ -294,19 +319,314 @@ class companymasterdatagrid extends React.Component {
                 
                 <DialogTitle id="company-dialog-title" onClose={(e)=>handleClose("YES")}>
                   Company Information |   
-                  
-                  {this.state.UpdateCompany===true?(<span style={{fontSize:12,color:'#9e9e9e'}}> Update</span>):(<span style={{fontSize:12,color:'#9e9e9e'}}> Add New</span>)}
+                  {this.state.UpdateCompany===true?(<span style={{fontSize:12,color:'#9e9e9e'}}> Edit</span>):(<span style={{fontSize:12,color:'#9e9e9e'}}> Add New</span>)}
                 </DialogTitle>
                 <DialogContent dividers>
+               
                     <DialogContentText id="company-information">
                        {this.state.UpdateCompany===true?(
-                           <div style={{marginTop:-15}}>
-                               <h5>Updating company information</h5>
+                           
+                           <div style={{marginTop:10}}>
+                            <div style={{ height: 50,marginLeft:10 }}>
+                            Saving...
+                            </div>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={4}>
+                                            <TextField
+                                                id="CompanyName"
+                                                label="Company Name"
+                                                variant="outlined"
+                                                size="small"
+                                                onChange={(e) => updateCompanyMasterDetail('CompanyName', e)}
+                                                fullWidth />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={4}>
+                                            <TextField
+                                                id="Address"
+                                                label="Address"
+                                                variant="outlined"
+                                                size="small"
+                                                onChange={(e) => updateCompanyMasterDetail('Address', e)}
+                                                fullWidth 
+                                                multiline
+                                                rows={4}
+                                                />
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <TextField
+                                                id="Address2"
+                                                label="Address 2"
+                                                variant="outlined"
+                                                size="small"
+                                                onChange={(e) => updateCompanyMasterDetail('Address2', e)}
+                                                fullWidth 
+                                                multiline
+                                                rows={4}
+                                                />
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <TextField
+                                                id="Address3"
+                                                label="Address 3"
+                                                variant="outlined"
+                                                size="small"
+                                                onChange={(e) => updateCompanyMasterDetail('Address3', e)}
+                                                fullWidth 
+                                                multiline
+                                                rows={4}
+                                                />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={3}>
+                                            <InputLabel id="Country-select-label">Country</InputLabel>
+                                            <Select
+                                                variant="outlined"
+                                                labelId="Country-select-label"
+                                                id="countrySelect"
+                                                // value={}
+                                                // onChange={handleChange}
+                                                label="Country"
+                                                fullWidth
+                                            >
+                                                <MenuItem value="-">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                <MenuItem value={10}>India</MenuItem>
+                                                <MenuItem value={20}>UK</MenuItem>
+                                                <MenuItem value={30}>UAE</MenuItem>
+                                            </Select>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                        <InputLabel id="State-select-label">State</InputLabel>
+                                        <Select
+                                            variant="outlined"
+                                            labelId="State-select-label"
+                                            id="stateSelect"
+                                            // value={}
+                                            // onChange={handleChange}
+                                            label="State"
+                                            fullWidth
+                                        >
+                                            <MenuItem value="-">
+                                                <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>Goa</MenuItem>
+                                            <MenuItem value={20}>Gujrat</MenuItem>
+                                            <MenuItem value={30}>Delhi</MenuItem>
+                                        </Select>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                        <InputLabel id="City-select-label">City</InputLabel>
+                                        <Select
+                                            variant="outlined"
+                                            labelId="City-select-label"
+                                            id="citySelect"
+                                            // value={}
+                                            // onChange={handleChange}
+                                            label="City"
+                                            fullWidth
+                                        >
+                                            <MenuItem value="-">
+                                                <em>None</em>
+                                            </MenuItem>
+                                            <MenuItem value={10}>Margao</MenuItem>
+                                            <MenuItem value={20}>Noida</MenuItem>
+                                            <MenuItem value={30}>Fujera</MenuItem>
+                                        </Select>
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            <TextField
+                                            style={{marginTop:30}}
+                                            id="Postcode"
+                                            label="Post Code"
+                                            variant="outlined"
+                                            size="small"
+                                            onChange={(e) => updateCompanyMasterDetail('Postcode', e)}
+                                            fullWidth />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={3}>
+                                            <TextField
+                                                id="PhoneNo"
+                                                label="Phone No"
+                                                variant="outlined"
+                                                size="small"
+                                                onChange={(e) => updateCompanyMasterDetail('PhoneNo', e)}
+                                                fullWidth />
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                        <TextField
+                                            id="Website"
+                                            label="Website"
+                                            variant="outlined"
+                                            size="small"
+                                            onChange={(e) => updateCompanyMasterDetail('Website', e)}
+                                            fullWidth />
+                                    </Grid>
+                                    </Grid>
                            </div>
                        ):(
-                           <div style={{marginTop:-15}}>
-                                <h5>Adding New company information</h5>
-                           </div>
+                           <div style={{marginTop:-15}}>                             
+
+                           <Grid container spacing={3}>
+                           <Grid item xs={4}>
+                               <TextField
+                                   id="CompanyName"
+                                   label="Company Name"
+                                   variant="outlined"
+                                   size="small"
+                                   onChange={(e) => updateCompanyMasterDetail('CompanyName', e)}
+                                   fullWidth />
+                           </Grid>
+                       </Grid>
+
+                       <Grid container spacing={3}>
+                           <Grid item xs={4}>
+                               <TextField
+                                   id="Address"
+                                   label="Address"
+                                   variant="outlined"
+                                   size="small"
+                                   onChange={(e) => updateCompanyMasterDetail('Address', e)}
+                                   fullWidth 
+                                   multiline
+                                   rows={4}
+                                   />
+                           </Grid>
+                           <Grid item xs={4}>
+                               <TextField
+                                   id="Address2"
+                                   label="Address 2"
+                                   variant="outlined"
+                                   size="small"
+                                   onChange={(e) => updateCompanyMasterDetail('Address2', e)}
+                                   fullWidth 
+                                   multiline
+                                   rows={4}
+                                   />
+                           </Grid>
+                           <Grid item xs={4}>
+                               <TextField
+                                   id="Address3"
+                                   label="Address 3"
+                                   variant="outlined"
+                                   size="small"
+                                   onChange={(e) => updateCompanyMasterDetail('Address3', e)}
+                                   fullWidth 
+                                   multiline
+                                   rows={4}
+                                   />
+                           </Grid>
+                       </Grid>
+
+                       <Grid container spacing={3}>
+                           <Grid item xs={3}>
+                               <InputLabel id="Country-select-label">Country</InputLabel>
+                               <Select
+                                   variant="outlined"
+                                   labelId="Country-select-label"
+                                   id="countrySelect"
+                                   // value={}
+                                   // onChange={handleChange}
+                                   label="Country"
+                                   fullWidth
+                               >
+                                   <MenuItem value="-">
+                                       <em>None</em>
+                                   </MenuItem>
+                                   <MenuItem value={10}>India</MenuItem>
+                                   <MenuItem value={20}>UK</MenuItem>
+                                   <MenuItem value={30}>UAE</MenuItem>
+                               </Select>
+                           </Grid>
+                           <Grid item xs={3}>
+                           <InputLabel id="State-select-label">State</InputLabel>
+                           <Select
+                               variant="outlined"
+                               labelId="State-select-label"
+                               id="stateSelect"
+                               // value={}
+                               // onChange={handleChange}
+                               label="State"
+                               fullWidth
+                           >
+                               <MenuItem value="-">
+                                   <em>None</em>
+                               </MenuItem>
+                               <MenuItem value={10}>Goa</MenuItem>
+                               <MenuItem value={20}>Gujrat</MenuItem>
+                               <MenuItem value={30}>Delhi</MenuItem>
+                           </Select>
+                           </Grid>
+                           <Grid item xs={3}>
+                           <InputLabel id="City-select-label">City</InputLabel>
+                           <Select
+                               variant="outlined"
+                               labelId="City-select-label"
+                               id="citySelect"
+                               // value={}
+                               // onChange={handleChange}
+                               label="City"
+                               fullWidth
+                           >
+                               <MenuItem value="-">
+                                   <em>None</em>
+                               </MenuItem>
+                               <MenuItem value={10}>Margao</MenuItem>
+                               <MenuItem value={20}>Noida</MenuItem>
+                               <MenuItem value={30}>Fujera</MenuItem>
+                           </Select>
+                           </Grid>
+                           <Grid item xs={2}>
+                               <TextField
+                               style={{marginTop:30}}
+                               id="Postcode"
+                               label="Post Code"
+                               variant="outlined"
+                               size="small"
+                               onChange={(e) => updateCompanyMasterDetail('Postcode', e)}
+                               fullWidth />
+                           </Grid>
+                       </Grid>
+
+                       <Grid container spacing={3}>
+                           <Grid item xs={3}>
+                               <TextField
+                                   id="PhoneNo"
+                                   label="Phone No"
+                                   variant="outlined"
+                                   size="small"
+                                   onChange={(e) => updateCompanyMasterDetail('PhoneNo', e)}
+                                   fullWidth />
+                           </Grid>
+                           <Grid item xs={3}>
+                           <TextField
+                               id="Website"
+                               label="Website"
+                               variant="outlined"
+                               size="small"
+                               
+                               fullWidth />
+                       </Grid>
+                       </Grid>
+                       <Grid container spacing={3}>
+                       <Grid item xs={6}>
+                          &nbsp;
+                        </Grid>
+                        <Grid item xs={6} style={{textAlign:'right'}}>
+                            <Button variant="outlined" style={{backgroundColor:'#9e9e9e'}} size="small">Create</Button>
+                        </Grid>
+                       </Grid>              
+                          
+                       
+                       </div>
                        )}
                          
                     </DialogContentText>

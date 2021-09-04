@@ -12,13 +12,14 @@ class BreadCrumb extends React.Component {
         this.state = {
           urlparams: "",
           parentBreadcrumb:true,  
-          companyMaster:false
+          companyMaster:false,
+          addNewCompany:false,
         };   
       }
 
     componentDidMount() {      
         if (
-            getCookie(COOKIE.USERID) != null
+            getCookie(COOKIE.TOKEN) != null
           ) {
             this.setState({ isLoggedIn: true });
             var url = new URL(window.location.href);
@@ -37,7 +38,8 @@ class BreadCrumb extends React.Component {
           }      
           let data= this.props.data;
           console.log("data > ",data);      
-          if(data==="companyMaster")this.setState({companyMaster:true});       
+          if(data==="companyMaster")this.setState({companyMaster:true});   
+          if(data==="addNewCompany")this.setState({addNewCompany:true});       
     }
 
     render() {
@@ -47,7 +49,7 @@ class BreadCrumb extends React.Component {
           }
 
         return (
-            <div style={{marginTop:50}}>
+            <Fragment style={{marginTop:50}}>
                 <Breadcrumbs aria-label="breadcrumb">
                 {this.state.parentBreadcrumb?(
                     <Link color="inherit" href={URLS.URLS.userDashboard+this.state.urlparams}  >
@@ -56,10 +58,18 @@ class BreadCrumb extends React.Component {
                 ):null}                
                 { this.state.companyMaster?(                                          
                     <Typography color="textPrimary">Company Master</Typography>                                     
-                ):null}           
+                ):null} 
+                { this.state.addNewCompany?(  
+                <Fragment>
+                  <Link color="inherit" href={URLS.URLS.userDashboard+this.state.urlparams}>
+                    Company master
+                  </Link>
+                  <Typography color="textPrimary">Add New Company</Typography>
+                </Fragment>
+              ):null}            
                 
             </Breadcrumbs>              
-            </div>
+            </Fragment>
         );
     }
 }

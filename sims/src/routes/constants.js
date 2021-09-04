@@ -7,4 +7,6 @@ export const URLS = {
   testReport:"/testReport",
   redirectLoginPage: "/login",  
   companyMaster: "/companyMaster",  
+  addNewCompany:"/addNewCompany",
+  editCompany:"/editCompany",
 };
