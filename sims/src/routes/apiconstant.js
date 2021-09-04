@@ -4,5 +4,5 @@ export const APIURL = {
     // Login: domain+"WebService.asmx/Login",
     Login: domain+"api/users/login",
     Logout:domain+"api/users/Logout",
-   
+    addNewCompany:domain+"",
   };
