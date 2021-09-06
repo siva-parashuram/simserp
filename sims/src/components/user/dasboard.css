@@ -125,6 +125,25 @@ cursor: pointer;
   background-color: #e0f2f1 !important;
 }
 
+.accordion-Header-Design{
+  background-color: #eceff1  !important;
+}
+.accordion-Header-Title{
+  color: #000 !important;
+  letter-spacing: 0.1rem !important;
+  font-weight: 545 !important;
+}
+
+.textFieldCss{
+  height: 30px !important;
+}
+
+.no-border-table{
+  border-style: none !important;
+}
+
+ 
+
 /**************************************************************************************************************************/
 
 /* width */

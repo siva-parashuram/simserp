@@ -4,5 +4,27 @@ export const APIURL = {
     // Login: domain+"WebService.asmx/Login",
     Login: domain+"api/users/login",
     Logout:domain+"api/users/Logout",
-    addNewCompany:domain+"",
+    addNewCompany:domain+"api/Company/CreateCompany",
+    GetCompanies:domain+"api/Company/GetCompanies",
   };
+
+
+  export let ValidUser={
+    UserID: null,
+    Token :null
+  };
+
+  export let company={
+    "CompanyID":null,
+    "CompanyName": null,
+    "Address": null,
+    "Address2": null,
+    "Address3": null,
+    "City": null,
+    "Postcode": null,
+    "CountryID": null,
+    "StateID": null,
+    "PhoneNo": null,
+    "Website": null,
+    "CreationDate": null
+};

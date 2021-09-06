@@ -78,11 +78,7 @@ class companyMaster extends React.Component {
           <Toolbar />
           <div style={{ marginLeft: 250 }}>
             <BreadCrumb data="companyMaster" />
-            
-             
               <Companymasterdatagrid/>
-            
-           
           </div>
         </main>
       </Fragment>

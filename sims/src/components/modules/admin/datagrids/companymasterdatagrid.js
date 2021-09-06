@@ -15,6 +15,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import Typography from '@material-ui/core/Typography';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
  
 
 import Table from '@material-ui/core/Table';
@@ -35,6 +38,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import * as APIURLS from "../../../../routes/apiconstant";
+
+import axios from "axios";
 
 let columns = [
 
@@ -86,6 +92,8 @@ class companymasterdatagrid extends React.Component {
         });   
     }
 
+    
+
     handleCheckboxChange = (e, id) => {
         console.log("handleCheckboxChange > e > ", e);
         console.log("handleCheckboxChange > e.target > ", e.target);
@@ -110,21 +118,47 @@ class companymasterdatagrid extends React.Component {
     }
 
     getCompanyList() {
+        /*
         let rows = [
             {
                 id: 226,
                 sno: 1,
                 company: "Siva Goa",
                 address: "N-6, Verna Industrial Area, Phase IV, Verna,Goa - 403722, INDIA",
+                branchList:[{branchID:1,branchName:"Siva IOT"}]
             },
             {
                 id: 115,
                 sno: 2,
                 company: "Siva Tec Ltd",
                 address: "Unit 3, Princes Drive Industrial Estate, Princes Drive, Kenilworth, Warwickshire, CV8 2FD, UK.",
+                branchList:[{branchID:2,branchName:"Siva Teck UK"}]
             }
         ];
-        this.setState({ masterCompanyData:rows,companyData: rows });
+*/
+
+        let rows=[];
+
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json"
+        };
+        let GetCompaniesUrl = APIURLS.APIURL.GetCompanies;       
+       
+        axios.post(GetCompaniesUrl, ValidUser, { headers })
+          .then(response => {           
+            let data=response.data;
+            console.log("getCompanyList > response > data > ",data);
+            rows=data;
+            this.setState({ masterCompanyData:rows,companyData: rows });
+          }
+          ).catch(error => {            
+            console.log("error > ",error);
+          });
+
+        
     }
 
 
@@ -180,9 +214,10 @@ class companymasterdatagrid extends React.Component {
             }else{
                
             for(let i=0;i<masterCompanyData.length;i++){
-                    if(masterCompanyData[i].company.toLowerCase().includes(key) || 
-                     masterCompanyData[i].address.toLowerCase().includes(key) ||
-                     masterCompanyData[i].id.toString().toLowerCase().includes(key)
+                    if(
+                     masterCompanyData[i].companyName!=null?masterCompanyData[i].companyName.toLowerCase().includes(key):null || 
+                     masterCompanyData[i].address!=null?masterCompanyData[i].address.toLowerCase().includes(key):null ||
+                     masterCompanyData[i].companyId!=null?masterCompanyData[i].companyId.toString().toLowerCase().includes(key):null
                      ){
                         rows.push(masterCompanyData[i]);
                     }           
@@ -216,10 +251,24 @@ class companymasterdatagrid extends React.Component {
 
         return (
             <div style={{ height: 300, width: '100%' }}>
-                <div style={{ height: 20 }}>
-                   
+            <div style={{ height: 20 }}> </div>
+            <div style={{marginLeft:2}}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Breadcrumbs aria-label="breadcrumb">
+                            <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
+                                Dashboard
+                            </Link>
+                            <Typography color="textPrimary">   Company master</Typography>
+                        </Breadcrumbs>
+
+                    </Grid>
+                </Grid>
                 </div>
-                <div style={{ marginLeft: 10 }}>
+                <div style={{ height: 20 }}> </div>              
+                   
+               
+                <div style={{ marginLeft: 2 }}>
                     <Grid container spacing={0}>
                         <Grid xs={2}>
                         <TextField 
@@ -264,7 +313,7 @@ class companymasterdatagrid extends React.Component {
                                 <Table stickyHeader size="small" className="" aria-label="company List table">
                                     <TableHead className="table-header-background">
                                         <TableRow>
-                                            <TableCell className="table-header-font">No</TableCell>
+                                            <TableCell className="table-header-font">#</TableCell>
                                             <TableCell className="table-header-font" align="left">Company Name</TableCell>
                                             <TableCell className="table-header-font" align="left">Address</TableCell>
                                         </TableRow>
@@ -279,10 +328,10 @@ class companymasterdatagrid extends React.Component {
                                             onClick={(event) => handleRowClick(event,item,"row_"+i)}
                                             >
                                                 <TableCell align="left">
-                                                    <a className="LINK tableLink" href={URLS.URLS.editCompany+this.state.urlparams+"&compID="+item.id} onClick={(e)=>openCompanyDetail(e,item)}>{item.id}</a>
+                                                    <a className="LINK tableLink" href={URLS.URLS.editCompany+this.state.urlparams+"&compID="+item.companyId} onClick={(e)=>openCompanyDetail(e,item)}>C{item.companyId}</a>
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                    <a className="LINK tableLink" href={URLS.URLS.editCompany+this.state.urlparams+"&compID="+item.id} onClick={(e)=>openCompanyDetail(e,item)}>{item.company}</a>
+                                                    <a className="LINK tableLink" href={URLS.URLS.editCompany+this.state.urlparams+"&compID="+item.companyId} onClick={(e)=>openCompanyDetail(e,item)}>{item.companyName}</a>
                                                 </TableCell>
                                                 <TableCell align="left">
                                                     {item.address}
@@ -293,11 +342,56 @@ class companymasterdatagrid extends React.Component {
 
 
                                     </TableBody>
-                                </Table>
-                            </TableContainer>
+                                </Table>                            
+                                </TableContainer>
                         </div>
                     </Grid>
-                    <Grid xs={3}></Grid>
+                    <Grid xs={4}>
+                     <div style={{marginLeft:10,marginTop:20}}>
+
+                     <Grid container spacing={0}>
+                        <Grid xs={12}>
+                         <h4>Branch Lists</h4>
+                        </Grid>
+                        <Grid xs={12}>
+                        <Table stickyHeader size="small" className="" aria-label="company List table">
+                        <TableHead className="table-header-background">
+                            <TableRow>
+                                <TableCell className="table-header-font">#</TableCell>
+                                <TableCell className="table-header-font" align="left">Branch</TableCell>
+                                
+                            </TableRow>
+                        </TableHead>
+                        <TableBody className="tableBody">
+                            {this.state.companyData.map((item, i) => (
+                                <TableRow 
+                                id={"row_"+i}
+                                className={this.state.initialCss}
+                                hover
+                                key={i}
+                                //onClick={(event) => handleRowClick(event,item,"row_"+i)}
+                                >
+                                    <TableCell align="left">
+                                        <a className="LINK tableLink" href={URLS.URLS.editCompany+this.state.urlparams+"&compID="+item.id} onClick={(e)=>openCompanyDetail(e,item)}>{item.id}</a>
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        <a className="LINK tableLink" href={URLS.URLS.editCompany+this.state.urlparams+"&compID="+item.id} onClick={(e)=>openCompanyDetail(e,item)}>{item.company}</a>
+                                    </TableCell>
+                                     
+                                </TableRow>
+   
+                            ))}
+   
+   
+                        </TableBody>
+                    </Table>
+                
+                        </Grid>
+                     </Grid>
+
+                    
+                     </div>
+                    </Grid>
                 </Grid>
 
 

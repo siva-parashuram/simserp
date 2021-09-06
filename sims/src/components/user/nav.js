@@ -185,7 +185,7 @@ class nav extends React.Component {
 
 
                 <Dialog fullScreen open={this.state.FullScreenDialog} onClose={processDialogClose} >
-                    <AppBar className={useStyles.appBar} style={{ width: '100%', margin: 0, backgroundColor: '#00838f ' }}>
+                    <AppBar className={useStyles.appBar} style={{ width: '100%', margin: 0,  }}>
                         <Toolbar>
                             <IconButton edge="start" color="inherit" onClick={processDialogClose} aria-label="close">
                                 <CloseIcon />
