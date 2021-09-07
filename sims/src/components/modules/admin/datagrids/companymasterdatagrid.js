@@ -164,9 +164,7 @@ class companymasterdatagrid extends React.Component {
 
 
 
-    render() {
-
- 
+    render() { 
 
         const processSave = () => {
             //process post request and hideSaved Alert
@@ -175,10 +173,7 @@ class companymasterdatagrid extends React.Component {
                 this.setState({ showSavedAlert: false });
             }.bind(this), 3000);
 
-        }
-
-
-     
+        }     
         
         const handleRowClick= (e,item,id) => {
             console.log("handleRowClick > e > ", e);

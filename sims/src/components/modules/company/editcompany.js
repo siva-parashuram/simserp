@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import '../../user/dasboard.css';
 import * as URLS from "../../../routes/constants";
+import * as APIURLS from "../../../routes/apiconstant";
+import { COOKIE, getCookie } from "../../../services/cookie";
 import Nav from "../../user/nav";
 import Drawer from "../../user/drawer";
 import Toolbar from '@material-ui/core/Toolbar';
@@ -29,22 +31,25 @@ import TextField from '@material-ui/core/TextField';
 
 import Button from '@material-ui/core/Button';
 import CheckIcon from '@material-ui/icons/Check';
+import axios from "axios";
+
+ 
 
 class editcompany extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       urlparams: "",
-      companyName: "",
-      address: "",
-      address2: "",
-      address3: "",
-      country: 0,
-      state: 0,
-      city: "",
-      postcode: "",
-      phoneno: "",
-      website: "",
+      CompanyName: "",
+      Address: "",
+      Address2: "",
+      Address3: "",
+      CountryID: 0,
+      StateID: 0,
+      City: "",
+      PostCode: "",
+      PhoneNo: "",
+      Website: "",
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: true,
@@ -54,9 +59,12 @@ class editcompany extends React.Component {
         country: { errorState: false, errorMsg: "" },
       },
       userIsTyping: false,
-      isUserchangesUpdated: false
+      isUserchangesUpdated: false,
+      CompanyID:null,
+      company: APIURLS.company
     };
     this.wrapper = React.createRef();
+     
   }
 
   componentDidMount() {
@@ -64,12 +72,73 @@ class editcompany extends React.Component {
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
-    let compID = url.searchParams.get("compID");
+    let CompanyID = url.searchParams.get("compID");
     let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
     this.setState({
       urlparams: urlparams,
+      CompanyID:CompanyID
+    },()=>{
+      this.getCompanyDetails(CompanyID);
     });
   }
+
+  getCompanyDetails(CompanyID){
+    console.log("getCompanyDetails > CompanyID > ",CompanyID);
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let company = APIURLS.company;
+    company.CompanyID = parseInt(CompanyID);
+    const data = {
+      validUser: ValidUser,
+      company: company
+    };
+    console.log("data - > ",data);
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    let GetCompanyUrl = APIURLS.APIURL.GetCompany;
+    axios.post(GetCompanyUrl, data, { headers })
+      .then(response => {
+        console.log("response > ", response);
+        if (response.status === 200) {
+          console.log("response.data.CompanyName > ", response.data.companyName);
+            company.CompanyName = response.data.companyName;
+            company.Address = response.data.address;
+            company.Address2 = response.data.address2;
+            company.Address3 = response.data.address3;
+            company.City = response.data.city;
+            company.Postcode = response.data.postcode;
+            company.CountryID = response.data.countryId;
+            company.StateID = response.data.stateId;
+            company.PhoneNo = response.data.phoneNo;
+            company.Website = response.data.website;
+            this.setState({
+              company:company,
+              CompanyName: response.data.companyName,
+              Address:response.data.address,
+              Address2 :response.data.address2,
+              Address3: response.data.address3,
+              CountryID: response.data.countryId,
+              state: response.data.stateId,
+              City: response.data.city,
+              PostCode: response.data.postcode,
+              PhoneNo: response.data.phoneNo,
+              Website: response.data.website,
+            },()=>{
+              console.log("=============================");
+              console.log("State > ",this.state);
+              console.log("=============================");
+            });
+        } else {
+
+        }
+      }
+      ).catch(error => {
+
+      });
+
+  } 
 
   render() {
     const useStyles = makeStyles((theme) => ({
@@ -83,13 +152,128 @@ class editcompany extends React.Component {
 
 
     const updateFormValue = (id, e) => {
-      this.setState({ userIsTyping: false, isUserchangesUpdated: true });
       console.log("updateFormValue > id > ", id);
       console.log("updateFormValue > e.target.value > ", e.target.value);
       
-      //get the value and send for update
+
+      //if (e.target.value === "" || e.target.value == null) {}else{ 
+
+        let company = this.state.company;
+        if (id === "PhoneNo") {
+          this.setState({ PhoneNo: e.target.value });
+          company.PhoneNo = e.target.value;
+        }
+        if (id === "companyName") {
+          this.setState({ CompanyName: e.target.value });
+          company.CompanyName = e.target.value;
+          if (e.target.value === "" || e.target.value == null) {
+            console.log("----------->  Blank ");
+            let v = this.state.Validations;
+            v.companyName = { errorState: true, errorMsg: "Company Name Cannot be blank!" };
+            this.setState({
+              Validations: v
+            });
+          }else{ 
+            console.log("-----------> Not Blank ");
+            let v = this.state.Validations;
+            v.companyName = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v
+            }, () => { updateCompanyDetails(company); });
+
+          }  
+
+        }
+
+        if (id === "Address") {
+          this.setState({ Address: e.target.value });
+          company.Address = e.target.value;
+          if (e.target.value === "" || e.target.value == null) {
+            console.log("----------->  Blank ");
+            let v = this.state.Validations;
+            v.address = { errorState: true, errorMsg: "Address Cannot be blank!" };
+            this.setState({
+              Validations: v
+            });
+          }else{
+            let v = this.state.Validations;
+            v.address = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v
+            }, () => { updateCompanyDetails(company); });
+
+
+          }
+        }
+        if (id === "Address2") {
+          this.setState({ Address2: e.target.value });
+          company.Address2 = e.target.value;
+          updateCompanyDetails(company);
+        }
+        if (id === "Address3") {
+          this.setState({ Address3: e.target.value });
+          company.Address3 = e.target.value;
+          updateCompanyDetails(company);
+        }
+
+
+        if (id === "Website") {
+          this.setState({ Website: e.target.value });
+          company.Website = e.target.value;
+          updateCompanyDetails(company);
+        }
+        if (id === "City") {
+          this.setState({ City: e.target.value });
+          company.City = e.target.value;
+          updateCompanyDetails(company);
+        }
+        if (id === "Postcode") {
+          this.setState({ PostCode: e.target.value });
+          company.Postcode = e.target.value;
+          updateCompanyDetails(company);
+        }
+        if (id === "Website") {
+          this.setState({ Website: e.target.value });
+          company.Website = e.target.value;
+          updateCompanyDetails(company);
+        }
+
+
+      //}  
+
 
     }
+
+    const updateCompanyDetails=(company)=>{
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const data = {
+        validUser: ValidUser,
+        company: company
+      };       
+      console.log("data - > ", data);
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      let UpdateCompanyUrl = APIURLS.APIURL.UpdateCompany;
+      axios.post(UpdateCompanyUrl, data, { headers })
+        .then(response => {
+          console.log("response > ", response);
+          if (response.status === 200) {
+            
+            this.setState({ isUserchangesUpdated: true }); 
+          } else {
+
+          }
+        }
+        ).catch(error => {
+
+        });
+
+
+    }
+
     const handleAccordionClick = (val, e) => {
       console.log("handleAccordionClick > val > ", val);
       console.log("handleAccordionClick > e > ", e);
@@ -102,7 +286,7 @@ class editcompany extends React.Component {
     }
 
     const userTypingBusyPrompt = (e) => {
-      this.setState({ userIsTyping: true,isUserchangesUpdated: false });
+      //this.setState({ userIsTyping: true,isUserchangesUpdated: false });
     }
 
 
@@ -188,19 +372,22 @@ class editcompany extends React.Component {
                               <TableBody className="tableBody">
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Company Name</b>
+                                    <b>Company Name </b>
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
                                       id="companyName"
                                       variant="outlined"
                                       size="small"
-                                      onKeyUp={(e) => userTypingBusyPrompt(e)}
+                                     // onKeyUp={(e) => userTypingBusyPrompt(e)}
                                       onChange={(e) => updateFormValue('companyName', e)}
                                       fullWidth
                                       InputProps={{
-                                        className: "textFieldCss"
+                                        className: "textFieldCss",
+                                       
                                       }}
+                                     
+                                      value={this.state.CompanyName}
                                       error={this.state.Validations.companyName.errorState}
                                       helperText={this.state.Validations.companyName.errorMsg}
                                     />
@@ -220,6 +407,7 @@ class editcompany extends React.Component {
                                       InputProps={{
                                         className: "textFieldCss"
                                       }}
+                                      value={this.state.PhoneNo}
                                     />
                                   </TableCell>
                                 </TableRow>
@@ -237,6 +425,7 @@ class editcompany extends React.Component {
                                       InputProps={{
                                         className: "textFieldCss"
                                       }}
+                                      value={this.state.Website}
                                     />
                                   </TableCell>
                                 </TableRow>
@@ -264,6 +453,7 @@ class editcompany extends React.Component {
                                   <TableCell align="left" className="no-border-table">
                                     <b>Country</b>
                                   </TableCell>
+                                  
                                   <TableCell align="left" className="no-border-table">
                                     <Select
                                       style={{ height: 40, marginTop: 14 }}
@@ -313,6 +503,7 @@ class editcompany extends React.Component {
                                   <TableCell align="left" className="no-border-table">
                                     <b>City</b>
                                   </TableCell>
+                                 
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
                                       id="City"
@@ -323,6 +514,7 @@ class editcompany extends React.Component {
                                       InputProps={{
                                         className: "textFieldCss"
                                       }}
+                                      value={this.state.City}
                                     />
                                   </TableCell>
                                 </TableRow>
@@ -340,12 +532,13 @@ class editcompany extends React.Component {
                                       InputProps={{
                                         className: "textFieldCss"
                                       }}
+                                      value={this.state.PostCode}
                                     />
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address</b>
+                                    <b>Address Line 1</b>
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -353,17 +546,19 @@ class editcompany extends React.Component {
                                       variant="outlined"
                                       size="small"
                                       onChange={(e) => updateFormValue('Address', e)}
-                                      fullWidth
-                                      multiline
-                                      rows={4}
+                                      value={this.state.Address}
+                                      fullWidth                                     
                                       error={this.state.Validations.address.errorState}
                                       helperText={this.state.Validations.address.errorMsg}
+                                      InputProps={{
+                                        className: "textFieldCss"
+                                      }}
                                     />
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address 2</b>
+                                    <b>Address Line 2</b>
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -372,15 +567,17 @@ class editcompany extends React.Component {
                                       size="small"
                                       onChange={(e) => updateFormValue('Address2', e)}
                                       fullWidth
-                                      multiline
-                                      rows={4}
+                                      value={this.state.Address2}
+                                      InputProps={{
+                                        className: "textFieldCss"
+                                      }}
 
                                     />
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address 3</b>
+                                    <b>Address Line 3</b>
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -388,10 +585,11 @@ class editcompany extends React.Component {
                                       variant="outlined"
                                       size="small"
                                       onChange={(e) => updateFormValue('Address3', e)}
-                                      fullWidth
-                                      multiline
-                                      rows={4}
-
+                                      fullWidth    
+                                      value={this.state.Address3}   
+                                      InputProps={{
+                                        className: "textFieldCss"
+                                      }}                              
                                     />
                                   </TableCell>
                                 </TableRow>

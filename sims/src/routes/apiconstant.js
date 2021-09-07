@@ -6,6 +6,8 @@ export const APIURL = {
     Logout:domain+"api/users/Logout",
     addNewCompany:domain+"api/Company/CreateCompany",
     GetCompanies:domain+"api/Company/GetCompanies",
+    GetCompany:domain+"api/Company/GetCompany",
+    UpdateCompany:domain+"api/Company/UpdateCompany",
   };
 
 
