@@ -1,10 +1,7 @@
 import './dasboard.css';
 import React, { Fragment } from 'react';
 import { Link } from "react-router-dom";
-import { COOKIE, getCookie } from "../../services/cookie";
-import * as URLS from "../../routes/constants";
-
-import { makeStyles } from '@material-ui/core/styles';
+import { COOKIE, getCookie } from "../../services/cookie"; 
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -26,7 +23,11 @@ class modules extends React.Component {
             moduleList:[
                 {
                     moduleName:"Admin",
-                    subMenus:[{name:"Company Master",link:"companyMaster"}]
+                    subMenus:[
+                        {name:"Company Master",link:"companyMaster"},
+                        {name:"Country Master",link:"countryMaster"},
+                        {name:"State Master",link:"stateMaster"}
+                    ]
                 },
                 {
                     moduleName:"Reports",

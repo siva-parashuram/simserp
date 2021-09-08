@@ -19,7 +19,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
-// import Alert from '@material-ui/lab/Alert';
+
 import MuiAlert from '@material-ui/lab/Alert';
 
 import ArrowForward from '@material-ui/icons/ArrowForward';
@@ -28,11 +28,11 @@ import CompanyList from './companyList';
 
 import * as URLS from "../routes/constants";
 import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cookie";
-import { FlashOnRounded } from '@material-ui/icons';
 
-let clientlog="";
-let companiesList=[
- 
+
+let clientlog = "";
+let companiesList = [
+
 ];
 
 class login extends React.Component {
@@ -40,7 +40,7 @@ class login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      token:"",
+      token: "",
       ErrorPrompt: false,
       isLoggedIn: false,
       data: {},
@@ -52,7 +52,7 @@ class login extends React.Component {
       loader: 'hideLoginScreenLoader',
       anchorEl: null,
       open: false,
-      clientlog:""
+      clientlog: ""
     };
     this.handleChange = this.handleChange.bind(this);
 
@@ -61,18 +61,18 @@ class login extends React.Component {
   logoutUser = () => {
     deleteCookie(COOKIE.USERID, null);
     deleteCookie(COOKIE.TOKEN, null);
-    deleteCookie(COOKIE.USERID, null); 
+    deleteCookie(COOKIE.USERID, null);
     deleteCookie(COOKIE.ISADMIN, null);
     deleteCookie(COOKIE.FIRSTNAME, null);
     this.removeSavedState();
-    this.setState({ anchorEl: null, isLoggedIn: false });      
+    this.setState({ anchorEl: null, isLoggedIn: false });
     window.location.reload();
   }
 
-   loadState = () => {
+  loadState = () => {
     try {
       const serializedState = localStorage.getItem('loginState');
-      if(serializedState === null) {
+      if (serializedState === null) {
         return undefined;
       }
       return JSON.parse(serializedState);
@@ -80,8 +80,8 @@ class login extends React.Component {
       return undefined;
     }
   };
-  
-   saveState = (state) => {
+
+  saveState = (state) => {
     try {
       const serializedState = JSON.stringify(state);
       localStorage.setItem('loginState', serializedState);
@@ -90,27 +90,27 @@ class login extends React.Component {
     }
   };
 
-  removeSavedState=()=>{
-    try {      
+  removeSavedState = () => {
+    try {
       localStorage.setItem('loginState', null);
     } catch (e) {
       // Ignore write errors;
     }
   }
-  
 
-  componentDidMount() {    
-     
+
+  componentDidMount() {
+
     let getLocalIP = this.getLocalIP();
-    this.setState({clientlog:getLocalIP});
+    this.setState({ clientlog: getLocalIP });
     let token = getCookie(COOKIE.TOKEN);
     if (token === "null" || token == null) {
       this.setState({ isLoggedIn: false });
       this.props.history.push(URLS.URLS.LoginPage);
-    } else {       
-      try{
-        let loginState=this.loadState(); 
-        console.log("loginState > ",loginState);
+    } else {
+      try {
+        let loginState = this.loadState();
+        console.log("loginState > ", loginState);
         this.setState({
           ErrorPrompt: loginState.ErrorPrompt,
           isLoggedIn: true,
@@ -123,13 +123,13 @@ class login extends React.Component {
           loader: 'hideLoginScreenLoader',
           anchorEl: loginState.anchorEl,
           open: loginState.open,
-          clientlog:loginState.clientlog
-      });
+          clientlog: loginState.clientlog
+        });
 
-      }catch(ex){
+      } catch (ex) {
         this.logoutUser();
       }
-      
+
     }
     this.interval = setInterval(() => {
       let token = getCookie(COOKIE.USERID);
@@ -146,26 +146,26 @@ class login extends React.Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
- 
+
 
 
   getLocalIP() {
-    let D ="";
+    let D = "";
     axios.get('https://www.cloudflare.com/cdn-cgi/trace')
-      .then(function (response) { 
-         D = response.data;
-         clientlog=D;
+      .then(function (response) {
+        D = response.data;
+        clientlog = D;
       })
-      .catch(function (error) { 
+      .catch(function (error) {
       })
-      .then(function () {        
+      .then(function () {
       });
 
-      return D;  
+    return D;
   }
 
 
-  
+
 
   handleChange(event) {
     let id = event.target.id;
@@ -180,69 +180,69 @@ class login extends React.Component {
   render() {
     const handleClick = (e) => {
       if (this.state.userID === "" || this.state.password === "") { } else {
-        this.setState({ loader: 'showLoginScreenLoader' });        
+        this.setState({ loader: 'showLoginScreenLoader' });
         const data = {
           loginId: this.state.userID,
           password: this.state.password,
-          ClientInfo:clientlog
-        };        
-        console.log("data -> ",data);
+          ClientInfo: clientlog
+        };
+        console.log("data -> ", data);
         const headers = {
           "Content-Type": "application/json"
         };
-        let loginUrl = APIURLS.APIURL.Login;       
-       
+        let loginUrl = APIURLS.APIURL.Login;
+
         axios.post(loginUrl, data, { headers })
           .then(response => {
-            
+
             if (response.status === 200) {
               if (response.data.UID === 0) {
                 this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
-                document.getElementById("password").value=null;
-                             
+                document.getElementById("password").value = null;
+
               } else {
-                let data=response.data;
-                setAllCookiesAndParams(data);               
+                let data = response.data;
+                setAllCookiesAndParams(data);
               }
             } else {
               this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
-              document.getElementById("password").value=null;
-              this.setState({ loader: 'hideLoginScreenLoader' });              
+              document.getElementById("password").value = null;
+              this.setState({ loader: 'hideLoginScreenLoader' });
             }
           }
-          ).catch(error => {            
+          ).catch(error => {
             this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true });
           });
-           
+
       }
     };
     const logoutUser = (e) => {
-      processLogout(getCookie(COOKIE.USERID),this.state.token);      
-      this.setState({ anchorEl: null, isLoggedIn: false },()=>{
+      processLogout(getCookie(COOKIE.USERID), this.state.token);
+      this.setState({ anchorEl: null, isLoggedIn: false }, () => {
         deleteCookie(COOKIE.USERID, null);
         deleteCookie(COOKIE.TOKEN, null);
-        deleteCookie(COOKIE.USERID, null); 
+        deleteCookie(COOKIE.USERID, null);
         deleteCookie(COOKIE.ISADMIN, null);
         deleteCookie(COOKIE.FIRSTNAME, null);
         this.removeSavedState();
-      });      
+      });
       // window.location.reload();
     }
 
 
-    const processLogout = (userID,token) => {
+    const processLogout = (userID, token) => {
       const data = {
         "UserID": parseInt(userID),
         "Token": token
       };
-      
+
       const headers = {
         "Content-Type": "application/json"
       };
       let logoutUrl = APIURLS.APIURL.Logout;
       axios.post(logoutUrl, data, { headers })
         .then(response => {
-         
+
         }
         ).catch(error => {
 
@@ -255,7 +255,7 @@ class login extends React.Component {
           ? this.setState({ anchorEl: null })
           : this.setState({ anchorEl: event.currentTarget });
       } catch (err) {
-        
+
       }
     };
     const menuClose = event => {
@@ -273,27 +273,27 @@ class login extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
-    const setAllCookiesAndParams=(data) =>{
-      
+    const setAllCookiesAndParams = (data) => {
+
       let name = data.head.firstName;
-      let initialName =  data.head.firstName.charAt(0).toUpperCase();     
-       
-      
+      let initialName = data.head.firstName.charAt(0).toUpperCase();
+
+
       createCookie(COOKIE.TOKEN, data.head.token);
-      createCookie(COOKIE.USERID, data.head.userID); 
+      createCookie(COOKIE.USERID, data.head.userID);
       createCookie(COOKIE.ISADMIN, data.head.isAdmin);
       createCookie(COOKIE.FIRSTNAME, data.head.firstName);
-       
 
-      
-      let companyList=data.companies.companyList;       
-        this.setState({ userCompanyList:companyList }, function () {
-        this.setState({token:data.head.token, loader: 'hideLoginScreenLoader',data: data, userInitial: initialName, name: name ,isLoggedIn: true},()=>{
+
+
+      let companyList = data.companies.companyList;
+      this.setState({ userCompanyList: companyList }, function () {
+        this.setState({ token: data.head.token, loader: 'hideLoginScreenLoader', data: data, userInitial: initialName, name: name, isLoggedIn: true }, () => {
           this.saveState(this.state);
-        });  
-           
+        });
+
       });
-   
+
     }
 
     return (
@@ -356,12 +356,12 @@ class login extends React.Component {
               <div>&nbsp;</div>
               <div>
                 <Button
-                  variant="contained"                  
+                  variant="contained"
                   endIcon={<ArrowForward />}
                   style={{ background: '#0072bc', color: '#fff' }}
                   onClick={handleClick}
                 >
-                  LOGIN 
+                  LOGIN
                 </Button>
               </div>
 
@@ -390,7 +390,7 @@ class login extends React.Component {
               },
             }}
           >
-         
+
             <MenuItem key="logout" onClick={logoutUser}>Log out</MenuItem>
           </Menu>
         </Container>

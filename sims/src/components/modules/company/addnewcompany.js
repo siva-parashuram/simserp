@@ -101,59 +101,59 @@ class addnewcompany extends React.Component {
             console.log("updateFormValue > id > ", id);
             console.log("updateFormValue > e.target.value > ", e.target.value);
 
-            if (id === "companyName"){
-                if (e.target.value === "" || e.target.value == null || e.target.value.length>50) {
-                    if(e.target.value.length>50){  
+            if (id === "companyName") {
+                if (e.target.value === "" || e.target.value == null || e.target.value.length > 50) {
+                    if (e.target.value.length > 50) {
                         let v = this.state.Validations;
                         v.companyName = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
                         this.setState({
                             Validations: v,
-                            updateBtnDisabled:true,
+                            updateBtnDisabled: true,
                             createBtnDisabled: true
                         });
-                     }
-                    if(e.target.value === "" || e.target.value == null){
+                    }
+                    if (e.target.value === "" || e.target.value == null) {
                         let v = this.state.Validations;
                         v.companyName = { errorState: true, errorMsg: "Company Name Cannot be blank!" };
                         this.setState({
                             Validations: v,
-                            updateBtnDisabled:true,
+                            updateBtnDisabled: true,
                             createBtnDisabled: true
                         });
                     }
-                }else{
+                } else {
                     let v = this.state.Validations;
                     v.companyName = { errorState: false, errorMsg: "" };
-                    this.setState({ Validations: v,companyName: e.target.value,createBtnDisabled: false });
+                    this.setState({ Validations: v, companyName: e.target.value, createBtnDisabled: false });
                 }
-                
-            } 
+
+            }
             if (id === "Address") {
-                if (e.target.value === "" || e.target.value == null || e.target.value.length>50) {
-                    if(e.target.value.length>50){  
+                if (e.target.value === "" || e.target.value == null || e.target.value.length > 50) {
+                    if (e.target.value.length > 50) {
                         let v = this.state.Validations;
                         v.address = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
                         this.setState({
                             Validations: v,
-                            updateBtnDisabled:true,
+                            updateBtnDisabled: true,
                             createBtnDisabled: true
                         });
-                     }
-                    if(e.target.value === "" || e.target.value == null){
+                    }
+                    if (e.target.value === "" || e.target.value == null) {
                         let v = this.state.Validations;
                         v.address = { errorState: true, errorMsg: "Address Cannot be blank!" };
                         this.setState({
                             Validations: v,
-                            updateBtnDisabled:true,
+                            updateBtnDisabled: true,
                             createBtnDisabled: true
                         });
                     }
-                }else{
+                } else {
                     let v = this.state.Validations;
                     v.address = { errorState: false, errorMsg: "" };
-                    this.setState({ Validations: v,address: e.target.value,createBtnDisabled: false });
+                    this.setState({ Validations: v, address: e.target.value, createBtnDisabled: false });
                 }
-               
+
             }
             if (id === "Address2") this.setState({ address2: e.target.value });
             if (id === "Address3") this.setState({ address3: e.target.value });
@@ -240,7 +240,7 @@ class addnewcompany extends React.Component {
                         }
                     }
                     ).catch(error => {
-                       // this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                        // this.setState({ ProgressLoader: true, ErrorPrompt: true });
                     });
             }
         };
