@@ -126,7 +126,7 @@ cursor: pointer;
 }
 
 .accordion-Header-Design{
-  background-color: #eceff1  !important;
+  background-color: #bdbdbd  !important;
 }
 .accordion-Header-Title{
   color: #000 !important;
@@ -135,11 +135,17 @@ cursor: pointer;
 }
 
 .textFieldCss{
-  height: 30px !important;
+  height: 25px !important;
+  font-size: 12px !important;
+  border-radius: 0px !important;
 }
 
 .no-border-table{
   border-style: none !important;
+}
+
+.accordion-table{
+  overflow: hidden !important;
 }
 
  

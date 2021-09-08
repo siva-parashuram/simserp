@@ -8,6 +8,7 @@ export const APIURL = {
     GetCompanies:domain+"api/Company/GetCompanies",
     GetCompany:domain+"api/Company/GetCompany",
     UpdateCompany:domain+"api/Company/UpdateCompany",
+    getTempData:domain+"api/TempData/getTempData",
   };
 
 

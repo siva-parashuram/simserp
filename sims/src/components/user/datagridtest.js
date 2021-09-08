@@ -112,10 +112,12 @@ class datagridtest extends React.Component {
         return (
             <div style={{ height: 300, width: '100%' }}>
              
-            
-           
+                     
              
             <DataGrid   rows={this.state.countryData} columns={columns} onEditRowsModelChange={editRowChange}  />
+
+
+            
      
             {this.state.showSavedAlert===true?(
               <Alert severity="success">Saved</Alert> 

@@ -186,7 +186,7 @@ class login extends React.Component {
           password: this.state.password,
           ClientInfo:clientlog
         };        
-        
+        console.log("data -> ",data);
         const headers = {
           "Content-Type": "application/json"
         };
@@ -235,7 +235,7 @@ class login extends React.Component {
         "UserID": parseInt(userID),
         "Token": token
       };
-
+      
       const headers = {
         "Content-Type": "application/json"
       };
@@ -283,19 +283,15 @@ class login extends React.Component {
       createCookie(COOKIE.USERID, data.head.userID); 
       createCookie(COOKIE.ISADMIN, data.head.isAdmin);
       createCookie(COOKIE.FIRSTNAME, data.head.firstName);
-      // console.log("setAllCookiesAndParams > data > ",data);
-      // console.log("setAllCookiesAndParams > data.companies > ",data.companies);
-      // console.log("setAllCookiesAndParams > data.companies.companyList > ",data.companies.companyList);
+       
 
       
-      let companyList=data.companies.companyList;
-      // createCookie(COOKIE.COMPANYLIST, companyList);
-      // console.log("---> setAllCookiesAndParams > companyList > ",companyList);
+      let companyList=data.companies.companyList;       
         this.setState({ userCompanyList:companyList }, function () {
         this.setState({token:data.head.token, loader: 'hideLoginScreenLoader',data: data, userInitial: initialName, name: name ,isLoggedIn: true},()=>{
           this.saveState(this.state);
         });  
-          //to save state locally   
+           
       });
    
     }

@@ -19,7 +19,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 
 import TextField from '@material-ui/core/TextField';
- 
+
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
@@ -28,17 +28,24 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
- 
+
 import TableRow from '@material-ui/core/TableRow';
- 
+
 import AddIcon from '@material-ui/icons/Add';
 
 import axios from "axios";
+
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 class addnewcompany extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ErrorPrompt: false,
+            SuccessPrompt: false,
+            ProgressLoader: true,
             urlparams: "",
             companyName: "",
             address: "",
@@ -52,10 +59,17 @@ class addnewcompany extends React.Component {
             website: "",
             createBtnDisabled: true,
             GeneralDetailsExpanded: true,
-            AddressDetailsExpanded: true
+            AddressDetailsExpanded: true,
+            Validations: {
+                companyName: { errorState: false, errorMsg: "" },
+                address: { errorState: false, errorMsg: "" },
+                country: { errorState: false, errorMsg: "" },
+            },
         };
         this.wrapper = React.createRef();
     }
+
+
 
     componentDidMount() {
         var url = new URL(window.location.href);
@@ -78,13 +92,69 @@ class addnewcompany extends React.Component {
             },
         }));
 
+        function Alert(props) {
+            return <MuiAlert elevation={6} variant="filled" {...props} />;
+        }
+
 
         const updateFormValue = (id, e) => {
             console.log("updateFormValue > id > ", id);
             console.log("updateFormValue > e.target.value > ", e.target.value);
 
-            if (id === "companyName") this.setState({ companyName: e.target.value });
-            if (id === "Address") this.setState({ address: e.target.value });
+            if (id === "companyName"){
+                if (e.target.value === "" || e.target.value == null || e.target.value.length>50) {
+                    if(e.target.value.length>50){  
+                        let v = this.state.Validations;
+                        v.companyName = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+                        this.setState({
+                            Validations: v,
+                            updateBtnDisabled:true,
+                            createBtnDisabled: true
+                        });
+                     }
+                    if(e.target.value === "" || e.target.value == null){
+                        let v = this.state.Validations;
+                        v.companyName = { errorState: true, errorMsg: "Company Name Cannot be blank!" };
+                        this.setState({
+                            Validations: v,
+                            updateBtnDisabled:true,
+                            createBtnDisabled: true
+                        });
+                    }
+                }else{
+                    let v = this.state.Validations;
+                    v.companyName = { errorState: false, errorMsg: "" };
+                    this.setState({ Validations: v,companyName: e.target.value,createBtnDisabled: false });
+                }
+                
+            } 
+            if (id === "Address") {
+                if (e.target.value === "" || e.target.value == null || e.target.value.length>50) {
+                    if(e.target.value.length>50){  
+                        let v = this.state.Validations;
+                        v.address = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+                        this.setState({
+                            Validations: v,
+                            updateBtnDisabled:true,
+                            createBtnDisabled: true
+                        });
+                     }
+                    if(e.target.value === "" || e.target.value == null){
+                        let v = this.state.Validations;
+                        v.address = { errorState: true, errorMsg: "Address Cannot be blank!" };
+                        this.setState({
+                            Validations: v,
+                            updateBtnDisabled:true,
+                            createBtnDisabled: true
+                        });
+                    }
+                }else{
+                    let v = this.state.Validations;
+                    v.address = { errorState: false, errorMsg: "" };
+                    this.setState({ Validations: v,address: e.target.value,createBtnDisabled: false });
+                }
+               
+            }
             if (id === "Address2") this.setState({ address2: e.target.value });
             if (id === "Address3") this.setState({ address3: e.target.value });
             if (id === "country") this.setState({ country: e.target.value });
@@ -93,7 +163,7 @@ class addnewcompany extends React.Component {
             if (id === "Postcode") this.setState({ postcode: e.target.value });
             if (id === "PhoneNo") this.setState({ phoneno: e.target.value });
             if (id === "Website") this.setState({ website: e.target.value });
-            processEnableCreateBtn();
+            //processEnableCreateBtn();
         }
 
         const processEnableCreateBtn = () => {
@@ -127,18 +197,7 @@ class addnewcompany extends React.Component {
 
 
         const handleCreateCompanyClick = (e) => {
-            /*
-                        let companyName = this.state.companyName;
-                        let address = this.state.address;
-                        let address2 = this.state.address2;
-                        let address3 = this.state.address3;
-                        let country = this.state.country;
-                        let state = this.state.state;
-                        let city = this.state.city;
-                        let postcode = this.state.postcode;
-                        let phoneno = this.state.phoneno;
-                        let website = this.state.website;
-            */
+            this.setState({ ProgressLoader: false });
 
             let ValidUser = APIURLS.ValidUser;
             let company = APIURLS.company;
@@ -173,18 +232,32 @@ class addnewcompany extends React.Component {
                 axios.post(addNewCompanyUrl, data, { headers })
                     .then(response => {
                         console.log("response > ", response);
-                        if (response.status === 200) {
-
+                        if (response.status === 200 || response.status === 201) {
+                            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                            this.props.history.push(URLS.URLS.companyMaster);
                         } else {
-
-
+                            this.setState({ ProgressLoader: true, ErrorPrompt: true });
                         }
                     }
                     ).catch(error => {
-
+                       // this.setState({ ProgressLoader: true, ErrorPrompt: true });
                     });
             }
         };
+
+        const closeErrorPrompt = (event, reason) => {
+            if (reason === 'clickaway') {
+                return;
+            }
+            this.setState({ SuccessPrompt: false });
+        }
+
+        const closeSuccessPrompt = (event, reason) => {
+            if (reason === 'clickaway') {
+                return;
+            }
+            this.setState({ SuccessPrompt: false });
+        }
 
 
         return (
@@ -193,6 +266,18 @@ class addnewcompany extends React.Component {
                 <Drawer />
                 <main className={useStyles.content}>
                     <Toolbar />
+
+                    {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+                    <div style={{ height: 20 }}> </div>
+
+                    <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
+                        <Alert onClose={closeSuccessPrompt} severity="success">Company Details Updated!</Alert>
+                    </Snackbar>
+
+                    <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
+                        <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
+                    </Snackbar>
+
                     <div style={{ marginLeft: 250 }}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
@@ -244,7 +329,7 @@ class addnewcompany extends React.Component {
                                                 </AccordionSummary>
                                                 <AccordionDetails key="">
                                                     <TableContainer>
-                                                        <Table stickyHeader size="small" className="" aria-label="company List table">
+                                                        <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                                             <TableBody className="tableBody">
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
@@ -258,8 +343,11 @@ class addnewcompany extends React.Component {
                                                                             onChange={(e) => updateFormValue('companyName', e)}
                                                                             fullWidth
                                                                             InputProps={{
-                                                                                className: "textFieldCss"
+                                                                                className: "textFieldCss",
+                                                                                maxlength: 50
                                                                             }}
+                                                                            error={this.state.Validations.companyName.errorState}
+                                                                            helperText={this.state.Validations.companyName.errorMsg}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -275,7 +363,8 @@ class addnewcompany extends React.Component {
                                                                             onChange={(e) => updateFormValue('PhoneNo', e)}
                                                                             fullWidth
                                                                             InputProps={{
-                                                                                className: "textFieldCss"
+                                                                                className: "textFieldCss",
+                                                                                maxlength: 20
                                                                             }}
                                                                         />
                                                                     </TableCell>
@@ -292,7 +381,8 @@ class addnewcompany extends React.Component {
                                                                             onChange={(e) => updateFormValue('Website', e)}
                                                                             fullWidth
                                                                             InputProps={{
-                                                                                className: "textFieldCss"
+                                                                                className: "textFieldCss",
+                                                                                maxlength: 20
                                                                             }}
                                                                         />
                                                                     </TableCell>
@@ -315,7 +405,7 @@ class addnewcompany extends React.Component {
                                                 </AccordionSummary>
                                                 <AccordionDetails key="">
                                                     <TableContainer>
-                                                        <Table stickyHeader size="small" className="" aria-label="company List table">
+                                                        <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                                             <TableBody className="tableBody">
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
@@ -378,7 +468,8 @@ class addnewcompany extends React.Component {
                                                                             onChange={(e) => updateFormValue('City', e)}
                                                                             fullWidth
                                                                             InputProps={{
-                                                                                className: "textFieldCss"
+                                                                                className: "textFieldCss",
+                                                                                maxlength: 50
                                                                             }}
                                                                         />
                                                                     </TableCell>
@@ -395,7 +486,8 @@ class addnewcompany extends React.Component {
                                                                             onChange={(e) => updateFormValue('Postcode', e)}
                                                                             fullWidth
                                                                             InputProps={{
-                                                                                className: "textFieldCss"
+                                                                                className: "textFieldCss",
+                                                                                maxlength: 10
                                                                             }}
                                                                         />
                                                                     </TableCell>
@@ -411,9 +503,12 @@ class addnewcompany extends React.Component {
                                                                             size="small"
                                                                             onChange={(e) => updateFormValue('Address', e)}
                                                                             fullWidth
-                                                                            multiline
-                                                                            rows={4}
-
+                                                                            InputProps={{
+                                                                                className: "textFieldCss",
+                                                                                maxlength: 50
+                                                                            }}
+                                                                            error={this.state.Validations.address.errorState}
+                                                                            helperText={this.state.Validations.address.errorMsg}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -428,8 +523,10 @@ class addnewcompany extends React.Component {
                                                                             size="small"
                                                                             onChange={(e) => updateFormValue('Address2', e)}
                                                                             fullWidth
-                                                                            multiline
-                                                                            rows={4}
+                                                                            InputProps={{
+                                                                                className: "textFieldCss",
+                                                                                maxlength: 50
+                                                                            }}
 
                                                                         />
                                                                     </TableCell>
@@ -445,9 +542,10 @@ class addnewcompany extends React.Component {
                                                                             size="small"
                                                                             onChange={(e) => updateFormValue('Address3', e)}
                                                                             fullWidth
-                                                                            multiline
-                                                                            rows={4}
-
+                                                                            InputProps={{
+                                                                                className: "textFieldCss",
+                                                                                maxlength: 50
+                                                                            }}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>

@@ -10,6 +10,7 @@ import testReport from "../components/reports/testReport";
 import companyMaster from "../components/modules/admin/companyMaster"; 
 import addNewCompany from "../components/modules/company/addnewcompany";
 import editCompany from "../components/modules/company/editcompany";
+import report1 from "../components/modules/reports/report1"
 
 
 let routes = ({ location, ...rest }) => {
@@ -23,6 +24,7 @@ let routes = ({ location, ...rest }) => {
     <Route path={URLS.URLS.companyMaster}  component={companyMaster} />
     <Route path={URLS.URLS.addNewCompany}  component={addNewCompany} />
     <Route path={URLS.URLS.editCompany}  component={editCompany} />
+    <Route path={URLS.URLS.report1}  component={report1} />
     </Switch>   
     </Router>
   );

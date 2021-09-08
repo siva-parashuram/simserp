@@ -9,4 +9,5 @@ export const URLS = {
   companyMaster: "/companyMaster",  
   addNewCompany:"/addNewCompany",
   editCompany:"/editCompany",
+  report1:"/report1",
 };

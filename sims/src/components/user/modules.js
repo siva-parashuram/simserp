@@ -27,6 +27,10 @@ class modules extends React.Component {
                 {
                     moduleName:"Admin",
                     subMenus:[{name:"Company Master",link:"companyMaster"}]
+                },
+                {
+                    moduleName:"Reports",
+                    subMenus:[{name:"Report 1",link:"report1"}]
                 }
             ]
         };

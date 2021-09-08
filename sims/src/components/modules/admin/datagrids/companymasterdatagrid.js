@@ -39,6 +39,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import * as APIURLS from "../../../../routes/apiconstant";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import axios from "axios";
 
@@ -60,6 +61,7 @@ class companymasterdatagrid extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ProgressLoader:false,
             columns: columns,
             masterCompanyData:rows,
             companyData: rows,
@@ -118,25 +120,6 @@ class companymasterdatagrid extends React.Component {
     }
 
     getCompanyList() {
-        /*
-        let rows = [
-            {
-                id: 226,
-                sno: 1,
-                company: "Siva Goa",
-                address: "N-6, Verna Industrial Area, Phase IV, Verna,Goa - 403722, INDIA",
-                branchList:[{branchID:1,branchName:"Siva IOT"}]
-            },
-            {
-                id: 115,
-                sno: 2,
-                company: "Siva Tec Ltd",
-                address: "Unit 3, Princes Drive Industrial Estate, Princes Drive, Kenilworth, Warwickshire, CV8 2FD, UK.",
-                branchList:[{branchID:2,branchName:"Siva Teck UK"}]
-            }
-        ];
-*/
-
         let rows=[];
 
         let ValidUser = APIURLS.ValidUser;
@@ -152,7 +135,7 @@ class companymasterdatagrid extends React.Component {
             let data=response.data;
             console.log("getCompanyList > response > data > ",data);
             rows=data;
-            this.setState({ masterCompanyData:rows,companyData: rows });
+            this.setState({ masterCompanyData:rows,companyData: rows,ProgressLoader:true }); 
           }
           ).catch(error => {            
             console.log("error > ",error);
@@ -246,6 +229,8 @@ class companymasterdatagrid extends React.Component {
 
         return (
             <div style={{ height: 300, width: '100%' }}>
+            
+            {this.state.ProgressLoader===false?(<div style={{marginTop:6, marginLeft:-10}}><LinearProgress style={{backgroundColor: '#ffeb3b'}} /> </div>):null} 
             <div style={{ height: 20 }}> </div>
             <div style={{marginLeft:2}}>
                 <Grid container spacing={3}>
@@ -260,45 +245,46 @@ class companymasterdatagrid extends React.Component {
                     </Grid>
                 </Grid>
                 </div>
-                <div style={{ height: 20 }}> </div>              
+                <div style={{ height: 20 }}>
                    
+                </div>
                
                 <div style={{ marginLeft: 2 }}>
                     <Grid container spacing={0}>
-                        <Grid xs={2}>
-                        <TextField 
-                        id="searchBox" 
-                        placeholder="Search"
-                        variant="outlined" 
-                        size="small"
-                        
-                        InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <SearchIcon />
-                              </InputAdornment>
-                            ),
-                          }}
-                        onKeyUp={searchInput}
-                        fullWidth 
-                        />
-                        </Grid>
                         <Grid xs={1}>
-                            <Button 
-                            style={{marginLeft:5}} 
-                            startIcon={<AddIcon />} 
-                           // onClick={(e)=>createNewCompanyRow()}
+                            <Button
+                                style={{ marginLeft: 5 }}
+                                startIcon={<AddIcon />}
+                            // onClick={(e)=>createNewCompanyRow()}
                             >
-                            <a className="button-link" href={URLS.URLS.addNewCompany+this.state.urlparams}>
-                              New
-                            </a>
-                            
+                                <a className="button-link" href={URLS.URLS.addNewCompany + this.state.urlparams}>
+                                    New
+                                </a>
+
                             </Button>
                         </Grid>
                         <Grid xs={1}>
-                            <Button style={{marginLeft:-20}} startIcon={<DeleteIcon  />} disabled={this.state.DeleteDisabled}>Delete</Button>
+                            <Button style={{ marginLeft: -20 }} startIcon={<DeleteIcon />} disabled={this.state.DeleteDisabled}>Delete</Button>
                         </Grid>
-                        
+                        <Grid xs={2}>
+                            <TextField
+                                id="searchBox"
+                                placeholder="Search"
+                                variant="outlined"
+                                size="small"
+
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                onKeyUp={searchInput}
+                                fullWidth
+                            />
+                        </Grid>
+
                     </Grid>
                 </div>
                 <Grid container spacing={0}>
