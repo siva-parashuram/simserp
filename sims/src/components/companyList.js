@@ -23,26 +23,7 @@ class CompanyList extends React.Component {
     }
 
     render() {
-        // const useStyles = makeStyles((theme) =>
-        //     createStyles({
-        //         root: {
-        //             '& .MuiTextField-root': {
-        //                 margin: theme.spacing(1),
-        //                 width: '25ch',
-
-        //             },
-        //         },
-        //         heading: {
-        //             fontSize: theme.typography.pxToRem(15),
-        //             fontWeight: theme.typography.fontWeightRegular,
-        //         }, button: {
-        //             margin: theme.spacing(1)
-                    
-        //         }
-        //     }),
-        // );
-
-
+      
         const openBranchDashboard=(url,branchId,compName,branchName)=>{
             
               url=url+"?branchId="+branchId+"&compName="+compName+"&branchName="+branchName;

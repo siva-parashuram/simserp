@@ -26,6 +26,7 @@ class nav extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            userInitial:"",
             branchName: "",
             branchId: "",
             compName: "",
@@ -36,15 +37,12 @@ class nav extends React.Component {
 
     componentDidMount() {
         let token = getCookie(COOKIE.USERID);
-
+        let FIRSTNAME = getCookie(COOKIE.FIRSTNAME);
+        
         if (token === "null" || token == null) {
-            this.setState({ isLoggedIn: false });
-            // document.write("Login Expired!");
-        } else {
-            //set cookie here
-            // let initialName = "A";
-            // let Name = "Admin";
-
+            this.setState({ isLoggedIn: false });             
+        } else {            
+            let initialName = FIRSTNAME.charAt(0).toUpperCase();
             var url = new URL(window.location.href);
             let branchId = url.searchParams.get("branchId");
             let branchName = url.searchParams.get("branchName");
@@ -52,7 +50,8 @@ class nav extends React.Component {
             this.setState({
                 branchName: branchName,
                 branchId: branchId,
-                compName: compName
+                compName: compName,
+                userInitial:initialName,
             });
         }
     }
@@ -80,11 +79,6 @@ class nav extends React.Component {
 
         }));
 
-
-        // const processDialogOpen = () => {
-        //     this.setState({ FullScreenDialog: true })
-        // };
-
         const processDialogClose = () => {
             this.setState({ FullScreenDialog: false })
         };
@@ -102,13 +96,7 @@ class nav extends React.Component {
         const menuClose = event => {
             this.setState({ anchorEl: null });
         };
-
-        // const logoutUser = (e) => {
-        //     deleteCookie(COOKIE.USERID, null);
-        //     this.setState({ anchorEl: null, isLoggedIn: false })
-        //     // this.props.history.push(URLS.URLS.LoginPage);
-        //     window.location.reload();
-        // }
+        
 
         const closeWindow = e => {
             window.close();
@@ -130,16 +118,23 @@ class nav extends React.Component {
                                 { /*                                                      
                                 <Button style={{marginTop:7}} color="inherit">Logout</Button>
                             */}
-                                <IconButton key="action-btn" aria-label="settings" aria-controls="logout-menu" aria-haspopup="true" onClick={menuClick} style={{ marginRight: -20 }} >
-                                    <Avatar aria-label="recipe" style={{ backgroundColor: '#39b54a' }} >
-                                        A
-                                    </Avatar>
-                                </IconButton>
+
+                                <Avatar 
+                                aria-label="recipe" 
+                                style={{ backgroundColor: '#39b54a',height:30,width:30,marginTop:-10 }} 
+                                className="nav-avatar-pointer" 
+                                aria-haspopup="true" 
+                                aria-controls="logout-menu" 
+                                onClick={menuClick} 
+                                >
+                                     {this.state.userInitial}
+                                </Avatar>                                
                             </Grid>
                         </Grid>
                     </Toolbar>
                 </AppBar>
                 <Menu
+                    className="nav-avatar-menu"
                     key="u-l-m"
                     id="logout-menu"
                     anchorEl={this.state.anchorEl}
@@ -149,14 +144,12 @@ class nav extends React.Component {
                     PaperProps={{
                         style: {
                             width: '15ch',
-                            marginLeft: 5,
-                            marginTop: 40
+                            marginLeft: 0,
+                            marginTop: 20
                         },
                     }}
                 >
-                    <MenuItem key="windowClose" onClick={closeWindow}>
-                        Exit
-                    </MenuItem>
+                    <MenuItem className="nav-avatar-menu-item" key="windowClose" onClick={closeWindow}>Exit</MenuItem>
                 </Menu>
                 <Dialog fullScreen open={this.state.FullScreenDialog} onClose={processDialogClose} >
                     <AppBar className={useStyles.appBar} style={{ width: '100%', margin: 0, }}>

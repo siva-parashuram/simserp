@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import Drawer from "../../user/drawer";
 import Nav from "../../user/nav";
-import BreadCrumb from '../../user/BreadCrumb';
+ 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import '../../user/dasboard.css';
 import { COOKIE, getCookie } from "../../../services/cookie";
 
-import Companymasterdatagrid from "./datagrids/companymasterdatagrid";
+import Companymasterdatagrid from "../admin/datagrids/companymasterdatagrid";
 
 // import Grid from '@material-ui/core/Grid';
 
@@ -76,8 +76,7 @@ class companyMaster extends React.Component {
         </div>
         <main className={useStyles.content}>
           <Toolbar />
-          <div style={{ marginLeft: 250 }}>
-            <BreadCrumb data="companyMaster" />
+          <div style={{ marginLeft: 250,marginTop:-20 }}>            
               <Companymasterdatagrid/>
           </div>
         </main>

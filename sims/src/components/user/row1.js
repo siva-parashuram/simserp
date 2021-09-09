@@ -1,17 +1,16 @@
 import './dasboard.css';
-import React from 'react';
+import React, { Fragment } from 'react';
 // import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
 // import * as URLS from "../../routes/constants";
 
-import { makeStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
- 
 
-// import Modules from "./modules";
- 
 
-class nav extends React.Component {
+import SalesDashView from "../../components/dashboard/sales";
+
+
+class row1 extends React.Component {
 
     constructor(props) {
         super(props);
@@ -30,38 +29,21 @@ class nav extends React.Component {
 
     render() {
 
-        const useStyles = makeStyles((theme) => ({
-
-
-        }));
-
-
-
-
-
-        // const showInvoice = () => {
-        //     console.log("hey...> ", URLS.URLS.testReport);
-        //     //  this.props.history.push(URLS.URLS.testReport);
-        //     window.open(URLS.URLS.testReport + "?id=101", "", "width=900,height=500");
-        // }
-
 
         return (
-            <div className={useStyles.root}>                 
-                    <Grid container spacing={2}>
-                        <Grid item xs={9}>
-                           Hi 1
-                        </Grid>
-                        <Grid item xs={3} className="rightGridSection">
-                           <div >
-                               HI 2
-                           </div>   
-                        
-                        </Grid>                         
-                    </Grid>                 
-            </div>
+            <Fragment>
+                <Grid container spacing={0}>
+                    <div>
+                        <div className="dash-row-header dash-header">
+                            <h1 className="dash-row-header-title">Sales</h1>
+                        </div>
+                        <SalesDashView />
+                    </div>
+
+                </Grid>
+            </Fragment>
         );
     }
 }
 
-export default nav;
+export default row1;
