@@ -1,7 +1,7 @@
 import './dasboard.css';
-import React, { Fragment } from 'react';
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
-import * as URLS from "../../routes/constants";
+import React from 'react';
+// import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
+// import * as URLS from "../../routes/constants";
 
 import { makeStyles } from '@material-ui/core/styles';
  

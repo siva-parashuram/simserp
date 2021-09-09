@@ -5,33 +5,17 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { Link } from "react-router-dom";
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'; 
+// import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import * as URLS from "../routes/constants";
 
 
 class CompanyList extends React.Component {
     constructor(props) {
-    super(props);
-    // this.state = {
-    //     ErrorPrompt: false,
-    //     isLoggedIn: false,
-    //     data: {},
-    //     userID: '',
-    //     password: '',
-    //     userInitial: '',
-    //     name: '',
-    //     userCompanyList: [],
-    //     loader: 'hideLoginScreenLoader',
-    //     anchorEl: null,
-    //     open: false,
-    //     clientlog:""
-    //   };
-    this.wrapper = React.createRef();
-  }
+        super(props);
+        this.state={}
+    }
 
     componentDidMount() {
        
@@ -39,24 +23,24 @@ class CompanyList extends React.Component {
     }
 
     render() {
-        const useStyles = makeStyles((theme) =>
-            createStyles({
-                root: {
-                    '& .MuiTextField-root': {
-                        margin: theme.spacing(1),
-                        width: '25ch',
+        // const useStyles = makeStyles((theme) =>
+        //     createStyles({
+        //         root: {
+        //             '& .MuiTextField-root': {
+        //                 margin: theme.spacing(1),
+        //                 width: '25ch',
 
-                    },
-                },
-                heading: {
-                    fontSize: theme.typography.pxToRem(15),
-                    fontWeight: theme.typography.fontWeightRegular,
-                }, button: {
-                    margin: theme.spacing(1)
+        //             },
+        //         },
+        //         heading: {
+        //             fontSize: theme.typography.pxToRem(15),
+        //             fontWeight: theme.typography.fontWeightRegular,
+        //         }, button: {
+        //             margin: theme.spacing(1)
                     
-                }
-            }),
-        );
+        //         }
+        //     }),
+        // );
 
 
         const openBranchDashboard=(url,branchId,compName,branchName)=>{

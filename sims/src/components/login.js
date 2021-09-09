@@ -390,7 +390,6 @@ class login extends React.Component {
               },
             }}
           >
-
             <MenuItem key="logout" onClick={logoutUser}>Log out</MenuItem>
           </Menu>
         </Container>

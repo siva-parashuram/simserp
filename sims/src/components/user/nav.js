@@ -1,7 +1,7 @@
 import './dasboard.css';
-import React from 'react'; 
-import { COOKIE, deleteCookie, getCookie } from "../../services/cookie";
- 
+import React from 'react';
+import { COOKIE,  getCookie } from "../../services/cookie";
+
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -9,11 +9,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
- 
+
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
- 
+
 import Grid from '@material-ui/core/Grid';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -42,8 +42,8 @@ class nav extends React.Component {
             // document.write("Login Expired!");
         } else {
             //set cookie here
-            let initialName = "A";
-            let Name = "Admin";
+            // let initialName = "A";
+            // let Name = "Admin";
 
             var url = new URL(window.location.href);
             let branchId = url.searchParams.get("branchId");
@@ -55,13 +55,7 @@ class nav extends React.Component {
                 compName: compName
             });
         }
-
-
-
-
-
     }
-
 
     render() {
         const drawerWidth = 240;
@@ -87,9 +81,9 @@ class nav extends React.Component {
         }));
 
 
-        const processDialogOpen = () => {
-            this.setState({ FullScreenDialog: true })
-        };
+        // const processDialogOpen = () => {
+        //     this.setState({ FullScreenDialog: true })
+        // };
 
         const processDialogClose = () => {
             this.setState({ FullScreenDialog: false })
@@ -109,38 +103,28 @@ class nav extends React.Component {
             this.setState({ anchorEl: null });
         };
 
-        const logoutUser = (e) => {
-            deleteCookie(COOKIE.USERID, null);
-            this.setState({ anchorEl: null, isLoggedIn: false })
-            // this.props.history.push(URLS.URLS.LoginPage);
-            window.location.reload();
-        }
+        // const logoutUser = (e) => {
+        //     deleteCookie(COOKIE.USERID, null);
+        //     this.setState({ anchorEl: null, isLoggedIn: false })
+        //     // this.props.history.push(URLS.URLS.LoginPage);
+        //     window.location.reload();
+        // }
 
         const closeWindow = e => {
             window.close();
         }
-
-
 
         return (
             <div className="navDiv">
                 <AppBar className="navDiv" position="fixed">
                     <Toolbar variant="dense">
                         <Grid
-                            justify="space-between" // Add it here :)
+                            justifyContent="space-between" // Add it here :)
                             container
-                            spacing={24}
+                            spacing={10}
                         >
                             <Grid item>
-                            {/*
-                                <Typography variant="h6" style={{marginTop:11}}>
-                                    <span style={{
-                                        marginLeft: 240, letterSpacing: 3,
-                                        fontWeight: 500, textDecorationLine: 'underline',
-                                        textDecorationColor: '#39b54a'
-                                    }}> {this.state.branchName}</span>
-                                </Typography>
-                                */}
+
                             </Grid>
                             <Grid item>
                                 { /*                                                      
@@ -155,7 +139,6 @@ class nav extends React.Component {
                         </Grid>
                     </Toolbar>
                 </AppBar>
-
                 <Menu
                     key="u-l-m"
                     id="logout-menu"
@@ -173,19 +156,10 @@ class nav extends React.Component {
                 >
                     <MenuItem key="windowClose" onClick={closeWindow}>
                         Exit
-
                     </MenuItem>
-                    {/*
-                    <MenuItem key="logout" onClick={logoutUser} >
-                      <span style={{textAlign:'right',alignItems:'right'}}>Log out</span>
-                    </MenuItem>
-                    */}
                 </Menu>
-
-
-
                 <Dialog fullScreen open={this.state.FullScreenDialog} onClose={processDialogClose} >
-                    <AppBar className={useStyles.appBar} style={{ width: '100%', margin: 0,  }}>
+                    <AppBar className={useStyles.appBar} style={{ width: '100%', margin: 0, }}>
                         <Toolbar>
                             <IconButton edge="start" color="inherit" onClick={processDialogClose} aria-label="close">
                                 <CloseIcon />
@@ -200,10 +174,6 @@ class nav extends React.Component {
                         <Modules />
                     </div>
                 </Dialog>
-
-
-
-
             </div>
         );
     }

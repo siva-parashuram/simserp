@@ -1,14 +1,14 @@
 import '../../../user/dasboard.css';
-import React, { Fragment } from 'react';
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../../../../services/cookie";
+import React from 'react';
+import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as URLS from "../../../../routes/constants";
 
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 
-import { DataGrid } from '@material-ui/data-grid';
-import Alert from '@material-ui/lab/Alert';
+// import { DataGrid } from '@material-ui/data-grid';
+// import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
+// import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -37,7 +37,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+// import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import * as APIURLS from "../../../../routes/apiconstant";
 import LinearProgress from '@material-ui/core/LinearProgress';
 
@@ -149,14 +149,14 @@ class companymasterdatagrid extends React.Component {
 
     render() { 
 
-        const processSave = () => {
-            //process post request and hideSaved Alert
+        // const processSave = () => {
+           
 
-            setTimeout(function () {
-                this.setState({ showSavedAlert: false });
-            }.bind(this), 3000);
+        //     setTimeout(function () {
+        //         this.setState({ showSavedAlert: false });
+        //     }.bind(this), 3000);
 
-        }     
+        // }     
         
         const handleRowClick= (e,item,id) => {
             console.log("handleRowClick > e > ", e);
@@ -205,9 +205,9 @@ class companymasterdatagrid extends React.Component {
                        
         }
 
-        const createNewCompanyRow=()=>{
-             this.setState({UpdateCompany:false,companyDialogStatus:true});
-        }
+        // const createNewCompanyRow=()=>{
+        //      this.setState({UpdateCompany:false,companyDialogStatus:true});
+        // }
 
         const openCompanyDetail=(e,item)=>{
             console.log("openCompanyDetail > e > ",e);

@@ -31,7 +31,7 @@ import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Update';
 import Button from '@material-ui/core/Button';
-import CheckIcon from '@material-ui/icons/Check';
+// import CheckIcon from '@material-ui/icons/Check';
 import axios from "axios";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -292,9 +292,9 @@ class editcompany extends React.Component {
       }
     }
 
-    const userTypingBusyPrompt = (e) => {
-      //this.setState({ userIsTyping: true,isUserchangesUpdated: false });
-    }
+    // const userTypingBusyPrompt = (e) => {
+    //   this.setState({ userIsTyping: true,isUserchangesUpdated: false });
+    // }
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === 'clickaway') {

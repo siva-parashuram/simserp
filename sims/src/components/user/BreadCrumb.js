@@ -43,10 +43,10 @@ class BreadCrumb extends React.Component {
     }
 
     render() {
-        function handleClick(event) {
-            event.preventDefault();
-            console.info('You clicked a breadcrumb.');
-          }
+        // function handleClick(event) {
+        //     event.preventDefault();
+        //     console.info('You clicked a breadcrumb.');
+        //   }
 
         return (
             <Fragment style={{marginTop:50}}>

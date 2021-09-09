@@ -1,14 +1,14 @@
 import './dasboard.css';
-import React, { Fragment } from 'react';
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
-import * as URLS from "../../routes/constants";
+import React from 'react';
+// import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
+// import * as URLS from "../../routes/constants";
 
 import { makeStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
  
 
-import Modules from "./modules";
+// import Modules from "./modules";
  
 
 class nav extends React.Component {
@@ -39,11 +39,11 @@ class nav extends React.Component {
 
 
 
-        const showInvoice = () => {
-            console.log("hey...> ", URLS.URLS.testReport);
-            //  this.props.history.push(URLS.URLS.testReport);
-            window.open(URLS.URLS.testReport + "?id=101", "", "width=900,height=500");
-        }
+        // const showInvoice = () => {
+        //     console.log("hey...> ", URLS.URLS.testReport);
+        //     //  this.props.history.push(URLS.URLS.testReport);
+        //     window.open(URLS.URLS.testReport + "?id=101", "", "width=900,height=500");
+        // }
 
 
         return (

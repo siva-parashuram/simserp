@@ -39,7 +39,7 @@ class userDashboard extends React.Component {
       let token = getCookie(COOKIE.USERID);
       if (token === "null" || token == null) {
         this.setState({ isLoggedIn: false });
-      }
+      }   
     }, 1000);
   }
 

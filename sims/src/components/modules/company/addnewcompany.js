@@ -166,23 +166,23 @@ class addnewcompany extends React.Component {
             //processEnableCreateBtn();
         }
 
-        const processEnableCreateBtn = () => {
-            if (this.state.companyName !== "" &&
-                this.state.address !== "" &&
-                this.state.address2 !== "" &&
-                this.state.address3 !== "" &&
-                this.state.country !== "" &&
-                this.state.state !== "" &&
-                this.state.city !== "" &&
-                this.state.postcode !== "" &&
-                this.state.phoneno !== "" &&
-                this.state.website !== ""
-            ) {
-                this.setState({ createBtnDisabled: false });
-            } else {
-                this.setState({ createBtnDisabled: true });
-            }
-        }
+        // const processEnableCreateBtn = () => {
+        //     if (this.state.companyName !== "" &&
+        //         this.state.address !== "" &&
+        //         this.state.address2 !== "" &&
+        //         this.state.address3 !== "" &&
+        //         this.state.country !== "" &&
+        //         this.state.state !== "" &&
+        //         this.state.city !== "" &&
+        //         this.state.postcode !== "" &&
+        //         this.state.phoneno !== "" &&
+        //         this.state.website !== ""
+        //     ) {
+        //         this.setState({ createBtnDisabled: false });
+        //     } else {
+        //         this.setState({ createBtnDisabled: true });
+        //     }
+        // }
 
         const handleAccordionClick = (val, e) => {
             console.log("handleAccordionClick > val > ", val);

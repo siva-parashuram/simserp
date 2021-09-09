@@ -3,8 +3,8 @@ import Drawer from "../../user/drawer";
 import Nav from "../../user/nav";
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
-import { COOKIE, createCookie, deleteCookie, getCookie } from "../../../services/cookie";
-import * as URLS from "../../../routes/constants";
+import { COOKIE,getCookie } from "../../../services/cookie";
+// import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
 import axios from "axios";
 
@@ -14,30 +14,15 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
+// import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-
-import datagridtest from "../../../components/user/datagridtest"
-import { ContactsOutlined } from '@material-ui/icons';
+// import datagridtest from "../../../components/user/datagridtest"
+// import { ContactsOutlined } from '@material-ui/icons';
  
  
-let col=[
- /*   {
-        field: 'id', headerName: 'id',  width: 100, editable: false 
-    },
-    {
-        field: 'custName', headerName: 'custName',  width: 100, editable: false 
-    },
-    {
-        field: 'fy', headerName: 'fy',  width: 100, editable: false 
-    },
-    {
-        field: 'invVal', headerName: 'invVal',  width: 100, editable: false 
-    }*/
-];
  
 let masterData=[
     
@@ -70,9 +55,9 @@ class report1 extends React.Component {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
-        const headers = {
-            "Content-Type": "application/json"
-        };
+        // const headers = {
+        //     "Content-Type": "application/json"
+        // };
         let GetTempDataUrl = APIURLS.APIURL.getTempData;
 
         axios.get(GetTempDataUrl)
@@ -131,13 +116,13 @@ class report1 extends React.Component {
                     custName:masterData[i]['custName'],
                 };
                 
-                if(customers.filter(value=> value.custId==C.custId).length > 0){
+                if(customers.filter(value=> value.custId===C.custId).length > 0){
                    // console.log("True");
                 }else{
                     // console.log("False");
                     customers.push(C);
                 }
-                if(FYs.filter(value=> value==masterData[i].fy).length > 0){
+                if(FYs.filter(value=> value===masterData[i].fy).length > 0){
                    // console.log("True");
                 }else{
                     //console.log("False");
@@ -159,7 +144,7 @@ class report1 extends React.Component {
        
         let total=0.00;
         for(let i=0;i<masterData.length;i++){
-            if(masterData[i]['fy']==fy  && masterData[i]['custId']==item.custId){
+            if(masterData[i]['fy']===fy  && masterData[i]['custId']===item.custId){
                 console.log("FY --> ",masterData[i]['fy']);
                 console.log("masterData[i] --> ",masterData[i]);
                 total=parseFloat(total)+parseFloat(masterData[i]['fcval']);
@@ -175,7 +160,7 @@ class report1 extends React.Component {
         let total=0.00;
         for(let c=0;c<customers.length;c++){
             for(let i=0;i<masterData.length;i++){
-                if(masterData[i]['fy']==fy  && masterData[i]['custId']==customers[c].custId){
+                if(masterData[i]['fy']===fy  && masterData[i]['custId']===customers[c].custId){
                     console.log("FY --> ",masterData[i]['fy']);
                     console.log("masterData[i] --> ",masterData[i]);
                     total=parseFloat(total)+parseFloat(masterData[i]['fcval']);
@@ -210,10 +195,7 @@ class report1 extends React.Component {
                 </div>
                 <main className={useStyles.content}>
                     <Toolbar />
-                    <div style={{ marginLeft: 250, marginTop: 50 }}>
-                    
-                    
-                   
+                    <div style={{ marginLeft: 250, marginTop: 50 }}>                   
                     {this.state.ProgressLoader===false?(<div style={{marginTop:-20,marginLeft:-10}}><LinearProgress style={{backgroundColor: '#ffeb3b'}} /> </div>):null} 
                         <h1>Report Test</h1>
                         

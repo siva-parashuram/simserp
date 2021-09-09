@@ -64,29 +64,25 @@ class modules extends React.Component {
             <Fragment >
                 <Fragment>
                 {this.state.moduleList.map((item, i) => (
-                    <Accordion className="menu-accordion">
+                    <Accordion key={"side-menu"+i} className="menu-accordion">
                     <AccordionSummary
+                        key={"side-menu-AS"+i}
                         expandIcon={<ExpandMoreIcon style={{ color: '#616161' }} />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
                         <Typography style={{ color: '#616161' }}> {item.moduleName} </Typography>
                     </AccordionSummary>
-                    <AccordionDetails style={{ color: '#616161' }}>
-                        <List component="nav" aria-label="" style={{ width: '100%' }}>
+                    <AccordionDetails  key={"side-menu-AD"+i} style={{ color: '#616161' }}>
+                        <List  key={"side-menu-L"+i} component="nav" aria-label="" style={{ width: '100%' }}>
                         {item.subMenus.map((subitem,j)=>(
-                            <ListItem button>
-                                <Link className="LINK" to={subitem.link + this.state.urlparams}>
-                                    <ArrowForwardIosIcon style={{ fontSize: 15 }} /> {subitem.name}
+                            <ListItem  key={"side-menu-LI"+j} button>
+                                <Link  key={"side-menu-LIL"+j} className="LINK" to={subitem.link + this.state.urlparams}>
+                                    <ArrowForwardIosIcon  key={"side-menu-LILI"+i} style={{ fontSize: 15 }} /> {subitem.name}
                                 </Link>
                             </ListItem>
-                        ))}
-                            
-                        { /*
-                            <ListItem button>
-                                <ArrowForwardIosIcon style={{ fontSize: 15 }} /> Sub Menu 2
-                            </ListItem>
-                        */}
+                        ))}                           
+                        
                         </List>
                     </AccordionDetails>
                 </Accordion>   
