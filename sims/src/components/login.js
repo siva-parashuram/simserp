@@ -388,7 +388,9 @@ class login extends React.Component {
                     <span>
                       " 
                       <span>
-                        Negativity is when you always  think of why it's going to fail. Positivity is when you always think why it's going to work. Change your mindset to change the result.
+                      Best Philosophy in life is to keep the mind happy....
+                      we don't know whether success gives happiness or not,
+                      But a happy mind can always lead to success.
                       </span>
                       "                      
                     </span>
