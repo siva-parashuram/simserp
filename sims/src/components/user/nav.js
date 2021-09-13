@@ -47,12 +47,26 @@ class nav extends React.Component {
             let branchId = url.searchParams.get("branchId");
             let branchName = url.searchParams.get("branchName");
             let compName = url.searchParams.get("compName");
-            this.setState({
-                branchName: branchName,
-                branchId: branchId,
-                compName: compName,
-                userInitial:initialName,
-            });
+
+            console.log("===========================================");
+            console.log("branchId > ",branchId);
+            console.log("branchName > ",branchName);
+            console.log("compName > ",compName);
+            console.log("===========================================");
+
+            if(branchId==null || branchName==null || compName==null || branchId==="null" || branchName==="null" || compName==="null"){
+                alert("Please reopen your branch From Login.");
+                window.close();
+            }else{
+                this.setState({
+                    branchName: branchName,
+                    branchId: branchId,
+                    compName: compName,
+                    userInitial:initialName,
+                });
+            }
+
+           
         }
     }
 
@@ -103,11 +117,11 @@ class nav extends React.Component {
         }
 
         return (
-            <div className="navDiv">
+            <div className="">
                 <AppBar className="navDiv" position="fixed">
                     <Toolbar variant="dense">
                         <Grid
-                            justifyContent="space-between" // Add it here :)
+                            justifyContent="space-between"  
                             container
                             spacing={10}
                         >
@@ -115,10 +129,6 @@ class nav extends React.Component {
 
                             </Grid>
                             <Grid item>
-                                { /*                                                      
-                                <Button style={{marginTop:7}} color="inherit">Logout</Button>
-                            */}
-
                                 <Avatar 
                                 aria-label="recipe" 
                                 style={{ backgroundColor: '#39b54a',height:30,width:30,marginTop:-10 }} 

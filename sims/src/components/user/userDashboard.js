@@ -1,13 +1,17 @@
 import './dasboard.css';
-import React from 'react'; 
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { COOKIE, getCookie } from "../../services/cookie"; 
+import { COOKIE, getCookie } from "../../services/cookie";
 import Nav from "./nav";
-import Row1 from "./row1";
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Drawer from "./drawer";
+import Menubar from "../user/menubar";
+import Grid from '@material-ui/core/Grid';
 
+import Row1 from "../dashboard/index/row1";
+import Activities from "../dashboard/index/activities";
 
 class userDashboard extends React.Component {
   constructor(props) {
@@ -39,11 +43,11 @@ class userDashboard extends React.Component {
       let token = getCookie(COOKIE.USERID);
       if (token === "null" || token == null) {
         this.setState({ isLoggedIn: false });
-      }   
+      }
     }, 1000);
   }
 
-  render() {   
+  render() {
     const useStyles = makeStyles((theme) => ({
       root: {
         display: 'flex',
@@ -53,16 +57,26 @@ class userDashboard extends React.Component {
       },
     }));
     return (
-      <div className={useStyles.root}>
-        <CssBaseline />        
-        <Nav />        
-        <Drawer/>
-        <main className={useStyles.content}>
-          <Toolbar />
-          <div style={{ marginLeft: 250,marginTop:-50 }}>
-            <Row1 />
-          </div>
-        </main>
+      <div>
+        <CssBaseline />
+        <Nav />
+        <div style={{ marginTop: 42 }}>
+          <Menubar />
+        </div>
+        <div style={{ height: 20 }}></div>
+        <div style={{ marginTop: -10 }}>
+          <Grid container spacing={0}>
+            <Grid item xs={12} sm={1}></Grid>
+            <Grid item xs={12} sm={10}>
+              
+              <Activities />
+              <Row1 />
+            </Grid>
+            <Grid item xs={12} sm={1}></Grid>
+          </Grid>
+
+        </div>
+
       </div>
     );
   }

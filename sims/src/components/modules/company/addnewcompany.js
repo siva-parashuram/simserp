@@ -39,6 +39,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
+import Menubar from "../../user/menubar";
+
 class addnewcompany extends React.Component {
     constructor(props) {
         super(props);
@@ -77,6 +79,7 @@ class addnewcompany extends React.Component {
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
         let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
+        // let urlparams = "?branchId=" + null + "&compName=" + null + "&branchName=" + null; //for testing null values
         this.setState({
             urlparams: urlparams,
         });
@@ -263,23 +266,25 @@ class addnewcompany extends React.Component {
         return (
             <Fragment>
                 <Nav />
-                <Drawer />
-                <main className={useStyles.content}>
-                    <Toolbar />
+                <div style={{ marginTop: 45 }}>
+                    <Menubar />
+                </div>
+                <div style={{ height: 8 }}></div>
 
-                    {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
-                    <div style={{ height: 20 }}> </div>
+                <Toolbar />
+                {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
-                    <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
-                        <Alert onClose={closeSuccessPrompt} severity="success">Company Details Updated!</Alert>
-                    </Snackbar>
+                <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
+                    <Alert onClose={closeSuccessPrompt} severity="success">Company Details Updated!</Alert>
+                </Snackbar>
 
-                    <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
-                        <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
-                    </Snackbar>
+                <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
+                    <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
+                </Snackbar>
 
-                    <div style={{ marginLeft: 250 }}>
-                        <Grid container spacing={3}>
+                <div style={{marginTop:-20}}>
+                    <div>
+                        <Grid container spacing={1}>
                             <Grid item xs={12}>
                                 <Breadcrumbs aria-label="breadcrumb">
                                     <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
@@ -293,280 +298,281 @@ class addnewcompany extends React.Component {
 
                             </Grid>
                         </Grid>
+                    </div>
 
-                        <div style={{ height: 15 }}></div>
+                    <div style={{ height: 15 }}></div>
 
-                        <div>
-                            <Grid container spacing={0}>
-                                <Grid xs={1}>
-                                    <Button
-                                        style={{ marginLeft: 5 }}
-                                        startIcon={<AddIcon />}
-                                        onClick={handleCreateCompanyClick}
-                                        disabled={this.state.createBtnDisabled}
-                                    >
-                                        Create
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </div>
-                        <div style={{ height: 5 }}></div>
-
-                        <Grid container spacing={3}>
-                            <Grid item xs={8}>
-                                <div style={{ minHeight: '100%', height: 500, overflowY: 'scroll', overflowX: 'hidden' }}>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12}>
-                                            <Accordion key="company-General-Details" expanded={this.state.GeneralDetailsExpanded} >
-                                                <AccordionSummary
-                                                    className="accordion-Header-Design"
-                                                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
-                                                    aria-controls="panel1a-content"
-                                                    id="panel1a-header"
-                                                    style={{ minHeight: 20, height: '100%' }}
-                                                >
-                                                    <Typography key="" className="accordion-Header-Title">General Details</Typography>
-                                                </AccordionSummary>
-                                                <AccordionDetails key="">
-                                                    <TableContainer>
-                                                        <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
-                                                            <TableBody className="tableBody">
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>Company Name</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="companyName"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('companyName', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 50
-                                                                            }}
-                                                                            error={this.state.Validations.companyName.errorState}
-                                                                            helperText={this.state.Validations.companyName.errorMsg}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b> Phone No</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="PhoneNo"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('PhoneNo', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 20
-                                                                            }}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>Website</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Website"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Website', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 20
-                                                                            }}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                            </TableBody>
-                                                        </Table>
-                                                    </TableContainer>
-
-                                                </AccordionDetails>
-                                            </Accordion>
-                                            <Accordion key="company-Address-Details" expanded={this.state.AddressDetailsExpanded} >
-                                                <AccordionSummary
-                                                    className="accordion-Header-Design"
-                                                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("AddressDetailsExpanded", e)} />}
-                                                    aria-controls="panel1a-content"
-                                                    id="panel1a-header"
-                                                    style={{ minHeight: 20, height: '100%' }}
-                                                >
-                                                    <Typography key="" className="accordion-Header-Title">Address Details</Typography>
-                                                </AccordionSummary>
-                                                <AccordionDetails key="">
-                                                    <TableContainer>
-                                                        <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
-                                                            <TableBody className="tableBody">
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>Country</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <Select
-                                                                            style={{ height: 40, marginTop: 14 }}
-                                                                            variant="outlined"
-                                                                            id="countrySelect"
-                                                                            label="Country"
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss"
-                                                                            }}
-                                                                        >
-                                                                            <MenuItem value="-">
-                                                                                <em>None</em>
-                                                                            </MenuItem>
-                                                                            <MenuItem value={10}>India</MenuItem>
-                                                                            <MenuItem value={20}>UK</MenuItem>
-                                                                            <MenuItem value={30}>UAE</MenuItem>
-                                                                        </Select>
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>State</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <Select
-                                                                            style={{ height: 40, marginTop: 14 }}
-                                                                            variant="outlined"
-                                                                            id="stateSelect"
-                                                                            label="State"
-                                                                            fullWidth
-                                                                            SelectProps={{
-                                                                                className: "textFieldCss"
-                                                                            }}
-
-                                                                        >
-                                                                            <MenuItem value="-">
-                                                                                <em>None</em>
-                                                                            </MenuItem>
-                                                                            <MenuItem value={10}>Goa</MenuItem>
-                                                                            <MenuItem value={20}>Gujrat</MenuItem>
-                                                                            <MenuItem value={30}>Delhi</MenuItem>
-                                                                        </Select>
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>City</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="City"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('City', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 50
-                                                                            }}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>Postcode</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Postcode"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Postcode', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 10
-                                                                            }}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>Address</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Address"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Address', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 50
-                                                                            }}
-                                                                            error={this.state.Validations.address.errorState}
-                                                                            helperText={this.state.Validations.address.errorMsg}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>Address 2</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Address2"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Address2', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 50
-                                                                            }}
-
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <b>Address 3</b>
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Address3"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Address3', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 50
-                                                                            }}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-
-                                                            </TableBody>
-                                                        </Table>
-                                                    </TableContainer>
-                                                </AccordionDetails>
-
-                                            </Accordion>
-                                        </Grid>
-                                    </Grid>
-                                </div>
-                            </Grid>
-                            <Grid item xs={4}>
-
+                    <div>
+                        <Grid container spacing={0}>
+                            <Grid xs={1}>
+                                <Button
+                                    style={{ marginLeft: 5 }}
+                                    startIcon={<AddIcon />}
+                                    onClick={handleCreateCompanyClick}
+                                    disabled={this.state.createBtnDisabled}
+                                >
+                                    Create
+                                </Button>
                             </Grid>
                         </Grid>
-
                     </div>
-                </main>
+                    <div style={{ height: 5 }}></div>
+
+                    <Grid container spacing={3}>
+                        <Grid item xs={8}>
+                            <div style={{ minHeight: '100%', height: 500, overflowY: 'scroll', overflowX: 'hidden' }}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12}>
+                                        <Accordion key="company-General-Details" expanded={this.state.GeneralDetailsExpanded} >
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                                style={{ minHeight: 20, height: '100%' }}
+                                            >
+                                                <Typography key="" className="accordion-Header-Title">General Details</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails key="">
+                                                <TableContainer>
+                                                    <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
+                                                        <TableBody className="tableBody">
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>Company Name</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <TextField
+                                                                        id="companyName"
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onChange={(e) => updateFormValue('companyName', e)}
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss",
+                                                                            maxlength: 50
+                                                                        }}
+                                                                        error={this.state.Validations.companyName.errorState}
+                                                                        helperText={this.state.Validations.companyName.errorMsg}
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b> Phone No</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <TextField
+                                                                        id="PhoneNo"
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onChange={(e) => updateFormValue('PhoneNo', e)}
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss",
+                                                                            maxlength: 20
+                                                                        }}
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>Website</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <TextField
+                                                                        id="Website"
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onChange={(e) => updateFormValue('Website', e)}
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss",
+                                                                            maxlength: 20
+                                                                        }}
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion key="company-Address-Details" expanded={this.state.AddressDetailsExpanded} >
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("AddressDetailsExpanded", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                                style={{ minHeight: 20, height: '100%' }}
+                                            >
+                                                <Typography key="" className="accordion-Header-Title">Address Details</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails key="">
+                                                <TableContainer>
+                                                    <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
+                                                        <TableBody className="tableBody">
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>Country</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <Select
+                                                                        style={{ height: 40, marginTop: 14 }}
+                                                                        variant="outlined"
+                                                                        id="countrySelect"
+                                                                        label="Country"
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss"
+                                                                        }}
+                                                                    >
+                                                                        <MenuItem value="-">
+                                                                            <em>None</em>
+                                                                        </MenuItem>
+                                                                        <MenuItem value={10}>India</MenuItem>
+                                                                        <MenuItem value={20}>UK</MenuItem>
+                                                                        <MenuItem value={30}>UAE</MenuItem>
+                                                                    </Select>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>State</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <Select
+                                                                        style={{ height: 40, marginTop: 14 }}
+                                                                        variant="outlined"
+                                                                        id="stateSelect"
+                                                                        label="State"
+                                                                        fullWidth
+                                                                        SelectProps={{
+                                                                            className: "textFieldCss"
+                                                                        }}
+
+                                                                    >
+                                                                        <MenuItem value="-">
+                                                                            <em>None</em>
+                                                                        </MenuItem>
+                                                                        <MenuItem value={10}>Goa</MenuItem>
+                                                                        <MenuItem value={20}>Gujrat</MenuItem>
+                                                                        <MenuItem value={30}>Delhi</MenuItem>
+                                                                    </Select>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>City</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <TextField
+                                                                        id="City"
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onChange={(e) => updateFormValue('City', e)}
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss",
+                                                                            maxlength: 50
+                                                                        }}
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>Postcode</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <TextField
+                                                                        id="Postcode"
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onChange={(e) => updateFormValue('Postcode', e)}
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss",
+                                                                            maxlength: 10
+                                                                        }}
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>Address</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <TextField
+                                                                        id="Address"
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onChange={(e) => updateFormValue('Address', e)}
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss",
+                                                                            maxlength: 50
+                                                                        }}
+                                                                        error={this.state.Validations.address.errorState}
+                                                                        helperText={this.state.Validations.address.errorMsg}
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>Address 2</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <TextField
+                                                                        id="Address2"
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onChange={(e) => updateFormValue('Address2', e)}
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss",
+                                                                            maxlength: 50
+                                                                        }}
+
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <b>Address 3</b>
+                                                                </TableCell>
+                                                                <TableCell align="left" className="no-border-table">
+                                                                    <TextField
+                                                                        id="Address3"
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onChange={(e) => updateFormValue('Address3', e)}
+                                                                        fullWidth
+                                                                        InputProps={{
+                                                                            className: "textFieldCss",
+                                                                            maxlength: 50
+                                                                        }}
+                                                                    />
+                                                                </TableCell>
+                                                            </TableRow>
+
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+                                            </AccordionDetails>
+
+                                        </Accordion>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </Grid>
+                        <Grid item xs={4}>
+
+                        </Grid>
+                    </Grid>
+
+
+                </div>
             </Fragment>
         );
     }

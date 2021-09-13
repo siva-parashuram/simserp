@@ -10,7 +10,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 
 import Companymasterdatagrid from "../admin/datagrids/companymasterdatagrid";
 
-// import Grid from '@material-ui/core/Grid';
+import Menubar from "../../user/menubar";
 
 
 class companyMaster extends React.Component {
@@ -71,15 +71,10 @@ class companyMaster extends React.Component {
       <Fragment>
         <CssBaseline />
         <Nav />
-        <div className="marginTop">
-          <Drawer />
+        <div style={{marginTop:40}}>
+          <Menubar/>
         </div>
-        <main className={useStyles.content}>
-          <Toolbar />
-          <div style={{ marginLeft: 250,marginTop:-20 }}>            
-              <Companymasterdatagrid/>
-          </div>
-        </main>
+        <Companymasterdatagrid/>
       </Fragment>
     );
   }

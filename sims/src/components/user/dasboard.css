@@ -5,6 +5,38 @@ body{
     overflow-x: hidden;
 }
 
+.menubar-link{
+  text-decoration: none !important;
+  color: rgb(0, 126, 135) !important;
+  font-size: 15px !important;
+}
+.menubar-link:hover{
+  text-decoration: underline !important;
+}
+
+.menubar-tab-icon-position{  
+  margin-bottom: -40px !important; 
+}
+
+.menubar-tab-app-bar{
+  font-size: 12px !important;
+  letter-spacing: 2 !important;
+  color: rgb(80, 92, 109) !important;
+}
+
+.MuiTab-labelIcon {
+  min-height: 45px !important; 
+  padding-top: 9px  !important; 
+}
+
+.MuiTab-textColorPrimary.Mui-selected {
+  color: #000 !important;
+}
+
+.PrivateTabIndicator-colorPrimary-3 {
+  background-color: rgb(0, 126, 135) !important;
+}
+
 .LINK{
   text-decoration: none !important;
   color: #212121 !important;
@@ -161,20 +193,38 @@ cursor: pointer;
 
  .dash-row-header{
    border-bottom-style: solid;
-   border-bottom-width: 1px;
-   border-bottom-color: rgb(0, 114, 188);
-  
-   margin-bottom: 20px !important;
-   
+   border-bottom-width: 2px;
+   border-bottom-color: #607d8b;  
+   margin-bottom: 20px !important;   
  }
 
  .dash-row-header-title{
-   font-size: 1.8rem;
-   color: rgb(57, 181, 74);
+   font-size: 1.2rem;
+   color: #455a64;
+   font-family: 'SegoeUI';
+   font-weight: 200;
  }
 
  .dash-header{
   cursor: pointer;
+ }
+
+ .dashComp-card-h5{
+  font-family: 'SegoeUI' !important;
+  letter-spacing: 3px !important;
+  color:#212121 !important;
+  font-size: 37.5pt !important;
+ }
+
+ .dash-activity-card{
+   height:180px !important;
+   border-style: none;
+   box-shadow: none !important;
+ }
+
+ .divider-overdue-border{
+  background-color: #e65100  !important;
+  height: 5px !important;
  }
 
 /**************************************************************************************************************************/

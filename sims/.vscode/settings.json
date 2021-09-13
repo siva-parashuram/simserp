@@ -7,7 +7,9 @@
         "dasboard",
         "FIRSTNAME",
         "ISADMIN",
+        "Menusitem",
         "randomnumber",
+        "urlparams",
         "USERID"
     ]
 }

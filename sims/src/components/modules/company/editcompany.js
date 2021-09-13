@@ -36,6 +36,7 @@ import axios from "axios";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Menubar from "../../user/menubar";
 
 
 class editcompany extends React.Component {
@@ -314,12 +315,13 @@ class editcompany extends React.Component {
     return (
       <Fragment>
         <Nav />
-        <Drawer />
+        <div style={{ marginTop: 45 }}>
+                    <Menubar />
+                </div>
         <main className={useStyles.content}>
           <Toolbar />
           {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
-          <div style={{ height: 20 }}> </div>
-
+         
           <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
             <Alert onClose={closeSuccessPrompt} severity="success">Company Details Updated!</Alert>
           </Snackbar>
@@ -328,7 +330,8 @@ class editcompany extends React.Component {
             <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
           </Snackbar>
 
-          <div style={{ marginLeft: 250 }}>
+          <div style={{ height:20 }}></div>
+          <div style={{marginTop:-30}}>
             <div style={{ marginLeft: 3 }}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -344,6 +347,8 @@ class editcompany extends React.Component {
                 </Grid>
               </Grid>
             </div>
+
+            <div style={{ height:10 }}></div>
 
             <div style={{ marginLeft: -10 }}>
               <Grid container spacing={0}>

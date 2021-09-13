@@ -57,8 +57,7 @@ class CompanyList extends React.Component {
                                         variant="outlined"
                                         className="branchListButton"
                                         onClick={(e)=>openBranchDashboard(URLS.URLS.userDashboard,branchItem.branchID,item.compName,branchItem.branchName)}
-                                    >
-                                        
+                                    >                                        
                                         {branchItem.branchName}
                                     </Button> 
                                     </Fragment>
