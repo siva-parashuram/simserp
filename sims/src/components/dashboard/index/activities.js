@@ -98,7 +98,7 @@ class activities extends React.Component {
                                     <div style={{width:'50%'}}>
                                     <Divider className="divider-overdue-border"/>
                                     </div>
-                                    
+                                    <div style={{ height: 20 }}></div>
                                     <CardActions>
                                         <ChevronRightIcon />
                                         <a href="#" className="LINK">See More</a>
