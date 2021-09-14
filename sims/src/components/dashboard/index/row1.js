@@ -34,18 +34,29 @@ class row1 extends React.Component {
                 <div style={{ marginLeft: 15 }}>
                     <Grid container spacing={0}>
                         <Grid item xs={12} sm={12}>
-
                             <div className="dash-row-header dash-header">
                                 <h1 className="dash-row-header-title">Insights</h1>
                             </div>
-
-                        </Grid>
-
-                        {userComponents.includes("component1") ? <Component1 /> : null}
-                        {userComponents.includes("component2") ? <Component2 /> : null}
-
+                        </Grid>                         
+                    </Grid>
+                    <Grid container spacing={0}>
                         
-
+                        {userComponents.includes("component1") ?(
+                            <Fragment>
+                            <Grid item  xs={12} sm={6} md={6} lg={6}>
+                             <Component1 />
+                            </Grid>                            
+                            </Fragment>
+                        )  : null}
+                        {userComponents.includes("component2") ?(
+                            <Fragment>
+                            <Grid item xs={12} sm={6} md={6} lg={6}>
+                             <Component1 />
+                            </Grid>                            
+                            </Fragment>
+                        )  : null}                        
+                       
+                       
                     </Grid>
                 </div>
 

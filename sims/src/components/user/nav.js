@@ -38,35 +38,29 @@ class nav extends React.Component {
     componentDidMount() {
         let token = getCookie(COOKIE.USERID);
         let FIRSTNAME = getCookie(COOKIE.FIRSTNAME);
-        
-        if (token === "null" || token == null) {
-            this.setState({ isLoggedIn: false });             
-        } else {            
-            let initialName = FIRSTNAME.charAt(0).toUpperCase();
+
+        let initialName = FIRSTNAME.charAt(0).toUpperCase();
             var url = new URL(window.location.href);
             let branchId = url.searchParams.get("branchId");
             let branchName = url.searchParams.get("branchName");
             let compName = url.searchParams.get("compName");
-
             console.log("===========================================");
             console.log("branchId > ",branchId);
             console.log("branchName > ",branchName);
             console.log("compName > ",compName);
             console.log("===========================================");
+        
+        if (token === "null" || token == null || compName==="" || compName==null || branchName==="" || branchName==null|| branchId==="" || branchId==null) {
+            this.setState({ isLoggedIn: false });             
+        } else {   
 
-            if(branchId==null || branchName==null || compName==null || branchId==="null" || branchName==="null" || compName==="null"){
-                alert("Please reopen your branch From Login.");
-                window.close();
-            }else{
-                this.setState({
-                    branchName: branchName,
-                    branchId: branchId,
-                    compName: compName,
-                    userInitial:initialName,
-                });
-            }
 
-           
+            this.setState({
+                branchName: branchName,
+                branchId: branchId,
+                compName: compName,
+                userInitial:initialName,
+            });          
         }
     }
 
@@ -126,12 +120,14 @@ class nav extends React.Component {
                             spacing={10}
                         >
                             <Grid item>
-
+                                <div className="comName-nav">
+                                    <span>{this.state.branchName}</span>
+                                </div>                               
                             </Grid>
                             <Grid item>
                                 <Avatar 
                                 aria-label="recipe" 
-                                style={{ backgroundColor: '#39b54a',height:30,width:30,marginTop:-10 }} 
+                                style={{ backgroundColor: '#39b54a',height:30,width:30 }} 
                                 className="nav-avatar-pointer" 
                                 aria-haspopup="true" 
                                 aria-controls="logout-menu" 

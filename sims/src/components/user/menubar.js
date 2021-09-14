@@ -186,19 +186,8 @@ export default function ScrollableTabsButtonAuto() {
     return (
         <div className={classes.root}>
             <Grid container spacing={1}>
-                <Grid item xs={2}>
-                    <Typography variant="h6" style={{ marginTop: 11, textAlign: 'center' }}>
-                        <span style={{
-                            fontSize:12,
-                            letterSpacing: 3,
-                            fontWeight: 500, textDecorationLine: 'underline',
-                            textDecorationColor: '#39b54a', color: '#000'
-                        }}>
-                            {branchName}
-                        </span>
-                    </Typography>
-                </Grid>
-                <Grid item xs={10}>
+                 
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div >
                         <Tabs
                             value={value}

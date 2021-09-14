@@ -1,23 +1,22 @@
 import './dasboard.css';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { COOKIE, getCookie } from "../../services/cookie";
-import Nav from "./nav";
-
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import Drawer from "./drawer";
 import Menubar from "../user/menubar";
 import Grid from '@material-ui/core/Grid';
-
+import Nav from "./nav";
 import Row1 from "../dashboard/index/row1";
 import Activities from "../dashboard/index/activities";
+import QuickActionSection from "../dashboard/index/quickactionsection";
+
 
 class userDashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false,
+
     };
   }
 
@@ -56,8 +55,11 @@ class userDashboard extends React.Component {
         zIndex: theme.zIndex.drawer + 1,
       },
     }));
+
+
+
     return (
-      <div>
+      <Fragment>
         <CssBaseline />
         <Nav />
         <div style={{ marginTop: 42 }}>
@@ -66,18 +68,28 @@ class userDashboard extends React.Component {
         <div style={{ height: 20 }}></div>
         <div style={{ marginTop: -10 }}>
           <Grid container spacing={0}>
-            <Grid item xs={12} sm={1}></Grid>
-            <Grid item xs={12} sm={10}>
-              
-              <Activities />
-              <Row1 />
+            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+            <Grid item xs={12} sm={12} md={10} lg={10}>
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <QuickActionSection />
+                </Grid>
+              </Grid>
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Activities />
+                </Grid>
+              </Grid>
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Row1 />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={1}></Grid>
+            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
           </Grid>
-
         </div>
-
-      </div>
+      </Fragment>
     );
   }
 }
