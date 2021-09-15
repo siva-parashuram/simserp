@@ -252,6 +252,8 @@ class editcompany extends React.Component {
     }
 
     const updateCompanyDetails = () => {
+      let gobackURL=URLS.URLS.companyMaster + this.state.urlparams;
+      
       this.setState({ProgressLoader: false});
       let company=this.state.company;
       let ValidUser = APIURLS.ValidUser;
@@ -271,6 +273,7 @@ class editcompany extends React.Component {
           console.log("response > ", response);
           if (response.status === 200) {
             this.setState({ ProgressLoader: true,SuccessPrompt: true  });
+            //this.props.history.push(gobackURL);
           } else {
             this.setState({ ProgressLoader: true,ErrorPrompt: true  });
           }
@@ -279,6 +282,40 @@ class editcompany extends React.Component {
 
         });
 
+
+    }
+
+    const deleteCompany=()=>{
+      let gobackURL=URLS.URLS.companyMaster + this.state.urlparams;
+      console.log("deleteCompany > gobackURL > ", gobackURL);
+      this.setState({ProgressLoader: false});
+      let company=this.state.company;
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const data = {
+        validUser: ValidUser,
+        company: company
+      };       
+      const headers = {
+        "Content-Type": "application/json"
+      };
+      let DeleteCompanyUrl = APIURLS.APIURL.DeleteCompany;
+   
+      axios.post(DeleteCompanyUrl, data, { headers })
+      .then(response => {
+        console.log("response > ", response);
+        if (response.status === 200) {
+          this.setState({ ProgressLoader: true,SuccessPrompt: true  });         
+          this.props.history.push(gobackURL);
+        } else {
+          this.setState({ ProgressLoader: true,ErrorPrompt: true  });
+        }
+      }
+      ).catch(error => {
+
+      });
+       
 
     }
 
@@ -315,23 +352,22 @@ class editcompany extends React.Component {
     return (
       <Fragment>
         <Nav />
-        <div style={{ marginTop: 45 }}>
-                    <Menubar />
-                </div>
-        <main className={useStyles.content}>
-          <Toolbar />
+        <Menubar />
+        <div style={{ height: 20 }}></div>
+        <div>
+         
           {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
          
           <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
-            <Alert onClose={closeSuccessPrompt} severity="success">Company Details Updated!</Alert>
+            <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
           </Snackbar>
 
           <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
             <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
           </Snackbar>
 
-          <div style={{ height:20 }}></div>
-          <div style={{marginTop:-30}}>
+      
+           
             <div style={{ marginLeft: 3 }}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -350,7 +386,7 @@ class editcompany extends React.Component {
 
             <div style={{ height:10 }}></div>
 
-            <div style={{ marginLeft: -10 }}>
+            <div >
               <Grid container spacing={0}>
                 <Grid xs={1}>
                   <Button
@@ -363,7 +399,14 @@ class editcompany extends React.Component {
                   </Button>
                 </Grid>
                 <Grid xs={1}>
-                  <Button style={{ marginLeft: 0 }} startIcon={<DeleteIcon />} disabled={this.state.DeleteDisabled}>Delete</Button>
+                  <Button 
+                  style={{ marginLeft: 0 }} 
+                  startIcon={<DeleteIcon />} 
+                  disabled={this.state.DeleteDisabled}
+                  onClick={(e)=>deleteCompany()}
+                  >
+                  Delete
+                  </Button>
                 </Grid>
               </Grid>
             </div>
@@ -636,8 +679,8 @@ class editcompany extends React.Component {
             </Grid>
 
 
-          </div>
-        </main>
+           
+        </div>
       </Fragment>
     );
   }

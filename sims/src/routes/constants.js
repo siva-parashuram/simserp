@@ -10,4 +10,7 @@ export const URLS = {
   addNewCompany:"/addNewCompany",
   editCompany:"/editCompany",
   report1:"/report1",
+  countryMaster:"/countryMaster",
+  addCountry:"/addCountry",
+  editCountry:"/editCountry",
 };

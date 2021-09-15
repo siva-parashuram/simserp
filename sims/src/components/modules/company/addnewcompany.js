@@ -200,6 +200,7 @@ class addnewcompany extends React.Component {
 
 
         const handleCreateCompanyClick = (e) => {
+            let gobackURL=URLS.URLS.companyMaster + this.state.urlparams;
             this.setState({ ProgressLoader: false });
 
             let ValidUser = APIURLS.ValidUser;
@@ -237,7 +238,7 @@ class addnewcompany extends React.Component {
                         console.log("response > ", response);
                         if (response.status === 200 || response.status === 201) {
                             this.setState({ ProgressLoader: true, SuccessPrompt: true });
-                            this.props.history.push(URLS.URLS.companyMaster);
+                            this.props.history.push(gobackURL);
                         } else {
                             this.setState({ ProgressLoader: true, ErrorPrompt: true });
                         }
@@ -266,12 +267,9 @@ class addnewcompany extends React.Component {
         return (
             <Fragment>
                 <Nav />
-                <div style={{ marginTop: 45 }}>
-                    <Menubar />
-                </div>
-                <div style={{ height: 8 }}></div>
-
-                <Toolbar />
+                <Menubar />
+                <div style={{ height: 30 }}></div>
+ 
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -562,7 +560,8 @@ class addnewcompany extends React.Component {
                                             </AccordionDetails>
 
                                         </Accordion>
-                                    </Grid>
+                                    
+                                        </Grid>
                                 </Grid>
                             </div>
                         </Grid>

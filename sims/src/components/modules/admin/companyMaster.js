@@ -71,9 +71,7 @@ class companyMaster extends React.Component {
       <Fragment>
         <CssBaseline />
         <Nav />
-        <div style={{marginTop:40}}>
-          <Menubar/>
-        </div>
+        <Menubar/>
         <Companymasterdatagrid/>
       </Fragment>
     );

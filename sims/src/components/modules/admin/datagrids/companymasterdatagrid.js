@@ -245,9 +245,7 @@ class companymasterdatagrid extends React.Component {
                     </Grid>
                 </Grid>
                 </div>
-                <div style={{ height: 20 }}>
-                   
-                </div>
+                <div style={{ height: 20 }}></div>
                
                 <div style={{ marginLeft: 2 }}>
                     <Grid container spacing={0}>

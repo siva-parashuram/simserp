@@ -14,7 +14,7 @@ import Component2 from "../sales/component2";
 
 const userComponents = ["component1", "component2"];
 
-class row1 extends React.Component {
+class insights extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -65,4 +65,4 @@ class row1 extends React.Component {
     }
 }
 
-export default row1;
+export default insights;

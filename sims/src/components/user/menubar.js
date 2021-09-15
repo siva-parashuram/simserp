@@ -104,8 +104,7 @@ export default function ScrollableTabsButtonAuto() {
         setbranchName(branchName);
     }
 
-    const getModuleList = () => {
-
+    const getModuleList = () => { 
 
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -122,58 +121,6 @@ export default function ScrollableTabsButtonAuto() {
                     { name: "Country Master", link: "countryMaster" },
                     { name: "State Master", link: "stateMaster" }
                 ]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
-            },
-            {
-                moduleName: "Reports",
-                subMenus: [{ name: "Report 1", link: "report1" }]
             }
         ]
         setmoduleList(moduleList);
@@ -201,7 +148,13 @@ export default function ScrollableTabsButtonAuto() {
                         >
                             {
                                 moduleList.map((item, i) => (
-                                    <Tab disableRipple={true}  className="menubar-tab-app-bar" onClick={(e) => handleTabClick(e, i)} icon={<ExpandMoreIcon className="menubar-tab-icon-position" />} label={item.moduleName}  {...a11yProps(i)} />
+                                    <Tab
+                                    disableRipple={true}
+                                    className="menubar-tab-app-bar" 
+                                    onClick={(e) => handleTabClick(e, i)} 
+                                     icon={<ExpandMoreIcon className="menubar-tab-icon-position" />} 
+                                    label={item.moduleName}  
+                                    {...a11yProps(i)} />
                                 ))
                             }
 

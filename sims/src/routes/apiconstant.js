@@ -9,6 +9,13 @@ export const APIURL = {
     GetCompany:domain+"api/Company/GetCompany",
     UpdateCompany:domain+"api/Company/UpdateCompany",
     getTempData:domain+"api/TempData/getTempData",
+    DeleteCompany:domain+"api/Company/DeleteCompany",
+    GetCountries:domain+"api/Country/GetCountries",
+    CreateCountry:domain+"api/Country/CreateCountry",
+    DeleteCountry:domain+"api/Country/DeleteCountry",
+    UpdateCountry:domain+"api/Country/UpdateCountry",
+    GetCountry:domain+"api/Country/GetCountry",
+    GetZones:domain+"api/Zone/GetZones"
   };
 
 
