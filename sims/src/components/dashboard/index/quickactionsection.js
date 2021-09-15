@@ -21,6 +21,7 @@ class quickactionsection extends React.Component {
             firstname: "",
             datetime: "",
             lastSync: "",
+            greetings:"",
             ActivityRefresh:false
         };
     }
@@ -52,6 +53,24 @@ class quickactionsection extends React.Component {
 
             var datetime = currentdate.toDateString();
 
+            
+            var time = currentdate.getHours();
+            var greetings="";
+            if (time < 12) {
+                greetings="Good morning!";  
+            }
+            if (time >= 13 || time<=14) {
+                greetings="Go eat lunch!";  
+               
+            }
+            if((time>12 && (time < 13 || time>14) ) || time<=16){
+                greetings="Good afternoon!"; 
+            }
+            if(time>=16){
+                greetings="Good Evening!"; 
+            }
+           
+
             this.setState({
                 branchName: branchName,
                 branchId: branchId,
@@ -59,7 +78,8 @@ class quickactionsection extends React.Component {
                 userInitial: initialName,
                 firstname: FIRSTNAME,
                 datetime: datetime,
-                lastSync: lastSync
+                lastSync: lastSync,
+                greetings:greetings
             });
         }
 
@@ -74,8 +94,43 @@ class quickactionsection extends React.Component {
 
 
      refreshActivityList=()=>{
+        console.log("function Called continue");
         this.setState({ActivityRefresh:true}); 
-        console.log("function Called ");
+        this.fetchGreetings();
+        //fetch last visited pages
+        //fetch recent sales,purchases
+    }
+
+    fetchGreetings=()=>{
+        var currentdate = new Date();
+        var lastSync = "Last Sync: " + currentdate.getDate() + "/"
+            + (currentdate.getMonth() + 1) + "/"
+            + currentdate.getFullYear() + " @ "
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + ":"
+            + currentdate.getSeconds();
+
+        var datetime = currentdate.toDateString();        
+        var time = currentdate.getHours();
+        var greetings="";
+        if (time < 12) {
+            greetings="Good morning!";  
+        }
+        if (time >= 13 || time<=14) {
+            greetings="Go eat lunch!";  
+           
+        }
+        if((time>12 && (time < 13 || time>14) ) || time<=16){
+            greetings="Good afternoon!"; 
+        }
+        if(time>=16){
+            greetings="Good Evening!"; 
+        }
+        this.setState({           
+            datetime: datetime,
+            lastSync: lastSync,
+            greetings:greetings
+        });
     }
 
     render() {
@@ -99,8 +154,9 @@ class quickactionsection extends React.Component {
                                     <Grid container spacing={0}>
                                         <Grid item xs={12} sm={12} md={12} lg={12}>
                                             {this.state.datetime}
-                                            <Typography variant="h3" className="welcome-text" gutterBottom>
-                                                Hi! <span className="welcome-username-highlight">{this.state.firstname}</span>
+                                            <Typography variant="h3" className="welcome-text" gutterBottom>                                              
+                                                <span className="greetings">{this.state.greetings} </span>
+                                                <span className="welcome-username-highlight">{this.state.firstname}</span>
                                             </Typography>
                                         </Grid>
                                     </Grid>

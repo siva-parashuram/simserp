@@ -115,6 +115,14 @@ export default function ScrollableTabsButtonAuto() {
 
         let moduleList = [
             {
+                moduleName: "Home",
+                subMenus: [
+                    { name: "Dashboard", link: "userDashboard" },
+                    
+                   
+                ]
+            },
+            {
                 moduleName: "Admin",
                 subMenus: [
                     { name: "Company Master", link: "companyMaster" },

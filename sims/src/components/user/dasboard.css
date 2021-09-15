@@ -291,10 +291,27 @@ cursor: pointer;
   color:#000 !important;
 }
 
+.greetings{
+  /* font-family: calibri !important; */
+  letter-spacing: 2px !important;
+  font-size: 28pt !important;
+  color:#000 !important;
+}
+
 .welcome-username-highlight{
   font-family: calibri !important;
   letter-spacing: 2px !important;
   font-size: 37.5pt !important;
+  color:#4caf50 !important;
+  font-weight: 100 !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px !important;
+}
+
+.navigation-username-highlight{
+  font-family: calibri !important;
+  letter-spacing: 2px !important;
+  font-size: 12.5pt !important;
   color:#4caf50 !important;
   font-weight: 100 !important;
   text-decoration: underline !important;

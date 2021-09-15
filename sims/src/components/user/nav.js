@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,8 +30,10 @@ export default function ButtonAppBar() {
     const [compName, setcompName] = React.useState("");
     const [userInitial, setuserInitial] = React.useState("");
     const [isLoggedIn, setisLoggedIn] = React.useState(true);
+    const [firstname, setfirstname] = React.useState("");
+    const [greetings, setgreetings] = React.useState("");
 
-
+    
     useEffect(() => {
         console.log('On Load Event of UseEffect !');
         let token = getCookie(COOKIE.USERID);
@@ -65,7 +68,7 @@ export default function ButtonAppBar() {
             setbranchId(branchId);
             setcompName(compName);
             setuserInitial(initialName);
-
+            setfirstname(FIRSTNAME);
         }
     }, []);
 
@@ -75,14 +78,12 @@ export default function ButtonAppBar() {
 
     return (
         <div className={classes.root}>
-        <CssBaseline />  
+        <CssBaseline />           
             <AppBar className="navDiv" position="static">
                 <Toolbar>
-
                     <Typography variant="h6" className={classes.title}>
                         {branchName}
                     </Typography>
-
                     <IconButton
                         aria-label="close"
                         className={classes.margin}
@@ -91,8 +92,14 @@ export default function ButtonAppBar() {
                     >
                         <CloseIcon />
                     </IconButton>
+                    
                 </Toolbar>
-            </AppBar>
+            </AppBar>             
+                <div style={{marginLeft:20}}>
+                <span className="greetings">{greetings} </span>
+                <span className="navigation-username-highlight">{firstname}</span>
+                </div>
+            
         </div>
     );
 }
