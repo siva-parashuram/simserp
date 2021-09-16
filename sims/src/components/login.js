@@ -281,13 +281,10 @@ class login extends React.Component {
       let name = data.head.firstName;
       let initialName = data.head.firstName.charAt(0).toUpperCase();
 
-
-      createCookie(COOKIE.TOKEN, data.head.token);
-      createCookie(COOKIE.USERID, data.head.userID);
-      createCookie(COOKIE.ISADMIN, data.head.isAdmin);
-      createCookie(COOKIE.FIRSTNAME, data.head.firstName);
-
-
+      createCookie(COOKIE.TOKEN, data.head.token,APIURLS.CTimeOut);
+      createCookie(COOKIE.USERID, data.head.userID,APIURLS.CTimeOut);
+      createCookie(COOKIE.ISADMIN, data.head.isAdmin,APIURLS.CTimeOut);
+      createCookie(COOKIE.FIRSTNAME, data.head.firstName,APIURLS.CTimeOut);
 
       let companyList = data.companies.companyList;
       this.setState({ userCompanyList: companyList }, function () {

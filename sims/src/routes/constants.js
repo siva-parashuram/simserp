@@ -13,4 +13,5 @@ export const URLS = {
   countryMaster:"/countryMaster",
   addCountry:"/addCountry",
   editCountry:"/editCountry",
+  stateMaster:"/stateMaster",
 };

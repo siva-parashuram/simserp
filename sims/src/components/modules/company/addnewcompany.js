@@ -59,6 +59,7 @@ class addnewcompany extends React.Component {
             postcode: "",
             phoneno: "",
             website: "",
+            countryData:[],
             createBtnDisabled: true,
             GeneralDetailsExpanded: true,
             AddressDetailsExpanded: true,
@@ -74,6 +75,7 @@ class addnewcompany extends React.Component {
 
 
     componentDidMount() {
+        this.getCountryList();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -83,6 +85,30 @@ class addnewcompany extends React.Component {
         this.setState({
             urlparams: urlparams,
         });
+    }
+
+    getCountryList() {
+        let rows=[];
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json"
+        };
+        let GetCountryUrl = APIURLS.APIURL.GetCountries;       
+       
+        axios.post(GetCountryUrl, ValidUser, { headers })
+          .then(response => {           
+            let data=response.data;
+            console.log("getCountryList > response > data > ",data);
+            rows=data;
+            this.setState({countryData: rows }); 
+          }
+          ).catch(error => {            
+            console.log("error > ",error);
+          });
+
+        
     }
 
     render() {
@@ -418,7 +444,7 @@ class addnewcompany extends React.Component {
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <Select
                                                                         style={{ height: 40, marginTop: 14 }}
-                                                                        variant="outlined"
+                                                                        // variant="outlined"
                                                                         id="countrySelect"
                                                                         label="Country"
                                                                         fullWidth
@@ -429,9 +455,14 @@ class addnewcompany extends React.Component {
                                                                         <MenuItem value="-">
                                                                             <em>None</em>
                                                                         </MenuItem>
-                                                                        <MenuItem value={10}>India</MenuItem>
-                                                                        <MenuItem value={20}>UK</MenuItem>
-                                                                        <MenuItem value={30}>UAE</MenuItem>
+                                                                        {
+                                                                            this.state.countryData.map((item,i)=>( 
+                                                                                <MenuItem  value={item.countryId}>
+                                                                                {item.name} 
+                                                                                </MenuItem>
+                                                                            ))
+                                                                        }
+                                                                         
                                                                     </Select>
                                                                 </TableCell>
                                                             </TableRow>
@@ -442,7 +473,7 @@ class addnewcompany extends React.Component {
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <Select
                                                                         style={{ height: 40, marginTop: 14 }}
-                                                                        variant="outlined"
+                                                                        // variant="outlined"
                                                                         id="stateSelect"
                                                                         label="State"
                                                                         fullWidth

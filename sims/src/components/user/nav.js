@@ -95,11 +95,7 @@ export default function ButtonAppBar() {
                     
                 </Toolbar>
             </AppBar>             
-                <div style={{marginLeft:20}}>
-                <span className="greetings">{greetings} </span>
-                <span className="navigation-username-highlight">{firstname}</span>
-                </div>
-            
+              
         </div>
     );
 }

@@ -58,17 +58,22 @@ class quickactionsection extends React.Component {
             var greetings="";
             if (time < 12) {
                 greetings="Good morning!";  
-            }
-            if (time >= 13 || time<=14) {
-                greetings="Go eat lunch!";  
-               
-            }
-            if((time>12 && (time < 13 || time>14) ) || time<=16){
-                greetings="Good afternoon!"; 
-            }
-            if(time>=16){
-                greetings="Good Evening!"; 
-            }
+            }else{
+                if(time >= 12){
+                    // if (time >= 13 && time<14) {
+                    //     greetings="Go eat lunch!"; 
+                    // }
+                    // if(time>12){
+                    //     greetings="Good afternoon!"; 
+                    // }
+                    if(time>=16){
+                        greetings="Good Evening!"; 
+                    }else{
+                        greetings="Good afternoon!"; 
+                    }
+                }
+            }        
+           
            
 
             this.setState({
@@ -115,16 +120,20 @@ class quickactionsection extends React.Component {
         var greetings="";
         if (time < 12) {
             greetings="Good morning!";  
-        }
-        if (time >= 13 || time<=14) {
-            greetings="Go eat lunch!";  
-           
-        }
-        if((time>12 && (time < 13 || time>14) ) || time<=16){
-            greetings="Good afternoon!"; 
-        }
-        if(time>=16){
-            greetings="Good Evening!"; 
+        }else{
+            if(time >= 12){
+                // if (time >= 13 && time<14) {
+                //     greetings="Go eat lunch!"; 
+                // }
+                // if(time>12){
+                //     greetings="Good afternoon!"; 
+                // }
+                if(time>=16){
+                    greetings="Good Evening!"; 
+                }else{
+                    greetings="Good afternoon!"; 
+                }
+            }
         }
         this.setState({           
             datetime: datetime,

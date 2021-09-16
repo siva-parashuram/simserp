@@ -58,6 +58,8 @@ class editcompany extends React.Component {
       PostCode: "",
       PhoneNo: "",
       Website: "",
+      countryData:[],
+      selectedCountry:"",
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: true,
@@ -78,6 +80,7 @@ class editcompany extends React.Component {
 
 
   componentDidMount() {
+    this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -91,6 +94,28 @@ class editcompany extends React.Component {
       this.getCompanyDetails(CompanyID);
     });
   }
+
+  getCountryList() {
+    let rows=[];
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    let GetCountryUrl = APIURLS.APIURL.GetCountries;       
+   
+    axios.post(GetCountryUrl, ValidUser, { headers })
+      .then(response => {           
+        let data=response.data;
+        console.log("getCountryList > response > data > ",data);
+        rows=data;
+        this.setState({countryData: rows }); 
+      }
+      ).catch(error => {            
+        console.log("error > ",error);
+      });    
+}
 
   getCompanyDetails(CompanyID) {
     console.log("getCompanyDetails > CompanyID > ", CompanyID);
@@ -135,6 +160,7 @@ class editcompany extends React.Component {
             PostCode: response.data.postcode,
             PhoneNo: response.data.phoneNo,
             Website: response.data.website,
+            selectedCountry:response.data.countryId,
             ProgressLoader: true
           }, () => {
             console.log("=============================");
@@ -247,8 +273,14 @@ class editcompany extends React.Component {
       }
       if (id === "Website") {        
         company.Website = e.target.value;
-        this.setState({ Website: e.target.value,company });
+        this.setState({ Website: e.target.value,company:company });
+      }if (id === "Country") {        
+        company.countryId = e.target.value;
+        this.setState({ selectedCountry: e.target.value,company:company });
       }
+
+      
+
     }
 
     const updateCompanyDetails = () => {
@@ -521,20 +553,26 @@ class editcompany extends React.Component {
                                   <TableCell align="left" className="no-border-table">
                                     <Select
                                       style={{ height: 40, marginTop: 14 }}
-                                      variant="outlined"
+                                      // variant="outlined"
                                       id="countrySelect"
                                       label="Country"
                                       fullWidth
                                       InputProps={{
                                         className: "textFieldCss"
                                       }}
+                                      value={parseInt(this.state.selectedCountry)}
+                                      onChange={(e) => updateFormValue('Country', e)}
                                     >
                                       <MenuItem value="-">
                                         <em>None</em>
                                       </MenuItem>
-                                      <MenuItem value={10}>India</MenuItem>
-                                      <MenuItem value={20}>UK</MenuItem>
-                                      <MenuItem value={30}>UAE</MenuItem>
+                                      {
+                                        this.state.countryData.map((item,i)=>( 
+                                            <MenuItem  value={item.countryId}>
+                                            {item.name} 
+                                            </MenuItem>
+                                        ))
+                                    }
                                     </Select>
                                   </TableCell>
                                 </TableRow>
@@ -545,7 +583,7 @@ class editcompany extends React.Component {
                                   <TableCell align="left" className="no-border-table">
                                     <Select
                                       style={{ height: 40, marginTop: 14 }}
-                                      variant="outlined"
+                                      // variant="outlined"
                                       id="stateSelect"
                                       label="State"
                                       fullWidth

@@ -14,6 +14,7 @@ import report1 from "../components/modules/reports/report1";
 import countryMaster from "../components/modules/country/countryMaster";
 import addCountry from "../components/modules/country/addcountry";
 import editCountry from "../components/modules/country/editcountry";
+import stateMaster from "../components/modules/country/statemaster";
 
 let routes = ({ location, ...rest }) => {
   return (
@@ -33,6 +34,9 @@ let routes = ({ location, ...rest }) => {
     <Route path={URLS.URLS.countryMaster}  component={countryMaster} />
     <Route path={URLS.URLS.addCountry}  component={addCountry} />
     <Route path={URLS.URLS.editCountry}  component={editCountry} />
+
+     {/*  State Routes  */}
+     <Route path={URLS.URLS.stateMaster}  component={stateMaster} />
 
     <Route path={URLS.URLS.report1}  component={report1} />
     </Switch>   

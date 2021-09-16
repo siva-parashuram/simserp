@@ -15,8 +15,11 @@ export const APIURL = {
     DeleteCountry:domain+"api/Country/DeleteCountry",
     UpdateCountry:domain+"api/Country/UpdateCountry",
     GetCountry:domain+"api/Country/GetCountry",
-    GetZones:domain+"api/Zone/GetZones"
+    GetZones:domain+"api/Zone/GetZones",
+    GetStates:domain+"api/Country/",
   };
+
+  export const CTimeOut = 3; 
 
 
   export let ValidUser={
