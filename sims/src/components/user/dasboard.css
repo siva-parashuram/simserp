@@ -334,6 +334,14 @@ cursor: pointer;
   margin-top: 10px !important;
   margin-right: 2px !important;
 }
+
+.destination-title{
+  letter-spacing: 2px !important;
+  text-decoration: underline !important;
+  text-decoration-color: #00897b !important;
+  text-decoration-thickness: 2px !important;
+   
+}
  
 
 /**************************************************************************************************************************/

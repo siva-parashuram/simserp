@@ -20,6 +20,8 @@ import '../../user/dasboard.css';
 import Nav from "../../user/nav";
 import Menubar from "../../user/menubar";
 
+import Destination from "./destination";
+
 let rows = [];
 class countryMaster extends React.Component {
     constructor(props) {
@@ -30,11 +32,14 @@ class countryMaster extends React.Component {
             countryData: rows,
             ProgressLoader:true,
             initialCss:"",
+            destinationParam: [],
+            destinations:[]
         }
     }
 
     componentDidMount() {
         this.getCountryList();
+        this.getAllDestinations();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -43,6 +48,31 @@ class countryMaster extends React.Component {
         this.setState({
             urlparams: urlparams,
         });
+    }
+
+    getAllDestinations=()=>{
+        this.setState({ ProgressLoader: false });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+         
+         
+
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetDestinationsUrl = APIURLS.APIURL.GetDestinations;    
+
+        axios.post(GetDestinationsUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getStateList > response > data > ", data);
+                this.setState({ destinations: data, ProgressLoader: true });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
     }
 
     getCountryList() {
@@ -115,36 +145,43 @@ class countryMaster extends React.Component {
                     <div style={{ height: 20 }}></div>
                     <Grid container spacing={0}>
                         <Grid xs={12} sm={12} md={8} lg={8}>
-                            <Table stickyHeader size="small" className="" aria-label="Country List table">
-                                <TableHead className="table-header-background">
-                                    <TableRow>
-                                        <TableCell className="table-header-font">#</TableCell>
-                                        <TableCell className="table-header-font" align="left">Country Name</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody className="tableBody">
-                                {this.state.countryData.map((item, i) => (
-                                    <TableRow 
-                                    id={"row_"+i}
-                                    className={this.state.initialCss}
-                                    hover
-                                    key={i}
-                                    onClick={(event) => handleRowClick(event,item,"row_"+i)}
-                                    >
-                                        <TableCell align="left">
-                                            <a className="LINK tableLink" href={URLS.URLS.editCountry+this.state.urlparams+"&countryID="+item.countryId} >CO{item.countryId}</a>
-                                        </TableCell>
-                                        <TableCell align="left">
-                                            <a className="LINK tableLink" href={URLS.URLS.editCountry+this.state.urlparams+"&countryID="+item.countryId} >{item.name}</a>
-                                        </TableCell>
-                                       
-                                    </TableRow>
+                        <Grid container spacing={0}>
+                        <Grid xs={12} sm={12} md={10} lg={10}>
+                        <Table stickyHeader size="small" className="" aria-label="Country List table">
+                        <TableHead className="table-header-background">
+                            <TableRow>
+                                <TableCell className="table-header-font">#</TableCell>
+                                <TableCell className="table-header-font" align="left">Country Name</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody className="tableBody">
+                        {this.state.countryData.map((item, i) => (
+                            <TableRow 
+                            id={"row_"+i}
+                            className={this.state.initialCss}
+                            hover
+                            key={i}
+                            onClick={(event) => handleRowClick(event,item,"row_"+i)}
+                            >
+                                <TableCell align="left">
+                                    <a className="LINK tableLink" href={URLS.URLS.editCountry+this.state.urlparams+"&countryID="+item.countryId} >CO{item.countryId}</a>
+                                </TableCell>
+                                <TableCell align="left">
+                                    <a className="LINK tableLink" href={URLS.URLS.editCountry+this.state.urlparams+"&countryID="+item.countryId} >{item.name}</a>
+                                </TableCell>
+                               
+                            </TableRow>
 
-                                ))}
-                                </TableBody>
-                            </Table>
+                        ))}
+                        </TableBody>
+                    </Table>
+                
                         </Grid>
-                        <Grid xs={12} sm={12} md={4} lg={4}></Grid>
+                        </Grid>
+                           </Grid>
+                        <Grid xs={12} sm={12} md={4} lg={4}>
+                        <Destination destinations={this.state.destinations} />
+                        </Grid>
                     </Grid>
                 </div>
 

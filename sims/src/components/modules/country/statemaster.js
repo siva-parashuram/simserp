@@ -9,7 +9,6 @@ import AddIcon from '@material-ui/icons/Add';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
@@ -19,6 +18,7 @@ import Menubar from "../../user/menubar";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import Destination from "./destination";
 
 class statemaster extends React.Component {
     constructor(props) {
@@ -27,10 +27,13 @@ class statemaster extends React.Component {
             urlparams: "",
             ProgressLoader: false,
             stateData: [],
+            destinationParam: []
         }
     }
     componentDidMount() {
+        this.setState({ProgressLoader: true});
         this.getStateList();
+        this.getAllDestinations();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -42,40 +45,109 @@ class statemaster extends React.Component {
     }
 
     getStateList() {
-        let rows=[];
+        let rows = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
-          "Content-Type": "application/json"
+            "Content-Type": "application/json"
         };
-        let GetStatesUrl = APIURLS.APIURL.GetStates;       
-       
-        axios.post(GetStatesUrl, ValidUser, { headers })
-          .then(response => {           
-            let data=response.data;
-            console.log("getStateList > response > data > ",data);
-            rows=data;
-            this.setState({ stateData: rows,ProgressLoader:true }); 
-          }
-          ).catch(error => {            
-            console.log("error > ",error);
-          });
+        let GetStatesUrl = APIURLS.APIURL.GetStates;
 
-        
+        axios.post(GetStatesUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getStateList > response > data > ", data);
+                rows = data;
+                this.setState({ stateData: rows, ProgressLoader: true });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+
+
+    }
+
+    getAllDestinations=()=>{
+        this.setState({ ProgressLoader: false });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+         
+         
+
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetDestinationsUrl = APIURLS.APIURL.GetDestinations;    
+
+        axios.post(GetDestinationsUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getStateList > response > data > ", data);
+                this.setState({ destinations: data, ProgressLoader: true });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
     }
 
     render() {
 
         const handleRowClick = (e, item, id) => {
+            console.log("handleRowClick > item > ", item);
+            getDestinationsByState(item);
             removeIsSelectedRowClasses();
             document.getElementById(id).classList.add('selectedRow');
+
         }
+
+
 
         const removeIsSelectedRowClasses = () => {
             for (let i = 0; i < this.state.stateData.length; i++) {
                 document.getElementById('row_' + i).className = '';
             }
+        }
+
+
+        const getDestinationsByState = (item) => {
+            this.setState({ ProgressLoader: false });
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+            let data={
+                Destination:{
+                    DestinationId:0,
+                        CountryId:item.countryId,
+                        DestinationName:null,
+                        Postcode:null
+                    },
+                validUser:ValidUser
+            };
+             
+
+            const headers = {
+                "Content-Type": "application/json"
+            };
+            let GetDestinationByCountryIdUrl = APIURLS.APIURL.GetDestinationByCountryId;    
+
+            axios.post(GetDestinationByCountryIdUrl, data, { headers })
+                .then(response => {
+                    let data = response.data;
+                    console.log("getStateList > response > data > ", data);
+                    if(Object.prototype.toString.call(data) === '[object Array]'){
+                        this.setState({ destinations: data, ProgressLoader: true });
+                    }else{
+                        this.setState({ destinations: [], ProgressLoader: true });
+                    }
+                    
+                }
+                ).catch(error => {
+                    console.log("error > ", error);
+                });
         }
 
         return (
@@ -96,16 +168,16 @@ class statemaster extends React.Component {
                     </Grid>
                     <Grid container spacing={3}>
                         <Grid xs={1}>
-                            
-                    <Button
-                        style={{ marginLeft: 10 }}
-                        startIcon={<AddIcon />}
-                    >
-                        <a className="button-link" href={URLS.URLS.addState + this.state.urlparams}>
-                            New
-                        </a>
-                    </Button>
-                
+
+                            <Button
+                                style={{ marginLeft: 10 }}
+                                startIcon={<AddIcon />}
+                            >
+                                <a className="button-link" href={URLS.URLS.addState + this.state.urlparams}>
+                                    New
+                                </a>
+                            </Button>
+
                         </Grid>
                     </Grid>
                     <div style={{ height: 20 }}></div>
@@ -151,26 +223,7 @@ class statemaster extends React.Component {
 
                         </Grid>
                         <Grid xs={12} sm={12} md={4} lg={4}>
-                            <Grid container spacing={0}>
-                                <Grid xs={12} sm={12} md={12} lg={12}>
-                                    <Table stickyHeader size="small" className="" aria-label="Destination & Postcode List table">
-                                        <TableHead className="table-header-background">
-                                            <TableRow>
-                                                <TableCell className="table-header-font">#</TableCell>
-                                                <TableCell className="table-header-font" align="left">Destination</TableCell>
-                                                <TableCell className="table-header-font" align="left">PostCode</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody className="tableBody">
-                                            <TableRow>
-                                                <TableCell className="table-header-font"> </TableCell>
-                                                <TableCell className="table-header-font" align="left"> </TableCell>
-                                                <TableCell className="table-header-font" align="left"> </TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </Grid>
-                            </Grid>
+                            <Destination destinations={this.state.destinations} /> 
                         </Grid>
                     </Grid>
                 </div>
