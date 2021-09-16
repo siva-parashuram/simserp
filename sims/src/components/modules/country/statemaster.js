@@ -30,6 +30,7 @@ class statemaster extends React.Component {
         }
     }
     componentDidMount() {
+        this.getStateList();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -38,6 +39,30 @@ class statemaster extends React.Component {
         this.setState({
             urlparams: urlparams,
         });
+    }
+
+    getStateList() {
+        let rows=[];
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json"
+        };
+        let GetStatesUrl = APIURLS.APIURL.GetStates;       
+       
+        axios.post(GetStatesUrl, ValidUser, { headers })
+          .then(response => {           
+            let data=response.data;
+            console.log("getStateList > response > data > ",data);
+            rows=data;
+            this.setState({ stateData: rows,ProgressLoader:true }); 
+          }
+          ).catch(error => {            
+            console.log("error > ",error);
+          });
+
+        
     }
 
     render() {
@@ -71,16 +96,16 @@ class statemaster extends React.Component {
                     </Grid>
                     <Grid container spacing={3}>
                         <Grid xs={1}>
-                            {/*
+                            
                     <Button
-                        style={{ marginLeft: 5 }}
+                        style={{ marginLeft: 10 }}
                         startIcon={<AddIcon />}
                     >
-                        <a className="button-link" href={URLS.URLS.addCountry + this.state.urlparams}>
+                        <a className="button-link" href={URLS.URLS.addState + this.state.urlparams}>
                             New
                         </a>
                     </Button>
-                */}
+                
                         </Grid>
                     </Grid>
                     <div style={{ height: 20 }}></div>
@@ -93,6 +118,8 @@ class statemaster extends React.Component {
                                             <TableRow>
                                                 <TableCell className="table-header-font">#</TableCell>
                                                 <TableCell className="table-header-font" align="left">State Name</TableCell>
+                                                <TableCell className="table-header-font" align="left">CODE</TableCell>
+                                                <TableCell className="table-header-font" align="left">GST CODE</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody className="tableBody">
@@ -105,11 +132,13 @@ class statemaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >CO{item.countryId}</a>
+                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >ST{item.stateId}</a>
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >{item.name}</a>
+                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{item.name}</a>
                                                     </TableCell>
+                                                    <TableCell align="left">{item.code}</TableCell>
+                                                    <TableCell align="left">{item.gstcode}</TableCell>
 
                                                 </TableRow>
 

@@ -16,7 +16,10 @@ export const APIURL = {
     UpdateCountry:domain+"api/Country/UpdateCountry",
     GetCountry:domain+"api/Country/GetCountry",
     GetZones:domain+"api/Zone/GetZones",
-    GetStates:domain+"api/Country/",
+    GetSate:domain+"api/State/GetSate",
+    GetStates:domain+"api/State/GetStates",
+    CreateState:domain+"api/State/CreateState",
+    UpdateState:domain+"api/State/UpdateState",
   };
 
   export const CTimeOut = 3; 

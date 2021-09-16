@@ -1,15 +1,21 @@
 {
     "cSpell.words": [
+        "addcountry",
+        "addstate",
         "APIURL",
         "APIURLS",
         "clickaway",
         "clientlog",
         "dasboard",
         "datetime",
+        "editcompany",
+        "editcountry",
         "FIRSTNAME",
+        "gstcode",
         "ISADMIN",
         "Menusitem",
         "randomnumber",
+        "statemaster",
         "urlparams",
         "USERID"
     ]
