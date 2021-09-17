@@ -94,7 +94,6 @@ class editdestination extends React.Component {
                 console.log("error > ", error);
             });
 
-
     }
 
     getStateList() {
@@ -117,8 +116,6 @@ class editdestination extends React.Component {
             ).catch(error => {
                 console.log("error > ", error);
             });
-
-
     }
 
 
@@ -131,7 +128,7 @@ class editdestination extends React.Component {
         let data = {
             Destination: {
                 DestinationId: parseInt(this.state.destinationId),
-                CountryId: parseInt(this.state.countryId),
+                CountryId: parseInt(this.state.countryId),              
                 DestinationName: null,
                 Postcode: null
             },
@@ -152,6 +149,7 @@ class editdestination extends React.Component {
                     destinationId: data.destinationId,
                     countryId: data.countryId,
                     destinationName: data.destinationName,
+                    stateId:data.stateId,
                     postcode: data.postcode,
                     ProgressLoader: true
                 });
@@ -238,7 +236,8 @@ class editdestination extends React.Component {
                     DestinationId: parseInt(this.state.destinationId),
                     CountryId: parseInt(this.state.countryId),
                     DestinationName: this.state.destinationName,
-                    Postcode: this.state.postcode
+                    Postcode: this.state.postcode,
+                    StateID:this.state.stateId
                 },
                 validUser: ValidUser
             };

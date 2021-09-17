@@ -124,13 +124,14 @@ class statemaster extends React.Component {
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
-
+ 
             let data = {
                 Destination: {
                     DestinationId: 0,
                     CountryId: item.countryId,
                     DestinationName: null,
-                    Postcode: null
+                    Postcode: null,
+                    StateID:item.stateId,
                 },
                 validUser: ValidUser
             };
@@ -139,9 +140,9 @@ class statemaster extends React.Component {
             const headers = {
                 "Content-Type": "application/json"
             };
-            let GetDestinationByCountryIdUrl = APIURLS.APIURL.GetDestinationByCountryId;
+            let GetDestinationByCountryIdAndStateIdUrl = APIURLS.APIURL.GetDestinationByCountryIdAndStateId;
 
-            axios.post(GetDestinationByCountryIdUrl, data, { headers })
+            axios.post(GetDestinationByCountryIdAndStateIdUrl, data, { headers })
                 .then(response => {
                     let data = response.data;
                     console.log("getStateList > response > data > ", data);

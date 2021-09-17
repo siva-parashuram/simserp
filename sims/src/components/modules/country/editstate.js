@@ -267,7 +267,7 @@ class editstate extends React.Component {
                                 <Link color="inherit" href={URLS.URLS.stateMaster + this.state.urlparams} >
                                     State Master
                                 </Link>
-                                <Typography color="textPrimary">Add New State</Typography>
+                                <Typography color="textPrimary">Edit State</Typography>
                             </Breadcrumbs>
 
                         </Grid>

@@ -16,6 +16,8 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -41,6 +43,10 @@ class adddestination extends React.Component {
             SuccessPrompt: false,
             countryData: [],
             stateData: [],
+            destinationName:null,            
+            postcode:null,
+            stateId:0,
+            countryId:0
 
         }
     }
@@ -141,6 +147,80 @@ class adddestination extends React.Component {
             }
         }
 
+        const updateFormValue = (id, e) => {
+            if (id === "Name") {
+                this.setState({
+                    destinationName: e.target.value
+                });
+            }
+            if (id === "PostCode") {
+                this.setState({
+                    postcode: e.target.value
+                });
+            }
+            if (id === "CountryID") {
+                this.setState({
+                    countryId: e.target.value
+                });
+            }
+            if (id === "stateID") {
+                this.setState({
+                    stateId: e.target.value
+                });
+            }
+
+            console.log("updated > ",this.state);
+
+
+            
+        }
+
+        
+        const addDestination = () => {
+            console.log("Starting addDestination");
+            this.setState({ ProgressLoader: false });
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+            let data = {
+                Destination: {
+                    DestinationId: 0,
+                    CountryId: parseInt(this.state.countryId),
+                    DestinationName: this.state.destinationName,
+                    stateId:parseInt(this.state.stateId),
+                    Postcode: this.state.postcode
+                },
+                validUser: ValidUser
+            };
+            console.log("state > ",this.state);
+            console.log("data > ",data);
+        
+            const headers = {
+                "Content-Type": "application/json"
+            };
+            let CreateDestinationUrl = APIURLS.APIURL.CreateDestination;
+
+           
+
+            axios.post(CreateDestinationUrl, data, { headers })
+                .then(response => {
+                    let data = response.data;
+                    console.log("updateDestination > response > data > ", data);
+                    if (response.status === 200|| response.status === 201) {
+                        this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                        this.getAllDestinations();
+                    } else {
+                        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                        this.getAllDestinations();
+                    }
+
+                }
+                ).catch(error => {
+                    console.log("error > ", error);
+                });
+        }
+
 
         const closeErrorPrompt = (event, reason) => {
             if (reason === 'clickaway') {
@@ -194,6 +274,7 @@ class adddestination extends React.Component {
                             <Button
                                 style={{ marginLeft: 10 }}
                                 startIcon={<AddIcon />}
+                                onClick={addDestination}
                             >
                                 Create
                             </Button>
@@ -236,7 +317,7 @@ class adddestination extends React.Component {
                                                                         className: "textFieldCss",
                                                                         maxlength: 50
                                                                     }}
-
+                                                                    onChange={(e) => updateFormValue('Name', e)}
                                                                 />
                                                             </TableCell>
                                                         </TableRow>
@@ -254,10 +335,70 @@ class adddestination extends React.Component {
                                                                         className: "textFieldCss",
                                                                         maxlength: 50
                                                                     }}
-
+                                                                    onChange={(e) => updateFormValue('PostCode', e)}
                                                                 />
                                                             </TableCell>
                                                         </TableRow>
+                                                        <TableRow>
+                                                                    <TableCell align="left" className="no-border-table">
+                                                                        <b>Country</b>
+                                                                    </TableCell>
+                                                                    <TableCell align="left" className="no-border-table">
+                                                                        <Select
+                                                                            style={{ height: 40, marginTop: 14 }}
+
+                                                                            id="CountryID"
+                                                                            label="Country"
+                                                                            fullWidth
+                                                                            InputProps={{
+                                                                                className: "textFieldCss"
+                                                                            }}
+                                                                            value={parseInt(this.state.countryId)}
+                                                                            onChange={(e) => updateFormValue('CountryID', e)}
+                                                                        >
+
+                                                                            {
+                                                                                this.state.countryData.map((item, i) => (
+                                                                                    <MenuItem value={item.countryId}>
+                                                                                        {item.name}
+                                                                                    </MenuItem>
+                                                                                ))
+                                                                            }
+
+
+                                                                        </Select>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                                <TableRow>
+                                                                    <TableCell align="left" className="no-border-table">
+                                                                        <b>State</b>
+                                                                    </TableCell>
+                                                                    <TableCell align="left" className="no-border-table">
+                                                                        <Select
+                                                                            style={{ height: 40, marginTop: 14 }}
+
+                                                                            id="stateID"
+                                                                            label="State"
+                                                                            fullWidth
+                                                                            InputProps={{
+                                                                                className: "textFieldCss"
+                                                                            }}
+                                                                            value={parseInt(this.state.stateId)}
+                                                                            onChange={(e) => updateFormValue('stateID', e)}
+                                                                        >
+
+                                                                            {
+                                                                                this.state.stateData.map((item, i) => (
+                                                                                    <MenuItem value={item.stateId}>
+                                                                                        {item.name}
+                                                                                    </MenuItem>
+                                                                                ))
+                                                                            }
+
+
+                                                                        </Select>
+                                                                    </TableCell>
+                                                                </TableRow>
 
                                                     </TableBody>
                                                 </Table>
