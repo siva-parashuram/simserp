@@ -4,8 +4,7 @@ import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import Nav from "../../user/nav";
-import Drawer from "../../user/drawer";
-import Toolbar from '@material-ui/core/Toolbar';
+ 
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
@@ -178,14 +177,7 @@ class editcompany extends React.Component {
   }
 
   render() {
-    const useStyles = makeStyles((theme) => ({
-      root: {
-        display: 'flex',
-      },
-      appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-      },
-    }));
+    
 
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -284,7 +276,7 @@ class editcompany extends React.Component {
     }
 
     const updateCompanyDetails = () => {
-      let gobackURL = URLS.URLS.companyMaster + this.state.urlparams;
+      
 
       this.setState({ ProgressLoader: false });
       let company = this.state.company;

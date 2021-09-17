@@ -23,6 +23,8 @@ export const APIURL = {
     UpdateState:domain+"api/State/UpdateState",
     GetDestinationByCountryId:domain+"api/Destination/GetDestinationByCountryId",
     GetDestinations:domain+"api/Destination/GetDestinations",
+    GetDestination:domain+"api/Destination/GetDestination",
+    UpdateDestination:domain+"api/Destination/UpdateDestination"
   };
 
   export const CTimeOut = 3; 

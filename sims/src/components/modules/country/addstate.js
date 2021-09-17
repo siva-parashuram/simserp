@@ -38,7 +38,7 @@ class addstate extends React.Component {
             ProgressLoader: false,
             GeneralDetailsExpanded: true,
             Validations: {
-                stateName: { errorState: false, errorMsg: "" },                 
+                stateName: { errorState: false, errorMsg: "" },
             },
             state: {
                 StateId: 0,
@@ -55,17 +55,17 @@ class addstate extends React.Component {
             creationDate: null,
             gstcode: null,
             name: null,
-            StateId: null,        
-            countryData:[], 
-            CountryID:null,
-            ErrorPrompt:false,
-            SuccessPrompt:false,
-            disableCreateBtn:true,
+            StateId: null,
+            countryData: [],
+            CountryID: null,
+            ErrorPrompt: false,
+            SuccessPrompt: false,
+            disableCreateBtn: true,
         }
     }
 
     componentDidMount() {
-        this.getCountryList() ;
+        this.getCountryList();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -77,29 +77,29 @@ class addstate extends React.Component {
     }
 
     getCountryList() {
-        let rows=[];
+        let rows = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
-          "Content-Type": "application/json"
+            "Content-Type": "application/json"
         };
-        let GetCountryUrl = APIURLS.APIURL.GetCountries;       
-       
-        axios.post(GetCountryUrl, ValidUser, { headers })
-          .then(response => {           
-            let data=response.data;
-            console.log("getCountryList > response > data > ",data);
-            rows=data;
-            this.setState({ countryData: rows, ProgressLoader: true }); 
-          }
-          ).catch(error => {            
-            console.log("error > ",error);
-          });
+        let GetCountryUrl = APIURLS.APIURL.GetCountries;
 
-        
+        axios.post(GetCountryUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getCountryList > response > data > ", data);
+                rows = data;
+                this.setState({ countryData: rows, ProgressLoader: true });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+
+
     }
-    
+
 
 
     render() {
@@ -114,89 +114,89 @@ class addstate extends React.Component {
             }
         }
 
-        const updateFormValue = (id, e) => {  
-            if(id==="Name"){
-                let state=this.state.state;
-                state.Name= e.target.value;
-                this.setState({ name: e.target.value,state:state });
-                if(e.target.value==="" || e.target.value==null){
-                    this.setState({disableCreateBtn:true});
-                    let Validations={
+        const updateFormValue = (id, e) => {
+            if (id === "Name") {
+                let state = this.state.state;
+                state.Name = e.target.value;
+                this.setState({ name: e.target.value, state: state });
+                if (e.target.value === "" || e.target.value == null) {
+                    this.setState({ disableCreateBtn: true });
+                    let Validations = {
                         stateName: { errorState: true, errorMsg: "Enter State Name" },
-                                    };
-                        this.setState({disableCreateBtn:true,Validations:Validations});
-                }else{
-                    let Validations={
+                    };
+                    this.setState({ disableCreateBtn: true, Validations: Validations });
+                } else {
+                    let Validations = {
                         stateName: { errorState: false, errorMsg: "" },
-                                    };
-                    this.setState({disableCreateBtn:false,Validations:Validations});
+                    };
+                    this.setState({ disableCreateBtn: false, Validations: Validations });
                 }
             }
-            if(id==="Code"){
-                let state=this.state.state;
-                state.Code= e.target.value;
-                this.setState({ code: e.target.value,state:state });
+            if (id === "Code") {
+                let state = this.state.state;
+                state.Code = e.target.value;
+                this.setState({ code: e.target.value, state: state });
             }
-            if(id==="GSTCode"){
-                let state=this.state.state;
-                state.Gstcode= e.target.value;
-                this.setState({ gstcode: e.target.value,state:state });
+            if (id === "GSTCode") {
+                let state = this.state.state;
+                state.Gstcode = e.target.value;
+                this.setState({ gstcode: e.target.value, state: state });
             }
-            if(id==="CountryID"){
-                let state=this.state.state;
-                state.CountryId= e.target.value;
-                this.setState({ CountryID: e.target.value,countryId:e.target.value,state:state });
-            }            
+            if (id === "CountryID") {
+                let state = this.state.state;
+                state.CountryId = e.target.value;
+                this.setState({ CountryID: e.target.value, countryId: e.target.value, state: state });
+            }
         }
 
-         const handleCreate=()=>{
+        const handleCreate = () => {
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
-            let state=this.state.state;
-            state.UserId=parseInt(getCookie(COOKIE.USERID));
+            let state = this.state.state;
+            state.UserId = parseInt(getCookie(COOKIE.USERID));
             const handleCreateData = {
                 validUser: ValidUser,
                 state: state
             };
             const headers = {
-              "Content-Type": "application/json"
+                "Content-Type": "application/json"
             };
-            let CreateStateUrl = APIURLS.APIURL.CreateState;       
-           
+            let CreateStateUrl = APIURLS.APIURL.CreateState;
+
             axios.post(CreateStateUrl, handleCreateData, { headers })
-              .then(response => {           
-                let data=response.data;
-                console.log("handleCreate > response > data > ",data);
-                if (response.status === 200 || response.status === 201) {
-                    this.setState({ProgressLoader:true,SuccessPrompt: true });  
-                }else{
-                    this.setState({ ProgressLoader: true,ErrorPrompt: true  });
+                .then(response => {
+                    let data = response.data;
+                    console.log("handleCreate > response > data > ", data);
+                    if (response.status === 200 || response.status === 201) {
+                        this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                    } else {
+                        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                    }
+
                 }
-                 
-              }
-              ).catch(error => {            
-                console.log("error > ",error);
-              });
-         }
+                ).catch(error => {
+                    console.log("error > ", error);
+                });
+        }
 
-         const closeErrorPrompt = (event, reason) => {
+        const closeErrorPrompt = (event, reason) => {
             if (reason === 'clickaway') {
-              return;
+                return;
             }
             this.setState({ SuccessPrompt: false });
-          }
-      
-          const closeSuccessPrompt = (event, reason) => {
+        }
+
+        const closeSuccessPrompt = (event, reason) => {
             if (reason === 'clickaway') {
-              return;
+                return;
             }
             this.setState({ SuccessPrompt: false });
-          }
+        }
 
-          function Alert(props) {
+        function Alert(props) {
             return <MuiAlert elevation={6} variant="filled" {...props} />;
-          }
+        }
 
         return (
             <Fragment>
@@ -205,12 +205,12 @@ class addstate extends React.Component {
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
-                <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
-              </Snackbar>
-    
-              <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
-                <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
-              </Snackbar>
+                    <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
+                </Snackbar>
+
+                <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
+                    <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
+                </Snackbar>
                 <div style={{ marginLeft: 10, marginTop: 10 }}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
@@ -231,20 +231,20 @@ class addstate extends React.Component {
                     </Grid>
                     <div style={{ height: 20 }}></div>
                     <Grid container spacing={3}>
-                    <Grid xs={1}>
-                   
-                        <Button
-                            style={{ marginLeft: 5 }}
-                            startIcon={<AddIcon />}
-                            onClick={handleCreate}
-                            disabled={this.state.disableCreateBtn}
-                        >
-                             
-                            Create
-                           
-                        </Button>
+                        <Grid xs={1}>
+
+                            <Button
+                                style={{ marginLeft: 5 }}
+                                startIcon={<AddIcon />}
+                                onClick={handleCreate}
+                                disabled={this.state.disableCreateBtn}
+                            >
+
+                                Create
+
+                            </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
 
                     <div style={{ height: 40 }}></div>
                     <Grid container spacing={3}>
@@ -324,29 +324,29 @@ class addstate extends React.Component {
                                                         <b>Country</b>
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
-                                                    <Select                                                            
-                                                    style={{ height: 40, marginTop: 14 }}
-                                                   
-                                                    id="CountryID"
-                                                    label="Country"
-                                                    fullWidth
-                                                    InputProps={{
-                                                        className: "textFieldCss"
-                                                    }}
-                                                    value={parseInt(this.state.CountryID)}
-                                                    onChange={(e) => updateFormValue('CountryID', e)}
-                                                >
-                                                   
-                                                    {
-                                                        this.state.countryData.map((item,i)=>( 
-                                                            <MenuItem  value={item.countryId}>
-                                                            {item.name}
-                                                            </MenuItem>
-                                                        ))
-                                                    }
-                                                    
-                                                     
-                                                </Select>
+                                                        <Select
+                                                            style={{ height: 40, marginTop: 14 }}
+
+                                                            id="CountryID"
+                                                            label="Country"
+                                                            fullWidth
+                                                            InputProps={{
+                                                                className: "textFieldCss"
+                                                            }}
+                                                            value={parseInt(this.state.CountryID)}
+                                                            onChange={(e) => updateFormValue('CountryID', e)}
+                                                        >
+
+                                                            {
+                                                                this.state.countryData.map((item, i) => (
+                                                                    <MenuItem value={item.countryId}>
+                                                                        {item.name}
+                                                                    </MenuItem>
+                                                                ))
+                                                            }
+
+
+                                                        </Select>
                                                     </TableCell>
                                                 </TableRow>
                                             </TableBody>
@@ -359,9 +359,9 @@ class addstate extends React.Component {
                         </Grid>
                     </Grid>
                 </div>
-           
-           
-                </Fragment>
+
+
+            </Fragment>
         )
     }
 

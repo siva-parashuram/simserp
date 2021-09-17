@@ -258,6 +258,9 @@ class editstate extends React.Component {
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Breadcrumbs aria-label="breadcrumb">
+                            <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
+                            Back
+                        </Link>
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
                                 </Link>

@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "addcountry",
+        "adddestination",
         "addstate",
         "apiconstant",
         "APIURL",
@@ -11,12 +12,14 @@
         "datetime",
         "editcompany",
         "editcountry",
+        "editstate",
         "FIRSTNAME",
         "gstcode",
         "ISADMIN",
         "Menusitem",
         "randomnumber",
         "statemaster",
+        "statesbycountry",
         "urlparams",
         "USERID"
     ]
