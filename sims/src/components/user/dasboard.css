@@ -172,8 +172,9 @@ body{
 }
 
 .table-header-font{
-  color:rgb(80, 92, 109) !important;
+  color:#009688 !important;
   font-weight: 545 !important;
+  text-transform: uppercase !important;
 }
 
 .tableBody:hover{
@@ -339,9 +340,28 @@ cursor: pointer;
   letter-spacing: 2px !important;
   text-decoration: underline !important;
   text-decoration-color: #00897b !important;
-  text-decoration-thickness: 2px !important;
-   
+  text-decoration-thickness: 1px !important;
+  color:#424242 !important; 
+  text-transform: uppercase !important;
 }
+
+.section-div-height{
+  height: 250px !important;
+  overflow-y: scroll;
+}
+
+.add-destination-button{
+  background-color: #b0bec5 !important;
+}
+
+.divider-custom{
+  background-color: #263238  !important;
+  height: 1px !important;
+ }
+
+ .backLink:hover{
+   cursor: pointer;
+ }
  
 
 /**************************************************************************************************************************/

@@ -43,10 +43,10 @@ class editcompany extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ErrorPrompt:false,
-      SuccessPrompt:false,
+      ErrorPrompt: false,
+      SuccessPrompt: false,
       ProgressLoader: false,
-      updateBtnDisabled:false,
+      updateBtnDisabled: false,
       urlparams: "",
       CompanyName: "",
       Address: "",
@@ -58,8 +58,8 @@ class editcompany extends React.Component {
       PostCode: "",
       PhoneNo: "",
       Website: "",
-      countryData:[],
-      selectedCountry:"",
+      countryData: [],
+      selectedCountry: "",
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: true,
@@ -96,26 +96,26 @@ class editcompany extends React.Component {
   }
 
   getCountryList() {
-    let rows=[];
+    let rows = [];
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json"
     };
-    let GetCountryUrl = APIURLS.APIURL.GetCountries;       
-   
+    let GetCountryUrl = APIURLS.APIURL.GetCountries;
+
     axios.post(GetCountryUrl, ValidUser, { headers })
-      .then(response => {           
-        let data=response.data;
-        console.log("getCountryList > response > data > ",data);
-        rows=data;
-        this.setState({countryData: rows }); 
+      .then(response => {
+        let data = response.data;
+        console.log("getCountryList > response > data > ", data);
+        rows = data;
+        this.setState({ countryData: rows });
       }
-      ).catch(error => {            
-        console.log("error > ",error);
-      });    
-}
+      ).catch(error => {
+        console.log("error > ", error);
+      });
+  }
 
   getCompanyDetails(CompanyID) {
     console.log("getCompanyDetails > CompanyID > ", CompanyID);
@@ -160,7 +160,7 @@ class editcompany extends React.Component {
             PostCode: response.data.postcode,
             PhoneNo: response.data.phoneNo,
             Website: response.data.website,
-            selectedCountry:response.data.countryId,
+            selectedCountry: response.data.countryId,
             ProgressLoader: true
           }, () => {
             console.log("=============================");
@@ -191,24 +191,24 @@ class editcompany extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
-    const updateFormValue = (id, e) => {    
-      console.log("value >",e.target.value);
-      console.log("Length >",e.target.value.length);
+    const updateFormValue = (id, e) => {
+      console.log("value >", e.target.value);
+      console.log("Length >", e.target.value.length);
       let company = this.state.company;
-      if (id === "PhoneNo") {        
+      if (id === "PhoneNo") {
         company.PhoneNo = e.target.value;
-        this.setState({ PhoneNo: e.target.value,company:company });
+        this.setState({ PhoneNo: e.target.value, company: company });
       }
-      if (id === "companyName") {        
+      if (id === "companyName") {
         company.CompanyName = e.target.value;
-        this.setState({ CompanyName: e.target.value,company:company });
+        this.setState({ CompanyName: e.target.value, company: company });
         if (e.target.value === "" || e.target.value == null) {
           console.log("----------->  Blank ");
           let v = this.state.Validations;
           v.companyName = { errorState: true, errorMsg: "Company Name Cannot be blank!" };
           this.setState({
             Validations: v,
-            updateBtnDisabled:true
+            updateBtnDisabled: true
           });
         } else {
           console.log("-----------> Not Blank ");
@@ -216,78 +216,78 @@ class editcompany extends React.Component {
           v.companyName = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            updateBtnDisabled:false
+            updateBtnDisabled: false
           });
         }
       }
 
-      if (id === "Address") {        
+      if (id === "Address") {
         company.Address = e.target.value;
-        this.setState({ Address: e.target.value,company:company });
-        if (e.target.value === "" || e.target.value == null || e.target.value.length>50) {
-          if(e.target.value.length>50){           
-          let v = this.state.Validations;
-          v.address = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
-          this.setState({
-            Validations: v,
-            updateBtnDisabled:true
-          });
-          }else{
-            
-          let v = this.state.Validations;
-          v.address = { errorState: true, errorMsg: "Address Cannot be blank!" };
-          this.setState({
-            Validations: v,
-            updateBtnDisabled:true
-          });
+        this.setState({ Address: e.target.value, company: company });
+        if (e.target.value === "" || e.target.value == null || e.target.value.length > 50) {
+          if (e.target.value.length > 50) {
+            let v = this.state.Validations;
+            v.address = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+            this.setState({
+              Validations: v,
+              updateBtnDisabled: true
+            });
+          } else {
+
+            let v = this.state.Validations;
+            v.address = { errorState: true, errorMsg: "Address Cannot be blank!" };
+            this.setState({
+              Validations: v,
+              updateBtnDisabled: true
+            });
           }
-         
+
         } else {
           let v = this.state.Validations;
           v.address = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            updateBtnDisabled:false
+            updateBtnDisabled: false
           });
         }
       }
-      if (id === "Address2") {        
+      if (id === "Address2") {
         company.Address2 = e.target.value;
-        this.setState({ Address2: e.target.value,company:company });
+        this.setState({ Address2: e.target.value, company: company });
       }
-      if (id === "Address3") {        
+      if (id === "Address3") {
         company.Address3 = e.target.value;
-        this.setState({ Address3: e.target.value,company:company });
+        this.setState({ Address3: e.target.value, company: company });
       }
-      if (id === "Website") {        
+      if (id === "Website") {
         company.Website = e.target.value;
-        this.setState({ Website: e.target.value,company:company });
+        this.setState({ Website: e.target.value, company: company });
       }
-      if (id === "City") {        
+      if (id === "City") {
         company.City = e.target.value;
-        this.setState({ City: e.target.value,company:company });         
+        this.setState({ City: e.target.value, company: company });
       }
-      if (id === "Postcode") {        
+      if (id === "Postcode") {
         company.Postcode = e.target.value;
-        this.setState({ PostCode: e.target.value,company:company });
+        this.setState({ PostCode: e.target.value, company: company });
       }
-      if (id === "Website") {        
+      if (id === "Website") {
         company.Website = e.target.value;
-        this.setState({ Website: e.target.value,company:company });
-      }if (id === "Country") {        
+        this.setState({ Website: e.target.value, company: company });
+      } if (id === "Country") {
         company.countryId = e.target.value;
-        this.setState({ selectedCountry: e.target.value,company:company });
+        this.setState({ selectedCountry: e.target.value, company: company });
       }
 
-      
+
 
     }
 
     const updateCompanyDetails = () => {
-      let gobackURL=URLS.URLS.companyMaster + this.state.urlparams;
-      
-      this.setState({ProgressLoader: false});
-      let company=this.state.company;
+      let gobackURL = URLS.URLS.companyMaster + this.state.urlparams;
+
+      this.setState({ ProgressLoader: false });
+      let company = this.state.company;
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -304,10 +304,10 @@ class editcompany extends React.Component {
         .then(response => {
           console.log("response > ", response);
           if (response.status === 200) {
-            this.setState({ ProgressLoader: true,SuccessPrompt: true  });
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
             //this.props.history.push(gobackURL);
           } else {
-            this.setState({ ProgressLoader: true,ErrorPrompt: true  });
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         }
         ).catch(error => {
@@ -317,37 +317,37 @@ class editcompany extends React.Component {
 
     }
 
-    const deleteCompany=()=>{
-      let gobackURL=URLS.URLS.companyMaster + this.state.urlparams;
+    const deleteCompany = () => {
+      let gobackURL = URLS.URLS.companyMaster + this.state.urlparams;
       console.log("deleteCompany > gobackURL > ", gobackURL);
-      this.setState({ProgressLoader: false});
-      let company=this.state.company;
+      this.setState({ ProgressLoader: false });
+      let company = this.state.company;
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       const data = {
         validUser: ValidUser,
         company: company
-      };       
+      };
       const headers = {
         "Content-Type": "application/json"
       };
       let DeleteCompanyUrl = APIURLS.APIURL.DeleteCompany;
-   
-      axios.post(DeleteCompanyUrl, data, { headers })
-      .then(response => {
-        console.log("response > ", response);
-        if (response.status === 200) {
-          this.setState({ ProgressLoader: true,SuccessPrompt: true  });         
-          this.props.history.push(gobackURL);
-        } else {
-          this.setState({ ProgressLoader: true,ErrorPrompt: true  });
-        }
-      }
-      ).catch(error => {
 
-      });
-       
+      axios.post(DeleteCompanyUrl, data, { headers })
+        .then(response => {
+          console.log("response > ", response);
+          if (response.status === 200) {
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            this.props.history.push(gobackURL);
+          } else {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+        }
+        ).catch(error => {
+
+        });
+
 
     }
 
@@ -387,9 +387,9 @@ class editcompany extends React.Component {
         <Menubar />
         <div style={{ height: 20 }}></div>
         <div>
-         
+
           {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
-         
+
           <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
             <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
           </Snackbar>
@@ -398,326 +398,329 @@ class editcompany extends React.Component {
             <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
           </Snackbar>
 
-      
-           
-            <div style={{ marginLeft: 3 }}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Breadcrumbs aria-label="breadcrumb">
-                    <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
-                      Dashboard
-                    </Link>
-                    <Link color="inherit" href={URLS.URLS.companyMaster + this.state.urlparams}>
-                      Company master
-                    </Link>
-                    <Typography color="textPrimary">Edit Company</Typography>
-                  </Breadcrumbs>
-                </Grid>
-              </Grid>
-            </div>
 
-            <div style={{ height:10 }}></div>
 
-            <div >
-              <Grid container spacing={0}>
-                <Grid xs={1}>
-                  <Button
-                   style={{ marginLeft: 5 }}
-                   onClick={(e)=>updateCompanyDetails()}
-                   disabled={this.state.updateBtnDisabled}
-                   startIcon={<UpdateIcon/>}
-                  >
-                  Update
-                  </Button>
-                </Grid>
-                <Grid xs={1}>
-                  <Button 
-                  style={{ marginLeft: 0 }} 
-                  startIcon={<DeleteIcon />} 
-                  disabled={this.state.DeleteDisabled}
-                  onClick={(e)=>deleteCompany()}
-                  >
-                  Delete
-                  </Button>
-                </Grid>
-              </Grid>
-            </div>
-
-            <div style={{ height: 5 }}> </div>
-
+          <div style={{ marginLeft: 3 }}>
             <Grid container spacing={3}>
-              <Grid item xs={8}>
-                <div style={{ minHeight: '100%', height: 500, overflowY: 'scroll', overflowX: 'hidden' }}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <Accordion key="company-General-Details" expanded={this.state.GeneralDetailsExpanded} >
-                        <AccordionSummary
-                          className="accordion-Header-Design"
-                          expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
-                          aria-controls="panel1a-content"
-                          id="panel1a-header"
-                          style={{ minHeight: 20, height: '100%' }}
-                        >
-                          <Typography key="" className="accordion-Header-Title">General Details</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails key="">
-                          <TableContainer>
-                            <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
-                              <TableBody className="tableBody">
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>Company Name </b>
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="companyName"
-                                      variant="outlined"
-                                      size="small"
-                                      // onKeyUp={(e) => userTypingBusyPrompt(e)}
-                                      onChange={(e) => updateFormValue('companyName', e)}
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50
-                                      }}
-
-                                      value={this.state.CompanyName}
-                                      error={this.state.Validations.companyName.errorState}
-                                      helperText={this.state.Validations.companyName.errorMsg}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b> Phone No</b>
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="PhoneNo"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) => updateFormValue('PhoneNo', e)}
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 20
-                                      }}
-                                      value={this.state.PhoneNo}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>Website</b>
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="Website"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) => updateFormValue('Website', e)}
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 20
-                                      }}
-                                      value={this.state.Website}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-
-                        </AccordionDetails>
-                      </Accordion>
-                      <Accordion key="company-Address-Details" expanded={this.state.AddressDetailsExpanded} >
-                        <AccordionSummary
-                          className="accordion-Header-Design"
-                          expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("AddressDetailsExpanded", e)} />}
-                          aria-controls="panel1a-content"
-                          id="panel1a-header"
-                          style={{ minHeight: 20, height: '100%' }}
-                        >
-                          <Typography key="" className="accordion-Header-Title">Address Details</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails key="">
-                          <TableContainer>
-                            <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
-                              <TableBody className="tableBody">
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>Country</b>
-                                  </TableCell>
-
-                                  <TableCell align="left" className="no-border-table">
-                                    <Select
-                                      style={{ height: 40, marginTop: 14 }}
-                                      // variant="outlined"
-                                      id="countrySelect"
-                                      label="Country"
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss"
-                                      }}
-                                      value={parseInt(this.state.selectedCountry)}
-                                      onChange={(e) => updateFormValue('Country', e)}
-                                    >
-                                      <MenuItem value="-">
-                                        <em>None</em>
-                                      </MenuItem>
-                                      {
-                                        this.state.countryData.map((item,i)=>( 
-                                            <MenuItem  value={item.countryId}>
-                                            {item.name} 
-                                            </MenuItem>
-                                        ))
-                                    }
-                                    </Select>
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>State</b>
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <Select
-                                      style={{ height: 40, marginTop: 14 }}
-                                      // variant="outlined"
-                                      id="stateSelect"
-                                      label="State"
-                                      fullWidth
-                                      SelectProps={{
-                                        className: "textFieldCss"
-                                      }}
-
-                                    >
-                                      <MenuItem value="-">
-                                        <em>None</em>
-                                      </MenuItem>
-                                      <MenuItem value={10}>Goa</MenuItem>
-                                      <MenuItem value={20}>Gujrat</MenuItem>
-                                      <MenuItem value={30}>Delhi</MenuItem>
-                                    </Select>
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>City</b>
-                                  </TableCell>
-
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="City"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) => updateFormValue('City', e)}
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50
-                                      }}
-                                      value={this.state.City}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>Postcode</b>
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="Postcode"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) => updateFormValue('Postcode', e)}
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 10
-                                      }}
-                                      value={this.state.PostCode}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 1</b>
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="Address"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) => updateFormValue('Address', e)}
-                                      value={this.state.Address}
-                                      fullWidth
-                                      error={this.state.Validations.address.errorState}
-                                      helperText={this.state.Validations.address.errorMsg}
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50
-                                      }}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 2</b>
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="Address2"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) => updateFormValue('Address2', e)}
-                                      fullWidth
-                                      value={this.state.Address2}
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50
-                                      }}
-
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 3</b>
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="Address3"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) => updateFormValue('Address3', e)}
-                                      fullWidth
-                                      value={this.state.Address3}
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50
-                                      }}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </AccordionDetails>
-
-                      </Accordion>
-                    </Grid>
-                  </Grid>
-                </div>
-              </Grid>
-              <Grid item xs={4}>
-
+              <Grid item xs={12}>
+                <Breadcrumbs aria-label="breadcrumb">
+                  <Link color="inherit" className="backLink" href="javascript:history.go(-1)">
+                    Back
+                  </Link>
+                  <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
+                    Dashboard
+                  </Link>
+                  <Link color="inherit" href={URLS.URLS.companyMaster + this.state.urlparams}>
+                    Company master
+                  </Link>
+                  <Typography color="textPrimary">Edit Company</Typography>
+                </Breadcrumbs>
               </Grid>
             </Grid>
+          </div>
+
+          <div style={{ height: 10 }}></div>
+
+          <div >
+            <Grid container spacing={0}>
+              <Grid xs={1}>
+                <Button
+                  style={{ marginLeft: 5 }}
+                  onClick={(e) => updateCompanyDetails()}
+                  disabled={this.state.updateBtnDisabled}
+                  startIcon={<UpdateIcon />}
+                >
+                  Update
+                </Button>
+              </Grid>
+              <Grid xs={1}>
+                <Button
+                  style={{ marginLeft: 0 }}
+                  startIcon={<DeleteIcon />}
+                  disabled={this.state.DeleteDisabled}
+                  onClick={(e) => deleteCompany()}
+                >
+                  Delete
+                </Button>
+              </Grid>
+            </Grid>
+          </div>
+
+          <div style={{ height: 5 }}> </div>
+
+          <Grid container spacing={3}>
+            <Grid item xs={8}>
+              <div style={{ minHeight: '100%', height: 500, overflowY: 'scroll', overflowX: 'hidden' }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Accordion key="company-General-Details" expanded={this.state.GeneralDetailsExpanded} >
+                      <AccordionSummary
+                        className="accordion-Header-Design"
+                        expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        style={{ minHeight: 20, height: '100%' }}
+                      >
+                        <Typography key="" className="accordion-Header-Title">General Details</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails key="">
+                        <TableContainer>
+                          <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
+                            <TableBody className="tableBody">
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>Company Name </b>
+                                </TableCell>
+                                <TableCell align="left" className="no-border-table">
+                                  <TextField
+                                    id="companyName"
+                                    variant="outlined"
+                                    size="small"
+                                    // onKeyUp={(e) => userTypingBusyPrompt(e)}
+                                    onChange={(e) => updateFormValue('companyName', e)}
+                                    fullWidth
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 50
+                                    }}
+
+                                    value={this.state.CompanyName}
+                                    error={this.state.Validations.companyName.errorState}
+                                    helperText={this.state.Validations.companyName.errorMsg}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b> Phone No</b>
+                                </TableCell>
+                                <TableCell align="left" className="no-border-table">
+                                  <TextField
+                                    id="PhoneNo"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) => updateFormValue('PhoneNo', e)}
+                                    fullWidth
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 20
+                                    }}
+                                    value={this.state.PhoneNo}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>Website</b>
+                                </TableCell>
+                                <TableCell align="left" className="no-border-table">
+                                  <TextField
+                                    id="Website"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) => updateFormValue('Website', e)}
+                                    fullWidth
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 20
+                                    }}
+                                    value={this.state.Website}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+
+                      </AccordionDetails>
+                    </Accordion>
+                    <Accordion key="company-Address-Details" expanded={this.state.AddressDetailsExpanded} >
+                      <AccordionSummary
+                        className="accordion-Header-Design"
+                        expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("AddressDetailsExpanded", e)} />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        style={{ minHeight: 20, height: '100%' }}
+                      >
+                        <Typography key="" className="accordion-Header-Title">Address Details</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails key="">
+                        <TableContainer>
+                          <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
+                            <TableBody className="tableBody">
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>Country</b>
+                                </TableCell>
+
+                                <TableCell align="left" className="no-border-table">
+                                  <Select
+                                    style={{ height: 40, marginTop: 14 }}
+                                    // variant="outlined"
+                                    id="countrySelect"
+                                    label="Country"
+                                    fullWidth
+                                    InputProps={{
+                                      className: "textFieldCss"
+                                    }}
+                                    value={parseInt(this.state.selectedCountry)}
+                                    onChange={(e) => updateFormValue('Country', e)}
+                                  >
+                                    <MenuItem value="-">
+                                      <em>None</em>
+                                    </MenuItem>
+                                    {
+                                      this.state.countryData.map((item, i) => (
+                                        <MenuItem value={item.countryId}>
+                                          {item.name}
+                                        </MenuItem>
+                                      ))
+                                    }
+                                  </Select>
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>State</b>
+                                </TableCell>
+                                <TableCell align="left" className="no-border-table">
+                                  <Select
+                                    style={{ height: 40, marginTop: 14 }}
+                                    // variant="outlined"
+                                    id="stateSelect"
+                                    label="State"
+                                    fullWidth
+                                    SelectProps={{
+                                      className: "textFieldCss"
+                                    }}
+
+                                  >
+                                    <MenuItem value="-">
+                                      <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value={10}>Goa</MenuItem>
+                                    <MenuItem value={20}>Gujrat</MenuItem>
+                                    <MenuItem value={30}>Delhi</MenuItem>
+                                  </Select>
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>City</b>
+                                </TableCell>
+
+                                <TableCell align="left" className="no-border-table">
+                                  <TextField
+                                    id="City"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) => updateFormValue('City', e)}
+                                    fullWidth
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 50
+                                    }}
+                                    value={this.state.City}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>Postcode</b>
+                                </TableCell>
+                                <TableCell align="left" className="no-border-table">
+                                  <TextField
+                                    id="Postcode"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) => updateFormValue('Postcode', e)}
+                                    fullWidth
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 10
+                                    }}
+                                    value={this.state.PostCode}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>Address Line 1</b>
+                                </TableCell>
+                                <TableCell align="left" className="no-border-table">
+                                  <TextField
+                                    id="Address"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) => updateFormValue('Address', e)}
+                                    value={this.state.Address}
+                                    fullWidth
+                                    error={this.state.Validations.address.errorState}
+                                    helperText={this.state.Validations.address.errorMsg}
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 50
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>Address Line 2</b>
+                                </TableCell>
+                                <TableCell align="left" className="no-border-table">
+                                  <TextField
+                                    id="Address2"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) => updateFormValue('Address2', e)}
+                                    fullWidth
+                                    value={this.state.Address2}
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 50
+                                    }}
+
+                                  />
+                                </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell align="left" className="no-border-table">
+                                  <b>Address Line 3</b>
+                                </TableCell>
+                                <TableCell align="left" className="no-border-table">
+                                  <TextField
+                                    id="Address3"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) => updateFormValue('Address3', e)}
+                                    fullWidth
+                                    value={this.state.Address3}
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 50
+                                    }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </AccordionDetails>
+
+                    </Accordion>
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+            <Grid item xs={4}>
+
+            </Grid>
+          </Grid>
 
 
-           
+
         </div>
       </Fragment>
     );

@@ -311,6 +311,9 @@ class addnewcompany extends React.Component {
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
                                 <Breadcrumbs aria-label="breadcrumb">
+                                <Link color="inherit" className="backLink" href="javascript:history.go(-1)">
+                                    Back
+                                </Link>
                                     <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                         Dashboard
                                     </Link>

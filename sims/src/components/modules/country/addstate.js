@@ -215,6 +215,9 @@ class addstate extends React.Component {
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <Breadcrumbs aria-label="breadcrumb">
+                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
+                                    Back
+                                </Link>
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
                                 </Link>
@@ -229,6 +232,7 @@ class addstate extends React.Component {
                     <div style={{ height: 20 }}></div>
                     <Grid container spacing={3}>
                     <Grid xs={1}>
+                   
                         <Button
                             style={{ marginLeft: 5 }}
                             startIcon={<AddIcon />}

@@ -17,6 +17,7 @@ export const APIURL = {
     GetCountry:domain+"api/Country/GetCountry",
     GetZones:domain+"api/Zone/GetZones",
     GetSate:domain+"api/State/GetSate",
+    GetStateByCountryId:domain+"api/State/GetStateByCountryId",
     GetStates:domain+"api/State/GetStates",
     CreateState:domain+"api/State/CreateState",
     UpdateState:domain+"api/State/UpdateState",
