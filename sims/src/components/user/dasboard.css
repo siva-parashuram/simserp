@@ -363,6 +363,19 @@ cursor: pointer;
    cursor: pointer;
  }
  
+ .table-text-field{ 
+  border-style: none !important;
+  width:50% !important;
+ }
+
+ .table-text-field:focus{ 
+  outline: none !important;
+  border-style: solid !important;
+  border-color:#b0bec5 !important;
+  border-width: 1px !important; 
+ }
+
+ 
 
 /**************************************************************************************************************************/
 

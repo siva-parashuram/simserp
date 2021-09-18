@@ -3,6 +3,7 @@
         "addcountry",
         "adddestination",
         "addstate",
+        "adduser",
         "apiconstant",
         "APIURL",
         "APIURLS",
@@ -21,6 +22,7 @@
         "statemaster",
         "statesbycountry",
         "urlparams",
-        "USERID"
+        "USERID",
+        "usermaster"
     ]
 }

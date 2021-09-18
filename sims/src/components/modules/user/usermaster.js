@@ -9,40 +9,39 @@ import AddIcon from '@material-ui/icons/Add';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import Divider from '@material-ui/core/Divider';
+import Switch from '@mui/material/Switch';
+
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
-import Destination from "./destination";
+import '../../user/dasboard.css';
+import Nav from "../../user/nav";
+import Menubar from "../../user/menubar";
 
-// import Datagrid from "./datagrid";
 
-class statemaster extends React.Component {
+class usermaster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             urlparams: "",
             ProgressLoader: false,
-            stateData: [],
-            destinationParam: []
+            initialCss: "",
+            users: []
+
+
         }
     }
+
     componentDidMount() {
-        // this.setState({ ProgressLoader: false });
-        this.getStateList();
-        this.getAllDestinations();
+        this.getUsersList();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -53,22 +52,22 @@ class statemaster extends React.Component {
         });
     }
 
-    getStateList() {
-        let rows = [];
+    getUsersList() {
+        this.setState({ProgressLoader: false });
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
             "Content-Type": "application/json"
         };
-        let GetStatesUrl = APIURLS.APIURL.GetStates;
+        let GetUsersUrl = APIURLS.APIURL.GetUsers;
 
-        axios.post(GetStatesUrl, ValidUser, { headers })
+        axios.post(GetUsersUrl, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
-                console.log("getStateList > response > data > ", data);
-                rows = data;
-                this.setState({ stateData: rows, ProgressLoader: true });
+                console.log("getUsersList > response > data > ", data);
+
+                this.setState({ users: data, ProgressLoader: true });
             }
             ).catch(error => {
                 console.log("error > ", error);
@@ -77,88 +76,37 @@ class statemaster extends React.Component {
 
     }
 
-    getAllDestinations = () => {
-        this.setState({ ProgressLoader: false });
-        let ValidUser = APIURLS.ValidUser;
-        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-        ValidUser.Token = getCookie(COOKIE.TOKEN);
 
 
-
-
-        const headers = {
-            "Content-Type": "application/json"
-        };
-        let GetDestinationsUrl = APIURLS.APIURL.GetDestinations;
-
-        axios.post(GetDestinationsUrl, ValidUser, { headers })
-            .then(response => {
-                let data = response.data;
-                console.log("getStateList > response > data > ", data);
-                this.setState({ destinations: data, ProgressLoader: true });
-            }
-            ).catch(error => {
-                console.log("error > ", error);
-            });
-    }
 
     render() {
-
         const handleRowClick = (e, item, id) => {
-            console.log("handleRowClick > item > ", item);
-            getDestinationsByState(item);
+
             removeIsSelectedRowClasses();
             document.getElementById(id).classList.add('selectedRow');
-
         }
 
-
-
         const removeIsSelectedRowClasses = () => {
-            for (let i = 0; i < this.state.stateData.length; i++) {
+            for (let i = 0; i < this.state.users.length; i++) {
                 document.getElementById('row_' + i).className = '';
             }
         }
 
-
-        const getDestinationsByState = (item) => {
-            this.setState({ ProgressLoader: false });
-            let ValidUser = APIURLS.ValidUser;
-            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-            ValidUser.Token = getCookie(COOKIE.TOKEN);
- 
-            let data = {
-                Destination: {
-                    DestinationId: 0,
-                    CountryId: item.countryId,
-                    DestinationName: null,
-                    Postcode: null,
-                    StateID:item.stateId,
-                },
-                validUser: ValidUser
-            };
-
-
-            const headers = {
-                "Content-Type": "application/json"
-            };
-            let GetDestinationByCountryIdAndStateIdUrl = APIURLS.APIURL.GetDestinationByCountryIdAndStateId;
-
-            axios.post(GetDestinationByCountryIdAndStateIdUrl, data, { headers })
-                .then(response => {
-                    let data = response.data;
-                    console.log("getStateList > response > data > ", data);
-                    if (Object.prototype.toString.call(data) === '[object Array]') {
-                        this.setState({ destinations: data, ProgressLoader: true });
-                    } else {
-                        this.setState({ destinations: [], ProgressLoader: true });
-                    }
-
-                }
-                ).catch(error => {
-                    console.log("error > ", error);
-                });
+        const changeUserStatus=(item,val)=>{
+            console.log("==================================");
+            console.log("item > ",item);
+            console.log("val > ",val);
+            let users=this.state.users;
+            let index=users.indexOf(item);
+            console.log("index > ",index);
+            let user=users[index];
+            user.isActive=val;
+            users[index]=user;
+            this.setState({users:users});
+            console.log("==================================");
         }
+
+
 
         const closeErrorPrompt = (event, reason) => {
             if (reason === 'clickaway') {
@@ -203,40 +151,44 @@ class statemaster extends React.Component {
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
                                 </Link>
-                                <Typography color="textPrimary">State master</Typography>
+                                <Typography color="textPrimary">User master</Typography>
                             </Breadcrumbs>
 
                         </Grid>
                     </Grid>
-                    <Grid container spacing={0}>
-                    <Grid xs={1}>                           
+                    <Grid container spacing={3}>
+                        <Grid xs={1}>
                             <Button
-                                style={{ marginLeft: 10 }}
+                                style={{ marginLeft: 5 }}
                                 startIcon={<AddIcon />}
                             >
-                                <a className="button-link" href={URLS.URLS.addState + this.state.urlparams}>
+                                <a className="button-link" href={URLS.URLS.addUser + this.state.urlparams}>
                                     New
                                 </a>
                             </Button>
-
                         </Grid>
                     </Grid>
                     <div style={{ height: 20 }}></div>
-                    <Grid container spacing={1}>
+                    <Grid container spacing={0}>
                         <Grid xs={12} sm={12} md={8} lg={8}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={10} lg={10}>
-                                    <Table stickyHeader size="small" className="" aria-label="State List table">
+                                    <Table stickyHeader size="small" className="" aria-label="Country List table">
                                         <TableHead className="table-header-background">
                                             <TableRow>
                                                 <TableCell className="table-header-font">#</TableCell>
-                                                <TableCell className="table-header-font" align="left"> Name</TableCell>
-                                                <TableCell className="table-header-font" align="left">Code</TableCell>
-                                                <TableCell className="table-header-font" align="left">Gst Code</TableCell>
+                                                <TableCell className="table-header-font" align="left">Email Id</TableCell>
+                                                <TableCell className="table-header-font" align="left">First Name</TableCell>
+                                                <TableCell className="table-header-font" align="left">Last Name</TableCell>
+                                                <TableCell className="table-header-font" align="left">Login Id</TableCell>
+                                                <TableCell className="table-header-font" align="left">isAdmin</TableCell>
+                                                <TableCell className="table-header-font" align="left">Status</TableCell>
+                                             
                                             </TableRow>
                                         </TableHead>
                                         <TableBody className="tableBody">
-                                            {this.state.stateData.map((item, i) => (
+                                        {console.log("this.state.users > ",this.state.users)}
+                                            {this.state.users.map((item, i) => (
                                                 <TableRow
                                                     id={"row_" + i}
                                                     className={this.state.initialCss}
@@ -245,13 +197,36 @@ class statemaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >ST{item.stateId}</a>
+                                                        <a className="LINK tableLink" href={URLS.URLS.editUser + this.state.urlparams+"&userId="+item.userId} >
+                                                            U-{item.userId}
+                                                        </a>
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{item.name}</a>
+                                                        <a className="LINK tableLink" href={URLS.URLS.editUser + this.state.urlparams+"&userId="+item.userId} >
+                                                            {item.emailId}
+                                                        </a>
                                                     </TableCell>
-                                                    <TableCell align="left">{item.code}</TableCell>
-                                                    <TableCell align="left">{item.gstcode}</TableCell>
+                                                    <TableCell align="left">
+                                                        {item.firstName}
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        {item.lastName}
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        {item.loginId}
+                                                    </TableCell>
+                                                    <TableCell align="left">
+
+                                                        {item.isAdmin?item.isAdmin===true?"True":"False":"-"}
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        {item.isActive?item.isActive===true?(
+                                                            <Switch defaultChecked size="small" onChange={(e)=>changeUserStatus(item,false)}/>
+                                                        ):(
+                                                            <Switch size="small" onChange={(e)=>changeUserStatus(item,true)}/>
+                                                        ):"-"}
+                                                    </TableCell>
+                                                    
 
                                                 </TableRow>
 
@@ -261,23 +236,21 @@ class statemaster extends React.Component {
 
                                 </Grid>
                             </Grid>
-
                         </Grid>
                         <Grid xs={12} sm={12} md={4} lg={4}>
-                            
                             <Grid container spacing={1}>
                                 <Grid xs={12} sm={12} md={10} lg={11}>
-                                <Destination destinations={this.state.destinations} />
+
                                 </Grid>
                             </Grid>
-                            
                         </Grid>
                     </Grid>
                 </div>
+
+
             </Fragment>
         )
     }
 
-
 }
-export default statemaster;
+export default usermaster;

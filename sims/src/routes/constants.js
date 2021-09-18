@@ -17,5 +17,8 @@ export const URLS = {
   addState:"/addState",
   editState:"/editState",
   addDestination:"/addDestination",
-  editDestination:"/editDestination"
+  editDestination:"/editDestination",
+  userMaster:"/userMaster",
+  addUser:"/addUser",
+  editUser:"/editUser",
 };

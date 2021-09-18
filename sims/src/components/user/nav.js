@@ -1,5 +1,5 @@
 import './dasboard.css';
-import { COOKIE, getCookie } from "../../services/cookie";
+import { COOKIE, getCookie,deleteCookie } from "../../services/cookie";
 import React, { useState, useEffect, Fragment } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,6 +32,8 @@ export default function ButtonAppBar() {
     const [isLoggedIn, setisLoggedIn] = React.useState(true);
     const [firstname, setfirstname] = React.useState("");
     const [greetings, setgreetings] = React.useState("");
+    const [branchBtnId,setbranchBtnId] = React.useState("");
+
 
     
     useEffect(() => {
@@ -44,6 +46,7 @@ export default function ButtonAppBar() {
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
+        let branchBtnId= url.searchParams.get("branchBtnId");
         console.log("===========================================");
         console.log("branchId > ", branchId);
         console.log("branchName > ", branchName);
@@ -69,11 +72,18 @@ export default function ButtonAppBar() {
             setcompName(compName);
             setuserInitial(initialName);
             setfirstname(FIRSTNAME);
+            setbranchBtnId(branchBtnId);
+
         }
     }, []);
 
-    const closeWindow = e => {
+    const closeWindow = e => {     
+        // let currentbranchBtnId= getCookie(COOKIE.branchBtnId);
+        // let chkBranchWindow="_"+"_"+branchId; 
+        // if(===branchBtnId) 
+      //  
         window.close();
+        
     }
 
     return (

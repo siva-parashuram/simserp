@@ -6,8 +6,9 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'; 
-// import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-
+ 
+import { COOKIE, createCookie, deleteCookie, getCookie } from "../services/cookie";
+import * as APIURLS from "../routes/apiconstant";
 import * as URLS from "../routes/constants";
 
 
@@ -24,16 +25,38 @@ class CompanyList extends React.Component {
 
     render() {
       
-        const openBranchDashboard=(url,branchId,compName,branchName)=>{
-            
-              url=url+"?branchId="+branchId+"&compName="+compName+"&branchName="+branchName;
-            //   window.open(url,"Siva Group",'width=800,resizable=no, height=700, menubar=no, toolbar=no, location=no');
+        const openBranchDashboard=(url,branchId,compID,compName,branchName)=>{  
+            let branchBtnId=("branchBtn_"+compID+"_"+branchId).toString();    
+            disableBranchButton(branchBtnId);                 
+            url=url+"?branchBtnId="+branchBtnId+"&branchId="+branchId+"&compID="+compID+"&compName="+compName+"&branchName="+branchName;            
             let randomnumber = Math.floor((Math.random()*100)+1); 
+           
             window.open(url,"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0, toolbar=no,resizable=1,width=500,height=400');
         }
 
+        const disableBranchButton=(branchBtnId)=>{
+            let BRANCH_OPEN=getCookie(COOKIE.BRANCH_OPEN);
+            let branch={
+                branchBtnId:branchBtnId
+            }            
+            if(BRANCH_OPEN===null){
+                BRANCH_OPEN=[];
+                BRANCH_OPEN.push(branch);
+                createCookie(COOKIE.BRANCH_OPEN, BRANCH_OPEN,APIURLS.CTimeOut);
+                document.getElementById(branchBtnId).disabled = true;
+            }else{
+                BRANCH_OPEN.push(branch);
+                createCookie(COOKIE.BRANCH_OPEN, BRANCH_OPEN,APIURLS.CTimeOut);
+                document.getElementById(branchBtnId).disabled = true;
+            }
+           
+           
+            
+        }
+
         return (
-            <Fragment>            
+            <Fragment>  
+            {console.log("this.props.state.userCompanyList > ",this.props.state.userCompanyList)}          
                 {
                    
                     this.props.state.userCompanyList.map((item, i) => (
@@ -52,11 +75,12 @@ class CompanyList extends React.Component {
                                     {item.branchList.map((branchItem,j)=>(
                                         <Fragment key={"branch__Frag_"+j + branchItem.branchName}>
                                         <Button
+                                        id={"branchBtn_"+item.compID+"_"+branchItem.branchID}
                                         key={"branch_btn_" + branchItem.branchName}
                                         size="small"
                                         variant="outlined"
                                         className="branchListButton"
-                                        onClick={(e)=>openBranchDashboard(URLS.URLS.userDashboard,branchItem.branchID,item.compName,branchItem.branchName)}
+                                        onClick={(e)=>openBranchDashboard(URLS.URLS.userDashboard,branchItem.branchID,item.compID,item.compName,branchItem.branchName)}
                                     >                                        
                                         {branchItem.branchName}
                                     </Button> 

@@ -27,6 +27,9 @@ export const APIURL = {
     UpdateDestination:domain+"api/Destination/UpdateDestination",
     CreateDestination:domain+"api/Destination/CreateDestination",
     GetDestinationByCountryIdAndStateId:domain+"api/Destination/GetDestinationByCountryIdAndStateId",
+    GetUsers:domain+"api/users/GetUsers",
+    AddUser:domain+"api/users/AddUser",
+    GetUser:domain+"api/users/GetUser",
   };
 
   export const CTimeOut = 3; 

@@ -36,8 +36,9 @@ body{
 
 .CompanyNameHeader{
     color: #fff !important;
-    letter-spacing: 0.3rem !important;
+    letter-spacing: 0.1rem !important;
     font-weight: 545 !important;
+    font-size: 12px !important;
 }
 
 .login-thought{

@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableContainer from '@material-ui/core/TableContainer';
+import TextField from '@mui/material/TextField';
 
 import '../../user/dasboard.css';
 import { COOKIE, getCookie } from "../../../services/cookie";
@@ -41,6 +42,17 @@ class destination extends React.Component {
 
 
     render() {
+
+
+        const updatePostcode=(id,e)=>{
+            console.log("updatePostcode > ");
+                 console.log("id : ",id);
+                 console.log("e : ",e);
+                 console.log("e.target.value : ",e.target.value);
+                 console.log(" document.getElementById(id) : ", document.getElementById(id));
+                 document.getElementById(id).value=e.target.value;
+        }
+
         return (
             <Fragment>
                 <Grid container spacing={0}>
@@ -75,14 +87,21 @@ class destination extends React.Component {
 
                                                             <TableRow>
                                                                 <TableCell>
-                                                                    <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams+"&&destinationId="+item.destinationId+"&&countryId="+item.countryId} >D{item.destinationId} </a>
+                                                                    <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams + "&&destinationId=" + item.destinationId + "&&countryId=" + item.countryId} >D{item.destinationId} </a>
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams + "&&destinationId=" + item.destinationId + "&&countryId=" + item.countryId} >{item.destinationName} </a>
 
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams+"&&destinationId="+item.destinationId+"&&countryId="+item.countryId} >{item.destinationName} </a>
-
+                                                                    <input 
+                                                                     className="table-text-field"
+                                                                    id={"postcode_"+item.destinationId} 
+                                                                    size="small" 
+                                                                    defaultValue={item.postcode} 
+                                                                    onKeyUp={(e)=>updatePostcode("postcode_"+item.destinationId,e)}
+                                                                    />
                                                                 </TableCell>
-                                                                <TableCell> {item.postcode} </TableCell>
                                                             </TableRow>
 
                                                         )) : null

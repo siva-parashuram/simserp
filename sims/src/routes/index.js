@@ -19,7 +19,9 @@ import addState from "../components/modules/country/addstate";
 import editState from "../components/modules/country/editstate";
 import adddestination from "../components/modules/country/adddestination";
 import editDestination from "../components/modules/country/editdestination";
-
+import userMaster from "../components/modules/user/usermaster";
+import addUser from "../components/modules/user/adduser";
+import editUser from "../components/modules/user/edituser";
 
 let routes = ({ location, ...rest }) => {
   return (
@@ -47,6 +49,12 @@ let routes = ({ location, ...rest }) => {
 
      <Route path={URLS.URLS.addDestination}  component={adddestination} />
      <Route path={URLS.URLS.editDestination}  component={editDestination} />
+
+
+        {/*  User Master Routes  */}
+        <Route path={URLS.URLS.userMaster}  component={userMaster} />
+        <Route path={URLS.URLS.addUser}  component={addUser} />
+        <Route path={URLS.URLS.editUser}  component={editUser} />
 
     <Route path={URLS.URLS.report1}  component={report1} />
     </Switch>   

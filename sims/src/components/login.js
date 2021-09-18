@@ -227,6 +227,7 @@ class login extends React.Component {
         deleteCookie(COOKIE.USERID, null);
         deleteCookie(COOKIE.ISADMIN, null);
         deleteCookie(COOKIE.FIRSTNAME, null);
+        deleteCookie(COOKIE.BRANCH_OPEN, null);
         this.removeSavedState();
       });
       // window.location.reload();
