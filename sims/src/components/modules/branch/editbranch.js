@@ -26,16 +26,17 @@ import TableRow from '@material-ui/core/TableRow';
 import Menubar from "../../user/menubar";
 
 
-class branchMaster extends React.Component {
+class editbranch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isLoggedIn: false,
             ProgressLoader: false,
-            urlparams: null,
-            branchData: [],
+            urlparams: null,             
             ErrorPrompt: false,
             SuccessPrompt: false,
+            branch:null,
+            branchId:0
 
         };
     }
@@ -50,11 +51,13 @@ class branchMaster extends React.Component {
             let branchId = url.searchParams.get("branchId");
             let branchName = url.searchParams.get("branchName");
             let compName = url.searchParams.get("compName");
+            let editbranchId = url.searchParams.get("editbranchId");
             let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
             this.setState({
-                urlparams: urlparams
+                urlparams: urlparams,
+                branchId:editbranchId
             },()=>{
-                this.getBranches();
+                // this.getBranchDetail();
             });
         } else {
             this.setState({ isLoggedIn: false });
@@ -64,7 +67,7 @@ class branchMaster extends React.Component {
     }
 
 
-    getBranches(){         
+    getBranchDetail(){         
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -76,30 +79,20 @@ class branchMaster extends React.Component {
         axios.post(GetBrachesUrl, ValidUser, { headers })
         .then(response => {
             let data = response.data;
-            console.log("getBranches > response > data > ", data);
+            console.log("getBranchDetail > response > data > ", data);
              
-            this.setState({ branchData: data, ProgressLoader: true });
+            this.setState({ branch: data, ProgressLoader: true });
         }
         ).catch(error => {
             console.log("error > ", error);
-            this.setState({ branchData: [], ProgressLoader: true});
+            this.setState({ branch: null, ProgressLoader: true});
         });     
        
     }
 
     render() {
 
-        const handleRowClick = (e, item, id) => {
-            
-            removeIsSelectedRowClasses();
-            document.getElementById(id).classList.add('selectedRow');
-        }
-
-        const removeIsSelectedRowClasses = () => {
-            for (let i = 0; i < this.state.branchData.length; i++) {
-                document.getElementById('row_' + i).className = '';
-            }
-        }
+        
 
 
         const closeErrorPrompt = (event, reason) => {
@@ -145,7 +138,10 @@ class branchMaster extends React.Component {
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
                                 </Link>
-                                <Typography color="textPrimary">Branch master</Typography>
+                                <Link color="inherit" href={URLS.URLS.branchMaster + this.state.urlparams}>
+                                   Branch master
+                                </Link>
+                                <Typography color="textPrimary">Edit Branch </Typography>
                             </Breadcrumbs>
 
                         </Grid>
@@ -154,11 +150,9 @@ class branchMaster extends React.Component {
                     <Grid xs={1}>
                         <Button
                             style={{ marginLeft: 5 }}
-                            startIcon={<AddIcon />}
+                             
                         >
-                            <a className="button-link" href={URLS.URLS.addBranch + this.state.urlparams}>
-                                New
-                            </a>
+                           Update
                         </Button>
                     </Grid>
                 </Grid>
@@ -167,38 +161,8 @@ class branchMaster extends React.Component {
                 <Grid xs={12} sm={12} md={8} lg={8}>
                     <Grid container spacing={0}>
                         <Grid xs={12} sm={12} md={10} lg={10}>
-                            <Table stickyHeader size="small" className="" aria-label="Country List table">
-                                <TableHead className="table-header-background">
-                                    <TableRow>
-                                        <TableCell className="table-header-font">#</TableCell>
-                                        <TableCell className="table-header-font" align="left">Branch Name</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody className="tableBody">
-                                    {this.state.branchData.map((item, i) => (
-                                        <TableRow
-                                            id={"row_" + i}
-                                            className={this.state.initialCss}
-                                            hover
-                                            key={i}
-                                            onClick={(event) => handleRowClick(event, item, "row_" + i)}
-                                        >
-                                            <TableCell align="left">
-                                                <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >
-                                                B{item.branchId}
-                                                </a>
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >{item.name}</a>
-                                            </TableCell>
 
-                                        </TableRow>
-
-                                    ))}
-                                </TableBody>
-                            </Table>
-
-                        </Grid>
+                          </Grid>
                     </Grid>
                 </Grid>
                 <Grid xs={12} sm={12} md={4} lg={4}>
@@ -216,4 +180,4 @@ class branchMaster extends React.Component {
 
 
 }
-export default branchMaster;
+export default editbranch;

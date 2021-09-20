@@ -278,8 +278,7 @@ class edituser extends React.Component {
                     <Grid container spacing={3}>
                         <Grid xs={1}>
                             <Button
-                                style={{ marginLeft: 5 }}
-                                startIcon={<AddIcon />}
+                                style={{ marginLeft: 5 }}                               
                                 onClick={handleUpdate}
                             >
 

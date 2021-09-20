@@ -21,5 +21,7 @@ export const URLS = {
   userMaster:"/userMaster",
   addUser:"/addUser",
   editUser:"/editUser",
-  branchMaster:"/branchMaster"
+  branchMaster:"/branchMaster",
+  editBranch:"/editBranch",
+  addBranch:"/addBranch",
 };

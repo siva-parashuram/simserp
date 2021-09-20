@@ -23,6 +23,10 @@ import userMaster from "../components/modules/user/usermaster";
 import addUser from "../components/modules/user/adduser";
 import editUser from "../components/modules/user/edituser";
 import branchMaster from "../components/modules/branch/branchmaster";
+import editBranch from "../components/modules/branch/editbranch";
+
+import addBranch from "../components/modules/branch/addBranch";
+
 
 let routes = ({ location, ...rest }) => {
   return (
@@ -60,7 +64,8 @@ let routes = ({ location, ...rest }) => {
 
         {/* branch Routes*/}
         <Route path={URLS.URLS.branchMaster}  component={branchMaster} />
-        
+        <Route path={URLS.URLS.editBranch}  component={editBranch} />
+        <Route path={URLS.URLS.addBranch}  component={addBranch} />
 
     <Route path={URLS.URLS.report1}  component={report1} />
     </Switch>   

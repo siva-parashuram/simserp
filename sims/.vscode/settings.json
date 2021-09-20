@@ -12,6 +12,7 @@
         "clientlog",
         "dasboard",
         "datetime",
+        "editbranch",
         "editcompany",
         "editcountry",
         "editstate",
