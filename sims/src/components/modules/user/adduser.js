@@ -48,6 +48,7 @@ class adduser extends React.Component {
                 LastName: null,
                 EmailID: null,
                 IsAdmin: false,
+                isActive:true,
             }
 
         }
@@ -87,6 +88,12 @@ class adduser extends React.Component {
             console.log("e.target.value > ",e.target.checked);
             console.log("====================================");
 
+            if(id==="isActive"){
+                let user=this.state.user;
+                user.isActive=e.target.checked;
+                this.setState({user:user});
+            }
+
             if(id==="isAdmin"){
                 let user=this.state.user;
                 user.IsAdmin=e.target.checked;
@@ -120,24 +127,32 @@ class adduser extends React.Component {
         }
 
         const handleCreate = () => {
+            this.setState({ProgressLoader:false});
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
             let user = this.state.user;
             const handleCreateData = {
                 validUser: ValidUser,
-                user: user
+                users: user
             };
             const headers = {
                 "Content-Type": "application/json"
             };
             let AddUserUrl = APIURLS.APIURL.AddUser;
+            console.log("handleCreateData >   ", handleCreateData);
+
+            
 
             axios.post(AddUserUrl, handleCreateData, { headers })
                 .then(response => {
                     let data = response.data;
                     console.log("handleCreate > response > data > ", data);
-
+                    if (response.status === 200 ||response.status === 201) {
+                        this.setState({ProgressLoader:true,SuccessPrompt: true });  
+                    }else{
+                        this.setState({ ProgressLoader: true,ErrorPrompt: true  });
+                    }
 
                 }
                 ).catch(error => {
@@ -335,6 +350,17 @@ class adduser extends React.Component {
                                                 />
                                                 </TableCell>
                                             </TableRow>
+                                            <TableRow>
+                                            <TableCell align="left" className="no-border-table">
+                                                <b> is Active?</b>
+                                            </TableCell>
+                                            <TableCell align="left" className="no-border-table">
+                                            <Switch 
+                                            size="small"
+                                            onChange={(e) => updateFormValue('isActive', e)}
+                                            />
+                                            </TableCell>
+                                        </TableRow>
 
 
                                             </TableBody>

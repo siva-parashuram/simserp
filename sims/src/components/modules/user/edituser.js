@@ -47,43 +47,43 @@ class edituser extends React.Component {
                 FirstName: null,
                 LastName: null,
                 EmailID: null,
-                isActive:null,
+                isActive: null,
                 IsAdmin: false,
             },
-            UserID:0,
+            UserID: 0,
             LoginID: null,
             Password: null,
             FirstName: null,
             LastName: null,
             EmailID: null,
             IsAdmin: false,
-            isActive:null
+            isActive: true
 
         }
     }
 
-    componentDidMount() {  
-            
+    componentDidMount() {
+
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
-        let userId= url.searchParams.get("userId");
+        let userId = url.searchParams.get("userId");
         let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
-        let user=this.state.user;
-        user.UserID=parseInt(userId);
+        let user = this.state.user;
+        user.UserID = parseInt(userId);
         this.setState({
             urlparams: urlparams,
-            UserID:userId
-        }, 
-         ()=>{
-            this.getUserDetails(); 
-         }   
+            UserID: parseInt(userId)
+        },
+            () => {
+                this.getUserDetails();
+            }
         );
     }
 
     getUserDetails() {
-        let user=this.state.user;
+        let user = this.state.user;
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -92,33 +92,44 @@ class edituser extends React.Component {
             users: user
         };
         const headers = {
-          "Content-Type": "application/json"
+            "Content-Type": "application/json"
         };
-        let GetUserUrl = APIURLS.APIURL.GetUser;       
-       
-        axios.post(GetUserUrl, getUserDetailsData, { headers })
-          .then(response => {           
-            let data=response.data;
-            console.log("getUserDetails > response > data > ",data);
-            
-           
-            this.setState({ 
-                country: data,
-                LoginID: data.loginId,
-                Password: data.password,
-                FirstName: data.firstName,
-                LastName: data.lastName,
-                EmailID: data.emailId,
-                IsAdmin: data.isAdmin,
-                isActive:data.isActive,
-                ProgressLoader:true
-            }); 
-          }
-          ).catch(error => {            
-            console.log("error > ",error);
-          });
+        let GetUserUrl = APIURLS.APIURL.GetUser;
 
-        
+        axios.post(GetUserUrl, getUserDetailsData, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getUserDetails > response > data > ", data);
+
+                let user = this.state.user;
+                user.UserID = parseInt(this.state.UserID);
+                user.LoginID = data.loginId;
+                user.Password = data.password;
+                user.FirstName = data.firstName;
+                user.LastName = data.lastName;
+                user.EmailID = data.emailId;
+                user.isActive = data.isActive;
+                user.IsAdmin = data.isAdmin;
+
+
+                this.setState({
+                    user: user,
+                    country: data,
+                    LoginID: data.loginId,
+                    Password: data.password,
+                    FirstName: data.firstName,
+                    LastName: data.lastName,
+                    EmailID: data.emailId,
+                    IsAdmin: data.isAdmin,
+                    isActive: data.isActive,
+                    ProgressLoader: true
+                });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+
+
     }
 
 
@@ -137,62 +148,73 @@ class edituser extends React.Component {
 
         const updateFormValue = (id, e) => {
             console.log("====================================");
-            console.log("id > ",id);
-            console.log("e > ",e);
-            console.log("e.target.value > ",e.target.checked);
+            console.log("id > ", id);
+            console.log("e > ", e);
+            
             console.log("====================================");
 
-            if(id==="isAdmin"){
-                let user=this.state.user;
-                user.IsAdmin=e.target.checked;
-                this.setState({user:user});
+            if (id === "isActive") {
+                let user = this.state.user;
+                user.isActive = e.target.checked;
+                this.setState({ user: user, isActive: e.target.checked });
             }
 
-            if(id==="FirstName"){
-                let user=this.state.user;
-                user.FirstName=e.target.value;
-                this.setState({user:user});
+            if (id === "isAdmin") {
+                let user = this.state.user;
+                user.IsAdmin = e.target.checked;
+                this.setState({ user: user, IsAdmin: e.target.checked });
             }
-            if(id==="LastName"){
-                let user=this.state.user;
-                user.LastName=e.target.value;
-                this.setState({user:user});
+
+            if (id === "FirstName") {
+                let user = this.state.user;
+                user.FirstName = e.target.value;
+                this.setState({ user: user, FirstName: e.target.value });
             }
-            if(id==="EmailID"){
-                let user=this.state.user;
-                user.EmailID=e.target.value;
-                this.setState({user:user});
-            }  
-            if(id==="LoginID"){
-                let user=this.state.user;
-                user.LoginID=e.target.value;
-                this.setState({user:user});
-            }if(id==="Password"){
-                let user=this.state.user;
-                user.Password=e.target.value;
-                this.setState({user:user});
+            if (id === "LastName") {
+                let user = this.state.user;
+                user.LastName = e.target.value;
+                this.setState({ user: user, LastName: e.target.value });
+            }
+            if (id === "EmailID") {
+                let user = this.state.user;
+                user.EmailID = e.target.value;
+                this.setState({ user: user, EmailID: e.target.value });
+            }
+            if (id === "LoginID") {
+                let user = this.state.user;
+                user.LoginID = e.target.value;
+                this.setState({ user: user, LoginID: e.target.value });
+            } if (id === "Password") {
+                let user = this.state.user;
+                user.Password = e.target.value;
+                this.setState({ user: user, Password: e.target.value });
             }
         }
 
-        const handleCreate = () => {
+        const handleUpdate = () => {
+            this.setState({ ProgressLoader: false });
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
             let user = this.state.user;
-            const handleCreateData = {
+            const handleUpdateData = {
                 validUser: ValidUser,
-                user: user
+                users: user
             };
             const headers = {
                 "Content-Type": "application/json"
             };
-            let AddUserUrl = APIURLS.APIURL.AddUser;
+            let UpdateUserUrl = APIURLS.APIURL.UpdateUser;
 
-            axios.post(AddUserUrl, handleCreateData, { headers })
+            axios.post(UpdateUserUrl, handleUpdateData, { headers })
                 .then(response => {
                     let data = response.data;
-                    console.log("handleCreate > response > data > ", data);
-
+                    console.log("handleUpdate > response > data > ", data);
+                    if (response.status === 200) {
+                        this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                    } else {
+                        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                    }
 
                 }
                 ).catch(error => {
@@ -218,8 +240,8 @@ class edituser extends React.Component {
             return <MuiAlert elevation={6} variant="filled" {...props} />;
         }
 
-        
-    
+
+
 
         return (
             <Fragment>
@@ -247,7 +269,7 @@ class edituser extends React.Component {
                                 <Link color="inherit" href={URLS.URLS.userMaster + this.state.urlparams} >
                                     User Master
                                 </Link>
-                                <Typography color="textPrimary">Add New User</Typography>
+                                <Typography color="textPrimary">Edit User</Typography>
                             </Breadcrumbs>
 
                         </Grid>
@@ -258,10 +280,10 @@ class edituser extends React.Component {
                             <Button
                                 style={{ marginLeft: 5 }}
                                 startIcon={<AddIcon />}
-                                onClick={handleCreate}
+                                onClick={handleUpdate}
                             >
 
-                                Create
+                                Update
 
                             </Button>
                         </Grid>
@@ -281,7 +303,7 @@ class edituser extends React.Component {
                                     <Typography key="" className="accordion-Header-Title">General Details</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails key="">
-                                {console.log("state user > ",this.state.user)}
+                                    {console.log("state user > ", this.state.user)}
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                             <TableBody className="tableBody">
@@ -301,7 +323,7 @@ class edituser extends React.Component {
                                                                 maxlength: 50
                                                             }}
                                                             value={this.state.FirstName}
-                                                            
+
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -368,7 +390,7 @@ class edituser extends React.Component {
                                                         <b> Password</b>
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <TextField                                                        
+                                                        <TextField
                                                             id="Password"
                                                             variant="outlined"
                                                             size="small"
@@ -383,15 +405,43 @@ class edituser extends React.Component {
                                                     </TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                <TableCell align="left" className="no-border-table">
-                                                    <b> is Admin?</b>
-                                                </TableCell>
-                                                <TableCell align="left" className="no-border-table">
-                                                <Switch 
-                                                onChange={(e) => updateFormValue('isAdmin', e)}
-                                                />
-                                                </TableCell>
-                                            </TableRow>
+                                                    <TableCell align="left" className="no-border-table">
+                                                        <b> is Admin?</b>
+                                                    </TableCell>
+                                                    <TableCell align="left" className="no-border-table">
+                                                        <Switch
+                                                        key="isadminswitch"
+                                                            size="small"
+                                                            checked={this.state.IsAdmin ? this.state.IsAdmin === true ? "checked" : "unchecked" : null}
+                                                            onChange={(e) => updateFormValue('isAdmin', e)}
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">
+                                                        <b> is Active?</b>
+                                                    </TableCell>
+                                                    <TableCell align="left" className="no-border-table">
+                                                    {console.log("this.state.isActive ------------------------------> ",this.state.isActive)}
+                                                    {this.state.isActive==true?(
+                                                        <Switch
+                                                            key="isactiuveswitch"
+                                                            size="small"  
+                                                            checked={this.state.IsActive === true ? "checked" : "unchecked" }                                                       
+                                                            onChange={(e) => updateFormValue('isActive', e)}
+                                                        />
+                                                    ):(
+                                                        <Switch
+                                                        key="isactiuveswitch"
+                                                        size="small"  
+                                                        checked={false}                                                       
+                                                        onChange={(e) => updateFormValue('isActive', e)}
+                                                    /> 
+                                                    )}
+                                                    
+                                                        
+                                                    </TableCell>
+                                                </TableRow>
 
 
                                             </TableBody>

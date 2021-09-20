@@ -25,6 +25,7 @@ import * as URLS from "../../../routes/constants";
 import '../../user/dasboard.css';
 import Nav from "../../user/nav";
 import Menubar from "../../user/menubar";
+import Userbranchalot from '../branch/userbranchalot';
 
 
 class usermaster extends React.Component {
@@ -34,8 +35,8 @@ class usermaster extends React.Component {
             urlparams: "",
             ProgressLoader: false,
             initialCss: "",
-            users: []
-
+            users: [],
+            userId:0
 
         }
     }
@@ -81,7 +82,8 @@ class usermaster extends React.Component {
 
     render() {
         const handleRowClick = (e, item, id) => {
-
+            console.log("item > ",item);
+            this.setState({userId:item.userId});
             removeIsSelectedRowClasses();
             document.getElementById(id).classList.add('selectedRow');
         }
@@ -102,6 +104,7 @@ class usermaster extends React.Component {
             let user=users[index];
             user.isActive=val;
             users[index]=user;
+            console.log("New users > ",users);
             this.setState({users:users});
             console.log("==================================");
         }
@@ -179,9 +182,13 @@ class usermaster extends React.Component {
                                                 <TableCell className="table-header-font">#</TableCell>
                                                 <TableCell className="table-header-font" align="left">Email Id</TableCell>
                                                 <TableCell className="table-header-font" align="left">First Name</TableCell>
+                                                { /*
                                                 <TableCell className="table-header-font" align="left">Last Name</TableCell>
+                                                */}
                                                 <TableCell className="table-header-font" align="left">Login Id</TableCell>
+                                                {/*
                                                 <TableCell className="table-header-font" align="left">isAdmin</TableCell>
+                                                */}
                                                 <TableCell className="table-header-font" align="left">Status</TableCell>
                                              
                                             </TableRow>
@@ -198,7 +205,7 @@ class usermaster extends React.Component {
                                                 >
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editUser + this.state.urlparams+"&userId="+item.userId} >
-                                                            U-{item.userId}
+                                                            U{item.userId}
                                                         </a>
                                                     </TableCell>
                                                     <TableCell align="left">
@@ -209,22 +216,27 @@ class usermaster extends React.Component {
                                                     <TableCell align="left">
                                                         {item.firstName}
                                                     </TableCell>
+                                                    {/*
                                                     <TableCell align="left">
                                                         {item.lastName}
                                                     </TableCell>
+                                                    */}
                                                     <TableCell align="left">
                                                         {item.loginId}
                                                     </TableCell>
+                                                    {/*
                                                     <TableCell align="left">
 
                                                         {item.isAdmin?item.isAdmin===true?"True":"False":"-"}
                                                     </TableCell>
+                                                */}
+                                                {console.log("item -> ",item)}
                                                     <TableCell align="left">
-                                                        {item.isActive?item.isActive===true?(
-                                                            <Switch defaultChecked size="small" onChange={(e)=>changeUserStatus(item,false)}/>
+                                                        {item.isActive===true?(
+                                                            <span style={{color:'green'}}>Active</span> // <Switch defaultChecked size="small" onChange={(e)=>changeUserStatus(item,false)}/>
                                                         ):(
-                                                            <Switch size="small" onChange={(e)=>changeUserStatus(item,true)}/>
-                                                        ):"-"}
+                                                            <span style={{color:'red'}}>In-Active</span> // <Switch size="small" onChange={(e)=>changeUserStatus(item,true)}/>
+                                                        )}
                                                     </TableCell>
                                                     
 
@@ -240,7 +252,7 @@ class usermaster extends React.Component {
                         <Grid xs={12} sm={12} md={4} lg={4}>
                             <Grid container spacing={1}>
                                 <Grid xs={12} sm={12} md={10} lg={11}>
-
+                                     <Userbranchalot userId={this.state.userId}/>
                                 </Grid>
                             </Grid>
                         </Grid>

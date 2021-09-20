@@ -7,6 +7,7 @@
         "apiconstant",
         "APIURL",
         "APIURLS",
+        "Braches",
         "clickaway",
         "clientlog",
         "dasboard",
@@ -16,12 +17,15 @@
         "editstate",
         "FIRSTNAME",
         "gstcode",
+        "isactiuveswitch",
         "ISADMIN",
+        "isadminswitch",
         "Menusitem",
         "randomnumber",
         "statemaster",
         "statesbycountry",
         "urlparams",
+        "userbranchalot",
         "USERID",
         "usermaster"
     ]

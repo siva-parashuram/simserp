@@ -28,8 +28,10 @@ export const APIURL = {
     CreateDestination:domain+"api/Destination/CreateDestination",
     GetDestinationByCountryIdAndStateId:domain+"api/Destination/GetDestinationByCountryIdAndStateId",
     GetUsers:domain+"api/users/GetUsers",
-    AddUser:domain+"api/users/AddUser",
+    AddUser:domain+"api/users/CreateUser",
     GetUser:domain+"api/users/GetUser",
+    UpdateUser:domain+"api/users/UpdateUser",
+    GetBraches:domain+"api/Branch/GetBraches",
   };
 
   export const CTimeOut = 3; 
