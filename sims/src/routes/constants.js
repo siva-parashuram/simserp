@@ -1,6 +1,7 @@
 //--------------------URL CONSTANTS-------------------------------------
 
 export const URLS = {
+  loginExpired: "/loginExpired",
   pageNotFound: "/page-not-found",
   userDashboard: "/userDashboard",  
   LoginPage: "/",  

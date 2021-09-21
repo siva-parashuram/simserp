@@ -2,6 +2,7 @@ import './dasboard.css';
 import React, { Fragment } from 'react';
 import { COOKIE, getCookie,deleteCookie } from "../../services/cookie";
 import * as URLS from "../../routes/constants";
+import  { Redirect } from 'react-router-dom';
 
 class logincheck extends React.Component {
 
@@ -16,22 +17,26 @@ class logincheck extends React.Component {
 
     componentDidMount() {
         this.interval = setInterval(() => {
+          console.log("Checking Log In");
             let token = getCookie(COOKIE.USERID);
             if (token === "null" || token == null) {
-              if (this.state.isLoggedIn === false) { } else {
-                this.setState({ isLoggedIn: false });              
-                this.props.history.push(URLS.URLS.LoginPage);
-              }
+              this.setState({ isLoggedIn: false });              
+              window.location.href="/loginExpired";
             }
       
           }, 1000);
     }
+
+    
 
     componentWillUnmount() {
         clearInterval(this.interval);
       }
 
     render() {
+
+      
+
         return (
             <Fragment >
                 

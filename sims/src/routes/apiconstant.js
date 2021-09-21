@@ -38,7 +38,7 @@ export const APIURL = {
     CreateUserBranchMapping:domain+"api/UserBranchMapping/CreateUserBranchMapping",
   };
 
-  export const CTimeOut = 3; 
+  export const CTimeOut = 10; 
 
 
   export let ValidUser={

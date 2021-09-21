@@ -41,44 +41,50 @@ export default function ButtonAppBar() {
     
     useEffect(() => {
         console.log('On Load Event of UseEffect !');
-        let token = getCookie(COOKIE.USERID);
-        let FIRSTNAME = getCookie(COOKIE.FIRSTNAME);
 
-        let initialName = FIRSTNAME.charAt(0).toUpperCase();
-        var url = new URL(window.location.href);
-        let branchId = url.searchParams.get("branchId");
-        let branchName = url.searchParams.get("branchName");
-        let compName = url.searchParams.get("compName");
-        let branchBtnId= url.searchParams.get("branchBtnId");
-        console.log("===========================================");
-        console.log("branchId > ", branchId);
-        console.log("branchName > ", branchName);
-        console.log("compName > ", compName);
-        console.log("===========================================");
-
-        if (
-            token === "null" || compName === "null" || branchName === "null" || branchId === "null" ||
-            token == null ||
-            compName === "" ||
-            compName == null ||
-            branchName === "" ||
-            branchName == null ||
-            branchId === "" ||
-            branchId == null
-        ) {
-            alert("Branch details Not found");
-            setisLoggedIn(false);
-            window.close();
-        } else {
-            setbranchName(branchName);
-            setbranchId(branchId);
-            setcompName(compName);
-            setuserInitial(initialName);
-            setfirstname(FIRSTNAME);
-            setbranchBtnId(branchBtnId);
-            settoken(token);
-
+        if(getCookie(COOKIE.USERID)!=null){
+            let token = getCookie(COOKIE.TOKEN);
+            let FIRSTNAME = getCookie(COOKIE.FIRSTNAME);
+            let initialName = FIRSTNAME.charAt(0).toUpperCase();
+            var url = new URL(window.location.href);
+            let branchId = url.searchParams.get("branchId");
+            let branchName = url.searchParams.get("branchName");
+            let compName = url.searchParams.get("compName");
+            let branchBtnId= url.searchParams.get("branchBtnId");
+            console.log("===========================================");
+            console.log("branchId > ", branchId);
+            console.log("branchName > ", branchName);
+            console.log("compName > ", compName);
+            console.log("===========================================");
+    
+            if (
+                token === "null" || compName === "null" || branchName === "null" || branchId === "null" ||
+                token == null ||
+                compName === "" ||
+                compName == null ||
+                branchName === "" ||
+                branchName == null ||
+                branchId === "" ||
+                branchId == null
+            ) {
+                alert("Branch details Not found");
+                setisLoggedIn(false);
+                window.close();
+            } else {
+                setbranchName(branchName);
+                setbranchId(branchId);
+                setcompName(compName);
+                setuserInitial(initialName);
+                setfirstname(FIRSTNAME);
+                setbranchBtnId(branchBtnId);
+                settoken(token);
+    
+            }
+        }else{
+            window.location.href="/loginExpired";
         }
+
+        
 
     }, []);
 
