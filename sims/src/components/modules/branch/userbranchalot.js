@@ -19,7 +19,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import Divider from '@material-ui/core/Divider';
+import Checkbox from '@mui/material/Checkbox';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -36,7 +36,7 @@ class userbranchalot extends React.Component {
             branchData: [],
             ErrorPrompt: false,
             SuccessPrompt: false,
-            userId:0
+            userId: 0
 
         };
     }
@@ -46,7 +46,7 @@ class userbranchalot extends React.Component {
             getCookie(COOKIE.USERID) != null
         ) {
 
-            
+
 
             this.setState({ isLoggedIn: true });
             var url = new URL(window.location.href);
@@ -79,12 +79,12 @@ class userbranchalot extends React.Component {
         axios.post(GetBrachesUrl, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
-                console.log("getBranches > response > data > ", data);
+                // console.log("getBranches > response > data > ", data);
 
                 this.setState({ branchData: data, ProgressLoader: true });
             }
             ).catch(error => {
-                console.log("error > ", error);
+                // console.log("error > ", error);
                 this.setState({ branchData: [], ProgressLoader: true });
             });
 
@@ -105,8 +105,64 @@ class userbranchalot extends React.Component {
         }
 
 
-        const handleBranchAdd=(userId)=>{
-                console.log("handleBranchAdd > userId > ",userId);
+        const handleBranchAdd = (userId) => {
+            let branch=[];
+           
+            // console.log("handleBranchAdd > userId > ", userId);
+            let chkboxes = document.querySelectorAll(".branchchecks:checked");
+            // console.log("handleBranchAdd > chkboxes > ", chkboxes);
+            for (let i = 0; i < chkboxes.length; i++) {
+                console.log("chkboxes[i] > ", chkboxes[i]);
+                branch.push(parseInt(chkboxes[i].value));                 
+            }
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            let data={
+                validUser: ValidUser,
+                userId:userId,
+                branch:branch
+            }
+            const headers = {
+                "Content-Type": "application/json"
+            };
+            
+           console.log("handleBranchAdd > data > ",data);
+
+           let CreateUserBranchMappingUrl = APIURLS.APIURL.CreateUserBranchMapping; 
+           axios.post(CreateUserBranchMappingUrl, data, { headers })
+            .then(response => {
+                
+                this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            }
+            ).catch(error => {
+                this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                this.setState({ProgressLoader: true });
+            });
+
+        }
+
+        const selectAllBranches = (e) => {
+
+            // console.log("selectAllBranches > e.target.checked ", e.target.checked);
+            if (e.target.checked) {
+                let chkboxes = document.getElementsByClassName("branchchecks");
+                // console.log("selectAllBranches > chkboxes > ", chkboxes);
+                for (let i = 0; i < chkboxes.length; i++) {
+                    // console.log("chkboxes[i] > ", chkboxes[i]);
+                    document.getElementById(chkboxes[i].id).checked = true;
+                }
+            } else {
+                let chkboxes = document.getElementsByClassName("branchchecks");
+                // console.log("selectAllBranches > chkboxes > ", chkboxes);
+                for (let i = 0; i < chkboxes.length; i++) {
+                    // console.log("chkboxes[i] > ", chkboxes[i]);
+                    document.getElementById(chkboxes[i].id).checked = false;
+                }
+            }
+
+             
+
         }
 
 
@@ -131,7 +187,7 @@ class userbranchalot extends React.Component {
 
         return (
             <Fragment>
-                 
+
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -141,80 +197,88 @@ class userbranchalot extends React.Component {
                 <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
+               
 
                 {
-                   console.log("this.state.userId ---------> ",this.state.userId)
-                }
-                
-
-                {
-                    this.props.userId>0?(
-                        <div style={{ marginLeft: 10, marginTop: 10 }}>                    
-                        <Grid container spacing={3}>
-                            <Grid xs={1}>
-                                <Button
-                                    style={{ marginLeft: 5 }}
-                                    startIcon={<AddIcon />}
-                                    onClick={(e)=>handleBranchAdd(this.props.userId)}
-                                >
-                                Alot
-                                </Button>
-                            </Grid>
-                        </Grid>
-                        <div style={{ height: 20 }}></div>
-                        <Grid container spacing={0}>
-                            <Grid xs={12} sm={12} md={11} lg={11}>
-                                <Grid container spacing={0}>
-                                    <Grid xs={12} sm={12} md={12} lg={12}>
-                                        <Table stickyHeader size="small" className="" aria-label="Country List table">
-                                            <TableHead className="table-header-background">
-                                                <TableRow>
-                                                    <TableCell className="table-header-font">checkbox</TableCell>
-                                                    <TableCell className="table-header-font">#</TableCell>
-                                                    <TableCell className="table-header-font" align="left">Branch Name</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody className="tableBody">
-                                                {this.state.branchData.map((item, i) => (
-                                                    <TableRow
-                                                        id={"row_" + i}
-                                                        className={this.state.initialCss}
-                                                        hover
-                                                        key={i}
-                                                        onClick={(event) => handleRowClick(event, item, "row_" + i)}
-                                                    >
-                                                        <TableCell align="left">
-                                                            checkbox
-                                                        </TableCell>
-                                                        <TableCell align="left">
-                                                            B{item.branchId}
-                                                        </TableCell>
-                                                        <TableCell align="left">
-                                                            {item.name}
-                                                        </TableCell>
-    
-                                                    </TableRow>
-    
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-    
-                                    </Grid>
+                    this.props.data.userId > 0 ? (
+                        <div style={{ marginLeft: 10, marginTop: 10 }}>
+                            <Grid container spacing={1}>
+                                <Grid xs={6} sm={6} md={6} lg={6}>
+                                    <Button
+                                        style={{ marginLeft: 5 }}
+                                        startIcon={<AddIcon />}
+                                        onClick={(e) => handleBranchAdd(this.props.data.userId)}
+                                    >
+                                        Alot branches
+                                    </Button>
                                 </Grid>
                             </Grid>
-                            <Grid xs={12} sm={12} md={4} lg={4}>
-    
+                            <div style={{ height: 20 }}></div>
+                            <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                    <Grid container spacing={0}>
+                                        <Grid xs={12} sm={12} md={12} lg={12}>
+                                            <Table stickyHeader size="small" className="" aria-label="Country List table">
+                                                <TableHead className="table-header-background">
+                                                    <TableRow>
+                                                        <TableCell className="table-header-font">
+                                                            <input
+                                                                type="checkbox"
+                                                                id="selectAllBranch"
+                                                                className="checkbox-css" 
+                                                                onClick={(e) => selectAllBranches(e)}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell className="table-header-font">#</TableCell>
+                                                        <TableCell className="table-header-font" align="left">Branch Name</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody className="tableBody">
+                                               
+                                                    {this.props.data.branches.map((item, i) => (
+                                                        <TableRow
+                                                            id={"row_" + i}
+                                                            className={this.state.initialCss}
+                                                            hover
+                                                            key={i}
+                                                           
+                                                        >
+                                                            <TableCell align="left">
+                                                                <input 
+                                                                    type="checkbox"
+                                                                    className="checkbox-css branchchecks"
+                                                                    id={"branch_check_" + item.branchId}
+                                                                    value={item.branchId}
+                                                                     />
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                B{item.branchId}
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                {item.name}
+                                                            </TableCell>
+                                                        </TableRow>
+
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid xs={12} sm={12} md={4} lg={4}>
+
+                                </Grid>
                             </Grid>
-                        </Grid>
-    
-    
-    
-                    </div>
-    
-                    ):null
+
+
+
+                        </div>
+
+                    ) : null
                 }
 
-               
+
             </Fragment>
         );
     }

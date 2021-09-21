@@ -25,7 +25,7 @@ import editUser from "../components/modules/user/edituser";
 import branchMaster from "../components/modules/branch/branchmaster";
 import editBranch from "../components/modules/branch/editbranch";
 
-import addBranch from "../components/modules/branch/addBranch";
+import addBranch from "../components/modules/branch/addbranch";
 
 
 let routes = ({ location, ...rest }) => {

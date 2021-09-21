@@ -172,6 +172,7 @@ class branchMaster extends React.Component {
                                     <TableRow>
                                         <TableCell className="table-header-font">#</TableCell>
                                         <TableCell className="table-header-font" align="left">Branch Name</TableCell>
+                                        <TableCell className="table-header-font" align="left">Company</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody className="tableBody">
@@ -191,6 +192,10 @@ class branchMaster extends React.Component {
                                             <TableCell align="left">
                                                 <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >{item.name}</a>
                                             </TableCell>
+                                            <TableCell align="left">
+                                            
+                                            {item.company?item.company.companyName?item.company.companyName:"-":"-"}
+                                        </TableCell>
 
                                         </TableRow>
 

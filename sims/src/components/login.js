@@ -103,14 +103,13 @@ class login extends React.Component {
 
 
   componentDidMount() {
-     
     let getLocalIP = this.getLocalIP();
     this.setState({ clientlog: getLocalIP });
     let token = getCookie(COOKIE.TOKEN);
     if (token === "null" || token == null) {
       this.setState({ isLoggedIn: false });
-      this.props.history.push(URLS.URLS.LoginPage);
-    } else {
+     this.props.history.push(URLS.URLS.LoginPage);
+    }else{
       try {
         let loginState = this.loadState();
         console.log("loginState > ", loginState);
@@ -128,17 +127,19 @@ class login extends React.Component {
           open: loginState.open,
           clientlog: loginState.clientlog
         });
+        
 
       } catch (ex) {
-        this.logoutUser();
+        // this.logoutUser();
       }
-
     }
+
     this.interval = setInterval(() => {
       let token = getCookie(COOKIE.USERID);
       if (token === "null" || token == null) {
         if (this.state.isLoggedIn === false) { } else {
-          this.setState({ isLoggedIn: false });
+          this.setState({ isLoggedIn: false,disableLoginBtn:false });
+        
           this.props.history.push(URLS.URLS.LoginPage);
         }
       }
@@ -166,9 +167,6 @@ class login extends React.Component {
 
     return D;
   }
-
-
-
 
   handleChange(event) {
     let id = event.target.id;
@@ -246,7 +244,7 @@ class login extends React.Component {
       let logoutUrl = APIURLS.APIURL.Logout;
       axios.post(logoutUrl, data, { headers })
         .then(response => {
-
+          this.setState({ disableLoginBtn:false });
         }
         ).catch(error => {
 
@@ -289,7 +287,14 @@ class login extends React.Component {
 
       let companyList = data.companies.companyList;
       this.setState({ userCompanyList: companyList }, function () {
-        this.setState({ token: data.head.token, loader: 'hideLoginScreenLoader', data: data, userInitial: initialName, name: name, isLoggedIn: true }, () => {
+        this.setState({ token: data.head.token, 
+          loader: 'hideLoginScreenLoader', 
+          data: data, 
+          userInitial: initialName, 
+          name: name, 
+          status:data.head.status,
+          isLoggedIn: true
+         }, () => {
           this.saveState(this.state);
         });
 
@@ -329,7 +334,10 @@ class login extends React.Component {
                     />
                     <Divider />
                     <CardContent style={{ textAlign: 'center', marginTop: 5, }}>
-                      <CompanyList state={this.state} />
+                    {this.state.status==="DL"?(
+                      <span>You are already logged in. Kindly loggout and login again</span>
+                    ):(<CompanyList state={this.state} />)}
+                      
                     </CardContent>
                   </Card>
                 </Paper>

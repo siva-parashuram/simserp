@@ -1,15 +1,18 @@
 import './dasboard.css';
 import { COOKIE, getCookie,deleteCookie } from "../../services/cookie";
-import React, { useState, useEffect, Fragment } from 'react';
+import * as URLS from "../../routes/constants";
+import React, { useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+ 
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Paper from '@material-ui/core/Paper';
+
+import Logincheck from "./logincheck";
+ 
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,7 +36,7 @@ export default function ButtonAppBar() {
     const [firstname, setfirstname] = React.useState("");
     const [greetings, setgreetings] = React.useState("");
     const [branchBtnId,setbranchBtnId] = React.useState("");
-
+    const [token,settoken] = React.useState("");
 
     
     useEffect(() => {
@@ -73,9 +76,14 @@ export default function ButtonAppBar() {
             setuserInitial(initialName);
             setfirstname(FIRSTNAME);
             setbranchBtnId(branchBtnId);
+            settoken(token);
 
         }
+
     }, []);
+
+
+  
 
     const closeWindow = e => {     
         // let currentbranchBtnId= getCookie(COOKIE.branchBtnId);
@@ -101,11 +109,10 @@ export default function ButtonAppBar() {
                         onClick={closeWindow}
                     >
                         <CloseIcon />
-                    </IconButton>
-                    
+                    </IconButton>                    
                 </Toolbar>
-            </AppBar>             
-              
+            </AppBar>
+            <Logincheck/>
         </div>
     );
 }

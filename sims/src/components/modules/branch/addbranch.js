@@ -19,7 +19,16 @@ import AddIcon from '@material-ui/icons/Add';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+
 import Divider from '@material-ui/core/Divider';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import TableContainer from '@material-ui/core/TableContainer';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -32,11 +41,61 @@ class addbranch extends React.Component {
         this.state = {
             isLoggedIn: false,
             ProgressLoader: false,
-            urlparams: null,             
+            urlparams: null,
+            GeneralDetailsExpanded: true,
+            AddressDetailsExpanded: true,
             ErrorPrompt: false,
             SuccessPrompt: false,
-            branch:null,
-            branchId:0
+            companyData: [],
+            countryData: [],
+            stateData: [],
+            branch: {
+                address: null,
+                address2: null,
+                address3: null,
+                branchId: 0,
+                city: null,
+                company: null,
+                companyId: 0,
+                country: null,
+                countryId: null,
+                emailId: null,
+                financialYears: [],
+                logoName: null,
+                name: null,
+                noSeries: [],
+                phoneNo: null,
+                postcode: null,
+                shortName: null,
+                state: null,
+                stateId: null,
+                wareHouses: [],
+                website: null,
+            }
+            ,
+            address: null,
+            address2: null,
+            address3: null,
+            branchId: 0,
+            city: null,
+            company: null,
+            companyId: 0,
+            country: null,
+            countryId: null,
+            emailId: null,
+            financialYears: [],
+            logoName: null,
+            name: null,
+            noSeries: [],
+            phoneNo: null,
+            postcode: null,
+            shortName: null,
+            state: null,
+            stateId: null,
+            wareHouses: [],
+            website: null,
+
+
 
         };
     }
@@ -54,10 +113,12 @@ class addbranch extends React.Component {
             let editbranchId = url.searchParams.get("editbranchId");
             let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
             this.setState({
-                urlparams: urlparams,
-                branchId:editbranchId
-            },()=>{
-                // this.getBranchDetail();
+                urlparams: urlparams
+
+            }, () => {
+                this.getCompanyList();
+                this.getStateList();
+                this.getCountryList();
             });
         } else {
             this.setState({ isLoggedIn: false });
@@ -66,33 +127,188 @@ class addbranch extends React.Component {
 
     }
 
+    getCompanyList() {
+        let rows = [];
 
-    getBranchDetail(){         
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
             "Content-Type": "application/json"
         };
-        let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+        let GetCompaniesUrl = APIURLS.APIURL.GetCompanies;
 
-        axios.post(GetBrachesUrl, ValidUser, { headers })
-        .then(response => {
-            let data = response.data;
-            console.log("getBranchDetail > response > data > ", data);
-             
-            this.setState({ branch: data, ProgressLoader: true });
-        }
-        ).catch(error => {
-            console.log("error > ", error);
-            this.setState({ branch: null, ProgressLoader: true});
-        });     
-       
+        axios.post(GetCompaniesUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getCompanyList > response > data > ", data);
+                rows = data;
+                this.setState({ companyData: rows, ProgressLoader: true });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+
+
     }
+
+    getStateList() {
+        let rows = [];
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetStatesUrl = APIURLS.APIURL.GetStates;
+
+        axios.post(GetStatesUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getStateList > response > data > ", data);
+                rows = data;
+                this.setState({ stateData: rows, ProgressLoader: true });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+    }
+
+    getCountryList() {
+        let rows = [];
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetCountryUrl = APIURLS.APIURL.GetCountries;
+
+        axios.post(GetCountryUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getCountryList > response > data > ", data);
+                rows = data;
+                this.setState({ countryData: rows });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+    }
+
+
+
+
 
     render() {
 
-        
+        const handleAccordionClick = (val, e) => {
+            console.log("handleAccordionClick > val > ", val);
+            console.log("handleAccordionClick > e > ", e);
+            if (val === "GeneralDetailsExpanded") {
+                this.state.GeneralDetailsExpanded === true ? this.setState({ GeneralDetailsExpanded: false }) : this.setState({ GeneralDetailsExpanded: true })
+            }
+            if (val === "AddressDetailsExpanded") {
+                this.state.AddressDetailsExpanded === true ? this.setState({ AddressDetailsExpanded: false }) : this.setState({ AddressDetailsExpanded: true })
+            }
+        }
+
+        const updateFormValue = (id, e) => {
+
+            if (id === "Company") {
+                let branch = this.state.branch;
+                branch.companyId = e.target.value;
+                this.setState({ branch: branch, companyId: e.target.value });
+            }
+
+
+            if (id === "Name") {
+                let branch = this.state.branch;
+                branch.name = e.target.value;
+                this.setState({ branch: branch, name: e.target.value });
+            }
+            if (id === "phoneNo") {
+                let branch = this.state.branch;
+                branch.phoneNo = e.target.value;
+                this.setState({ branch: branch, phoneNo: e.target.value });
+            }
+
+            if (id === "website") {
+                let branch = this.state.branch;
+                branch.website = e.target.value;
+                this.setState({ branch: branch, website: e.target.value });
+            }
+            if (id === "Country") {
+                let branch = this.state.branch;
+                branch.countryId = e.target.value;
+                this.setState({ branch: branch, countryId: e.target.value });
+            }
+            if (id === "State") {
+                let branch = this.state.branch;
+                branch.stateId = e.target.value;
+                this.setState({ branch: branch, stateId: e.target.value });
+            }
+
+
+
+            if (id === "City") {
+                let branch = this.state.branch;
+                branch.city = e.target.value;
+                this.setState({ branch: branch, city: e.target.value });
+            }
+            if (id === "Postcode") {
+                let branch = this.state.branch;
+                branch.postcode = e.target.value;
+                this.setState({ branch: branch, postcode: e.target.value });
+            }
+            if (id === "Address") {
+                let branch = this.state.branch;
+                branch.address = e.target.value;
+                this.setState({ branch: branch, address: e.target.value });
+            }
+            if (id === "Address2") {
+                let branch = this.state.branch;
+                branch.address2 = e.target.value;
+                this.setState({ branch: branch, address2: e.target.value });
+            }
+            if (id === "Address3") {
+                let branch = this.state.branch;
+                branch.address3 = e.target.value;
+                this.setState({ branch: branch, address3: e.target.value });
+            }
+        }
+
+        const handleCreate = () => {
+            this.setState({ ProgressLoader: false });
+            let branch = this.state.branch;
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            const data = {
+                validUser: ValidUser,
+                branch: branch
+            };
+            console.log("data - > ", data);
+
+
+            const headers = {
+                "Content-Type": "application/json"
+            };
+            let CreateBranchUrl = APIURLS.APIURL.CreateBranch;
+            axios.post(CreateBranchUrl, data, { headers })
+                .then(response => {
+                    console.log("response > ", response);
+                    if (response.status === 200 || response.status === 201) {
+                        this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                        this.props.history.push(URLS.URLS.branchMaster + this.state.urlparams);
+                    } else {
+                        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                    }
+                }
+                ).catch(error => {
+
+                });
+        }
 
 
         const closeErrorPrompt = (event, reason) => {
@@ -139,7 +355,7 @@ class addbranch extends React.Component {
                                     Dashboard
                                 </Link>
                                 <Link color="inherit" href={URLS.URLS.branchMaster + this.state.urlparams}>
-                                   Branch master
+                                    Branch master
                                 </Link>
                                 <Typography color="textPrimary">Add Branch </Typography>
                             </Breadcrumbs>
@@ -147,29 +363,323 @@ class addbranch extends React.Component {
                         </Grid>
                     </Grid>
                     <Grid container spacing={3}>
-                    <Grid xs={1}>
-                        <Button
-                            style={{ marginLeft: 5 }}
-                             
-                        >
-                           Add
-                        </Button>
+                        <Grid xs={1}>
+                            <Button
+                                style={{ marginLeft: 5 }}
+                                onClick={handleCreate}
+                            >
+                                Add
+                            </Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <div style={{ height: 20 }}></div>
-                <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={8} lg={8}>
+                    <div style={{ height: 20 }}></div>
                     <Grid container spacing={0}>
-                        <Grid xs={12} sm={12} md={10} lg={10}>
+                        <Grid xs={12} sm={12} md={8} lg={8}>
+                            <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={10} lg={10}>
+                                    <Accordion key="company-General-Details" expanded={this.state.GeneralDetailsExpanded} >
+                                        <AccordionSummary
+                                            className="accordion-Header-Design"
+                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                            style={{ minHeight: 20, height: '100%' }}
+                                        >
+                                            <Typography key="" className="accordion-Header-Title">General Details</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails key="">
+                                            <TableContainer>
+                                                <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
+                                                    <TableBody className="tableBody">
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>Company</b>
+                                                            </TableCell>
 
-                          </Grid>
+                                                            {console.log("this.state.countryId > ", this.state.countryId)}
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <Select
+                                                                    style={{ height: 40, marginTop: 14 }}
+
+                                                                    id="companySelect"
+                                                                    label="Company"
+                                                                    fullWidth
+                                                                    InputProps={{
+                                                                        className: "textFieldCss"
+                                                                    }}
+                                                                    value={parseInt(this.state.companyId)}
+                                                                    onChange={(e) => updateFormValue('Company', e)}
+                                                                >
+                                                                    <MenuItem value="-">
+                                                                        <em>None</em>
+                                                                    </MenuItem>
+                                                                    {
+                                                                        this.state.companyData.map((item, i) => (
+                                                                            <MenuItem value={parseInt(item.companyId)}>
+                                                                                {item.companyName}
+                                                                            </MenuItem>
+                                                                        ))
+                                                                    }
+                                                                </Select>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>Branch Name </b>
+                                                            </TableCell>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <TextField
+                                                                    id="Name"
+                                                                    variant="outlined"
+                                                                    size="small"
+
+                                                                    onChange={(e) => updateFormValue('Name', e)}
+                                                                    fullWidth
+                                                                    InputProps={{
+                                                                        className: "textFieldCss",
+                                                                        maxlength: 50
+                                                                    }}
+
+                                                                    value={this.state.name}
+
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b> Phone No</b>
+                                                            </TableCell>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <TextField
+                                                                    id="phoneNo"
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                    onChange={(e) => updateFormValue('phoneNo', e)}
+                                                                    fullWidth
+                                                                    InputProps={{
+                                                                        className: "textFieldCss",
+                                                                        maxlength: 20
+                                                                    }}
+                                                                    value={this.state.phoneNo}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>Website</b>
+                                                            </TableCell>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <TextField
+                                                                    id="website"
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                    onChange={(e) => updateFormValue('website', e)}
+                                                                    fullWidth
+                                                                    InputProps={{
+                                                                        className: "textFieldCss",
+                                                                        maxlength: 20
+                                                                    }}
+                                                                    value={this.state.website}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+
+                                        </AccordionDetails>
+                                    </Accordion>
+                                    <Accordion key="company-Address-Details" expanded={this.state.AddressDetailsExpanded} >
+                                        <AccordionSummary
+                                            className="accordion-Header-Design"
+                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("AddressDetailsExpanded", e)} />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                            style={{ minHeight: 20, height: '100%' }}
+                                        >
+                                            <Typography key="" className="accordion-Header-Title">Address Details</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails key="">
+                                            <TableContainer>
+                                                <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
+                                                    <TableBody className="tableBody">
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>Country</b>
+                                                            </TableCell>
+
+                                                            {console.log("this.state.countryId > ", this.state.countryId)}
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <Select
+                                                                    style={{ height: 40, marginTop: 14 }}
+                                                                    // variant="outlined"
+                                                                    id="countrySelect"
+                                                                    label="Country"
+                                                                    fullWidth
+                                                                    InputProps={{
+                                                                        className: "textFieldCss"
+                                                                    }}
+                                                                    value={parseInt(this.state.countryId)}
+                                                                    onChange={(e) => updateFormValue('Country', e)}
+                                                                >
+                                                                    <MenuItem value="-">
+                                                                        <em>None</em>
+                                                                    </MenuItem>
+                                                                    {
+                                                                        this.state.countryData.map((item, i) => (
+                                                                            <MenuItem value={parseInt(item.countryId)}>
+                                                                                {item.name}
+                                                                            </MenuItem>
+                                                                        ))
+                                                                    }
+                                                                </Select>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>State</b>
+                                                            </TableCell>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <Select
+                                                                    style={{ height: 40, marginTop: 14 }}
+                                                                    // variant="outlined"
+                                                                    id="stateSelect"
+                                                                    label="State"
+                                                                    fullWidth
+                                                                    SelectProps={{
+                                                                        className: "textFieldCss"
+                                                                    }}
+                                                                    value={parseInt(this.state.stateId)}
+                                                                    onChange={(e) => updateFormValue('State', e)}
+                                                                >
+                                                                    <MenuItem value="-">
+                                                                        <em>None</em>
+                                                                    </MenuItem>
+                                                                    {
+                                                                        this.state.stateData.map((item, i) => (
+                                                                            <MenuItem value={parseInt(item.stateId)}>
+                                                                                {item.name}
+                                                                            </MenuItem>
+                                                                        ))
+                                                                    }
+
+                                                                </Select>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>City</b>
+                                                            </TableCell>
+
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <TextField
+                                                                    id="City"
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                    onChange={(e) => updateFormValue('City', e)}
+                                                                    fullWidth
+                                                                    InputProps={{
+                                                                        className: "textFieldCss",
+                                                                        maxlength: 50
+                                                                    }}
+                                                                    value={this.state.city}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>Postcode</b>
+                                                            </TableCell>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <TextField
+                                                                    id="Postcode"
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                    onChange={(e) => updateFormValue('Postcode', e)}
+                                                                    fullWidth
+                                                                    InputProps={{
+                                                                        className: "textFieldCss",
+                                                                        maxlength: 10
+                                                                    }}
+                                                                    value={this.state.postcode}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>Address Line 1</b>
+                                                            </TableCell>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <TextField
+                                                                    id="Address"
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                    onChange={(e) => updateFormValue('Address', e)}
+                                                                    value={this.state.address}
+                                                                    fullWidth
+
+                                                                    InputProps={{
+                                                                        className: "textFieldCss",
+                                                                        maxlength: 50
+                                                                    }}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>Address Line 2</b>
+                                                            </TableCell>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <TextField
+                                                                    id="Address2"
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                    onChange={(e) => updateFormValue('Address2', e)}
+                                                                    fullWidth
+                                                                    value={this.state.address2}
+                                                                    InputProps={{
+                                                                        className: "textFieldCss",
+                                                                        maxlength: 50
+                                                                    }}
+
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        <TableRow>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <b>Address Line 3</b>
+                                                            </TableCell>
+                                                            <TableCell align="left" className="no-border-table">
+                                                                <TextField
+                                                                    id="Address3"
+                                                                    variant="outlined"
+                                                                    size="small"
+                                                                    onChange={(e) => updateFormValue('Address3', e)}
+                                                                    fullWidth
+                                                                    value={this.state.address3}
+                                                                    InputProps={{
+                                                                        className: "textFieldCss",
+                                                                        maxlength: 50
+                                                                    }}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                        </AccordionDetails>
+
+                                    </Accordion>
+
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid xs={12} sm={12} md={4} lg={4}>
+
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid xs={12} sm={12} md={4} lg={4}>
-                   
-                </Grid>
-            </Grid>
-        
+
 
 
                 </div>

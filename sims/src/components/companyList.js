@@ -18,10 +18,7 @@ class CompanyList extends React.Component {
         this.state={}
     }
 
-    componentDidMount() {
-       
-
-    }
+    componentDidMount() {}
 
     render() {
       
@@ -56,10 +53,10 @@ class CompanyList extends React.Component {
 
         return (
             <Fragment>  
-            {console.log("this.props.state.userCompanyList > ",this.props.state.userCompanyList)}          
+              
                 {
                    
-                    this.props.state.userCompanyList.map((item, i) => (
+                    this.props.state.userCompanyList?this.props.state.userCompanyList.map((item, i) => (
                         <Fragment key={"branch__Frag1_" + item.compName}>
                             <Accordion key={"branch_" + item.compName}>
                                 <AccordionSummary
@@ -90,7 +87,7 @@ class CompanyList extends React.Component {
                                 </AccordionDetails>
                             </Accordion>
                         </Fragment>
-                    ))
+                    )):""
                 }
             </Fragment>
         );

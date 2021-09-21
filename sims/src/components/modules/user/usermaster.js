@@ -36,7 +36,8 @@ class usermaster extends React.Component {
             ProgressLoader: false,
             initialCss: "",
             users: [],
-            userId:0
+            userId:0,
+            passData:[]
 
         }
     }
@@ -53,6 +54,59 @@ class usermaster extends React.Component {
         });
     }
 
+    getBranches() {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+
+        axios.post(GetBrachesUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                
+                let passData={
+                    userId:this.state.userId,
+                    branches:data,
+                    userBranches:this.getUserBranches(this.state.userId) 
+                };
+                this.setState({ 
+                    branchData: data, 
+                    passData:passData,
+                    ProgressLoader: true });
+            }
+            ).catch(error => {
+                //console.log("error > ", error);
+                this.setState({ branchData: [], ProgressLoader: true });
+            });
+    }
+
+    getUserBranches(userId) {
+        let userBranches=[];
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+
+        axios.post(GetBrachesUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                userBranches=data;
+                
+            }
+            ).catch(error => {
+                
+            });
+            return userBranches;
+    }
+
+
+
     getUsersList() {
         this.setState({ProgressLoader: false });
         let ValidUser = APIURLS.ValidUser;
@@ -66,9 +120,11 @@ class usermaster extends React.Component {
         axios.post(GetUsersUrl, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
-                console.log("getUsersList > response > data > ", data);
-
-                this.setState({ users: data, ProgressLoader: true });
+              console.log("getUsersList > response > data > ", data);
+                this.setState({ 
+                    users: data,                     
+                    ProgressLoader: true 
+                });
             }
             ).catch(error => {
                 console.log("error > ", error);
@@ -82,9 +138,10 @@ class usermaster extends React.Component {
 
     render() {
         const handleRowClick = (e, item, id) => {
-            console.log("item > ",item);
+           // console.log("item > ",item);
             this.setState({userId:item.userId});
             removeIsSelectedRowClasses();
+            this.getBranches();
             document.getElementById(id).classList.add('selectedRow');
         }
 
@@ -194,7 +251,7 @@ class usermaster extends React.Component {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody className="tableBody">
-                                        {console.log("this.state.users > ",this.state.users)}
+                                        
                                             {this.state.users.map((item, i) => (
                                                 <TableRow
                                                     id={"row_" + i}
@@ -230,7 +287,7 @@ class usermaster extends React.Component {
                                                         {item.isAdmin?item.isAdmin===true?"True":"False":"-"}
                                                     </TableCell>
                                                 */}
-                                                {console.log("item -> ",item)}
+                                                
                                                     <TableCell align="left">
                                                         {item.isActive===true?(
                                                             <span style={{color:'green'}}>Active</span> // <Switch defaultChecked size="small" onChange={(e)=>changeUserStatus(item,false)}/>
@@ -252,7 +309,9 @@ class usermaster extends React.Component {
                         <Grid xs={12} sm={12} md={4} lg={4}>
                             <Grid container spacing={1}>
                                 <Grid xs={12} sm={12} md={10} lg={11}>
-                                     <Userbranchalot userId={this.state.userId}/>
+                                     <Userbranchalot data={
+                                        this.state.passData                                         
+                                        }/>
                                 </Grid>
                             </Grid>
                         </Grid>
