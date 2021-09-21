@@ -130,6 +130,7 @@ export default function ScrollableTabsButtonAuto() {
                     { name: "State Master", link: "stateMaster" },
                     { name: "User Master", link: "userMaster" },
                     { name: "Branch Master", link: "branchMaster" },
+                    { name: "Module Master", link: "moduleMaster" },
                     
 
                 ]

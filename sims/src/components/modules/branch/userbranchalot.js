@@ -106,39 +106,39 @@ class userbranchalot extends React.Component {
 
 
         const handleBranchAdd = (userId) => {
-            let branch=[];
-           
+            let branch = [];
+
             // console.log("handleBranchAdd > userId > ", userId);
             let chkboxes = document.querySelectorAll(".branchchecks:checked");
             // console.log("handleBranchAdd > chkboxes > ", chkboxes);
             for (let i = 0; i < chkboxes.length; i++) {
                 console.log("chkboxes[i] > ", chkboxes[i]);
-                branch.push(parseInt(chkboxes[i].value));                 
+                branch.push(parseInt(chkboxes[i].value));
             }
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
-            let data={
+            let data = {
                 validUser: ValidUser,
-                userId:userId,
-                branch:branch
+                UserID: userId,
+                BranchID: branch
             }
             const headers = {
                 "Content-Type": "application/json"
             };
-            
-           console.log("handleBranchAdd > data > ",data);
 
-           let CreateUserBranchMappingUrl = APIURLS.APIURL.CreateUserBranchMapping; 
-           axios.post(CreateUserBranchMappingUrl, data, { headers })
-            .then(response => {
-                
-                this.setState({ ProgressLoader: true, SuccessPrompt: true });
-            }
-            ).catch(error => {
-                this.setState({ ProgressLoader: true, ErrorPrompt: true });
-                this.setState({ProgressLoader: true });
-            });
+            console.log("handleBranchAdd > data > ", data);
+
+            let CreateUserBranchMappingUrl = APIURLS.APIURL.CreateUserBranchMapping;
+            axios.post(CreateUserBranchMappingUrl, data, { headers })
+                .then(response => {
+                    console.log("response > ",response);
+                    this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                }
+                ).catch(error => {
+                    this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                    this.setState({ ProgressLoader: true });
+                });
 
         }
 
@@ -161,8 +161,30 @@ class userbranchalot extends React.Component {
                 }
             }
 
-             
 
+
+        }
+
+        const checkboxclick=(e,id)=>{
+            console.log("checkboxclick > id > ",id);
+            console.log("checkboxclick > e.target.checked > ",e.target.checked);
+            let chkboxes = document.getElementsByClassName("branchchecks");
+            if (e.target.checked) {
+                for (let i = 0; i < chkboxes.length; i++) {
+                    if (chkboxes[i].id === id) {
+                        document.getElementById(chkboxes[i].id).checked = true;
+                    }
+                }
+            }else{
+                for (let i = 0; i < chkboxes.length; i++) {
+                    if (chkboxes[i].id === id) {
+                        document.getElementById(chkboxes[i].id).checked = false;
+                    }
+                }
+            }
+
+            
+             
         }
 
 
@@ -197,10 +219,10 @@ class userbranchalot extends React.Component {
                 <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
-               
+             
 
                 {
-                    this.props.data.userId > 0 ? (
+                    this.props.data.companyBranch?this.props.data.companyBranch.length > 0 ? (
                         <div style={{ marginLeft: 10, marginTop: 10 }}>
                             <Grid container spacing={1}>
                                 <Grid xs={6} sm={6} md={6} lg={6}>
@@ -218,51 +240,75 @@ class userbranchalot extends React.Component {
                                 <Grid xs={12} sm={12} md={11} lg={11}>
                                     <Grid container spacing={0}>
                                         <Grid xs={12} sm={12} md={12} lg={12}>
-                                            <Table stickyHeader size="small" className="" aria-label="Country List table">
+                                            <Table stickyHeader size="small" className="" aria-label="company Branch List table">
                                                 <TableHead className="table-header-background">
                                                     <TableRow>
                                                         <TableCell className="table-header-font">
                                                             <input
                                                                 type="checkbox"
                                                                 id="selectAllBranch"
-                                                                className="checkbox-css" 
+                                                                className="checkbox-css"
                                                                 onClick={(e) => selectAllBranches(e)}
                                                             />
-                                                        </TableCell>
-                                                        <TableCell className="table-header-font">#</TableCell>
-                                                        <TableCell className="table-header-font" align="left">Branch Name</TableCell>
+                                                        </TableCell>                                                        
+                                                        <TableCell className="table-header-font" align="left">&nbsp;</TableCell>
+                                                        <TableCell className="table-header-font" align="left">Branch Short Name</TableCell>
                                                     </TableRow>
                                                 </TableHead>
-                                                <TableBody className="tableBody">
-                                               
-                                                    {this.props.data.branches.map((item, i) => (
-                                                        <TableRow
-                                                            id={"row_" + i}
-                                                            className={this.state.initialCss}
-                                                            hover
-                                                            key={i}
+                                                <TableBody  className="tableBody">
+                                                {
+                                                    this.props.data.companyBranch.map((item, i) => (
+                                                        <Fragment>
+                                                        <TableRow>
+                                                        <TableCell>&nbsp;</TableCell>
+                                                        <TableCell><h4>{item.companyName} </h4></TableCell>
+                                                        <TableCell>&nbsp;</TableCell>
+                                                        </TableRow>
                                                            
-                                                        >
-                                                            <TableCell align="left">
-                                                                <input 
+                                                           {
+                                                               item.branch.map((branchItem,j)=> (
+                                                                <TableRow>
+                                                                {console.log("branchItem > ",branchItem)}
+                                                                <TableCell>
+                                                                { parseInt(branchItem.mark)==1?(
+                                                                    <input                                                                
                                                                     type="checkbox"
                                                                     className="checkbox-css branchchecks"
-                                                                    id={"branch_check_" + item.branchId}
-                                                                    value={item.branchId}
-                                                                     />
-                                                            </TableCell>
-                                                            <TableCell align="left">
-                                                                B{item.branchId}
-                                                            </TableCell>
-                                                            <TableCell align="left">
-                                                                {item.name}
-                                                            </TableCell>
-                                                        </TableRow>
-
-                                                    ))}
+                                                                    id={"branch_check_" + branchItem.branchID}
+                                                                    value={branchItem.branchID}
+                                                                    defaultChecked={true}
+                                                                    onChange={(e)=>checkboxclick(e,"branch_check_" + branchItem.branchID)}
+                                                                     
+                                                                />
+                                                                ):(
+                                                                    <input                                                                
+                                                                    type="checkbox"
+                                                                    className="checkbox-css branchchecks"
+                                                                    id={"branch_check_" + branchItem.branchID}
+                                                                    value={branchItem.branchID}
+                                                                    defaultChecked={false}
+                                                                    onChange={(e)=>checkboxclick(e,"branch_check_" + branchItem.branchID)}
+                                                                     
+                                                                />
+                                                                )  }
+                                                               
+                                                                </TableCell>
+        
+                                                                <TableCell align="left">  {branchItem.branchName}</TableCell>
+                                                                <TableCell align="left"> {branchItem.shortName} </TableCell>
+                                                            </TableRow>
+                                                               ))
+                                                           }
+                                                            
+        
+                                                        </Fragment>
+                                                    ))
+                                                   }
                                                 </TableBody>
                                             </Table>
+                                          
 
+                                          
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -275,7 +321,7 @@ class userbranchalot extends React.Component {
 
                         </div>
 
-                    ) : null
+                    ) : null:null
                 }
 
 

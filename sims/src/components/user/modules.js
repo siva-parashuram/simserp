@@ -26,7 +26,8 @@ class modules extends React.Component {
                     subMenus:[
                         {name:"Company Master",link:"companyMaster"},
                         {name:"Country Master",link:"countryMaster"},
-                        {name:"State Master",link:"stateMaster"}
+                        {name:"State Master",link:"stateMaster"},
+                        {name:"Module Master",link:"moduleMaster"}
                     ]
                 },
                 {

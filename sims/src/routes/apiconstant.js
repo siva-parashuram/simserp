@@ -36,6 +36,10 @@ export const APIURL = {
     UpdateBranch:domain+"api/Branch/UpdateBranch",
     CreateBranch:domain+"api/Branch/CreateBranch",
     CreateUserBranchMapping:domain+"api/UserBranchMapping/CreateUserBranchMapping",
+    GetUserBranchMappedByUserID:domain+"api/UserBranchMapping/GetUserBranchMappedByUserID",
+    CreateModule:domain+"api/Module/CreateModule",
+    UpdateModule:domain+"api/Module/UpdateModule",
+    GetModules:domain+"api/Module/GetModules",
   };
 
   export const CTimeOut = 10; 

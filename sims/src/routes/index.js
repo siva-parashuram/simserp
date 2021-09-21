@@ -27,7 +27,8 @@ import editBranch from "../components/modules/branch/editbranch";
 
 import addBranch from "../components/modules/branch/addbranch";
 import loginExpired from "../components/user/loginexpired";
-
+import moduleMaster from "../components/modules/modules/modulemaster";
+import addModule from "../components/modules/modules/addmodule";
 
 let routes = ({ location, ...rest }) => {
   return (
@@ -67,6 +68,13 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.branchMaster}  component={branchMaster} />
         <Route path={URLS.URLS.editBranch}  component={editBranch} />
         <Route path={URLS.URLS.addBranch}  component={addBranch} />
+
+
+        <Route path={URLS.URLS.moduleMaster}  component={moduleMaster} />
+        <Route path={URLS.URLS.addModule}  component={addModule} />
+        
+
+    
 
       
         <Route path={URLS.URLS.loginExpired}  component={loginExpired} />

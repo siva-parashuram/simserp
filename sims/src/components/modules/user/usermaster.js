@@ -84,6 +84,7 @@ class usermaster extends React.Component {
     }
 
     getUserBranches(userId) {
+        console.log("getUserBranches > ",userId);
         let userBranches=[];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -91,12 +92,19 @@ class usermaster extends React.Component {
         const headers = {
             "Content-Type": "application/json"
         };
-        let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+        let data={
+            ValidUser:ValidUser,
+            UserID: userId ,
+            userBranchMappingList:null
+        }
+        let GetUserBranchMappedByUserIDUrl = APIURLS.APIURL.GetUserBranchMappedByUserID;
 
-        axios.post(GetBrachesUrl, ValidUser, { headers })
+        axios.post(GetUserBranchMappedByUserIDUrl, data, { headers })
             .then(response => {
+                console.log("getUserBranches > response.data > ",response.data);
                 let data = response.data;
-                userBranches=data;
+                
+                this.processData(data.userBranchMappingList,userId);
                 
             }
             ).catch(error => {
@@ -105,7 +113,47 @@ class usermaster extends React.Component {
             return userBranches;
     }
 
+    processData(data,userId){
+        let company = [];
+        for (let i = 0; i < data.length; i++) {
+            let c = {
+                companyID: data[i].companyID,
+                companyName: data[i].companyName,
+                branch:[],
+            };
+            company.push(c);
+        }
+        console.log("processData > company > ",company);
+        let uniqueCompany=[];
+        company.map(x => uniqueCompany.filter(a => a.companyID === x.companyID && a.companyName === x.companyName).length > 0 ? null : uniqueCompany.push(x));
+        console.log("processData > uniqueCompany > ",uniqueCompany);
 
+        let branches=[];
+        for (let i = 0; i < uniqueCompany.length; i++) {
+             let branch=uniqueCompany[i].branch;
+            for (let j = 0; j < data.length; j++) {
+                // console.log("uniqueCompany[i] > ",uniqueCompany[i]);
+                // console.log("uniqueCompany[i] > ",uniqueCompany[i]);
+                if(uniqueCompany[i].companyID=== data[j].companyID){
+                    let b = {
+                        branchID: data[j].branchID,
+                        branchName: data[j].branchName,
+                        mark:data[j].mark,
+                        shortName:data[j].shortName
+                    };
+                    branch.push(b);
+                }
+            }
+            uniqueCompany[i].branch=branch;             
+        }
+        console.log("-------> FINAL processData > uniqueCompany > ",uniqueCompany);
+        let passData={
+            userId:userId,
+            companyBranch:uniqueCompany
+        };
+
+        this.setState({ passData: passData });
+    }
 
     getUsersList() {
         this.setState({ProgressLoader: false });
@@ -138,10 +186,11 @@ class usermaster extends React.Component {
 
     render() {
         const handleRowClick = (e, item, id) => {
-           // console.log("item > ",item);
+            this.setState({ passData: [] });
+           console.log("handleRowClick > item > ",item);
             this.setState({userId:item.userId});
             removeIsSelectedRowClasses();
-            this.getBranches();
+            this.getUserBranches(item.userId);
             document.getElementById(id).classList.add('selectedRow');
         }
 
@@ -308,7 +357,7 @@ class usermaster extends React.Component {
                         </Grid>
                         <Grid xs={12} sm={12} md={4} lg={4}>
                             <Grid container spacing={1}>
-                                <Grid xs={12} sm={12} md={10} lg={11}>
+                                <Grid xs={12} sm={12} md={12} lg={12}>
                                      <Userbranchalot data={
                                         this.state.passData                                         
                                         }/>
