@@ -269,6 +269,16 @@ class editbranch extends React.Component {
     }
 
     const updateFormValue = (id, e) => {
+
+
+      
+
+      if (id === "shortName") {
+        let branch = this.state.branch;
+        branch.shortName = e.target.value;
+        this.setState({ branch: branch, shortName: e.target.value });
+      }
+
       if (id === "Company") {
         let branch = this.state.branch;
         branch.companyId = e.target.value;
@@ -497,6 +507,30 @@ class editbranch extends React.Component {
                                 />
                               </TableCell>
                             </TableRow>
+                            <TableRow>
+                            <TableCell align="left" className="no-border-table">
+                              <b>Short Name </b>
+                            </TableCell>
+                            <TableCell align="left" className="no-border-table">
+                              <TextField
+                                id="shortName"
+                                variant="outlined"
+                                size="small"
+                                maxlength={10}
+                                onChange={(e) => updateFormValue('shortName', e)}
+                                fullWidth
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50
+                                }}
+
+                                value={this.state.shortName}
+
+                              />
+                            </TableCell>
+                          </TableRow>
+
+                            
                             <TableRow>
                               <TableCell align="left" className="no-border-table">
                                 <b> Phone No</b>

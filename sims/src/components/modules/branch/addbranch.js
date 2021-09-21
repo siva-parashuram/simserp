@@ -221,6 +221,12 @@ class addbranch extends React.Component {
                 this.setState({ branch: branch, companyId: e.target.value });
             }
 
+            if (id === "shortName") {
+                let branch = this.state.branch;
+                branch.shortName = e.target.value;
+                this.setState({ branch: branch, shortName: e.target.value });
+              }
+
 
             if (id === "Name") {
                 let branch = this.state.branch;
@@ -432,7 +438,7 @@ class addbranch extends React.Component {
                                                                     id="Name"
                                                                     variant="outlined"
                                                                     size="small"
-
+                                                                    maxlength={10}
                                                                     onChange={(e) => updateFormValue('Name', e)}
                                                                     fullWidth
                                                                     InputProps={{
@@ -445,6 +451,28 @@ class addbranch extends React.Component {
                                                                 />
                                                             </TableCell>
                                                         </TableRow>
+                                                        <TableRow>
+                                                        <TableCell align="left" className="no-border-table">
+                                                          <b>Short Name </b>
+                                                        </TableCell>
+                                                        <TableCell align="left" className="no-border-table">
+                                                          <TextField
+                                                            id="shortName"
+                                                            variant="outlined"
+                                                            size="small"
+                            
+                                                            onChange={(e) => updateFormValue('shortName', e)}
+                                                            fullWidth
+                                                            InputProps={{
+                                                              className: "textFieldCss",
+                                                              maxlength: 50
+                                                            }}
+                            
+                                                            value={this.state.shortName}
+                            
+                                                          />
+                                                        </TableCell>
+                                                      </TableRow>
                                                         <TableRow>
                                                             <TableCell align="left" className="no-border-table">
                                                                 <b> Phone No</b>
