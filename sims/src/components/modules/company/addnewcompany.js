@@ -445,28 +445,25 @@ class addnewcompany extends React.Component {
                                                                     <b>Country</b>
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <Select
-                                                                        style={{ height: 40, marginTop: 14 }}
-                                                                        // variant="outlined"
+                                                                    <select
+                                                                    className="dropdown-css"
                                                                         id="countrySelect"
                                                                         label="Country"
                                                                         fullWidth
-                                                                        InputProps={{
-                                                                            className: "textFieldCss"
-                                                                        }}
+                                                                        
                                                                     >
-                                                                        <MenuItem value="-">
-                                                                            <em>None</em>
-                                                                        </MenuItem>
+                                                                        <option value="-">
+                                                                             None 
+                                                                        </option>
                                                                         {
                                                                             this.state.countryData.map((item,i)=>( 
-                                                                                <MenuItem  value={item.countryId}>
+                                                                                <option  value={item.countryId}>
                                                                                 {item.name} 
-                                                                                </MenuItem>
+                                                                                </option>
                                                                             ))
                                                                         }
                                                                          
-                                                                    </Select>
+                                                                    </select>
                                                                 </TableCell>
                                                             </TableRow>
                                                             <TableRow>
@@ -474,24 +471,20 @@ class addnewcompany extends React.Component {
                                                                     <b>State</b>
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <Select
-                                                                        style={{ height: 40, marginTop: 14 }}
-                                                                        // variant="outlined"
+                                                                    <select
+                                                                    className="dropdown-css"
                                                                         id="stateSelect"
                                                                         label="State"
                                                                         fullWidth
-                                                                        SelectProps={{
-                                                                            className: "textFieldCss"
-                                                                        }}
-
+                                                                        
                                                                     >
-                                                                        <MenuItem value="-">
-                                                                            <em>None</em>
-                                                                        </MenuItem>
-                                                                        <MenuItem value={10}>Goa</MenuItem>
-                                                                        <MenuItem value={20}>Gujrat</MenuItem>
-                                                                        <MenuItem value={30}>Delhi</MenuItem>
-                                                                    </Select>
+                                                                        <option value="-">
+                                                                            None 
+                                                                        </option>
+                                                                        <option value={10}>Goa</option>
+                                                                        <option value={20}>Gujrat</option>
+                                                                        <option value={30}>Delhi</option>
+                                                                    </select>
                                                                 </TableCell>
                                                             </TableRow>
                                                             <TableRow>

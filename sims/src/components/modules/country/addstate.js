@@ -324,29 +324,26 @@ class addstate extends React.Component {
                                                         <b>Country</b>
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <Select
-                                                            style={{ height: 40, marginTop: 14 }}
-
+                                                        <select
+                                                            className="dropdown-css"
                                                             id="CountryID"
                                                             label="Country"
                                                             fullWidth
-                                                            InputProps={{
-                                                                className: "textFieldCss"
-                                                            }}
+                                                            
                                                             value={parseInt(this.state.CountryID)}
                                                             onChange={(e) => updateFormValue('CountryID', e)}
                                                         >
 
                                                             {
                                                                 this.state.countryData.map((item, i) => (
-                                                                    <MenuItem value={item.countryId}>
+                                                                    <option value={item.countryId}>
                                                                         {item.name}
-                                                                    </MenuItem>
+                                                                    </option>
                                                                 ))
                                                             }
 
 
-                                                        </Select>
+                                                        </select>
                                                     </TableCell>
                                                 </TableRow>
                                             </TableBody>

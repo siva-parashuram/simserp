@@ -202,7 +202,35 @@ cursor: pointer;
   height: 25px !important;
   font-size: 12px !important;
   border-radius: 0px !important;
+   
 }
+
+.MuiOutlinedInput-input {
+  padding: 5px 5px !important;
+}
+
+.dropdown-css{
+  border-style: solid !important;
+  height: 25px !important;
+  font-size: 12px !important;
+  border-color: rgba(224, 224, 224, 1) !important;
+  width: 100% !important;
+  border-width: 1px !important;
+  border-radius: 0px !important;   
+  -webkit-border-radius: 0px;
+}
+.dropdown-css:focus{
+  outline: none !important;
+  border-style: solid !important;
+  height: 25px !important;
+  font-size: 12px !important;
+  border-color: rgba(224, 224, 224, 1) !important;
+  width: 100% !important;
+  border-width: 1px !important;
+  border-radius: 0px !important;   
+  -webkit-border-radius: 0px;
+}
+ 
 
 .no-border-table{
   border-style: none !important;
