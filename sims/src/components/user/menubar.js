@@ -74,15 +74,7 @@ export default function ScrollableTabsButtonAuto() {
     }, []);
 
     const handleChange = (event, newValue) => {
-        // console.log("event > ",event);
-        // console.log("even.target > ",event.target);
-        // console.log("newValue > ",newValue);
-        // console.log("value > ",value);
-        // if(value===newValue){
-        //     setValue(newValue);
-        // }else{
-        //     setValue(null);
-        // }
+        
 
     };
 
@@ -105,7 +97,6 @@ export default function ScrollableTabsButtonAuto() {
     }
 
     const getModuleList = () => { 
-
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -118,8 +109,6 @@ export default function ScrollableTabsButtonAuto() {
                 moduleName: "Home",
                 subMenus: [
                     { name: "Dashboard", link: "userDashboard" },
-                    
-                   
                 ]
             },
             {
@@ -130,16 +119,12 @@ export default function ScrollableTabsButtonAuto() {
                     { name: "State Master", link: "stateMaster" },
                     { name: "User Master", link: "userMaster" },
                     { name: "Branch Master", link: "branchMaster" },
-                    { name: "Module Master", link: "moduleMaster" },
-                    
+                    { name: "Module Master", link: "moduleMaster" },                    
 
                 ]
             }
         ]
         setmoduleList(moduleList);
-
-
-
     }
 
 

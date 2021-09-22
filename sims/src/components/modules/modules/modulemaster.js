@@ -174,11 +174,15 @@ class modulemasters extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams} >
+                                                        <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams+"&moduleId="+item.moduleId} >
                                                             M{item.moduleId}
                                                         </a>
                                                     </TableCell>
-                                                    <TableCell align="left">{item.name}</TableCell>
+                                                    <TableCell align="left">
+                                                    <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams+"&moduleId="+item.moduleId} >
+                                                    {item.name}
+                                                    </a>
+                                                    </TableCell>
                                                     <TableCell align="left">{item.description}</TableCell>
                                                 </TableRow>
 

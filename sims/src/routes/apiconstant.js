@@ -40,6 +40,7 @@ export const APIURL = {
     CreateModule:domain+"api/Module/CreateModule",
     UpdateModule:domain+"api/Module/UpdateModule",
     GetModules:domain+"api/Module/GetModules",
+    GetModule:domain+"api/Module/GetModule",
   };
 
   export const CTimeOut = 10; 

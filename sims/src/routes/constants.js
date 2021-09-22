@@ -27,4 +27,5 @@ export const URLS = {
   addBranch:"/addBranch",
   moduleMaster:"/moduleMaster",
   addModule:"/addModule",
+  editModule:"/editModule",
 };

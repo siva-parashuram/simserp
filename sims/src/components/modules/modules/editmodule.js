@@ -61,10 +61,57 @@ class editmodule extends React.Component {
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
+        let moduleId= url.searchParams.get("moduleId");
         let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
+
+        let Module=this.state.Module;
+        Module.ModuleId=moduleId;
         this.setState({
             urlparams: urlparams,
+            ModuleId:moduleId,
+            Module:Module
+        },()=>{
+            this.getModule(moduleId);
         });
+    }
+
+
+    getModule(ModuleId){
+        
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        let Module=this.state.Module;
+        const handleCreateData = {
+            validUser: ValidUser,
+            Module: Module
+        };
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetModuleUrl = APIURLS.APIURL.GetModule;
+
+        axios.post(GetModuleUrl, handleCreateData, { headers })
+            .then(response => {
+                if(response.status===200){
+                    let data = response.data;
+                    console.log("getModule > response > data > ", data);
+                 
+                    this.setState({ 
+                        Module: data, 
+                        Name: data.name,
+                        Description: data.description,
+                        IconName: data.iconName,
+                        ProgressLoader: true 
+                    });
+                }else{
+                    
+                }
+               
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
     }
 
 
@@ -171,7 +218,7 @@ class editmodule extends React.Component {
                                 <Link color="inherit" href={URLS.URLS.moduleMaster + this.state.urlparams} >
                                     Module Master
                                 </Link>
-                                <Typography color="textPrimary">Add New Module</Typography>
+                                <Typography color="textPrimary">Edit Module</Typography>
                             </Breadcrumbs>
 
                         </Grid>
@@ -185,7 +232,7 @@ class editmodule extends React.Component {
                                 onClick={handleUpdate}
                             >
 
-                                Create
+                                Update
 
                             </Button>
                         </Grid>
