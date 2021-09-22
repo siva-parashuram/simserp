@@ -37,6 +37,7 @@ class editmodule extends React.Component {
             urlparams: "",
             ProgressLoader: true,
             GeneralDetailsExpanded: true,
+            updateBtnDisable:false,
             Module:
             {
                 ModuleId: 0,
@@ -44,6 +45,11 @@ class editmodule extends React.Component {
                 Description: null,
                 IconName: null,
             },
+            Validations: {
+                Name: { errorState: false, errorMsg: "" },
+                Description: { errorState: false, errorMsg: "" },
+                IconName: { errorState: false, errorMsg: "" },
+              },
             ModuleId: 0,
             Name: null,
             Description: null,
@@ -130,20 +136,74 @@ class editmodule extends React.Component {
         }
 
         const updateFormValue = (id, e) => {
+            
+
             if (id === "Name") {
-                let Module = this.state.Module;
-                Module.Name = e.target.value;
-                this.setState({ Module: Module,Name:e.target.value });
+           
+                if(e.target.value==="" || e.target.value.length>20){
+                    let Module = this.state.Module;
+                    Module.Name = e.target.value;
+                    let Validations=this.state.Validations;
+                    if(e.target.value===""){
+                        Validations.Name={  errorState: true, errorMsg: "Blank inputs not allowed!" }
+                    }
+                    if(e.target.value.length>20){
+                        Validations.Name={  errorState: true, errorMsg: "Maximum 20 characters Allowed!" }
+                    }
+                    this.setState({ Module: Module,Name:e.target.value,updateBtnDisable:true,Validations:Validations });
+                }else{
+                    let Module = this.state.Module;                    
+                    Module.Name = e.target.value;
+                    let Validations=this.state.Validations;
+                    Validations.Name={ errorState: false, errorMsg: "" };
+                    this.setState({ Module: Module,Name:e.target.value,updateBtnDisable:false,Validations:Validations  });
+                }
+
+               
             }
             if (id === "Description") {
-                let Module = this.state.Module;
-                Module.Description = e.target.value;
-                this.setState({ Module: Module,Description:e.target.value });
+                if(e.target.value==="" || e.target.value.length>50){
+                    let Module = this.state.Module;
+                    Module.Description = e.target.value;
+                    let Validations=this.state.Validations;
+                    if(e.target.value===""){
+                        Validations.Description={  errorState: true, errorMsg: "Blank inputs not allowed!" }
+                    }
+                    if(e.target.value.length>20){
+                        Validations.Description={  errorState: true, errorMsg: "Maximum 50 characters Allowed!" }
+                    }
+                    this.setState({ Module: Module,Description:e.target.value,updateBtnDisable:true,Validations:Validations });
+                }else{
+                    let Module = this.state.Module;
+                    Module.Description = e.target.value;
+                    let Validations=this.state.Validations;
+                    Validations.Description={ errorState: false, errorMsg: "" };
+                    this.setState({ Module: Module,Description:e.target.value,updateBtnDisable:false });
+                }
+
+
+               
             }
             if (id === "IconName") {
-                let Module = this.state.Module;
-                Module.IconName = e.target.value;
-                this.setState({ Module: Module,IconName:e.target.value });
+
+                if(e.target.value==="" || e.target.value.length>50){
+                    let Module = this.state.Module;
+                    Module.IconName = e.target.value;
+                    let Validations=this.state.Validations;
+                    if(e.target.value===""){
+                        Validations.IconName={  errorState: true, errorMsg: "Blank inputs not allowed!" }
+                    }
+                    if(e.target.value.length>20){
+                        Validations.IconName={  errorState: true, errorMsg: "Maximum 50 characters Allowed!" }
+                    }
+                    this.setState({ Module: Module,IconName:e.target.value,updateBtnDisable:true,Validations:Validations });
+                }else{
+                    let Module = this.state.Module;
+                    Module.IconName = e.target.value;
+                    this.setState({ Module: Module,IconName:e.target.value,updateBtnDisable:false });
+                }
+
+                
             }
 
         }
@@ -230,10 +290,9 @@ class editmodule extends React.Component {
                                 style={{ marginLeft: 5 }}
                                 startIcon={<AddIcon />}
                                 onClick={handleUpdate}
+                                disabled={this.state.updateBtnDisable}
                             >
-
                                 Update
-
                             </Button>
                         </Grid>
                     </Grid>
@@ -268,9 +327,12 @@ class editmodule extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 50
+                                                               
                                                             }}
-                                                             value={this.state.Name}
+                                                            maxlength={20}                                                            
+                                                            value={this.state.Name}
+                                                            error={this.state.Validations.Name.errorState}
+                                                            helperText={this.state.Validations.Name.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -287,9 +349,12 @@ class editmodule extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 20
+                                                                 
                                                             }}
+                                                            maxlength={50}
                                                             value={this.state.Description}
+                                                            error={this.state.Validations.Description.errorState}
+                                                            helperText={this.state.Validations.Description.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -306,9 +371,12 @@ class editmodule extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 20
+                                                                 
                                                             }}
+                                                            maxlength={50}
                                                             value={this.state.IconName}
+                                                            error={this.state.Validations.IconName.errorState}
+                                                            helperText={this.state.Validations.IconName.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>

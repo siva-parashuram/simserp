@@ -44,7 +44,11 @@ class addmodule extends React.Component {
                Description :null,
                IconName:null,
             },
-          
+            Validations: {
+                Name: { errorState: false, errorMsg: "" },
+                Description: { errorState: false, errorMsg: "" },
+                IconName: { errorState: false, errorMsg: "" },
+              },
             ErrorPrompt:false,
             SuccessPrompt:false,
 
@@ -79,6 +83,7 @@ class addmodule extends React.Component {
         }
 
         const updateFormValue = (id, e) => {
+            /*
                   if(id==="Name"){
                       let Module=this.state.Module;
                       Module.Name=e.target.value;
@@ -94,6 +99,78 @@ class addmodule extends React.Component {
                     Module.IconName=e.target.value;
                     this.setState({Module:Module});
                 }
+                */
+
+                
+            if (id === "Name") {
+           
+                if(e.target.value==="" || e.target.value.length>20){
+                    let Module = this.state.Module;
+                    Module.Name = e.target.value;
+                    let Validations=this.state.Validations;
+                    if(e.target.value===""){
+                        Validations.Name={  errorState: true, errorMsg: "Blank inputs not allowed!" }
+                    }
+                    if(e.target.value.length>20){
+                        Validations.Name={  errorState: true, errorMsg: "Maximum 20 characters Allowed!" }
+                    }
+                    this.setState({ Module: Module,updateBtnDisable:true,Validations:Validations });
+                }else{
+                    let Module = this.state.Module;                    
+                    Module.Name = e.target.value;
+                    let Validations=this.state.Validations;
+                    Validations.Name={ errorState: false, errorMsg: "" };
+                    this.setState({ Module: Module,updateBtnDisable:false,Validations:Validations  });
+                }
+
+               
+            }
+            if (id === "Description") {
+                if(e.target.value==="" || e.target.value.length>50){
+                    let Module = this.state.Module;
+                    Module.Description = e.target.value;
+                    let Validations=this.state.Validations;
+                    if(e.target.value===""){
+                        Validations.Description={  errorState: true, errorMsg: "Blank inputs not allowed!" }
+                    }
+                    if(e.target.value.length>20){
+                        Validations.Description={  errorState: true, errorMsg: "Maximum 50 characters Allowed!" }
+                    }
+                    this.setState({ Module: Module,updateBtnDisable:true,Validations:Validations });
+                }else{
+                    let Module = this.state.Module;
+                    Module.Description = e.target.value;
+                    let Validations=this.state.Validations;
+                    Validations.Description={ errorState: false, errorMsg: "" };
+                    this.setState({ Module: Module,updateBtnDisable:false });
+                }
+
+
+               
+            }
+            if (id === "IconName") {
+
+                if(e.target.value==="" || e.target.value.length>50){
+                    let Module = this.state.Module;
+                    Module.IconName = e.target.value;
+                    let Validations=this.state.Validations;
+                    if(e.target.value===""){
+                        Validations.IconName={  errorState: true, errorMsg: "Blank inputs not allowed!" }
+                    }
+                    if(e.target.value.length>20){
+                        Validations.IconName={  errorState: true, errorMsg: "Maximum 50 characters Allowed!" }
+                    }
+                    this.setState({ Module: Module,updateBtnDisable:true,Validations:Validations });
+                }else{
+                    let Module = this.state.Module;
+                    Module.IconName = e.target.value;
+                    this.setState({ Module: Module,updateBtnDisable:false });
+                }
+
+                
+            }
+
+
                                  
          }
 
@@ -217,9 +294,10 @@ class addmodule extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 50
+                                                                 
                                                             }}
-                                                           
+                                                            error={this.state.Validations.Name.errorState}
+                                                            helperText={this.state.Validations.Name.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -236,8 +314,10 @@ class addmodule extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 20
+                                                                
                                                             }}
+                                                            error={this.state.Validations.Description.errorState}
+                                                            helperText={this.state.Validations.Description.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -254,8 +334,10 @@ class addmodule extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 20
+                                                               
                                                             }}
+                                                            error={this.state.Validations.IconName.errorState}
+                                                            helperText={this.state.Validations.IconName.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>

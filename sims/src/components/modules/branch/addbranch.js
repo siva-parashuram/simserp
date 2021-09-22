@@ -443,7 +443,7 @@ class addbranch extends React.Component {
                                                                     fullWidth
                                                                     InputProps={{
                                                                         className: "textFieldCss",
-                                                                        maxlength: 50
+                                                                        
                                                                     }}
 
                                                                     value={this.state.name}
