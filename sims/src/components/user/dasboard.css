@@ -205,7 +205,7 @@ cursor: pointer;
    
 }
 
-.MuiOutlinedInput-input {
+.textFieldCss .MuiOutlinedInput-input {
   padding: 5px 5px !important;
 }
 
