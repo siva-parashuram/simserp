@@ -22,18 +22,23 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 
+import Addpage from "./addpage";
+
 class modulemasters extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             urlparams: "",
             ProgressLoader: false,
-            modules:[]
+            modules:[],
+            moduleId:null,
+            pageLinkRow:[]
         };
 
     }
 
     componentDidMount() {
+        
         this.getModules();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
@@ -79,6 +84,11 @@ class modulemasters extends React.Component {
     render() {
 
         const handleRowClick = (e, item, id) => {
+            console.log("id > ",id);
+            console.log("item > ",item);
+            this.setState({moduleId:item.moduleId});
+            getPageList(item.moduleId);
+            
             removeIsSelectedRowClasses();            
             document.getElementById(id).classList.add('selectedRow');
         }
@@ -87,6 +97,60 @@ class modulemasters extends React.Component {
             for (let i = 0; i < this.state.modules.length; i++) {
                 document.getElementById('row_' + i).className = '';
             }
+        }
+
+        const getPageList=(moduleId)=>{
+        
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            const data = {
+                "validUser": ValidUser,
+                "page": {
+                    PageId: 0,
+                    ModuleId: moduleId,
+                    PageName: null,
+                    PageLink: null,
+                    Description: null,
+                }
+            };
+            const headers = {
+                "Content-Type": "application/json"
+            };
+            let GetPageByModuleIdUrl = APIURLS.APIURL.GetPageByModuleId;
+    
+            axios.post(GetPageByModuleIdUrl, data, { headers })
+                .then(response => {
+                    if(response.status===200){
+                        let data = response.data;
+                        console.log("getPageList > response > data > ", data);
+                        resetDataList(data);
+                                     
+                    }else{
+                        
+                    }
+                   
+                }
+                ).catch(error => {
+                    console.log("error > ", error);
+                });
+        }
+
+        const resetDataList = (data) => {
+            let rows = [];
+            for (let i = 0; i < data.length; i++) {
+                let r = {
+                    id:data[i].pageId,
+                    moduleId:data[i].moduleId,
+                    pageId: "PL"+data[i].pageId,
+                    pageName: data[i].pageName,
+                    pageLink: data[i].pageLink,
+                    description: data[i].description
+                };
+                rows.push(r);
+            }
+            console.log("rows > ",rows);
+            this.setState({ pageLinkRow: rows });
         }
 
 
@@ -151,7 +215,7 @@ class modulemasters extends React.Component {
                     </Grid>
                     <div style={{ height: 20 }}></div>
                     <Grid container spacing={0}>
-                        <Grid xs={12} sm={12} md={8} lg={8}>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={10} lg={10}>
                                     <Table stickyHeader size="small" className="" aria-label="Country List table">
@@ -193,10 +257,14 @@ class modulemasters extends React.Component {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={4} lg={4}>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
                             <Grid container spacing={1}>
-                                <Grid xs={12} sm={12} md={12} lg={12}>
-                                      
+                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                
+                                      <Addpage data={{
+                                        moduleId:this.state.moduleId,
+                                        rows: this.state.pageLinkRow
+                                     }}/>
                                 </Grid>
                             </Grid>
                         </Grid>
