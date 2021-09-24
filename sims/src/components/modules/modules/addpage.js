@@ -370,13 +370,13 @@ class addpage extends React.Component {
             ValidUser.Token = getCookie(COOKIE.TOKEN);
             const data = {
                 "validUser": ValidUser,
-                "page": page
+                "pageLists": page
             };
             console.log("processUpdateData > data > ", data);
             const headers = {
                 "Content-Type": "application/json"
             };
-            let UpdateUrl = APIURLS.APIURL;
+            let UpdateUrl = APIURLS.APIURL.UpdatePageByModuleIdAndPageID;
            
             axios.post(UpdateUrl, data, { headers })
                 .then(response => {
