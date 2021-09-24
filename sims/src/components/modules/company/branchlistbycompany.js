@@ -13,11 +13,33 @@ import TableCell from '@material-ui/core/TableCell';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+const initialCss = "";
 class branchlistbycompany extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {           
+          initialCss: initialCss,
+          urlparams: ""
+        };
+      }
+
+      componentDidMount() {
+        var url = new URL(window.location.href);
+        let branchId = url.searchParams.get("branchId");
+        let branchName = url.searchParams.get("branchName");
+        let compName = url.searchParams.get("compName");
+
+        let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
+        this.setState({
+            urlparams: urlparams,
+
+        });
+      }
 
     render() {
         return (
             <Fragment>
+            {console.log("this.props.data > ",this.props.data)}
                 {this.props.data ? (
                     <div style={{marginLeft:50,marginTop:-56}}>
                         <Grid container spacing={0}>
@@ -42,13 +64,15 @@ class branchlistbycompany extends React.Component {
                                                 className={this.state.initialCss}
                                                 hover
                                                 key={i}
-                                            //onClick={(event) => handleRowClick(event,item,"row_"+i)}
+                                             
                                             >
                                                 <TableCell align="left">
-
+                                                <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >
+                                                B{item.branchId}
+                                                </a>
                                                 </TableCell>
                                                 <TableCell align="left">
-
+                                                <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >{item.name}</a>
                                                 </TableCell>
 
                                             </TableRow>

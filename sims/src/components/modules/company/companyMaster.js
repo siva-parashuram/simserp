@@ -83,16 +83,16 @@ class companyMaster extends React.Component {
       let branchId = url.searchParams.get("branchId");
       let branchName = url.searchParams.get("branchName");
       let compName = url.searchParams.get("compName");
+      let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
       this.setState({
         branchName: branchName,
         branchId: branchId,
         compName: compName,
+        urlparams: urlparams,
       });
     } else {
       this.setState({ isLoggedIn: false });
     }
-
-
   }
 
   handleCheckboxChange = (e, id) => {
@@ -150,8 +150,10 @@ class companyMaster extends React.Component {
     const handleRowClick = (e, item, id) => {
       console.log("handleRowClick > e > ", e);
       console.log("handleRowClick > item > ", item);
-      getCompanyBranchList(item.companyId);
-      this.setState({ DeleteDisabled: false });
+      let branches=item.branches;
+
+     // getCompanyBranchList(item.companyId);
+      this.setState({ DeleteDisabled: false,branch:branches });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add('selectedRow');
     }
