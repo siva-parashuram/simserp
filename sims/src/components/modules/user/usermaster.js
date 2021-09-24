@@ -311,7 +311,7 @@ class usermaster extends React.Component {
                                                 >
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editUser + this.state.urlparams+"&userId="+item.userId} >
-                                                            U{item.userId}
+                                                             {URLS.PREFIX.userID+item.userId}
                                                         </a>
                                                     </TableCell>
                                                     <TableCell align="left">

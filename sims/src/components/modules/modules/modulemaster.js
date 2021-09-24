@@ -239,7 +239,7 @@ class modulemasters extends React.Component {
                                                 >
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams+"&moduleId="+item.moduleId} >
-                                                            M{item.moduleId}
+                                                            {URLS.PREFIX.moduleID+item.moduleId}
                                                         </a>
                                                     </TableCell>
                                                     <TableCell align="left">

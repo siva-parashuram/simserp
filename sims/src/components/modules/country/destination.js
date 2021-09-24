@@ -87,7 +87,7 @@ class destination extends React.Component {
 
                                                             <TableRow>
                                                                 <TableCell>
-                                                                    <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams + "&&destinationId=" + item.destinationId + "&&countryId=" + item.countryId} >D{item.destinationId} </a>
+                                                                    <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams + "&&destinationId=" + item.destinationId + "&&countryId=" + item.countryId} >{URLS.PREFIX.destinationID+item.destinationId} </a>
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams + "&&destinationId=" + item.destinationId + "&&countryId=" + item.countryId} >{item.destinationName} </a>

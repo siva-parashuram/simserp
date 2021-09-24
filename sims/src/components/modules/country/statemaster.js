@@ -243,7 +243,7 @@ class statemaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >ST{item.stateId}</a>
+                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{URLS.PREFIX.stateID+item.stateId}</a>
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{item.name}</a>

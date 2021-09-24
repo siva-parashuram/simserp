@@ -80,9 +80,16 @@ class addpage extends React.Component {
             pageLink: null,
             description: null,
             createBtnDisable: true,
-            updateBtnDisable:true,
+            updateBtnDisable: true,
             refreshPageLinkList: false,
-            modules:[]
+            modules: [],
+            rowsPerPageOptions: 5,
+            pageSize: 100,
+            Validations: {
+                pageName: { errorState: false, errorMsg: "" },
+                pageLink: { errorState: false, errorMsg: "" },
+
+            }
 
         };
     }
@@ -100,7 +107,7 @@ class addpage extends React.Component {
         });
     }
 
-    getModules(){
+    getModules() {
         let rows = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -112,36 +119,36 @@ class addpage extends React.Component {
 
         axios.post(GetModulesUrl, ValidUser, { headers })
             .then(response => {
-                if(response.status===200){
+                if (response.status === 200) {
                     let data = response.data;
                     console.log("getModules > response > data > ", data);
                     rows = data;
                     this.setState({ modules: rows, ProgressLoader: true });
                     this.updateColumns(rows);
-                }else{
-                    
+                } else {
+
                 }
-               
+
             }
             ).catch(error => {
                 console.log("error > ", error);
             });
     }
 
-    updateColumns(modules){
+    updateColumns(modules) {
         let columns = [
             {
                 field: 'pageId',
                 headerName: '#',
                 width: 100,
-        
+
             },
             {
                 field: 'pageName',
                 headerName: 'Page Name',
                 width: 150,
                 editable: true,
-        
+
             },
             {
                 field: 'pageLink',
@@ -160,24 +167,31 @@ class addpage extends React.Component {
             {
                 field: 'moduleId',
                 headerName: 'Module',
-                width: 250,              
+                width: 250,
                 renderCell: (params) => (
                     <Fragment>
-                    {console.log("params > ",params)}
+                        {console.log("params > ", params)}
                         <select
-                        className="dropdown-css"
-                        value={params.value} 
+                            className="dropdown-css"
+                            defaultValue={params.value}
+                            onChange={(e) => this.handleDropdownChange(e, params)}
                         >
-                       { modules.map((item, i) => (
-                        <option value={item.moduleId}> {item.name}</option>
-                       ))}
-                         
+                            {modules.map((item, i) => (
+                                <option value={item.moduleId}> {item.name}</option>
+                            ))}
+
                         </select>
                     </Fragment>
                 )
             }
         ];
-        this.setState({columns:columns});
+        this.setState({ columns: columns });
+    }
+
+    handleDropdownChange(e, params) {
+        console.log("handleDropdownChange > e > ", e);
+        console.log("handleDropdownChange > params > ", params);
+        this.setState({updateBtnDisable:false});
     }
 
 
@@ -227,44 +241,94 @@ class addpage extends React.Component {
             }
         }
 
-        const processUpdateData = (rowID, col, colEditValue) => {             
-            let rows = this.state.rows;
-                let moduleId=this.props.data.moduleId;
-            for (let i = 0; i < rows.length; i++) {                 
+        const processUpdateData = (rowID, col, colEditValue) => {
+
+            let rows = this.props.data.rows;
+            let moduleId = this.props.data.moduleId;
+
+            console.log("processUpdateData > rows > ", rows);
+            console.log("processUpdateData > moduleId > ", moduleId);
+            for (let i = 0; i < rows.length; i++) {
                 if (rows[i].id === rowID) {
                     rows[i][col] = colEditValue;
-                    rows[i]['moduleId']=moduleId;
+                    rows[i]['moduleId'] = moduleId;
                 }
             }
-            this.setState({ rows: rows });           
-            let ValidUser = APIURLS.ValidUser;
-                ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-                ValidUser.Token = getCookie(COOKIE.TOKEN);
-                const data = {
-                    "validUser": ValidUser,
-                    "page": rows
-                };
-                console.log("processUpdateData > data > ",data);
+            this.setState({ rows: rows, updateBtnDisable: false });
+
         }
+
+        const handleUpdate = () => {
+            let rows = this.state.rows;
+            let moduleId = this.props.data.moduleId;
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            const data = {
+                "validUser": ValidUser,
+                "page": rows
+            };
+            console.log("processUpdateData > data > ", data);
+            this.setState({ updateBtnDisable: true }, () => {
+                getPageListByModuleId(moduleId);
+            });
+        }
+
+
 
         const updateFormValue = (id, e) => {
 
             if (id === "pageName") {
-                this.setState({ pageName: e.target.value });
+                if (e.target.value === "" || e.target.value.length > 20) {
+                    let Validations = this.state.Validations;
+                    if (e.target.value === "") {
+                        Validations.pageName = { errorState: true, errorMsg: "Blank inputs not allowed!" }
+                    }
+                    if (e.target.value.length > 20) {
+                        Validations.pageName = { errorState: true, errorMsg: "Maximum 20 characters Allowed!" }
+                    }
+                    this.setState({ pageName: e.target.value, Validations: Validations }); 
+                } else {
+                    let Validations = this.state.Validations;
+                    Validations.Description = { errorState: false, errorMsg: "" };
+                    this.setState({ pageName: e.target.value, Validations: Validations });
+                }
             }
             if (id === "pageLink") {
-                this.setState({ pageLink: e.target.value });
+                if (e.target.value === "" || e.target.value.length > 100) {
+                    let Validations = this.state.Validations;
+                    if (e.target.value === "") {
+                        Validations.pageLink = { errorState: true, errorMsg: "Blank inputs not allowed!" }
+                    }
+                    if (e.target.value.length > 100) {
+                        Validations.pageLink = { errorState: true, errorMsg: "Maximum 100 characters Allowed!" }
+                    }
+                    this.setState({ pageLink: e.target.value, Validations: Validations });
+                } else {
+                    let Validations = this.state.Validations;
+                    Validations.pageLink = { errorState: false, errorMsg: "" };
+                    this.setState({ pageLink: e.target.value, Validations: Validations });
+                }
             }
             if (id === "description") {
                 this.setState({ description: e.target.value });
             }
-            enableCreateBtn();
-
         }
 
         const enableCreateBtn = () => {
             if ((this.state.pageName !== "" || this.state.pageName != null) && (this.state.pageLink !== "" || this.state.pageLink != null)) {
-                this.setState({ createBtnDisable: false });
+                this.setState({ createBtnDisable: true });
+                if(this.state.pageName!=null && this.state.pageLink != null){
+                    if(this.state.pageName.length>20 || this.state.pageName !== ""){
+                        this.setState({ createBtnDisable: true });
+                     }else if(this.state.pageLink.length>100 || this.state.pageLink !== ""){
+                        this.setState({ createBtnDisable: true });
+                     }else{
+                        this.setState({ createBtnDisable: false });
+                     }
+                }else{
+                    this.setState({ createBtnDisable: false });
+                }
             }
         }
 
@@ -294,9 +358,6 @@ class addpage extends React.Component {
                 };
                 let CreatePageUrl = APIURLS.APIURL.CreatePage;
                 console.log("handlecreate > data > ", data);
-                 
-                
-
                 axios.post(CreatePageUrl, data, { headers })
                     .then(response => {
                         let data = response.data;
@@ -310,7 +371,6 @@ class addpage extends React.Component {
         }
 
         const getPageListByModuleId = (moduleId) => {
-
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -335,37 +395,31 @@ class addpage extends React.Component {
                         let data = response.data;
                         console.log("getPageList > response > data > ", data);
                         resetDataList(data);
-                       
-
                     } else {
-
                     }
-
                 }
                 ).catch(error => {
                     console.log("error > ", error);
                 });
-
-
         }
 
         const resetDataList = (data) => {
             let rows = [];
             for (let i = 0; i < data.length; i++) {
                 let r = {
-                    id:data[i].pageId,
-                    pageId: "PL"+data[i].pageId,
+                    id: data[i].pageId,
+                    pageId: URLS.PREFIX.pageID + data[i].pageId,
                     pageName: data[i].pageName,
                     pageLink: data[i].pageLink,
                     description: data[i].description
                 };
                 rows.push(r);
             }
-            console.log("rows > ",rows);
+            console.log("rows > ", rows);
             this.setState({ rows: rows }, () => {
                 this.setState({ refreshPageLinkList: true });
             });
-            
+
         }
 
         const handleAccordionClick = (val, e) => {
@@ -378,18 +432,14 @@ class addpage extends React.Component {
 
         return (
             <Fragment>
-
-                
-
                 {this.props.data ? (
-                    <Fragment>
-
+                    <div style={{marginTop:-50}}>
                         <Grid container spacing={3}>
                             <Grid xs={12} sm={12} md={3} lg={3}>
                                 <Button
-                                    style={{ marginLeft: 10 }}                                  
+                                    style={{ marginLeft: 10 }}
                                     disabled={this.state.updateBtnDisable}
-
+                                    onClick={handleUpdate}
                                 >
                                     Update
                                 </Button>
@@ -403,9 +453,9 @@ class addpage extends React.Component {
                                 <DataGrid
                                     rows={this.state.rows}
                                     columns={this.state.columns}
-                                    pageSize={100}
-                                    rowsPerPageOptions={[5]}
-                                    checkboxSelection={true}
+                                    pageSize={this.state.pageSize}
+                                    rowsPerPageOptions={[this.state.rowsPerPageOptions]}
+                                    // checkboxSelection={true}
                                     // onRowClick={(e) => {                            
                                     //     handleRowClick(e)
                                     // }}
@@ -418,25 +468,25 @@ class addpage extends React.Component {
                                 />
                             ) : (
                                 <Fragment>
-                                
-                                <DataGrid
-                                    rows={this.props.data.rows}
-                                    columns={this.state.columns}
-                                    pageSize={100}
-                                    rowsPerPageOptions={[5]}
-                                    // checkboxSelection={true}
-                                    // onRowClick={(e) => {                            
-                                    //     handleRowClick(e)
-                                    // }}
-                                    // onSelectionModelChange={(e) => {
-                                    //     onSelectionModelChange(e)
-                                    // }}
-                                    onEditRowsModelChange={(e) => {
-                                        onEditRowsModelChange(e)
-                                    }}
-                                />
+
+                                    <DataGrid
+                                        rows={this.props.data.rows}
+                                        columns={this.state.columns}
+                                        pageSize={this.state.pageSize}
+                                        rowsPerPageOptions={[this.state.rowsPerPageOptions]}
+                                        // checkboxSelection={true}
+                                        // onRowClick={(e) => {                            
+                                        //     handleRowClick(e)
+                                        // }}
+                                        // onSelectionModelChange={(e) => {
+                                        //     onSelectionModelChange(e)
+                                        // }}
+                                        onEditRowsModelChange={(e) => {
+                                            onEditRowsModelChange(e)
+                                        }}
+                                    />
                                 </Fragment>
-                               
+
                             )}
 
 
@@ -453,11 +503,9 @@ class addpage extends React.Component {
                                 id="panel1a-header"
                                 style={{ minHeight: 20, height: '100%' }}
                             >
-                                <Typography key="" className="accordion-Header-Title">Create New</Typography>
+                                <Typography key="" className="accordion-Header-Title">Create New Page</Typography>
                             </AccordionSummary>
                             <AccordionDetails key="">
-
-
                                 <TableContainer>
                                     <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                         <TableBody className="tableBody">
@@ -494,7 +542,8 @@ class addpage extends React.Component {
                                                         }}
                                                         maxlength={20}
                                                         value={this.state.pageName}
-
+                                                        error={this.state.Validations.pageName.errorState}
+                                                        helperText={this.state.Validations.pageName.errorMsg}
                                                     />
                                                 </TableCell>
                                             </TableRow>
@@ -514,7 +563,8 @@ class addpage extends React.Component {
                                                         }}
                                                         maxlength={20}
                                                         value={this.state.pageLink}
-
+                                                        error={this.state.Validations.pageLink.errorState}
+                                                        helperText={this.state.Validations.pageLink.errorMsg}
                                                     />
                                                 </TableCell>
                                             </TableRow>
@@ -540,21 +590,13 @@ class addpage extends React.Component {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-
-
                             </AccordionDetails>
                         </Accordion>
-
-
-                    </Fragment>
+                    </div>
                 ) : null}
-
-
             </Fragment>
         )
     }
-
-
 }
 
 export default addpage;

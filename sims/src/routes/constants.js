@@ -29,3 +29,14 @@ export const URLS = {
   addModule:"/addModule",
   editModule:"/editModule",
 };
+
+
+export const PREFIX={
+  moduleID:"M",
+  pageID:"PL",
+  companyID:"C",
+  countryID:"CO",
+  stateID:"ST",
+  destinationID:"DEST",
+  userID:"U"
+};

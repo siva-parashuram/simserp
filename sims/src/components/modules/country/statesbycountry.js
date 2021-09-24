@@ -71,7 +71,7 @@ class statesbycountry extends React.Component {
                            
                             <TableRow>
                             <TableCell>
-                            <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >ST{item.stateId}</a>
+                            <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{URLS.PREFIX.stateID+item.stateId}</a>
                             
                             </TableCell>
                             <TableCell> 

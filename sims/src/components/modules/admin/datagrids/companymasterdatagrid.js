@@ -317,7 +317,7 @@ class companymasterdatagrid extends React.Component {
                                                 onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                             >
                                                 <TableCell align="left">
-                                                    <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>C{item.companyId}</a>
+                                                    <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>{URLS.PREFIX.companyID+item.companyId}</a>
                                                 </TableCell>
                                                 <TableCell align="left">
                                                     <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>{item.companyName}</a>

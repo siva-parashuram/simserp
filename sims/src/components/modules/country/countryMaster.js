@@ -309,7 +309,7 @@ class countryMaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >CO{item.countryId}</a>
+                                                        <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >{URLS.PREFIX.countryID+item.countryId}</a>
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >{item.name}</a>
