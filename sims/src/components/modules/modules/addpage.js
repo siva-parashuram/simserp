@@ -16,6 +16,9 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -79,7 +82,7 @@ class addpage extends React.Component {
             pageName: null,
             pageLink: null,
             description: null,
-            createBtnDisable: true,
+            createBtnDisable: false,
             updateBtnDisable: true,
             refreshPageLinkList: false,
             modules: [],
@@ -108,6 +111,7 @@ class addpage extends React.Component {
     }
 
     getModules() {
+        
         let rows = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -123,15 +127,14 @@ class addpage extends React.Component {
                     let data = response.data;
                     console.log("getModules > response > data > ", data);
                     rows = data;
-                    this.setState({ modules: rows, ProgressLoader: true });
+                    this.setState({ modules: rows });
                     this.updateColumns(rows);
                 } else {
-
                 }
-
             }
             ).catch(error => {
                 console.log("error > ", error);
+                this.setState({ProgressLoader:false});
             });
     }
 
@@ -141,36 +144,31 @@ class addpage extends React.Component {
                 field: 'pageId',
                 headerName: '#',
                 width: 100,
-
+                headerClassName:'table-header-font'
             },
             {
                 field: 'pageName',
                 headerName: 'Page Name',
-                width: 150,
+                width: 180,
                 editable: true,
-
+                headerClassName:'table-header-font'
             },
             {
                 field: 'pageLink',
                 headerName: 'Page Link',
-                width: 150,
+                width: 180,
+                cellClassName:"pageLink-css",
                 editable: true,
-                filterable: true
-            },
-            {
-                field: 'description',
-                headerName: 'Description',
-                width: 250,
-                editable: true,
-                filterable: true
+                filterable: true,
+                headerClassName:'table-header-font'
             },
             {
                 field: 'moduleId',
                 headerName: 'Module',
-                width: 250,
+                width: 150,
+                headerClassName:'table-header-font',
                 renderCell: (params) => (
-                    <Fragment>
-                        {console.log("params > ", params)}
+                    <Fragment>                       
                         <select
                             className="dropdown-css"
                             defaultValue={params.value}
@@ -183,15 +181,115 @@ class addpage extends React.Component {
                         </select>
                     </Fragment>
                 )
+            },
+            {
+                field: 'description',
+                headerName: 'Description',
+                width: 320,
+                headerClassName:'table-header-font',
+                editable: true,
+                filterable: true
             }
         ];
         this.setState({ columns: columns });
+        this.setState({ProgressLoader:true});
     }
 
     handleDropdownChange(e, params) {
-        console.log("handleDropdownChange > e > ", e);
-        console.log("handleDropdownChange > params > ", params);
-        this.setState({updateBtnDisable:false});
+        this.setState({ProgressLoader:false});
+        console.log("==========================================================");        
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        let PageId= parseInt(params.id);
+        let moduleId = this.props.data.moduleId;
+        const data = {
+            "validUser": ValidUser,
+            "page": {
+                PageId: PageId,
+                ModuleId:  parseInt(e.target.value),
+                PageName: null,
+                PageLink: null,
+                Description: null,
+            }
+        };  
+        const headers = {
+            "Content-Type": "application/json"
+        };       
+        let UpdateModuleIdByPageIDUrl = APIURLS.APIURL.UpdateModuleIdByPageID;
+        axios.post(UpdateModuleIdByPageIDUrl, data, { headers })
+            .then(response => {
+                if (response.status === 200) {
+                    let data = response.data;
+                    console.log("handleDropdownChange > response > data > ", data);
+                    this.refreshPageListByModuleId(moduleId);
+                    this.setState({ProgressLoader:true});
+                } else {
+                }
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+                this.setState({ProgressLoader:true});
+            });
+
+
+        
+       
+        console.log("==========================================================");
+    }
+
+     refreshPageListByModuleId(moduleId){
+       
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const data = {
+            "validUser": ValidUser,
+            "page": {
+                PageId: 0,
+                ModuleId: moduleId,
+                PageName: null,
+                PageLink: null,
+                Description: null,
+            }
+        };
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetPageByModuleIdUrl = APIURLS.APIURL.GetPageByModuleId;
+        axios.post(GetPageByModuleIdUrl, data, { headers })
+            .then(response => {
+                if (response.status === 200) {
+                    let data = response.data;
+                    console.log("getPageList > response > data > ", data);
+                    this.refreshDataList(data);
+                    this.setState({ProgressLoader:true});
+                } else {
+                }
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+                this.setState({ProgressLoader:true});
+            });
+    }
+
+    refreshDataList (data){
+        this.setState({ProgressLoader:false});
+        let rows = [];
+        for (let i = 0; i < data.length; i++) {
+            let r = {
+                id: data[i].pageId,
+                pageId: URLS.PREFIX.pageID + data[i].pageId,
+                pageName: data[i].pageName,
+                pageLink: data[i].pageLink,
+                description: data[i].description
+            };
+            rows.push(r);
+        }  
+        this.props.data.rows=rows;     
+        // this.setState({ rows: rows }, () => {
+        //     this.setState({ refreshPageLinkList: true });
+        // });
     }
 
 
@@ -259,19 +357,34 @@ class addpage extends React.Component {
         }
 
         const handleUpdate = () => {
+            this.setState({ProgressLoader:false});
             let rows = this.state.rows;
             let moduleId = this.props.data.moduleId;
+            let page=[];
+            for(let i=0;i<rows.length;i++){
+               let p={
+                    PageId: rows[i].id,
+                    ModuleId: rows[i].moduleId,
+                    PageName: rows[i].pageName,
+                    PageLink: rows[i].pageLink,
+                    Description: rows[i].description
+                };
+                page.push(p);
+            }
+            
+            
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
             const data = {
                 "validUser": ValidUser,
-                "page": rows
+                "page": page
             };
             console.log("processUpdateData > data > ", data);
             this.setState({ updateBtnDisable: true }, () => {
                 getPageListByModuleId(moduleId);
             });
+            this.setState({ProgressLoader:true});
         }
 
 
@@ -334,6 +447,7 @@ class addpage extends React.Component {
 
 
         const handlecreate = (moduleId) => {
+            this.setState({ProgressLoader:false});
             console.log("handlecreate > moduleId > ", moduleId);
             let pageName = this.state.pageName;
             let pageLink = this.state.pageLink;
@@ -363,14 +477,23 @@ class addpage extends React.Component {
                         let data = response.data;
                         console.log("handleUpdate > response > data > ", data);
                         getPageListByModuleId(moduleId);
+                        
+                        this.setState({
+                            pageName: null,
+                            pageLink: null,
+                            description: null
+                        });
+                        this.setState({ProgressLoader:true});
                     }
                     ).catch(error => {
                         console.log("error > ", error);
+                        this.setState({ProgressLoader:true});
                     });
             }
         }
 
         const getPageListByModuleId = (moduleId) => {
+            this.setState({ProgressLoader:false});
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -400,6 +523,7 @@ class addpage extends React.Component {
                 }
                 ).catch(error => {
                     console.log("error > ", error);
+                    this.setState({ProgressLoader:true});
                 });
         }
 
@@ -415,9 +539,10 @@ class addpage extends React.Component {
                 };
                 rows.push(r);
             }
-            console.log("rows > ", rows);
+           
             this.setState({ rows: rows }, () => {
                 this.setState({ refreshPageLinkList: true });
+                this.setState({ProgressLoader:true});
             });
 
         }
@@ -430,10 +555,40 @@ class addpage extends React.Component {
 
         }
 
+        
+        const closeErrorPrompt = (event, reason) => {
+            if (reason === 'clickaway') {
+                return;
+            }
+            this.setState({ SuccessPrompt: false });
+        }
+
+        const closeSuccessPrompt = (event, reason) => {
+            if (reason === 'clickaway') {
+                return;
+            }
+            this.setState({ SuccessPrompt: false });
+        }
+
+        function Alert(props) {
+            return <MuiAlert elevation={6} variant="filled" {...props} />;
+        }
+
         return (
             <Fragment>
                 {this.props.data ? (
                     <div style={{marginTop:-50}}>
+                    {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+
+                    <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
+                        <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
+                    </Snackbar>
+    
+                    <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
+                        <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
+                    </Snackbar>
+                    <div style={{ height: 20 }}></div>
+
                         <Grid container spacing={3}>
                             <Grid xs={12} sm={12} md={3} lg={3}>
                                 <Button
@@ -540,7 +695,7 @@ class addpage extends React.Component {
                                                         InputProps={{
                                                             className: "textFieldCss",
                                                         }}
-                                                        maxlength={20}
+                                                        
                                                         value={this.state.pageName}
                                                         error={this.state.Validations.pageName.errorState}
                                                         helperText={this.state.Validations.pageName.errorMsg}
@@ -561,7 +716,7 @@ class addpage extends React.Component {
                                                         InputProps={{
                                                             className: "textFieldCss",
                                                         }}
-                                                        maxlength={20}
+                                                        
                                                         value={this.state.pageLink}
                                                         error={this.state.Validations.pageLink.errorState}
                                                         helperText={this.state.Validations.pageLink.errorMsg}

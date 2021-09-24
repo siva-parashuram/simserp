@@ -407,6 +407,11 @@ cursor: pointer;
    cursor: pointer !important;
  }
 
+ .pageLink-css{
+   color: #01579b !important;
+   text-decoration: underline !important;
+ }
+
  
 
 /**************************************************************************************************************************/

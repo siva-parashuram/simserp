@@ -45,6 +45,7 @@ export const APIURL = {
     GetPages:domain+"api/Page/GetPages",
     GetPageByModuleId:domain+"api/Page/GetPageByModuleId",
     UpdatePage:domain+"api/Page/UpdatePage",
+    UpdateModuleIdByPageID:domain+"api/Page/UpdateModuleIdByPageID"
   };
 
   export const CTimeOut = 10; 
