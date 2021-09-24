@@ -7,7 +7,7 @@ import LoginPage from "../components/login";
 
 import userDashboard from "../components/user/userDashboard"; 
 import testReport from "../components/reports/testReport";
-import companyMaster from "../components/modules/admin/companyMaster"; 
+import companyMaster from "../components/modules/company/companyMaster"; 
 import addNewCompany from "../components/modules/company/addnewcompany";
 import editCompany from "../components/modules/company/editcompany";
 import report1 from "../components/modules/reports/report1";
