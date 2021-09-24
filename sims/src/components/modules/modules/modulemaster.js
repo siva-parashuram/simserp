@@ -65,7 +65,7 @@ class modulemasters extends React.Component {
 
         axios.post(GetModulesUrl, ValidUser, { headers })
             .then(response => {
-                if(response.status==200){
+                if(response.status===200){
                     let data = response.data;
                     console.log("getModules > response > data > ", data);
                     rows = data;
@@ -215,7 +215,7 @@ class modulemasters extends React.Component {
                     </Grid>
                     <div style={{ height: 20 }}></div>
                     <Grid container spacing={0}>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
+                        <Grid xs={12} sm={12} md={4} lg={4}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={10} lg={10}>
                                     <Table stickyHeader size="small" className="" aria-label="Country List table">
@@ -257,7 +257,7 @@ class modulemasters extends React.Component {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
+                        <Grid xs={12} sm={12} md={8} lg={8}>
                             <Grid container spacing={1}>
                                 <Grid xs={12} sm={12} md={11} lg={11}>
                                 

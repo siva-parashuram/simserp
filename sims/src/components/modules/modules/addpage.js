@@ -21,7 +21,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
-const columns = [
+let columns = [
     {
         field: 'pageId',
         headerName: '#',
@@ -48,16 +48,21 @@ const columns = [
         width: 250,
         editable: true,
         filterable: true
+    },
+    {
+        field: 'moduleId',
+        headerName: 'Module',
+        width: 250
     }
 ];
 
 const rows = [
-    { pageId: 1, pageName: 'Company Master', pageLink: 'companyMaster', description: 'company master page', },
-    { pageId: 2, pageName: 'Country Master', pageLink: 'countryMaster', description: 'country master page' },
-    { pageId: 3, pageName: 'State Master', pageLink: 'stateMaster', description: 'state master page' },
-    { pageId: 4, pageName: 'User Master', pageLink: 'userMaster', description: 'user master page' },
-    { pageId: 5, pageName: 'Branch Master', pageLink: 'companyMaster', description: 'company master page' },
-    { pageId: 6, pageName: 'Module Master', pageLink: 'moduleMaster', description: 'module master page' },
+    // { pageId: 1, pageName: 'Company Master', pageLink: 'companyMaster', description: 'company master page', },
+    // { pageId: 2, pageName: 'Country Master', pageLink: 'countryMaster', description: 'country master page' },
+    // { pageId: 3, pageName: 'State Master', pageLink: 'stateMaster', description: 'state master page' },
+    // { pageId: 4, pageName: 'User Master', pageLink: 'userMaster', description: 'user master page' },
+    // { pageId: 5, pageName: 'Branch Master', pageLink: 'companyMaster', description: 'company master page' },
+    // { pageId: 6, pageName: 'Module Master', pageLink: 'moduleMaster', description: 'module master page' },
 
 ];
 
@@ -77,12 +82,13 @@ class addpage extends React.Component {
             createBtnDisable: true,
             updateBtnDisable:true,
             refreshPageLinkList: false,
+            modules:[]
 
         };
     }
 
     componentDidMount() {
-
+        this.getModules();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -94,7 +100,85 @@ class addpage extends React.Component {
         });
     }
 
+    getModules(){
+        let rows = [];
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json"
+        };
+        let GetModulesUrl = APIURLS.APIURL.GetModules;
 
+        axios.post(GetModulesUrl, ValidUser, { headers })
+            .then(response => {
+                if(response.status===200){
+                    let data = response.data;
+                    console.log("getModules > response > data > ", data);
+                    rows = data;
+                    this.setState({ modules: rows, ProgressLoader: true });
+                    this.updateColumns(rows);
+                }else{
+                    
+                }
+               
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+    }
+
+    updateColumns(modules){
+        let columns = [
+            {
+                field: 'pageId',
+                headerName: '#',
+                width: 100,
+        
+            },
+            {
+                field: 'pageName',
+                headerName: 'Page Name',
+                width: 150,
+                editable: true,
+        
+            },
+            {
+                field: 'pageLink',
+                headerName: 'Page Link',
+                width: 150,
+                editable: true,
+                filterable: true
+            },
+            {
+                field: 'description',
+                headerName: 'Description',
+                width: 250,
+                editable: true,
+                filterable: true
+            },
+            {
+                field: 'moduleId',
+                headerName: 'Module',
+                width: 250,              
+                renderCell: (params) => (
+                    <Fragment>
+                    {console.log("params > ",params)}
+                        <select
+                        className="dropdown-css"
+                        value={params.value} 
+                        >
+                       { modules.map((item, i) => (
+                        <option value={item.moduleId}> {item.name}</option>
+                       ))}
+                         
+                        </select>
+                    </Fragment>
+                )
+            }
+        ];
+        this.setState({columns:columns});
+    }
 
 
     processResetData(data) {
@@ -124,61 +208,35 @@ class addpage extends React.Component {
         const onEditRowsModelChange = (e) => {
             console.log("onEditRowsModelChange > ", e);
             var keys = Object.keys(e);
-            // console.log("onEditRowsModelChange > keys", keys);
-
             if (keys.length === 0) {
             } else {
-                // console.log("================================================");    
                 let rowID = parseInt(keys[0]);
                 let data = e[keys[0]];
-                // console.log("onEditRowsModelChange > value", data);
                 var DataKeys = Object.keys(data);
-                // console.log("onEditRowsModelChange > DataKeys", DataKeys);
                 let col = DataKeys[0];
-                // console.log("onEditRowsModelChange > col", col);
                 let colEditValue = data[col].value;
-                // console.log("onEditRowsModelChange > colEditValue", colEditValue);
-
                 if (col === "pageName") {
-                    //   console.log("Process updating pageName value for ROW ID > ",rowID);
-                    //   console.log("col Name cell : ", col);
-                    //   console.log("col Name cell Value :", colEditValue);
                     processUpdateData(rowID, col, colEditValue);
-                   // console.log("New STate > ", this.state.rows);
                 }
                 if (col === "pageLink") {
-                    //     console.log("Process updating pageLink value for ROW ID > ",rowID);
-                    //     console.log("col Name cell : ", col);
-                    //   console.log("col Name cell Value :", colEditValue);
                     processUpdateData(rowID, col, colEditValue);
-                   // console.log("New STate > ", this.state.rows);
                 }
                 if (col === "description") {
-                    //     console.log("Process updating description value for ROW ID > ",rowID);
-                    //     console.log("col Name cell : ", col);
-                    //   console.log("col Name cell Value :", colEditValue);
                     processUpdateData(rowID, col, colEditValue);
-                   // console.log("New STate > ", this.state.rows);
                 }
-
-                // console.log("================================================");         
-
             }
         }
 
-        const processUpdateData = (rowID, col, colEditValue) => {
+        const processUpdateData = (rowID, col, colEditValue) => {             
             let rows = this.state.rows;
                 let moduleId=this.props.data.moduleId;
-            for (let i = 0; i < rows.length; i++) {
-                //{ id: 1, pageName: 'Company Master', pageLink: 'companyMaster', description: 'company master page', }
+            for (let i = 0; i < rows.length; i++) {                 
                 if (rows[i].id === rowID) {
                     rows[i][col] = colEditValue;
                     rows[i]['moduleId']=moduleId;
                 }
             }
-            this.setState({ rows: rows });
-
-            // let UpdatePageUrl=
+            this.setState({ rows: rows });           
             let ValidUser = APIURLS.ValidUser;
                 ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
                 ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -187,7 +245,6 @@ class addpage extends React.Component {
                     "page": rows
                 };
                 console.log("processUpdateData > data > ",data);
-
         }
 
         const updateFormValue = (id, e) => {
@@ -352,9 +409,9 @@ class addpage extends React.Component {
                                     // onRowClick={(e) => {                            
                                     //     handleRowClick(e)
                                     // }}
-                                    onSelectionModelChange={(e) => {
-                                        onSelectionModelChange(e)
-                                    }}
+                                    // onSelectionModelChange={(e) => {
+                                    //     onSelectionModelChange(e)
+                                    // }}
                                     onEditRowsModelChange={(e) => {
                                         onEditRowsModelChange(e)
                                     }}
@@ -367,13 +424,13 @@ class addpage extends React.Component {
                                     columns={this.state.columns}
                                     pageSize={100}
                                     rowsPerPageOptions={[5]}
-                                    checkboxSelection={true}
+                                    // checkboxSelection={true}
                                     // onRowClick={(e) => {                            
                                     //     handleRowClick(e)
                                     // }}
-                                    onSelectionModelChange={(e) => {
-                                        onSelectionModelChange(e)
-                                    }}
+                                    // onSelectionModelChange={(e) => {
+                                    //     onSelectionModelChange(e)
+                                    // }}
                                     onEditRowsModelChange={(e) => {
                                         onEditRowsModelChange(e)
                                     }}
