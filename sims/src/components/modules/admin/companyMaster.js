@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
-import Drawer from "../../user/drawer";
+ 
 import Nav from "../../user/nav";
  
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import { makeStyles } from '@material-ui/core/styles';
+ 
+ 
 import '../../user/dasboard.css';
 import { COOKIE, getCookie } from "../../../services/cookie";
 
@@ -56,15 +56,7 @@ class companyMaster extends React.Component {
   }
 
   render() {
-    const useStyles = makeStyles((theme) => ({
-      root: {
-        display: 'flex',
-      },
-      appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-      },
-
-    }));
+     
 
 
     return (

@@ -1,6 +1,6 @@
 import './dasboard.css';
 import React, { Fragment } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+ 
 import { COOKIE, getCookie } from "../../services/cookie";
  
 import Menubar from "../user/menubar";
@@ -47,14 +47,7 @@ class userDashboard extends React.Component {
   }
 
   render() {
-    const useStyles = makeStyles((theme) => ({
-      root: {
-        display: 'flex',
-      },
-      appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-      },
-    }));
+     
 
 
 

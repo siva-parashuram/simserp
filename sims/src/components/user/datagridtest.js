@@ -3,7 +3,7 @@ import React from 'react';
 // import { COOKIE, createCookie, deleteCookie, getCookie } from "../../services/cookie";
 // import * as URLS from "../../routes/constants";
 
-import { makeStyles } from '@material-ui/core/styles';
+ 
  
 import { DataGrid } from '@material-ui/data-grid';
 import Alert from '@material-ui/lab/Alert';
@@ -55,10 +55,7 @@ class datagridtest extends React.Component {
 
     render() {
 
-        const useStyles = makeStyles((theme) => ({
-           
-
-        }));
+       
 
         const columns = [
           { field: 'sno', headerName: 'sno', type: 'number', width: 100, editable: false },

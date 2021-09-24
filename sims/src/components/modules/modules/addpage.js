@@ -197,7 +197,7 @@ class addpage extends React.Component {
 
     handleDropdownChange(e, params) {
         this.setState({ProgressLoader:false});
-        console.log("==========================================================");        
+       
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -220,8 +220,7 @@ class addpage extends React.Component {
         axios.post(UpdateModuleIdByPageIDUrl, data, { headers })
             .then(response => {
                 if (response.status === 200) {
-                    let data = response.data;
-                    console.log("handleDropdownChange > response > data > ", data);
+                    let data = response.data;                 
                     this.refreshPageListByModuleId(moduleId);
                     this.setState({ProgressLoader:true});
                 } else {
@@ -230,12 +229,7 @@ class addpage extends React.Component {
             ).catch(error => {
                 console.log("error > ", error);
                 this.setState({ProgressLoader:true});
-            });
-
-
-        
-       
-        console.log("==========================================================");
+            }); 
     }
 
      refreshPageListByModuleId(moduleId){
@@ -287,9 +281,7 @@ class addpage extends React.Component {
             rows.push(r);
         }  
         this.props.data.rows=rows;     
-        // this.setState({ rows: rows }, () => {
-        //     this.setState({ refreshPageLinkList: true });
-        // });
+        
     }
 
 
@@ -344,14 +336,14 @@ class addpage extends React.Component {
             let rows = this.props.data.rows;
             let moduleId = this.props.data.moduleId;
 
-            console.log("processUpdateData > rows > ", rows);
-            console.log("processUpdateData > moduleId > ", moduleId);
+           
             for (let i = 0; i < rows.length; i++) {
                 if (rows[i].id === rowID) {
                     rows[i][col] = colEditValue;
                     rows[i]['moduleId'] = moduleId;
                 }
             }
+            this.props.data.rows=rows;     
             this.setState({ rows: rows, updateBtnDisable: false });
 
         }
@@ -381,10 +373,24 @@ class addpage extends React.Component {
                 "page": page
             };
             console.log("processUpdateData > data > ", data);
-            this.setState({ updateBtnDisable: true }, () => {
-                getPageListByModuleId(moduleId);
-            });
-            this.setState({ProgressLoader:true});
+            const headers = {
+                "Content-Type": "application/json"
+            };
+            let UpdateUrl = APIURLS.APIURL;
+           
+            axios.post(UpdateUrl, data, { headers })
+                .then(response => {
+                    let data = response.data;
+                    console.log("handleUpdate > response > data > ", data);
+                    this.setState({ updateBtnDisable: true }, () => {
+                        getPageListByModuleId(moduleId);
+                    });
+                    this.setState({ProgressLoader:true});
+                }
+                ).catch(error => {
+                    console.log("error > ", error);
+                    this.setState({ProgressLoader:true});
+                });           
         }
 
 
@@ -477,12 +483,10 @@ class addpage extends React.Component {
                         let data = response.data;
                         console.log("handleUpdate > response > data > ", data);
                         getPageListByModuleId(moduleId);
-                        
-                        this.setState({
-                            pageName: null,
-                            pageLink: null,
-                            description: null
-                        });
+                        document.getElementById("pageName").value=null;
+                        document.getElementById("pageLink").value=null;
+                        document.getElementById("description").value=null;
+                      
                         this.setState({ProgressLoader:true});
                     }
                     ).catch(error => {
@@ -539,11 +543,9 @@ class addpage extends React.Component {
                 };
                 rows.push(r);
             }
-           
-            this.setState({ rows: rows }, () => {
-                this.setState({ refreshPageLinkList: true });
-                this.setState({ProgressLoader:true});
-            });
+            this.props.data.rows=rows;     
+            this.setState({ProgressLoader:true});
+            
 
         }
 
@@ -601,9 +603,7 @@ class addpage extends React.Component {
                             </Grid>
                         </Grid>
                         <div style={{ height: 20 }}></div>
-
                         <div style={{ height: 300, width: '100%' }}>
-
                             {this.state.refreshPageLinkList ? (
                                 <DataGrid
                                     rows={this.state.rows}
@@ -696,7 +696,7 @@ class addpage extends React.Component {
                                                             className: "textFieldCss",
                                                         }}
                                                         
-                                                        value={this.state.pageName}
+                                                       
                                                         error={this.state.Validations.pageName.errorState}
                                                         helperText={this.state.Validations.pageName.errorMsg}
                                                     />
@@ -716,8 +716,8 @@ class addpage extends React.Component {
                                                         InputProps={{
                                                             className: "textFieldCss",
                                                         }}
+                                                       
                                                         
-                                                        value={this.state.pageLink}
                                                         error={this.state.Validations.pageLink.errorState}
                                                         helperText={this.state.Validations.pageLink.errorMsg}
                                                     />
@@ -738,7 +738,7 @@ class addpage extends React.Component {
                                                             className: "textFieldCss",
                                                         }}
                                                         maxlength={20}
-                                                        value={this.state.description}
+                                                       
                                                     />
                                                 </TableCell>
                                             </TableRow>
