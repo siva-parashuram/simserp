@@ -362,8 +362,7 @@ class addpage extends React.Component {
                     Description: rows[i].description
                 };
                 page.push(p);
-            }
-            
+            }            
             
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -480,8 +479,6 @@ class addpage extends React.Component {
                 console.log("handlecreate > data > ", data);
                 axios.post(CreatePageUrl, data, { headers })
                     .then(response => {
-                        let data = response.data;
-                        console.log("handleUpdate > response > data > ", data);
                         getPageListByModuleId(moduleId);
                         document.getElementById("pageName").value=null;
                         document.getElementById("pageLink").value=null;
@@ -520,7 +517,6 @@ class addpage extends React.Component {
                 .then(response => {
                     if (response.status === 200) {
                         let data = response.data;
-                        console.log("getPageList > response > data > ", data);
                         resetDataList(data);
                     } else {
                     }
@@ -545,8 +541,6 @@ class addpage extends React.Component {
             }
             this.props.data.rows=rows;     
             this.setState({ProgressLoader:true});
-            
-
         }
 
         const handleAccordionClick = (val, e) => {
@@ -554,7 +548,6 @@ class addpage extends React.Component {
             if (val === "GeneralDetailsExpanded") {
                 this.state.GeneralDetailsExpanded === true ? this.setState({ GeneralDetailsExpanded: false }) : this.setState({ GeneralDetailsExpanded: true })
             }
-
         }
 
         
