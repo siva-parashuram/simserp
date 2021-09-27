@@ -67,7 +67,6 @@ class modulemasters extends React.Component {
             .then(response => {
                 if(response.status===200){
                     let data = response.data;
-                    console.log("getModules > response > data > ", data);
                     rows = data;
                     this.setState({ modules: rows, ProgressLoader: true });
                 }else{
@@ -123,7 +122,6 @@ class modulemasters extends React.Component {
                 .then(response => {
                     if(response.status===200){
                         let data = response.data;
-                        console.log("getPageList > response > data > ", data);
                         resetDataList(data);
                                      
                     }else{

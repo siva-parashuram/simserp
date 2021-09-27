@@ -25,6 +25,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
  
 import ArrowForward from '@material-ui/icons/ArrowForward';
+import Typography from '@mui/material/Typography';
 import axios from "axios";
 import CompanyList from './companyList';
 
@@ -392,18 +393,21 @@ class login extends React.Component {
             </div>
              <div className="spacing-div"></div>
             <div style={{textAlign:'left'}}>
-                  <h5 className="login-thought">
-                    <span>
-                      " 
+                  <Typography  variant="h6" className="login-thought">
+                    <span className="login-thought">
+                       
                       <span>
                       Best Philosophy in life is to keep the mind happy....
                       we don't know whether success gives happiness or not,
                       But a happy mind can always lead to success.
                       </span>
-                      "                      
+                                            
                     </span>
-                    <h4 style={{textAlign:'right',color:'#0072bc'}}>-Team HR</h4>
-                  </h5>
+                     <div  style={{textAlign:'right'}}  className="login-thought">
+                     <span style={{textAlign:'right',color:'#0072bc'}}>-Team HR</span>
+                     </div>
+                    
+                  </Typography>
             </div>
   
             <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
