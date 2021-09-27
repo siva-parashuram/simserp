@@ -143,7 +143,7 @@ export default function ScrollableTabsButtonAuto() {
                             scrollButtons={true}
                             aria-label="Menu Bar Navigation"
                             allowScrollButtonsMobile={true}
-                            
+                            className="menubar-tab-height"
                         >
                             {
                                 moduleList.map((item, i) => (
