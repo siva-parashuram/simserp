@@ -140,8 +140,9 @@ export default function ScrollableTabsButtonAuto() {
                             indicatorColor="primary"
                             textColor="primary"
                             variant="scrollable"
-                            scrollButtons="auto"
+                            scrollButtons={true}
                             aria-label="Menu Bar Navigation"
+                            allowScrollButtonsMobile={true}
                             
                         >
                             {

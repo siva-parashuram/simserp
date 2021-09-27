@@ -198,6 +198,10 @@ cursor: pointer;
   font-weight: 545 !important;
 }
 
+.side-display-accordion-Header-Design{
+  background-color: #fff  !important;
+}
+
 .textFieldCss{
   height: 25px !important;
   font-size: 12px !important;
@@ -410,6 +414,17 @@ cursor: pointer;
  .pageLink-css{
    color: #01579b !important;
    text-decoration: underline !important;
+ }
+
+ .side-display-header-css{
+   font-size: 12px !important;
+   color: #00897b !important;
+   font-weight: bold !important;
+ }
+
+ .side-display-partition-divider{
+  background-color: #004d40  !important;
+  height: 1px !important;
  }
 
  

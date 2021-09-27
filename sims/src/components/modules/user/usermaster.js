@@ -14,6 +14,10 @@ import Switch from '@mui/material/Switch';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -26,6 +30,7 @@ import '../../user/dasboard.css';
 import Nav from "../../user/nav";
 import Menubar from "../../user/menubar";
 import Userbranchalot from '../branch/userbranchalot';
+import Usermoduleassign from "../modules/usermoduleassign";
 
 
 class usermaster extends React.Component {
@@ -33,11 +38,13 @@ class usermaster extends React.Component {
         super(props);
         this.state = {
             urlparams: "",
+            allotBranch: true,
+            allotModule: true,
             ProgressLoader: false,
             initialCss: "",
             users: [],
-            userId:0,
-            passData:[]
+            userId: 0,
+            passData: []
 
         }
     }
@@ -66,16 +73,17 @@ class usermaster extends React.Component {
         axios.post(GetBrachesUrl, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
-                
-                let passData={
-                    userId:this.state.userId,
-                    branches:data,
-                    userBranches:this.getUserBranches(this.state.userId) 
+
+                let passData = {
+                    userId: this.state.userId,
+                    branches: data,
+                    userBranches: this.getUserBranches(this.state.userId)
                 };
-                this.setState({ 
-                    branchData: data, 
-                    passData:passData,
-                    ProgressLoader: true });
+                this.setState({
+                    branchData: data,
+                    passData: passData,
+                    ProgressLoader: true
+                });
             }
             ).catch(error => {
                 //console.log("error > ", error);
@@ -84,79 +92,79 @@ class usermaster extends React.Component {
     }
 
     getUserBranches(userId) {
-        console.log("getUserBranches > ",userId);
-        let userBranches=[];
+        console.log("getUserBranches > ", userId);
+        let userBranches = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
             "Content-Type": "application/json"
         };
-        let data={
-            ValidUser:ValidUser,
-            UserID: userId ,
-            userBranchMappingList:null
+        let data = {
+            ValidUser: ValidUser,
+            UserID: userId,
+            userBranchMappingList: null
         }
         let GetUserBranchMappedByUserIDUrl = APIURLS.APIURL.GetUserBranchMappedByUserID;
 
         axios.post(GetUserBranchMappedByUserIDUrl, data, { headers })
             .then(response => {
-                console.log("getUserBranches > response.data > ",response.data);
+                console.log("getUserBranches > response.data > ", response.data);
                 let data = response.data;
-                
-                this.processData(data.userBranchMappingList,userId);
-                
+
+                this.processData(data.userBranchMappingList, userId);
+
             }
             ).catch(error => {
-                
+
             });
-            return userBranches;
+        return userBranches;
     }
 
-    processData(data,userId){
+    processData(data, userId) {
         let company = [];
         for (let i = 0; i < data.length; i++) {
             let c = {
                 companyID: data[i].companyID,
                 companyName: data[i].companyName,
-                branch:[],
+                branch: [],
             };
             company.push(c);
         }
-        console.log("processData > company > ",company);
-        let uniqueCompany=[];
+        console.log("processData > company > ", company);
+        let uniqueCompany = [];
         company.map(x => uniqueCompany.filter(a => a.companyID === x.companyID && a.companyName === x.companyName).length > 0 ? null : uniqueCompany.push(x));
-        console.log("processData > uniqueCompany > ",uniqueCompany);
+        console.log("processData > uniqueCompany > ", uniqueCompany);
 
-        let branches=[];
+        let branches = [];
         for (let i = 0; i < uniqueCompany.length; i++) {
-             let branch=uniqueCompany[i].branch;
+            let branch = uniqueCompany[i].branch;
             for (let j = 0; j < data.length; j++) {
                 // console.log("uniqueCompany[i] > ",uniqueCompany[i]);
                 // console.log("uniqueCompany[i] > ",uniqueCompany[i]);
-                if(uniqueCompany[i].companyID=== data[j].companyID){
+                if (uniqueCompany[i].companyID === data[j].companyID) {
                     let b = {
                         branchID: data[j].branchID,
                         branchName: data[j].branchName,
-                        mark:data[j].mark,
-                        shortName:data[j].shortName
+                        mark: data[j].mark,
+                        shortName: data[j].shortName
                     };
                     branch.push(b);
                 }
             }
-            uniqueCompany[i].branch=branch;             
+            uniqueCompany[i].branch = branch;
         }
-        console.log("-------> FINAL processData > uniqueCompany > ",uniqueCompany);
-        let passData={
-            userId:userId,
-            companyBranch:uniqueCompany
+        console.log("-------> FINAL processData > uniqueCompany > ", uniqueCompany);
+        let passData = {
+            userId: userId,
+            companyBranch: uniqueCompany
         };
 
         this.setState({ passData: passData });
     }
 
     getUsersList() {
-        this.setState({ProgressLoader: false });
+        this.setState({ ProgressLoader: false });
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -168,10 +176,10 @@ class usermaster extends React.Component {
         axios.post(GetUsersUrl, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
-              console.log("getUsersList > response > data > ", data);
-                this.setState({ 
-                    users: data,                     
-                    ProgressLoader: true 
+                console.log("getUsersList > response > data > ", data);
+                this.setState({
+                    users: data,
+                    ProgressLoader: true
                 });
             }
             ).catch(error => {
@@ -185,10 +193,23 @@ class usermaster extends React.Component {
 
 
     render() {
+
+
+        const handleAccordionClick = (val, e) => {
+            console.log("handleAccordionClick > val > ", val);
+            console.log("handleAccordionClick > e > ", e);
+            if (val === "allotBranch") {
+                this.state.allotBranch === true ? this.setState({ allotBranch: false }) : this.setState({ allotBranch: true })
+            }
+            if (val === "allotModule") {
+                this.state.allotModule === true ? this.setState({ allotModule: false }) : this.setState({ allotModule: true })
+            }
+        }
+
         const handleRowClick = (e, item, id) => {
             this.setState({ passData: [] });
-           console.log("handleRowClick > item > ",item);
-            this.setState({userId:item.userId});
+            console.log("handleRowClick > item > ", item);
+            this.setState({ userId: item.userId });
             removeIsSelectedRowClasses();
             this.getUserBranches(item.userId);
             document.getElementById(id).classList.add('selectedRow');
@@ -200,18 +221,18 @@ class usermaster extends React.Component {
             }
         }
 
-        const changeUserStatus=(item,val)=>{
+        const changeUserStatus = (item, val) => {
             console.log("==================================");
-            console.log("item > ",item);
-            console.log("val > ",val);
-            let users=this.state.users;
-            let index=users.indexOf(item);
-            console.log("index > ",index);
-            let user=users[index];
-            user.isActive=val;
-            users[index]=user;
-            console.log("New users > ",users);
-            this.setState({users:users});
+            console.log("item > ", item);
+            console.log("val > ", val);
+            let users = this.state.users;
+            let index = users.indexOf(item);
+            console.log("index > ", index);
+            let user = users[index];
+            user.isActive = val;
+            users[index] = user;
+            console.log("New users > ", users);
+            this.setState({ users: users });
             console.log("==================================");
         }
 
@@ -279,9 +300,9 @@ class usermaster extends React.Component {
                     </Grid>
                     <div style={{ height: 20 }}></div>
                     <Grid container spacing={0}>
-                        <Grid xs={12} sm={12} md={8} lg={8}>
+                        <Grid xs={12} sm={12} md={5} lg={5}>
                             <Grid container spacing={0}>
-                                <Grid xs={12} sm={12} md={10} lg={10}>
+                                <Grid xs={12} sm={12} md={11} lg={11}>
                                     <Table stickyHeader size="small" className="" aria-label="Country List table">
                                         <TableHead className="table-header-background">
                                             <TableRow>
@@ -296,11 +317,11 @@ class usermaster extends React.Component {
                                                 <TableCell className="table-header-font" align="left">isAdmin</TableCell>
                                                 */}
                                                 <TableCell className="table-header-font" align="left">Status</TableCell>
-                                             
+
                                             </TableRow>
                                         </TableHead>
                                         <TableBody className="tableBody">
-                                        
+
                                             {this.state.users.map((item, i) => (
                                                 <TableRow
                                                     id={"row_" + i}
@@ -310,12 +331,12 @@ class usermaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editUser + this.state.urlparams+"&userId="+item.userId} >
-                                                             {URLS.PREFIX.userID+item.userId}
+                                                        <a className="LINK tableLink" href={URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.userId} >
+                                                            {URLS.PREFIX.userID + item.userId}
                                                         </a>
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editUser + this.state.urlparams+"&userId="+item.userId} >
+                                                        <a className="LINK tableLink" href={URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.userId} >
                                                             {item.emailId}
                                                         </a>
                                                     </TableCell>
@@ -336,15 +357,15 @@ class usermaster extends React.Component {
                                                         {item.isAdmin?item.isAdmin===true?"True":"False":"-"}
                                                     </TableCell>
                                                 */}
-                                                
+
                                                     <TableCell align="left">
-                                                        {item.isActive===true?(
-                                                            <span style={{color:'green'}}>Active</span> // <Switch defaultChecked size="small" onChange={(e)=>changeUserStatus(item,false)}/>
-                                                        ):(
-                                                            <span style={{color:'red'}}>In-Active</span> // <Switch size="small" onChange={(e)=>changeUserStatus(item,true)}/>
+                                                        {item.isActive === true ? (
+                                                            <span style={{ color: 'green' }}>Active</span> // <Switch defaultChecked size="small" onChange={(e)=>changeUserStatus(item,false)}/>
+                                                        ) : (
+                                                            <span style={{ color: 'red' }}>In-Active</span> // <Switch size="small" onChange={(e)=>changeUserStatus(item,true)}/>
                                                         )}
                                                     </TableCell>
-                                                    
+
 
                                                 </TableRow>
 
@@ -355,14 +376,53 @@ class usermaster extends React.Component {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={4} lg={4}>
-                            <Grid container spacing={1}>
-                                <Grid xs={12} sm={12} md={12} lg={12}>
-                                     <Userbranchalot data={
-                                        this.state.passData                                         
-                                        }/>
+                        <Grid xs={12} sm={12} md={7} lg={7}>
+                            <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                    <Accordion key="allotBranch" expanded={this.state.allotBranch} >
+                                        <AccordionSummary
+                                            className="side-display-accordion-Header-Design"
+                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("allotBranch", e)} />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                            style={{ minHeight: 20, height: '100%' }}
+                                        >
+                                            <Typography key="" className="side-display-header-css">Assign Branch</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails key="">
+                                            <Grid container spacing={1}>
+                                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                                    <Userbranchalot data={
+                                                        this.state.passData
+                                                    } />
+                                                </Grid>
+                                            </Grid>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                    <Accordion key="allotModule" expanded={this.state.allotModule} >
+                                    <AccordionSummary
+                                        className="side-display-accordion-Header-Design"
+                                        expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("allotModule", e)} />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                        style={{ minHeight: 20, height: '100%' }}
+                                    >
+                                        <Typography key="" className="side-display-header-css">Assign Module</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails key="">
+                                        <Grid container spacing={1}>
+                                            <Grid xs={12} sm={12} md={11} lg={11}>
+                                            <Usermoduleassign data={
+                                                this.state.userId
+                                            } />
+                                            </Grid>
+                                        </Grid>
+                                    </AccordionDetails>
+                                </Accordion>
+                               
                                 </Grid>
                             </Grid>
+                             
                         </Grid>
                     </Grid>
                 </div>

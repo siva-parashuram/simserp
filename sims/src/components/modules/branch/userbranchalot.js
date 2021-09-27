@@ -231,7 +231,7 @@ class userbranchalot extends React.Component {
                                         startIcon={<AddIcon />}
                                         onClick={(e) => handleBranchAdd(this.props.data.userId)}
                                     >
-                                        Alot branches
+                                        Alot
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -321,7 +321,7 @@ class userbranchalot extends React.Component {
 
                         </div>
 
-                    ) : null:null
+                    ) : null:"Please select User to process"
                 }
 
 
