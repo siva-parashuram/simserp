@@ -228,7 +228,7 @@ class userbranchalot extends React.Component {
                                 <Grid xs={6} sm={6} md={6} lg={6}>
                                     <Button
                                         style={{ marginLeft: 5 }}
-                                        startIcon={<AddIcon />}
+                                        
                                         onClick={(e) => handleBranchAdd(this.props.data.userId)}
                                     >
                                         Alot
@@ -237,7 +237,7 @@ class userbranchalot extends React.Component {
                             </Grid>
                             <div style={{ height: 20 }}></div>
                             <Grid container spacing={0}>
-                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                <Grid xs={12} sm={12} md={12} lg={12}>
                                     <Grid container spacing={0}>
                                         <Grid xs={12} sm={12} md={12} lg={12}>
                                             <Table stickyHeader size="small" className="" aria-label="company Branch List table">

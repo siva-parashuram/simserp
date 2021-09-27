@@ -396,33 +396,37 @@ class usermaster extends React.Component {
                                                         this.state.passData
                                                     } />
                                                 </Grid>
+
                                             </Grid>
+
                                         </AccordionDetails>
                                     </Accordion>
                                     <Accordion key="allotModule" expanded={this.state.allotModule} >
-                                    <AccordionSummary
-                                        className="side-display-accordion-Header-Design"
-                                        expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("allotModule", e)} />}
-                                        aria-controls="panel1a-content"
-                                        id="panel1a-header"
-                                        style={{ minHeight: 20, height: '100%' }}
-                                    >
-                                        <Typography key="" className="side-display-header-css">Assign Module</Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails key="">
-                                        <Grid container spacing={1}>
-                                            <Grid xs={12} sm={12} md={11} lg={11}>
-                                            <Usermoduleassign data={
-                                                this.state.userId
-                                            } />
+                                        <AccordionSummary
+                                            className="side-display-accordion-Header-Design"
+                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("allotModule", e)} />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                            style={{ minHeight: 20, height: '100%' }}
+                                        >
+                                            <Typography key="" className="side-display-header-css">Assign Module</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails key="">
+                                            <Grid container spacing={1}>
+                                                <Grid xs={12} sm={12} md={12} lg={12}>
+                                                    <Usermoduleassign data={
+                                                        this.state.userId
+                                                    } />
+                                                </Grid>
+
                                             </Grid>
-                                        </Grid>
-                                    </AccordionDetails>
-                                </Accordion>
-                               
+
+                                        </AccordionDetails>
+                                    </Accordion>
+
                                 </Grid>
                             </Grid>
-                             
+
                         </Grid>
                     </Grid>
                 </div>

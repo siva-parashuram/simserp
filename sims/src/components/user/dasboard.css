@@ -427,6 +427,10 @@ cursor: pointer;
   height: 1px !important;
  }
 
+ .border-less-datagrid{
+   border-style: none !important;
+ }
+
  
 
 /**************************************************************************************************************************/
