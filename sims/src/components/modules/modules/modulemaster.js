@@ -65,6 +65,7 @@ class modulemasters extends React.Component {
 
         axios.post(GetModulesUrl, ValidUser, { headers })
             .then(response => {
+                console.log("getModules > response > ", response);
                 if(response.status===200){
                     let data = response.data;
                     rows = data;
@@ -75,7 +76,8 @@ class modulemasters extends React.Component {
                
             }
             ).catch(error => {
-                console.log("error > ", error);
+                console.log("getModules > error > ", error);
+                this.setState({ modules: [], ProgressLoader: true });
             });
     }
 
@@ -130,7 +132,7 @@ class modulemasters extends React.Component {
                    
                 }
                 ).catch(error => {
-                    console.log("error > ", error);
+                    console.log("getPageList > error > ", error);
                 });
         }
 

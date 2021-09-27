@@ -74,7 +74,7 @@ class addpage extends React.Component {
         super(props);
         this.state = {
             urlparams: "",
-            ProgressLoader: false,
+            ProgressLoader: true,
             columns: columns,
             rows: rows,
             isRowSelected: false,
@@ -227,7 +227,7 @@ class addpage extends React.Component {
                 }
             }
             ).catch(error => {
-                console.log("error > ", error);
+                console.log("handleDropdownChange > error > ", error);
                 this.setState({ProgressLoader:true});
             }); 
     }
@@ -262,7 +262,7 @@ class addpage extends React.Component {
                 }
             }
             ).catch(error => {
-                console.log("error > ", error);
+                console.log("refreshPageListByModuleId > error > ", error);
                 this.setState({ProgressLoader:true});
             });
     }
@@ -387,7 +387,7 @@ class addpage extends React.Component {
                     this.setState({ProgressLoader:true});
                 }
                 ).catch(error => {
-                    console.log("error > ", error);
+                    console.log("handleUpdate > error > ", error);
                     this.setState({ProgressLoader:true});
                 });           
         }
@@ -522,7 +522,7 @@ class addpage extends React.Component {
                     }
                 }
                 ).catch(error => {
-                    console.log("error > ", error);
+                    console.log("getPageListByModuleId > error > ", error);
                     this.setState({ProgressLoader:true});
                 });
         }
@@ -616,7 +616,7 @@ class addpage extends React.Component {
                                 />
                             ) : (
                                 <Fragment>
-
+                                    
                                     <DataGrid
                                         rows={this.props.data.rows}
                                         columns={this.state.columns}

@@ -35,14 +35,15 @@ body{
 }
 
 .menubar-tab-icon-position{  
-  margin-bottom: -40px !important; 
+  margin-right: -60px !important; 
+  margin-bottom: -22px !important;
 }
 
 .menubar-tab-app-bar{
   font-size: 12px !important;
   letter-spacing: 2 !important;
   color: rgb(80, 92, 109) !important;
-  
+  min-height: 10px !important;
 }
 
 .menubar-tab-height{

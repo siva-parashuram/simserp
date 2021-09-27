@@ -56,7 +56,9 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         width: '100%',
         backgroundColor: theme.palette.background.paper,
+
     },
+    
 }));
 
 export default function ScrollableTabsButtonAuto() {
@@ -105,12 +107,12 @@ export default function ScrollableTabsButtonAuto() {
         };
 
         let moduleList = [
-            {
-                moduleName: "Home",
-                subMenus: [
-                    { name: "Dashboard", link: "userDashboard" },
-                ]
-            },
+            // {
+            //     moduleName: "Home",
+            //     subMenus: [
+            //         { name: "Dashboard", link: "userDashboard" },
+            //     ]
+            // },
             {
                 moduleName: "Admin",
                 subMenus: [
@@ -144,16 +146,20 @@ export default function ScrollableTabsButtonAuto() {
                             aria-label="Menu Bar Navigation"
                             allowScrollButtonsMobile={true}
                             className="menubar-tab-height"
+                           
                         >
                             {
                                 moduleList.map((item, i) => (
+
                                     <Tab
                                     disableRipple={true}
-                                    className="menubar-tab-app-bar" 
+                                    className="menubar-tab-app-bar"                                     
                                     onClick={(e) => handleTabClick(e, i)} 
-                                     icon={<ExpandMoreIcon className="menubar-tab-icon-position" />} 
+                                //    icon={<ExpandMoreIcon className="menubar-tab-icon-position" small/>} 
                                     label={item.moduleName}  
-                                    {...a11yProps(i)} />
+                                    {...a11yProps(i)} 
+                                    wrapped
+                                    />
                                 ))
                             }
 
@@ -164,7 +170,7 @@ export default function ScrollableTabsButtonAuto() {
                             <TabPanel value={value} index={i} style={{ backgroundColor: '#eceff1' }}>
                                 <Grid container spacing={0}>
                                     {
-                                        item.subMenus.map((subMenusitem, j) => (
+                                        item.subMenus? item.subMenus.map((subMenusitem, j) => (
                                             <Fragment>
                                                 <div>
                                                     <Link key={"side-menu-LIL" + j} className="menubar-link" to={subMenusitem.link + urlparams}>
@@ -174,7 +180,7 @@ export default function ScrollableTabsButtonAuto() {
                                                 <div style={{ width: 30 }}></div>
                                             </Fragment>
 
-                                        ))
+                                        )):null
                                     }
                                 </Grid>
                             </TabPanel>
