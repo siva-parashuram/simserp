@@ -1,7 +1,6 @@
-// const domain="http://103.86.176.85:81/";
+// const domain="http://192.168.10.106:44356/";
 const domain="http://192.168.10.200:8080/";
-export const APIURL = {
-    // Login: domain+"WebService.asmx/Login",
+export const APIURL = {    
     Login: domain+"api/users/login",
     Logout:domain+"api/users/Logout",
     addNewCompany:domain+"api/Company/CreateCompany",
@@ -46,7 +45,11 @@ export const APIURL = {
     GetPageByModuleId:domain+"api/Page/GetPageByModuleId",
     UpdatePage:domain+"api/Page/UpdatePage",
     UpdateModuleIdByPageID:domain+"api/Page/UpdateModuleIdByPageID",
-    UpdatePageByModuleIdAndPageID:domain+"api/Page/UpdatePageByModuleIdAndPageID"
+    UpdatePageByModuleIdAndPageID:domain+"api/Page/UpdatePageByModuleIdAndPageID",
+    GetRoles:domain+"api/Role/GetRoles",
+    CreateRole:domain+"api/Role/CreateRole",
+    RoleDetailGetRoleDetailByRoleId:domain+"api/RoleDetail/GetRoleDetailByRoleId",
+    CreateRoleDetail:domain+"api/RoleDetail/CreateRoleDetail",
   };
 
   export const CTimeOut = 10; 
@@ -71,3 +74,5 @@ export const APIURL = {
     "Website": null,
     "CreationDate": null
 };
+
+ 

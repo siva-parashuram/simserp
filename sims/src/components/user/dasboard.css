@@ -448,6 +448,11 @@ cursor: pointer;
    border-style: none !important;
  }
 
+ .chk-all-cell-css{
+   background-color: #e0f2f1 !important;
+  
+ }
+
  
 
 /**************************************************************************************************************************/

@@ -28,6 +28,8 @@ export const URLS = {
   moduleMaster:"/moduleMaster",
   addModule:"/addModule",
   editModule:"/editModule",
+  roleMaster:"/rolemaster", 
+  addRole:"/addRole"
 };
 
 
@@ -38,5 +40,6 @@ export const PREFIX={
   countryID:"CO",
   stateID:"ST",
   destinationID:"DEST",
-  userID:"U"
+  userID:"U",
+  roleID:"R",
 };

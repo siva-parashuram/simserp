@@ -30,6 +30,8 @@ import loginExpired from "../components/user/loginexpired";
 import moduleMaster from "../components/modules/modules/modulemaster";
 import addModule from "../components/modules/modules/addmodule";
 import editModule from "../components/modules/modules/editmodule";
+import rolemaster from "../components/modules/role/rolemaster";
+import addRole from "../components/modules/role/addrole";
 
 let routes = ({ location, ...rest }) => {
   return (
@@ -73,9 +75,9 @@ let routes = ({ location, ...rest }) => {
 
         <Route path={URLS.URLS.moduleMaster}  component={moduleMaster} />
         <Route path={URLS.URLS.addModule}  component={addModule} />
-        <Route path={URLS.URLS.editModule}  component={editModule} />
-
-        
+        <Route path={URLS.URLS.editModule}  component={editModule} />        
+        <Route path={URLS.URLS.roleMaster}  component={rolemaster} />
+        <Route path={URLS.URLS.addRole}  component={addRole} />
 
       
         <Route path={URLS.URLS.loginExpired}  component={loginExpired} />
