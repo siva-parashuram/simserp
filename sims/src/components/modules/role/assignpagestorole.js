@@ -552,11 +552,15 @@ class assignpagestorole extends React.Component {
                 let ValidUser = APIURLS.ValidUser;
                 ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
                 ValidUser.Token = getCookie(COOKIE.TOKEN);
-                let data = {
+                let data = APIURLS.CreateRoleDetailData;
+                data.validUser=ValidUser;
+                data.RoleId=this.props.data.roleId;
+                data.RoleDetailLists=RoleDetailList;
+                /*{
                     validUser: ValidUser,
                     RoleId: this.props.data.roleId,
                     RoleDetailLists: RoleDetailList
-                };
+                };*/
                 console.log("processUpdateData > data > ", data);
                 const headers = {
                     "Content-Type": "application/json"

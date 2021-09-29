@@ -75,4 +75,10 @@ export const APIURL = {
     "CreationDate": null
 };
 
+export let CreateRoleDetailData={
+  validUser: null,
+  RoleId: null,
+  RoleDetailLists: null
+};
+
  

@@ -4,7 +4,7 @@ import Menubar from "../../user/menubar";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
-import * as Customfunctions from "../../../services/functions/customfunctions";
+ 
 
 import React, { Fragment } from 'react';
 import axios from "axios";
