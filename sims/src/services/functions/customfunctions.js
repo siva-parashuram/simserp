@@ -1,12 +1,12 @@
 import axios from "axios";
 //-------------------------------Axios API data fetching reusable function is below-----------------------------------------------
 
- export  const   Axios = (url=null, data=null, headers=null) => {
+ export  const   Axios = async(url=null, data=null, headers=null) => {
     console.log("Axios > url > ",url);
         console.log("Axios > data > ",data);
         console.log("Axios > headers > ",headers);
         let responseData = null;
-         axios.post(url, data, { headers })
+        await axios.post(url, data, { headers })
             .then(response => {
                 console.log("Axios > response > ",response);  
                 responseData = response
