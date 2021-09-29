@@ -40,7 +40,7 @@ class addmodule extends React.Component {
             Module:
             {
                ModuleId :0,
-              Name :null,
+               Name :null,
                Description :null,
                IconName:null,
             },
@@ -55,8 +55,7 @@ class addmodule extends React.Component {
         }
     }
 
-    componentDidMount() {
-      
+    componentDidMount() {      
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -73,7 +72,6 @@ class addmodule extends React.Component {
     render() {
 
         const handleAccordionClick = (val, e) => {
-
             if (val === "GeneralDetailsExpanded") {
                 this.state.GeneralDetailsExpanded === true ? this.setState({ GeneralDetailsExpanded: false }) : this.setState({ GeneralDetailsExpanded: true })
             }
@@ -83,27 +81,7 @@ class addmodule extends React.Component {
         }
 
         const updateFormValue = (id, e) => {
-            /*
-                  if(id==="Name"){
-                      let Module=this.state.Module;
-                      Module.Name=e.target.value;
-                      this.setState({Module:Module});
-                  }
-                  if(id==="Description"){
-                    let Module=this.state.Module;
-                    Module.Description=e.target.value;
-                    this.setState({Module:Module});
-                }
-                if(id==="IconName"){
-                    let Module=this.state.Module;
-                    Module.IconName=e.target.value;
-                    this.setState({Module:Module});
-                }
-                */
-
-                
-            if (id === "Name") {
-           
+            if (id === "Name") {           
                 if(e.target.value==="" || e.target.value.length>20){
                     let Module = this.state.Module;
                     Module.Name = e.target.value;
@@ -121,9 +99,7 @@ class addmodule extends React.Component {
                     let Validations=this.state.Validations;
                     Validations.Name={ errorState: false, errorMsg: "" };
                     this.setState({ Module: Module,updateBtnDisable:false,Validations:Validations  });
-                }
-
-               
+                }               
             }
             if (id === "Description") {
                 if(e.target.value==="" || e.target.value.length>50){
@@ -143,13 +119,9 @@ class addmodule extends React.Component {
                     let Validations=this.state.Validations;
                     Validations.Description={ errorState: false, errorMsg: "" };
                     this.setState({ Module: Module,updateBtnDisable:false });
-                }
-
-
-               
+                }               
             }
             if (id === "IconName") {
-
                 if(e.target.value==="" || e.target.value.length>50){
                     let Module = this.state.Module;
                     Module.IconName = e.target.value;
@@ -165,13 +137,8 @@ class addmodule extends React.Component {
                     let Module = this.state.Module;
                     Module.IconName = e.target.value;
                     this.setState({ Module: Module,updateBtnDisable:false });
-                }
-
-                
-            }
-
-
-                                 
+                }                
+            }                                 
          }
 
          const handleCreate=()=>{
@@ -179,16 +146,19 @@ class addmodule extends React.Component {
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
             let Module=this.state.Module;
-            const handleCreateData = {
-                validUser: ValidUser,
-                Module: Module
-            };
+            const data = APIURLS.CreateModuleData;
+            data.validUser=ValidUser;
+            data.Module=Module;
+            // {
+            //     validUser: ValidUser,
+            //     Module: Module
+            // };
             const headers = {
               "Content-Type": "application/json"
             };
             let CreateModuleUrl = APIURLS.APIURL.CreateModule;       
            
-            axios.post(CreateModuleUrl, handleCreateData, { headers })
+            axios.post(CreateModuleUrl, data, { headers })
               .then(response => {           
                 let data=response.data;
                 console.log("handleCreate > response > data > ",data);

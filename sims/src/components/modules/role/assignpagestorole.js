@@ -13,92 +13,11 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 // import * as URLS from "../../../routes/constants";
 import * as Customfunctions from "../../../services/functions/customfunctions";
+import * as Tablecolumns from "../../../services/functions/tablecolumns";
 
 
-let columns = [
-    {
-        field: 'pageId',
-        headerName: '#',
-        width: 100,
-        headerClassName: 'table-header-font'
-    },
-    {
-        field: 'pageName',
-        headerName: 'Page Name',
-        width: 200,
-        editable: true,
-        headerClassName: 'table-header-font'
-    },
-    {
-        field: 'pageLink',
-        headerName: 'Page Link',
-        width: 200,
-        editable: true,
-        filterable: true,
-        headerClassName: 'table-header-font'
-    },
 
-    {
-        field: 'moduleId',
-        headerName: 'Module',
-        width: 200,
-        headerClassName: 'table-header-font'
-    }
-    ,
-
-    {
-        field: 'chkAll',
-        headerName: 'S#',
-        width: 100,
-        headerClassName: 'table-header-font',
-
-    }
-    ,
-
-    {
-        field: 'IsCreate',
-        headerName: 'Create',
-        width: 100,
-        headerClassName: 'table-header-font',
-
-    },
-
-    {
-        field: 'IsUpdate',
-        headerName: 'Update',
-        width: 100,
-        headerClassName: 'table-header-font',
-
-    }
-    ,
-
-    {
-        field: 'IsDelete',
-        headerName: 'Delete',
-        width: 100,
-        headerClassName: 'table-header-font',
-
-    },
-
-    {
-        field: 'IsView',
-        headerName: 'View',
-        width: 100,
-        headerClassName: 'table-header-font',
-
-    },
-
-    {
-        field: 'IsPrint',
-        headerName: 'Print',
-        width: 100,
-        headerClassName: 'table-header-font',
-
-    }
-
-
-];
-
+let columns=Tablecolumns.roleMasterDetail;
 
 class assignpagestorole extends React.Component {
     constructor(props) {
@@ -139,180 +58,7 @@ class assignpagestorole extends React.Component {
     }
 
     getColumns() {
-        let columns = [
-
-            {
-                field: 'pageName',
-                headerName: 'Page Name',
-                width: 160,
-                editable: true,
-                headerClassName: 'table-header-font'
-            },
-            {
-                field: 'pageLink',
-                headerName: 'Page Link',
-                width: 160,
-                editable: true,
-                filterable: true,
-                headerClassName: 'table-header-font'
-            },
-
-            {
-                field: 'moduleName',
-                headerName: 'Module',
-                width: 160,
-                headerClassName: 'table-header-font'
-            }
-            ,
-
-            {
-                field: 'chkAll',
-                headerName: '#',
-                width: 100,
-                headerClassName: 'table-header-font',
-                cellClassName: 'chk-all-cell-css',
-                align: "center",
-                renderCell: (params) => (
-                    <Fragment>
-                        {params.value === true ? <input
-                            id={"chkAll_" + params.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => this.performCheckAll(params, e, true)}
-                        /> : <input
-                            id={"chkAll_" + params.id}
-                            type="checkbox"
-                            checked={false}
-                            onClick={(e) => this.performCheckAll(params, e, false)}
-                        />}
-                    </Fragment>
-                )
-            }
-            ,
-
-            {
-                field: 'IsCreate',
-                headerName: 'Create',
-                width: 100,
-                headerClassName: 'table-header-font',
-                cellClassName: 'chk-all-cell-css',
-                align: "center",
-                renderCell: (params) => (
-                    <Fragment>
-                        {params.value === true ? <input
-                            id={"IsCreate_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => this.chkPermission(e, params, 'IsCreate', true)}
-                        /> : <input
-                            id={"IsCreate_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={false}
-                            onClick={(e) => this.chkPermission(e, params, 'IsCreate', false)}
-                        />}
-                    </Fragment>
-                )
-            },
-
-            {
-                field: 'IsUpdate',
-                headerName: 'Update',
-                width: 100,
-                headerClassName: 'table-header-font',
-                cellClassName: 'chk-all-cell-css',
-                align: "center",
-                renderCell: (params) => (
-                    <Fragment>
-                        {params.value === true ? <input
-                            id={"IsUpdate_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => this.chkPermission(e, params, 'IsUpdate', true)}
-                        /> : <input
-                            id={"IsUpdate_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={false}
-                            onClick={(e) => this.chkPermission(e, params, 'IsUpdate', false)}
-                        />}
-                    </Fragment>
-                )
-            }
-            ,
-
-            {
-                field: 'IsDelete',
-                headerName: 'Delete',
-                width: 100,
-                headerClassName: 'table-header-font',
-                cellClassName: 'chk-all-cell-css',
-                align: "center",
-                renderCell: (params) => (
-                    <Fragment>
-                        {params.value === true ? <input
-                            id={"IsDelete_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => this.chkPermission(e, params, 'IsDelete', true)}
-                        /> : <input
-                            id={"IsDelete_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={false}
-                            onClick={(e) => this.chkPermission(e, params, 'IsDelete', false)}
-                        />}
-                    </Fragment>
-                )
-            },
-
-            {
-                field: 'IsView',
-                headerName: 'View',
-                width: 100,
-                headerClassName: 'table-header-font',
-                cellClassName: 'chk-all-cell-css',
-                align: "center",
-                renderCell: (params) => (
-                    <Fragment>
-                        {params.value === true ? <input
-                            id={"IsView_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => this.chkPermission(e, params, 'IsView', true)}
-                        /> : <input
-                            id={"IsView_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={false}
-                            onClick={(e) => this.chkPermission(e, params, 'IsView', false)}
-                        />}
-                    </Fragment>
-                )
-            },
-
-            {
-                field: 'IsPrint',
-                headerName: 'Print',
-                width: 100,
-                headerClassName: 'table-header-font',
-                cellClassName: 'chk-all-cell-css',
-                align: "center",
-                renderCell: (params) => (
-                    <Fragment>
-                        {params.value === true ? <input
-                            id={"IsPrint_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => this.chkPermission(e, params, 'IsCreate', true)}
-                        /> : <input
-                            id={"IsPrint_checkbox_" + params.id}
-                            type="checkbox"
-                            checked={false}
-                            onClick={(e) => this.chkPermission(e, params, 'IsCreate', false)}
-                        />}
-                    </Fragment>
-                )
-            }
-
-
-        ];
+        let columns=Tablecolumns.roleMasterDetail;
         this.setState({ columns: columns });
     }
 
@@ -468,6 +214,19 @@ class assignpagestorole extends React.Component {
     }
 
     render() {
+
+        const selectedRows=()=>{
+            let rows=this.props.data.rows;
+            console.log("selectedRows > rows > ",rows);
+            let selectedRows=[];
+            for(let i=0;i<rows.length;i++){
+              if(rows[i].chkAll===true){
+                selectedRows.push(rows[i]);
+              }
+            }
+
+            return selectedRows;
+        }
          
 
         const updateSelectedRow = (e) => {
@@ -590,6 +349,8 @@ class assignpagestorole extends React.Component {
             }
         }
 
+
+
      
 
         const closeErrorPrompt = (event, reason) => {
@@ -625,6 +386,8 @@ class assignpagestorole extends React.Component {
                         </Snackbar>
                         <div style={{ height: 20 }}></div>
 
+                        {console.log("this.props.data.rows > ",this.props.data.rows)}
+
                         <Grid container spacing={3}>
                             <Grid xs={12} sm={12} md={3} lg={3}>
                                 <Button
@@ -646,9 +409,11 @@ class assignpagestorole extends React.Component {
                                     pageSize={this.state.pageSize}
                                     rowsPerPageOptions={[this.state.rowsPerPageOptions]}
                                     checkboxSelection={true}
+                                    disableSelectionOnClick={true}
                                     onSelectionModelChange={(e) => {
                                         onSelectionModelChange(e)
                                     }}
+                                    
                                 />
                             ) : (
                                 <Fragment>
@@ -659,9 +424,12 @@ class assignpagestorole extends React.Component {
                                         pageSize={this.state.pageSize}
                                         rowsPerPageOptions={[this.state.rowsPerPageOptions]}
                                         checkboxSelection={true}
+                                        disableSelectionOnClick={true}
                                         onSelectionModelChange={(e) => {
                                             onSelectionModelChange(e)
                                         }}
+                                        
+                                        
                                     />
                                 </Fragment>
 

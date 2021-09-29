@@ -196,9 +196,10 @@ class login extends React.Component {
 
         axios.post(loginUrl, data, { headers })
           .then(response => {
+                   
 
             if (response.status === 200) {
-              if (response.data.UID === 0) {
+              if (response.data.head.userID === 0) {
                 this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true,disableLoginBtn:false });
                 document.getElementById("password").value = null;
 

@@ -259,8 +259,7 @@ class modulemasters extends React.Component {
                         </Grid>
                         <Grid xs={12} sm={12} md={8} lg={8}>
                             <Grid container spacing={1}>
-                                <Grid xs={12} sm={12} md={11} lg={11}>
-                                
+                                <Grid xs={12} sm={12} md={11} lg={11}>                                
                                       <Addpage data={{
                                         moduleId:this.state.moduleId,
                                         rows: this.state.pageLinkRow

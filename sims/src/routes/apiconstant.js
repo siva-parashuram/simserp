@@ -75,6 +75,36 @@ export const APIURL = {
     "CreationDate": null
 };
 
+
+export let page={  
+    PageId: 0,
+    ModuleId: 0,
+    PageName: null,
+    PageLink: null,
+    Description: null, 
+};
+
+export let UpdateModuleIdByPageID = {
+  validUser: ValidUser,
+  page: null
+};
+
+export let CreateModuleData={
+  validUser: null,
+  Module: null
+};
+
+export let CreateRoleData={
+  validUser:null,
+  Role:null
+};
+
+export let GetRoleDetailByRoleIdData={
+  validUser: null,
+  RoleId: null,
+  RoleDetailList: null
+};
+
 export let CreateRoleDetailData={
   validUser: null,
   RoleId: null,

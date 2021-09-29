@@ -111,11 +111,9 @@ class rolemaster extends React.Component {
             const headers = {
                 "Content-Type": "application/json"
             };
-            let data = {
-                validUser: ValidUser,
-                RoleId: roleId,
-                RoleDetailList: {}
-            };
+            let data = APIURLS.GetRoleDetailByRoleIdData;
+                data.validUser=ValidUser;
+                data.RoleId=roleId;          
 
             let RoleDetailGetRoleDetailByRoleIdUrl = APIURLS.APIURL.RoleDetailGetRoleDetailByRoleId;
             axios.post(RoleDetailGetRoleDetailByRoleIdUrl, data, { headers })
@@ -140,6 +138,18 @@ class rolemaster extends React.Component {
             let rows = [];
             var i = 0, len = data.length;
             while (i < len) {
+                let chkAll= true;
+                if (
+                    data[i].isCreate === true &&
+                    data[i].isDelete === true &&
+                    data[i].isPrint === true &&
+                    data[i].isUpdate === true &&
+                    data[i].isView === true
+                ) {
+                    chkAll= true;
+                }else{
+                    chkAll= false;
+                }
                 let row = {
                     id: data[i].pageId,
                     pageId: data[i].pageId,
@@ -147,7 +157,7 @@ class rolemaster extends React.Component {
                     pageLink: data[i].pageLink,
                     moduleId: data[i].moduleID,
                     moduleName: data[i].name,
-                    chkAll: false,
+                    chkAll: chkAll,
                     IsCreate: data[i].isCreate,
                     IsUpdate: data[i].isUpdate,
                     IsDelete: data[i].isDelete,

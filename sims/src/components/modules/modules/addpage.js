@@ -23,6 +23,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+ 
 
 let columns = [
     {
@@ -59,15 +60,7 @@ let columns = [
     }
 ];
 
-const rows = [
-    // { pageId: 1, pageName: 'Company Master', pageLink: 'companyMaster', description: 'company master page', },
-    // { pageId: 2, pageName: 'Country Master', pageLink: 'countryMaster', description: 'country master page' },
-    // { pageId: 3, pageName: 'State Master', pageLink: 'stateMaster', description: 'state master page' },
-    // { pageId: 4, pageName: 'User Master', pageLink: 'userMaster', description: 'user master page' },
-    // { pageId: 5, pageName: 'Branch Master', pageLink: 'companyMaster', description: 'company master page' },
-    // { pageId: 6, pageName: 'Module Master', pageLink: 'moduleMaster', description: 'module master page' },
-
-];
+const rows = [];
 
 class addpage extends React.Component {
     constructor(props) {
@@ -139,6 +132,8 @@ class addpage extends React.Component {
     }
 
     updateColumns(modules) {
+
+      
         let columns = [
             {
                 field: 'pageId',
@@ -191,6 +186,7 @@ class addpage extends React.Component {
                 filterable: true
             }
         ];
+        
         this.setState({ columns: columns });
         this.setState({ProgressLoader:true});
     }
@@ -203,16 +199,24 @@ class addpage extends React.Component {
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         let PageId= parseInt(params.id);
         let moduleId = this.props.data.moduleId;
-        const data = {
-            "validUser": ValidUser,
-            "page": {
-                PageId: PageId,
-                ModuleId:  parseInt(e.target.value),
-                PageName: null,
-                PageLink: null,
-                Description: null,
-            }
-        };  
+        let page=APIURLS.page;
+        page.PageId=PageId;
+        page.ModuleId= parseInt(e.target.value);
+
+        const data =APIURLS.UpdateModuleIdByPageID; 
+        data.validUser=ValidUser;
+        data.page=page;
+
+        // {
+        //     "validUser": ValidUser,
+        //     "page": {
+        //         PageId: PageId,
+        //         ModuleId:  parseInt(e.target.value),
+        //         PageName: null,
+        //         PageLink: null,
+        //         Description: null,
+        //     }
+        // };  
         const headers = {
             "Content-Type": "application/json"
         };       
@@ -237,16 +241,25 @@ class addpage extends React.Component {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
-        const data = {
-            "validUser": ValidUser,
-            "page": {
-                PageId: 0,
-                ModuleId: moduleId,
-                PageName: null,
-                PageLink: null,
-                Description: null,
-            }
-        };
+
+        let page=APIURLS.page;
+        page.PageId=0;
+        page.ModuleId= moduleId;
+
+        const data =APIURLS.UpdateModuleIdByPageID; 
+        data.validUser=ValidUser;
+        data.page=page;
+
+        // const data = {
+        //     "validUser": ValidUser,
+        //     "page": {
+        //         PageId: 0,
+        //         ModuleId: moduleId,
+        //         PageName: null,
+        //         PageLink: null,
+        //         Description: null,
+        //     }
+        // };
         const headers = {
             "Content-Type": "application/json"
         };

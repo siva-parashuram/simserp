@@ -94,10 +94,14 @@ class addrole extends React.Component {
             const headers = {
                 "Content-Type": "application/json"
             };
-            let data={
-                validUser:ValidUser,
-                Role:this.state.Role
-            };
+            let data=APIURLS.CreateRoleData;
+            data.validUser=ValidUser;
+            data.Role=this.state.Role;
+            
+            // {
+            //     validUser:ValidUser,
+            //     Role:this.state.Role
+            // };
             let CreateRoleUrl = APIURLS.APIURL.CreateRole;
             console.log("CreateRoleUrl > ", CreateRoleUrl);
             axios.post(CreateRoleUrl, data, { headers })
