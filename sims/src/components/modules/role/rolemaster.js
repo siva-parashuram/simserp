@@ -140,7 +140,7 @@ class rolemaster extends React.Component {
                     pageName: data[i].pageName,
                     pageLink: data[i].pageLink,
                     moduleId: data[i].moduleID,
-                    moduleName:data[i].name,
+                    moduleName: data[i].name,
                     chkAll: false,
                     IsCreate: data[i].isCreate,
                     IsUpdate: data[i].isUpdate,
@@ -222,43 +222,45 @@ class rolemaster extends React.Component {
                     </Grid>
                     <div style={{ height: 20 }}></div>
                     <Grid container spacing={0}>
-                        <Grid xs={12} sm={12} md={1} lg={1}>
-                            <Table stickyHeader size="small" className="" aria-label="Role List table">
-                                <TableHead className="table-header-background">
-                                    <TableRow>
-                                        <TableCell className="table-header-font">#</TableCell>
-                                        <TableCell className="table-header-font" align="left">Role Name</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody className="tableBody">
+                        <Grid xs={12} sm={12} md={2} lg={2}>
+                            <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                    <Table stickyHeader size="small" className="" aria-label="Role List table">
+                                        <TableHead className="table-header-background">
+                                            <TableRow>
+                                                <TableCell className="table-header-font">#</TableCell>
+                                                <TableCell className="table-header-font" align="left">Role Name</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody className="tableBody">
+                                            {this.state.roles ? this.state.roles.map((item, i) => (
+                                                <TableRow
+                                                    id={"row_" + i}
+                                                    className={this.state.initialCss}
+                                                    hover
+                                                    key={i}
+                                                    onClick={(event) => handleRowClick(event, item, "row_" + i)}
+                                                >
+                                                    <TableCell align="left">
+                                                        <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams + "&roleID=" + item.moduleId} >
+                                                            {URLS.PREFIX.roleID + item.roleId}
+                                                        </a>
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams + "&roleID=" + item.moduleId} >
+                                                            {item.name}
+                                                        </a>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )) : null}
+                                        </TableBody>
+                                    </Table>
 
-                                    {this.state.roles ? this.state.roles.map((item, i) => (
-                                        <TableRow
-                                            id={"row_" + i}
-                                            className={this.state.initialCss}
-                                            hover
-                                            key={i}
-                                            onClick={(event) => handleRowClick(event, item, "row_" + i)}
-                                        >
-                                            <TableCell align="left">
-                                                <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams + "&roleID=" + item.moduleId} >
-                                                    {URLS.PREFIX.roleID + item.roleId}
-                                                </a>
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams + "&roleID=" + item.moduleId} >
-                                                    {item.name}
-                                                </a>
-                                            </TableCell>
-
-                                        </TableRow>
-
-                                    )) : null}
-                                </TableBody>
-                            </Table>
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={11} lg={11}>
-                            <Grid container spacing={0}>                               
+                        <Grid xs={12} sm={12} md={10} lg={10}>
+                            <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={12} lg={12}>
                                     <Grid container spacing={0}>
                                         <Grid xs={12} sm={12} md={11} lg={11}>
