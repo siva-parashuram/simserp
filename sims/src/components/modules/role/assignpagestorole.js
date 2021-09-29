@@ -11,7 +11,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
-import * as URLS from "../../../routes/constants";
+// import * as URLS from "../../../routes/constants";
+import * as Customfunctions from "../../../services/functions/customfunctions";
 
 
 let columns = [
@@ -317,9 +318,6 @@ class assignpagestorole extends React.Component {
 
     chkPermission(e, params, col, bool) {
 
-        console.log("params > ", params);
-        console.log("col > ", col);
-        console.log("bool > ", bool);
         if (this.state.refreshPageLinkList === true) {
             let newBool = bool === true ? false : true;
             let rows = this.state.PropsRows;
@@ -463,35 +461,14 @@ class assignpagestorole extends React.Component {
             this.props.data.rows = newRows;
             this.setState({ refreshPageLinkList: true, PropsRows: newRows });
         }
-
     }
-
-
-
 
     processResetData(data) {
         console.log("processResetData > data > ", data);
     }
 
     render() {
-
-        const setRows = (rows) => {
-            this.setState({ rows: rows });
-        }
-
-        const handleRowClick = (e) => {
-            console.log("e > ", e);
-            let previousRowSelected = this.state.previousRowSelected;
-            console.log("previousRowSelected > ", previousRowSelected);
-            console.log("e.id > ", e.id);
-            if (parseInt(previousRowSelected) != parseInt(e.id)) {
-                this.setState({ isRowSelected: true, previousRowSelected: e.id });
-                console.log("NOT EQUAL");
-                console.log("Perform operations here...");
-            } else {
-                this.setState({ isRowSelected: false, previousRowSelected: e.id });
-            }
-        }
+         
 
         const updateSelectedRow = (e) => {
             console.log("updateSelectedRow > e > ", e);
@@ -512,6 +489,9 @@ class assignpagestorole extends React.Component {
                                 }
                             }
                         }
+
+                        SelectedRows.concat(newPropsRow);
+                        SelectedRows = Customfunctions.removeDuplicates(SelectedRows, 'id');
                         this.setState({ SelectedRows: newPropsRow });
                     });
                 } else {
@@ -528,6 +508,8 @@ class assignpagestorole extends React.Component {
                             }
                         }
                     }
+                    SelectedRows.concat(newPropsRow);
+                    SelectedRows = Customfunctions.removeDuplicates(SelectedRows, 'id');
                     this.setState({ SelectedRows: newPropsRow });
                 }
             }
@@ -604,22 +586,7 @@ class assignpagestorole extends React.Component {
             }
         }
 
-        const enableCreateBtn = () => {
-            if ((this.state.pageName !== "" || this.state.pageName != null) && (this.state.pageLink !== "" || this.state.pageLink != null)) {
-                this.setState({ createBtnDisable: true });
-                if (this.state.pageName != null && this.state.pageLink != null) {
-                    if (this.state.pageName.length > 20 || this.state.pageName !== "") {
-                        this.setState({ createBtnDisable: true });
-                    } else if (this.state.pageLink.length > 100 || this.state.pageLink !== "") {
-                        this.setState({ createBtnDisable: true });
-                    } else {
-                        this.setState({ createBtnDisable: false });
-                    }
-                } else {
-                    this.setState({ createBtnDisable: false });
-                }
-            }
-        }
+     
 
         const closeErrorPrompt = (event, reason) => {
             if (reason === 'clickaway') {
@@ -669,6 +636,7 @@ class assignpagestorole extends React.Component {
                         <div style={{ height: 500, width: '100%' }}>
                             {this.state.refreshPageLinkList === true ? (
                                 <DataGrid
+                                className="no-border-table"
                                     rows={this.state.PropsRows}
                                     columns={this.state.columns}
                                     pageSize={this.state.pageSize}
@@ -681,6 +649,7 @@ class assignpagestorole extends React.Component {
                             ) : (
                                 <Fragment>
                                     <DataGrid
+                                    className="no-border-table"
                                         rows={this.props.data.rows}
                                         columns={this.state.columns}
                                         pageSize={this.state.pageSize}

@@ -4,6 +4,7 @@ import Menubar from "../../user/menubar";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import * as Customfunctions from "../../../services/functions/customfunctions";
 
 import React, { Fragment } from 'react';
 import axios from "axios";
@@ -57,6 +58,10 @@ class rolemaster extends React.Component {
         });
     }
 
+
+
+
+
     getRoles() {
         this.setState({ ProgressLoader: false });
         let rows = [];
@@ -67,7 +72,7 @@ class rolemaster extends React.Component {
             "Content-Type": "application/json"
         };
         let GetRolesUrl = APIURLS.APIURL.GetRoles;
-
+        
         axios.post(GetRolesUrl, ValidUser, { headers })
             .then(response => {
                 console.log("getRoles > response > ", response);
@@ -83,6 +88,7 @@ class rolemaster extends React.Component {
                 console.log("getRoles > error > ", error);
                 this.setState({ modules: [], ProgressLoader: true });
             });
+
     }
 
     render() {
