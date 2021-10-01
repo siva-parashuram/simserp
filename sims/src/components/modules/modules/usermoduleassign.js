@@ -246,7 +246,11 @@ class usermoduleassign extends React.Component {
                                                             onChange={(e) => this.setState({ branchId: e.target.value })}
                                                         >
                                                             {this.props.data.List.map((item, i) => (
+                                                               item.mark===1?(
                                                                 <option value={item.branchID}>{item.branchName}-({item.companyName})</option>
+                                                               ):(
+                                                                null
+                                                               ) 
                                                             ))}
                                                         </select>
                                                     </td>
