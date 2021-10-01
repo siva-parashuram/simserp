@@ -134,6 +134,7 @@ class userbranchalot extends React.Component {
                 .then(response => {
                     console.log("response > ",response);
                     this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                    window.location.reload();
                 }
                 ).catch(error => {
                     this.setState({ ProgressLoader: true, ErrorPrompt: true });
