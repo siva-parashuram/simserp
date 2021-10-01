@@ -336,7 +336,8 @@ class assignpagestorole extends React.Component {
                 }
             }
             this.props.data.rows = newRows;
-            this.setState({ refreshPageLinkList: true, PropsRows: newRows });
+            // this.setState({ refreshPageLinkList: true, PropsRows: newRows });
+            this.setState({  PropsRows: newRows });
         }
 
 
@@ -406,7 +407,8 @@ class assignpagestorole extends React.Component {
                 }
             }
             this.props.data.rows = newRows;
-            this.setState({ refreshPageLinkList: true, PropsRows: newRows });
+            // this.setState({ refreshPageLinkList: true, PropsRows: newRows });
+            this.setState({  PropsRows: newRows });
         }
     }
 
