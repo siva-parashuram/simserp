@@ -4,6 +4,19 @@ import React, { Fragment } from 'react';
  
 export const roleMasterDetail=[
     {
+        field: 'moduleId',
+        headerName: '#',
+        width: 160,
+        headerClassName: 'table-header-font',
+        renderCell: (params) => (
+            <Fragment>
+            {console.log("params > ",params)}
+            
+            </Fragment>
+        )
+        
+    },
+    {
         field: 'moduleName',
         headerName: 'Module',
         width: 160,
