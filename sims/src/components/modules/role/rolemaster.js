@@ -47,6 +47,7 @@ class rolemaster extends React.Component {
 
     componentDidMount() {
         this.getRoles();
+
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -65,6 +66,8 @@ class rolemaster extends React.Component {
 
     getRoles() {
         this.setState({ ProgressLoader: false });
+        
+ 
         let rows = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -72,9 +75,7 @@ class rolemaster extends React.Component {
         const headers = {
             "Content-Type": "application/json"
         };
-        let GetRolesUrl = APIURLS.APIURL.GetRoles;
-
-   
+        let GetRolesUrl = APIURLS.APIURL.GetRoles;  
 
         axios.post(GetRolesUrl, ValidUser, { headers })
             .then(response => {
@@ -89,8 +90,9 @@ class rolemaster extends React.Component {
             }
             ).catch(error => {
                 console.log("getRoles > error > ", error);
-                this.setState({ modules: [], ProgressLoader: true });
+                this.setState({ roles: [], ProgressLoader: true });
             });
+          
 
     }
 
@@ -118,8 +120,8 @@ class rolemaster extends React.Component {
                 data.validUser=ValidUser;
                 data.RoleId=roleId;          
 
-            let RoleDetailGetRoleDetailByRoleIdUrl = APIURLS.APIURL.RoleDetailGetRoleDetailByRoleId;
-            axios.post(RoleDetailGetRoleDetailByRoleIdUrl, data, { headers })
+            let GetRoleDetailByRoleIdUrl = APIURLS.APIURL.GetRoleDetailByRoleId;
+            axios.post(GetRoleDetailByRoleIdUrl, data, { headers })
                 .then(response => {
                     console.log("getPageListByRoleId > response > ", response);
                     if (response.status === 200) {
@@ -132,8 +134,6 @@ class rolemaster extends React.Component {
                     console.log("getRoles > error > ", error);
                     this.setState({ pages: [], ProgressLoader: true });
                 });
-
-
         }
 
         const processPageData = (data) => {

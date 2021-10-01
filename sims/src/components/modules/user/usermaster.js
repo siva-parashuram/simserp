@@ -38,13 +38,14 @@ class usermaster extends React.Component {
         super(props);
         this.state = {
             urlparams: "",
-            allotBranch: true,
-            allotModule: true,
+            allotBranch: false,
+            allotModule: false,
             ProgressLoader: false,
             initialCss: "",
             users: [],
             userId: 0,
-            passData: []
+            passData: [],
+            userBranchMappingList:[]
 
         }
     }
@@ -111,7 +112,7 @@ class usermaster extends React.Component {
             .then(response => {
                 console.log("getUserBranches > response.data > ", response.data);
                 let data = response.data;
-
+                this.setState({userBranchMappingList:data.userBranchMappingList});
                 this.processData(data.userBranchMappingList, userId);
 
             }
@@ -409,13 +410,16 @@ class usermaster extends React.Component {
                                             id="panel1a-header"
                                             style={{ minHeight: 20, height: '100%' }}
                                         >
-                                            <Typography key="" className="side-display-header-css">Assign Module</Typography>
+                                            <Typography key="" className="side-display-header-css">Assign Role</Typography>
                                         </AccordionSummary>
                                         <AccordionDetails key="">
                                             <Grid container spacing={1}>
                                                 <Grid xs={12} sm={12} md={12} lg={12}>
                                                     <Usermoduleassign data={
-                                                        this.state.userId
+                                                    {   
+                                                        userId:this.state.userId,
+                                                        List:this.state.userBranchMappingList
+                                                    }
                                                     } />
                                                 </Grid>
 

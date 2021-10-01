@@ -39,7 +39,7 @@ class assignpagestorole extends React.Component {
             modules: [],
             rowsPerPageOptions: 5,
             pageSize: 100,
-
+            allRowsChecked:false,
 
         };
     }
@@ -60,19 +60,39 @@ class assignpagestorole extends React.Component {
     getColumns() {
         //let columns=Tablecolumns.roleMasterDetail;
         let columns=[
-            {
+           /* {
                 field: 'moduleId',
                 headerName: '#',
-                width: 160,
-                headerClassName: 'table-header-font',
+                width: 70,
+                headerClassName: 'table-header-font ',
+                sortable: false,
+                renderHeader:()=>(
+                  this.state.allRowsChecked===true?(
+                    <input 
+                    type="checkbox"
+                    id="chkAllRows"
+                    className="checkbox-css"
+                    onClick={(e)=>this.processSelectedRow(e,'All',false)}
+                    checked={true}
+                    />
+                  ):(
+                    <input 
+                    type="checkbox"
+                    id="chkAllRows"
+                    className="checkbox-css"
+                    onClick={(e)=>this.processSelectedRow(e,'All',true)}
+                    checked={false}
+                    />
+                  )   
+                ),
                 renderCell: (params) => (
                     <Fragment>
-                    {console.log("params > ",params)}
+                     
                     
                     </Fragment>
                 )
                 
-            },
+            },*/
             {
                 field: 'moduleName',
                 headerName: 'Module',
@@ -392,6 +412,12 @@ class assignpagestorole extends React.Component {
 
     processResetData(data) {
         console.log("processResetData > data > ", data);
+    }
+
+    processSelectedRow(e,opt,bool){
+        console.log("processSelectedRow > e > ", e);  
+        console.log("processSelectedRow > opt > ", opt);  
+        this.setState({allRowsChecked:bool});
     }
 
     render() {

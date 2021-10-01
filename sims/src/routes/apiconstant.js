@@ -48,8 +48,11 @@ export const APIURL = {
     UpdatePageByModuleIdAndPageID:domain+"api/Page/UpdatePageByModuleIdAndPageID",
     GetRoles:domain+"api/Role/GetRoles",
     CreateRole:domain+"api/Role/CreateRole",
-    RoleDetailGetRoleDetailByRoleId:domain+"api/RoleDetail/GetRoleDetailByRoleId",
+    GetRoleDetailByRoleId:domain+"api/RoleDetail/GetRoleDetailByRoleId",
     CreateRoleDetail:domain+"api/RoleDetail/CreateRoleDetail",
+    GetAllUserPermission:domain+"api/UserPermission/GetAllUserPermission",
+    GetUserPermissionByUserIDAndBranchID:domain+"api/UserPermission/GetUserPermissionByUserIDAndBranchID",
+    CreateUserPermission:domain+"api/UserPermission/CreateUserPermission",
   };
 
   export const CTimeOut = 10; 
@@ -110,5 +113,26 @@ export let CreateRoleDetailData={
   RoleId: null,
   RoleDetailLists: null
 };
+
+export let userPermissionLists = {
+  UserId: 0,
+  RoleId: 0,
+  PageId: 0,
+  BranchId: 0,
+  IsCreate: false,
+  IsUpdate: false,
+  IsDelete: false,
+  IsView: false,
+  IsPrint: false,
+  CreationDate: null,
+}
+
+export let GetAllUserPermissionData={
+  validUser: null,
+  BranchId: null,
+  UserId: null,
+  // userPermissionLists :null
+  };
+
 
  
