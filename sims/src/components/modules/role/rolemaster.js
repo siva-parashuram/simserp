@@ -166,6 +166,7 @@ class rolemaster extends React.Component {
                     IsDelete: data[i].isDelete,
                     IsView: data[i].isView,
                     IsPrint: data[i].isPrint,
+                    isChecked: data[i].isChecked
                 };
                 rows.push(row);
                 i++

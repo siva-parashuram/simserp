@@ -620,7 +620,9 @@ class assignpagestorole extends React.Component {
                                     onSelectionModelChange={(e) => {
                                         onSelectionModelChange(e)
                                     }}
-                                    
+                                    rowHeight={25}
+                                    isRowSelectable={(params) => params.row.IsCreate===true || params.row.IsDelete===true || params.row.IsPrint===true || params.row.IsUpdate===true || params.row.IsView===true}
+                                     
                                 />
                             ) : (
                                 <Fragment>
@@ -635,8 +637,8 @@ class assignpagestorole extends React.Component {
                                         onSelectionModelChange={(e) => {
                                             onSelectionModelChange(e)
                                         }}
-                                        
-                                        
+                                        rowHeight={25}
+                                        isRowSelectable={(params) => params.row.IsCreate===true || params.row.IsDelete===true || params.row.IsPrint===true || params.row.IsUpdate===true || params.row.IsView===true}
                                     />
                                 </Fragment>
 
