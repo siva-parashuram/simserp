@@ -44,7 +44,7 @@ class editbranch extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       GeneralDetailsExpanded: true,
-      AddressDetailsExpanded: true,
+      AddressDetailsExpanded: false,
       companyData: [],
       countryData: [],
       stateData: [],

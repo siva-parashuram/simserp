@@ -2,13 +2,16 @@ import '../../user/dasboard.css';
 import React, { Fragment } from 'react';
 import axios from "axios";
 import { DataGrid } from '@material-ui/data-grid';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid'; 
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -39,6 +42,8 @@ class usermoduleassign extends React.Component {
             urlparams: "",
             userId: 0,
             ProgressLoader: false,
+            ErrorPrompt: false,
+            SuccessPrompt: false,
             initialCss: "",
             roles: [],
             columns: columns,
@@ -214,19 +219,52 @@ class usermoduleassign extends React.Component {
             axios.post(URL, data, { headers })
                 .then(response => {
                     console.log("handleUpdate > response > ", response);
-                    this.setState({ ProgressLoader: true });               
+                    console.log("handleUpdate > response.status > ", response.status);
+                    if(response.status===200 || response.status===201){
+                        this.setState({ ProgressLoader: true,SuccessPrompt:true });          
+                    }else{
+                        this.setState({ ProgressLoader: true,ErrorPrompt:true });     
+                    }
+                          
                 }
                 ).catch(error => {
                     console.log("getRoles > error > ", error);
-                    this.setState({ ProgressLoader: true });
+                    this.setState({ ProgressLoader: true,ErrorPrompt:true });      
                 });
                 
 
         }
 
+        const closeErrorPrompt = (event, reason) => {
+            if (reason === 'clickaway') {
+                return;
+            }
+            this.setState({ ErrorPrompt: false });
+        }
+
+        const closeSuccessPrompt = (event, reason) => {
+            if (reason === 'clickaway') {
+                return;
+            }
+            this.setState({ SuccessPrompt: false });
+        }
+
+        function Alert(props) {
+            return <MuiAlert elevation={6} variant="filled" {...props} />;
+        }
+
         return (
             <Fragment>
                 {console.log("-------------> this.props.data > ", this.props.data)}
+                {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+
+                <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
+                    <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
+                </Snackbar>
+
+                <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
+                    <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
+                </Snackbar>
 
                 {this.props.data.userId ? (
                     <Fragment>

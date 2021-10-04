@@ -164,7 +164,7 @@ class adduser extends React.Component {
             if (reason === 'clickaway') {
                 return;
             }
-            this.setState({ SuccessPrompt: false });
+            this.setState({ ErrorPrompt: false });
         }
 
         const closeSuccessPrompt = (event, reason) => {
@@ -194,6 +194,7 @@ class adduser extends React.Component {
                 <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
+
                 <div style={{ marginLeft: 10, marginTop: 10 }}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
