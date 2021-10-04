@@ -22,6 +22,10 @@ import TableRow from '@material-ui/core/TableRow';
 import TableContainer from '@material-ui/core/TableContainer';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@mui/material/Switch';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+ 
 
 import axios from "axios";
 
@@ -99,25 +103,28 @@ class editwarehouse extends React.Component {
         };
         axios.post(Url, data, { headers })
             .then(response => {
+                console.log("===========================================");
                 console.log("response > ", response);
+                console.log("response.data > ", response.data);
+                console.log("===========================================");
                 let warehouse={
                     WareHouseId: wareHouseId,
-                    BranchId: response.branchId,
-                    Code: response.code,
-                    Description: response.description,
-                    Address: response.address,
-                    Address2: response.address2,
-                    Address3: response.address3,
-                    IsEdi: response.isEdi,
-                    Ediurl: response.ediurl,
-                    EdiloginId:response.ediloginId,
-                    Edipassword: response.edipassword,
-                    ContactPerson: response.contactPerson,
-                    EmailId: response.emailId,
-                    PhoneNo:response.phoneNo,
-                    IsActive: response.isActive
+                    BranchId: response.data.branchId,
+                    Code: response.data.code,
+                    Description: response.data.description,
+                    Address: response.data.address,
+                    Address2: response.data.address2,
+                    Address3: response.data.address3,
+                    IsEdi: response.data.isEdi,
+                    Ediurl: response.data.ediurl,
+                    EdiloginId:response.data.ediloginId,
+                    Edipassword: response.data.edipassword,
+                    ContactPerson: response.data.contactPerson,
+                    EmailId: response.data.emailId,
+                    PhoneNo:response.data.phoneNo,
+                    IsActive: response.data.isActive
                 }
-              this.setState({warehouse:warehouse});
+              this.setState({warehouse:warehouse,ProgressLoader: true});
             }
             ).catch(error => {
 
@@ -227,14 +234,44 @@ class editwarehouse extends React.Component {
                 ).catch(error => {
 
                 });
+             }
 
-        }
+             const closeErrorPrompt = (event, reason) => {
+                if (reason === 'clickaway') {
+                    return;
+                }
+                this.setState({ ErrorPrompt: false });
+            }
+    
+            const closeSuccessPrompt = (event, reason) => {
+                if (reason === 'clickaway') {
+                    return;
+                }
+                this.setState({ SuccessPrompt: false });
+            }
+    
+            function Alert(props) {
+                return <MuiAlert elevation={6} variant="filled" {...props} />;
+            }
+    
 
 
         return (
             <Fragment>
                 <Nav />
                 <Menubar />
+                
+                {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+
+                <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
+                    <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
+                </Snackbar>
+
+                <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
+                    <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
+                </Snackbar>
+
+                
                 <div style={{ marginLeft: 10, marginTop: 10 }}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
@@ -300,7 +337,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 10
                                                                             }}
-                                                                            value={this.state.warehouse.code}
+                                                                            value={this.state.warehouse.Code}
 
                                                                         />
                                                                     </TableCell>
@@ -320,7 +357,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 10
                                                                             }}
-
+                                                                            value={this.state.warehouse.Description}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -339,7 +376,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 50
                                                                             }}
-
+                                                                            value={this.state.warehouse.ContactPerson}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -358,7 +395,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 50
                                                                             }}
-
+                                                                            value={this.state.warehouse.PhoneNo}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -387,7 +424,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 50
                                                                             }}
-
+                                                                            value={this.state.warehouse.EmailId}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -406,7 +443,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 10
                                                                             }}
-
+                                                                            value={this.state.warehouse.Address}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -425,7 +462,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 10
                                                                             }}
-
+                                                                            value={this.state.warehouse.Address1}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -444,7 +481,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 10
                                                                             }}
-
+                                                                            value={this.state.warehouse.Address2}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -456,6 +493,7 @@ class editwarehouse extends React.Component {
                                                                         <Switch
                                                                             size="small"
                                                                             onChange={(e) => updateFormValue('isActive', e)}
+                                                                            checked={this.state.warehouse.IsActive ? this.state.warehouse.IsActive === true ? "checked" : "unchecked" : null}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -491,6 +529,7 @@ class editwarehouse extends React.Component {
                                                                         <Switch
                                                                             size="small"
                                                                             onChange={(e) => updateFormValue('isEDI', e)}
+                                                                            checked={this.state.warehouse.IsEdi ? this.state.warehouse.IsEdi === true ? "checked" : "unchecked" : null}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -509,7 +548,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 10
                                                                             }}
-
+                                                                            value={this.state.warehouse.Ediurl}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -536,6 +575,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 10
                                                                             }}
+                                                                            value={this.state.warehouse.EdiloginId}
 
                                                                         />
                                                                     </TableCell>
@@ -555,7 +595,7 @@ class editwarehouse extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 10
                                                                             }}
-
+                                                                            value={this.state.warehouse.Edipassword}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>

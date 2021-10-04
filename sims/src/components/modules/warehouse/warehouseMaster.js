@@ -16,6 +16,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
+import CheckIcon from '@mui/icons-material/Check';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 import axios from "axios";
 
@@ -58,15 +60,21 @@ class warehouseMaster extends React.Component {
         axios.post(GetWareHousesUrl, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
+                if(response.status===200){
+                    this.setState({
+                        warehouses: data,
+                        ProgressLoader: true
+                    });
+                }else{
+                    this.setState({ branchData: [], ProgressLoader: true });
+                     
+                }
 
-                this.setState({
-                    warehouses: data,
-                    ProgressLoader: true
-                });
+                
             }
             ).catch(error => {
                 //console.log("error > ", error);
-                this.setState({ branchData: [], ProgressLoader: true });
+                
             });
     }
 
@@ -123,6 +131,7 @@ class warehouseMaster extends React.Component {
                                                 <TableCell className="table-header-font">#</TableCell>
                                                 <TableCell className="table-header-font" align="left">Code</TableCell>
                                                 <TableCell className="table-header-font" align="left">Description</TableCell>
+                                                <TableCell className="table-header-font" align="left">Status</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody className="tableBody">
@@ -143,6 +152,9 @@ class warehouseMaster extends React.Component {
                                                         {item.code}
                                                     </TableCell>
                                                     <TableCell align="left">{item.description}</TableCell>
+                                                    <TableCell align="left">
+                                                      {item.isActive===true?<CheckIcon style={{color:'green'}}/>:<PriorityHighIcon style={{color:'red'}}/>}
+                                                    </TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>
