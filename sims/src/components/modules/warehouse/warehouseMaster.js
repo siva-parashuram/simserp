@@ -69,8 +69,6 @@ class warehouseMaster extends React.Component {
                     this.setState({ branchData: [], ProgressLoader: true });
                      
                 }
-
-                
             }
             ).catch(error => {
                 //console.log("error > ", error);

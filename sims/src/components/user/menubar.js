@@ -67,11 +67,16 @@ export default function ScrollableTabsButtonAuto() {
     const [urlparams, seturlparams] = React.useState("");
     const [moduleList, setmoduleList] = React.useState([]);
     const [branchName, setbranchName] = React.useState("");
-
+    const [MenuBarBranchId, setMenuBarBranchId] = React.useState(0);
+    const [userPermissionLists, setuserPermissionLists] = React.useState([]);
+    const [masterMenuData,setmasterMenuData]=React.useState([]);
+    const [moduleHeader,setmoduleHeader]=React.useState([]);
+    const [moduleLinks,setmoduleLinks]=React.useState([]);
 
     useEffect(() => {
-        getModuleList();
         getUrlParams();
+        
+       
         console.log('On Load Event of UseEffect !');
     }, []);
 
@@ -96,6 +101,8 @@ export default function ScrollableTabsButtonAuto() {
         let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
         seturlparams(urlparams);
         setbranchName(branchName);
+        setMenuBarBranchId(branchId);
+        getModuleList();
     }
 
     const getModuleList = () => { 
@@ -105,6 +112,31 @@ export default function ScrollableTabsButtonAuto() {
         const headers = {
             "Content-Type": "application/json"
         };
+
+        let data={
+            validUser:ValidUser,
+            BranchId: parseInt(MenuBarBranchId),
+            UserId:parseInt(getCookie(COOKIE.USERID)),
+            userPermissionLists:userPermissionLists
+        };
+        console.log("get Menu Links > Request data > ",data);
+
+        let URL=APIURLS.APIURL.GetUserPermissionByUserIDAndBranchID;
+
+        axios.post(URL, data, { headers })
+        .then(response => {
+            let D = response.data;
+            console.log("get Menu Links > ",D);
+            if(response.status===200){
+               setmasterMenuData(D);
+               processData(D); 
+            }
+        }
+        ).catch(error => {
+            //console.log("error > ", error);
+            
+        });
+
 
         let moduleList = [
             // {
@@ -128,6 +160,32 @@ export default function ScrollableTabsButtonAuto() {
             }
         ]
         setmoduleList(moduleList);
+    }
+
+    const processData=(data)=>{
+          let moduleHeader=[];
+          for(let i=0; i<data.length;i++){
+              let mh={
+                moduleID:data[i].moduleID,
+                name:data[i].name,
+              };
+              moduleHeader.push(mh);
+          }
+          setmoduleHeader(moduleHeader);
+
+          let moduleLinks=[];
+          for(let i=0; i<moduleHeader.length;i++){
+              for(let j=0;j<data.length;j++){
+                let ml={
+                    moduleID:data[i].moduleID,
+                    name:data[i].name,
+                  };
+              }
+            
+            // moduleLinks.push(ml);
+        }
+
+
     }
 
 
