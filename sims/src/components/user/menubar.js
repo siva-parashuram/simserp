@@ -15,7 +15,8 @@ import * as APIURLS from "../../routes/apiconstant";
 import axios from "axios";
 
 import Grid from '@material-ui/core/Grid';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'; 
+import * as Customfunctions from "../../services/functions/customfunctions";
 
 
 function TabPanel(props) {
@@ -139,12 +140,7 @@ export default function ScrollableTabsButtonAuto() {
 
 
         let moduleList = [
-            // {
-            //     moduleName: "Home",
-            //     subMenus: [
-            //         { name: "Dashboard", link: "userDashboard" },
-            //     ]
-            // },
+            
             {
                 moduleName: "Admin",
                 subMenus: [
@@ -159,33 +155,48 @@ export default function ScrollableTabsButtonAuto() {
                 ]
             }
         ]
-        setmoduleList(moduleList);
+        // setmoduleList(moduleList);
     }
 
-    const processData=(data)=>{
+    const processData=(D)=>{
+        console.log("In processData > D > ",D);
+         let data=D.userPermissionLists;
+         console.log("In processData > userPermissionLists - data > ",D);
           let moduleHeader=[];
           for(let i=0; i<data.length;i++){
               let mh={
                 moduleID:data[i].moduleID,
                 name:data[i].name,
+                pages:[]
               };
               moduleHeader.push(mh);
           }
-          setmoduleHeader(moduleHeader);
 
-          let moduleLinks=[];
-          for(let i=0; i<moduleHeader.length;i++){
-              for(let j=0;j<data.length;j++){
-                let ml={
-                    moduleID:data[i].moduleID,
-                    name:data[i].name,
-                  };
-              }
-            
-            // moduleLinks.push(ml);
+          moduleHeader=Customfunctions.removeDuplicates(moduleHeader, 'moduleID');
+          console.log("In processData > moduleHeader > ",moduleHeader);
+
+        for (let i = 0; i < data.length; i++) {
+            let ml = {
+                pageId: data[i].pageId,
+                pageLink: data[i].pageLink,
+                pageName: data[i].pageName,
+                isCreate: data[i].isCreate,
+                isDelete: data[i].isDelete,
+                isPrint: data[i].isPrint,
+                isUpdate: data[i].isUpdate,
+                isView: data[i].isView,
+            };
+            for(let j=0;j<moduleHeader.length;j++){
+                if(data[i].moduleID===moduleHeader[j].moduleID){
+                    moduleHeader[j].pages.push(ml);
+                    console.log("ml > ",ml);
+                }
+            }
         }
-
-
+         
+        console.log("Menubar processData > moduleHeader > ",moduleHeader);
+        setmoduleHeader(moduleHeader);
+        setmoduleList(moduleHeader);
     }
 
 
@@ -215,7 +226,7 @@ export default function ScrollableTabsButtonAuto() {
                                     className="menubar-tab-app-bar"                                     
                                     onClick={(e) => handleTabClick(e, i)} 
                                 //    icon={<ExpandMoreIcon className="menubar-tab-icon-position" small/>} 
-                                    label={item.moduleName}  
+                                    label={item.name}  
                                     {...a11yProps(i)} 
                                     wrapped
                                     />
@@ -229,11 +240,11 @@ export default function ScrollableTabsButtonAuto() {
                             <TabPanel value={value} index={i} style={{ backgroundColor: '#eceff1' }}>
                                 <Grid container spacing={0}>
                                     {
-                                        item.subMenus? item.subMenus.map((subMenusitem, j) => (
+                                        item.pages? item.pages.map((pages, j) => (
                                             <Fragment>
                                                 <div>
-                                                    <Link key={"side-menu-LIL" + j} className="menubar-link" to={subMenusitem.link + urlparams}>
-                                                        {subMenusitem.name}
+                                                    <Link key={"side-menu-LIL" + pages.pageId} className="menubar-link" to={pages.pageLink + urlparams}>
+                                                        {pages.pageName}
                                                     </Link>
                                                 </div>
                                                 <div style={{ width: 30 }}></div>
