@@ -32,6 +32,10 @@ import addModule from "../components/modules/modules/addmodule";
 import editModule from "../components/modules/modules/editmodule";
 import rolemaster from "../components/modules/role/rolemaster";
 import addRole from "../components/modules/role/addrole";
+import warehousemaster from "../components/modules/warehouse/warehouseMaster";
+import addWarehouse from "../components/modules/warehouse/addwarehouse";
+import editWarehouse from "../components/modules/warehouse/editwarehouse";
+
 
 let routes = ({ location, ...rest }) => {
   return (
@@ -72,12 +76,18 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.editBranch}  component={editBranch} />
         <Route path={URLS.URLS.addBranch}  component={addBranch} />
 
-
+        {/* Module Routes*/}
         <Route path={URLS.URLS.moduleMaster}  component={moduleMaster} />
         <Route path={URLS.URLS.addModule}  component={addModule} />
         <Route path={URLS.URLS.editModule}  component={editModule} />        
         <Route path={URLS.URLS.roleMaster}  component={rolemaster} />
         <Route path={URLS.URLS.addRole}  component={addRole} />
+
+          {/* Warehouse Routes*/}
+          <Route path={URLS.URLS.warehouseMaster}  component={warehousemaster} />
+          <Route path={URLS.URLS.addWarehouse}  component={addWarehouse} />
+          <Route path={URLS.URLS.editWarehouse}  component={editWarehouse} />
+          
 
       
         <Route path={URLS.URLS.loginExpired}  component={loginExpired} />

@@ -306,7 +306,7 @@ class usermoduleassign extends React.Component {
                                                             {this.state.roles.map((item, i) => (
                                                                 <option value={item.roleId}>{item.name}</option>
                                                             ))}
-
+                                                             
                                                         </select>
                                                     </td>
                                                 </tr>

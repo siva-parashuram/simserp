@@ -45,7 +45,7 @@ class usermaster extends React.Component {
             users: [],
             userId: 0,
             passData: [],
-            userBranchMappingList:[]
+            userBranchMappingList: []
 
         }
     }
@@ -112,7 +112,7 @@ class usermaster extends React.Component {
             .then(response => {
                 console.log("getUserBranches > response.data > ", response.data);
                 let data = response.data;
-                this.setState({userBranchMappingList:data.userBranchMappingList});
+                this.setState({ userBranchMappingList: data.userBranchMappingList });
                 this.processData(data.userBranchMappingList, userId);
 
             }
@@ -310,13 +310,9 @@ class usermaster extends React.Component {
                                                 <TableCell className="table-header-font">#</TableCell>
                                                 <TableCell className="table-header-font" align="left">Email Id</TableCell>
                                                 <TableCell className="table-header-font" align="left">First Name</TableCell>
-                                                { /*
-                                                <TableCell className="table-header-font" align="left">Last Name</TableCell>
-                                                */}
+
                                                 <TableCell className="table-header-font" align="left">Login Id</TableCell>
-                                                {/*
-                                                <TableCell className="table-header-font" align="left">isAdmin</TableCell>
-                                                */}
+
                                                 <TableCell className="table-header-font" align="left">Status</TableCell>
 
                                             </TableRow>
@@ -344,26 +340,17 @@ class usermaster extends React.Component {
                                                     <TableCell align="left">
                                                         {item.firstName}
                                                     </TableCell>
-                                                    {/*
-                                                    <TableCell align="left">
-                                                        {item.lastName}
-                                                    </TableCell>
-                                                    */}
+
                                                     <TableCell align="left">
                                                         {item.loginId}
                                                     </TableCell>
-                                                    {/*
-                                                    <TableCell align="left">
 
-                                                        {item.isAdmin?item.isAdmin===true?"True":"False":"-"}
-                                                    </TableCell>
-                                                */}
 
                                                     <TableCell align="left">
                                                         {item.isActive === true ? (
-                                                            <span style={{ color: 'green' }}>Active</span> // <Switch defaultChecked size="small" onChange={(e)=>changeUserStatus(item,false)}/>
+                                                            <span style={{ color: 'green' }}>Active</span>
                                                         ) : (
-                                                            <span style={{ color: 'red' }}>In-Active</span> // <Switch size="small" onChange={(e)=>changeUserStatus(item,true)}/>
+                                                            <span style={{ color: 'red' }}>In-Active</span>
                                                         )}
                                                     </TableCell>
 
@@ -416,10 +403,10 @@ class usermaster extends React.Component {
                                             <Grid container spacing={1}>
                                                 <Grid xs={12} sm={12} md={12} lg={12}>
                                                     <Usermoduleassign data={
-                                                    {   
-                                                        userId:this.state.userId,
-                                                        List:this.state.userBranchMappingList
-                                                    }
+                                                        {
+                                                            userId: this.state.userId,
+                                                            List: this.state.userBranchMappingList
+                                                        }
                                                     } />
                                                 </Grid>
 

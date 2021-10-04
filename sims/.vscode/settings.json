@@ -20,12 +20,16 @@
         "customfunctions",
         "dasboard",
         "datetime",
+        "ediloginid",
+        "edipassword",
         "editbranch",
         "editcompany",
         "editcountry",
         "editmodule",
         "editstate",
         "edituser",
+        "editware",
+        "ediurl",
         "FIRSTNAME",
         "gstcode",
         "insitiate",
@@ -43,6 +47,7 @@
         "urlparams",
         "userbranchalot",
         "USERID",
-        "usermaster"
+        "usermaster",
+        "warehousemaster"
     ]
 }

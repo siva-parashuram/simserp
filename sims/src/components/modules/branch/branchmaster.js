@@ -186,7 +186,7 @@ class branchMaster extends React.Component {
                                         >
                                             <TableCell align="left">
                                                 <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >
-                                                B{item.branchId}
+                                                 {URLS.PREFIX.branchId+item.branchId}
                                                 </a>
                                             </TableCell>
                                             <TableCell align="left">

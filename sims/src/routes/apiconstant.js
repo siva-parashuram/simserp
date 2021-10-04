@@ -53,6 +53,10 @@ export const APIURL = {
     GetAllUserPermission:domain+"api/UserPermission/GetAllUserPermission",
     GetUserPermissionByUserIDAndBranchID:domain+"api/UserPermission/GetUserPermissionByUserIDAndBranchID",
     CreateUserPermission:domain+"api/UserPermission/CreateUserPermission",
+    GetWareHouses:domain+"api/WareHouse/GetWareHouses",
+    CreateWareHouse:domain+"api/WareHouse/CreateWareHouse",
+    UpdateWareHouse:domain+"api/WareHouse/UpdateWareHouse",
+    GetWareHouse:domain+"api/WareHouse/GetWareHouse",
   };
 
   export const CTimeOut = 10; 

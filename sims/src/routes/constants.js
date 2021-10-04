@@ -29,7 +29,10 @@ export const URLS = {
   addModule:"/addModule",
   editModule:"/editModule",
   roleMaster:"/rolemaster", 
-  addRole:"/addRole"
+  addRole:"/addRole",
+  warehouseMaster:"/warehouseMaster",
+  addWarehouse:"/addWarehouse",
+  editWarehouse:"/editWarehouse",
 };
 
 
@@ -37,9 +40,11 @@ export const PREFIX={
   moduleID:"M",
   pageID:"PL",
   companyID:"C",
+  branchId:"B",
   countryID:"CO",
   stateID:"ST",
   destinationID:"DEST",
   userID:"U",
   roleID:"R",
+  wareHouseId:"W",
 };
