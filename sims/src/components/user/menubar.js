@@ -103,10 +103,10 @@ export default function ScrollableTabsButtonAuto() {
         seturlparams(urlparams);
         setbranchName(branchName);
         setMenuBarBranchId(branchId);
-        getModuleList();
+        getModuleList(branchId);
     }
 
-    const getModuleList = () => { 
+    const getModuleList = (branchId) => { 
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -116,7 +116,7 @@ export default function ScrollableTabsButtonAuto() {
 
         let data={
             validUser:ValidUser,
-            BranchId: parseInt(MenuBarBranchId),
+            BranchId: parseInt(branchId),
             UserId:parseInt(getCookie(COOKIE.USERID)),
             userPermissionLists:userPermissionLists
         };
