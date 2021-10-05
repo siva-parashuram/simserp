@@ -53,6 +53,7 @@ class usermoduleassign extends React.Component {
             branchId: 0,
             selectedList:[],
             roleId:0,
+            UserAllotedRoleByBranch:0,
         }
     }
     componentDidMount() {
@@ -95,9 +96,8 @@ class usermoduleassign extends React.Component {
             this.setState({ userId: userId });
         }
 
-        const dropdownChange = (e) => {
-            console.log("dropdownChange > e.target.value > ", e.target.value);
-            getPageListByRoleId(e.target.value);
+        const dropdownChange = (e) => {            
+            getPageListByRoleId(e);
         }
 
         const getPageListByRoleId = (roleId) => {
@@ -118,11 +118,19 @@ class usermoduleassign extends React.Component {
             // data.BranchId =parseInt(branchId);
             // data.UserId = this.props.data.userId;
 
+            // let data={
+            //     validUser:ValidUser,
+            //     BranchId: parseInt(branchId),
+            //     UserId:parseInt(this.props.data.userId),
+            //     userPermissionLists:[]
+            // };  
+
             let data = APIURLS.GetRoleDetailByRoleIdData;
             data.validUser=ValidUser;
             data.RoleId=parseInt(roleId);    
              
             let GetRoleDetailByRoleIdUrl = APIURLS.APIURL.GetRoleDetailByRoleId;
+            // let Url=APIURLS.APIURL.GetUserPermissionByUserIDAndBranchID;
             axios.post(GetRoleDetailByRoleIdUrl, data, { headers })
                 .then(response => {
                     console.log("getPageListByRoleId > response > ", response);
@@ -138,9 +146,10 @@ class usermoduleassign extends React.Component {
         const processData=(userPermissionLists)=>{
             let feUserPermissionLists=[];
             for(let i=0;i<userPermissionLists.length;i++){
-                 if(userPermissionLists[i].isChecked===true){
-                    feUserPermissionLists.push(userPermissionLists[i]);
-                 }                 
+                //  if(userPermissionLists[i].isChecked===true){
+                //     feUserPermissionLists.push(userPermissionLists[i]);
+                //  }     
+                 feUserPermissionLists.push(userPermissionLists[i]);                        
               
             }
             this.setState({ ModuleRoleListMst:userPermissionLists,ModuleRoleList: feUserPermissionLists, ProgressLoader: true });
@@ -174,7 +183,7 @@ class usermoduleassign extends React.Component {
                 if(ModuleRoleList[i].isChecked===true){
                     let obj={
                         "userId": userId,
-                        "roleId": this.state.roleId,
+                        "roleId": parseInt(this.state.roleId),
                         "pageId": ModuleRoleList[i].pageId,
                         "branchId": parseInt(branchId),
                         "isCreate": ModuleRoleList[i].isCreate,
@@ -186,7 +195,8 @@ class usermoduleassign extends React.Component {
                         "moduleID": ModuleRoleList[i].moduleID,
                         "name": ModuleRoleList[i].name,
                         "pageName": ModuleRoleList[i].pageName,
-                        "pageLink": ModuleRoleList[i].pageLink               
+                        "pageLink": ModuleRoleList[i].pageLink,
+                        "isChecked": ModuleRoleList[i].isChecked               
                       };
                       userPermissionLists.push(obj);
                 }
@@ -235,6 +245,40 @@ class usermoduleassign extends React.Component {
 
         }
 
+        const selectBranchDropdown=(e,userId)=>{
+            this.setState({ branchId: e.target.value }, () => {
+                let ValidUser = APIURLS.ValidUser;
+                ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+                ValidUser.Token = getCookie(COOKIE.TOKEN);
+                const headers = {
+                    "Content-Type": "application/json"
+                };
+                let data={
+                    validUser:ValidUser,
+                    BranchId:parseInt(e.target.value),
+                    UserId:parseInt(userId)
+                };
+                let URL=APIURLS.APIURL.GetUserPermissionByRoleId; 
+                axios.post(URL, data, { headers })
+                .then(response => {
+                    console.log("selectBranchDropdown > response.data > ", response.data);     
+                    this.setState({UserAllotedRoleByBranch:response.data},()=>{
+                        if(response.data===0){
+                            this.setState({ ModuleRoleList: [], ProgressLoader: true });
+                        }else{
+                            dropdownChange(response.data);
+                        }
+                        
+                    }); 
+                }
+                ).catch(error => {
+                    console.log("selectBranchDropdown > error > ", error);
+                         
+                });
+
+            })
+        }
+
         const closeErrorPrompt = (event, reason) => {
             if (reason === 'clickaway') {
                 return;
@@ -281,8 +325,12 @@ class usermoduleassign extends React.Component {
                                                         <select
                                                             className="dropdown-css"
                                                             id="branchList"
-                                                            onChange={(e) => this.setState({ branchId: e.target.value })}
+                                                            onChange={(e) => selectBranchDropdown(e,this.props.data.userId)}
+
+                                                           
+
                                                         >
+                                                        <option value="0" disabled selected>-Choose-</option>
                                                             {this.props.data.List.map((item, i) => (
                                                                item.mark===1?(
                                                                 <option value={item.branchID}>{item.branchName}-({item.companyName})</option>
@@ -300,9 +348,10 @@ class usermoduleassign extends React.Component {
                                                         <select
                                                             className="dropdown-css"
                                                             id="roleList"
-                                                            onChange={(e) => dropdownChange(e)}
+                                                            onChange={(e) => dropdownChange(e.target.value)}
+                                                            value={this.state.UserAllotedRoleByBranch}
                                                         >
-                                                            <option value="-" disabled selected>-Choose-</option>
+                                                            <option value="0" disabled >-Choose-</option>
                                                             {this.state.roles.map((item, i) => (
                                                                 <option value={item.roleId}>{item.name}</option>
                                                             ))}
@@ -347,8 +396,9 @@ class usermoduleassign extends React.Component {
                                                         {
                                                             this.state.ModuleRoleList ? this.state.ModuleRoleList.map((item, i) => (
                                                                 <TableRow>
-                                                                {console.log("-----------------> item > ",item)}
+                                                                
                                                                     <TableCell align="left">
+                                                                
                                                                     {item.isChecked===true?(
                                                                         <input
                                                                         type="checkbox"

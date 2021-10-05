@@ -53,6 +53,7 @@ export const APIURL = {
     GetAllUserPermission:domain+"api/UserPermission/GetAllUserPermission",
     GetUserPermissionByUserIDAndBranchID:domain+"api/UserPermission/GetUserPermissionByUserIDAndBranchID",
     CreateUserPermission:domain+"api/UserPermission/CreateUserPermission",
+    GetUserPermissionByRoleId:domain+"api/UserPermission/GetUserPermissionByRoleId",
     GetWareHouses:domain+"api/WareHouse/GetWareHouses",
     CreateWareHouse:domain+"api/WareHouse/CreateWareHouse",
     UpdateWareHouse:domain+"api/WareHouse/UpdateWareHouse",

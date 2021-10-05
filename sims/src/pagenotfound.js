@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import './components/loginPage.css';
+import logo from './logo.png';
 
 import Link from '@material-ui/core/Link';
 import * as URLS from "./routes/constants";
@@ -46,6 +47,9 @@ class pageNotFound extends React.Component {
                     </p>
                     <p style={{ textAlign:'center' }}>
                        <PriorityHighIcon style={{fontSize:400,color:'red'}}/>
+                    </p>
+                    <p  style={{ textAlign:'center' }}>
+                    <img src={logo} className="App-logo" alt="logo" />
                     </p>
                 </div>
             </Fragment>
