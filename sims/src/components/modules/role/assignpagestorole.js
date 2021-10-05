@@ -609,7 +609,7 @@ class assignpagestorole extends React.Component {
                             </Grid>
                         </Grid>
                         <div style={{ height: 20 }}></div>
-                        <div style={{ height: 500, width: '100%' }}>
+                        <div style={{ height: 1500, width: '100%' }}>
                             {this.state.refreshPageLinkList === true ? (
                                 <DataGrid
                                 className="no-border-table"
@@ -622,7 +622,7 @@ class assignpagestorole extends React.Component {
                                     onSelectionModelChange={(e) => {
                                         onSelectionModelChange(e)
                                     }}
-                                    rowHeight={25}
+                                    // rowHeight={25}
                                     isRowSelectable={(params) => params.row.IsCreate===true || params.row.IsDelete===true || params.row.IsPrint===true || params.row.IsUpdate===true || params.row.IsView===true}
                                      
                                 />
@@ -639,7 +639,7 @@ class assignpagestorole extends React.Component {
                                         onSelectionModelChange={(e) => {
                                             onSelectionModelChange(e)
                                         }}
-                                        rowHeight={25}
+                                        // rowHeight={25}
                                         isRowSelectable={(params) => params.row.IsCreate===true || params.row.IsDelete===true || params.row.IsPrint===true || params.row.IsUpdate===true || params.row.IsView===true}
                                     />
                                 </Fragment>

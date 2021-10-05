@@ -143,15 +143,15 @@ export default function ScrollableTabsButtonAuto() {
             
             {
                 moduleName: "Admin",
-                subMenus: [
-                    { name: "Company Master", link: "companyMaster" },
-                    { name: "Country Master", link: "countryMaster" },
-                    { name: "State Master", link: "stateMaster" },
-                    { name: "User Master", link: "userMaster" },
-                    { name: "Branch Master", link: "branchMaster" },
-                    { name: "Module Master", link: "moduleMaster" },                    
-                    { name: "Role Master", link: "roleMaster" }, 
-                    { name: "Warehouse Master", link: "warehouseMaster" },  
+                pages: [
+                    { pageName: "Company Master", pageLink: "companyMaster" },
+                    { pageName: "Country Master", pageLink: "countryMaster" },
+                    { pageName: "State Master", pageLink: "stateMaster" },
+                    { pageName: "User Master", pageLink: "userMaster" },
+                    { pageName: "Branch Master", pageLink: "branchMaster" },
+                    { pageName: "Module Master", pageLink: "moduleMaster" },                    
+                    { pageName: "Role Master", pageLink: "roleMaster" }, 
+                    { pageName: "Warehouse Master", pageLink: "warehouseMaster" },  
                 ]
             }
         ]
@@ -164,12 +164,15 @@ export default function ScrollableTabsButtonAuto() {
          console.log("In processData > userPermissionLists - data > ",D);
           let moduleHeader=[];
           for(let i=0; i<data.length;i++){
-              let mh={
-                moduleID:data[i].moduleID,
-                name:data[i].name,
-                pages:[]
-              };
-              moduleHeader.push(mh);
+            if(data[i].isChecked===true){
+                let mh={
+                    moduleID:data[i].moduleID,
+                    name:data[i].name,
+                    pages:[]
+                  };
+                  moduleHeader.push(mh);
+            }
+            
           }
 
           moduleHeader=Customfunctions.removeDuplicates(moduleHeader, 'moduleID');
@@ -188,8 +191,11 @@ export default function ScrollableTabsButtonAuto() {
             };
             for(let j=0;j<moduleHeader.length;j++){
                 if(data[i].moduleID===moduleHeader[j].moduleID){
-                    moduleHeader[j].pages.push(ml);
-                    console.log("ml > ",ml);
+                    if(data[i].isChecked===true){
+                        moduleHeader[j].pages.push(ml);
+                        console.log("ml > ",ml);
+                    }
+                   
                 }
             }
         }
@@ -201,9 +207,9 @@ export default function ScrollableTabsButtonAuto() {
 
 
     return (
-        <div className={classes.root}>
-            <Grid container spacing={1}>
-                 
+        moduleList.length>0?(
+            <div className={classes.root}>
+            <Grid container spacing={1}>                 
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div >
                         <Tabs
@@ -262,5 +268,7 @@ export default function ScrollableTabsButtonAuto() {
 
 
         </div>
+        ):null
+       
     );
 }
