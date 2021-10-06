@@ -221,7 +221,7 @@ class login extends React.Component {
     };
     const logoutUser = (e) => {
       processLogout(getCookie(COOKIE.USERID), this.state.token);
-      this.setState({ anchorEl: null, isLoggedIn: false }, () => {
+      this.setState({ anchorEl: null, isLoggedIn: false,userID:"",password:""  }, () => {
         deleteCookie(COOKIE.USERID, null);
         deleteCookie(COOKIE.TOKEN, null);
         deleteCookie(COOKIE.USERID, null);
