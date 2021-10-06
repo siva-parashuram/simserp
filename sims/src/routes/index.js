@@ -35,6 +35,9 @@ import addRole from "../components/modules/role/addrole";
 import warehousemaster from "../components/modules/warehouse/warehouseMaster";
 import addWarehouse from "../components/modules/warehouse/addwarehouse";
 import editWarehouse from "../components/modules/warehouse/editwarehouse";
+import numberingMaster from "../components/modules/numberings/numberingmaster";
+import addNumbering from "../components/modules/numberings/addnumbering";
+
 
 import pageNotFound from "../../src/pagenotfound";
 
@@ -90,6 +93,9 @@ let routes = ({ location, ...rest }) => {
           <Route path={URLS.URLS.addWarehouse}  component={addWarehouse} />
           <Route path={URLS.URLS.editWarehouse}  component={editWarehouse} />
           <Route path={URLS.URLS.loginExpired}  component={loginExpired} />
+          <Route path={URLS.URLS.numberingMaster}  component={numberingMaster} />
+          <Route path={URLS.URLS.addNumbering}  component={addNumbering} />
+          
  
           <Route component={pageNotFound} />
          

@@ -33,6 +33,8 @@ export const URLS = {
   warehouseMaster:"/warehouseMaster",
   addWarehouse:"/addWarehouse",
   editWarehouse:"/editWarehouse",
+  numberingMaster:"/numberingMaster",
+  addNumbering:"/addNumbering",
 };
 
 

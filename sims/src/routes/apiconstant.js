@@ -61,6 +61,7 @@ export const APIURL = {
   };
 
   export const CTimeOut = 10; 
+  export const DFormat = "MM/DD/YYYY";
 
 
   export let ValidUser={
