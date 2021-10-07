@@ -35,6 +35,8 @@ export const URLS = {
   editWarehouse:"/editWarehouse",
   numberingMaster:"/numberingMaster",
   addNumbering:"/addNumbering",
+  currencyMaster:"/currencyMaster",
+  addCurrency:"/addCurrency",
 };
 
 

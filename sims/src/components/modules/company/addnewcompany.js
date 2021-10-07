@@ -217,7 +217,7 @@ class addnewcompany extends React.Component {
 
 
         const handleCreateCompanyClick = (e) => {
-            let gobackURL=URLS.URLS.companyMaster + this.state.urlparams;
+            
             this.setState({ ProgressLoader: false });
 
             let ValidUser = APIURLS.ValidUser;
@@ -255,6 +255,7 @@ class addnewcompany extends React.Component {
                         console.log("response > ", response);
                         if (response.status === 200 || response.status === 201) {
                             this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                            let gobackURL=URLS.URLS.companyMaster + this.state.urlparams;
                             this.props.history.push(gobackURL);
                         } else {
                             this.setState({ ProgressLoader: true, ErrorPrompt: true });

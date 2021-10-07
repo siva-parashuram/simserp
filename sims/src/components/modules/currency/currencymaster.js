@@ -28,20 +28,20 @@ import Menubar from "../../user/menubar";
 
 
 
-class numberingmaster extends React.Component {
+class currencymaster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             urlparams: "",
             ProgressLoader: true,
             initialCss: "",
-            numberings: [],
+            currency: [],
 
         }
     }
 
     componentDidMount() {
-
+        this.getList();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -60,14 +60,14 @@ class numberingmaster extends React.Component {
         const headers = {
             "Content-Type": "application/json"
         };
-        let GetUsersUrl = APIURLS.APIURL.GetUsers;
+        let Url = APIURLS.APIURL.GetCurrencies;
 
-        axios.post(GetUsersUrl, ValidUser, { headers })
+        axios.post(Url, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
                 console.log("getList > response > data > ", data);
                 this.setState({
-                    numberings: data,
+                    currency: data,
                     ProgressLoader: true
                 });
             }
@@ -87,7 +87,7 @@ class numberingmaster extends React.Component {
         }
 
         const removeIsSelectedRowClasses = () => {
-            for (let i = 0; i < this.state.numberings.length; i++) {
+            for (let i = 0; i < this.state.currency.length; i++) {
                 document.getElementById('row_' + i).className = '';
             }
         }
@@ -135,7 +135,7 @@ class numberingmaster extends React.Component {
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
                                 </Link>
-                                <Typography color="textPrimary">Numbering Master</Typography>
+                                <Typography color="textPrimary">Currency Master</Typography>
                             </Breadcrumbs>
 
                         </Grid>
@@ -145,7 +145,7 @@ class numberingmaster extends React.Component {
                             <Button
                                 style={{ marginLeft: 5 }}
                             >
-                                <a className="button-link" href={URLS.URLS.addNumbering + this.state.urlparams}>
+                                <a className="button-link" href={URLS.URLS.addCurrency + this.state.urlparams}>
                                     New
                                 </a>
                             </Button>
@@ -162,13 +162,13 @@ class numberingmaster extends React.Component {
                                                 <TableCell className="table-header-font">#</TableCell>
                                                 <TableCell className="table-header-font" align="left">Code</TableCell>
                                                 <TableCell className="table-header-font" align="left">Description</TableCell>
-                                                <TableCell className="table-header-font" align="left">Starting No</TableCell>
-                                                <TableCell className="table-header-font" align="left"> Ending No</TableCell>
+                                                <TableCell className="table-header-font" align="left">Symbol</TableCell>
+                                                <TableCell className="table-header-font" align="left"> Rounding</TableCell>
                                                
                                             </TableRow>
                                         </TableHead>
                                         <TableBody className="tableBody">
-                                            {this.state.numberings.map((item, i) => (
+                                            {this.state.currency.map((item, i) => (
                                                 <TableRow
                                                     id={"row_" + i}
                                                     className={this.state.initialCss}
@@ -208,4 +208,4 @@ class numberingmaster extends React.Component {
     }
 
 }
-export default numberingmaster;
+export default currencymaster;
