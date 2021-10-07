@@ -41,6 +41,7 @@ class editnumbering extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            lastLno:null,
             urlparams: "",
             GeneralDetailsExpanded: true,
             NumberingsListExpanded: false,
@@ -49,7 +50,7 @@ class editnumbering extends React.Component {
             branchId: 0,
             numberings: [],
             startdate: "2021-10-06",
-            noSeries: {
+            noSeries: {  
                 NoSeriesId: 0,
                 Code: null,
                 Description: null,
@@ -133,7 +134,10 @@ class editnumbering extends React.Component {
                         noSeriesDetailList.push(l);
                     }
 
+                    let lastLno=noSeriesDetailList.at(-1).Lno;
+
                     this.setState({
+                        lastLno:lastLno,
                         noSeries: noSeries,
                         numberings: noSeriesDetailList,
                         ProgressLoader: true
@@ -258,17 +262,18 @@ class editnumbering extends React.Component {
 
         const creatNewLine = () => {
             let N = this.state.numberings;
+            let newLno=N.at(-1).Lno+1;
             let newID = N.length + 1;
             let numberings = {
                 id: newID,
-                NoSeriesId: 0,
-                Lno: 0,
+                NoSeriesId: parseInt(this.state.noSeries.NoSeriesId) ,
+                Lno: newLno,
                 StartDate: null,
                 Prefix: null,
-                StartNo: 0,
+                StartNo: null,
                 Suffix: null,
-                Increment: 0,
-                LastNo: 0,
+                Increment: null,
+                LastNo: null,
                 LastNoDate: null,
             };
 
@@ -293,7 +298,7 @@ class editnumbering extends React.Component {
 
         }
 
-        const formatDate = () => {
+        const formatData = () => {
             let noSeriesDetailList = this.state.numberings;
 
             for (let i = 0; i < noSeriesDetailList.length; i++) {
@@ -310,12 +315,12 @@ class editnumbering extends React.Component {
             ValidUser.Token = getCookie(COOKIE.TOKEN);
 
             let noSeries = this.state.noSeries;
-            let noSeriesDetailList = formatDate();
+            let noSeriesDetailList = formatData();
             let BranchId = this.state.branchId;
             const data = {
                 validUser: ValidUser,
                 noSeries: noSeries,
-                BranchId: BranchId,
+                BranchId: parseInt(BranchId),
                 noSeriesDetailList: noSeriesDetailList
             };
             const headers = {
@@ -524,13 +529,14 @@ class editnumbering extends React.Component {
                                                                         id={"startno" + item.id}
                                                                         variant="outlined"
                                                                         size="small"
+                                                                        onKeyUp={(e)=>updateNumberingListState("startno", item, "startno" + item.id, e)}
                                                                         onKeyDown={(e) => updateListValue("startno", item, 'startno' + item.id, 'suffix' + item.id, e)}
                                                                         style={{ width: 120 }}
                                                                         InputProps={{
                                                                             className: "textFieldCss"
                                                                         }}
-                                                                        value={item.StartNo}
-
+                                                                        defaultValue={item.StartNo}
+    
                                                                     />
                                                                 </td>
                                                                 <td>
@@ -538,12 +544,13 @@ class editnumbering extends React.Component {
                                                                         id={"suffix" + item.id}
                                                                         variant="outlined"
                                                                         size="small"
+                                                                        onKeyUp={(e)=>updateNumberingListState("suffix", item, "suffix" + item.id, e)}
                                                                         onKeyDown={(e) => updateListValue("suffix", item, 'suffix' + item.id, 'prefix' + item.id, e)}
                                                                         style={{ width: 120 }}
                                                                         InputProps={{
                                                                             className: "textFieldCss"
                                                                         }}
-                                                                        value={item.Suffix}
+                                                                        defaultValue={item.Suffix}
                                                                     />
                                                                 </td>
                                                                 <td>
@@ -551,12 +558,13 @@ class editnumbering extends React.Component {
                                                                         id={"prefix" + item.id}
                                                                         variant="outlined"
                                                                         size="small"
+                                                                        onKeyUp={(e)=>updateNumberingListState("prefix", item, "prefix" + item.id, e)}
                                                                         onKeyDown={(e) => updateListValue("prefix", item, 'prefix' + item.id, 'Increment' + item.id, e)}
                                                                         style={{ width: 120 }}
                                                                         InputProps={{
                                                                             className: "textFieldCss"
                                                                         }}
-                                                                        value={item.Prefix}
+                                                                        defaultValue={item.Prefix}
                                                                     />
                                                                 </td>
                                                                 <td>
@@ -565,15 +573,17 @@ class editnumbering extends React.Component {
                                                                         id={"Increment" + item.id}
                                                                         variant="outlined"
                                                                         size="small"
+                                                                        onKeyUp={(e)=>updateNumberingListState("Increment", item, "Increment" + item.id, e)}
                                                                         onKeyDown={(e) => updateListValue("Increment", item, 'Increment' + item.id, 'newline', e)}
                                                                         style={{ width: 120 }}
                                                                         InputProps={{
                                                                             className: "textFieldCss"
                                                                         }}
-                                                                        value={item.Increment}
+                                                                        defaultValue={item.Increment}
                                                                     />
                                                                 </td>
                                                                 <td>
+                                                                
                                                                     <TextField
                                                                         type="number"
                                                                         id={"lastno" + item.id}
@@ -589,8 +599,9 @@ class editnumbering extends React.Component {
                                                                     />
                                                                 </td>
                                                                 <td>
+                                                                
 
-                                                                    {i > 0 && item.Lno === 0 ? <DeleteForeverIcon
+                                                                    {item.Lno > this.state.lastLno ? <DeleteForeverIcon
                                                                         fontSize="small"
                                                                         className="table-delete-icon"
                                                                         onClick={(e) => deleteEntry(e, item)}

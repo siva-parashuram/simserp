@@ -422,7 +422,7 @@ class edituser extends React.Component {
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
                                                     {console.log("this.state.isActive ------------------------------> ",this.state.isActive)}
-                                                    {this.state.isActive==true?(
+                                                    {this.state.isActive===true?(
                                                         <Switch
                                                             key="isactiuveswitch"
                                                             size="small"  
