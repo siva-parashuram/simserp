@@ -455,6 +455,14 @@ cursor: pointer;
   
  }
 
+ .table-delete-icon{
+   color: #e53935;
+ }
+ .table-delete-icon:hover{
+  cursor: pointer !important;
+
+}
+
  
 
 /**************************************************************************************************************************/

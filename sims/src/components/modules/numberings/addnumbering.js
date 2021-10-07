@@ -23,6 +23,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 
 import { COOKIE, getCookie } from "../../../services/cookie";
@@ -52,12 +53,32 @@ class addnumbering extends React.Component {
             ProgressLoader: true,
             initialCss: "",
             numberings: [],
-            startdate: "2021-10-06"
+            startdate: "2021-10-06",
+            noSeries: {
+                NoSeriesId: 0,
+                Code: null,
+                Description: null,
+                BranchId: 0,
+                UserId: 0,
+                CreationDate: null,
+            },
+            noSeriesDetailList: {
+                id:0,
+                NoSeriesId: 0,
+                Lno: 0,
+                StartDate: null,
+                Prefix: null,
+                StartNo: 0,
+                Suffix: null,
+                Increment: 0,
+                LastNo: 0,
+                LastNoDate: null,
+            }
         }
     }
 
     componentDidMount() {
-        this.getNumberingList();
+       let USERID= getCookie(COOKIE.USERID);
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -66,23 +87,21 @@ class addnumbering extends React.Component {
         this.setState({
             urlparams: urlparams,
         });
+        this.getNumberingList(branchId,USERID);
     }
 
-    getNumberingList() {
+    getNumberingList(branchId,USERID) {
         let today = moment().format("dd-mm-yyyy");
         let N = [];
-        let numberings = {
-            id: 0,
-            LNo: 0,
-            StartDate: today,
-            Prefix: null,
-            StartNo: 0,
-            Suffix: null,
-            Increment: 0,
-            LastNo: null
-        }
+        let numberings = this.state.noSeriesDetailList;
+        numberings.StartDate=today;       
         N.push(numberings);
-        this.setState({ numberings: N });
+
+       let noSeries=this.state.noSeries;
+       noSeries.BranchId=parseInt(branchId);
+       noSeries.UserId=parseInt(USERID);
+
+        this.setState({ numberings: N,noSeries:noSeries });
     }
 
 
@@ -104,6 +123,15 @@ class addnumbering extends React.Component {
 
         const updateFormValue = (id, e) => {
             console.log("In updateFormValue");
+            let noSeries=this.state.noSeries;
+            if(id==="Code"){
+                noSeries.Code=e.target.value;
+                this.setState({noSeries:noSeries});
+            }
+            if(id==="Description"){
+                noSeries.Description=e.target.value;
+                this.setState({noSeries:noSeries});
+            }
 
 
         }
@@ -118,21 +146,22 @@ class addnumbering extends React.Component {
             this.setState({ numberings: numberings });
         }
 
-        const updateListValue = (id, nextid, e) => {
-            console.log("In updateFormValue");
-            console.log(" > id > ", id);
-            console.log(" > nextid > ", nextid);
-            console.log(" > e > ", e);
-            console.log(" > e.key > ", e.key);
+        const updateListValue = (param,item,id, nextid, e) => {
+            // console.log("In updateFormValue");
+            // console.log(" > id > ", id);
+            // console.log(" > nextid > ", nextid);
+            // console.log(" > e > ", e);
+            // console.log(" > e.key > ", e.key);
             if (e.key === 'Enter') {
-                console.log('do validate');
+                // console.log('do validate');
                 let value = document.getElementById(id).value;
-                console.log('> value > ', value);
+                // console.log('> value > ', value);
                 if (value === "" || value === null) {
-                    alert("Cannot be blank!");                    
+                    // alert("Cannot be blank!");                    
                 } else {
-                    console.log('In OK > value > ', value);
-                    //processJsonUpdate
+                    // console.log('In OK > value > ', value);
+
+                    updateNumberingListState(param,item,id,e);
                     
                     if (nextid === "newline") {
                         // alert("Creating next Line.");
@@ -145,24 +174,111 @@ class addnumbering extends React.Component {
 
         }
 
+        const updateNumberingListState=(param,item,id,e)=>{
+            let numberings=this.state.numberings;
+            console.log('====================================');
+            console.log('updateNumberingListState > item : ',item);
+            console.log('updateNumberingListState > id : ',id);
+            console.log('updateNumberingListState > e : ',e);
+            console.log('updateNumberingListState > e.target : ',e.target);
+            console.log('updateNumberingListState > e.target.value : ',e.target.value);
+            console.log('====================================');
+            for(let i=0;i<numberings.length;i++){
+                if(numberings[i].id===item.id){
+                    if(param==="Increment"){
+                        numberings[i][param]=parseInt(e.target.value);
+                    }else{
+                        numberings[i][param]=e.target.value;
+                    }
+                    
+                }
+            }
+            this.setState({numberings:numberings});
+        }
+
         const creatNewLine = () => {
             let N = this.state.numberings;
-            let newID=N.length + 1;
+            let newID=N.length+1 ;
             let numberings = {
-                id: newID,
-                LNo: 0,
+                id:newID,
+                NoSeriesId: 0,
+                Lno: 0,
                 StartDate: null,
                 Prefix: null,
                 StartNo: 0,
                 Suffix: null,
                 Increment: 0,
-                LastNo: null
-            }
+                LastNo: 0,
+                LastNoDate: null,
+            };             
+            
             N.push(numberings);
             this.setState({ numberings: N },()=>{
                 document.getElementById("startdate"+newID).focus();
             });
             
+        }
+
+        const deleteEntry=(e,item)=>{
+            let numberings=this.state.numberings;
+            let newNumberings=[];
+            for(let i=0;i<numberings.length;i++){
+                if(numberings[i].id===item.id){
+                    
+                }else{
+                    newNumberings.push(numberings[i]);
+                }
+            }
+            this.setState({numberings:newNumberings});
+
+        }
+
+        const formatDate=()=>{
+            let noSeriesDetailList=this.state.numberings;
+
+            for(let i=0;i<noSeriesDetailList.length;i++){
+                noSeriesDetailList[i].startdate=moment(noSeriesDetailList[i].startdate).format("MM/DD/YYYY");
+            }
+
+            return noSeriesDetailList;
+        }
+
+        const handleCreate=(e)=>{
+            this.setState({ProgressLoader:false});
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+             
+            let noSeries=this.state.noSeries;
+            let noSeriesDetailList=formatDate();
+            const data = {
+                validUser: ValidUser,
+                noSeries: noSeries,
+                noSeriesDetailList:noSeriesDetailList
+            };
+            const headers = {
+                "Content-Type": "application/json"
+            };
+            let Url = APIURLS.APIURL.CreateNoSeries;
+            console.log("handleCreateData >   ", data);
+
+            
+            axios.post(Url, data, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("handleCreate > response > data > ", data);
+                if (response.status === 200 ||response.status === 201) {
+                    this.setState({ProgressLoader:true,SuccessPrompt: true });  
+                }else{
+                    this.setState({ ProgressLoader: true,ErrorPrompt: true  });
+                }
+
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+
+
         }
 
 
@@ -221,6 +337,7 @@ class addnumbering extends React.Component {
                         <Grid xs={1}>
                             <Button
                                 style={{ marginLeft: 5 }}
+                                onClick={(e)=>handleCreate(e)}
                             >
                                 Create
                             </Button>
@@ -245,14 +362,14 @@ class addnumbering extends React.Component {
                                             <TableBody className="tableBody">
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <b>Name</b>
+                                                        <b>Code</b>
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
                                                         <TextField
-                                                            id="Name"
+                                                            id="Code"
                                                             variant="outlined"
                                                             size="small"
-                                                            onChange={(e) => updateFormValue('Name', e)}
+                                                            onChange={(e) => updateFormValue('Code', e)}
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
@@ -306,14 +423,18 @@ class addnumbering extends React.Component {
                                                         <td className="table-header-font">Start Date</td>
                                                         <td className="table-header-font">Start No</td>
                                                         <td className="table-header-font">Suffix</td>
+                                                        <td className="table-header-font">Prefix</td>
                                                         <td className="table-header-font">Increment</td>
                                                         <td className="table-header-font">Last No</td>
+                                                        <td className="table-header-font">&nbsp;</td>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody>                                                 
+
                                                     {this.state.numberings.map(
                                                         (item, i) => (
                                                             <tr>
+                                                            {console.log("--------> ",item)}
                                                                 <td><ArrowRightIcon /></td>
                                                                 <td>
                                                                 
@@ -324,7 +445,7 @@ class addnumbering extends React.Component {
                                                                         size="small"
                                                                         value={item.StartDate}
                                                                         onChange={(e) => updateStartDate(e.value,item)}
-                                                                        onKeyDown={(e) => updateListValue('startdate' + item.id, 'startno' + item.id, e)}
+                                                                        onKeyDown={(e) => updateListValue("startdate",item,'startdate' + item.id, 'startno' + item.id, e)}
                                                                         style={{ width: 125 }}
                                                                         InputProps={{
                                                                             className: "textFieldCss"
@@ -337,7 +458,7 @@ class addnumbering extends React.Component {
                                                                         id={"startno" + item.id}
                                                                         variant="outlined"
                                                                         size="small"
-                                                                        onKeyDown={(e) => updateListValue('startno' + item.id, 'suffix' + item.id, e)}
+                                                                        onKeyDown={(e) => updateListValue("startno",item,'startno' + item.id, 'suffix' + item.id, e)}
                                                                         style={{ width: 120 }}
                                                                         InputProps={{
                                                                             className: "textFieldCss"
@@ -351,7 +472,20 @@ class addnumbering extends React.Component {
                                                                         id={"suffix" + item.id}
                                                                         variant="outlined"
                                                                         size="small"
-                                                                        onKeyDown={(e) => updateListValue('suffix' + item.id, 'increment' + item.id, e)}
+                                                                        onKeyDown={(e) => updateListValue("suffix",item,'suffix' + item.id, 'prefix' + item.id, e)}
+                                                                        style={{ width: 120 }}
+                                                                        InputProps={{
+                                                                            className: "textFieldCss"
+                                                                        }}
+
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    <TextField
+                                                                        id={"prefix" + item.id}
+                                                                        variant="outlined"
+                                                                        size="small"
+                                                                        onKeyDown={(e) => updateListValue("prefix",item,'prefix' + item.id, 'Increment' + item.id, e)}
                                                                         style={{ width: 120 }}
                                                                         InputProps={{
                                                                             className: "textFieldCss"
@@ -362,10 +496,10 @@ class addnumbering extends React.Component {
                                                                 <td>
                                                                     <TextField
                                                                         type="number"
-                                                                        id={"increment" + item.id}
+                                                                        id={"Increment" + item.id}
                                                                         variant="outlined"
                                                                         size="small"
-                                                                        onKeyDown={(e) => updateListValue('increment' + item.id, 'newline', e)}
+                                                                        onKeyDown={(e) => updateListValue("Increment",item,'Increment' + item.id, 'newline', e)}
                                                                         style={{ width: 120 }}
                                                                         InputProps={{
                                                                             className: "textFieldCss"
@@ -388,6 +522,11 @@ class addnumbering extends React.Component {
 
                                                                     />
                                                                 </td>
+                                                                <td> {i>0 && item.Lno===0?<DeleteForeverIcon 
+                                                                    fontSize="small" 
+                                                                    className="table-delete-icon"
+                                                                    onClick={(e)=>deleteEntry(e,item)}
+                                                                />:null}</td>
                                                             </tr>
 
                                                         )
