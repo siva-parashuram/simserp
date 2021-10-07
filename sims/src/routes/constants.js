@@ -51,4 +51,5 @@ export const PREFIX={
   userID:"U",
   roleID:"R",
   wareHouseId:"W",
+  noSeriesId:"NO"
 };

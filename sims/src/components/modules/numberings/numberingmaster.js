@@ -41,7 +41,7 @@ class numberingmaster extends React.Component {
     }
 
     componentDidMount() {
-
+        this.getList();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -60,9 +60,9 @@ class numberingmaster extends React.Component {
         const headers = {
             "Content-Type": "application/json"
         };
-        let GetUsersUrl = APIURLS.APIURL.GetUsers;
+        let Url = APIURLS.APIURL.GetNoSeries;
 
-        axios.post(GetUsersUrl, ValidUser, { headers })
+        axios.post(Url, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
                 console.log("getList > response > data > ", data);
@@ -153,7 +153,7 @@ class numberingmaster extends React.Component {
                     </Grid>
                     <div style={{ height: 20 }}></div>
                     <Grid container spacing={0}>
-                        <Grid xs={12} sm={12} md={5} lg={5}>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={11} lg={11}>
                                     <Table stickyHeader size="small" className="" aria-label="Country List table">
@@ -177,10 +177,15 @@ class numberingmaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
+                                                        <a className="LINK tableLink" href={URLS.URLS.editNumbering + this.state.urlparams + "&noSeriesId=" + item.noSeriesId} >
+                                                            {URLS.PREFIX.noSeriesId + item.noSeriesId}
+                                                        </a>
                                                     </TableCell>
                                                     <TableCell align="left">
+                                                    {item.code}
                                                     </TableCell>
                                                     <TableCell align="left">
+                                                    {item.description}
                                                     </TableCell>
                                                     <TableCell align="left">
                                                     </TableCell>
@@ -194,7 +199,7 @@ class numberingmaster extends React.Component {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={7} lg={7}>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={11} lg={11}>
 
