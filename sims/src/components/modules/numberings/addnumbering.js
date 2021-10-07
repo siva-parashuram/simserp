@@ -35,11 +35,10 @@ import Menubar from "../../user/menubar";
 
 import moment from "moment";
 
-const Dformat = APIURLS.DFormat;
-const viewDate = "yyyy-mm-dd";
-const todayDate = new Date(); //moment().format(viewDate);
-console.log("Dformat > ", Dformat);
-console.log("todayDate > ", todayDate);
+ 
+ 
+ 
+
 
 
 
