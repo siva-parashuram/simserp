@@ -211,10 +211,10 @@ class addwarehouse extends React.Component {
             <Fragment>
                 <Nav />
                 <Menubar />
-                <div style={{ marginLeft: 10, marginTop: 10 }}>
+                <div className='breadcrumb-height'>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Breadcrumbs aria-label="breadcrumb">
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
@@ -225,12 +225,13 @@ class addwarehouse extends React.Component {
                                     Warehouse master
                                 </Link>
                                 <Typography color="textPrimary">Add Warehouse</Typography>
-                            </Breadcrumbs>
+                            </Breadcrumbs> 
 
                         </Grid>
                     </Grid>
+                    <div className="breadcrumb-bottom"></div>
                     <Grid container spacing={3}>
-                        <Grid xs={1}>
+                        <Grid className="style-buttons"  xs={1}>
                             <Button
                                 style={{ marginLeft: 5 }}
                                 onClick={(e)=>handleCreate()}
@@ -239,8 +240,8 @@ class addwarehouse extends React.Component {
                             </Button>
                         </Grid>
                     </Grid>
-                    <div style={{ height: 20 }}></div>
-                    <Grid container spacing={0}>
+                    <div className="New-link-bottom"></div>
+                    <Grid className="table-adjust"  container spacing={0}>
                         <Grid xs={12} sm={12} md={7} lg={7}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={12} lg={12}>

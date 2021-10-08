@@ -4,7 +4,8 @@ import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import Nav from "../../user/nav";
- 
+import { Divider } from '@material-ui/core';
+
 import Grid from '@material-ui/core/Grid';
 
 import Accordion from '@material-ui/core/Accordion';
@@ -38,6 +39,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import Menubar from "../../user/menubar";
+import { withStyles } from '@material-ui/styles';
 
 class addnewcompany extends React.Component {
     constructor(props) {
@@ -57,7 +59,7 @@ class addnewcompany extends React.Component {
             postcode: "",
             phoneno: "",
             website: "",
-            countryData:[],
+            countryData: [],
             createBtnDisabled: true,
             GeneralDetailsExpanded: true,
             AddressDetailsExpanded: true,
@@ -65,6 +67,12 @@ class addnewcompany extends React.Component {
                 companyName: { errorState: false, errorMsg: "" },
                 address: { errorState: false, errorMsg: "" },
                 country: { errorState: false, errorMsg: "" },
+                address2: { errorState: false, errorMsg: "" },
+                address3: { errorState: false, errorMsg: "" },
+                city: { errorState: false, errorMsg: "" },
+                postcode: { errorState: false, errorMsg: "" },
+                phoneno: { errorState: false, errorMsg: "" },
+                website: { errorState: false, errorMsg: "" },
             },
         };
         this.wrapper = React.createRef();
@@ -86,34 +94,43 @@ class addnewcompany extends React.Component {
     }
 
     getCountryList() {
-        let rows=[];
+        let rows = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
-          "Content-Type": "application/json"
+            "Content-Type": "application/json"
         };
-        let GetCountryUrl = APIURLS.APIURL.GetCountries;       
-       
-        axios.post(GetCountryUrl, ValidUser, { headers })
-          .then(response => {           
-            let data=response.data;
-            console.log("getCountryList > response > data > ",data);
-            rows=data;
-            this.setState({countryData: rows }); 
-          }
-          ).catch(error => {            
-            console.log("error > ",error);
-          });
+        let GetCountryUrl = APIURLS.APIURL.GetCountries;
 
-        
+        axios.post(GetCountryUrl, ValidUser, { headers })
+            .then(response => {
+                let data = response.data;
+                console.log("getCountryList > response > data > ", data);
+                rows = data;
+                this.setState({ countryData: rows });
+            }
+            ).catch(error => {
+                console.log("error > ", error);
+            });
+
+
     }
 
     render() {
-         
+
 
         function Alert(props) {
             return <MuiAlert elevation={6} variant="filled" {...props} />;
+        }
+
+        const Checktrue = () => {
+            if (this.state.companyName === '' || this.state.companyName === null || this.state.companyName.length > 50) {
+                this.setState({ createBtnDisabled: true })
+            } else {
+                this.setState({ createBtnDisabled: false })
+            }
+            return;
         }
 
 
@@ -122,6 +139,7 @@ class addnewcompany extends React.Component {
             console.log("updateFormValue > e.target.value > ", e.target.value);
 
             if (id === "companyName") {
+
                 if (e.target.value === "" || e.target.value == null || e.target.value.length > 50) {
                     if (e.target.value.length > 50) {
                         let v = this.state.Validations;
@@ -140,15 +158,17 @@ class addnewcompany extends React.Component {
                             updateBtnDisabled: true,
                             createBtnDisabled: true
                         });
+
                     }
                 } else {
                     let v = this.state.Validations;
                     v.companyName = { errorState: false, errorMsg: "" };
                     this.setState({ Validations: v, companyName: e.target.value, createBtnDisabled: false });
                 }
-
+                Checktrue();
             }
             if (id === "Address") {
+
                 if (e.target.value === "" || e.target.value == null || e.target.value.length > 50) {
                     if (e.target.value.length > 50) {
                         let v = this.state.Validations;
@@ -172,48 +192,147 @@ class addnewcompany extends React.Component {
                     let v = this.state.Validations;
                     v.address = { errorState: false, errorMsg: "" };
                     this.setState({ Validations: v, address: e.target.value, createBtnDisabled: false });
+
+
                 }
+                Checktrue();
+            }
+
+
+            if (id === "Address2") {
+                if (e.target.value.length > 50) {
+                    let v = this.state.Validations;
+                    v.address2 = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" }
+                    this.setState({ 
+                        Validations: v, 
+                        createBtnDisabled: true 
+                    });
+                } 
+                else{
+                    let v = this.state.Validations;
+                    v.address2 = { errorState: false, errorMsg: "" };
+                    this.setState({
+                         Validations: v, 
+                         address2: e.target.value,
+                          createBtnDisabled: false 
+                        });
+                }
+                Checktrue();
+            }
+
+            if (id === "Address3"){
+                if (e.target.value.length > 50) {
+                    let v = this.state.Validations;
+                    v.address3 = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" }
+                    this.setState({ Validations: v, createBtnDisabled: true })
+                }else{
+                    let v = this.state.Validations;
+                    v.address3 = { errorState: false, errorMsg: "" };
+                    this.setState({ Validations: v, address3: e.target.value, createBtnDisabled: false });
+                }
+                Checktrue();
+            }
+
+
+            if (id === "City"){
+                if (e.target.value.length > 50) {
+                    let v = this.state.Validations;
+                    v.city = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" }
+                    this.setState({ Validations: v, createBtnDisabled: true })
+                }else{
+                    let v = this.state.Validations;
+                    v.city= { errorState: false, errorMsg: "" };
+                    this.setState({ Validations: v, city: e.target.value, createBtnDisabled: false });
+                }
+                Checktrue();
 
             }
-            if (id === "Address2") this.setState({ address2: e.target.value });
-            if (id === "Address3") this.setState({ address3: e.target.value });
-            if (id === "country") this.setState({ country: e.target.value });
-            if (id === "state") this.setState({ state: e.target.value });
-            if (id === "City") this.setState({ city: e.target.value });
-            if (id === "Postcode") this.setState({ postcode: e.target.value });
-            if (id === "PhoneNo") this.setState({ phoneno: e.target.value });
-            if (id === "Website") this.setState({ website: e.target.value });
-            //processEnableCreateBtn();
+
+            if (id === "Postcode"){
+                if (e.target.value.length > 10) {
+                    let v = this.state.Validations;
+                    v.postcode = { errorState: true, errorMsg: "Only 10 Characters are Allowed!" }
+                    this.setState({ Validations: v, createBtnDisabled: true })
+                }else{
+                    let v = this.state.Validations;
+                    v.postcode= { errorState: false, errorMsg: "" };
+                    this.setState({ Validations: v, postcode: e.target.value, createBtnDisabled: false });
+                }
+                Checktrue();
+
+            }
+
+             if (id === "PhoneNo"){
+                if (e.target.value.length > 20) {
+                    let v = this.state.Validations;
+                    v.phoneno = { errorState: true, errorMsg: "Only 20 digits are Allowed!" }
+                    this.setState({ Validations: v, createBtnDisabled: true })
+                }else{
+                    let v = this.state.Validations;
+                    v.phoneno= { errorState: false, errorMsg: "" };
+                    this.setState({ Validations: v, phoneno: e.target.value, createBtnDisabled: false });
+                }
+                Checktrue();
+
+
+             } 
+
+             if (id === "Website") {
+                if (e.target.value.length > 50) {
+                    let v = this.state.Validations;
+                    v.website = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" }
+                    this.setState({ Validations: v, createBtnDisabled: true })
+                }else{
+                    let v = this.state.Validations;
+                    v.website= { errorState: false, errorMsg: "" };
+                    this.setState({ Validations: v, website: e.target.value, createBtnDisabled: false });
+                }
+                Checktrue();
+             }
+            }
+
+
+    
+        
+
+        
+        // if (id === "country") this.setState({ country: e.target.value });
+        // if (id === "state") this.setState({ state: e.target.value });
+        
+        
+        
+        
+        // //processEnableCreateBtn();
+    
+
+    // const processEnableCreateBtn = () => {
+    //     if (this.state.companyName !== "" &&
+    //         this.state.address !== "" &&
+    //         this.state.address2 !== "" &&
+    //         this.state.address3 !== "" &&
+    //         this.state.country !== "" &&
+    //         this.state.state !== "" &&
+    //         this.state.city !== "" &&
+    //         this.state.postcode !== "" &&
+    //         this.state.phoneno !== "" &&
+    //         this.state.website !== ""
+    //     ) {
+    //         this.setState({ createBtnDisabled: false });
+    //     } else {
+    //         this.setState({ createBtnDisabled: true });
+    //     }
+    // }
+
+    const handleAccordionClick = (val, e) => {
+        console.log("handleAccordionClick > val > ", val);
+        console.log("handleAccordionClick > e > ", e);
+        if (val === "GeneralDetailsExpanded") {
+            this.state.GeneralDetailsExpanded === true ? this.setState({ GeneralDetailsExpanded: false }) : this.setState({ GeneralDetailsExpanded: true })
         }
-
-        // const processEnableCreateBtn = () => {
-        //     if (this.state.companyName !== "" &&
-        //         this.state.address !== "" &&
-        //         this.state.address2 !== "" &&
-        //         this.state.address3 !== "" &&
-        //         this.state.country !== "" &&
-        //         this.state.state !== "" &&
-        //         this.state.city !== "" &&
-        //         this.state.postcode !== "" &&
-        //         this.state.phoneno !== "" &&
-        //         this.state.website !== ""
-        //     ) {
-        //         this.setState({ createBtnDisabled: false });
-        //     } else {
-        //         this.setState({ createBtnDisabled: true });
-        //     }
-        // }
-
-        const handleAccordionClick = (val, e) => {
-            console.log("handleAccordionClick > val > ", val);
-            console.log("handleAccordionClick > e > ", e);
-            if (val === "GeneralDetailsExpanded") {
-                this.state.GeneralDetailsExpanded === true ? this.setState({ GeneralDetailsExpanded: false }) : this.setState({ GeneralDetailsExpanded: true })
-            }
-            if (val === "AddressDetailsExpanded") {
-                this.state.AddressDetailsExpanded === true ? this.setState({ AddressDetailsExpanded: false }) : this.setState({ AddressDetailsExpanded: true })
-            }
+        if (val === "AddressDetailsExpanded") {
+            this.state.AddressDetailsExpanded === true ? this.setState({ AddressDetailsExpanded: false }) : this.setState({ AddressDetailsExpanded: true })
         }
+    }
 
 
         const handleCreateCompanyClick = (e) => {
@@ -261,34 +380,50 @@ class addnewcompany extends React.Component {
                             this.setState({ ProgressLoader: true, ErrorPrompt: true });
                         }
                     }
-                    ).catch(error => {
-                        // this.setState({ ProgressLoader: true, ErrorPrompt: true });
-                    });
-            }
-        };
-
-        const closeErrorPrompt = (event, reason) => {
-            if (reason === 'clickaway') {
-                return;
-            }
-            this.setState({ SuccessPrompt: false });
+            
+                ).catch(error => {
+                    // this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                });
         }
 
-        const closeSuccessPrompt = (event, reason) => {
-            if (reason === 'clickaway') {
-                return;
-            }
-            this.setState({ SuccessPrompt: false });
+    };
+
+    const closeErrorPrompt = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
         }
+        this.setState({ SuccessPrompt: false });
+    }
+
+    const closeSuccessPrompt = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({ SuccessPrompt: false });
+    }
+
+    // const StyledAccordionSummary = withStyles({
+    //     root: {
+    //         minHeight:"40px",
+    //         maxHeight: "40px",
+
+    //         '&.Mui-expanded': {
+    //           minHeight: '50px',
+    //           maxHeight: '50px',
+
+    //         }
+    //     },
+
+    //     })(AccordionSummary);
 
 
-        return (
+    return(
             <Fragment>
                 <Nav />
                 <Menubar />
-                <div style={{ height: 30 }}></div>
- 
-                {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+                
+
+{ this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null }
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
                     <Alert onClose={closeSuccessPrompt} severity="success">Company Details Updated!</Alert>
@@ -298,14 +433,14 @@ class addnewcompany extends React.Component {
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
 
-                <div style={{marginTop:-20}}>
-                    <div>
-                        <Grid container spacing={1}>
-                            <Grid item xs={12}>
-                                <Breadcrumbs aria-label="breadcrumb">
-                                <Link color="inherit" className="backLink" href="javascript:history.go(-1)">
-                                    Back
-                                </Link>
+                <div className='breadcrumb-height'>
+                    
+                        <Grid  container spacing={1}>
+                            <Grid   item xs={12}>
+                                <Breadcrumbs className='style-breadcrumb'  aria-label="breadcrumb">
+                                    <Link color="inherit" className="backLink" href="javascript:history.go(-1)">
+                                        Back
+                                    </Link>
                                     <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                         Dashboard
                                     </Link>
@@ -317,48 +452,49 @@ class addnewcompany extends React.Component {
 
                             </Grid>
                         </Grid>
-                    </div>
+                    
 
-                    <div style={{ height: 15 }}></div>
-
+                    <div className="breadcrumb-bottom"></div>
                     <div>
                         <Grid container spacing={0}>
-                            <Grid xs={1}>
+                            <Grid className="style-buttons" xs={1}>
                                 <Button
+                                    
                                     style={{ marginLeft: 5 }}
-                                    startIcon={<AddIcon />}
                                     onClick={handleCreateCompanyClick}
                                     disabled={this.state.createBtnDisabled}
                                 >
                                     Create
                                 </Button>
+                                {/* <Link className="style-Links" onClick={handleCreateCompanyClick} disabled={this.state.createBtnDisabled} >CREATE</Link> */}
                             </Grid>
                         </Grid>
                     </div>
-                    <div style={{ height: 5 }}></div>
+                    <div className="New-link-bottom"></div>
 
-                    <Grid container spacing={3}>
-                        <Grid item xs={8}>
-                            <div style={{ minHeight: '100%', height: 500, overflowY: 'scroll', overflowX: 'hidden' }}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12}>
-                                        <Accordion key="company-General-Details" expanded={this.state.GeneralDetailsExpanded} >
+                    <Grid className="table-adjust"  container spacing={0}>
+                        <Grid  item xs={8}>
+                            {/* <div style={{ minHeight: '100%', height: 500, overflowY: 'scroll', overflowX: 'hidden' }}> */}
+                                <Grid container spacing={2}> 
+                                    <Grid  item xs={12}>
+                                        <Accordion    key="company-General-Details" expanded={this.state.GeneralDetailsExpanded} >
                                             <AccordionSummary
                                                 className="accordion-Header-Design"
                                                 expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
                                                 aria-controls="panel1a-content"
                                                 id="panel1a-header"
-                                                style={{ minHeight: 20, height: '100%' }}
+                                             style={{ minHeight:'40px', maxHeight:'40px' }}
                                             >
                                                 <Typography key="" className="accordion-Header-Title">General Details</Typography>
                                             </AccordionSummary>
+                                            {/* <Divider  className="accordion-Header-underline"/> */}
                                             <AccordionDetails key="">
                                                 <TableContainer>
                                                     <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                                         <TableBody className="tableBody">
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>Company Name</b>
+                                                                    Company Name
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <TextField
@@ -367,6 +503,7 @@ class addnewcompany extends React.Component {
                                                                         size="small"
                                                                         onChange={(e) => updateFormValue('companyName', e)}
                                                                         fullWidth
+                                                                        value={this.state.companyName}
                                                                         InputProps={{
                                                                             className: "textFieldCss",
                                                                             maxlength: 50
@@ -378,25 +515,31 @@ class addnewcompany extends React.Component {
                                                             </TableRow>
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b> Phone No</b>
+                                                                     Phone No
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <TextField
+                                                                    type='number'
+
                                                                         id="PhoneNo"
                                                                         variant="outlined"
                                                                         size="small"
                                                                         onChange={(e) => updateFormValue('PhoneNo', e)}
                                                                         fullWidth
+                                                                        value={this.state.phoneno}
                                                                         InputProps={{
                                                                             className: "textFieldCss",
                                                                             maxlength: 20
+                                                                            
                                                                         }}
+                                                                        error={this.state.Validations.phoneno.errorState}
+                                                                        helperText={this.state.Validations.phoneno.errorMsg}
                                                                     />
                                                                 </TableCell>
                                                             </TableRow>
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>Website</b>
+                                                                    Website
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <TextField
@@ -405,10 +548,13 @@ class addnewcompany extends React.Component {
                                                                         size="small"
                                                                         onChange={(e) => updateFormValue('Website', e)}
                                                                         fullWidth
+                                                                        value={this.state.website}
                                                                         InputProps={{
                                                                             className: "textFieldCss",
-                                                                            maxlength: 20
+                                                                            maxlength: 50
                                                                         }}
+                                                                        error={this.state.Validations.website.errorState}
+                                                                        helperText={this.state.Validations.website.errorMsg}
                                                                     />
                                                                 </TableCell>
                                                             </TableRow>
@@ -418,60 +564,61 @@ class addnewcompany extends React.Component {
 
                                             </AccordionDetails>
                                         </Accordion>
-                                        <Accordion key="company-Address-Details" expanded={this.state.AddressDetailsExpanded} >
+                                        <Accordion   key="company-Address-Details" expanded={this.state.AddressDetailsExpanded} >
                                             <AccordionSummary
                                                 className="accordion-Header-Design"
                                                 expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("AddressDetailsExpanded", e)} />}
                                                 aria-controls="panel1a-content"
                                                 id="panel1a-header"
-                                                style={{ minHeight: 20, height: '100%' }}
+                                                style={{ minHeight:'40px', maxHeight:'40px' }}
                                             >
                                                 <Typography key="" className="accordion-Header-Title">Address Details</Typography>
                                             </AccordionSummary>
+                                            {/* <Divider   className="accordion-Header-underline"/> */}
                                             <AccordionDetails key="">
                                                 <TableContainer>
                                                     <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                                         <TableBody className="tableBody">
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>Country</b>
+                                                                    Country
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <select
-                                                                    className="dropdown-css"
+                                                                        className="dropdown-css"
                                                                         id="countrySelect"
                                                                         label="Country"
                                                                         fullWidth
-                                                                        
+
                                                                     >
                                                                         <option value="-">
-                                                                             None 
+                                                                            None
                                                                         </option>
                                                                         {
-                                                                            this.state.countryData.map((item,i)=>( 
-                                                                                <option  value={item.countryId}>
-                                                                                {item.name} 
+                                                                            this.state.countryData.map((item, i) => (
+                                                                                <option value={item.countryId}>
+                                                                                    {item.name}
                                                                                 </option>
                                                                             ))
                                                                         }
-                                                                         
+
                                                                     </select>
                                                                 </TableCell>
                                                             </TableRow>
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>State</b>
+                                                                    State
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <select
-                                                                    className="dropdown-css"
+                                                                        className="dropdown-css"
                                                                         id="stateSelect"
                                                                         label="State"
                                                                         fullWidth
-                                                                        
+
                                                                     >
                                                                         <option value="-">
-                                                                            None 
+                                                                            None
                                                                         </option>
                                                                         <option value={10}>Goa</option>
                                                                         <option value={20}>Gujrat</option>
@@ -481,7 +628,7 @@ class addnewcompany extends React.Component {
                                                             </TableRow>
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>City</b>
+                                                                    City
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <TextField
@@ -490,16 +637,19 @@ class addnewcompany extends React.Component {
                                                                         size="small"
                                                                         onChange={(e) => updateFormValue('City', e)}
                                                                         fullWidth
+                                                                        value={this.state.city}
                                                                         InputProps={{
                                                                             className: "textFieldCss",
                                                                             maxlength: 50
                                                                         }}
+                                                                        error={this.state.Validations.city.errorState}
+                                                                        helperText={this.state.Validations.city.errorMsg}
                                                                     />
                                                                 </TableCell>
                                                             </TableRow>
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>Postcode</b>
+                                                                    Postcode
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <TextField
@@ -508,16 +658,19 @@ class addnewcompany extends React.Component {
                                                                         size="small"
                                                                         onChange={(e) => updateFormValue('Postcode', e)}
                                                                         fullWidth
+                                                                        value={this.state.postcode}
                                                                         InputProps={{
                                                                             className: "textFieldCss",
                                                                             maxlength: 10
                                                                         }}
+                                                                        error={this.state.Validations.postcode.errorState}
+                                                                        helperText={this.state.Validations.postcode.errorMsg}
                                                                     />
                                                                 </TableCell>
                                                             </TableRow>
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>Address</b>
+                                                                    Address
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <TextField
@@ -526,6 +679,7 @@ class addnewcompany extends React.Component {
                                                                         size="small"
                                                                         onChange={(e) => updateFormValue('Address', e)}
                                                                         fullWidth
+                                                                        value={this.state.address}
                                                                         InputProps={{
                                                                             className: "textFieldCss",
                                                                             maxlength: 50
@@ -537,7 +691,7 @@ class addnewcompany extends React.Component {
                                                             </TableRow>
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>Address 2</b>
+                                                                    Address 2
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <TextField
@@ -546,17 +700,20 @@ class addnewcompany extends React.Component {
                                                                         size="small"
                                                                         onChange={(e) => updateFormValue('Address2', e)}
                                                                         fullWidth
+                                                                        value={this.state.address2}
                                                                         InputProps={{
                                                                             className: "textFieldCss",
                                                                             maxlength: 50
                                                                         }}
+                                                                        error={this.state.Validations.address2.errorState}
+                                                                        helperText={this.state.Validations.address2.errorMsg}
 
                                                                     />
                                                                 </TableCell>
                                                             </TableRow>
                                                             <TableRow>
                                                                 <TableCell align="left" className="no-border-table">
-                                                                    <b>Address 3</b>
+                                                                    Address 3
                                                                 </TableCell>
                                                                 <TableCell align="left" className="no-border-table">
                                                                     <TextField
@@ -565,10 +722,13 @@ class addnewcompany extends React.Component {
                                                                         size="small"
                                                                         onChange={(e) => updateFormValue('Address3', e)}
                                                                         fullWidth
+                                                                        value={this.state.address3}
                                                                         InputProps={{
                                                                             className: "textFieldCss",
                                                                             maxlength: 50
                                                                         }}
+                                                                        error={this.state.Validations.address3.errorState}
+                                                                        helperText={this.state.Validations.address3.errorMsg}
                                                                     />
                                                                 </TableCell>
                                                             </TableRow>
@@ -579,10 +739,10 @@ class addnewcompany extends React.Component {
                                             </AccordionDetails>
 
                                         </Accordion>
-                                    
-                                        </Grid>
+
+                                    </Grid>
                                 </Grid>
-                            </div>
+                            {/* </div> */}
                         </Grid>
                         <Grid item xs={4}>
 
@@ -591,7 +751,7 @@ class addnewcompany extends React.Component {
 
 
                 </div>
-            </Fragment>
+            </Fragment >
         );
     }
 

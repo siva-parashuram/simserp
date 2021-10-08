@@ -337,7 +337,7 @@ class addbranch extends React.Component {
 
 
         return (
-            <Fragment>
+            <Fragment> 
                 <Nav />
                 <Menubar />
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
@@ -350,10 +350,10 @@ class addbranch extends React.Component {
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
 
-                <div style={{ marginLeft: 10, marginTop: 10 }}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <Breadcrumbs aria-label="breadcrumb">
+                <div className='breadcrumb-height'>
+                    <Grid  container spacing={3}>
+                        <Grid  item xs={12}>
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
@@ -368,18 +368,19 @@ class addbranch extends React.Component {
 
                         </Grid>
                     </Grid>
+                    <div className="breadcrumb-bottom"></div>  
                     <Grid container spacing={3}>
-                        <Grid xs={1}>
-                            <Button
-                                style={{ marginLeft: 5 }}
-                                onClick={handleCreate}
+                        <Grid className="style-buttons" xs={1}> 
+                            <Button      
+                                style={{ marginLeft: 5 }}                 
+                                onClick={handleCreate}                 
                             >
-                                Add
+                                Add    
                             </Button>
                         </Grid>
                     </Grid>
-                    <div style={{ height: 20 }}></div>
-                    <Grid container spacing={0}>
+                    <div className="New-link-bottom"></div>
+                    <Grid className="table-adjust"  container spacing={0}>
                         <Grid xs={12} sm={12} md={9} lg={9}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={12} lg={12}>
@@ -476,10 +477,11 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Phone No</b>
+                                                                        <b>Phone No</b>
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
+                                                                        type="number"
                                                                             id="phoneNo"
                                                                             variant="outlined"
                                                                             size="small"

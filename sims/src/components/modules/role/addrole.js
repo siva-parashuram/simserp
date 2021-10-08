@@ -152,10 +152,10 @@ class addrole extends React.Component {
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
 
-                <div style={{ marginLeft: 10, marginTop: 10 }}>
+                <div className='breadcrumb-height'>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Breadcrumbs aria-label="breadcrumb">
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
@@ -169,10 +169,11 @@ class addrole extends React.Component {
                             </Breadcrumbs>
                         </Grid>
                     </Grid>
+                    <div className="breadcrumb-bottom"></div> 
                     <Grid container spacing={3}>
-                        <Grid xs={1}>
+                        <Grid className="style-buttons" xs={1}>
                             <Button
-                                style={{ marginLeft: 6 }}
+                                style={{ marginLeft: 5 }}
                                 onClick={(e) => handleCreate(e)}
                                 disabled={this.state.CreateBtnDisable}
                             >
@@ -180,8 +181,8 @@ class addrole extends React.Component {
                             </Button>
                         </Grid>
                     </Grid>
-                    <div style={{ height: 20 }}></div>
-                    <Grid container spacing={0}>
+                    <div className="New-link-bottom"></div>
+                    <Grid className="table-adjust"  container spacing={0}>
                         <Grid xs={12} sm={12} md={6} lg={6}>
                             <Accordion key="country-General-Details" expanded={this.state.GeneralDetailsExpanded} >
                                 <AccordionSummary

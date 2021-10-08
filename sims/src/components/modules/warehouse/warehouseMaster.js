@@ -92,10 +92,10 @@ class warehouseMaster extends React.Component {
             <Fragment>
                 <Nav />
                 <Menubar />
-                <div style={{ marginLeft: 10, marginTop: 10 }}>
+                <div className='breadcrumb-height'>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Breadcrumbs aria-label="breadcrumb">
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
@@ -107,19 +107,21 @@ class warehouseMaster extends React.Component {
 
                         </Grid>
                     </Grid>
-                    <Grid container spacing={3}>
-                        <Grid xs={1}>
-                            <Button
+                    <div className="breadcrumb-bottom"></div>  
+                    <Grid container spacing={0}>
+                    <Grid className="style-all-Links"  xs={1}>
+                            <Link className="style-link" href={URLS.URLS.addWarehouse + this.state.urlparams}>NEW</Link>
+                            {/* <Button
                                 style={{ marginLeft: 5 }}
                             >
                                 <a className="button-link" href={URLS.URLS.addWarehouse + this.state.urlparams}>
                                     New
                                 </a>
-                            </Button>
-                        </Grid>
+                            </Button> */}
+                        </Grid>    
                     </Grid>
-                    <div style={{ height: 20 }}></div>
-                    <Grid container spacing={0}>
+                    <div className="New-link-bottom"></div>
+                    <Grid className="table-adjust" container spacing={0}>
                         <Grid xs={12} sm={12} md={5} lg={5}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={11} lg={11}>

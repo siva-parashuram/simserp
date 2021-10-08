@@ -260,35 +260,37 @@ class countryMaster extends React.Component {
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
 
-                <div style={{ marginLeft: 10, marginTop: 10 }}>
+                <div className='breadcrumb-height'>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Breadcrumbs aria-label="breadcrumb">
-                            <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
+                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
                                 </Link>
-                                <Typography color="textPrimary">Country master</Typography>
+                                <Typography color="textPrimary">Country master</Typography> 
                             </Breadcrumbs>
 
                         </Grid>
                     </Grid>
-                    <Grid container spacing={3}>
-                        <Grid xs={1}>
-                            <Button
+                    <div className="breadcrumb-bottom"></div>
+                    <Grid container spacing={0}>
+                        <Grid className="style-all-Links" xs={1}>
+                            <Link className="style-link" href={URLS.URLS.addCountry + this.state.urlparams}>NEW</Link>
+                            {/* <Button
                                 style={{ marginLeft: 5 }}
                                 startIcon={<AddIcon />}
                             >
                                 <a className="button-link" href={URLS.URLS.addCountry + this.state.urlparams}>
                                     New
                                 </a>
-                            </Button>
+                            </Button> */}
                         </Grid>
                     </Grid>
-                    <div style={{ height: 20 }}></div>
-                    <Grid container spacing={0}>
+                    <div className="New-link-bottom"></div> 
+                    <Grid className="table-adjust" container spacing={0}>
                         <Grid xs={12} sm={12} md={8} lg={8}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={10} lg={10}>
@@ -309,7 +311,7 @@ class countryMaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >{URLS.PREFIX.countryID+item.countryId}</a>
+                                                        <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >{URLS.PREFIX.countryID + item.countryId}</a>
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >{item.name}</a>

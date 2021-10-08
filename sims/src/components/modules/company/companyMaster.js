@@ -19,7 +19,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import TextField from '@material-ui/core/TextField';
- 
+
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AddIcon from '@material-ui/icons/Add';
@@ -32,7 +32,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
- 
+
 
 import Branchlistbycompany from "./branchlistbycompany";
 
@@ -56,12 +56,12 @@ class companyMaster extends React.Component {
       ProgressLoader: false,
       branchName: "",
       branchId: "",
-      compName: "",      
-      branch:[],
+      compName: "",
+      branch: [],
       columns: columns,
       masterCompanyData: rows,
       companyData: rows,
-      showSavedAlert: false,      
+      showSavedAlert: false,
       selectedCompanyId: 0,
       initialCss: initialCss,
       DeleteDisabled: true,
@@ -150,10 +150,10 @@ class companyMaster extends React.Component {
     const handleRowClick = (e, item, id) => {
       console.log("handleRowClick > e > ", e);
       console.log("handleRowClick > item > ", item);
-      let branches=item.branches;
+      let branches = item.branches;
 
-     // getCompanyBranchList(item.companyId);
-      this.setState({ DeleteDisabled: false,branch:branches });
+      // getCompanyBranchList(item.companyId);
+      this.setState({ DeleteDisabled: false, branch: branches });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add('selectedRow');
     }
@@ -164,7 +164,7 @@ class companyMaster extends React.Component {
       }
     }
 
-    const getCompanyBranchList=(companyId)=>{
+    const getCompanyBranchList = (companyId) => {
 
     }
 
@@ -224,17 +224,17 @@ class companyMaster extends React.Component {
     }
 
 
-    return (
+    return (   
       <Fragment>
         <CssBaseline />
         <Nav />
         <Menubar />
         {this.state.ProgressLoader === false ? (<div style={{ marginTop: 6, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
-        
-        <div style={{ height: 20 }}></div>
+
+        <div className='breadcrumb-height'>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Breadcrumbs aria-label="breadcrumb">
+            <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
               <Link color="inherit" className="backLink" href="javascript:history.go(-1)">
                 Back
               </Link>
@@ -245,11 +245,15 @@ class companyMaster extends React.Component {
             </Breadcrumbs>
           </Grid>
         </Grid>
-        <div style={{ height: 20 }}></div>
+        <div className="breadcrumb-bottom"></div>
         <Grid container spacing={0}>
-          <Grid xs={1}>
-            <Button
-              style={{ marginLeft: 5 }}
+          <Grid className="style-all-Links" xs={1}>
+            <Link className="style-link" href={URLS.URLS.addNewCompany + this.state.urlparams}>NEW</Link>
+
+
+            {/* <Button
+            
+             
               startIcon={<AddIcon />}
             // onClick={(e)=>createNewCompanyRow()}
             >
@@ -257,69 +261,49 @@ class companyMaster extends React.Component {
                 New
               </a>
 
-            </Button>
+            </Button> */}
           </Grid>
-          <Grid xs={1}>
-            <Button style={{ marginLeft: -20 }} startIcon={<DeleteIcon />} disabled={this.state.DeleteDisabled}>Delete</Button>
-          </Grid>
-          <Grid xs={2}>
-            <TextField
-              id="searchBox"
-              placeholder="Search"
-              variant="outlined"
-              size="small"
 
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-              onKeyUp={searchInput}
-              fullWidth
-            />
-          </Grid>
         </Grid>
-        <div style={{ height: 20 }}></div>
-        <Grid container spacing={0}>
+        <div className="New-link-bottom"></div>
+        <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={6} lg={6}>
-          <TableContainer style={{ maxHeight: 440 }}>
-          <Table stickyHeader size="small" className="" aria-label="company List table">
-              <TableHead className="table-header-background">
+            <TableContainer style={{ maxHeight: 440 }}>
+              <Table stickyHeader size="small" className="" aria-label="company List table">
+                <TableHead className="table-header-background"> 
                   <TableRow>
-                      <TableCell className="table-header-font">#</TableCell>
-                      <TableCell className="table-header-font" align="left">Company Name</TableCell>
-                      <TableCell className="table-header-font" align="left">Address</TableCell>
+                    <TableCell className="table-header-font">#</TableCell>
+                    <TableCell className="table-header-font" align="left">Company Name</TableCell>
+                    <TableCell className="table-header-font" align="left">Address</TableCell>
                   </TableRow>
-              </TableHead>
-              <TableBody className="tableBody">
+                </TableHead>
+                <TableBody className="tableBody">
                   {this.state.companyData.map((item, i) => (
-                      <TableRow
-                          id={"row_" + i}
-                          className={this.state.initialCss}
-                          hover
-                          key={i}
-                          onClick={(event) => handleRowClick(event, item, "row_" + i)}
-                      >
-                          <TableCell align="left">
-                              <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>{URLS.PREFIX.companyID+item.companyId}</a>
-                          </TableCell>
-                          <TableCell align="left">
-                              <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>{item.companyName}</a>
-                          </TableCell>
-                          <TableCell align="left">
-                              {item.address}
-                          </TableCell>
-                      </TableRow>
+                    <TableRow
+                      id={"row_" + i}
+                      className={this.state.initialCss}
+                      hover
+                      key={i}
+                      onClick={(event) => handleRowClick(event, item, "row_" + i)}
+                    >
+                      <TableCell align="left">
+                        <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>{URLS.PREFIX.companyID + item.companyId}</a>
+                      </TableCell>
+                      <TableCell align="left">
+                        <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>{item.companyName}</a>
+                      </TableCell>
+                      <TableCell align="left">
+                        {item.address}
+                      </TableCell>
+                    </TableRow>
 
                   ))}
 
 
-              </TableBody>
-          </Table>
-      </TableContainer>
-  
+                </TableBody>
+              </Table>
+            </TableContainer>
+
           </Grid>
           <Grid xs={12} sm={12} md={6} lg={6}>
             <Grid container spacing={0}>
@@ -327,13 +311,13 @@ class companyMaster extends React.Component {
                 <Branchlistbycompany data={this.state.branch} />
               </Grid>
             </Grid>
-             
+
           </Grid>
         </Grid>
 
 
 
-        
+        </div>
       </Fragment>
     );
   }

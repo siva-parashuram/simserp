@@ -59,7 +59,7 @@ class adddestination extends React.Component {
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
-        let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName;
+        let urlparams = "?branchId=" + branchId + "&compName=" + compName + "&branchName=" + branchName; 
         this.setState({
             urlparams: urlparams,
         });
@@ -254,10 +254,10 @@ class adddestination extends React.Component {
                 <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
-                <div style={{ marginLeft: 10, marginTop: 10 }}>
+                <div className='breadcrumb-height'>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Breadcrumbs aria-label="breadcrumb">
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
@@ -269,11 +269,12 @@ class adddestination extends React.Component {
 
                         </Grid>
                     </Grid>
-                    <Grid container spacing={0}>
-                        <Grid xs={1}>
+                    <div className="breadcrumb-bottom"></div>
+                    <Grid container spacing={3}>
+                        <Grid className="style-buttons" xs={1}> 
                             <Button
-                                style={{ marginLeft: 10 }}
-                                startIcon={<AddIcon />}
+                                style={{ marginLeft:5 }}
+                                
                                 onClick={addDestination}
                             >
                                 Create
@@ -281,10 +282,10 @@ class adddestination extends React.Component {
 
                         </Grid>
                     </Grid>
-                    <div style={{ height: 20 }}></div>
+                    <div className="New-link-bottom"></div>
 
-                    <div style={{ marginLeft: 10 }}>
-                        <Grid container spacing={1}>
+                    
+                        <Grid  className="table-adjust" container spacing={0}>
                             <Grid xs={12} sm={12} md={7} lg={7}>
                             <Grid container spacing={0}>
                                     <Grid xs={12} sm={12} md={9} lg={9}>
@@ -425,7 +426,7 @@ class adddestination extends React.Component {
                             </Grid>
                         </Grid>
                     </div>
-                </div>
+   
 
             </Fragment>
         )

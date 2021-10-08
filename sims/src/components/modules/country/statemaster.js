@@ -124,14 +124,14 @@ class statemaster extends React.Component {
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
- 
+
             let data = {
                 Destination: {
                     DestinationId: 0,
                     CountryId: item.countryId,
                     DestinationName: null,
                     Postcode: null,
-                    StateID:item.stateId,
+                    StateID: item.stateId,
                 },
                 validUser: ValidUser
             };
@@ -191,10 +191,10 @@ class statemaster extends React.Component {
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
 
-                <div style={{ marginLeft: 10, marginTop: 10 }}>
+                <div className='breadcrumb-height'>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Breadcrumbs aria-label="breadcrumb">
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
@@ -204,25 +204,28 @@ class statemaster extends React.Component {
                                 <Typography color="textPrimary">State master</Typography>
                             </Breadcrumbs>
 
-                        </Grid>
+                        </Grid>   
                     </Grid>
+                    <div className="breadcrumb-bottom"></div>
                     <Grid container spacing={0}>
-                    <Grid xs={1}>                           
-                            <Button
+                        <Grid className="style-all-Links"  xs={1}>
+                            <Link className="style-link" href={URLS.URLS.addState + this.state.urlparams}>NEW</Link>
+
+                            {/* <Button
                                 style={{ marginLeft: 10 }}
                                 startIcon={<AddIcon />}
                             >
                                 <a className="button-link" href={URLS.URLS.addState + this.state.urlparams}>
                                     New
                                 </a>
-                            </Button>
+                            </Button> */} 
 
                         </Grid>
                     </Grid>
-                    <div style={{ height: 20 }}></div>
-                    <Grid container spacing={1}>
-                        <Grid xs={12} sm={12} md={8} lg={8}>
-                            <Grid container spacing={0}>
+                    <div className="New-link-bottom"></div> 
+                    <Grid className="table-adjust" container spacing={0}>
+                        <Grid  xs={12} sm={12} md={8} lg={8}>
+                            <Grid  container spacing={0}>
                                 <Grid xs={12} sm={12} md={10} lg={10}>
                                     <Table stickyHeader size="small" className="" aria-label="State List table">
                                         <TableHead className="table-header-background">
@@ -243,7 +246,7 @@ class statemaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{URLS.PREFIX.stateID+item.stateId}</a>
+                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{URLS.PREFIX.stateID + item.stateId}</a>
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{item.name}</a>
@@ -262,13 +265,13 @@ class statemaster extends React.Component {
 
                         </Grid>
                         <Grid xs={12} sm={12} md={4} lg={4}>
-                            
+
                             <Grid container spacing={1}>
                                 <Grid xs={12} sm={12} md={10} lg={11}>
-                                <Destination destinations={this.state.destinations} />
+                                    <Destination destinations={this.state.destinations} />
                                 </Grid>
                             </Grid>
-                            
+
                         </Grid>
                     </Grid>
                 </div>

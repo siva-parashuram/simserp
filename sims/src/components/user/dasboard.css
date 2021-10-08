@@ -75,6 +75,23 @@ body{
   color: #212121 !important;
 }
 
+.style-buttons{
+  padding-left: 24px;
+  color:black
+}
+
+.style-all-Links{
+ display: inline-block;
+  margin-left:24px;
+}
+.style-all-Links .style-link{
+  color: #000;
+  padding:auto 3px;
+  font-size: medium;
+  
+}
+
+
 
 .LINK:hover{
   text-decoration: underline !important;
@@ -194,6 +211,7 @@ body{
   color:#009688 !important;
   font-weight: 545 !important;
   text-transform: uppercase !important;
+  
 }
 
 .tableBody:hover{
@@ -209,13 +227,49 @@ cursor: pointer;
 }
 
 .accordion-Header-Design{
-  background-color: #bdbdbd  !important;
+  
+  border-color:#009688 ;
+  border-bottom-color: #000;
+  border-bottom-width: 2px;
+  
+  
+  
+
 }
+
+.accordion-Header-Design .MuiAccordionSummary-root .Mui-expanded{
+  border-color: #000;
+  min-height : 40px ;
+  max-height:40px ; 
+   
+}
+
+
 .accordion-Header-Title{
-  color: #000 !important;
+  color: #009688!important;
   letter-spacing: 0.1rem !important;
-  font-weight: 545 !important;
+  font-weight: bold !important;
+  
+
 }
+ /* .MuiButtonBase-root .MuiAccordionSummary-root .accordion-Header-Design {
+  border-bottom-color: black !important; */
+
+
+
+
+/* .accordion-all{
+  padding-left: 30px;
+
+}
+   */
+
+
+
+
+
+
+
 
 .side-display-accordion-Header-Design{
   background-color: #fff  !important;
@@ -409,6 +463,28 @@ cursor: pointer;
   background-color: #263238  !important;
   height: 1px !important;
  }
+
+ 
+ .style-breadcrumb{
+   padding-left: 24px;
+ }
+
+ .breadcrumb-height{
+   padding-top:20px;
+ }
+
+ .breadcrumb-bottom{
+   height:15px;
+}
+
+.New-link-bottom{
+  height: 25px;
+}
+.table-adjust{
+  margin-left:20px ;
+}
+
+ 
 
  .backLink:hover{
    cursor: pointer;

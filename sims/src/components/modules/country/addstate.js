@@ -211,10 +211,10 @@ class addstate extends React.Component {
                 <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
-                <div style={{ marginLeft: 10, marginTop: 10 }}>
+                <div className='breadcrumb-height'>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Breadcrumbs aria-label="breadcrumb">
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
@@ -229,13 +229,13 @@ class addstate extends React.Component {
 
                         </Grid>
                     </Grid>
-                    <div style={{ height: 20 }}></div>
+                    <div className="breadcrumb-bottom"></div>  
                     <Grid container spacing={3}>
-                        <Grid xs={1}>
+                        <Grid className="style-buttons" xs={1}>
 
                             <Button
                                 style={{ marginLeft: 5 }}
-                                startIcon={<AddIcon />}
+                               
                                 onClick={handleCreate}
                                 disabled={this.state.disableCreateBtn}
                             >
@@ -246,8 +246,8 @@ class addstate extends React.Component {
                         </Grid>
                     </Grid>
 
-                    <div style={{ height: 40 }}></div>
-                    <Grid container spacing={3}>
+                    <div className="New-link-bottom"></div>
+                    <Grid className="table-adjust"  container spacing={0}>
                         <Grid xs={12} sm={6} md={6} lg={6}>
                             <Accordion key="country-General-Details" expanded={this.state.GeneralDetailsExpanded} >
                                 <AccordionSummary
