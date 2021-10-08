@@ -35,6 +35,7 @@ export const URLS = {
   editWarehouse:"/editWarehouse",
   numberingMaster:"/numberingMaster",
   addNumbering:"/addNumbering",
+  editNumbering:"/editNumbering",
   currencyMaster:"/currencyMaster",
   addCurrency:"/addCurrency",
 };
@@ -51,4 +52,5 @@ export const PREFIX={
   userID:"U",
   roleID:"R",
   wareHouseId:"W",
+  noSeriesId:"NO"
 };

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
+ 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -41,7 +41,7 @@ class numberingmaster extends React.Component {
     }
 
     componentDidMount() {
-
+        
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -50,9 +50,10 @@ class numberingmaster extends React.Component {
         this.setState({
             urlparams: urlparams,
         });
+        this.getList(branchId);
     }
 
-    getList() {
+    getList(branchId) {
         this.setState({ ProgressLoader: false });
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -60,19 +61,38 @@ class numberingmaster extends React.Component {
         const headers = {
             "Content-Type": "application/json"
         };
-        let GetUsersUrl = APIURLS.APIURL.GetUsers;
+        let Url = APIURLS.APIURL.GetAllNoSeriesByBranchId;
 
-        axios.post(GetUsersUrl, ValidUser, { headers })
+        let data={
+            ValidUser:ValidUser,
+            BranchId:parseInt(branchId)
+        };
+
+        axios.post(Url, data, { headers })
             .then(response => {
                 let data = response.data;
                 console.log("getList > response > data > ", data);
-                this.setState({
-                    numberings: data,
-                    ProgressLoader: true
-                });
+                if(response.status===200){
+                    this.setState({
+                        numberings: data.noSeriesDetailList,
+                        ProgressLoader: true
+                    });
+                }else{
+                    this.setState({
+                        numberings: [],
+                        ProgressLoader: true,
+                        ErrorPrompt:true
+                    });
+                }
+               
             }
             ).catch(error => {
                 console.log("error > ", error);
+                this.setState({
+                    numberings: [],
+                    ProgressLoader: true,
+                    ErrorPrompt:true
+                });
             });
     }
 
@@ -96,7 +116,7 @@ class numberingmaster extends React.Component {
             if (reason === 'clickaway') {
                 return;
             }
-            this.setState({ SuccessPrompt: false });
+            this.setState({ ErrorPrompt: false });
         }
 
         const closeSuccessPrompt = (event, reason) => {
@@ -171,7 +191,7 @@ class numberingmaster extends React.Component {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody className="tableBody">
-                                            {this.state.numberings.map((item, i) => (
+                                            {this.state.numberings.length>0?this.state.numberings.map((item, i) => (
                                                 <TableRow
                                                     id={"row_" + i}
                                                     className={this.state.initialCss}
@@ -180,24 +200,31 @@ class numberingmaster extends React.Component {
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
                                                 >
                                                     <TableCell align="left">
+                                                        <a className="LINK tableLink" href={URLS.URLS.editNumbering + this.state.urlparams + "&noSeriesId=" + item.noSeriesId} >
+                                                            {URLS.PREFIX.noSeriesId + item.noSeriesId}
+                                                        </a>
                                                     </TableCell>
                                                     <TableCell align="left">
+                                                    {item.code}
                                                     </TableCell>
                                                     <TableCell align="left">
+                                                    {item.description}
                                                     </TableCell>
                                                     <TableCell align="left">
+                                                    {item.startNo}
                                                     </TableCell>
                                                     <TableCell align="left">
+                                                    {item.lastNo}
                                                     </TableCell>
                                                 </TableRow>
-                                            ))}
+                                            )):null}
                                         </TableBody>
                                     </Table>
 
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={7} lg={7}>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={11} lg={11}>
 

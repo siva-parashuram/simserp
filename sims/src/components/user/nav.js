@@ -92,13 +92,8 @@ export default function ButtonAppBar() {
 
   
 
-    const closeWindow = e => {     
-        // let currentbranchBtnId= getCookie(COOKIE.branchBtnId);
-        // let chkBranchWindow="_"+"_"+branchId; 
-        // if(===branchBtnId) 
-      //  
-        window.close();
-        
+    const closeWindow = e => { 
+        window.close();        
     }
 
     return (
@@ -109,18 +104,7 @@ export default function ButtonAppBar() {
                     <Typography variant="h6" className={classes.title}>
                         {branchName}
                     </Typography>
-                    {
-                        /*
-                        <IconButton
-                        aria-label="close"
-                        className={classes.margin}
-                        style={{ color: '#fff' }}
-                        onClick={closeWindow}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                        */ 
-                    }
+                     
 
                     <Link
                     className="nav-exit-link"                    

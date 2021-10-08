@@ -60,7 +60,10 @@ export const APIURL = {
     GetWareHouse:domain+"api/WareHouse/GetWareHouse",
     GetCurrencies:domain+"api/Currency/GetCurrencies", 
     CreateCurrency:domain+"api/Currency/CreateCurrency",
-    CreateNoSeries:domain+"api/NoSeries/CreateNoSeries",
+    CreateNoSeries:domain+"api/NoSeriesDetails/CreateNoSeries",
+    GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
+    GetNoSeriesByNoSeriesId:domain+"api/NoSeriesDetails/GetNoSeriesByNoSeriesId",
+    UpdateNoSeries:domain+"api/NoSeriesDetails/UpdateNoSeries",
   };
 
   export const CTimeOut = 10; 
