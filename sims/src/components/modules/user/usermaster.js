@@ -294,7 +294,7 @@ class usermaster extends React.Component {
           </Alert>
         </Snackbar>
 
-        <div style={{ marginLeft: 10, marginTop: 10 }}>
+        <div className='breadcrumb-height'>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Breadcrumbs aria-label="breadcrumb">
@@ -315,7 +315,7 @@ class usermaster extends React.Component {
               </Breadcrumbs>
             </Grid>
           </Grid>
-          <div className="New-link-bottom"></div>
+          <div className="breadcrumb-bottom"></div>
           <Grid container spacing={3}>
             <Grid xs={1}>
               <Button style={{ marginLeft: 5 }} startIcon={<AddIcon />}>
@@ -329,8 +329,8 @@ class usermaster extends React.Component {
             </Grid>
           </Grid>
 
-         <div className="New-link-bottom"></div>
-          <Grid container spacing={0}>
+          <div className="New-link-bottom"></div>
+          <Grid  className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
