@@ -1,6 +1,7 @@
 //--------------------URL CONSTANTS-------------------------------------
 
 export const URLS = {
+  testformat:"/testformat",
   pageNotFound:"/pageNotFound",
   loginExpired: "/loginExpired",  
   userDashboard: "/userDashboard",  

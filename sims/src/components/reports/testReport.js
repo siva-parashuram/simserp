@@ -24,10 +24,7 @@ class testReport extends React.Component {
     }
 
 
-    printReport() {
-        //window.print()
-    }
-
+    
 
 
     render() {

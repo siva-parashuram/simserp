@@ -45,6 +45,9 @@ import addCurrency from "../components/modules/currency/addcurrency";
 import pageNotFound from "../../src/pagenotfound";
 
 
+import testformat from "../components/modules/accounts/reports/testformat";
+
+
 let routes = ({ location, ...rest }) => {
   return (
     <Router>
@@ -103,7 +106,11 @@ let routes = ({ location, ...rest }) => {
 
           <Route path={URLS.URLS.currencyMaster}  component={currencyMaster} />
           <Route path={URLS.URLS.addCurrency}  component={addCurrency} />
+
+
           
+          
+          <Route path={URLS.URLS.testformat}  component={testformat} />
           
           
           <Route component={pageNotFound} />
