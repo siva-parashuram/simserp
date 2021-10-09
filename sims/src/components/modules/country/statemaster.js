@@ -212,7 +212,7 @@ class statemaster extends React.Component {
                             <Link className="style-link" href={URLS.URLS.addState + this.state.urlparams}>NEW</Link>
 
                             {/* <Button
-                                style={{ marginLeft: 10 }}
+                                style={{ marginLeft: 10 }} 
                                 startIcon={<AddIcon />}
                             >
                                 <a className="button-link" href={URLS.URLS.addState + this.state.urlparams}>

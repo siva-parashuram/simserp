@@ -37,9 +37,8 @@ class addstate extends React.Component {
             urlparams: "",
             ProgressLoader: false,
             GeneralDetailsExpanded: true,
-            Validations: {
-                stateName: { errorState: false, errorMsg: "" },
-            },
+           
+            
             state: {
                 StateId: 0,
                 CountryId: 0,
@@ -61,6 +60,11 @@ class addstate extends React.Component {
             ErrorPrompt: false,
             SuccessPrompt: false,
             disableCreateBtn: true,
+            Validations: {
+                name: { errorState: false, errorMsg: "" },
+                gstcode: { errorState: false, errorMsg: "" },
+                code: { errorState: false, errorMsg: "" },
+},
         }
     }
 
@@ -114,34 +118,101 @@ class addstate extends React.Component {
             }
         }
 
+        const checkName=()=>{
+            if (this.state.name === "" || this.state.name == null||this.state.name.length>50) {
+                this.setState({disableCreateBtn:true});}
+                else{
+                    this.setState({disableCreateBtn:false});
+                }
+            }
+
+       
+
         const updateFormValue = (id, e) => {
             if (id === "Name") {
                 let state = this.state.state;
                 state.Name = e.target.value;
-                this.setState({ name: e.target.value, state: state });
-                if (e.target.value === "" || e.target.value == null) {
-                    this.setState({ disableCreateBtn: true });
-                    let Validations = {
-                        stateName: { errorState: true, errorMsg: "Enter State Name" },
-                    };
-                    this.setState({ disableCreateBtn: true, Validations: Validations });
+                // this.setState({ name: e.target.value, state: state });
+                if (e.target.value === "" || e.target.value == null||e.target.value.length>50) {
+                    if(e.target.value.length>50){
+                        let v=this.state.Validations;
+                        v.name={errorState:true,errorMsg:"Only 50 Characters are Allowed!"}
+                        this.setState({
+                            Validations:v,
+                            disableCreateBtn:true,
+                        });
+                    }
+                    if(e.target.value === "" || e.target.value == null){
+                        let v=this.state.Validations;
+                        v.name={errorState:true,errorMsg:"State Name Cannot be blank"}
+                        this.setState({
+                            Validations:v,
+                            disableCreateBtn: true,
+                        });
+
+                    }
                 } else {
-                    let Validations = {
-                        stateName: { errorState: false, errorMsg: "" },
-                    };
-                    this.setState({ disableCreateBtn: false, Validations: Validations });
+                    let v=this.state.Validations;
+                        v.name={errorState:false,errorMsg:""}
+                        this.setState({
+                            Validations:v,
+                            disableCreateBtn: false,
+                            name:e.target.value,
+                            state:state,
+                        });
                 }
+                // checkName();
             }
             if (id === "Code") {
                 let state = this.state.state;
                 state.Code = e.target.value;
-                this.setState({ code: e.target.value, state: state });
+                // this.setState({ code: e.target.value, state: state });
+                if(e.target.value.length>5){
+                    let v=this.state.Validations;
+                    v.code={errorState:true,errorMsg:"Only 5 numbers are allowed"}
+                    this.setState({
+                        Validations:v,
+                        disableCreateBtn: true, 
+                });
             }
+                else{
+                    let v=this.state.Validations;
+                        v.code={errorState:false,errorMsg:""}
+                        this.setState({
+                            Validations:v,
+                            disableCreateBtn: false,
+                            code:e.target.value,
+                            state:state,
+                        });
+                }
+                checkName();
+            }
+            
             if (id === "GSTCode") {
                 let state = this.state.state;
                 state.Gstcode = e.target.value;
-                this.setState({ gstcode: e.target.value, state: state });
+                // this.setState({ gstcode: e.target.value, state: state });
+                if(e.target.value.length>2){
+                    let v=this.state.Validations;
+                    v.gstcode={errorState:true,errorMsg:"Only 2 numbers are allowed"}
+                    this.setState({
+                        Validations:v,
+                        disableCreateBtn: true, 
+                });
             }
+                else{
+                    let v=this.state.Validations;
+                        v.gstcode={errorState:false,errorMsg:""}
+                        this.setState({
+                            Validations:v,
+                            disableCreateBtn: false,
+                            gstcode:e.target.value,
+                            state:state,
+                        });
+                }
+                checkName();
+            }
+
             if (id === "CountryID") {
                 let state = this.state.state;
                 state.CountryId = e.target.value;
@@ -150,6 +221,7 @@ class addstate extends React.Component {
         }
 
         const handleCreate = () => {
+            checkName();
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -246,7 +318,7 @@ class addstate extends React.Component {
                         </Grid>
                     </Grid>
 
-                    <div className="New-link-bottom"></div>
+                    <div className="New-link-bottom"></div> 
                     <Grid className="table-adjust"  container spacing={0}>
                         <Grid xs={12} sm={6} md={6} lg={6}>
                             <Accordion key="country-General-Details" expanded={this.state.GeneralDetailsExpanded} >
@@ -274,12 +346,14 @@ class addstate extends React.Component {
                                                             size="small"
                                                             onChange={(e) => updateFormValue('Name', e)}
                                                             fullWidth
+                                                            // value={this.state.name}
                                                             InputProps={{
                                                                 className: "textFieldCss",
                                                                 maxlength: 50
                                                             }}
-                                                            error={this.state.Validations.stateName.errorState}
-                                                            helperText={this.state.Validations.stateName.errorMsg}
+                                                             value={this.state.name}
+                                                            error={this.state.Validations.name.errorState}
+                                                            helperText={this.state.Validations.name.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -296,8 +370,11 @@ class addstate extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 20
+                                                                maxlength: 5
                                                             }}
+                                                            value={this.state.code}
+                                                            error={this.state.Validations.code.errorState}
+                                                            helperText={this.state.Validations.code.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -316,6 +393,9 @@ class addstate extends React.Component {
                                                                 className: "textFieldCss",
                                                                 maxlength: 20
                                                             }}
+                                                            value={this.state.gstcode}
+                                                            error={this.state.Validations.gstcode.errorState}
+                                                            helperText={this.state.Validations.gstcode.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>

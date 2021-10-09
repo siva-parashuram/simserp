@@ -46,6 +46,7 @@ class addbranch extends React.Component {
             AddressDetailsExpanded: true,
             ErrorPrompt: false,
             SuccessPrompt: false,
+            disabledCreatebtn: false,
             companyData: [],
             countryData: [],
             stateData: [],
@@ -94,6 +95,18 @@ class addbranch extends React.Component {
             stateId: null,
             wareHouses: [],
             website: null,
+            Validations: {
+                name: { errorState: false, errorMsg: "" },
+                shortName: { errorState: false, errorMsg: "" },
+                address: { errorState: false, errorMsg: "" },
+                country: { errorState: false, errorMsg: "" },
+                address2: { errorState: false, errorMsg: "" },
+                address3: { errorState: false, errorMsg: "" },
+                city: { errorState: false, errorMsg: "" },
+                postcode: { errorState: false, errorMsg: "" },
+                phoneNo: { errorState: false, errorMsg: "" },
+                website: { errorState: false, errorMsg: "" },
+            },
 
 
 
@@ -213,7 +226,39 @@ class addbranch extends React.Component {
             }
         }
 
+        const ValidateName = () => {
+            if (this.state.name === "" || this.state.name === null || this.state.name.length > 50) {
+                this.setState({ disabledCreatebtn: true });
+            } else {
+                this.setState({ disabledCreatebtn: false });
+            }
+        }
+
         const updateFormValue = (id, e) => {
+            if (id === "shortName") {
+                let branch = this.state.branch;
+                branch.shortName = e.target.value;
+                if (e.target.value.length > 10) {
+                    let v = this.state.Validations;
+                    v.shortName = { errorState: true, errorMsg: "Only 10 Characters are Allowed!" };
+                    this.setState({
+                        Validations: v,
+                        disabledCreatebtn: true,
+                    });
+                } else {
+                    let v = this.state.Validations;
+                    v.shortName = { errorState: false, errorMsg: "" };
+                    this.setState({
+                        Validations: v,
+                        disabledCreatebtn: false,
+                        branch: branch,
+                        shortName: e.target.value
+                    });
+
+
+                }
+                ValidateName();
+            }
 
             if (id === "Company") {
                 let branch = this.state.branch;
@@ -221,28 +266,92 @@ class addbranch extends React.Component {
                 this.setState({ branch: branch, companyId: e.target.value });
             }
 
-            if (id === "shortName") {
-                let branch = this.state.branch;
-                branch.shortName = e.target.value;
-                this.setState({ branch: branch, shortName: e.target.value });
-            }
-
-
             if (id === "Name") {
                 let branch = this.state.branch;
                 branch.name = e.target.value;
-                this.setState({ branch: branch, name: e.target.value });
+                if (e.target.value === "" || e.target.value === null || e.target.value.length > 50) {
+                    if (e.target.value.length > 50) {
+                        let v = this.state.Validations;
+                        v.name = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+                        this.setState({
+                            Validations: v,
+                            disabledCreatebtn: true,
+                           
+                        });
+
+                    }
+                    if (e.target.value === "" || e.target.value === null) {
+                        let v = this.state.Validations;
+                        v.name = { errorState: true, errorMsg: "Branch name cannot be blank" };
+                        this.setState({
+                            Validations: v,
+                            disabledCreatebtn: true,
+                           
+                        });
+
+                    }
+                }
+                else {
+                    let v = this.state.Validations;
+                    v.name = { errorState: false, errorMsg: "" };
+                    this.setState({
+                        Validations: v,
+                        disabledCreatebtn: false,
+                        name: e.target.value,
+                        branch: branch,
+                    });
+                }
             }
+            
             if (id === "phoneNo") {
                 let branch = this.state.branch;
                 branch.phoneNo = e.target.value;
-                this.setState({ branch: branch, phoneNo: e.target.value });
+                if (e.target.value.length > 20) {
+                    let v = this.state.Validations;
+                    v.phoneNo = { errorState: true, errorMsg: "Only 20 numbers are allowed" }
+                    this.setState({
+                        Validations: v,
+                        disabledCreatebtn: true,
+                    })
+                }
+                else {
+                    let v = this.state.Validations;
+                    v.phoneNo = { errorState: false, errorMsg: "" }
+                    this.setState({
+                        Validations: v,
+                        disabledCreatebtn: false,
+                        branch: branch,
+                        phoneNo: e.target.value
+                    });
+                }
+                ValidateName();
             }
+
+
 
             if (id === "website") {
                 let branch = this.state.branch;
                 branch.website = e.target.value;
-                this.setState({ branch: branch, website: e.target.value });
+                if (e.target.value.length > 50) {
+                    let v = this.state.Validations;
+                    v.website = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+                    this.setState({
+                        Validations: v,
+                        disabledCreatebtn: true,
+                    });
+
+                } else {
+                    let v = this.state.Validations;
+                    v.website = { errorState: false, errorMsg: "" };   
+                    this.setState({
+                        Validations: v,
+                        disabledCreatebtn: false,
+                        branch: branch,
+                        website: e.target.value
+                    });
+                }
+                ValidateName();
+
             }
             if (id === "Country") {
                 let branch = this.state.branch;
@@ -260,28 +369,130 @@ class addbranch extends React.Component {
             if (id === "City") {
                 let branch = this.state.branch;
                 branch.city = e.target.value;
-                this.setState({ branch: branch, city: e.target.value });
-            }
-            if (id === "Postcode") {
+                if (e.target.value.length > 50) {
+                  let v = this.state.Validations;
+                  v.city = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: true,
+                  });
+        
+                } else {
+                  let v = this.state.Validations;
+                  v.city = { errorState: false, errorMsg: "" };
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: false,
+                    branch: branch,
+                    city: e.target.value
+                  });
+                }
+                ValidateName();
+              }
+        
+        
+              if (id === "Postcode") {
                 let branch = this.state.branch;
                 branch.postcode = e.target.value;
-                this.setState({ branch: branch, postcode: e.target.value });
-            }
-            if (id === "Address") {
+                if (e.target.value.length > 10) {
+                  let v = this.state.Validations;
+                  v.postcode = { errorState: true, errorMsg: "Only 10 numbers are allowed" }
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: true,
+                  })
+                }
+                else {
+                  let v = this.state.Validations;
+                  v.postcode = { errorState: false, errorMsg: "" }
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: false,
+                    branch: branch,
+                    postcode: e.target.value
+                  });
+                }
+                ValidateName();
+        
+              }
+        
+        
+              if (id === "Address") {
                 let branch = this.state.branch;
                 branch.address = e.target.value;
-                this.setState({ branch: branch, address: e.target.value });
-            }
-            if (id === "Address2") {
+                if (e.target.value.length > 50) {
+                  let v = this.state.Validations;
+                  v.address = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: true,
+                  });
+        
+                }
+                else {
+                  let v = this.state.Validations;
+                  v.address = { errorState: false, errorMsg: "" };
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: false,
+                    branch: branch,
+                    address: e.target.value
+                  });
+        
+                }
+                ValidateName();
+        
+              }
+              if (id === "Address2") {
                 let branch = this.state.branch;
                 branch.address2 = e.target.value;
-                this.setState({ branch: branch, address2: e.target.value });
-            }
-            if (id === "Address3") {
+                if (e.target.value.length > 50) {
+                  let v = this.state.Validations;
+                  v.address2 = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: true,
+                  });
+        
+                }
+                else {
+                  let v = this.state.Validations;
+                  v.address2 = { errorState: false, errorMsg: "" };
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: false,
+                    branch: branch,
+                    address2: e.target.value
+                  });
+        
+                }
+                ValidateName();
+              }
+              if (id === "Address3") {
                 let branch = this.state.branch;
                 branch.address3 = e.target.value;
-                this.setState({ branch: branch, address3: e.target.value });
-            }
+                if (e.target.value.length > 50) {
+                  let v = this.state.Validations;
+                  v.address3 = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: true,
+                  });
+        
+                }
+                else {
+                  let v = this.state.Validations;
+                  v.address3 = { errorState: false, errorMsg: "" };
+                  this.setState({
+                    Validations: v,
+                    disabledCreatebtn: false,
+                    branch: branch,
+                    address3: e.target.value
+                  });
+        
+                };
+                ValidateName();
+              }
         }
 
         const handleCreate = () => {
@@ -337,7 +548,7 @@ class addbranch extends React.Component {
 
 
         return (
-            <Fragment> 
+            <Fragment>
                 <Nav />
                 <Menubar />
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
@@ -351,8 +562,8 @@ class addbranch extends React.Component {
                 </Snackbar>
 
                 <div className='breadcrumb-height'>
-                    <Grid  container spacing={3}>
-                        <Grid  item xs={12}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
                             <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
@@ -368,19 +579,20 @@ class addbranch extends React.Component {
 
                         </Grid>
                     </Grid>
-                    <div className="breadcrumb-bottom"></div>  
+                    <div className="breadcrumb-bottom"></div>
                     <Grid container spacing={3}>
-                        <Grid className="style-buttons" xs={1}> 
-                            <Button      
-                                style={{ marginLeft: 5 }}                 
-                                onClick={handleCreate}                 
+                        <Grid className="style-buttons" xs={1}>
+                            <Button
+                                style={{ marginLeft: 5 }}
+                                onClick={handleCreate}
+                                disabled={this.state.disabledCreatebtn}
                             >
-                                Add    
+                                Add
                             </Button>
                         </Grid>
                     </Grid>
                     <div className="New-link-bottom"></div>
-                    <Grid className="table-adjust"  container spacing={0}>
+                    <Grid className="table-adjust" container spacing={0}>
                         <Grid xs={12} sm={12} md={9} lg={9}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={12} lg={12}>
@@ -409,17 +621,17 @@ class addbranch extends React.Component {
                                                                     {console.log("this.state.countryId > ", this.state.countryId)}
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <select
-                                                                           
+
                                                                             className="dropdown-css"
                                                                             id="companySelect"
                                                                             label="Company"
                                                                             fullWidth
-                                                                            
+
                                                                             value={parseInt(this.state.companyId)}
                                                                             onChange={(e) => updateFormValue('Company', e)}
                                                                         >
                                                                             <option value="-">
-                                                                               None 
+                                                                                None
                                                                             </option>
                                                                             {
                                                                                 this.state.companyData.map((item, i) => (
@@ -448,7 +660,9 @@ class addbranch extends React.Component {
 
                                                                             }}
 
-                                                                            value={this.state.name}
+                                                                             value={this.state.name}
+                                                                            error={this.state.Validations.name.errorState}
+                                                                            helperText={this.state.Validations.name.errorMsg}
 
                                                                         />
                                                                     </TableCell>
@@ -471,6 +685,8 @@ class addbranch extends React.Component {
                                                                             }}
 
                                                                             value={this.state.shortName}
+                                                                            error={this.state.Validations.shortName.errorState}
+                                                                            helperText={this.state.Validations.shortName.errorMsg}
 
                                                                         />
                                                                     </TableCell>
@@ -481,7 +697,7 @@ class addbranch extends React.Component {
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
-                                                                        type="number"
+                                                                            type="number"
                                                                             id="phoneNo"
                                                                             variant="outlined"
                                                                             size="small"
@@ -492,6 +708,8 @@ class addbranch extends React.Component {
                                                                                 maxlength: 20
                                                                             }}
                                                                             value={this.state.phoneNo}
+                                                                            error={this.state.Validations.phoneNo.errorState}
+                                                                            helperText={this.state.Validations.phoneNo.errorMsg}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -501,7 +719,7 @@ class addbranch extends React.Component {
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
-                                                                           
+
                                                                             id="website"
                                                                             variant="outlined"
                                                                             size="small"
@@ -512,6 +730,8 @@ class addbranch extends React.Component {
                                                                                 maxlength: 20
                                                                             }}
                                                                             value={this.state.website}
+                                                                            error={this.state.Validations.website.errorState}
+                                                                            helperText={this.state.Validations.website.errorMsg}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -531,21 +751,21 @@ class addbranch extends React.Component {
 
                                                                     {console.log("this.state.countryId > ", this.state.countryId)}
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <select     
+                                                                        <select
                                                                             className="dropdown-css"
                                                                             id="countrySelect"
                                                                             label="Country"
                                                                             fullWidth
-                                                                            
+
                                                                             value={parseInt(this.state.countryId)}
                                                                             onChange={(e) => updateFormValue('Country', e)}
                                                                         >
-                                                                            <option  value="-">
-                                                                                None 
+                                                                            <option value="-">
+                                                                                None
                                                                             </option>
                                                                             {
                                                                                 this.state.countryData.map((item, i) => (
-                                                                                    <option  value={parseInt(item.countryId)}>
+                                                                                    <option value={parseInt(item.countryId)}>
                                                                                         {item.name}
                                                                                     </option>
                                                                                 ))
@@ -564,12 +784,12 @@ class addbranch extends React.Component {
                                                                             id="stateSelect"
                                                                             label="State"
                                                                             fullWidth
-                                                                            
+
                                                                             value={parseInt(this.state.stateId)}
                                                                             onChange={(e) => updateFormValue('State', e)}
                                                                         >
                                                                             <option value="-">
-                                                                                 None 
+                                                                                None
                                                                             </option>
                                                                             {
                                                                                 this.state.stateData.map((item, i) => (
@@ -599,6 +819,8 @@ class addbranch extends React.Component {
                                                                                 maxlength: 50
                                                                             }}
                                                                             value={this.state.city}
+                                                                            error={this.state.Validations.city.errorState}
+                                                                            helperText={this.state.Validations.city.errorMsg}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -618,6 +840,8 @@ class addbranch extends React.Component {
                                                                                 maxlength: 10
                                                                             }}
                                                                             value={this.state.postcode}
+                                                                            error={this.state.Validations.postcode.errorState}
+                                                                            helperText={this.state.Validations.postcode.errorMsg}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -638,6 +862,9 @@ class addbranch extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 50
                                                                             }}
+                                                                            value={this.state.address}
+                                                                            error={this.state.Validations.address.errorState}
+                                                                            helperText={this.state.Validations.address.errorMsg}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
@@ -657,6 +884,9 @@ class addbranch extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 50
                                                                             }}
+                                                                            value={this.state.address2}
+                                                                            error={this.state.Validations.address2.errorState}
+                                                                            helperText={this.state.Validations.address2.errorMsg}
 
                                                                         />
                                                                     </TableCell>
@@ -677,6 +907,9 @@ class addbranch extends React.Component {
                                                                                 className: "textFieldCss",
                                                                                 maxlength: 50
                                                                             }}
+                                                                            value={this.state.address3}
+                                                                            error={this.state.Validations.address3.errorState}
+                                                                            helperText={this.state.Validations.address3.errorMsg}
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>

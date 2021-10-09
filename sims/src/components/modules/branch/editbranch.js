@@ -45,7 +45,7 @@ class editbranch extends React.Component {
       SuccessPrompt: false,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: false,
-      disabledUpdatebtn:false,
+      disabledUpdatebtn: false,
       companyData: [],
       countryData: [],
       stateData: [],
@@ -96,7 +96,7 @@ class editbranch extends React.Component {
       website: null,
       Validations: {
         name: { errorState: false, errorMsg: "" },
-        shortName:{errorState: false, errorMsg: ""},
+        shortName: { errorState: false, errorMsg: "" },
         address: { errorState: false, errorMsg: "" },
         country: { errorState: false, errorMsg: "" },
         address2: { errorState: false, errorMsg: "" },
@@ -105,10 +105,10 @@ class editbranch extends React.Component {
         postcode: { errorState: false, errorMsg: "" },
         phoneNo: { errorState: false, errorMsg: "" },
         website: { errorState: false, errorMsg: "" },
-    },
+      },
 
     }
-   
+
   }
 
   componentDidMount() {
@@ -282,36 +282,40 @@ class editbranch extends React.Component {
       }
     }
 
+    const ValidateName = () => {
+      if (this.state.name === "" || this.state.name === null || this.state.name.length > 50) {
+        this.setState({ disabledUpdatebtn: true });
+      } else {
+        this.setState({ disabledUpdatebtn: false });
+      }
+      return;
+    }
+
     const updateFormValue = (id, e) => {
-
-
-
-
       if (id === "shortName") {
         let branch = this.state.branch;
-        branch.shortName=e.target.value;
-        
         branch.shortName = e.target.value;
-        if(e.target.value.length>10){
-          let v=this.state.Validations;
-          v.shortName={errorState:true,errorMsg:"Only 10 Characters are Allowed!"};
+        if (e.target.value.length > 10) {
+          let v = this.state.Validations;
+          v.shortName = { errorState: true, errorMsg: "Only 10 Characters are Allowed!" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:true,
+            Validations: v,
+            disabledUpdatebtn: true,
           });
-        }else{
-          let v=this.state.Validations;
-          v.shortName={errorState:false,errorMsg:""};
+        } else {
+          let v = this.state.Validations;
+          v.shortName = { errorState: false, errorMsg: "" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:false,
-            branch: branch, 
+            Validations: v,
+            disabledUpdatebtn: false,
+            branch: branch,
             shortName: e.target.value
-        });
+          });
 
-        
+
+        }
+        ValidateName();
       }
-    }
 
       if (id === "Company") {
         let branch = this.state.branch;
@@ -320,84 +324,89 @@ class editbranch extends React.Component {
       }
 
       if (id === "Name") {
-         let branch = this.state.branch;
-         branch.name=e.target.value;
-        if(e.target.value===""||e.target.value===null||e.target.value.length>50){
-          if(e.target.value.length>50){
-            let v=this.state.Validations;
-            v.name={errorState:true,errorMsg:"Only 50 Characters are Allowed!"};
+        let branch = this.state.branch;
+        branch.name = e.target.value;
+        if (e.target.value === "" || e.target.value === null || e.target.value.length > 50) {
+          if (e.target.value.length > 50) {
+            let v = this.state.Validations;
+            v.name = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
             this.setState({
-              Validations:v,
-              disabledUpdatebtn:true,
+              Validations: v,
+              disabledUpdatebtn: true,
             });
 
           }
-          if(e.target.value===""||e.target.value===null){
-            let v=this.state.Validations;
-            v.name={errorState:true,errorMsg:"Branch name cannot be blank"};
+          if (e.target.value === "" || e.target.value === null) {
+            let v = this.state.Validations;
+            v.name = { errorState: true, errorMsg: "Branch name cannot be blank" };
             this.setState({
-              Validations:v,
-              disabledUpdatebtn:true,
+              Validations: v,
+              disabledUpdatebtn: true,
             });
 
-          }}
-          else{
-          let v=this.state.Validations;
-            v.name={errorState:false,errorMsg:""};
-            this.setState({
-              Validations:v,
-              name:e.target.value,
-              branch: branch,
-              
-              disabledUpdatebtn:false
-          
-        });
-      }}
+          }
+        }
+        else {
+          let v = this.state.Validations;
+          v.name = { errorState: false, errorMsg: "" };
+          this.setState({
+            Validations: v,
+            name: e.target.value,
+            branch: branch,
+
+            disabledUpdatebtn: false
+
+          });
+        }
+      }
       if (id === "phoneNo") {
         let branch = this.state.branch;
-        branch.phoneNo=e.target.value;
-        if(e.target.value.length>20){
-          let v=this.state.Validations;
-          v.phoneNo={errorState:true,errorMsg:"Only 20 numbers are allowed"}
+        branch.phoneNo = e.target.value;
+        if (e.target.value.length > 20) {
+          let v = this.state.Validations;
+          v.phoneNo = { errorState: true, errorMsg: "Only 20 numbers are allowed" }
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:true,
+            Validations: v,
+            disabledUpdatebtn: true,
           })
         }
-        else{
-          let v=this.state.Validations;
-          v.phoneNo={errorState:false,errorMsg:""}
-          this.setState({ 
-            Validations:v,
-            disabledUpdatebtn:false,
-            branch: branch, 
-            phoneNo: e.target.value });
+        else {
+          let v = this.state.Validations;
+          v.phoneNo = { errorState: false, errorMsg: "" }
+          this.setState({
+            Validations: v,
+            disabledUpdatebtn: false,
+            branch: branch,
+            phoneNo: e.target.value
+          });
         }
-        
+        ValidateName();
+
       }
 
       if (id === "website") {
         let branch = this.state.branch;
-        branch.website=e.target.value;
-        if(e.target.value.length>50){
-          let v=this.state.Validations;
-          v.website={errorState:true,errorMsg:"Only 50 Characters are Allowed!"};
+        branch.website = e.target.value;
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.website = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:true,
+            Validations: v,
+            disabledUpdatebtn: true,
           });
 
-        }else{
-          let v=this.state.Validations;
-          v.website={errorState:false,errorMsg:""};
+        } else {
+          let v = this.state.Validations;
+          v.website = { errorState: false, errorMsg: "" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:false,
-            branch: branch, 
+            Validations: v,
+            disabledUpdatebtn: false,
+            branch: branch,
             website: e.target.value
           });
         }
-        
+        ValidateName();
+
       }
       if (id === "Country") {
         let branch = this.state.branch;
@@ -415,128 +424,134 @@ class editbranch extends React.Component {
       if (id === "City") {
         let branch = this.state.branch;
         branch.city = e.target.value;
-        if(e.target.value.length>50){
-          let v=this.state.Validations;
-          v.city={errorState:true,errorMsg:"Only 50 Characters are Allowed!"};
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.city = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:true,
+            Validations: v,
+            disabledUpdatebtn: true,
           });
 
-        }else{
-          let v=this.state.Validations;
-          v.city={errorState:false,errorMsg:""};
+        } else {
+          let v = this.state.Validations;
+          v.city = { errorState: false, errorMsg: "" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:false,
-            branch: branch, 
+            Validations: v,
+            disabledUpdatebtn: false,
+            branch: branch,
             city: e.target.value
           });
         }
+        ValidateName();
       }
-        
-       
+
+
       if (id === "Postcode") {
         let branch = this.state.branch;
         branch.postcode = e.target.value;
-        if(e.target.value.length>10){
-          let v=this.state.Validations;
-          v.postcode={errorState:true,errorMsg:"Only 10 numbers are allowed"}
+        if (e.target.value.length > 10) {
+          let v = this.state.Validations;
+          v.postcode = { errorState: true, errorMsg: "Only 10 numbers are allowed" }
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:true,
+            Validations: v,
+            disabledUpdatebtn: true,
           })
         }
-        else{
-          let v=this.state.Validations;
-          v.postcode={errorState:false,errorMsg:""}
-          this.setState({ 
-            Validations:v,
-            disabledUpdatebtn:false,
-            branch: branch, 
-            postcode: e.target.value });
+        else {
+          let v = this.state.Validations;
+          v.postcode = { errorState: false, errorMsg: "" }
+          this.setState({
+            Validations: v,
+            disabledUpdatebtn: false,
+            branch: branch,
+            postcode: e.target.value
+          });
         }
-        
+        ValidateName();
+
       }
-       
-      
+
+
       if (id === "Address") {
         let branch = this.state.branch;
         branch.address = e.target.value;
-        if(e.target.value.length>50){
-          let v=this.state.Validations;
-          v.address={errorState:true,errorMsg:"Only 50 Characters are Allowed!"};
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.address = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:true,
+            Validations: v,
+            disabledUpdatebtn: true,
           });
 
         }
-        else{
-          let v=this.state.Validations;
-          v.address={errorState:false,errorMsg:""};
+        else {
+          let v = this.state.Validations;
+          v.address = { errorState: false, errorMsg: "" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:false,
-            branch: branch, 
-            address: e.target.value 
+            Validations: v,
+            disabledUpdatebtn: false,
+            branch: branch,
+            address: e.target.value
           });
 
         }
-        
+        ValidateName();
+
       }
-      if (id === "Address2") {
+      if (id === "Address2") {     
         let branch = this.state.branch;
         branch.address2 = e.target.value;
-        if(e.target.value.length>50){
-          let v=this.state.Validations;
-          v.address2={errorState:true,errorMsg:"Only 50 Characters are Allowed!"};
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.address2 = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:true,
+            Validations: v,
+            disabledUpdatebtn: true,
           });
 
         }
-        else{
-          let v=this.state.Validations;
-          v.address2={errorState:false,errorMsg:""};
+        else {
+          let v = this.state.Validations;
+          v.address2 = { errorState: false, errorMsg: "" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:false,
-            branch: branch, 
-            address2: e.target.value 
+            Validations: v,
+            disabledUpdatebtn: false,
+            branch: branch,
+            address2: e.target.value
           });
 
         }
+        ValidateName();
       }
       if (id === "Address3") {
         let branch = this.state.branch;
         branch.address3 = e.target.value;
-        if(e.target.value.length>50){
-          let v=this.state.Validations;
-          v.address3={errorState:true,errorMsg:"Only 50 Characters are Allowed!"};
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.address3 = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:true,
+            Validations: v,
+            disabledUpdatebtn: true,
           });
 
         }
-        else{
-          let v=this.state.Validations;
-          v.address3={errorState:false,errorMsg:""};
+        else {
+          let v = this.state.Validations;
+          v.address3 = { errorState: false, errorMsg: "" };
           this.setState({
-            Validations:v,
-            disabledUpdatebtn:false,
-            branch: branch, 
-            address3: e.target.value 
+            Validations: v,
+            disabledUpdatebtn: false,
+            branch: branch,
+            address3: e.target.value
           });
 
-        }
-       ;
+        };
+        ValidateName();
       }
     }
 
     const handleupdate = () => {
+      ValidateName();
       this.setState({ ProgressLoader: false });
       let branch = this.state.branch;
       let ValidUser = APIURLS.ValidUser;
@@ -603,12 +618,12 @@ class editbranch extends React.Component {
         </Snackbar>
 
         <div className='breadcrumb-height'>
-          <Grid  container spacing={3}>
-            <Grid  item xs={12}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
               <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                   Back
-                </Link> 
+                </Link>
                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                   Dashboard
                 </Link>
@@ -621,7 +636,7 @@ class editbranch extends React.Component {
           </Grid>
           <div className="breadcrumb-bottom"></div>
           <Grid container spacing={3}>
-            <Grid className="style-buttons" xs={1}> 
+            <Grid className="style-buttons" xs={1}>
               <Button
                 style={{ marginLeft: 5 }}
                 onClick={handleupdate}
@@ -664,12 +679,12 @@ class editbranch extends React.Component {
                                       id="companySelect"
                                       label="Company"
                                       fullWidth
-                                     
+
                                       value={parseInt(this.state.companyId)}
                                       onChange={(e) => updateFormValue('Company', e)}
                                     >
                                       <option value="-">
-                                         None 
+                                        None
                                       </option>
                                       {
                                         this.state.companyData.map((item, i) => (
@@ -694,15 +709,15 @@ class editbranch extends React.Component {
                                       onChange={(e) => updateFormValue('Name', e)}
                                       fullWidth
                                       InputProps={{
-                                        className: "textFieldCss", 
+                                        className: "textFieldCss",
                                         maxlength: 50
                                       }}
 
-                                      value={this.state.name}
+                                       value={this.state.name}
                                       error={this.state.Validations.name.errorState}
                                       helperText={this.state.Validations.name.errorMsg}
 
-                                    /> 
+                                    />
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
@@ -737,7 +752,7 @@ class editbranch extends React.Component {
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
-                                    type="number"
+                                      type="number"
                                       id="phoneNo"
                                       variant="outlined"
                                       size="small"
@@ -792,16 +807,16 @@ class editbranch extends React.Component {
                                   {console.log("this.state.countryId > ", this.state.countryId)}
                                   <TableCell align="left" className="no-border-table">
                                     <select
-                                    className="dropdown-css"
+                                      className="dropdown-css"
                                       id="countrySelect"
                                       label="Country"
                                       fullWidth
-                                      
+
                                       value={parseInt(this.state.countryId)}
                                       onChange={(e) => updateFormValue('Country', e)}
                                     >
                                       <option value="-">
-                                         None 
+                                        None
                                       </option>
                                       {
                                         this.state.countryData.map((item, i) => (
@@ -819,16 +834,16 @@ class editbranch extends React.Component {
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <select
-                                    className="dropdown-css"
+                                      className="dropdown-css"
                                       id="stateSelect"
                                       label="State"
                                       fullWidth
-                                      
+
                                       value={parseInt(this.state.stateId)}
                                       onChange={(e) => updateFormValue('State', e)}
                                     >
                                       <option value="-">
-                                         None 
+                                        None
                                       </option>
                                       {
                                         this.state.stateData.map((item, i) => (

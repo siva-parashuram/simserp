@@ -297,7 +297,7 @@ class usermaster extends React.Component {
         <div className='breadcrumb-height'>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Breadcrumbs aria-label="breadcrumb">
+              <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                 <Link
                   color="inherit"
                   className="backLink"
@@ -316,16 +316,17 @@ class usermaster extends React.Component {
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          <Grid container spacing={3}>
-            <Grid xs={1}>
-              <Button style={{ marginLeft: 5 }} startIcon={<AddIcon />}>
+          <Grid container spacing={0}>
+            <Grid className="style-all-Links" xs={1}>
+            <Link className="style-link" href={URLS.URLS.addUser + this.state.urlparams}>NEW</Link>
+              {/* <Button style={{ marginLeft: 5 }} startIcon={<AddIcon />}>
                 <a
                   className="button-link"
                   href={URLS.URLS.addUser + this.state.urlparams}
                 >
                   New
                 </a>
-              </Button>
+              </Button> */}
             </Grid>
           </Grid>
 

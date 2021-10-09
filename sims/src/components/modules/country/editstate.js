@@ -37,10 +37,7 @@ class editstate extends React.Component {
             urlparams: "",
             ProgressLoader: false,
             GeneralDetailsExpanded: true,
-            Validations: {
-                stateName: { errorState: false, errorMsg: "" },
-                 
-            },
+            
             state: {
                 StateId: null,
                 CountryId: 0,
@@ -61,14 +58,19 @@ class editstate extends React.Component {
             CountryID: null,
             ErrorPrompt: false,
             SuccessPrompt: false,
-            disableCreateBtn:true,
+            disableUpdateBtn:true,
+            Validations: {
+                name: { errorState: false, errorMsg: "" },
+                gstcode: { errorState: false, errorMsg: "" },
+                code: { errorState: false, errorMsg: "" },
+},
         }
     }
 
     componentDidMount() {
         this.getCountryList();
         var url = new URL(window.location.href);
-        let branchId = url.searchParams.get("branchId");
+        let branchId = url.searchParams.get("branchId");   
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
         let StateId = url.searchParams.get("StateId");
@@ -160,34 +162,99 @@ class editstate extends React.Component {
             }
         }
 
+        const checkName=()=>{
+            if (this.state.name === "" || this.state.name == null||this.state.name.length>50) {
+                this.setState({disableUpdateBtn:true});}
+                else{
+                    this.setState({disableUpdateBtn:false});
+                }
+            }
+
         const updateFormValue = (id, e) => {  
-            if(id==="Name"){
-                let state=this.state.state;
-                state.Name= e.target.value;
-                this.setState({ name: e.target.value,state:state });
-                if(e.target.value==="" || e.target.value==null){
-                  let Validations={
-                    stateName: { errorState: true, errorMsg: "Enter State Name" },
-                                };
-                     
-                    this.setState({disableCreateBtn:true,Validations:Validations});
-                }else{
-                    let Validations={
-                        stateName: { errorState: false, errorMsg: "" },
-                                    };
-                    this.setState({disableCreateBtn:false,Validations:Validations});
-                }   
+            if (id === "Name") {
+                let state = this.state.state;
+                // state.Name = e.target.value;
+                // this.setState({ name: e.target.value, state: state });
+                if (e.target.value === "" || e.target.value == null||e.target.value.length>50) {
+                    if(e.target.value.length>50){
+                        let v=this.state.Validations;
+                        v.name={errorState:true,errorMsg:"Only 50 Characters are Allowed!"}
+                        this.setState({
+                            Validations:v,
+                            disableUpdateBtn:true,
+                        });
+                    }
+                    if(e.target.value === "" || e.target.value == null){
+                        let v=this.state.Validations;
+                        v.name={errorState:true,errorMsg:"State Name Cannot be blank"}
+                        this.setState({
+                            Validations:v,
+                            disableUpdateBtn: true,
+                        });
+
+                    }
+                } else {
+                    let v=this.state.Validations;
+                        v.name={errorState:false,errorMsg:""}
+                        this.setState({
+                            Validations:v,
+                            disableUpdateBtn: false,
+                            name:e.target.value,
+                            state:state,
+                        });
+                }
+                // checkName();
             }
-            if(id==="Code"){
-                let state=this.state.state;
-                state.Code= e.target.value;
-                this.setState({ code: e.target.value,state:state });
+            if (id === "Code") {
+                let state = this.state.state;
+                state.Code = e.target.value;
+                // this.setState({ code: e.target.value, state: state });
+                if(e.target.value.length>5){
+                    let v=this.state.Validations;
+                    v.code={errorState:true,errorMsg:"Only 5 numbers are allowed"}
+                    this.setState({
+                        Validations:v,
+                        disableUpdateBtn: true, 
+                });
             }
-            if(id==="GSTCode"){
-                let state=this.state.state;
-                state.Gstcode= e.target.value;
-                this.setState({ gstcode: e.target.value,state:state });
+                else{
+                    let v=this.state.Validations;
+                        v.code={errorState:false,errorMsg:""}
+                        this.setState({
+                            Validations:v,
+                            disableUpdateBtn: false,
+                            code:e.target.value,
+                            state:state,
+                        });
+                }
+                checkName();
             }
+            
+            if (id === "GSTCode") {
+                let state = this.state.state;
+                state.Gstcode = e.target.value;
+                // this.setState({ gstcode: e.target.value, state: state });
+                if(e.target.value.length>2){
+                    let v=this.state.Validations;
+                    v.gstcode={errorState:true,errorMsg:"Only 2 numbers are allowed"}
+                    this.setState({
+                        Validations:v,
+                        disableCreateBtn: true, 
+                });
+            }
+                else{
+                    let v=this.state.Validations;
+                        v.gstcode={errorState:false,errorMsg:""}
+                        this.setState({
+                            Validations:v,
+                            disableCreateBtn: false,
+                            gstcode:e.target.value,
+                            state:state,
+                        });
+                }
+                checkName();
+            }
+
             if(id==="CountryID"){
                 let state=this.state.state;
                 state.CountryId= e.target.value;
@@ -196,6 +263,7 @@ class editstate extends React.Component {
         }
 
         const handleUpdate = () => {
+            checkName();
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -279,12 +347,12 @@ class editstate extends React.Component {
                                 style={{ marginLeft: 5 }}
                                 
                                 onClick={handleUpdate}
-                                disabled={this.state.disableCreateBtn}
+                                disabled={this.state.disableUpdateBtn}
                             >
 
                                 Update
 
-                            </Button>
+                            </Button> 
                         </Grid>
                     </Grid>
 
@@ -320,9 +388,10 @@ class editstate extends React.Component {
                                                                 className: "textFieldCss",
                                                                 maxlength: 50
                                                             }}
-                                                            error={this.state.Validations.stateName.errorState}
-                                                            helperText={this.state.Validations.stateName.errorMsg}
-                                                            value={this.state.name}
+                                                             value={this.state.name}
+                                                            error={this.state.Validations.name.errorState}
+                                                            helperText={this.state.Validations.name.errorMsg}
+                                                         
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -339,9 +408,12 @@ class editstate extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 20
+                                                                maxlength: 5
                                                             }}
                                                             value={this.state.code}
+                                                            error={this.state.Validations.code.errorState}
+                                                            helperText={this.state.Validations.code.errorMsg}
+
                                                         />
                                                     </TableCell>
                                                 </TableRow>
@@ -358,9 +430,11 @@ class editstate extends React.Component {
                                                             fullWidth
                                                             InputProps={{
                                                                 className: "textFieldCss",
-                                                                maxlength: 20
+                                                                maxlength: 2
                                                             }}
                                                             value={this.state.gstcode}
+                                                            error={this.state.Validations.gstcode.errorState}
+                                                            helperText={this.state.Validations.gstcode.errorMsg}
                                                         />
                                                     </TableCell>
                                                 </TableRow>
