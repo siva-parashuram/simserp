@@ -227,6 +227,7 @@ class addstate extends React.Component {
             ValidUser.Token = getCookie(COOKIE.TOKEN);
             let state = this.state.state;
             state.UserId = parseInt(getCookie(COOKIE.USERID));
+            state.CountryId=parseInt(document.getElementById("CountryID").value);
             const handleCreateData = {
                 validUser: ValidUser,
                 state: state
@@ -235,6 +236,8 @@ class addstate extends React.Component {
                 "Content-Type": "application/json"
             };
             let CreateStateUrl = APIURLS.APIURL.CreateState;
+            console.log("handleCreate > handleCreateData > ", handleCreateData);
+return false;
 
             axios.post(CreateStateUrl, handleCreateData, { headers })
                 .then(response => {
