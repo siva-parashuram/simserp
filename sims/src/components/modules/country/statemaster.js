@@ -249,7 +249,7 @@ class statemaster extends React.Component {
                                                         <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{URLS.PREFIX.stateID + item.stateId}</a>
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId} >{item.name}</a>
+                                                    {item.name}
                                                     </TableCell>
                                                     <TableCell align="left">{item.code}</TableCell>
                                                     <TableCell align="left">{item.gstcode}</TableCell>

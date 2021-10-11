@@ -237,7 +237,7 @@ class addstate extends React.Component {
             };
             let CreateStateUrl = APIURLS.APIURL.CreateState;
             console.log("handleCreate > handleCreateData > ", handleCreateData);
-return false;
+ 
 
             axios.post(CreateStateUrl, handleCreateData, { headers })
                 .then(response => {

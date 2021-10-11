@@ -314,7 +314,7 @@ class countryMaster extends React.Component {
                                                         <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >{URLS.PREFIX.countryID + item.countryId}</a>
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editCountry + this.state.urlparams + "&countryID=" + item.countryId} >{item.name}</a>
+                                                    {item.name}
                                                     </TableCell>
 
                                                 </TableRow>

@@ -269,9 +269,7 @@ class rolemaster extends React.Component {
                                                         </a>
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams + "&roleID=" + item.moduleId} >
-                                                            {item.name}
-                                                        </a>
+                                                    {item.name}
                                                     </TableCell>
                                                 </TableRow>
                                             )) : null}

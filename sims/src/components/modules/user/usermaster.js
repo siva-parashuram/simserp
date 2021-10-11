@@ -385,17 +385,7 @@ class usermaster extends React.Component {
                             </a>
                           </TableCell>
                           <TableCell align="left">
-                            <a
-                              className="LINK tableLink"
-                              href={
-                                URLS.URLS.editUser +
-                                this.state.urlparams +
-                                "&userId=" +
-                                item.userId
-                              }
-                            >
-                              {item.emailId}
-                            </a>
+                          {item.emailId}
                           </TableCell>
                           <TableCell align="left">{item.firstName}</TableCell>
 

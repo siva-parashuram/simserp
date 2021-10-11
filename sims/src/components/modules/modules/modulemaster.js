@@ -245,9 +245,7 @@ class modulemasters extends React.Component {
                                                         </a>
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                    <a className="LINK tableLink" href={URLS.URLS.editModule + this.state.urlparams+"&moduleId="+item.moduleId} >
                                                     {item.name}
-                                                    </a>
                                                     </TableCell>
                                                     <TableCell align="left">{item.description}</TableCell>
                                                 </TableRow>

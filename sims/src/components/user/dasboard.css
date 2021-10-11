@@ -34,6 +34,7 @@ body{
 }
 .menubar-link:hover{
   text-decoration: underline !important;
+ 
 }
 
 .menubar-tab-icon-position{  
@@ -70,6 +71,9 @@ body{
   color: #212121 !important;
 }
 
+
+
+
 .button-link{
   text-decoration: none !important;
   color: #212121 !important;
@@ -96,11 +100,14 @@ body{
 .LINK:hover{
   text-decoration: underline !important;
   text-decoration-color: #bdbdbd !important;
+  color: rgb(0, 126, 135) !important;
 }
+
+ 
 
 .LINK:visited{
   text-decoration: none !important;
-  color: #263238 !important;
+  /* color: #263238 !important; */
 }
 
 .tableLink{

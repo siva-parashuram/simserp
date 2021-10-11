@@ -290,7 +290,7 @@ class companyMaster extends React.Component {
                         <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>{URLS.PREFIX.companyID + item.companyId}</a>
                       </TableCell>
                       <TableCell align="left">
-                        <a className="LINK tableLink" href={URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId} onClick={(e) => openCompanyDetail(e, item)}>{item.companyName}</a>
+                      {item.companyName}
                       </TableCell>
                       <TableCell align="left">
                         {item.address}
