@@ -23,7 +23,8 @@ class notification extends React.Component {
         super(props);
         this.state = {
             notifications: [],
-            notificationCleared: false
+            notificationCleared: false,
+            notificationCount:0
         };
     }
 
@@ -38,7 +39,15 @@ class notification extends React.Component {
             { id: 1, name: "Purchase Order from", details: { by: "Siva Tec Ltd (UK)", action: "create Sales Order" }, view: true },
             { id: 2, name: "Requested for Sales Order", details: "", view: true }
         ];
-        this.setState({ notifications: N });
+
+        let notificationCount=0;
+        for (let i = 0; i < N.length; i++) {            
+            if (N[i].view === true) {
+                notificationCount++;
+            }
+        }
+
+        this.setState({ notifications: N,notificationCount:notificationCount });
     };
 
     render() {
@@ -81,16 +90,20 @@ class notification extends React.Component {
 
             }
             let ct = 0;
+            let notificationCount=0;
             for (let i = 0; i < notifications.length; i++) {
                 if (notifications[i].view === false) {
                     ct++;
+                }
+                if (notifications[i].view === true) {
+                    notificationCount++;
                 }
             }
             if (ct === notifications.length) {
                 notificationCleared = true;
             }
 
-            this.setState({ notifications: notifications, notificationCleared: notificationCleared });
+            this.setState({ notifications: notifications, notificationCleared: notificationCleared,notificationCount:notificationCount });
         }
 
 
@@ -100,6 +113,8 @@ class notification extends React.Component {
                     <Grid container spacing={1}>
                         <Grid item xs={1} sm={1}></Grid>
                         <Grid item xs={10} sm={10}>
+
+                            
                            
                             {this.state.notifications.length>0 && this.state.notificationCleared === false ? (
                                 <Accordion defaultExpanded={true} square={true}>
@@ -117,7 +132,7 @@ class notification extends React.Component {
 
                                         <Typography>
                                             <StyledBadge
-                                                badgeContent={this.state.notifications.length}
+                                                badgeContent={this.state.notificationCount}
                                             >
                                                 Notifications
                                             </StyledBadge>
