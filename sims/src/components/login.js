@@ -398,9 +398,12 @@ class login extends React.Component {
                     <span className="login-thought">
                        
                       <span>
-                      Best Philosophy in life is to keep the mind happy....
-                      we don't know whether success gives happiness or not,
-                      But a happy mind can always lead to success.
+                        Life is like a camera......
+                        Focus on what's important,
+                        Capture the good times,
+                        Develop from the negatives,
+                        And if things don't work out,
+                        Take another Shot
                       </span>
                                             
                     </span>

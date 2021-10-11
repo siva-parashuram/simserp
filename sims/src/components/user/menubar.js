@@ -248,15 +248,12 @@ export default function ScrollableTabsButtonAuto() {
                                 <Grid container spacing={0}>
                                     {
                                         item.pages? item.pages.map((pages, j) => (
-                                            <Fragment>
-                                                <div>
-                                                    <Link key={"side-menu-LIL" + pages.pageId} className="menubar-link" to={pages.pageLink + urlparams}>
-                                                        {pages.pageName}
-                                                    </Link>
-                                                </div>
-                                                <div style={{ width: 30 }}></div>
-                                            </Fragment>
-
+                                            <Fragment>                                                
+                                                <Link key={"side-menu-LIL" + pages.pageId} className="menubar-link" to={pages.pageLink + urlparams}>
+                                                    {pages.pageName}
+                                                </Link>                                                
+                                        </Fragment>
+                                          
                                         )):null
                                     }
                                 </Grid>

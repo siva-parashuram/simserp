@@ -1,14 +1,14 @@
 import './dasboard.css';
 import React, { Fragment } from 'react';
- 
+import Header from "./userheaderconstants";
 import { COOKIE, getCookie } from "../../services/cookie";
  
-import Menubar from "../user/menubar";
 import Grid from '@material-ui/core/Grid';
-import Nav from "./nav";
+
 import Insights from "../dashboard/index/insights";
 import Activities from "../dashboard/index/activities";
 import QuickActionSection from "../dashboard/index/quickactionsection";
+ 
 
 
 class userDashboard extends React.Component {
@@ -53,13 +53,15 @@ class userDashboard extends React.Component {
 
     return (
       <Fragment>           
-        <Nav />        
-        <Menubar />
+        <Header /> 
+       
+       
         <div style={{ height: 20 }}></div>
         <div style={{ marginTop: -10 }}>
           <Grid container spacing={0}>
             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
             <Grid item xs={12} sm={12} md={10} lg={10}>
+             
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                   <QuickActionSection />
