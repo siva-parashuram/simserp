@@ -27,11 +27,36 @@ class notification extends React.Component {
             notificationCount:0
         };
     }
-
+    componentWillUnmount() {
+        clearInterval(this.interval);        
+      }
 
 
     componentDidMount() {
         this.getNotifications();
+        //this.checkNotification();
+    }
+
+
+    checkNotification(){
+        this.interval = setInterval(() => {            
+            this.fetchNew();                 
+          }, 3000);
+    }
+
+    
+   fetchNew(){
+        let notifications=this.state.notifications;
+        let N =                
+            { id: 3, name: "New Product Received", details: "", view: true };
+        notifications.unshift(N);
+        let notificationCount=0;
+        for (let i = 0; i < notifications.length; i++) {            
+            if (notifications[i].view === true) {
+                notificationCount++; 
+            }
+        }
+        this.setState({ notifications: notifications,notificationCount:notificationCount });
     }
 
     getNotifications() {
@@ -107,6 +132,7 @@ class notification extends React.Component {
         }
 
 
+
         return (
             <Fragment>
                 <div style={{ marginLeft: 15, marginTop: 5 }}>
@@ -159,6 +185,8 @@ class notification extends React.Component {
                                     </AccordionDetails>
                                 </Accordion>
                             ) : null}
+
+                           
 
                         </Grid>
                         <Grid item xs={1} sm={1}></Grid>
