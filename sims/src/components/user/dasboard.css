@@ -259,7 +259,7 @@ cursor: pointer;
 .AccordionDetails-css{
   border-top-style: solid !important;
   border-top-width: 1px !important;
-  border-top-color: #212121 !important;
+  border-top-color: #eeeeee !important;
 }
 
 .accordion-Header-Design .MuiAccordionSummary-root .Mui-expanded{
