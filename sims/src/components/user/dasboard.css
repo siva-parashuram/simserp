@@ -247,15 +247,13 @@ cursor: pointer;
   background-color: #e0f2f1 !important;
 }
 
-.accordion-Header-Design{
-  
+.accordion-Header-Design{  
   border-color:#009688 ;
   border-bottom-color: #000;
-  border-bottom-width: 2px;
-  
-  
-  
-
+  border-bottom-width: 2px;  
+  min-height: 30px !important;
+  max-height: 30px !important;
+  /* minHeight: 30,maxHeight: 30 */
 }
 
 .accordion-Header-Design .MuiAccordionSummary-root .Mui-expanded{
@@ -267,7 +265,7 @@ cursor: pointer;
 
 
 .accordion-Header-Title{
-  color: #009688!important;
+  color: #26a69a !important;
   letter-spacing: 0.1rem !important;
   font-weight: bold !important;
   

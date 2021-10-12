@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Insights from "../dashboard/index/insights";
 import Activities from "../dashboard/index/activities";
 import QuickActionSection from "../dashboard/index/quickactionsection";
+import Notify from "../dashboard/index/notification";
  
 
 
@@ -52,7 +53,7 @@ class userDashboard extends React.Component {
     return (
       <Fragment>           
         <Header /> 
-       
+        <Notify/>   
        
         <div style={{ height: 20 }}></div>
         <div style={{ marginTop: -10 }}>

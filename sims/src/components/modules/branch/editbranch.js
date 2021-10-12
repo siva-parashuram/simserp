@@ -965,7 +965,7 @@ class editbranch extends React.Component {
                       expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
-                      style={{ minHeight: 20, height: '100%' }}
+                      style={{ minHeight: 30,maxHeight: 30, height: '100%' }}
                     >
                       <Typography key="" className="accordion-Header-Title">General Details</Typography>
                     </AccordionSummary>
@@ -1158,9 +1158,7 @@ class editbranch extends React.Component {
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     Country
-                                  </TableCell>
-
-                                  {console.log("this.state.countryId > ", this.state.countryId)}
+                                  </TableCell>                                 
                                   <TableCell align="left" className="no-border-table">
                                     <select
                                       className="dropdown-css"
