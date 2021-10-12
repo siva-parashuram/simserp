@@ -3,6 +3,8 @@ import Header from "../../user/userheaderconstants";
  
 
 
+import moment from "moment";
+import Nav from "../../user/nav";
 import '../../user/dasboard.css';
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -37,6 +39,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import Tablerowcelldropdowninput from "../../compo/tablerowcelldropdowninput";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 
 
 class editbranch extends React.Component {
@@ -50,8 +53,9 @@ class editbranch extends React.Component {
       SuccessPrompt: false,
       GeneralDetailsExpanded: true,
       TaxationDetailsExpanded: false,
-      NumberingExpanded:false,
+      NumberingExpanded: false,
       disabledUpdatebtn: false,
+      numberSeries: [],
       companyData: [],
       countryData: [],
       stateData: [],
@@ -77,6 +81,28 @@ class editbranch extends React.Component {
         stateId: null,
         wareHouses: [],
         website: null,
+        PINo: null,
+        SONo: null,
+        SINo: null,
+        PSNo: null,
+        CPSNo: null,
+        CNNo: null,
+        DNNo: null,
+        PRNo: null,
+        PONo: null,
+        PurInvNo: null,
+        GITNo: null,
+        SRNo: null,
+        SIssueNo: null,
+        JVNo: null,
+        PVNo: null,
+        CENo: null,
+        BankNo: null,
+        CashNo: null,
+        FGQCNo: null,
+        RMQCNo: null,
+        IJCNo: null,
+        EffectiveDate:null,
       }
       ,
       address: null,
@@ -100,6 +126,28 @@ class editbranch extends React.Component {
       stateId: null,
       wareHouses: [],
       website: null,
+      PINo: null,
+      SONo: null,
+      SINo: null,
+      PSNo: null,
+      CPSNo: null,
+      CNNo: null,
+      DNNo: null,
+      PRNo: null,
+      PONo: null,
+      PurInvNo: null,
+      GITNo: null,
+      SRNo: null,
+      SIssueNo: null,
+      JVNo: null,
+      PVNo: null,
+      CENo: null,
+      BankNo: null,
+      CashNo: null,
+      FGQCNo: null,
+      RMQCNo: null,
+      IJCNo: null,
+      EffectiveDate:null,
       Validations: {
         name: { errorState: false, errorMsg: "" },
         shortName: { errorState: false, errorMsg: "" },
@@ -140,6 +188,7 @@ class editbranch extends React.Component {
         this.getCountryList();
         this.getStateList();
         this.getBranchDetail();
+        this.getNumberSeries(editbranchId);
       });
     } else {
       this.setState({ isLoggedIn: false });
@@ -248,6 +297,7 @@ class editbranch extends React.Component {
 
 
   setStateParams(data) {
+    console.log("-> data : ",data);
     this.setState({
       branch: data,
       address: data.address,
@@ -271,10 +321,85 @@ class editbranch extends React.Component {
       stateId: data.stateId,
       wareHouses: data.wareHouses,
       website: data.website,
-
-
+      PINo: data.pino,
+      SONo: data.sono,
+      SINo: data.sino,
+      PSNo: data.psno,
+      CPSNo: data.cpsno,
+      CNNo: data.cnno,
+      DNNo: data.dnno,
+      PRNo: data.prno,
+      PONo: data.pono,
+      PurInvNo: data.purInvNo,
+      GITNo: data.gitno,
+      SRNo: data.srno,
+      SIssueNo: data.sissueno,
+      JVNo: data.jvno,
+      PVNo: data.pvno,
+      CENo: data.ceno,
+      BankNo: data.bankno,
+      CashNo: data.cashno,
+      FGQCNo: data.fgqcno,
+      RMQCNo: data.rmqcno,
+      IJCNo: data.ijcno,
+      RVNo: data.rvno,
+      EffectiveDate:moment(data.effectiveDate).format("YYYY-MM-DD"),
       ProgressLoader: true
     });
+  }
+
+  getNumberSeries(branchId) {
+    let numberSeries = [];
+
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    let Url = APIURLS.APIURL.GetAllNoSeriesByBranchId;
+    let data = {
+      ValidUser: ValidUser,
+      BranchId: parseInt(branchId)
+    };
+    axios.post(Url, data, { headers })
+      .then(response => {
+        let data = response.data;
+        console.log("getNumberSeries > response > data > ", data);
+        if (response.status === 200) {
+          let newData = [];
+          let responseData = data.noSeriesDetailList;
+          for (let i = 0; i < responseData.length; i++) {
+            let d = {
+              id: responseData[i].noSeriesId,
+              value: responseData[i].noSeriesId,
+              text: responseData[i].code,
+            };
+            newData.push(d);
+          }
+          this.setState({
+            numberSeries: newData,
+            ProgressLoader: true
+          });
+        } else {
+          this.setState({
+            numberSeries: [],
+            ProgressLoader: true,
+            ErrorPrompt: true
+          });
+        }
+
+      }
+      ).catch(error => {
+        console.log("error > ", error);
+        this.setState({
+          numberSeries: [],
+          ProgressLoader: true,
+          ErrorPrompt: true
+        });
+      });
+
+    this.setState({ numberSeries: numberSeries });
   }
 
   render() {
@@ -292,7 +417,7 @@ class editbranch extends React.Component {
         this.state.NumberingExpanded === true ? this.setState({ NumberingExpanded: false }) : this.setState({ NumberingExpanded: true })
       }
 
-      
+
 
     }
 
@@ -306,7 +431,7 @@ class editbranch extends React.Component {
     }
 
     const updateFormValue = (id, e) => {
-      alert("Hi new");
+      
       if (id === "shortName") {
         let branch = this.state.branch;
         branch.shortName = e.target.value;
@@ -513,7 +638,7 @@ class editbranch extends React.Component {
         ValidateName();
 
       }
-      if (id === "Address2") {     
+      if (id === "Address2") {
         let branch = this.state.branch;
         branch.address2 = e.target.value;
         if (e.target.value.length > 50) {
@@ -563,6 +688,130 @@ class editbranch extends React.Component {
         };
         ValidateName();
       }
+
+
+       //---------------Numbering-----------
+      if (id === "PINo") {
+        let branch = this.state.branch;
+        branch.PINo = e.target.value;
+        this.setState({ branch: branch, PINo: e.target.value });
+      }
+      if (id === "SONo") {
+        let branch = this.state.branch;
+        branch.SONo = e.target.value;
+        this.setState({ branch: branch, SONo: e.target.value });
+      }
+      if (id === "SINo") {
+        let branch = this.state.branch;
+        branch.SINo = e.target.value;
+        this.setState({ branch: branch, SINo: e.target.value });
+      }
+      if (id === "PSNo") {
+        let branch = this.state.branch;
+        branch.PSNo = e.target.value;
+        this.setState({ branch: branch, PSNo: e.target.value });
+      }
+      if (id === "CPSNo") {
+        let branch = this.state.branch;
+        branch.CPSNo = e.target.value;
+        this.setState({ branch: branch, CPSNo: e.target.value });
+      }
+      if (id === "CNNo") {
+        let branch = this.state.branch;
+        branch.CNNo = e.target.value;
+        this.setState({ branch: branch, CNNo: e.target.value });
+      }
+      if (id === "DNNo") {
+        let branch = this.state.branch;
+        branch.DNNo = e.target.value;
+        this.setState({ branch: branch, DNNo: e.target.value });
+      }
+      if (id === "PRNo") {
+        let branch = this.state.branch;
+        branch.PRNo = e.target.value;
+        this.setState({ branch: branch, PRNo: e.target.value });
+      }
+      if (id === "PONo") {
+        let branch = this.state.branch;
+        branch.PONo = e.target.value;
+        this.setState({ branch: branch, PONo: e.target.value });
+      }
+      if (id === "PurInvNo") {
+        let branch = this.state.branch;
+        branch.PurInvNo = e.target.value;
+        this.setState({ branch: branch, PurInvNo: e.target.value });
+      }
+      if (id === "GITNo") {
+        let branch = this.state.branch;
+        branch.GITNo = e.target.value;
+        this.setState({ branch: branch, GITNo: e.target.value });
+      }
+      if (id === "SRNo") {
+        let branch = this.state.branch;
+        branch.SRNo = e.target.value;
+        this.setState({ branch: branch, SRNo: e.target.value });
+      }
+      if (id === "SIssueNo") {
+        let branch = this.state.branch;
+        branch.SIssueNo = e.target.value;
+        this.setState({ branch: branch, SIssueNo: e.target.value });
+      }
+      if (id === "JVNo") {
+        let branch = this.state.branch;
+        branch.JVNo = e.target.value;
+        this.setState({ branch: branch, JVNo: e.target.value });
+      }
+      if (id === "PVNo") {
+        let branch = this.state.branch;
+        branch.PVNo = e.target.value;
+        this.setState({ branch: branch, PVNo: e.target.value });
+      }
+      if (id === "CENo") {
+        let branch = this.state.branch;
+        branch.CENo = e.target.value;
+        this.setState({ branch: branch, CENo: e.target.value });
+      }
+      if (id === "BankNo") {
+        let branch = this.state.branch;
+        branch.BankNo = e.target.value;
+        this.setState({ branch: branch, BankNo: e.target.value });
+      }
+      if (id === "CashNo") {
+        let branch = this.state.branch;
+        branch.CashNo = e.target.value;
+        this.setState({ branch: branch, CashNo: e.target.value });
+      }
+      if (id === "FGQCNo") {
+        let branch = this.state.branch;
+        branch.FGQCNo = e.target.value;
+        this.setState({ branch: branch, FGQCNo: e.target.value });
+      }
+      if (id === "RMQCNo") {
+        let branch = this.state.branch;
+        branch.RMQCNo = e.target.value;
+        this.setState({ branch: branch, RMQCNo: e.target.value });
+      }
+      if (id === "IJCNo") {
+        let branch = this.state.branch;
+        branch.IJCNo = e.target.value;
+        this.setState({ branch: branch, IJCNo: e.target.value });
+      }
+      if (id === "RVNo") {
+        let branch = this.state.branch;
+        branch.RVNo = e.target.value;
+        this.setState({ branch: branch, RVNo: e.target.value });
+      }
+
+      if(id==="EffectiveDate"){
+        // moment().format("YYYY-MM-DD")
+        let branch = this.state.branch;
+        branch.EffectiveDate = e.target.value;
+        this.setState({ branch: branch, EffectiveDate: e.target.value });
+      }
+      
+       
+
+
     }
 
     const handleupdate = () => {
@@ -603,7 +852,7 @@ class editbranch extends React.Component {
       if (reason === 'clickaway') {
         return;
       }
-      this.setState({ SuccessPrompt: false });
+      this.setState({ ErrorPrompt: false });
     }
 
     const closeSuccessPrompt = (event, reason) => {
@@ -836,6 +1085,22 @@ class editbranch extends React.Component {
                                     />
                                   </TableCell>
                                 </TableRow>
+                               
+                                <Tablerowcelldateinput
+                                  id="EffectiveDate"
+                                  label="Effective Date"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('EffectiveDate', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  defaultValue={this.state.EffectiveDate}
+                                  error={null}
+                                  helperText={null}
+                                />
+
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -1017,7 +1282,7 @@ class editbranch extends React.Component {
 
                         </Grid>
                       </Grid>
-                      </AccordionDetails>
+                    </AccordionDetails>
                   </Accordion>
                   <Accordion key="company-Taxation-Details" expanded={this.state.TaxationDetailsExpanded} >
                     <AccordionSummary
@@ -1049,145 +1314,171 @@ class editbranch extends React.Component {
                           <TableContainer>
                             <Table stickyHeader size="small" className="accordion-table" aria-label="Numbering table">
                               <TableBody className="tableBody">
-                                <Tablerowcelldropdowninput  
+                                <Tablerowcelldropdowninput
                                   id="PINo"
                                   label="Proforma Invoice"
-                                  value={1}
+                                  value={this.state.PINo}
                                   onChange={(e) => updateFormValue('PINo', e)}
-                                  options={[{id:1,value:1,name:"test"}]}
+                                  options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput  
+                                <Tablerowcelldropdowninput
                                   id="SONo"
                                   label="Sales Order"
-                                  value={1}
+                                  value={this.state.SONo}
                                   onChange={(e) => updateFormValue('SONo', e)}
-                                  options={[{id:1,value:1,name:"test"}]}
+                                  options={this.state.numberSeries}
                                 />
-                                 
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Sales Order</TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                  <select
-                                      className="dropdown-css"
-                                      id="SONo"
-                                      label="Sales Order"
-                                      fullWidth
+                                <Tablerowcelldropdowninput
+                                  id="SINo"
+                                  label="Sales Invoice"
+                                  value={this.state.SINo}
+                                  onChange={(e) => updateFormValue('SINo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="PSNo"
+                                  label="Pack slip"
+                                  value={this.state.PSNo}
+                                  onChange={(e) => updateFormValue('PSNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="CPSNo"
+                                  label="Combine Pack Slip"
+                                  value={this.state.CPSNo}
+                                  onChange={(e) => updateFormValue('CPSNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="CNNo"
+                                  label="Credit Note"
+                                  value={this.state.CNNo}
+                                  onChange={(e) => updateFormValue('CNNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="DNNo"
+                                  label="Debit Note"
+                                  value={this.state.DNNo}
+                                  onChange={(e) => updateFormValue('DNNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="PRNo"
+                                  label="Purchase Request"
+                                  value={this.state.PRNo}
+                                  onChange={(e) => updateFormValue('PRNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="PONo"
+                                  label="Purchase Order"
+                                  value={this.state.PONo}
+                                  onChange={(e) => updateFormValue('PONo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="PurInvNo"
+                                  label="Purchase Invoice"
+                                  value={this.state.PurInvNo}
+                                  onChange={(e) => updateFormValue('PurInvNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="GITNo"
+                                  label="GIT"
+                                  value={this.state.GITNo}
+                                  onChange={(e) => updateFormValue('GITNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                
 
-                                      // value={parseInt(this.state.stateId)}
-                                      // onChange={(e) => updateFormValue('State', e)}
-                                    >
-                                      <option value="-">
-                                        None
-                                      </option>
-                                       
-                                    </select>
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Sales Invoice</TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                  <select
-                                      className="dropdown-css"
-                                      id="SONo"
-                                      label="Sales Order"
-                                      fullWidth
 
-                                      // value={parseInt(this.state.stateId)}
-                                      // onChange={(e) => updateFormValue('State', e)}
-                                    >
-                                      <option value="-">
-                                        None
-                                      </option>
-                                       
-                                    </select>
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Pack slip</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Combine Pack Slip</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Credit Note</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Debit Note</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Purchase Request</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Purchase Order</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Purchase Invoice</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">GIT</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                 <TableRow>
-                                  <TableCell align="left" className="no-border-table">Store Requisition</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
                               </TableBody>
                             </Table>
                           </TableContainer>
                         </Grid>
                         <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
+                          <TableContainer>
                             <Table stickyHeader size="small" className="accordion-table" aria-label="Numbering table">
                               <TableBody className="tableBody">
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Store Issue </TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Journal Voucher</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Payment Voucher</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Receipt Voucher</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Contra Entry</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Bank</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">Cash</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">FG QC No</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">RM QC No</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">IJC</TableCell>
-                                  <TableCell align="left" className="no-border-table"></TableCell>
-                                </TableRow>
-                              
-                              
+                              <Tablerowcelldropdowninput
+                                  id="SRNo"
+                                  label="Store Requisition"
+                                  value={this.state.SRNo}
+                                  onChange={(e) => updateFormValue('SRNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="SIssueNo"
+                                  label="Store Issue"
+                                  value={this.state.SIssueNo}
+                                  onChange={(e) => updateFormValue('SIssueNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="JVNo"
+                                  label="Journal Voucher"
+                                  value={this.state.JVNo}
+                                  onChange={(e) => updateFormValue('JVNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="PVNo"
+                                  label="Payment Voucher"
+                                  value={this.state.PVNo}
+                                  onChange={(e) => updateFormValue('PVNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="RVNo"
+                                  label="Receipt Voucher"
+                                  value={this.state.RVNo}
+                                  onChange={(e) => updateFormValue('RVNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="CENo"
+                                  label="Contra Entry"
+                                  value={this.state.CENo}
+                                  onChange={(e) => updateFormValue('CENo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="BankNo"
+                                  label="Bank"
+                                  value={this.state.BankNo}
+                                  onChange={(e) => updateFormValue('BankNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="CashNo"
+                                  label="Cash"
+                                  value={this.state.CashNo}
+                                  onChange={(e) => updateFormValue('CashNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="FGQCNo"
+                                  label="FG QC No"
+                                  value={this.state.FGQCNo}
+                                  onChange={(e) => updateFormValue('FGQCNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="RMQCNo"
+                                  label="RM QC No"
+                                  value={this.state.RMQCNo}
+                                  onChange={(e) => updateFormValue('RMQCNo', e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <Tablerowcelldropdowninput
+                                  id="IJCNo"
+                                  label="IJC"
+                                  value={this.state.IJCNo}
+                                  onChange={(e) => updateFormValue('IJCNo', e)}
+                                  options={this.state.numberSeries}
+                                />
                               </TableBody>
                             </Table>
                           </TableContainer>

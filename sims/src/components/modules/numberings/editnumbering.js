@@ -543,7 +543,6 @@ class editnumbering extends React.Component {
                                                                         InputProps={{
                                                                             className: "textFieldCss"
                                                                         }}
-
                                                                     />
                                                                 </td>
                                                                 <td>
