@@ -100,6 +100,21 @@ class editbranch extends React.Component {
         RMQCNo: null,
         IJCNo: null,
         EffectiveDate:null,
+        IsVat:false,
+        VATNo:null,
+        VATRegistrationNo:null,
+        VATPercentage:null,
+        IsGST:false,
+        GSTNo:null,
+       
+        PANNo:null,
+        TANNo:null,
+        CINNo:null,
+        IECNo:null,
+        ARNNo:null,
+        IsSEZ:false,
+        IsExportUnit:false,
+        CurrID:null,
       }
       ,
       address: null,
@@ -145,6 +160,21 @@ class editbranch extends React.Component {
       RMQCNo: null,
       IJCNo: null,
       EffectiveDate:null,
+      IsVat:false,
+      VATNo:null,
+      VATRegistrationNo:null,
+      VATPercentage:null,
+      IsGST:false,
+      GSTNo:null,
+      
+      PANNo:null,
+      TANNo:null,
+      CINNo:null,
+      IECNo:null,
+      ARNNo:null,
+      IsSEZ:false,
+      IsExportUnit:false,
+      CurrID:null,
       Validations: {
         name: { errorState: false, errorMsg: "" },
         shortName: { errorState: false, errorMsg: "" },
@@ -341,6 +371,21 @@ class editbranch extends React.Component {
       IJCNo: data.ijcno,
       RVNo: data.rvno,
       EffectiveDate:moment(data.effectiveDate).format("YYYY-MM-DD"),
+      IsVat:data.isVat===null?false:data.isVat,
+      VATNo:data.vatno,
+      VATRegistrationNo:null,
+      VATPercentage:data.vatpercentage,
+      IsGST:data.isGst===null?false:data.isGst,
+      GSTNo:data.gstno,
+      
+      PANNo:data.panno,
+      TANNo:data.tanno,
+      CINNo:data.cinno,
+      IECNo:data.iecno,
+      ARNNo:data.arnno,
+      IsSEZ:data.isSez===null?false:data.isSez,
+      IsExportUnit:data.isExportUnit===null?false:data.isExportUnit,
+      CurrID:data.currId,
       ProgressLoader: true
     });
   }
@@ -1079,7 +1124,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  defaultValue={this.state.EffectiveDate}
+                                  value={this.state.EffectiveDate}
                                   error={null}
                                   helperText={null}
                                 />
@@ -1278,7 +1323,13 @@ class editbranch extends React.Component {
                       <Typography key="" className="accordion-Header-Title">Taxation Details</Typography>
                     </AccordionSummary>
                     <AccordionDetails key="">
+                      <TableContainer>
+                        <Table stickyHeader size="small" className="accordion-table" aria-label="Taxation table">
+                          <TableBody className="tableBody">
 
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
                     </AccordionDetails>
                   </Accordion>
                   <Accordion key="company-Numbering" expanded={this.state.NumberingExpanded} >
