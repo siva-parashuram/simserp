@@ -28,7 +28,7 @@ class userheaderconstatnts extends React.Component {
       <Fragment>           
         <Nav />        
         <Menubar />
-        <Notify/>       
+            
       </Fragment>
     );
   }

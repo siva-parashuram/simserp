@@ -247,15 +247,19 @@ cursor: pointer;
   background-color: #e0f2f1 !important;
 }
 
-.accordion-Header-Design{
-  
+.accordion-Header-Design{  
   border-color:#009688 ;
   border-bottom-color: #000;
-  border-bottom-width: 2px;
-  
-  
-  
+  border-bottom-width: 2px;  
+  min-height: 30px !important;
+  max-height: 30px !important;
+  /* minHeight: 30,maxHeight: 30 */
+}
 
+.AccordionDetails-css{
+  border-top-style: solid !important;
+  border-top-width: 1px !important;
+  border-top-color: #212121 !important;
 }
 
 .accordion-Header-Design .MuiAccordionSummary-root .Mui-expanded{
@@ -267,10 +271,10 @@ cursor: pointer;
 
 
 .accordion-Header-Title{
-  color: #009688!important;
+  color: #009688 !important;
   letter-spacing: 0.1rem !important;
-  font-weight: bold !important;
-  
+  /* font-weight: bold !important; */
+  text-decoration: underline !important;
 
 }
  /* .MuiButtonBase-root .MuiAccordionSummary-root .accordion-Header-Design {
@@ -294,6 +298,7 @@ cursor: pointer;
 
 .side-display-accordion-Header-Design{
   background-color: #fff  !important;
+ 
 }
 
 .textFieldCss{

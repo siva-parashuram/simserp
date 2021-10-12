@@ -965,11 +965,11 @@ class editbranch extends React.Component {
                       expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
-                      style={{ minHeight: 20, height: '100%' }}
+                      style={{ minHeight: 30,maxHeight: 30, height: '100%' }}
                     >
                       <Typography key="" className="accordion-Header-Title">General Details</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key="">
+                    <AccordionDetails key="" className="AccordionDetails-css">
                       <Grid container spacing={1}>
                         <Grid xs={12} sm={12} md={6} lg={6}>
                           <TableContainer>
@@ -1158,9 +1158,7 @@ class editbranch extends React.Component {
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     Country
-                                  </TableCell>
-
-                                  {console.log("this.state.countryId > ", this.state.countryId)}
+                                  </TableCell>                                 
                                   <TableCell align="left" className="no-border-table">
                                     <select
                                       className="dropdown-css"
@@ -1339,7 +1337,7 @@ class editbranch extends React.Component {
                     >
                       <Typography key="" className="accordion-Header-Title">Taxation Details</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key="">
+                    <AccordionDetails key=""  className="AccordionDetails-css">
                       <TableContainer>
                         <Table stickyHeader size="small" className="accordion-table" aria-label="Taxation table">
                           <TableBody className="tableBody">
@@ -1359,7 +1357,7 @@ class editbranch extends React.Component {
                     >
                       <Typography key="" className="accordion-Header-Title">Numbering</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key="">
+                    <AccordionDetails key=""  className="AccordionDetails-css">
                       <Grid container spacing={1}>
                         <Grid xs={12} sm={12} md={6} lg={6}>
                           <TableContainer>
