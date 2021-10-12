@@ -222,7 +222,7 @@ class editcompany extends React.Component {
         // this.setState({ PhoneNo: e.target.value, company: company });
       // }
       if (id === "companyName") {
-        // company.CompanyName = e.target.value;
+         company.CompanyName = e.target.value;
         // this.setState({ CompanyName: e.target.value, company: company });
         if (e.target.value === "" || e.target.value == null||e.target.value.length>50) {
           if(e.target.value.length>50){
@@ -247,12 +247,14 @@ class editcompany extends React.Component {
           
         } else {
           console.log("-----------> Not Blank ");
+          console.log("-----------> Not Blank ");
           let v = this.state.Validations;
           v.companyName = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
             updateBtnDisabled: false,
             CompanyName:e.target.value,
+            company:company
 
           });
         }
@@ -295,6 +297,7 @@ class editcompany extends React.Component {
         CheckTrue();
       }
       if (id === "Address2") {
+        company.Address2 = e.target.value;
         if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.address2 = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" }
@@ -311,13 +314,15 @@ class editcompany extends React.Component {
                  Validations: v, 
                  Address2: e.target.value,
                   //createBtnDisabled: false ,
-                  updateBtnDisabled: false
+                  updateBtnDisabled: false,
+                  company: company
                 });
         }
         CheckTrue();
     }
 
     if (id === "Address3"){
+      company.Address3 = e.target.value;
         if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.address3 = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" }
@@ -332,7 +337,8 @@ class editcompany extends React.Component {
             this.setState({ Validations: v,
                Address3: e.target.value, 
               //createBtnDisabled: false,
-              updateBtnDisabled: false
+              updateBtnDisabled: false,
+              company: company
              });
         }
         CheckTrue();
@@ -340,6 +346,7 @@ class editcompany extends React.Component {
 
 
     if (id === "City"){
+      company.City = e.target.value;
         if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.city = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" }
@@ -356,7 +363,8 @@ class editcompany extends React.Component {
               Validations: v, 
               City: e.target.value, 
               //createBtnDisabled: false 
-              updateBtnDisabled: false
+              updateBtnDisabled: false,
+              company: company
             });
         }
         CheckTrue();
@@ -364,6 +372,7 @@ class editcompany extends React.Component {
     }
 
     if (id === "Postcode"){
+      company.Postcode = e.target.value;
         if (e.target.value.length > 10) {
             let v = this.state.Validations;
             v.postcode = { errorState: true, errorMsg: "Only 10 Characters are Allowed!" }
@@ -379,7 +388,8 @@ class editcompany extends React.Component {
               Validations: v, 
               PostCode: e.target.value, 
               //createBtnDisabled: false
-              updateBtnDisabled: false 
+              updateBtnDisabled: false ,
+              company: company
             });
         }
         CheckTrue();
@@ -387,6 +397,7 @@ class editcompany extends React.Component {
     }
 
      if (id === "PhoneNo"){
+      company.PhoneNo = e.target.value;
         if (e.target.value.length > 20) {
             let v = this.state.Validations;
             v.phoneno = { errorState: true, errorMsg: "Only 20 digits are Allowed!" }
@@ -403,7 +414,8 @@ class editcompany extends React.Component {
               Validations: v, 
               PhoneNo: e.target.value, 
               //createBtnDisabled: false
-              updateBtnDisabled: false
+              updateBtnDisabled: false,
+              company: company
              });
         }
         CheckTrue();
@@ -412,6 +424,7 @@ class editcompany extends React.Component {
      } 
 
      if (id === "Website") {
+      company.Website = e.target.value;
         if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.website = { errorState: true, errorMsg: "Only 50 Characters are Allowed!" }
@@ -427,7 +440,8 @@ class editcompany extends React.Component {
               Validations: v, 
               Website: e.target.value, 
               //createBtnDisabled: false 
-              updateBtnDisabled: false
+              updateBtnDisabled: false,
+              company: company
             });
         }
         CheckTrue();
@@ -634,7 +648,7 @@ class editcompany extends React.Component {
                         <Typography key="" className="accordion-Header-Title">General Details</Typography>
                       </AccordionSummary>
                       {/* <Divider   className="accordion-Header-underline"/> */}
-                      <AccordionDetails key="">
+                      <AccordionDetails key="" className="AccordionDetails-css">
                         <TableContainer>
                           <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                             <TableBody className="tableBody">
@@ -707,7 +721,7 @@ class editcompany extends React.Component {
 
                       </AccordionSummary>
                       {/* <Divider   className="accordion-Header-underline"/> */}
-                      <AccordionDetails key="">
+                      <AccordionDetails key="" className="AccordionDetails-css">
                         <TableContainer>
                           <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                             <TableBody className="tableBody">

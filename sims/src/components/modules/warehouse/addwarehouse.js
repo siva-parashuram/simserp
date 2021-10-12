@@ -275,7 +275,7 @@ class addwarehouse extends React.Component {
                         General Details
                       </Typography>
                     </AccordionSummary>
-                    <AccordionDetails key="">
+                    <AccordionDetails key="" className="AccordionDetails-css">
                       <Grid container spacing={0}>
                         <Grid xs={12} sm={12} md={6} lg={6}>
                           <TableContainer>
@@ -478,7 +478,7 @@ class addwarehouse extends React.Component {
                         More Details
                       </Typography>
                     </AccordionSummary>
-                    <AccordionDetails key="">
+                    <AccordionDetails key="" className="AccordionDetails-css">
                       <Grid container spacing={0}>
                         <Grid xs={12} sm={12} md={6} lg={6}>
                           <TableContainer>

@@ -666,7 +666,7 @@ class addpage extends React.Component {
                             >
                                 <Typography key="" className="accordion-Header-Title">Create New Page</Typography>
                             </AccordionSummary>
-                            <AccordionDetails key="">
+                            <AccordionDetails key="" className="AccordionDetails-css">
                                 <TableContainer>
                                     <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                         <TableBody className="tableBody">

@@ -403,7 +403,7 @@ class editstate extends React.Component {
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={6} md={6} lg={6}>
+            <Grid xs={12} sm={6} md={6} lg={6}>   
               <Accordion
                 key="country-General-Details"
                 expanded={this.state.GeneralDetailsExpanded}
@@ -425,7 +425,7 @@ class editstate extends React.Component {
                     General Details
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails key="">
+                <AccordionDetails key="" className="AccordionDetails-css">
                   <TableContainer>
                     <Table
                       stickyHeader

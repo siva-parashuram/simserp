@@ -379,7 +379,7 @@ class editmodule extends React.Component {
                     General Details
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails key="">
+                <AccordionDetails key="" className="AccordionDetails-css">
                   <TableContainer>
                     <Table
                       stickyHeader

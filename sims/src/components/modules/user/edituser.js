@@ -332,7 +332,7 @@ class edituser extends React.Component {
                     General Details
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails key="">
+                <AccordionDetails key="" className="AccordionDetails-css">
                   {console.log("state user > ", this.state.user)}
                   <TableContainer>
                     <Table

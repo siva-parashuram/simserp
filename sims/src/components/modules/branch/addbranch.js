@@ -606,7 +606,7 @@ class addbranch extends React.Component {
                                         >
                                             <Typography key="" className="accordion-Header-Title">General Details</Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails key="">
+                                        <AccordionDetails key="" className="AccordionDetails-css">
 
                                             <Grid container spacing={0}>
                                                 <Grid xs={12} sm={12} md={6} lg={6}>
@@ -934,7 +934,7 @@ class addbranch extends React.Component {
                                         >
                                             <Typography key="" className="accordion-Header-Title">Taxation Details</Typography>
                                         </AccordionSummary>
-                                        <AccordionDetails key="">
+                                        <AccordionDetails key="" className="AccordionDetails-css">
                                         </AccordionDetails>
 
                                     </Accordion>

@@ -574,7 +574,7 @@ class addnewcompany extends React.Component {
                       </Typography>
                     </AccordionSummary>
                     {/* <Divider  className="accordion-Header-underline"/> */}
-                    <AccordionDetails key="">
+                    <AccordionDetails key="" className="AccordionDetails-css">
                       <TableContainer>
                         <Table
                           stickyHeader
@@ -760,7 +760,7 @@ class addnewcompany extends React.Component {
                       </Typography>
                     </AccordionSummary>
                     {/* <Divider   className="accordion-Header-underline"/> */}
-                    <AccordionDetails key="">
+                    <AccordionDetails key="" className="AccordionDetails-css">
                       <TableContainer>
                         <Table
                           stickyHeader

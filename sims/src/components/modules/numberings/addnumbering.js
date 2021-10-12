@@ -441,7 +441,7 @@ class addnumbering extends React.Component {
                     Numberings Details
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails key="">
+                <AccordionDetails key="" className="AccordionDetails-css">
                   <Grid container spacing={1}>
                     <Grid xs={12} sm={12} md={12} lg={12}>
                       <table>
