@@ -1,4 +1,7 @@
 import React, { Fragment } from 'react';
+import Header from "../../user/userheaderconstants";
+ 
+
 
 import moment from "moment";
 import Nav from "../../user/nav";
@@ -31,7 +34,7 @@ import TextField from '@material-ui/core/TextField';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Menubar from "../../user/menubar";
+
 
 
 import Tablerowcelldropdowninput from "../../compo/tablerowcelldropdowninput";
@@ -182,7 +185,7 @@ class editbranch extends React.Component {
         country: { errorState: false, errorMsg: "" },
         address2: { errorState: false, errorMsg: "" },
         address3: { errorState: false, errorMsg: "" },
-        city: { errorState: false, errorMsg: "" },
+        city: { errorState: false, errorMsg: "" },  
         postcode: { errorState: false, errorMsg: "" },
         phoneNo: { errorState: false, errorMsg: "" },
         website: { errorState: false, errorMsg: "" },
@@ -911,8 +914,7 @@ class editbranch extends React.Component {
 
     return (
       <Fragment>
-        <Nav />
-        <Menubar />
+        <Header/>
         {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
         <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -974,9 +976,10 @@ class editbranch extends React.Component {
                             <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                               <TableBody className="tableBody">
 
+                              
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Company</b>
+                                  Company
                                   </TableCell>
 
                                   {console.log("this.state.countryId > ", this.state.countryId)}
@@ -1020,7 +1023,7 @@ class editbranch extends React.Component {
                                 {/*
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Name </b>
+                                    Name 
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1043,9 +1046,23 @@ class editbranch extends React.Component {
                                   </TableCell>
                                 </TableRow>
                                 */}
-                                <TableRow>
+                                <Tablerowcelltextboxinput
+                                  id="shortName"
+                                  label="ShortName"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('shortName', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.shortName}
+                                  error={this.state.Validations.shortName.errorState}
+                                  helperText={this.state.Validations.shortName.errorMsg}
+                                />
+                                {/* <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Short Name </b>
+                                    Short Name 
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1066,12 +1083,12 @@ class editbranch extends React.Component {
 
                                     />
                                   </TableCell>
-                                </TableRow>
+                                </TableRow> */}
 
 
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b> Phone No</b>
+                                     Phone No
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1094,7 +1111,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Website</b>
+                                    Website
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1140,7 +1157,7 @@ class editbranch extends React.Component {
                               <TableBody className="tableBody">
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Country</b>
+                                    Country
                                   </TableCell>
 
                                   {console.log("this.state.countryId > ", this.state.countryId)}
@@ -1169,7 +1186,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>State</b>
+                                    State
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <select
@@ -1197,7 +1214,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>City</b>
+                                    City
                                   </TableCell>
 
                                   <TableCell align="left" className="no-border-table">
@@ -1219,7 +1236,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Postcode</b>
+                                    Postcode
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1240,7 +1257,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 1</b>
+                                    Address Line 1
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1262,7 +1279,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 2</b>
+                                    Address Line 2
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1284,7 +1301,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 3</b>
+                                    Address Line 3
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField

@@ -1,6 +1,6 @@
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -25,6 +25,8 @@ import TextField from '@material-ui/core/TextField';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 
 class addrole extends React.Component {
@@ -139,8 +141,7 @@ class addrole extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>
 
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -5, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
@@ -198,10 +199,23 @@ class addrole extends React.Component {
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                             <TableBody className="tableBody">
+                                            <Tablerowcelltextboxinput
+                              id="name"
+                              label="Name"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('name', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            />
 
-                                                <TableRow>
+                                                {/* <TableRow>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <b>Name</b>
+                                                        Name
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
                                                         <TextField
@@ -216,7 +230,7 @@ class addrole extends React.Component {
 
                                                         />
                                                     </TableCell>
-                                                </TableRow>
+                                                </TableRow> */}
                                             </TableBody>
                                         </Table>
 

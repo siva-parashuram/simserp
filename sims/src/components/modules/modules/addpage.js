@@ -689,7 +689,7 @@ class addpage extends React.Component {
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell align="left" className="no-border-table">
-                                                    <b>Page Name</b>
+                                                    Page Name
                                                 </TableCell>
                                                 <TableCell align="left" className="no-border-table">
                                                     <TextField
@@ -710,7 +710,7 @@ class addpage extends React.Component {
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell align="left" className="no-border-table">
-                                                    <b> Page Link</b>
+                                                     Page Link
                                                 </TableCell>
                                                 <TableCell align="left" className="no-border-table">
                                                     <TextField
@@ -731,7 +731,7 @@ class addpage extends React.Component {
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell align="left" className="no-border-table">
-                                                    <b> Description</b>
+                                                    Description
                                                 </TableCell>
                                                 <TableCell align="left" className="no-border-table">
                                                     <TextField

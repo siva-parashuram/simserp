@@ -23,8 +23,8 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 
 
 
@@ -112,8 +112,7 @@ class currencymaster extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>
 
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: 0, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 

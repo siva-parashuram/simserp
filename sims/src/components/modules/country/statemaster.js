@@ -20,8 +20,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -178,8 +178,7 @@ class statemaster extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>
 
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
@@ -208,7 +207,6 @@ class statemaster extends React.Component {
                     </Grid>
                     <div className="breadcrumb-bottom"></div>
                     <Grid container spacing={0}>
-                        <Grid className="style-all-Links"  xs={1}>
                             <Link className="style-link" href={URLS.URLS.addState + this.state.urlparams}>NEW</Link>
 
                             {/* <Button
@@ -218,10 +216,10 @@ class statemaster extends React.Component {
                                 <a className="button-link" href={URLS.URLS.addState + this.state.urlparams}>
                                     New
                                 </a>
-                            </Button> */} 
+                            </Button> */}     
 
                         </Grid>
-                    </Grid>
+                    {/* </Grid> */}
                     <div className="New-link-bottom"></div> 
                     <Grid className="table-adjust" container spacing={0}>
                         <Grid  xs={12} sm={12} md={8} lg={8}>

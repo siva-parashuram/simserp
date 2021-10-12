@@ -3,8 +3,8 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -28,6 +28,7 @@ import MuiAlert from '@material-ui/lab/Alert';
  
 
 import axios from "axios";
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 
 class editwarehouse extends React.Component {
@@ -258,8 +259,7 @@ class editwarehouse extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>s
                 
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
@@ -322,10 +322,74 @@ class editwarehouse extends React.Component {
                                                     <TableContainer>
                                                         <Table stickyHeader size="small" className="accordion-table" aria-label="table">
                                                             <TableBody className="tableBody">
+                                                            <Tablerowcelltextboxinput
+                                  id="Code"
+                                  label="Code"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue("Code", e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 10,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+
+                                <Tablerowcelltextboxinput
+                                  id="Description"
+                                  label="Description"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("Description", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 10,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+                                <Tablerowcelltextboxinput
+                                  id="contactPerson"
+                                  label=" Contact Person"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("contactPerson", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+
+                                <Tablerowcelltextboxinput
+                                  id="phoneNo"
+                                  label="Phone No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("phoneNo", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
                                                                  
-                                                                <TableRow>
+                                                                {/* <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Code</b>
+                                                                         Code
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -345,7 +409,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Description</b>
+                                                                         Description
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -364,7 +428,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Contact Person</b>
+                                                                         Contact Person
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -383,7 +447,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Phone No</b>
+                                                                         Phone No
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -399,7 +463,7 @@ class editwarehouse extends React.Component {
                                                                             value={this.state.warehouse.PhoneNo}
                                                                         />
                                                                     </TableCell>
-                                                                </TableRow>
+                                                                </TableRow> */}
 
                                                             </TableBody>
                                                         </Table>
@@ -410,9 +474,76 @@ class editwarehouse extends React.Component {
                                                     <TableContainer>
                                                         <Table stickyHeader size="small" className="accordion-table" aria-label="table">
                                                             <TableBody className="tableBody">
-                                                                <TableRow>
+                                                            <Tablerowcelltextboxinput
+                                  id="EmailID"
+                                  label="Email ID"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("EmailID", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+
+                                <Tablerowcelltextboxinput
+                                  id="Address"
+                                  label="Address Line 1"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("Address", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 10,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+
+                                <Tablerowcelltextboxinput
+                                  id="Address2"
+                                  label="Address Line 2"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("Address2", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 10,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+
+                                <Tablerowcelltextboxinput
+                                  id="Address3"
+                                  label="Address Line 3"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("Address3", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 10,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+                                                                {/* <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> EmailID</b>
+                                                                         EmailID
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -431,7 +562,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Address Line 1</b>
+                                                                         Address Line 1
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -450,7 +581,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Address Line 2</b>
+                                                                        Address Line 2
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -469,7 +600,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Address Line 3</b>
+                                                                         Address Line 3
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -485,10 +616,10 @@ class editwarehouse extends React.Component {
                                                                             value={this.state.warehouse.Address2}
                                                                         />
                                                                     </TableCell>
-                                                                </TableRow>
+                                                                </TableRow> */}
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> is Active?</b>
+                                                                        is Active?
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <Switch
@@ -522,9 +653,10 @@ class editwarehouse extends React.Component {
                                                     <TableContainer>
                                                         <Table stickyHeader size="small" className="accordion-table" aria-label="table">
                                                             <TableBody className="tableBody">
-                                                                <TableRow>
+                                                                
+                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> isEDI?</b>
+                                                                         isEDI?
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <Switch
@@ -534,7 +666,68 @@ class editwarehouse extends React.Component {
                                                                         />
                                                                     </TableCell>
                                                                 </TableRow>
-                                                                <TableRow>
+                                                                <Tablerowcelltextboxinput
+                                  id="ediurl"
+                                  label="EDI Url"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue("ediurl", e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 10,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
+                          <TableContainer>
+                            <Table
+                              stickyHeader
+                              size="small"
+                              className="accordion-table"
+                              aria-label="table"
+                            >
+                              <TableBody className="tableBody">
+                                <Tablerowcelltextboxinput
+                                  id="ediloginid"
+                                  label="EDI LoginID"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("ediloginid", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 10,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+
+                                <Tablerowcelltextboxinput
+                                  type="password"
+                                  id="edipassword"
+                                  label="EDI Password"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("edipassword", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 10,
+                                  }}
+                                  //   value={this.state.CompanyName}
+                                  //   error={this.state.Validations.companyName.errorState}
+                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                />
+                                                                {/*<TableRow>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <b> EDI Url</b>
                                                                     </TableCell>
@@ -599,7 +792,7 @@ class editwarehouse extends React.Component {
                                                                             value={this.state.warehouse.Edipassword}
                                                                         />
                                                                     </TableCell>
-                                                                </TableRow>
+                                                                </TableRow> */}
                                                             </TableBody>
                                                         </Table>
                                                     </TableContainer>

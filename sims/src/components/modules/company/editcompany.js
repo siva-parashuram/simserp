@@ -3,7 +3,7 @@ import '../../user/dasboard.css';
 import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
 import { COOKIE, getCookie } from "../../../services/cookie";
-import Nav from "../../user/nav";
+import Header from "../../user/userheaderconstants";
  
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -37,8 +37,10 @@ import axios from "axios";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Menubar from "../../user/menubar";
+
 import { withStyles } from '@material-ui/styles';
+
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 
 class editcompany extends React.Component {
@@ -260,7 +262,7 @@ class editcompany extends React.Component {
 
       if (id === "Address") {
         company.Address = e.target.value;
-        this.setState({ Address: e.target.value, company: company });
+        
         if (e.target.value === "" || e.target.value == null || e.target.value.length > 50) {
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
@@ -284,7 +286,9 @@ class editcompany extends React.Component {
           v.address = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            updateBtnDisabled: false
+            updateBtnDisabled: false,
+            Address: e.target.value, 
+            company: company
             
           });
         }
@@ -428,6 +432,11 @@ class editcompany extends React.Component {
         }
         CheckTrue();
      }
+     if (id === "country") {
+      this.setState({ CountryID: e.target.value });
+    }
+
+    if (id === "state") this.setState({ state: e.target.value });
 
 
       
@@ -551,8 +560,7 @@ class editcompany extends React.Component {
 
     return (
       <Fragment>
-        <Nav />
-        <Menubar />
+        <Header/>
         
         <div>
 
@@ -630,75 +638,52 @@ class editcompany extends React.Component {
                         <TableContainer>
                           <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                             <TableBody className="tableBody">
-                              <TableRow>
-                                <TableCell align="left" className="no-border-table">
-                                  Company Name 
-                                </TableCell>
-                                <TableCell align="left" className="no-border-table">
-                                  <TextField
-                                    id="companyName"
-                                    variant="outlined"
-                                    size="small"
-                                    // onKeyUp={(e) => userTypingBusyPrompt(e)}
-                                    onChange={(e) => updateFormValue('companyName', e)}
-                                    fullWidth
-                                    value={this.state.CompanyName}
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50
-                                    }}
-
-                                    
-                                    error={this.state.Validations.companyName.errorState}
-                                    helperText={this.state.Validations.companyName.errorMsg}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell align="left" className="no-border-table">
-                                   Phone No
-                                </TableCell>
-                                <TableCell align="left" className="no-border-table">
-                                  <TextField
-                                  type='number'
-                                    id="PhoneNo"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PhoneNo}
-                                    onChange={(e) => updateFormValue('PhoneNo', e)}
-                                    fullWidth
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 20
-                                    }}
-                                    
-                                    error={this.state.Validations.phoneno.errorState}
+                            <Tablerowcelltextboxinput
+                              id="companyName"
+                              label="Company Name"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('companyName', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                              }}
+                              value={this.state.CompanyName}
+                              error={this.state.Validations.companyName.errorState}
+                              helperText={this.state.Validations.companyName.errorMsg}
+                            />
+                             
+                              <Tablerowcelltextboxinput
+                              id="PhoneNo"
+                              type="number"
+                              label="PhoneNo"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('PhoneNo', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 20
+                              }}
+                              value={this.state.PhoneNo}
+                              error={this.state.Validations.phoneno.errorState}
                                     helperText={this.state.Validations.phoneno.errorMsg}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell align="left" className="no-border-table">
-                                  Website
-                                </TableCell>
-                                <TableCell align="left" className="no-border-table">
-                                  <TextField
-                                    id="Website"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.Website}
-                                    onChange={(e) => updateFormValue('Website', e)}
-                                    fullWidth
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 20
-                                    }}
-                                    
-                                    error={this.state.Validations.website.errorState}
-                                    helperText={this.state.Validations.website.errorMsg}
-                                  />
-                                </TableCell>
-                              </TableRow>
+                            />
+                              
+                              <Tablerowcelltextboxinput
+                              id="Website"
+                              label="Website"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Website', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 20
+                              }}
+                              value={this.state.Website}
+                              error={this.state.Validations.website.errorState}
+                              helperText={this.state.Validations.website.errorMsg}
+                            />
+                              
                             </TableBody>
                           </Table>
                         </TableContainer>
@@ -726,7 +711,7 @@ class editcompany extends React.Component {
                         <TableContainer>
                           <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                             <TableBody className="tableBody">
-                              <TableRow>
+                               <TableRow>
                                 <TableCell align="left" className="no-border-table">
                                   Country
                                 </TableCell>
@@ -776,115 +761,80 @@ class editcompany extends React.Component {
                                   </select>
                                 </TableCell>
                               </TableRow>
-                              <TableRow>
-                                <TableCell align="left" className="no-border-table">
-                                  City
-                                </TableCell>
-
-                                <TableCell align="left" className="no-border-table">
-                                  <TextField
-                                    id="City"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) => updateFormValue('City', e)}
-                                    fullWidth
-                                    value={this.state.City}
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50
-                                    }}
-                                    
-                                    error={this.state.Validations.city.errorState}
+                              <Tablerowcelltextboxinput
+                              id="City"
+                              label="City"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('City', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                              }}
+                              value={this.state.City}
+                              error={this.state.Validations.city.errorState}
                                     helperText={this.state.Validations.city.errorMsg}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell align="left" className="no-border-table">
-                                  Postcode
-                                </TableCell>
-                                <TableCell align="left" className="no-border-table">
-                                  <TextField
-                                    id="Postcode"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) => updateFormValue('Postcode', e)}
-                                    fullWidth
-                                    value={this.state.PostCode}
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 10
-                                    }}
-                                    
-                                    error={this.state.Validations.postcode.errorState}
-                                    helperText={this.state.Validations.postcode.errorMsg}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell align="left" className="no-border-table">
-                                  Address Line 1
-                                </TableCell>
-                                <TableCell align="left" className="no-border-table">
-                                  <TextField
-                                    id="Address"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) => updateFormValue('Address', e)}
-                                    value={this.state.Address}
-                                    fullWidth
-                                    error={this.state.Validations.address.errorState}
-                                    helperText={this.state.Validations.address.errorMsg}
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50
-                                    }}
-                                  />
-                                </TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell align="left" className="no-border-table">
-                                  Address Line 2
-                                </TableCell>
-                                <TableCell align="left" className="no-border-table">
-                                  <TextField
-                                    id="Address2"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) => updateFormValue('Address2', e)}
-                                    fullWidth
-                                    value={this.state.Address2}
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50
-                                    }}
-                                    error={this.state.Validations.address2.errorState}
+                            />
+                             <Tablerowcelltextboxinput
+                              id="Postcode"
+                              label="Postcode"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Postcode', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 10
+                              }}
+                              value={this.state.PostCode}
+                              error={this.state.Validations.postcode.errorState}
+                              helperText={this.state.Validations.postcode.errorMsg}
+                            />
+                             
+                             <Tablerowcelltextboxinput
+                              id="Address"
+                              label="Address"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Address', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                              }}
+                              value={this.state.Address}
+                              error={this.state.Validations.address.errorState}
+                              helperText={this.state.Validations.address.errorMsg}
+                            /> 
+                            <Tablerowcelltextboxinput
+                              id="Address2"
+                              label="Address 2"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Address2', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                              }}
+                              value={this.state.Address2}
+                              error={this.state.Validations.address2.errorState}
                                     helperText={this.state.Validations.address2.errorMsg}
-
-                                  />
-                                </TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell align="left" className="no-border-table">
-                                  Address Line 3
-                                </TableCell>
-                                <TableCell align="left" className="no-border-table">
-                                  <TextField
-                                    id="Address3"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) => updateFormValue('Address3', e)}
-                                    fullWidth
-                                    value={this.state.Address3}
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50
-                                    }}
-                                    error={this.state.Validations.address3.errorState}
-                                    helperText={this.state.Validations.address3.errorMsg}
-                                  />
-                                </TableCell>
-                              </TableRow>
+                            /> 
+                              
+                              
+                              <Tablerowcelltextboxinput
+                              id="Address3"
+                              label="Address 3"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Address3', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                              }}
+                              value={this.state.Address3}
+                              error={this.state.Validations.address3.errorState}
+                              helperText={this.state.Validations.address3.errorMsg}
+                            /> 
+                         
 
                             </TableBody>
                           </Table>
