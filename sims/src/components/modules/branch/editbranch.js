@@ -969,7 +969,7 @@ class editbranch extends React.Component {
                     >
                       <Typography key="" className="accordion-Header-Title">General Details</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key="">
+                    <AccordionDetails key="" className="AccordionDetails-css">
                       <Grid container spacing={1}>
                         <Grid xs={12} sm={12} md={6} lg={6}>
                           <TableContainer>
@@ -1337,7 +1337,7 @@ class editbranch extends React.Component {
                     >
                       <Typography key="" className="accordion-Header-Title">Taxation Details</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key="">
+                    <AccordionDetails key=""  className="AccordionDetails-css">
                       <TableContainer>
                         <Table stickyHeader size="small" className="accordion-table" aria-label="Taxation table">
                           <TableBody className="tableBody">
@@ -1357,7 +1357,7 @@ class editbranch extends React.Component {
                     >
                       <Typography key="" className="accordion-Header-Title">Numbering</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key="">
+                    <AccordionDetails key=""  className="AccordionDetails-css">
                       <Grid container spacing={1}>
                         <Grid xs={12} sm={12} md={6} lg={6}>
                           <TableContainer>
