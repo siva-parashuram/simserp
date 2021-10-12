@@ -27,8 +27,8 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+
 import Userbranchalot from "../branch/userbranchalot";
 import Usermoduleassign from "../modules/usermoduleassign";
 
@@ -265,8 +265,7 @@ class usermaster extends React.Component {
 
     return (
       <Fragment>
-        <Nav />
-        <Menubar />
+        <Header />
 
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: -8, marginLeft: -10 }}>
@@ -294,10 +293,10 @@ class usermaster extends React.Component {
           </Alert>
         </Snackbar>
 
-        <div className='breadcrumb-height'>
+        <div className="breadcrumb-height">
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
+              <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
                 <Link
                   color="inherit"
                   className="backLink"
@@ -318,7 +317,12 @@ class usermaster extends React.Component {
           <div className="breadcrumb-bottom"></div>
           <Grid container spacing={0}>
             <Grid className="style-all-Links" xs={1}>
-            <Link className="style-link" href={URLS.URLS.addUser + this.state.urlparams}>NEW</Link>
+              <Link
+                className="style-link"
+                href={URLS.URLS.addUser + this.state.urlparams}
+              >
+                NEW
+              </Link>
               {/* <Button style={{ marginLeft: 5 }} startIcon={<AddIcon />}>
                 <a
                   className="button-link"
@@ -331,7 +335,7 @@ class usermaster extends React.Component {
           </Grid>
 
           <div className="New-link-bottom"></div>
-          <Grid  className="table-adjust" container spacing={0}>
+          <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
@@ -384,9 +388,7 @@ class usermaster extends React.Component {
                               {URLS.PREFIX.userID + item.userId}
                             </a>
                           </TableCell>
-                          <TableCell align="left">
-                          {item.emailId}
-                          </TableCell>
+                          <TableCell align="left">{item.emailId}</TableCell>
                           <TableCell align="left">{item.firstName}</TableCell>
 
                           <TableCell align="left">{item.loginId}</TableCell>

@@ -25,11 +25,12 @@ import Switch from '@mui/material/Switch';
 
 
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 class edituser extends React.Component {
     constructor(props) {
@@ -245,8 +246,7 @@ class edituser extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -306,7 +306,81 @@ class edituser extends React.Component {
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                             <TableBody className="tableBody">
-                                                <TableRow>
+                                            <Tablerowcelltextboxinput
+                              id="FirstName"
+                              label="First Name"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('FirstName', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            />
+
+<Tablerowcelltextboxinput
+                              id="LastName"
+                              label="LastName"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('LastName', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            />  
+                            <Tablerowcelltextboxinput
+                              id="EmailID"
+                              label="Email ID"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('EmailID', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            /> 
+
+                            <Tablerowcelltextboxinput
+                              id="LoginID"
+                              label="Login ID"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('LoginID', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            /> 
+
+                            <Tablerowcelltextboxinput
+                            type='password'
+                              id="Password"
+                              label="Password"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Password', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            />
+                                                {/* <TableRow>
                                                     <TableCell align="left" className="no-border-table">
                                                         <b> FirstName</b>
                                                     </TableCell>
@@ -402,10 +476,10 @@ class edituser extends React.Component {
                                                             value={this.state.Password}
                                                         />
                                                     </TableCell>
-                                                </TableRow>
+                                                </TableRow> */}
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <b> is Admin?</b>
+                                                         is Admin?
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
                                                         <Switch
@@ -418,7 +492,7 @@ class edituser extends React.Component {
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <b> is Active?</b>
+                                                       is Active?
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
                                                     {console.log("this.state.isActive ------------------------------> ",this.state.isActive)}

@@ -25,11 +25,12 @@ import Switch from '@mui/material/Switch';
 
 
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 class adduser extends React.Component {
     constructor(props) {
@@ -183,8 +184,7 @@ class adduser extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -229,7 +229,7 @@ class adduser extends React.Component {
                     </Grid>
 
                     <div className="New-link-bottom"></div>
-                    <Grid className="table-adjust"  container spacing={0}>
+                    <Grid className="table-adjust"  container spacing={0}>     
                         <Grid xs={12} sm={6} md={6} lg={6}>
                             <Accordion key="country-General-Details" expanded={this.state.GeneralDetailsExpanded} >
                                 <AccordionSummary
@@ -245,104 +245,90 @@ class adduser extends React.Component {
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                             <TableBody className="tableBody">
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <b> FirstName</b>
-                                                    </TableCell>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <TextField
-                                                            id="FirstName"
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onChange={(e) => updateFormValue('FirstName', e)}
-                                                            fullWidth
-                                                            InputProps={{
-                                                                className: "textFieldCss",
-                                                                maxlength: 50
-                                                            }}
-                                                            
-                                                        />
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <b> LastName</b>
-                                                    </TableCell>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <TextField
-                                                            id="LastName"
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onChange={(e) => updateFormValue('LastName', e)}
-                                                            fullWidth
-                                                            InputProps={{
-                                                                className: "textFieldCss",
-                                                                maxlength: 50
-                                                            }}
+                                            <Tablerowcelltextboxinput
+                              id="FirstName"
+                              label="FirstName"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('FirstName', e)}   
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            />
 
-                                                        />
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <b> EmailID</b>
-                                                    </TableCell>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <TextField
-                                                            id="EmailID"
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onChange={(e) => updateFormValue('EmailID', e)}
-                                                            fullWidth
-                                                            InputProps={{
-                                                                className: "textFieldCss",
-                                                                maxlength: 50
-                                                            }}
+<Tablerowcelltextboxinput
+                              id="LastName"
+                              label="LastName"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('LastName', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            />  
+                            <Tablerowcelltextboxinput
+                              id="EmailID"
+                              label="Email ID"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('EmailID', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            /> 
 
-                                                        />
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <b> LoginID</b>
-                                                    </TableCell>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <TextField
-                                                            id="LoginID"
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onChange={(e) => updateFormValue('LoginID', e)}
-                                                            fullWidth
-                                                            InputProps={{
-                                                                className: "textFieldCss",
-                                                                maxlength: 50
-                                                            }}
+                            <Tablerowcelltextboxinput
+                              id="LoginID"
+                              label="Login ID"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('LoginID', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            /> 
 
-                                                        />
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <b> Password</b>
-                                                    </TableCell>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <TextField                                                        
-                                                            id="Password"
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onChange={(e) => updateFormValue('Password', e)}
-                                                            fullWidth
-                                                            InputProps={{
-                                                                className: "textFieldCss",
-                                                                maxlength: 50
-                                                            }}
-
-                                                        />
-                                                    </TableCell>
-                                                </TableRow>
+                            <Tablerowcelltextboxinput
+                            type='password'
+                              id="Password"
+                              label="Password"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Password', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                            }}
+                            //   value={this.state.City}
+                            //   error={this.state.Validations.city.errorState}
+                            //         helperText={this.state.Validations.city.errorMsg}
+                            />
+                            
+                                                
+                                            
+                                                
+                                             
+                                                
+                                               
                                                 <TableRow>
                                                 <TableCell align="left" className="no-border-table">
-                                                    <b> is Admin?</b>
+                                                     is Admin?
                                                 </TableCell>
                                                 <TableCell align="left" className="no-border-table">
                                                 <Switch 
@@ -353,7 +339,7 @@ class adduser extends React.Component {
                                             </TableRow>
                                             <TableRow>
                                             <TableCell align="left" className="no-border-table">
-                                                <b> is Active?</b>
+                                                 is Active?
                                             </TableCell>
                                             <TableCell align="left" className="no-border-table">
                                             <Switch 
@@ -361,7 +347,7 @@ class adduser extends React.Component {
                                             onChange={(e) => updateFormValue('isActive', e)}
                                             />
                                             </TableCell>
-                                        </TableRow>
+                                        </TableRow> 
 
 
                                             </TableBody>

@@ -30,10 +30,10 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
-
+import Header from "../../user/userheaderconstants";
+ 
 import moment from "moment";
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 
 
@@ -370,9 +370,7 @@ class editnumbering extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
-
+                <Header/>
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: 0, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -428,7 +426,32 @@ class editnumbering extends React.Component {
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                             <TableBody className="tableBody">
-                                                <TableRow>
+                                            <Tablerowcelltextboxinput
+                              id="Code"
+                              label="Code"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Code', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                              }}
+                             
+                            />
+                                                
+                                                <Tablerowcelltextboxinput
+                              id="Description"
+                              label="Description"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue('Description', e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50
+                              }}
+                             
+                            />
+                                                {/* <TableRow>
                                                     <TableCell align="left" className="no-border-table">
                                                         <b>Code</b>
                                                     </TableCell>
@@ -466,7 +489,7 @@ class editnumbering extends React.Component {
                                                             value={this.state.noSeries.Description}
                                                         />
                                                     </TableCell>
-                                                </TableRow>
+                                                </TableRow> */}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>

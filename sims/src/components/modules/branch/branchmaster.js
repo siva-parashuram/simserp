@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
-import Nav from "../../user/nav";
+import Header from "../../user/userheaderconstants";
+ 
 
 
 import '../../user/dasboard.css';
@@ -23,7 +24,7 @@ import Divider from '@material-ui/core/Divider';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Menubar from "../../user/menubar";
+
 
 
 class branchMaster extends React.Component {
@@ -123,8 +124,7 @@ class branchMaster extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}> 

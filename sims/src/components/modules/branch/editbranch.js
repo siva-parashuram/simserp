@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
-import Nav from "../../user/nav";
+import Header from "../../user/userheaderconstants";
+ 
 
 
 import '../../user/dasboard.css';
@@ -31,7 +32,7 @@ import TextField from '@material-ui/core/TextField';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Menubar from "../../user/menubar";
+
 
 
 import Tablerowcelldropdowninput from "../../compo/tablerowcelldropdowninput";
@@ -619,8 +620,7 @@ class editbranch extends React.Component {
 
     return (
       <Fragment>
-        <Nav />
-        <Menubar />
+        <Header/>
         {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
         <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -681,7 +681,8 @@ class editbranch extends React.Component {
                           <TableContainer>
                             <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                               <TableBody className="tableBody">
-                             
+
+                              
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     <b>Company</b>
@@ -751,7 +752,21 @@ class editbranch extends React.Component {
                                   </TableCell>
                                 </TableRow>
                                 */}
-                                <TableRow>
+                                <Tablerowcelltextboxinput
+                                  id="shortName"
+                                  label="ShortName"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('shortName', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.shortName}
+                                  error={this.state.Validations.shortName.errorState}
+                                  helperText={this.state.Validations.shortName.errorMsg}
+                                />
+                                {/* <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     <b>Short Name </b>
                                   </TableCell>
@@ -774,7 +789,7 @@ class editbranch extends React.Component {
 
                                     />
                                   </TableCell>
-                                </TableRow>
+                                </TableRow> */}
 
 
                                 <TableRow>

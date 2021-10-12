@@ -22,11 +22,12 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 class editcountry extends React.Component {
     constructor(props) {
@@ -224,8 +225,7 @@ class editcountry extends React.Component {
 
         return (
             <Fragment>           
-                <Nav />
-                <Menubar />
+                <Header/>
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -282,7 +282,48 @@ class editcountry extends React.Component {
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                                             <TableBody className="tableBody">
-                                                <TableRow>
+                                            <Tablerowcelltextboxinput
+                          id="Name"
+                          label="Country Name"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Name", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 50,
+                          }}
+                          error={this.state.Validations.countryName.errorState}
+                          helperText={
+                            this.state.Validations.countryName.errorMsg
+                          }
+                        />
+
+                        <Tablerowcelltextboxinput
+                          id="TwoDitgitCode"
+                          label="Two Digit Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("TwoDitgitCode", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 20,
+                          }}
+                        />
+
+                        <Tablerowcelltextboxinput
+                          id="ThreeDitgitCode"
+                          label="Three Digit Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) =>
+                            updateFormValue("ThreeDitgitCode", e)
+                          }
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 20,
+                          }}
+                        />
+                                                {/* <TableRow>
                                                     <TableCell align="left" className="no-border-table">
                                                         <b>Country Name</b>
                                                     </TableCell>
@@ -340,7 +381,7 @@ class editcountry extends React.Component {
                                                             value={this.state.ThreeDitgitCode}
                                                         />
                                                     </TableCell>
-                                                </TableRow>
+                                                </TableRow> */}
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">
                                                         <b>Zone</b>

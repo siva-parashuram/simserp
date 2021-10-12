@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-import Nav from "../../user/nav";
+
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -11,7 +11,7 @@ import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
 
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import axios from "axios";
 import Grid from '@material-ui/core/Grid';
@@ -227,8 +227,7 @@ class companyMaster extends React.Component {
     return (   
       <Fragment>
         <CssBaseline />
-        <Nav />
-        <Menubar />
+        <Header/>
         {this.state.ProgressLoader === false ? (<div style={{ marginTop: 6, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
         <div className='breadcrumb-height'>

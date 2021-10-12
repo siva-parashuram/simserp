@@ -25,11 +25,12 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Destination from "./destination";
 
 import '../../user/dasboard.css';
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 class editdestination extends React.Component {
     constructor(props) {
@@ -292,8 +293,7 @@ class editdestination extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -353,7 +353,31 @@ class editdestination extends React.Component {
                                                     <Grid xs={12} sm={12} md={12} lg={12}>
                                                         <Table stickyHeader size="small" className="accordion-table" aria-label="destination add table">
                                                             <TableBody className="tableBody">
-                                                                <TableRow>
+                                                            <Tablerowcelltextboxinput
+                                id="Name"
+                                label="Destination"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Name", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="PostCode"
+                                label="Post Code"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("PostCode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                              />
+
+                                                                {/* <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <b> Destination</b>
                                                                     </TableCell>
@@ -390,10 +414,10 @@ class editdestination extends React.Component {
                                                                             value={this.state.postcode}
                                                                         />
                                                                     </TableCell>
-                                                                </TableRow>
+                                                                </TableRow> */}
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Country</b>
+                                                                        Country
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <Select
@@ -423,7 +447,7 @@ class editdestination extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>State</b>
+                                                                        State
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <Select

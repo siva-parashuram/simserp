@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import Nav from "../../user/nav";
+
 
 
 import '../../user/dasboard.css';
@@ -32,7 +32,8 @@ import TextField from '@material-ui/core/TextField';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Menubar from "../../user/menubar";
+import Header from "../../user/userheaderconstants";
+ 
 
 
 class addbranch extends React.Component {
@@ -549,8 +550,7 @@ class addbranch extends React.Component {
 
         return (
             <Fragment>
-                <Nav />
-                <Menubar />
+                <Header/>
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
