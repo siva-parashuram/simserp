@@ -389,7 +389,7 @@ class editwarehouse extends React.Component {
                                                                  
                                                                 {/* <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Code</b>
+                                                                         Code
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -409,7 +409,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Description</b>
+                                                                         Description
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -428,7 +428,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Contact Person</b>
+                                                                         Contact Person
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -447,7 +447,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Phone No</b>
+                                                                         Phone No
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -543,7 +543,7 @@ class editwarehouse extends React.Component {
                                 />
                                                                 {/* <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> EmailID</b>
+                                                                         EmailID
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -562,7 +562,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Address Line 1</b>
+                                                                         Address Line 1
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -581,7 +581,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Address Line 2</b>
+                                                                        Address Line 2
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -600,7 +600,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Address Line 3</b>
+                                                                         Address Line 3
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -619,7 +619,7 @@ class editwarehouse extends React.Component {
                                                                 </TableRow> */}
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                         is Active?
+                                                                        is Active?
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <Switch

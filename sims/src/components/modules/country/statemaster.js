@@ -207,7 +207,6 @@ class statemaster extends React.Component {
                     </Grid>
                     <div className="breadcrumb-bottom"></div>
                     <Grid container spacing={0}>
-                        <Grid className="style-all-Links"  xs={1}>
                             <Link className="style-link" href={URLS.URLS.addState + this.state.urlparams}>NEW</Link>
 
                             {/* <Button
@@ -217,10 +216,10 @@ class statemaster extends React.Component {
                                 <a className="button-link" href={URLS.URLS.addState + this.state.urlparams}>
                                     New
                                 </a>
-                            </Button> */} 
+                            </Button> */}     
 
                         </Grid>
-                    </Grid>
+                    {/* </Grid> */}
                     <div className="New-link-bottom"></div> 
                     <Grid className="table-adjust" container spacing={0}>
                         <Grid  xs={12} sm={12} md={8} lg={8}>

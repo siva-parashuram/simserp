@@ -215,7 +215,7 @@ class addrole extends React.Component {
 
                                                 {/* <TableRow>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <b>Name</b>
+                                                        Name
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
                                                         <TextField

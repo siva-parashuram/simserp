@@ -379,7 +379,7 @@ class editdestination extends React.Component {
 
                                                                 {/* <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Destination</b>
+                                                                         Destination
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -398,7 +398,7 @@ class editdestination extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b> Post Code</b>
+                                                                         Post Code
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField

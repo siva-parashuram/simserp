@@ -3,7 +3,8 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+import Nav from "../../user/nav";
+import Menubar from "../../user/menubar";
 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -211,7 +212,8 @@ class addwarehouse extends React.Component {
 
     return (
       <Fragment>
-        <Header />
+        <Nav />
+        <Menubar />
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -434,7 +436,7 @@ class addwarehouse extends React.Component {
                                     align="left"
                                     className="no-border-table"
                                   >
-                                    is Active?
+                                  is Active?
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -492,7 +494,7 @@ class addwarehouse extends React.Component {
                                     align="left"
                                     className="no-border-table"
                                   >
-                                    isEDI?
+                                     isEDI?
                                   </TableCell>
                                   <TableCell
                                     align="left"

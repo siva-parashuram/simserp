@@ -432,6 +432,11 @@ class editcompany extends React.Component {
         }
         CheckTrue();
      }
+     if (id === "country") {
+      this.setState({ CountryID: e.target.value });
+    }
+
+    if (id === "state") this.setState({ state: e.target.value });
 
 
       

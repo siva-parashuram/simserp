@@ -394,7 +394,7 @@ class editnumbering extends React.Component {
                                 <Link color="inherit" href={URLS.URLS.numberingMaster + this.state.urlparams} >
                                     Numbering Master
                                 </Link>
-                                <Typography color="textPrimary">Add Numbering </Typography>
+                                <Typography color="textPrimary">Edit Numbering </Typography>
                             </Breadcrumbs>
 
                         </Grid>
@@ -453,7 +453,7 @@ class editnumbering extends React.Component {
                             />
                                                 {/* <TableRow>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <b>Code</b>
+                                                        Code
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
                                                         <TextField
@@ -473,7 +473,7 @@ class editnumbering extends React.Component {
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">
-                                                        <b> Description</b>
+                                                         Description
                                                     </TableCell>
                                                     <TableCell align="left" className="no-border-table">
                                                         <TextField

@@ -50,7 +50,7 @@ class addstate extends React.Component {
                 UserId: null
             },
             code: null,
-            country: null,
+            country: null,  
             countryId: null,
             creationDate: null,
             gstcode: null,

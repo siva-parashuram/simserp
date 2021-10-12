@@ -615,7 +615,7 @@ class addbranch extends React.Component {
                                                             <TableBody className="tableBody">
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Company</b>
+                                                                        Company
                                                                     </TableCell>
 
                                                                     {console.log("this.state.countryId > ", this.state.countryId)}
@@ -645,7 +645,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Branch Name </b>
+                                                                        Branch Name 
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -669,7 +669,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Short Name </b>
+                                                                        Short Name
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -693,7 +693,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Phone No</b>
+                                                                        Phone No
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -715,7 +715,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Website</b>
+                                                                        Website
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -746,7 +746,7 @@ class addbranch extends React.Component {
                                                             <TableBody className="tableBody">
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Country</b>
+                                                                        Country
                                                                     </TableCell>
 
                                                                     {console.log("this.state.countryId > ", this.state.countryId)}
@@ -775,7 +775,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>State</b>
+                                                                        State
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <select
@@ -804,7 +804,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>City</b>
+                                                                        City
                                                                     </TableCell>
 
                                                                     <TableCell align="left" className="no-border-table">
@@ -826,7 +826,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Postcode</b>
+                                                                        Postcode
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -847,7 +847,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Address Line 1</b>
+                                                                        Address Line 1
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -870,7 +870,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Address Line 2</b>
+                                                                        Address Line 2
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField
@@ -893,7 +893,7 @@ class addbranch extends React.Component {
                                                                 </TableRow>
                                                                 <TableRow>
                                                                     <TableCell align="left" className="no-border-table">
-                                                                        <b>Address Line 3</b>
+                                                                    Address Line 3
                                                                     </TableCell>
                                                                     <TableCell align="left" className="no-border-table">
                                                                         <TextField

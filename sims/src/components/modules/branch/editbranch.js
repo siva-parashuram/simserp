@@ -155,7 +155,7 @@ class editbranch extends React.Component {
         country: { errorState: false, errorMsg: "" },
         address2: { errorState: false, errorMsg: "" },
         address3: { errorState: false, errorMsg: "" },
-        city: { errorState: false, errorMsg: "" },
+        city: { errorState: false, errorMsg: "" },  
         postcode: { errorState: false, errorMsg: "" },
         phoneNo: { errorState: false, errorMsg: "" },
         website: { errorState: false, errorMsg: "" },
@@ -934,7 +934,7 @@ class editbranch extends React.Component {
                               
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Company</b>
+                                  Company
                                   </TableCell>
 
                                   {console.log("this.state.countryId > ", this.state.countryId)}
@@ -978,7 +978,7 @@ class editbranch extends React.Component {
                                 {/*
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Name </b>
+                                    Name 
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1017,7 +1017,7 @@ class editbranch extends React.Component {
                                 />
                                 {/* <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Short Name </b>
+                                    Short Name 
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1043,7 +1043,7 @@ class editbranch extends React.Component {
 
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b> Phone No</b>
+                                     Phone No
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1066,7 +1066,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Website</b>
+                                    Website
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1112,7 +1112,7 @@ class editbranch extends React.Component {
                               <TableBody className="tableBody">
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Country</b>
+                                    Country
                                   </TableCell>
 
                                   {console.log("this.state.countryId > ", this.state.countryId)}
@@ -1141,7 +1141,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>State</b>
+                                    State
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <select
@@ -1169,7 +1169,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>City</b>
+                                    City
                                   </TableCell>
 
                                   <TableCell align="left" className="no-border-table">
@@ -1191,7 +1191,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Postcode</b>
+                                    Postcode
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1212,7 +1212,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 1</b>
+                                    Address Line 1
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1234,7 +1234,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 2</b>
+                                    Address Line 2
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1256,7 +1256,7 @@ class editbranch extends React.Component {
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                    <b>Address Line 3</b>
+                                    Address Line 3
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
