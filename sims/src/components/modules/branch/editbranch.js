@@ -34,6 +34,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Menubar from "../../user/menubar";
 
 
+import Tablerowcelldropdowninput from "../../compo/tablerowcelldropdowninput";
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+
+
 class editbranch extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +48,8 @@ class editbranch extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       GeneralDetailsExpanded: true,
-      AddressDetailsExpanded: false,
+      TaxationDetailsExpanded: false,
+      NumberingExpanded:false,
       disabledUpdatebtn: false,
       companyData: [],
       countryData: [],
@@ -265,6 +270,8 @@ class editbranch extends React.Component {
       stateId: data.stateId,
       wareHouses: data.wareHouses,
       website: data.website,
+
+
       ProgressLoader: true
     });
   }
@@ -277,9 +284,15 @@ class editbranch extends React.Component {
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true ? this.setState({ GeneralDetailsExpanded: false }) : this.setState({ GeneralDetailsExpanded: true })
       }
-      if (val === "AddressDetailsExpanded") {
-        this.state.AddressDetailsExpanded === true ? this.setState({ AddressDetailsExpanded: false }) : this.setState({ AddressDetailsExpanded: true })
+      if (val === "TaxationDetailsExpanded") {
+        this.state.TaxationDetailsExpanded === true ? this.setState({ TaxationDetailsExpanded: false }) : this.setState({ TaxationDetailsExpanded: true })
       }
+      if (val === "NumberingExpanded") {
+        this.state.NumberingExpanded === true ? this.setState({ NumberingExpanded: false }) : this.setState({ NumberingExpanded: true })
+      }
+
+      
+
     }
 
     const ValidateName = () => {
@@ -292,6 +305,7 @@ class editbranch extends React.Component {
     }
 
     const updateFormValue = (id, e) => {
+      alert("Hi new");
       if (id === "shortName") {
         let branch = this.state.branch;
         branch.shortName = e.target.value;
@@ -667,6 +681,7 @@ class editbranch extends React.Component {
                           <TableContainer>
                             <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                               <TableBody className="tableBody">
+                             
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     <b>Company</b>
@@ -696,6 +711,21 @@ class editbranch extends React.Component {
                                     </select>
                                   </TableCell>
                                 </TableRow>
+                                <Tablerowcelltextboxinput
+                                  id="Name"
+                                  label="Name"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('Name', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.name}
+                                  error={this.state.Validations.name.errorState}
+                                  helperText={this.state.Validations.name.errorMsg}
+                                />
+                                {/*
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     <b>Name </b>
@@ -713,13 +743,14 @@ class editbranch extends React.Component {
                                         maxlength: 50
                                       }}
 
-                                       value={this.state.name}
+                                      value={this.state.name}
                                       error={this.state.Validations.name.errorState}
                                       helperText={this.state.Validations.name.errorMsg}
 
                                     />
                                   </TableCell>
                                 </TableRow>
+                                */}
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     <b>Short Name </b>
@@ -971,14 +1002,12 @@ class editbranch extends React.Component {
 
                         </Grid>
                       </Grid>
-
-
-                    </AccordionDetails>
+                      </AccordionDetails>
                   </Accordion>
-                  <Accordion key="company-Address-Details" expanded={this.state.AddressDetailsExpanded} >
+                  <Accordion key="company-Taxation-Details" expanded={this.state.TaxationDetailsExpanded} >
                     <AccordionSummary
                       className="accordion-Header-Design"
-                      expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("AddressDetailsExpanded", e)} />}
+                      expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("TaxationDetailsExpanded", e)} />}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
                       style={{ minHeight: 20, height: '100%' }}
@@ -988,7 +1017,168 @@ class editbranch extends React.Component {
                     <AccordionDetails key="">
 
                     </AccordionDetails>
+                  </Accordion>
+                  <Accordion key="company-Numbering" expanded={this.state.NumberingExpanded} >
+                    <AccordionSummary
+                      className="accordion-Header-Design"
+                      expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("NumberingExpanded", e)} />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                      style={{ minHeight: 20, height: '100%' }}
+                    >
+                      <Typography key="" className="accordion-Header-Title">Numbering</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails key="">
+                      <Grid container spacing={1}>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
+                          <TableContainer>
+                            <Table stickyHeader size="small" className="accordion-table" aria-label="Numbering table">
+                              <TableBody className="tableBody">
+                                <Tablerowcelldropdowninput  
+                                  id="PINo"
+                                  label="Proforma Invoice"
+                                  value={1}
+                                  onChange={(e) => updateFormValue('PINo', e)}
+                                  options={[{id:1,value:1,name:"test"}]}
+                                />
+                                <Tablerowcelldropdowninput  
+                                  id="SONo"
+                                  label="Sales Order"
+                                  value={1}
+                                  onChange={(e) => updateFormValue('SONo', e)}
+                                  options={[{id:1,value:1,name:"test"}]}
+                                />
+                                 
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Sales Order</TableCell>
+                                  <TableCell align="left" className="no-border-table">
+                                  <select
+                                      className="dropdown-css"
+                                      id="SONo"
+                                      label="Sales Order"
+                                      fullWidth
 
+                                      // value={parseInt(this.state.stateId)}
+                                      // onChange={(e) => updateFormValue('State', e)}
+                                    >
+                                      <option value="-">
+                                        None
+                                      </option>
+                                       
+                                    </select>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Sales Invoice</TableCell>
+                                  <TableCell align="left" className="no-border-table">
+                                  <select
+                                      className="dropdown-css"
+                                      id="SONo"
+                                      label="Sales Order"
+                                      fullWidth
+
+                                      // value={parseInt(this.state.stateId)}
+                                      // onChange={(e) => updateFormValue('State', e)}
+                                    >
+                                      <option value="-">
+                                        None
+                                      </option>
+                                       
+                                    </select>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Pack slip</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Combine Pack Slip</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Credit Note</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Debit Note</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Purchase Request</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Purchase Order</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Purchase Invoice</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">GIT</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                 <TableRow>
+                                  <TableCell align="left" className="no-border-table">Store Requisition</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                            <Table stickyHeader size="small" className="accordion-table" aria-label="Numbering table">
+                              <TableBody className="tableBody">
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Store Issue </TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Journal Voucher</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Payment Voucher</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Receipt Voucher</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Contra Entry</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Bank</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">Cash</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">FG QC No</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">RM QC No</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">IJC</TableCell>
+                                  <TableCell align="left" className="no-border-table"></TableCell>
+                                </TableRow>
+                              
+                              
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+                      </Grid>
+                    </AccordionDetails>
                   </Accordion>
 
                 </Grid>
