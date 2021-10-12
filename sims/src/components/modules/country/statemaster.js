@@ -206,7 +206,7 @@ class statemaster extends React.Component {
                         </Grid>   
                     </Grid>
                     <div className="breadcrumb-bottom"></div>
-                    <Grid container spacing={0}>
+                    <Grid container className= "style-all-Links"  spacing={0}>
                             <Link className="style-link" href={URLS.URLS.addState + this.state.urlparams}>NEW</Link>
 
                             {/* <Button
