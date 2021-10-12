@@ -182,7 +182,7 @@ class editstate extends React.Component {
     const updateFormValue = (id, e) => {
       if (id === "Name") {
         let state = this.state.state;
-        // state.Name = e.target.value;
+        state.Name = e.target.value;
         // this.setState({ name: e.target.value, state: state });
         if (
           e.target.value === "" ||
