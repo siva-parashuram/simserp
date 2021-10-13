@@ -231,7 +231,11 @@ class branchMaster extends React.Component {
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={11} lg={11}>
                                     {this.state.branchItem && Object.keys(this.state.branchItem).length === 0 && Object.getPrototypeOf(this.state.branchItem) === Object.prototype ?null:(
-                                        <BranchQuickDetails new={URLS.URLS.addBranch + this.state.urlparams} edit={this.state.editUrl} branchItem={this.state.branchItem}/>
+                                        <Fragment>
+                                             <BranchQuickDetails new={URLS.URLS.addBranch + this.state.urlparams} edit={this.state.editUrl} branchItem={this.state.branchItem}/>
+                                             
+                                        </Fragment>
+                                       
                                     )}
                                    
                                 </Grid>
