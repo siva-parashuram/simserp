@@ -1,11 +1,7 @@
+import '../../user/dasboard.css';
 import React, { Fragment } from 'react';
 import Header from "../../user/userheaderconstants";
- 
-
-
 import moment from "moment";
-import Nav from "../../user/nav";
-import '../../user/dasboard.css';
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -18,24 +14,16 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import Divider from '@material-ui/core/Divider';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TableContainer from '@material-ui/core/TableContainer';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
-
 
 import Tablerowcelldropdowninput from "../../compo/tablerowcelldropdowninput";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
@@ -102,22 +90,22 @@ class editbranch extends React.Component {
         FGQCNo: null,
         RMQCNo: null,
         IJCNo: null,
-        EffectiveDate:null,
-        IsVat:false,
-        VATNo:null,
-        VATRegistrationNo:null,
-        VATPercentage:null,
-        IsGST:false,
-        GSTNo:null,
-       
-        PANNo:null,
-        TANNo:null,
-        CINNo:null,
-        IECNo:null,
-        ARNNo:null,
-        IsSEZ:false,
-        IsExportUnit:false,
-        CurrID:null,
+        EffectiveDate: null,
+        IsVat: false,
+        VATNo: null,
+        VATRegistrationNo: null,
+        VATPercentage: null,
+        IsGST: false,
+        GSTNo: null,
+
+        PANNo: null,
+        TANNo: null,
+        CINNo: null,
+        IECNo: null,
+        ARNNo: null,
+        IsSEZ: false,
+        IsExportUnit: false,
+        CurrID: null,
       }
       ,
       address: null,
@@ -162,26 +150,26 @@ class editbranch extends React.Component {
       FGQCNo: null,
       RMQCNo: null,
       IJCNo: null,
-      EffectiveDate:null,
-      IsVat:false,
-      VATNo:null,
-      VATRegistrationNo:null,
-      VATPercentage:null,
-      IsGST:false,
-      GSTNo:null,
-      
-      PANNo:null,
-      TANNo:null,
-      CINNo:null,
-      IECNo:null,
-      ARNNo:null,
-      IsSEZ:false,
-      IsExportUnit:false,
-      CurrID:null,
+      EffectiveDate: null,
+      IsVat: false,
+      VATNo: null,
+      VATRegistrationNo: null,
+      VATPercentage: null,
+      IsGST: false,
+      GSTNo: null,
 
-      VATNoDisabled:true,
-      VATPercentageDisabled:true,
-      GSTNoDisabled:true,
+      PANNo: null,
+      TANNo: null,
+      CINNo: null,
+      IECNo: null,
+      ARNNo: null,
+      IsSEZ: false,
+      IsExportUnit: false,
+      CurrID: null,
+
+      VATNoDisabled: true,
+      VATPercentageDisabled: true,
+      GSTNoDisabled: true,
 
       Validations: {
         name: { errorState: false, errorMsg: "" },
@@ -190,7 +178,7 @@ class editbranch extends React.Component {
         country: { errorState: false, errorMsg: "" },
         address2: { errorState: false, errorMsg: "" },
         address3: { errorState: false, errorMsg: "" },
-        city: { errorState: false, errorMsg: "" },  
+        city: { errorState: false, errorMsg: "" },
         postcode: { errorState: false, errorMsg: "" },
         phoneNo: { errorState: false, errorMsg: "" },
         website: { errorState: false, errorMsg: "" },
@@ -332,7 +320,7 @@ class editbranch extends React.Component {
 
 
   setStateParams(data) {
-    console.log("-> data : ",data);
+    console.log("-> data : ", data);
     this.setState({
       branch: data,
       address: data.address,
@@ -378,23 +366,23 @@ class editbranch extends React.Component {
       RMQCNo: data.rmqcno,
       IJCNo: data.ijcno,
       RVNo: data.rvno,
-      EffectiveDate:moment(data.effectiveDate).format("YYYY-MM-DD"),
-      IsVat:data.isVat===null?false:data.isVat,
-      isGst:data.isGst===null?false:data.isGst,
-      VATNo:data.vatno,
-      VATRegistrationNo:null,
-      VATPercentage:data.vatpercentage,
-      IsGST:data.isGst===null?false:data.isGst,
-      GSTNo:data.gstno,
-      
-      PANNo:data.panno,
-      TANNo:data.tanno,
-      CINNo:data.cinno,
-      IECNo:data.iecno,
-      ARNNo:data.arnno,
-      IsSEZ:data.isSez===null?false:data.isSez,
-      IsExportUnit:data.isExportUnit===null?false:data.isExportUnit,
-      CurrID:data.currId,
+      EffectiveDate: moment(data.effectiveDate).format("YYYY-MM-DD"),
+      IsVat: data.isVat === null ? false : data.isVat,
+      isGst: data.isGst === null ? false : data.isGst,
+      VATNo: data.vatno,
+      VATRegistrationNo: null,
+      VATPercentage: data.vatpercentage,
+      IsGST: data.isGst === null ? false : data.isGst,
+      GSTNo: data.gstno,
+
+      PANNo: data.panno,
+      TANNo: data.tanno,
+      CINNo: data.cinno,
+      IECNo: data.iecno,
+      ARNNo: data.arnno,
+      IsSEZ: data.isSez === null ? false : data.isSez,
+      IsExportUnit: data.isExportUnit === null ? false : data.isExportUnit,
+      CurrID: data.currId,
       ProgressLoader: true
     });
   }
@@ -482,7 +470,7 @@ class editbranch extends React.Component {
     }
 
     const updateFormValue = (id, e) => {
-      
+
       if (id === "shortName") {
         let branch = this.state.branch;
         branch.shortName = e.target.value;
@@ -784,8 +772,8 @@ class editbranch extends React.Component {
       }
       if (id === "IsSEZ") {
         let branch = this.state.branch;
-        console.log("IsSEZ set > this.state > ",this.state);
-        console.log("IsSEZ set > branch > ",branch);
+        console.log("IsSEZ set > this.state > ", this.state);
+        console.log("IsSEZ set > branch > ", branch);
         branch.IsSEZ = e.target.checked;
         this.setState({ branch: branch, IsSEZ: e.target.checked });
       }
@@ -796,7 +784,7 @@ class editbranch extends React.Component {
       }
 
 
-       //---------------Numbering-----------
+      //---------------Numbering-----------
       if (id === "PINo") {
         let branch = this.state.branch;
         branch.PINo = e.target.value;
@@ -908,14 +896,14 @@ class editbranch extends React.Component {
         this.setState({ branch: branch, RVNo: e.target.value });
       }
 
-      if(id==="EffectiveDate"){
+      if (id === "EffectiveDate") {
         // moment().format("YYYY-MM-DD")
         let branch = this.state.branch;
         branch.EffectiveDate = e.target.value;
         this.setState({ branch: branch, EffectiveDate: e.target.value });
       }
-      
-       
+
+
 
 
     }
@@ -924,30 +912,30 @@ class editbranch extends React.Component {
     // VATNoDisabled:true,
     //   VATPercentageDisabled:true,
 
-    const VAT_GST_Checkbox_Click=(e,param)=>{
-      console.log("param > ",param);
-      console.log("e.target.checked > ",e.target.checked);
-      if(param==="isvat"){
+    const VAT_GST_Checkbox_Click = (e, param) => {
+      console.log("param > ", param);
+      console.log("e.target.checked > ", e.target.checked);
+      if (param === "isvat") {
         let branch = this.state.branch;
-        
-           if(e.target.checked===true){
-            branch.isVat=true;
-             this.setState({VATNoDisabled:false,VATPercentageDisabled:false,branch:branch});
-           }
-           if(e.target.checked===false){
-            branch.isVat=false;
-            this.setState({VATNoDisabled:true,VATPercentageDisabled:true,branch:branch});
-           }
-      }
-      if(param==="isgst"){
-        let branch = this.state.branch;
-        if(e.target.checked===true){
-          branch.isGst=true;
-          this.setState({GSTNoDisabled:false,IsGST:true,branch:branch});
+
+        if (e.target.checked === true) {
+          branch.isVat = true;
+          this.setState({ VATNoDisabled: false, VATPercentageDisabled: false, branch: branch });
         }
-        if(e.target.checked===false){
-          branch.isGst=false;
-          this.setState({GSTNoDisabled:true,IsGST:false,branch:branch});
+        if (e.target.checked === false) {
+          branch.isVat = false;
+          this.setState({ VATNoDisabled: true, VATPercentageDisabled: true, branch: branch });
+        }
+      }
+      if (param === "isgst") {
+        let branch = this.state.branch;
+        if (e.target.checked === true) {
+          branch.isGst = true;
+          this.setState({ GSTNoDisabled: false, IsGST: true, branch: branch });
+        }
+        if (e.target.checked === false) {
+          branch.isGst = false;
+          this.setState({ GSTNoDisabled: true, IsGST: false, branch: branch });
         }
       }
     }
@@ -1008,7 +996,7 @@ class editbranch extends React.Component {
 
     return (
       <Fragment>
-        <Header/>
+        <Header />
         {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
         <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
@@ -1059,7 +1047,7 @@ class editbranch extends React.Component {
                       expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("GeneralDetailsExpanded", e)} />}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
-                      style={{ minHeight: 30,maxHeight: 30, height: '100%' }}
+                      style={{ minHeight: 30, maxHeight: 30, height: '100%' }}
                     >
                       <Typography key="" className="accordion-Header-Title">General Details</Typography>
                     </AccordionSummary>
@@ -1070,10 +1058,10 @@ class editbranch extends React.Component {
                             <Table stickyHeader size="small" className="accordion-table" aria-label="company List table">
                               <TableBody className="tableBody">
 
-                              
+
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                  Company
+                                    Company
                                   </TableCell>
 
                                   {console.log("this.state.countryId > ", this.state.countryId)}
@@ -1182,7 +1170,7 @@ class editbranch extends React.Component {
 
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                     Phone No
+                                    Phone No
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <TextField
@@ -1224,7 +1212,7 @@ class editbranch extends React.Component {
                                     />
                                   </TableCell>
                                 </TableRow>
-                               
+
                                 <Tablerowcelldateinput
                                   id="EffectiveDate"
                                   label="Effective Date"
@@ -1252,7 +1240,7 @@ class editbranch extends React.Component {
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     Country
-                                  </TableCell>                                 
+                                  </TableCell>
                                   <TableCell align="left" className="no-border-table">
                                     <select
                                       className="dropdown-css"
@@ -1431,10 +1419,10 @@ class editbranch extends React.Component {
                     >
                       <Typography key="" className="accordion-Header-Title">Taxation Details</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key=""  className="AccordionDetails-css">
-                    <Grid container spacing={2}>
-                    <Grid xs={12} sm={12} md={6} lg={6}> 
-                    <TableContainer>
+                    <AccordionDetails key="" className="AccordionDetails-css">
+                      <Grid container spacing={2}>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
+                          <TableContainer>
                             <Table stickyHeader size="small" className="accordion-table" aria-label="Taxation table">
                               <TableBody className="tableBody">
                                 <Tablerowcelltextboxinput
@@ -1447,7 +1435,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  value={this.state.PANNo}                                 
+                                  value={this.state.PANNo}
                                 />
                                 <Tablerowcelltextboxinput
                                   id="TANNo"
@@ -1459,7 +1447,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  value={this.state.TANNo}                                 
+                                  value={this.state.TANNo}
                                 />
                                 <Tablerowcelltextboxinput
                                   id="CINNo"
@@ -1471,7 +1459,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  value={this.state.CINNo}                                 
+                                  value={this.state.CINNo}
                                 />
                                 <Tablerowcelltextboxinput
                                   id="IECNo"
@@ -1483,7 +1471,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  value={this.state.IECNo}                                 
+                                  value={this.state.IECNo}
                                 />
                                 <Tablerowcelltextboxinput
                                   id="ARNNo"
@@ -1495,7 +1483,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  value={this.state.ARNNo}                                 
+                                  value={this.state.ARNNo}
                                 />
 
                                 <TableRow>
@@ -1503,37 +1491,37 @@ class editbranch extends React.Component {
                                     Is SEZ?
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
-                                    <input type="checkbox"  onChange={(e) => updateFormValue('IsSEZ', e)}  checked={this.state.IsSEZ}/>
+                                    <input type="checkbox" onChange={(e) => updateFormValue('IsSEZ', e)} checked={this.state.IsSEZ} />
                                   </TableCell>
                                 </TableRow>
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
-                                  Is Export Unit?
+                                    Is Export Unit?
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
-                                    <input type="checkbox"  onChange={(e) => updateFormValue('IsExportUnit', e)}  checked={this.state.IsExportUnit}/>
+                                    <input type="checkbox" onChange={(e) => updateFormValue('IsExportUnit', e)} checked={this.state.IsExportUnit} />
                                   </TableCell>
                                 </TableRow>
 
                               </TableBody>
                             </Table>
-                      </TableContainer>
-                    </Grid>
-                    <Grid xs={12} sm={12} md={6} lg={6}> 
-                    <TableContainer>
-                        <Table stickyHeader size="small" className="accordion-table" aria-label="Taxation table">
-                          <TableBody className="tableBody">      
+                          </TableContainer>
+                        </Grid>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
+                          <TableContainer>
+                            <Table stickyHeader size="small" className="accordion-table" aria-label="Taxation table">
+                              <TableBody className="tableBody">
 
                                 <TableRow>
                                   <TableCell align="left" className="no-border-table">
                                     Is VAT?
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
-                                    <input type="checkbox" onClick={(e)=>VAT_GST_Checkbox_Click(e,'isvat')}  checked={this.state.IsVat}/>
+                                    <input type="checkbox" onClick={(e) => VAT_GST_Checkbox_Click(e, 'isvat')} checked={this.state.IsVat} />
                                   </TableCell>
                                 </TableRow>
 
-                                 <Tablerowcelltextboxinput
+                                <Tablerowcelltextboxinput
                                   id="VATNo"
                                   label="VAT No"
                                   variant="outlined"
@@ -1543,8 +1531,8 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  value={this.state.VATNo}   
-                                  disabled={this.state.VATNoDisabled}                              
+                                  value={this.state.VATNo}
+                                  disabled={this.state.VATNoDisabled}
                                 />
                                 <Tablerowcelltextboxinput
                                   id="VATPercentage"
@@ -1556,8 +1544,8 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  value={this.state.VATPercentage}  
-                                  disabled={this.state.VATPercentageDisabled}                                    
+                                  value={this.state.VATPercentage}
+                                  disabled={this.state.VATPercentageDisabled}
                                 />
 
 
@@ -1566,7 +1554,7 @@ class editbranch extends React.Component {
                                     Is GST?
                                   </TableCell>
                                   <TableCell align="left" className="no-border-table">
-                                    <input type="checkbox"  onClick={(e)=>VAT_GST_Checkbox_Click(e,'isgst')} checked={this.state.IsGST}/>
+                                    <input type="checkbox" onClick={(e) => VAT_GST_Checkbox_Click(e, 'isgst')} checked={this.state.IsGST} />
                                   </TableCell>
                                 </TableRow>
 
@@ -1580,16 +1568,16 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50
                                   }}
-                                  value={this.state.GSTNo}   
-                                  disabled={this.state.GSTNoDisabled}                              
+                                  value={this.state.GSTNo}
+                                  disabled={this.state.GSTNoDisabled}
                                 />
 
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    </Grid>
-                    </Grid>
-                      
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+                      </Grid>
+
                     </AccordionDetails>
                   </Accordion>
                   <Accordion key="company-Numbering" expanded={this.state.NumberingExpanded} >
@@ -1602,7 +1590,7 @@ class editbranch extends React.Component {
                     >
                       <Typography key="" className="accordion-Header-Title">Numbering</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key=""  className="AccordionDetails-css">
+                    <AccordionDetails key="" className="AccordionDetails-css">
                       <Grid container spacing={1}>
                         <Grid xs={12} sm={12} md={6} lg={6}>
                           <TableContainer>
@@ -1685,7 +1673,7 @@ class editbranch extends React.Component {
                                   onChange={(e) => updateFormValue('GITNo', e)}
                                   options={this.state.numberSeries}
                                 />
-                                
+
 
 
                               </TableBody>
@@ -1696,7 +1684,7 @@ class editbranch extends React.Component {
                           <TableContainer>
                             <Table stickyHeader size="small" className="accordion-table" aria-label="Numbering table">
                               <TableBody className="tableBody">
-                              <Tablerowcelldropdowninput
+                                <Tablerowcelldropdowninput
                                   id="SRNo"
                                   label="Store Requisition"
                                   value={this.state.SRNo}
