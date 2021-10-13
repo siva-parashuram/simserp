@@ -51,7 +51,13 @@ class editdestination extends React.Component {
       SuccessPrompt: false,
       countryData: [],
       stateData: [],
-    };
+      DisabledCreatebtn: true,
+      Validations: {
+        destinationName: { errorState: false, errorMssg: "" },
+        postcode: { errorState: false, errorMssg: "" },
+      },
+    }
+    
   }
 
   componentDidMount() {
@@ -207,15 +213,62 @@ class editdestination extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-      if (id === "destinationName") {
-        this.setState({
-          destinationName: e.target.value,
-        });
+      if (id === "Name") {
+        if (
+          e.target.value === "" ||
+          e.target.value === null ||
+          e.target.value.length > 50
+        ) {
+          if (e.target.value.length > 50) {
+            let v = this.state.Validations;
+            v.destinationName = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters are allowed",
+            };
+            this.setState({
+              Validations: v,
+              DisabledCreatebtn: true,
+            });
+          }
+          if (e.target.value === "" || e.target.value === null) {
+            let v = this.state.Validations;
+            v.destinationName = {
+              errorState: true,
+              errorMssg: "Name cannot be blank",
+            };
+            this.setState({
+              Validations: v,
+              DisabledCreatebtn: true,
+            });
+          }
+        } else {
+          let v = this.state.Validations;
+          v.destinationName = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            DisabledCreatebtn: false,
+            destinationName: e.target.value,
+          });
+        }
       }
-      if (id === "Postcode") {
-        this.setState({
-          postcode: e.target.value,
-        });
+      if (id === "PostCode") {
+        if (e.target.value.length > 20) {
+          let v = this.state.Validations;
+          v.postcode = {
+            errorState: true,
+            errorMssg: "Maximum 20 characters are allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.postcode = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            postcode: e.target.value,
+          });
+        }
       }
       if (id === "CountryID") {
         this.setState({
@@ -396,6 +449,15 @@ class editdestination extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
+                                  value={this.state.destinationName}
+                                error={
+                                  this.state.Validations.destinationName
+                                    .errorState
+                                }
+                                helperText={
+                                  this.state.Validations.destinationName
+                                    .errorMssg
+                                }
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -410,6 +472,15 @@ class editdestination extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
+                                  value={this.state.postcode}
+                                error={
+                                  this.state.Validations.postcode
+                                    .errorState
+                                }
+                                helperText={
+                                  this.state.Validations.postcode
+                                    .errorMssg
+                                }
                                 />
 
                                 {/* <TableRow>

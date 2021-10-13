@@ -28,7 +28,6 @@ import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
- 
 
 import moment from "moment";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
@@ -55,6 +54,14 @@ class addcurrency extends React.Component {
         RealizedGainId: 0,
         RealizedLossId: 0,
         Rounding: 0,
+      },
+      Code: null,
+      Description: null,
+      Symbol: null,
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Description: { errorState: false, errorMssg: "" },
+        Symbol: { errorState: false, errorMssg: "" },
       },
     };
   }
@@ -88,6 +95,69 @@ class addcurrency extends React.Component {
     const updateFormValue = (id, e) => {
       console.log("In updateFormValue");
       let Currency = this.state.Currency;
+      if (id === "Code") {
+        Currency.Code = e.target.value;
+        if (e.target.value.length > 10) {
+          let v = this.state.Validations;
+          v.Code = {
+            errorState: true,
+            errorMssg: "MAximum 10 characters allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Code = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            Currency: Currency,
+            Code: e.target.value,
+          });
+        }
+      }
+      if (id === "Description") {
+        Currency.Description = e.target.value;
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Description = {
+            errorState: true,
+            errorMssg: "MAximum 50 characters allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Description = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            Currency: Currency,
+            Description: e.target.value,
+          });
+        }
+      }
+      if (id === "Symbol") {
+        Currency.Symbol = e.target.value;
+        if (e.target.value.length > 5) {
+          let v = this.state.Validations;
+          v.Symbol = {
+            errorState: true,
+            errorMssg: "MAximum 5 characters allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Symbol = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            Currency: Currency,
+            Symbol: e.target.value,
+          });
+        }
+      }
     };
 
     const handleCreate = (e) => {
@@ -141,7 +211,7 @@ class addcurrency extends React.Component {
 
     return (
       <Fragment>
-        <Header/>
+        <Header />
 
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: 0, marginLeft: -10 }}>
@@ -249,6 +319,9 @@ class addcurrency extends React.Component {
                           InputProps={{
                             className: "textFieldCss",
                           }}
+                          value={this.state.Code}
+                          error={this.state.Validations.Code.errorState}
+                          helperText={this.state.Validations.Code.errorMssg}
                         />
 
                         <Tablerowcelltextboxinput
@@ -260,6 +333,11 @@ class addcurrency extends React.Component {
                           InputProps={{
                             className: "textFieldCss",
                           }}
+                          value={this.state.Description}
+                          error={this.state.Validations.Description.errorState}
+                          helperText={
+                            this.state.Validations.Description.errorMssg
+                          }
                         />
 
                         <Tablerowcelltextboxinput
@@ -271,8 +349,10 @@ class addcurrency extends React.Component {
                           InputProps={{
                             className: "textFieldCss",
                           }}
+                          value={this.state.Symbol}
+                          error={this.state.Validations.Symbol.errorState}
+                          helperText={this.state.Validations.Symbol.errorMssg}
                         />
-                        
                       </TableBody>
                     </Table>
                   </TableContainer>

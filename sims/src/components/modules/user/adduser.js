@@ -100,6 +100,18 @@ class adduser extends React.Component {
       }
     };
 
+    const CheckFirstName = () => {
+      if (
+        this.state.FirstName === "" ||
+        this.state.FirstName === null ||
+        this.state.FirstName.length > 20
+      ) {
+        this.setState({ DisabledCreatebtn: true });
+      } else {
+        this.setState({ DisabledCreatebtn: false });
+      }
+    };
+
     const updateFormValue = (id, e) => {
       console.log("====================================");
       console.log("id > ", id);
@@ -154,18 +166,18 @@ class adduser extends React.Component {
           };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
-          v.FirstName = { errorState: false, errorMssg: "" };
+          v.LastName = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: false,
+
             LastName: e.target.value,
             user: user,
           });
         }
+        CheckFirstName();
       }
       if (id === "EmailID") {
         let user = this.state.user;
@@ -178,18 +190,18 @@ class adduser extends React.Component {
           };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.EmailID = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: false,
+
             EmailID: e.target.value,
             user: user,
           });
         }
+        CheckFirstName();
       }
       if (id === "LoginID") {
         let user = this.state.user;
@@ -203,24 +215,24 @@ class adduser extends React.Component {
           };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.LoginID = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: false,
+
             LoginID: e.target.value,
             user: user,
           });
         }
+        CheckFirstName();
       }
 
       if (id === "Password") {
         let user = this.state.user;
         user.Password = e.target.value;
-        // this.setState({user:user});
+
         if (e.target.value.length > 10) {
           let v = this.state.Validations;
           v.Password = {
@@ -229,22 +241,23 @@ class adduser extends React.Component {
           };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
-          v.EmailID = { errorState: false, errorMssg: "" };
+          v.Password = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: false,
+
             Password: e.target.value,
             user: user,
           });
         }
+        CheckFirstName();
       }
     };
 
     const handleCreate = () => {
+      CheckFirstName();
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -406,9 +419,11 @@ class adduser extends React.Component {
                             className: "textFieldCss",
                             maxlength: 50,
                           }}
-                          //   value={this.state.City}
-                          //   error={this.state.Validations.city.errorState}
-                          //         helperText={this.state.Validations.city.errorMsg}
+                          value={this.state.FirstName}
+                          error={this.state.Validations.FirstName.errorState}
+                          helperText={
+                            this.state.Validations.FirstName.errorMssg
+                          }
                         />
 
                         <Tablerowcelltextboxinput
@@ -421,9 +436,9 @@ class adduser extends React.Component {
                             className: "textFieldCss",
                             maxlength: 50,
                           }}
-                          //   value={this.state.City}
-                          //   error={this.state.Validations.city.errorState}
-                          //         helperText={this.state.Validations.city.errorMsg}
+                          value={this.state.LastName}
+                          error={this.state.Validations.LastName.errorState}
+                          helperText={this.state.Validations.LastName.errorMssg}
                         />
                         <Tablerowcelltextboxinput
                           id="EmailID"
@@ -435,9 +450,9 @@ class adduser extends React.Component {
                             className: "textFieldCss",
                             maxlength: 50,
                           }}
-                          //   value={this.state.City}
-                          //   error={this.state.Validations.city.errorState}
-                          //         helperText={this.state.Validations.city.errorMsg}
+                          value={this.state.EmailID}
+                          error={this.state.Validations.EmailID.errorState}
+                          helperText={this.state.Validations.EmailID.errorMssg}
                         />
 
                         <Tablerowcelltextboxinput
@@ -450,9 +465,9 @@ class adduser extends React.Component {
                             className: "textFieldCss",
                             maxlength: 50,
                           }}
-                          //   value={this.state.City}
-                          //   error={this.state.Validations.city.errorState}
-                          //         helperText={this.state.Validations.city.errorMsg}
+                          value={this.state.LoginID}
+                          error={this.state.Validations.LoginID.errorState}
+                          helperText={this.state.Validations.LoginID.errorMssg}
                         />
 
                         <Tablerowcelltextboxinput
@@ -466,9 +481,9 @@ class adduser extends React.Component {
                             className: "textFieldCss",
                             maxlength: 50,
                           }}
-                          //   value={this.state.City}
-                          //   error={this.state.Validations.city.errorState}
-                          //         helperText={this.state.Validations.city.errorMsg}
+                          value={this.state.Password}
+                          error={this.state.Validations.Password.errorState}
+                          helperText={this.state.Validations.Password.errorMssg}
                         />
 
                         <TableRow>

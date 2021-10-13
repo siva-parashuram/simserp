@@ -26,7 +26,7 @@ import Destination from "./destination";
 
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
- 
+
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -48,6 +48,11 @@ class adddestination extends React.Component {
       postcode: null,
       stateId: 0,
       countryId: 0,
+      DisabledCreatebtn: true,
+      Validations: {
+        destinationName: { errorState: false, errorMssg: "" },
+        postcode: { errorState: false, errorMssg: "" },
+      },
     };
   }
 
@@ -129,7 +134,7 @@ class adddestination extends React.Component {
     let GetDestinationsUrl = APIURLS.APIURL.GetDestinations;
 
     axios
-      .post(GetDestinationsUrl, ValidUser, { headers })
+      .post(GetDestinationsUrl, ValidUser, { headers })   
       .then((response) => {
         let data = response.data;
         console.log("getStateList > response > data > ", data);
@@ -156,14 +161,61 @@ class adddestination extends React.Component {
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
-        this.setState({
-          destinationName: e.target.value,
-        });
+        if (
+          e.target.value === "" ||
+          e.target.value === null ||
+          e.target.value.length > 50
+        ) {
+          if (e.target.value.length > 50) {
+            let v = this.state.Validations;
+            v.destinationName = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters are allowed",
+            };
+            this.setState({
+              Validations: v,
+              DisabledCreatebtn: true,
+            });
+          }
+          if (e.target.value === "" || e.target.value === null) {
+            let v = this.state.Validations;
+            v.destinationName = {
+              errorState: true,
+              errorMssg: "Name cannot be blank",
+            };
+            this.setState({
+              Validations: v,
+              DisabledCreatebtn: true,
+            });
+          }
+        } else {
+          let v = this.state.Validations;
+          v.destinationName = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            DisabledCreatebtn: false,
+            destinationName: e.target.value,
+          });
+        }
       }
       if (id === "PostCode") {
-        this.setState({
-          postcode: e.target.value,
-        });
+        if (e.target.value.length > 20) {
+          let v = this.state.Validations;
+          v.postcode = {
+            errorState: true,
+            errorMssg: "Maximum 20 characters are allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.postcode = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            postcode: e.target.value,
+          });
+        }
       }
       if (id === "CountryID") {
         this.setState({
@@ -242,7 +294,7 @@ class adddestination extends React.Component {
 
     return (
       <Fragment>
-        <Header/>
+        <Header />
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: -8, marginLeft: -10 }}>
             <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
@@ -292,7 +344,11 @@ class adddestination extends React.Component {
           <div className="breadcrumb-bottom"></div>
           <Grid container spacing={3}>
             <Grid className="style-buttons" xs={1}>
-              <Button style={{ marginLeft: 5 }} onClick={addDestination}>
+              <Button
+                style={{ marginLeft: 5 }}
+                onClick={addDestination}
+                disabled={this.state.DisabledCreatebtn}
+              >
                 Create
               </Button>
             </Grid>
@@ -344,6 +400,15 @@ class adddestination extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 50,
                                 }}
+                                value={this.state.destinationName}
+                                error={
+                                  this.state.Validations.destinationName
+                                    .errorState
+                                }
+                                helperText={
+                                  this.state.Validations.destinationName
+                                    .errorMssg
+                                }
                               />
 
                               <Tablerowcelltextboxinput
@@ -356,6 +421,13 @@ class adddestination extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 50,
                                 }}
+                                value={this.state.postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.postcode.errorMssg
+                                }
                               />
 
                               <TableRow>

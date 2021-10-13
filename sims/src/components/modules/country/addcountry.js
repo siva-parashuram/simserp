@@ -25,7 +25,7 @@ import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
- 
+
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -37,10 +37,11 @@ class addcountry extends React.Component {
       urlparams: "",
       ProgressLoader: false,
       GeneralDetailsExpanded: true,
+      DisableCreatebtn: true,
       Validations: {
-        countryName: { errorState: false, errorMsg: "" },
-        address: { errorState: false, errorMsg: "" },
-        country: { errorState: false, errorMsg: "" },
+        Name: { errorState: false, errorMssg: "" },
+        TwoDitgitCode: { errorState: false, errorMssg: "" },
+        ThreeDitgitCode: { errorState: false, errorMssg: "" },
       },
       country: {
         CountryId: 0,
@@ -51,6 +52,9 @@ class addcountry extends React.Component {
         ZoneID: 0,
         UserID: 0,
       },
+      Name: "",
+      ThreeDitgitCode: "",
+      TwoDitgitCode: "",
       zones: [],
       selectedZone: null,
       ErrorPrompt: false,
@@ -111,21 +115,106 @@ class addcountry extends React.Component {
       }
     };
 
+    const CheckName = () => {
+      if (
+        this.state.Name === "" ||
+        this.state.Name === null ||
+        this.state.Name.length > 50
+      ) {
+        this.setState({ DisableCreatebtn: true });
+      } else {
+        this.setState({ DisableCreatebtn: false });
+      }
+    };
+
     const updateFormValue = (id, e) => {
       if (id === "Name") {
         let country = this.state.country;
         country.Name = e.target.value;
-        this.setState({ country: country });
+        if (
+          e.target.value === "" ||
+          e.target.value === null ||
+          e.target.value.length > 50
+        ) {
+          let v = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v.Name = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters allowed",
+            };
+          }
+          if (e.target.value === "" || e.target.value === null) {
+            v.Name = { errorState: true, errorMssg: "Name cannot be blank" };
+          }
+          this.setState({
+            Validations: v,
+            DisableCreatebtn: true,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Name = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({
+            Validations: v,
+            DisableCreatebtn: false,
+            Name: e.target.value,
+            country: country,
+          });
+        }
       }
       if (id === "TwoDitgitCode") {
         let country = this.state.country;
         country.TwoDitgitCode = e.target.value;
-        this.setState({ country: country });
+        if (e.target.value.length > 2) {
+          let v = this.state.Validations;
+          v.TwoDitgitCode = {
+            errorState: true,
+            errorMssg: "Maximum 2 characters allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Name = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({
+            Validations: v,
+            TwoDitgitCode: e.target.value,
+            country: country,
+          });
+        }
+        CheckName();
       }
       if (id === "ThreeDitgitCode") {
         let country = this.state.country;
         country.ThreeDitgitCode = e.target.value;
-        this.setState({ country: country });
+        if (e.target.value.length > 3) {
+          let v = this.state.Validations;
+          v.ThreeDitgitCode = {
+            errorState: true,
+            errorMssg: "Maximum 3 characters allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.ThreeDitgitCode = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({
+            Validations: v,
+            ThreeDitgitCode: e.target.value,
+            country: country,
+          });
+        }
+        CheckName();
       }
       if (id === "ZoneID") {
         let country = this.state.country;
@@ -180,7 +269,7 @@ class addcountry extends React.Component {
 
     return (
       <Fragment>
-        <Header/>
+        <Header />
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: -8, marginLeft: -10 }}>
             <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
@@ -285,10 +374,9 @@ class addcountry extends React.Component {
                             className: "textFieldCss",
                             maxlength: 50,
                           }}
-                          error={this.state.Validations.countryName.errorState}
-                          helperText={
-                            this.state.Validations.countryName.errorMsg
-                          }
+                          value={this.state.Name}
+                          error={this.state.Validations.Name.errorState}
+                          helperText={this.state.Validations.Name.errorMssg}
                         />
 
                         <Tablerowcelltextboxinput
@@ -301,6 +389,13 @@ class addcountry extends React.Component {
                             className: "textFieldCss",
                             maxlength: 20,
                           }}
+                          value={this.state.TwoDitgitCode}
+                          error={
+                            this.state.Validations.TwoDitgitCode.errorState
+                          }
+                          helperText={
+                            this.state.Validations.TwoDitgitCode.errorMssg
+                          }
                         />
 
                         <Tablerowcelltextboxinput
@@ -315,6 +410,13 @@ class addcountry extends React.Component {
                             className: "textFieldCss",
                             maxlength: 20,
                           }}
+                          value={this.state.ThreeDitgitCode}
+                          error={
+                            this.state.Validations.ThreeDitgitCode.errorState
+                          }
+                          helperText={
+                            this.state.Validations.ThreeDitgitCode.errorMssg
+                          }
                         />
 
                         <TableRow>
