@@ -36,6 +36,7 @@ class addwarehouse extends React.Component {
       ProgressLoader: false,
       GeneralDetailsExpanded: true,
       OtherDetailsExpanded: false,
+
       initialCss: "",
       branchId: 0,
       branches: [],
@@ -55,6 +56,34 @@ class addwarehouse extends React.Component {
         EmailId: null,
         PhoneNo: 0,
         IsActive: false,
+      },
+      WareHouseId: 0,
+      BranchId: 0,
+      Code: null,
+      Description: null,
+      Address: null,
+      Address2: null,
+      Address3: null,
+      IsEdi: false,
+      Ediurl: null,
+      EdiloginId: 0,
+      Edipassword: null,
+      ContactPerson: null,
+      EmailId: null,
+      PhoneNo: null,
+      IsActive: false,
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Description: { errorState: false, errorMssg: "" },
+        Address: { errorState: false, errorMssg: "" },
+        Address2: { errorState: false, errorMssg: "" },
+        Address3: { errorState: false, errorMssg: "" },
+        Ediurl: { errorState: false, errorMssg: "" },
+        EdiloginId: { errorState: false, errorMssg: "" },
+        Edipassword: { errorState: false, errorMssg: "" },
+        ContactPerson: { errorState: false, errorMssg: "" },
+        EmailId: { errorState: false, errorMssg: "" },
+        PhoneNo: { errorState: false, errorMssg: "" },
       },
     };
   }
@@ -130,35 +159,171 @@ class addwarehouse extends React.Component {
 
       if (id === "Code") {
         warehouse.Code = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 10) {
+          let v = this.state.Validations;
+          v.Code = {
+            errorState: true,
+            errorMssg: "Maximum 10 characters allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Code = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            Code: e.target.value,
+          });
+        }
       }
       if (id === "Description") {
         warehouse.Description = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Description = {
+            errorState: true,
+            errorMssg: "Maximum 50 characters allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Description = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            Description: e.target.value,
+          });
+        }
       }
       if (id === "contactPerson") {
         warehouse.ContactPerson = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.ContactPerson = {
+            errorState: true,
+            errorMssg: "Maximum 50 characters allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.ContactPerson = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            ContactPerson: e.target.value,
+          });
+        }
       }
       if (id === "phoneNo") {
         warehouse.PhoneNo = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 20) {
+          let v = this.state.Validations;
+          v.PhoneNo = {
+            errorState: true,
+            errorMssg: "Maximum 20 Numbers allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.PhoneNo = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            PhoneNo: e.target.value,
+          });
+        }
       }
       if (id === "EmailID") {
         warehouse.EmailId = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.EmailId = {
+            errorState: true,
+            errorMssg: "Maximum 50 Numbers allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.EmailId = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            EmailId: e.target.value,
+          });
+        }
       }
       if (id === "Address") {
         warehouse.Address = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Address = {
+            errorState: true,
+            errorMssg: "Maximum 50 Numbers allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Address = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            Address: e.target.value,
+          });
+        }
       }
       if (id === "Address2") {
         warehouse.Address2 = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Address2 = {
+            errorState: true,
+            errorMssg: "Maximum 50 Numbers allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Address2 = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            Address2: e.target.value,
+          });
+        }
       }
       if (id === "Address3") {
         warehouse.Address3 = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Address3 = {
+            errorState: true,
+            errorMssg: "Maximum 50 Numbers allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Address3 = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            Address3: e.target.value,
+          });
+        }
       }
       if (id === "isEDI") {
         warehouse.IsEdi = e.target.checked;
@@ -166,15 +331,66 @@ class addwarehouse extends React.Component {
       }
       if (id === "ediurl") {
         warehouse.Ediurl = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Ediurl = {
+            errorState: true,
+            errorMssg: "Maximum 50 Numbers allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Ediurl = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            Ediurl: e.target.value,
+          });
+        }
       }
       if (id === "ediloginid") {
         warehouse.EdiloginId = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.EdiloginId = {
+            errorState: true,
+            errorMssg: "Maximum 50 Numbers allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.EdiloginId = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            EdiloginId: e.target.value,
+          });
+        }
       }
       if (id === "edipassword") {
         warehouse.Edipassword = e.target.value;
-        this.setState({ warehouse: warehouse });
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Edipassword = {
+            errorState: true,
+            errorMssg: "Maximum 50 Numbers allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          let v = this.state.Validations;
+          v.Edipassword = { errorState: false, errorMssg: "" };
+          this.setState({
+            Validations: v,
+            warehouse: warehouse,
+            Edipassword: e.target.value,
+          });
+        }
       }
     };
 
@@ -296,9 +512,11 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.Code}
+                                  error={this.state.Validations.Code.errorState}
+                                  helperText={
+                                    this.state.Validations.Code.errorMssg
+                                  }
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -313,9 +531,14 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.Description}
+                                  error={
+                                    this.state.Validations.Description
+                                      .errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.Description.errorMssg
+                                  }
                                 />
                                 <Tablerowcelltextboxinput
                                   id="contactPerson"
@@ -329,12 +552,19 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.ContactPerson}
+                                  error={
+                                    this.state.Validations.ContactPerson
+                                      .errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.ContactPerson
+                                      .errorMssg
+                                  }
                                 />
 
                                 <Tablerowcelltextboxinput
+                                  type="number"
                                   id="phoneNo"
                                   label="Phone No"
                                   variant="outlined"
@@ -346,9 +576,13 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.PhoneNo}
+                                  error={
+                                    this.state.Validations.PhoneNo.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.PhoneNo.errorMssg
+                                  }
                                 />
                               </TableBody>
                             </Table>
@@ -375,9 +609,13 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.EmailId}
+                                  error={
+                                    this.state.Validations.EmailId.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.EmailId.errorMssg
+                                  }
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -390,11 +628,15 @@ class addwarehouse extends React.Component {
                                   }
                                   InputProps={{
                                     className: "textFieldCss",
-                                    maxlength: 10,
+                                    maxlength: 50,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.Address}
+                                  error={
+                                    this.state.Validations.Address.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.Address.errorMssg
+                                  }
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -409,9 +651,13 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.Address2}
+                                  error={
+                                    this.state.Validations.Address2.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.Address2.errorMssg
+                                  }
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -426,9 +672,13 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.Address3}
+                                  error={
+                                    this.state.Validations.Address3.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.Address3.errorMssg
+                                  }
                                 />
 
                                 <TableRow>
@@ -436,7 +686,7 @@ class addwarehouse extends React.Component {
                                     align="left"
                                     className="no-border-table"
                                   >
-                                  is Active?
+                                    is Active?
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -494,7 +744,7 @@ class addwarehouse extends React.Component {
                                     align="left"
                                     className="no-border-table"
                                   >
-                                     isEDI?
+                                    isEDI?
                                   </TableCell>
                                   <TableCell
                                     align="left"
@@ -518,9 +768,13 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.Ediurl}
+                                  error={
+                                    this.state.Validations.Ediurl.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.Ediurl.errorMssg
+                                  }
                                 />
                               </TableBody>
                             </Table>
@@ -547,9 +801,13 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.EdiloginId}
+                                  error={
+                                    this.state.Validations.EdiloginId.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.EdiloginId.errorMssg
+                                  }
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -565,9 +823,14 @@ class addwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  //   value={this.state.CompanyName}
-                                  //   error={this.state.Validations.companyName.errorState}
-                                  //   helperText={this.state.Validations.companyName.errorMsg}
+                                  value={this.state.Edipassword}
+                                  error={
+                                    this.state.Validations.Edipassword
+                                      .errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.Edipassword.errorMssg
+                                  }
                                 />
                               </TableBody>
                             </Table>

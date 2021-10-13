@@ -757,7 +757,7 @@ class addbranch extends React.Component {
                                                                             label="Country"
                                                                             fullWidth
 
-                                                                            value={parseInt(this.state.countryId)}
+                                                                            value={parseInt(this.state.countryId)}   
                                                                             onChange={(e) => updateFormValue('Country', e)}
                                                                         >
                                                                             <option value="-">
@@ -765,7 +765,7 @@ class addbranch extends React.Component {
                                                                             </option>
                                                                             {
                                                                                 this.state.countryData.map((item, i) => (
-                                                                                    <option value={parseInt(item.countryId)}>
+                                                                                    <option value={parseInt(item.countryId)}>   
                                                                                         {item.name}
                                                                                     </option>
                                                                                 ))

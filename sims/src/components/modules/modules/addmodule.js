@@ -37,6 +37,11 @@ class addmodule extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      CreateBtnDisable: true,
+      ModuleId: 0,
+      Name: null,
+      Description: null,
+      IconName: null,
       Module: {
         ModuleId: 0,
         Name: null,
@@ -84,6 +89,18 @@ class addmodule extends React.Component {
       }
     };
 
+    const CheckName = () => {
+      if (
+        this.state.Name === "" ||
+        this.state.Name === null ||
+        this.state.Name.length > 20
+      ) {
+        this.setState({ CreateBtnDisable: true });
+      } else {
+        this.setState({ CreateBtnDisable: false });
+      }
+    };
+
     const updateFormValue = (id, e) => {
       if (id === "Name") {
         if (e.target.value === "" || e.target.value.length > 20) {
@@ -103,8 +120,7 @@ class addmodule extends React.Component {
             };
           }
           this.setState({
-            Module: Module,
-            updateBtnDisable: true,
+            CreateBtnDisable: true,
             Validations: Validations,
           });
         } else {
@@ -114,8 +130,9 @@ class addmodule extends React.Component {
           Validations.Name = { errorState: false, errorMsg: "" };
           this.setState({
             Module: Module,
-            updateBtnDisable: false,
+            CreateBtnDisable: false,
             Validations: Validations,
+            Name: e.target.value,
           });
         }
       }
@@ -137,8 +154,6 @@ class addmodule extends React.Component {
             };
           }
           this.setState({
-            Module: Module,
-            updateBtnDisable: true,
             Validations: Validations,
           });
         } else {
@@ -146,8 +161,13 @@ class addmodule extends React.Component {
           Module.Description = e.target.value;
           let Validations = this.state.Validations;
           Validations.Description = { errorState: false, errorMsg: "" };
-          this.setState({ Module: Module, updateBtnDisable: false });
+          this.setState({
+            Module: Module,
+            CreateBtnDisable: false,
+            Description: e.target.value,
+          });
         }
+        CheckName();
       }
       if (id === "IconName") {
         if (e.target.value === "" || e.target.value.length > 50) {
@@ -167,19 +187,25 @@ class addmodule extends React.Component {
             };
           }
           this.setState({
-            Module: Module,
-            updateBtnDisable: true,
-            Validations: Validations,
+            Validations: Validations, 
           });
         } else {
           let Module = this.state.Module;
           Module.IconName = e.target.value;
-          this.setState({ Module: Module, updateBtnDisable: false });
+          let Validations = this.state.Validations;
+          Validations.IconName = { errorState: false, errorMsg: "" };
+          this.setState({
+            Module: Module,
+            CreateBtnDisable: false,
+            IconName: e.target.value,
+          });
         }
       }
+      CheckName();
     };
 
     const handleCreate = () => {
+      CheckName();
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -283,7 +309,11 @@ class addmodule extends React.Component {
           <div className="breadcrumb-bottom"></div>
           <Grid container spacing={3}>
             <Grid className="style-buttons" xs={1}>
-              <Button style={{ marginLeft: 5 }} onClick={handleCreate}>
+              <Button
+                style={{ marginLeft: 5 }}
+                onClick={handleCreate}
+                disabled={this.state.CreateBtnDisable}
+              >
                 Create
               </Button>
             </Grid>
@@ -330,8 +360,9 @@ class addmodule extends React.Component {
                           onChange={(e) => updateFormValue("Name", e)}
                           InputProps={{
                             className: "textFieldCss",
+                            maxlength: 20,
                           }}
-                          value={this.state.gstcode}
+                          value={this.state.Name}
                           error={this.state.Validations.Name.errorState}
                           helperText={this.state.Validations.Name.errorMsg}
                         />
@@ -344,7 +375,7 @@ class addmodule extends React.Component {
                           InputProps={{
                             className: "textFieldCss",
                           }}
-                          //value={this.state.gstcode}
+                          value={this.state.Description}
                           error={this.state.Validations.Description.errorState}
                           helperText={
                             this.state.Validations.Description.errorMsg
@@ -359,7 +390,7 @@ class addmodule extends React.Component {
                           InputProps={{
                             className: "textFieldCss",
                           }}
-                          //value={this.state.gstcode}
+                          value={this.state.IconName}
                           error={this.state.Validations.IconName.errorState}
                           helperText={this.state.Validations.IconName.errorMsg}
                         />

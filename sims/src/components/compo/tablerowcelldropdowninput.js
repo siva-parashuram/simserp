@@ -22,7 +22,7 @@ class tablerowcelldropdowninput extends React.Component {
                         label={this.props.label}
                         fullWidth
                         value={isNaN(this.props.value) ? this.props.value : parseInt(this.props.value)}
-                        onChange={this.props.onChange}
+                        onChange={this.props.onChange}   
                     >
                         {this.props.value === null ? (
                             <option value="0">

@@ -37,7 +37,7 @@ class editmodule extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
-      updateBtnDisable: false,
+      updateBtnDisable: true,
       Module: {
         ModuleId: 0,
         Name: null,
@@ -137,6 +137,18 @@ class editmodule extends React.Component {
       }
     };
 
+    const CheckName = () => {
+      if (
+        this.state.Name === "" ||
+        this.state.Name === null ||
+        this.state.Name.length > 20
+      ) {
+        this.setState({ updateBtnDisable: true });
+      } else {
+        this.setState({ updateBtnDisable: false });
+      }
+    };
+
     const updateFormValue = (id, e) => {
       if (id === "Name") {
         if (e.target.value === "" || e.target.value.length > 20) {
@@ -157,7 +169,7 @@ class editmodule extends React.Component {
           }
           this.setState({
             Module: Module,
-            Name: e.target.value,
+
             updateBtnDisable: true,
             Validations: Validations,
           });
@@ -193,7 +205,7 @@ class editmodule extends React.Component {
           }
           this.setState({
             Module: Module,
-            Description: e.target.value,
+
             updateBtnDisable: true,
             Validations: Validations,
           });
@@ -208,6 +220,7 @@ class editmodule extends React.Component {
             updateBtnDisable: false,
           });
         }
+        CheckName();
       }
       if (id === "IconName") {
         if (e.target.value === "" || e.target.value.length > 50) {
@@ -228,7 +241,7 @@ class editmodule extends React.Component {
           }
           this.setState({
             Module: Module,
-            IconName: e.target.value,
+
             updateBtnDisable: true,
             Validations: Validations,
           });
@@ -242,9 +255,11 @@ class editmodule extends React.Component {
           });
         }
       }
+      CheckName();
     };
 
     const handleUpdate = () => {
+      CheckName();
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
