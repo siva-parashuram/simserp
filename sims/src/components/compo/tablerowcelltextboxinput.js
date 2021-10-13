@@ -29,6 +29,7 @@ class tablerowcelltextboxinput extends React.Component {
                     InputProps={this.props.InputProps}
                     error={this.props.error}
                     helperText={this.props.helperText}
+                    disabled={this.props.disabled}
                     />
                 </TableCell>
             </TableRow>

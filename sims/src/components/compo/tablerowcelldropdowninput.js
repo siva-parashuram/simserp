@@ -13,7 +13,7 @@ class tablerowcelldropdowninput extends React.Component {
     componentDidMount() { }
     render() {
         return (
-            <TableRow>   {console.log("this.props > ", this.props)}
+            <TableRow>   
                 <TableCell align="left" className="no-border-table">{this.props.label}</TableCell>
                 <TableCell align="left" className="no-border-table">
                     <select
