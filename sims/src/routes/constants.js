@@ -39,6 +39,7 @@ export const URLS = {
   editNumbering:"/editNumbering",
   currencyMaster:"/currencyMaster",
   addCurrency:"/addCurrency",
+  coa:"/coa",
 };
 
 

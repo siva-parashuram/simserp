@@ -25,6 +25,8 @@ import Divider from '@material-ui/core/Divider';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import BranchQuickDetails from "./branchquickdetails";
+
 
 
 class branchMaster extends React.Component {
@@ -37,7 +39,8 @@ class branchMaster extends React.Component {
             branchData: [],
             ErrorPrompt: false,
             SuccessPrompt: false,
-
+            branchItem:{},
+            editUrl:null,
         };
     }
 
@@ -78,8 +81,12 @@ class branchMaster extends React.Component {
             .then(response => {
                 let data = response.data;
                 console.log("getBranches > response > data > ", data);
-
-                this.setState({ branchData: data, ProgressLoader: true });
+                this.setState({ branchData: data, ProgressLoader: true },()=>{
+                    if(this.state.branchData.length>0){
+                        this.InitialhandleRowClick(null,data[0],"row_0");
+                    }
+                    
+                });
             }
             ).catch(error => {
                 console.log("error > ", error);
@@ -88,10 +95,28 @@ class branchMaster extends React.Component {
 
     }
 
+    InitialhandleRowClick (e, item, id){
+        console.log("handleRowClick > id > ",id);
+        console.log("handleRowClick > vitem > ",item);
+        let editUrl=URLS.URLS.editBranch+this.state.urlparams + "&editbranchId=" + item.branchId;
+        this.setState({branchItem:item,editUrl:editUrl});
+        this.InitialremoveIsSelectedRowClasses();
+        document.getElementById(id).classList.add('selectedRow');
+    }
+
+    InitialremoveIsSelectedRowClasses(){
+        for (let i = 0; i < this.state.branchData.length; i++) {
+            document.getElementById('row_' + i).className = '';
+        }
+    }
+
     render() {
 
         const handleRowClick = (e, item, id) => {
-
+            console.log("handleRowClick > id > ",id);
+            console.log("handleRowClick > vitem > ",item);
+            let editUrl=URLS.URLS.editBranch+this.state.urlparams + "&editbranchId=" + item.branchId;
+            this.setState({branchItem:item,editUrl:editUrl});
             removeIsSelectedRowClasses();
             document.getElementById(id).classList.add('selectedRow');
         }
@@ -125,7 +150,7 @@ class branchMaster extends React.Component {
         return (
             <Fragment>
                 <Header/>
-                {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+                {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}> 
                     <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
@@ -151,24 +176,18 @@ class branchMaster extends React.Component {
                         </Grid>
                     </Grid>
                     <div className="breadcrumb-bottom"></div>
+                    {/*
                     <Grid container spacing={0}>
-                        <Grid className="style-all-Links" xs={1}>
-                            <Link className="style-link" href={URLS.URLS.addBranch + this.state.urlparams}>NEW</Link>
-                            {/* <Button
-                            style={{ marginLeft: 5 }}
-                            startIcon={<AddIcon />}
-                        >
-                            <a className="button-link" href={URLS.URLS.addBranch + this.state.urlparams}>
-                                New
-                            </a>
-                        </Button> */}
+                        <Grid className="style-all-Links" xs={1}>                           
+                         <Link className="style-link" href={URLS.URLS.addBranch + this.state.urlparams}>NEW</Link>
                         </Grid>
                     </Grid>
+                    */}
                     <div className="New-link-bottom"></div>
                     <Grid className="table-adjust" container spacing={0}>
-                        <Grid   xs={12} sm={12} md={8} lg={8}>
+                        <Grid   xs={12} sm={12} md={7} lg={7}>
                             <Grid container spacing={0}>
-                                <Grid xs={12} sm={12} md={10} lg={10}>
+                                <Grid xs={12} sm={12} md={11} lg={11}>
                                     <Table stickyHeader size="small" className="" aria-label="Country List table">
                                         <TableHead className="table-header-background">
                                             <TableRow>
@@ -208,8 +227,15 @@ class branchMaster extends React.Component {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={4} lg={4}>
-
+                        <Grid xs={12} sm={12} md={5} lg={5}>
+                            <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                    {this.state.branchItem && Object.keys(this.state.branchItem).length === 0 && Object.getPrototypeOf(this.state.branchItem) === Object.prototype ?null:(
+                                        <BranchQuickDetails new={URLS.URLS.addBranch + this.state.urlparams} edit={this.state.editUrl} branchItem={this.state.branchItem}/>
+                                    )}
+                                   
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
 

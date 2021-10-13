@@ -20,6 +20,21 @@ body{
     overflow-x: hidden;
 }
 
+.mini-branch-logo-css{
+  width: 120px !important;
+  height: 30px !important;
+}
+
+
+.btn-bottom-border-color{
+  color: rgb(0, 126, 135) !important;
+  border-bottom-style: solid !important;
+  border-bottom-color: rgb(0, 126, 135) !important;
+  border-bottom-width: 3px !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
 .notification-alert{
   margin-bottom: -12px !important; 
   
@@ -232,7 +247,7 @@ body{
   color:#009688 !important;
   font-weight: 545 !important;
   text-transform: uppercase !important;
-  
+  background-color: #fff !important;
 }
 
 .tableBody:hover{
@@ -241,6 +256,7 @@ cursor: pointer;
 
 .table-header-background{
   background-color: #eeeeee !important;
+   
 }
 
 .selectedRow{
