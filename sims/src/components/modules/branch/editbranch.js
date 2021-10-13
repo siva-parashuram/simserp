@@ -178,6 +178,11 @@ class editbranch extends React.Component {
       IsSEZ:false,
       IsExportUnit:false,
       CurrID:null,
+
+      VATNoDisabled:true,
+      VATPercentageDisabled:true,
+      GSTNoDisabled:true,
+
       Validations: {
         name: { errorState: false, errorMsg: "" },
         shortName: { errorState: false, errorMsg: "" },
@@ -375,6 +380,7 @@ class editbranch extends React.Component {
       RVNo: data.rvno,
       EffectiveDate:moment(data.effectiveDate).format("YYYY-MM-DD"),
       IsVat:data.isVat===null?false:data.isVat,
+      isGst:data.isGst===null?false:data.isGst,
       VATNo:data.vatno,
       VATRegistrationNo:null,
       VATPercentage:data.vatpercentage,
@@ -734,6 +740,61 @@ class editbranch extends React.Component {
         ValidateName();
       }
 
+      //----------------TAXATION------------
+
+      if (id === "VATNo") {
+        let branch = this.state.branch;
+        branch.VATNo = e.target.value;
+        this.setState({ branch: branch, VATNo: e.target.value });
+      }
+      if (id === "VATPercentage") {
+        let branch = this.state.branch;
+        branch.VATPercentage = e.target.value;
+        this.setState({ branch: branch, VATPercentage: e.target.value });
+      }
+      if (id === "GSTNo") {
+        let branch = this.state.branch;
+        branch.GSTNo = e.target.value;
+        this.setState({ branch: branch, GSTNo: e.target.value });
+      }
+      if (id === "PANNo") {
+        let branch = this.state.branch;
+        branch.PANNo = e.target.value;
+        this.setState({ branch: branch, PANNo: e.target.value });
+      }
+      if (id === "TANNo") {
+        let branch = this.state.branch;
+        branch.TANNo = e.target.value;
+        this.setState({ branch: branch, TANNo: e.target.value });
+      }
+      if (id === "CINNo") {
+        let branch = this.state.branch;
+        branch.CINNo = e.target.value;
+        this.setState({ branch: branch, CINNo: e.target.value });
+      }
+      if (id === "IECNo") {
+        let branch = this.state.branch;
+        branch.IECNo = e.target.value;
+        this.setState({ branch: branch, IECNo: e.target.value });
+      }
+      if (id === "ARNNo") {
+        let branch = this.state.branch;
+        branch.ARNNo = e.target.value;
+        this.setState({ branch: branch, ARNNo: e.target.value });
+      }
+      if (id === "IsSEZ") {
+        let branch = this.state.branch;
+        console.log("IsSEZ set > this.state > ",this.state);
+        console.log("IsSEZ set > branch > ",branch);
+        branch.IsSEZ = e.target.checked;
+        this.setState({ branch: branch, IsSEZ: e.target.checked });
+      }
+      if (id === "IsExportUnit") {
+        let branch = this.state.branch;
+        branch.IsExportUnit = e.target.checked;
+        this.setState({ branch: branch, IsExportUnit: e.target.checked });
+      }
+
 
        //---------------Numbering-----------
       if (id === "PINo") {
@@ -858,6 +919,39 @@ class editbranch extends React.Component {
 
 
     }
+
+
+    // VATNoDisabled:true,
+    //   VATPercentageDisabled:true,
+
+    const VAT_GST_Checkbox_Click=(e,param)=>{
+      console.log("param > ",param);
+      console.log("e.target.checked > ",e.target.checked);
+      if(param==="isvat"){
+        let branch = this.state.branch;
+        
+           if(e.target.checked===true){
+            branch.isVat=true;
+             this.setState({VATNoDisabled:false,VATPercentageDisabled:false,branch:branch});
+           }
+           if(e.target.checked===false){
+            branch.isVat=false;
+            this.setState({VATNoDisabled:true,VATPercentageDisabled:true,branch:branch});
+           }
+      }
+      if(param==="isgst"){
+        let branch = this.state.branch;
+        if(e.target.checked===true){
+          branch.isGst=true;
+          this.setState({GSTNoDisabled:false,IsGST:true,branch:branch});
+        }
+        if(e.target.checked===false){
+          branch.isGst=false;
+          this.setState({GSTNoDisabled:true,IsGST:false,branch:branch});
+        }
+      }
+    }
+
 
     const handleupdate = () => {
       ValidateName();
@@ -1338,13 +1432,164 @@ class editbranch extends React.Component {
                       <Typography key="" className="accordion-Header-Title">Taxation Details</Typography>
                     </AccordionSummary>
                     <AccordionDetails key=""  className="AccordionDetails-css">
-                      <TableContainer>
+                    <Grid container spacing={2}>
+                    <Grid xs={12} sm={12} md={6} lg={6}> 
+                    <TableContainer>
+                            <Table stickyHeader size="small" className="accordion-table" aria-label="Taxation table">
+                              <TableBody className="tableBody">
+                                <Tablerowcelltextboxinput
+                                  id="PANNo"
+                                  label="PAN No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('PANNo', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.PANNo}                                 
+                                />
+                                <Tablerowcelltextboxinput
+                                  id="TANNo"
+                                  label="TAN No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('TANNo', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.TANNo}                                 
+                                />
+                                <Tablerowcelltextboxinput
+                                  id="CINNo"
+                                  label="CIN No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('CINNo', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.CINNo}                                 
+                                />
+                                <Tablerowcelltextboxinput
+                                  id="IECNo"
+                                  label="IEC No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('IECNo', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.IECNo}                                 
+                                />
+                                <Tablerowcelltextboxinput
+                                  id="ARNNo"
+                                  label="ARN No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('ARNNo', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.ARNNo}                                 
+                                />
+
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">
+                                    Is SEZ?
+                                  </TableCell>
+                                  <TableCell align="left" className="no-border-table">
+                                    <input type="checkbox"  onChange={(e) => updateFormValue('IsSEZ', e)}  checked={this.state.IsSEZ}/>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">
+                                  Is Export Unit?
+                                  </TableCell>
+                                  <TableCell align="left" className="no-border-table">
+                                    <input type="checkbox"  onChange={(e) => updateFormValue('IsExportUnit', e)}  checked={this.state.IsExportUnit}/>
+                                  </TableCell>
+                                </TableRow>
+
+                              </TableBody>
+                            </Table>
+                      </TableContainer>
+                    </Grid>
+                    <Grid xs={12} sm={12} md={6} lg={6}> 
+                    <TableContainer>
                         <Table stickyHeader size="small" className="accordion-table" aria-label="Taxation table">
-                          <TableBody className="tableBody">
+                          <TableBody className="tableBody">      
+
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">
+                                    Is VAT?
+                                  </TableCell>
+                                  <TableCell align="left" className="no-border-table">
+                                    <input type="checkbox" onClick={(e)=>VAT_GST_Checkbox_Click(e,'isvat')}  checked={this.state.IsVat}/>
+                                  </TableCell>
+                                </TableRow>
+
+                                 <Tablerowcelltextboxinput
+                                  id="VATNo"
+                                  label="VAT No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('VATNo', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.VATNo}   
+                                  disabled={this.state.VATNoDisabled}                              
+                                />
+                                <Tablerowcelltextboxinput
+                                  id="VATPercentage"
+                                  label="VAT Percentage"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('VATPercentage', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.VATPercentage}  
+                                  disabled={this.state.VATPercentageDisabled}                                    
+                                />
+
+
+                                <TableRow>
+                                  <TableCell align="left" className="no-border-table">
+                                    Is GST?
+                                  </TableCell>
+                                  <TableCell align="left" className="no-border-table">
+                                    <input type="checkbox"  onClick={(e)=>VAT_GST_Checkbox_Click(e,'isgst')} checked={this.state.IsGST}/>
+                                  </TableCell>
+                                </TableRow>
+
+                                <Tablerowcelltextboxinput
+                                  id="GSTNo"
+                                  label="GST No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue('GSTNo', e)}
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50
+                                  }}
+                                  value={this.state.GSTNo}   
+                                  disabled={this.state.GSTNoDisabled}                              
+                                />
 
                           </TableBody>
                         </Table>
                       </TableContainer>
+                    </Grid>
+                    </Grid>
+                      
                     </AccordionDetails>
                   </Accordion>
                   <Accordion key="company-Numbering" expanded={this.state.NumberingExpanded} >
