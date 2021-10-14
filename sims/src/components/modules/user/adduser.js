@@ -134,12 +134,23 @@ class adduser extends React.Component {
       if (id === "FirstName") {
         let user = this.state.user;
         user.FirstName = e.target.value;
-        if (e.target.value.length > 20) {
+        if (
+          e.target.value === "" ||
+          (e.target.value === null) | (e.target.value.length > 20)
+        ) {
           let v = this.state.Validations;
-          v.FirstName = {
-            errorState: true,
-            errorMssg: "only 20 characters are allowed",
-          };
+          if (e.target.value.length > 20) {
+            v.FirstName = {
+              errorState: true,
+              errorMssg: "only 20 characters are allowed",
+            };
+          }
+          if (e.target.value === "" || e.target.value === null) {
+            v.FirstName = {
+              errorState: true,
+              errorMssg: "FirstName cannot be blank!",
+            };
+          }
           this.setState({
             Validations: v,
             DisabledCreatebtn: true,
