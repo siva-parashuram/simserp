@@ -183,8 +183,7 @@ class branchMaster extends React.Component {
                                 </Link>
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
-                                </Link>
-                               
+                                </Link>                               
                                 <Typography color="textPrimary">Branch master</Typography>
                             </Breadcrumbs>
                             </div>                            
@@ -195,8 +194,7 @@ class branchMaster extends React.Component {
                                  <Button
                                      className="action-btns"
                                      startIcon ={<AddIcon/>}                                               
-                                     onClick={(e) => openPage(URLS.URLS.addBranch + this.state.urlparams)}
-                                     
+                                     onClick={(e) => openPage(URLS.URLS.addBranch + this.state.urlparams)}                                     
                                      >New</Button>
                                  <Button
                                  className="action-btns"
@@ -205,35 +203,14 @@ class branchMaster extends React.Component {
                                      >Edit</Button> 
                              </ButtonGroup>
                             </div>                           
-                        </Grid>
-
-{/*
-                        <Grid item xs={12}>
-                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
-                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
-                                    Back
-                                </Link>
-                                <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
-                                    Dashboard
-                                </Link>
-                                <Typography color="textPrimary">Branch master</Typography>
-                            </Breadcrumbs>
-                        </Grid>
-                        */}
+                        </Grid> 
                     </Grid>
-                    <div className="breadcrumb-bottom"></div>
-                    {/*
-                    <Grid container spacing={0}>
-                        <Grid className="style-all-Links" xs={1}>                           
-                         <Link className="style-link" href={URLS.URLS.addBranch + this.state.urlparams}>NEW</Link>
-                        </Grid>
-                    </Grid>
-                    */}
+                    <div className="breadcrumb-bottom"></div>                   
                     <div className="New-link-bottom"></div>
                     <Grid className="table-adjust" container spacing={0}>
-                        <Grid   xs={12} sm={12} md={7} lg={7}>
+                        <Grid   xs={12} sm={12} md={8} lg={8}>
                             <Grid container spacing={0}>
-                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                <Grid xs={12} sm={12} md={12} lg={12}>
                                     <Table stickyHeader size="small" className="" aria-label="Country List table">
                                         <TableHead className="table-header-background">
                                             <TableRow>
@@ -264,18 +241,16 @@ class branchMaster extends React.Component {
 
                                                         {item.company ? item.company.companyName ? item.company.companyName : "-" : "-"}
                                                     </TableCell>
-
                                                 </TableRow>
-
                                             ))}
                                         </TableBody>
                                     </Table>
-
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={5} lg={5}>
+                        <Grid xs={12} sm={12} md={4} lg={4}>
                             <Grid container spacing={0}>
+                            <Grid xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
                                 <Grid xs={12} sm={12} md={11} lg={11}>
                                     {this.state.branchItem && Object.keys(this.state.branchItem).length === 0 && Object.getPrototypeOf(this.state.branchItem) === Object.prototype ?null:(
                                         <Fragment>
@@ -283,8 +258,7 @@ class branchMaster extends React.Component {
                                              
                                         </Fragment>
                                        
-                                    )}
-                                   
+                                    )}                                   
                                 </Grid>
                             </Grid>
                         </Grid>

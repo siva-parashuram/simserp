@@ -49,17 +49,13 @@ class branchquickdetails extends React.Component {
                     <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
                         <ButtonGroup variant="text" aria-label="text button group">
                             <Button
-                                
                                 startIcon={<InfoIcon />}
                                 className={this.state.detailsUnderlineBtnCss}
                                 onClick={(e) => customTabButton(e, "details")}>Details</Button>
                             <Button
-                                
                                 startIcon={<AttachFileIcon />}
                                 className={this.state.attachmentUnderlineBtnCss}
                                 onClick={(e) => customTabButton(e, "attachments")}>Attachments</Button>
-                           
-
                         </ButtonGroup>
                     </Grid>
                 </Grid>
@@ -77,7 +73,6 @@ class branchquickdetails extends React.Component {
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="table">
                                             <TableBody className="tableBody">
-                                                 
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">Effective Date</TableCell>
                                                     <TableCell align="right" className="no-border-table"> {this.props.branchItem.effectiveDate ? moment(this.props.branchItem.effectiveDate).format("MM/DD/YYYY") : "-"}</TableCell>
@@ -109,61 +104,60 @@ class branchquickdetails extends React.Component {
                                     <div style={{ height: 20 }}></div>
                                 </Grid>
                             </Grid>
-                            <Grid container spacing={0} style={{marginLeft:15}}>
-                                <Grid  item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
-                                <Grid container spacing={1} >
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                    <div key="paymentPendingLink" to="#" className="card-link">
-                                        <Card className="dash-activity-card2" raised={false}>
-                                            <CardContent>
-                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
-                                                   Total Customers 
-                                                </Typography>
-                                                <Typography variant="h4" component="h2" className="dashComp-card2-h5">
-                                                    870
-                                                </Typography>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
+                            <Grid container spacing={0} style={{ marginLeft: 15 }}>
+                                <Grid item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                                    <Grid container spacing={1} >
+                                        <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                            <div key="paymentPendingLink" to="#" className="card-link">
+                                                <Card className="dash-activity-card2" raised={false}>
+                                                    <CardContent>
+                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
+                                                            Total Customers
+                                                        </Typography>
+                                                        <Typography >
+                                                            870
+                                                        </Typography>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                            <div key="paymentPendingLink" to="#" className="card-link">
+                                                <Card className="dash-activity-card2" raised={false}>
+                                                    <CardContent>
+                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
+                                                            Total Sales
+                                                        </Typography>
+                                                        <Typography>
+                                                            5,735
+                                                        </Typography>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                            <div key="paymentPendingLink" to="#" className="card-link">
+                                                <Card className="dash-activity-card2" raised={false}>
+                                                    <CardContent>
+                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
+                                                            Purchase Order Raised
+                                                        </Typography>
+                                                        <Typography>
+                                                            1,766
+                                                        </Typography>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                    <div key="paymentPendingLink" to="#" className="card-link">
-                                        <Card className="dash-activity-card2" raised={false}>
-                                            <CardContent>
-                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
-                                                   Total Sales
-                                                </Typography>
-                                                <Typography variant="h4" component="h2" className="dashComp-card2-h5">
-                                                    5,735
-                                                </Typography>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                    <div key="paymentPendingLink" to="#" className="card-link">
-                                        <Card className="dash-activity-card2" raised={false}>
-                                            <CardContent>
-                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
-                                                   Purchase Order Raised
-                                                </Typography>
-                                                <Typography variant="h4" component="h2" className="dashComp-card2-h5">
-                                                   1,766
-                                                </Typography>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                </Grid>
-                                </Grid>
-                                </Grid>
-                                
+
                             </Grid>
                         </Fragment>
 
                     ) : null}
                     {this.state.showAttachments === true ? (
                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-
                             <TableContainer>
                                 <Table stickyHeader size="small" className="accordion-table" aria-label="table">
                                     <TableBody className="tableBody">
