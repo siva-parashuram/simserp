@@ -17,13 +17,15 @@ import Link from '@material-ui/core/Link';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Divider from '@material-ui/core/Divider';
-
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+ 
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 import BranchQuickDetails from "./branchquickdetails";
 
@@ -147,6 +149,14 @@ class branchMaster extends React.Component {
         }
 
 
+        const openPage = (url) => {
+            console.log("url > ", url);
+
+            this.setState({ ProgressLoader: false });
+            window.location = url;
+        }
+
+
         return (
             <Fragment>
                 <Header/>
@@ -161,7 +171,38 @@ class branchMaster extends React.Component {
                 </Snackbar>
 
                 <div className='breadcrumb-height'>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={1}>
+                        <Grid xs={12} sm={12} md={3} lg={3} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
+                            <div style={{marginTop:8}}>
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
+                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
+                                    Back
+                                </Link>
+                                <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
+                                    Dashboard
+                                </Link>
+                                <Typography color="textPrimary">Branch master</Typography>
+                            </Breadcrumbs>
+                            </div>                            
+                        </Grid>
+                        <Grid xs={12} sm={12} md={9} lg={9}>
+                            <div style={{marginLeft:10,marginTop:1}}>
+                            <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
+                                 <Button
+                                     className="action-btns"
+                                     startIcon ={<AddIcon/>}                                               
+                                     onClick={(e) => openPage(URLS.URLS.addBranch + this.state.urlparams)}
+                                     >New</Button>
+                                 <Button
+                                 className="action-btns"
+                                     startIcon ={<EditIcon/>}                                               
+                                     onClick={(e) => openPage(this.state.editUrl)}
+                                     >Edit</Button> 
+                             </ButtonGroup>
+                            </div>                           
+                        </Grid>
+
+{/*
                         <Grid item xs={12}>
                             <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
@@ -172,8 +213,8 @@ class branchMaster extends React.Component {
                                 </Link>
                                 <Typography color="textPrimary">Branch master</Typography>
                             </Breadcrumbs>
-
                         </Grid>
+                        */}
                     </Grid>
                     <div className="breadcrumb-bottom"></div>
                     {/*

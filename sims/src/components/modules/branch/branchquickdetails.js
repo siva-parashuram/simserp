@@ -49,19 +49,16 @@ class branchquickdetails extends React.Component {
                     <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
                         <ButtonGroup variant="text" aria-label="text button group">
                             <Button
+                                
                                 startIcon={<InfoIcon />}
                                 className={this.state.detailsUnderlineBtnCss}
                                 onClick={(e) => customTabButton(e, "details")}>Details</Button>
                             <Button
+                                
                                 startIcon={<AttachFileIcon />}
                                 className={this.state.attachmentUnderlineBtnCss}
                                 onClick={(e) => customTabButton(e, "attachments")}>Attachments</Button>
-                            <Button
-                                // startIcon ={<AttachFileIcon/>}                                               
-                                onClick={(e) => openPage(this.props.new)}>New</Button>
-                            <Button
-                                // startIcon ={<AttachFileIcon/>}                                               
-                                onClick={(e) => openPage(this.props.edit)}>Edit</Button>
+                           
 
                         </ButtonGroup>
                     </Grid>
@@ -71,8 +68,6 @@ class branchquickdetails extends React.Component {
                         <div style={{ height: 20 }}></div>
                     </Grid>
                 </Grid>
-
-
                 <Grid container spacing={0}>
                     {this.state.showDetails === true ? (
                         <Fragment>
@@ -114,23 +109,55 @@ class branchquickdetails extends React.Component {
                                     </TableContainer>
                                 </Grid>
                             </Grid>
-                            <Grid container spacing={0} >
+                            <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                                    <div style={{ height: 20 }}></div>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={0} style={{marginLeft:15}}>
                                 <Grid  item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
-                                <Grid container spacing={0} >
-                                <Grid item xs={12} sm={12} md={4} lg={4}  >
+                                <Grid container spacing={1} >
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
                                     <div key="paymentPendingLink" to="#" className="card-link">
                                         <Card className="dash-activity-card2" raised={false}>
                                             <CardContent>
                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
-                                                    Sales Quotes
+                                                   Total Customers 
                                                 </Typography>
                                                 <Typography variant="h4" component="h2" className="dashComp-card2-h5">
-                                                    5000
+                                                    870
                                                 </Typography>
                                             </CardContent>
                                         </Card>
                                     </div>
-
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                    <div key="paymentPendingLink" to="#" className="card-link">
+                                        <Card className="dash-activity-card2" raised={false}>
+                                            <CardContent>
+                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
+                                                   Total Sales
+                                                </Typography>
+                                                <Typography variant="h4" component="h2" className="dashComp-card2-h5">
+                                                    5,735
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                    <div key="paymentPendingLink" to="#" className="card-link">
+                                        <Card className="dash-activity-card2" raised={false}>
+                                            <CardContent>
+                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
+                                                   Purchase Order Raised
+                                                </Typography>
+                                                <Typography variant="h4" component="h2" className="dashComp-card2-h5">
+                                                   1,766
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
                                 </Grid>
                                 </Grid>
                                 </Grid>

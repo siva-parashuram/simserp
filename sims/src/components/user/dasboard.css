@@ -25,6 +25,11 @@ body{
   height: 30px !important;
 }
 
+.action-btns{
+  color: rgb(0, 126, 135) !important;
+  border-right-style: none !important;
+}
+
 
 .btn-bottom-border-color{
   color: rgb(0, 126, 135) !important;
