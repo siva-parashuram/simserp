@@ -77,12 +77,7 @@ class branchquickdetails extends React.Component {
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="table">
                                             <TableBody className="tableBody">
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">&nbsp;</TableCell>
-                                                    <TableCell align="right" className="no-border-table">
-                                                        <img className="mini-branch-logo-css" src={branchlogo} />
-                                                    </TableCell>
-                                                </TableRow>
+                                                 
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">Effective Date</TableCell>
                                                     <TableCell align="right" className="no-border-table"> {this.props.branchItem.effectiveDate ? moment(this.props.branchItem.effectiveDate).format("MM/DD/YYYY") : "-"}</TableCell>

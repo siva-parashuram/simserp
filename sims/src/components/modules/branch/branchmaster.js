@@ -35,6 +35,7 @@ class branchMaster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            
             isLoggedIn: false,
             ProgressLoader: false,
             urlparams: null,
@@ -115,6 +116,7 @@ class branchMaster extends React.Component {
     render() {
 
         const handleRowClick = (e, item, id) => {
+            this.setState({selectedRow:id});
             console.log("handleRowClick > id > ",id);
             console.log("handleRowClick > vitem > ",item);
             let editUrl=URLS.URLS.editBranch+this.state.urlparams + "&editbranchId=" + item.branchId;
@@ -149,18 +151,19 @@ class branchMaster extends React.Component {
         }
 
 
-        const openPage = (url) => {
-            console.log("url > ", url);
-
+        const openPage = (url) => {             
             this.setState({ ProgressLoader: false });
             window.location = url;
         }
 
+         
 
         return (
             <Fragment>
                 <Header/>
-                {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+                {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress
+                className="linearProgress-css"
+                /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}> 
                     <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
@@ -172,7 +175,7 @@ class branchMaster extends React.Component {
 
                 <div className='breadcrumb-height'>
                     <Grid container spacing={1}>
-                        <Grid xs={12} sm={12} md={3} lg={3} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
+                        <Grid xs={12} sm={12} md={4} lg={4} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
                             <div style={{marginTop:8}}>
                             <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
@@ -181,17 +184,19 @@ class branchMaster extends React.Component {
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
                                 </Link>
+                               
                                 <Typography color="textPrimary">Branch master</Typography>
                             </Breadcrumbs>
                             </div>                            
                         </Grid>
-                        <Grid xs={12} sm={12} md={9} lg={9}>
+                        <Grid xs={12} sm={12} md={8} lg={8}>
                             <div style={{marginLeft:10,marginTop:1}}>
                             <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
                                  <Button
                                      className="action-btns"
                                      startIcon ={<AddIcon/>}                                               
                                      onClick={(e) => openPage(URLS.URLS.addBranch + this.state.urlparams)}
+                                     
                                      >New</Button>
                                  <Button
                                  className="action-btns"
@@ -245,6 +250,7 @@ class branchMaster extends React.Component {
                                                     hover
                                                     key={i}
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
+                                                    
                                                 >
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >
