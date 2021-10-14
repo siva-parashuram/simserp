@@ -17,13 +17,15 @@ import Link from '@material-ui/core/Link';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Divider from '@material-ui/core/Divider';
-
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+ 
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 import BranchQuickDetails from "./branchquickdetails";
 
@@ -33,6 +35,7 @@ class branchMaster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            
             isLoggedIn: false,
             ProgressLoader: false,
             urlparams: null,
@@ -113,6 +116,7 @@ class branchMaster extends React.Component {
     render() {
 
         const handleRowClick = (e, item, id) => {
+            this.setState({selectedRow:id});
             console.log("handleRowClick > id > ",id);
             console.log("handleRowClick > vitem > ",item);
             let editUrl=URLS.URLS.editBranch+this.state.urlparams + "&editbranchId=" + item.branchId;
@@ -147,10 +151,19 @@ class branchMaster extends React.Component {
         }
 
 
+        const openPage = (url) => {             
+            this.setState({ ProgressLoader: false });
+            window.location = url;
+        }
+
+         
+
         return (
             <Fragment>
                 <Header/>
-                {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+                {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress
+                className="linearProgress-css"
+                /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}> 
                     <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
@@ -161,33 +174,43 @@ class branchMaster extends React.Component {
                 </Snackbar>
 
                 <div className='breadcrumb-height'>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
+                    <Grid container spacing={1}>
+                        <Grid xs={12} sm={12} md={4} lg={4} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
+                            <div style={{marginTop:8}}>
                             <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
                                 </Link>
                                 <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                                     Dashboard
-                                </Link>
+                                </Link>                               
                                 <Typography color="textPrimary">Branch master</Typography>
                             </Breadcrumbs>
-
+                            </div>                            
                         </Grid>
+                        <Grid xs={12} sm={12} md={8} lg={8}>
+                            <div style={{marginLeft:10,marginTop:1}}>
+                            <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
+                                 <Button
+                                     className="action-btns"
+                                     startIcon ={<AddIcon/>}                                               
+                                     onClick={(e) => openPage(URLS.URLS.addBranch + this.state.urlparams)}                                     
+                                     >New</Button>
+                                 <Button
+                                 className="action-btns"
+                                     startIcon ={<EditIcon/>}                                               
+                                     onClick={(e) => openPage(this.state.editUrl)}
+                                     >Edit</Button> 
+                             </ButtonGroup>
+                            </div>                           
+                        </Grid> 
                     </Grid>
-                    <div className="breadcrumb-bottom"></div>
-                    {/*
-                    <Grid container spacing={0}>
-                        <Grid className="style-all-Links" xs={1}>                           
-                         <Link className="style-link" href={URLS.URLS.addBranch + this.state.urlparams}>NEW</Link>
-                        </Grid>
-                    </Grid>
-                    */}
+                    <div className="breadcrumb-bottom"></div>                   
                     <div className="New-link-bottom"></div>
                     <Grid className="table-adjust" container spacing={0}>
-                        <Grid   xs={12} sm={12} md={7} lg={7}>
+                        <Grid   xs={12} sm={12} md={8} lg={8}>
                             <Grid container spacing={0}>
-                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                <Grid xs={12} sm={12} md={12} lg={12}>
                                     <Table stickyHeader size="small" className="" aria-label="Country List table">
                                         <TableHead className="table-header-background">
                                             <TableRow>
@@ -204,6 +227,7 @@ class branchMaster extends React.Component {
                                                     hover
                                                     key={i}
                                                     onClick={(event) => handleRowClick(event, item, "row_" + i)}
+                                                    
                                                 >
                                                     <TableCell align="left">
                                                         <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >
@@ -217,18 +241,16 @@ class branchMaster extends React.Component {
 
                                                         {item.company ? item.company.companyName ? item.company.companyName : "-" : "-"}
                                                     </TableCell>
-
                                                 </TableRow>
-
                                             ))}
                                         </TableBody>
                                     </Table>
-
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid xs={12} sm={12} md={5} lg={5}>
+                        <Grid xs={12} sm={12} md={4} lg={4}>
                             <Grid container spacing={0}>
+                            <Grid xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
                                 <Grid xs={12} sm={12} md={11} lg={11}>
                                     {this.state.branchItem && Object.keys(this.state.branchItem).length === 0 && Object.getPrototypeOf(this.state.branchItem) === Object.prototype ?null:(
                                         <Fragment>
@@ -236,8 +258,7 @@ class branchMaster extends React.Component {
                                              
                                         </Fragment>
                                        
-                                    )}
-                                   
+                                    )}                                   
                                 </Grid>
                             </Grid>
                         </Grid>

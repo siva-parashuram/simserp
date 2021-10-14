@@ -20,9 +20,19 @@ body{
     overflow-x: hidden;
 }
 
+.linearProgress-css{
+  background-color: #009688 !important;
+   
+}
+
 .mini-branch-logo-css{
   width: 120px !important;
   height: 30px !important;
+}
+
+.action-btns{
+  color: rgb(0, 126, 135) !important;
+  border-right-style: none !important;
 }
 
 
