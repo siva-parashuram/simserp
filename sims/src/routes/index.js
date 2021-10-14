@@ -49,6 +49,10 @@ import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
 
 
+
+import Ftptest from "../components/ftp/ftptest";
+
+
 let routes = ({ location, ...rest }) => {
   return (
     <Router>
@@ -113,6 +117,10 @@ let routes = ({ location, ...rest }) => {
           
           
           <Route path={URLS.URLS.testformat}  component={testformat} />
+
+          <Route path={URLS.URLS.Ftptest}  component={Ftptest} />
+
+          
           
           
           <Route component={pageNotFound} />

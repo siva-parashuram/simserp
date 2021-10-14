@@ -1,6 +1,7 @@
 //--------------------URL CONSTANTS-------------------------------------
 
 export const URLS = {
+  Ftptest:"/Ftptest",
   testformat:"/testformat",
   pageNotFound:"/pageNotFound",
   loginExpired: "/loginExpired",  
