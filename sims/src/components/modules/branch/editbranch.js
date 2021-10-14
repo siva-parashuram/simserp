@@ -498,19 +498,30 @@ class editbranch extends React.Component {
       } else {
         this.setState({ disabledUpdatebtn: false });
       }
-      return;
     };
 
     const updateFormValue = (id, e) => {
       if (id === "shortName") {
         let branch = this.state.branch;
         branch.shortName = e.target.value;
-        if (e.target.value.length > 10) {
+        if (
+          e.target.value === "" ||
+          e.target.value === null ||
+          e.target.value.length > 10
+        ) {
           let v = this.state.Validations;
-          v.shortName = {
-            errorState: true,
-            errorMsg: "Only 10 Characters are Allowed!",
-          };
+          if (e.target.value.length > 10) {
+            v.shortName = {
+              errorState: true,
+              errorMsg: "Only 10 Characters are Allowed!",
+            };
+          }
+          if (e.target.value === "" || e.target.value === null) {
+            v.shortName = {
+              errorState: true,
+              errorMsg: "Shortname cannot be blank",
+            };
+          }
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
