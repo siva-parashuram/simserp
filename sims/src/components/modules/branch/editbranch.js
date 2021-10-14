@@ -188,6 +188,26 @@ class editbranch extends React.Component {
         VATNo: { errorState: false, errorMsg: "" },
         VATPercentage: { errorState: false, errorMsg: "" },
         GSTNo: { errorState: false, errorMsg: "" },
+        PINo: { errorState: false, errorMsg: "" },
+        SONo: { errorState: false, errorMsg: "" },
+        SINo: { errorState: false, errorMsg: "" },
+        PSNo: { errorState: false, errorMsg: "" },
+        CPSNo: { errorState: false, errorMsg: "" },
+        CNNo: { errorState: false, errorMsg: "" },
+        DNNo: { errorState: false, errorMsg: "" },
+        PRNo: { errorState: false, errorMsg: "" },
+        PONo: { errorState: false, errorMsg: "" },
+        PurInvNo: { errorState: false, errorMsg: "" },
+        GITNo: { errorState: false, errorMsg: "" },
+        SRNo: { errorState: false, errorMsg: "" },
+        SIssueNo: { errorState: false, errorMsg: "" },
+        JVNo: { errorState: false, errorMsg: "" },
+        CENo: { errorState: false, errorMsg: "" },
+        BankNo: { errorState: false, errorMsg: "" },
+        CashNo: { errorState: false, errorMsg: "" },
+        FGQCNo: { errorState: false, errorMsg: "" },
+        RMQCNo: { errorState: false, errorMsg: "" },
+        IJCNo: { errorState: false, errorMsg: "" },
       },
     };
   }
@@ -755,7 +775,7 @@ class editbranch extends React.Component {
         if (e.target.value.length > 20) {
           v.VATNo = {
             errorState: true,
-            errorMsg: "Only 20 numbers are allowed",
+            errorMsg: "Only 20 chatracters are allowed",
           };
           this.setState({
             Validations: v,
@@ -774,12 +794,48 @@ class editbranch extends React.Component {
       if (id === "VATPercentage") {
         let branch = this.state.branch;
         branch.VATPercentage = e.target.value;
-        this.setState({ branch: branch, VATPercentage: e.target.value });
+        let v = this.state.Validations;
+        if (e.target.value.length > 8) {
+          v.VATPercentage = {
+            errorState: true,
+            errorMsg: "Only 8 numbers are allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          v.VATPercentage = { errorState: false, errorMsg: "" };
+          this.setState({
+            Validations: v,
+
+            branch: branch,
+            VATPercentage: e.target.value,
+          });
+        }
+        ValidateName();
       }
       if (id === "GSTNo") {
         let branch = this.state.branch;
         branch.GSTNo = e.target.value;
-        this.setState({ branch: branch, GSTNo: e.target.value });
+        let v = this.state.Validations;
+        if (e.target.value.length > 20) {
+          v.GSTNo = {
+            errorState: true,
+            errorMsg: "Only 20 characters are allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          v.GSTNo = { errorState: false, errorMsg: "" };
+          this.setState({
+            Validations: v,
+
+            branch: branch,
+            GSTNo: e.target.value,
+          });
+        }
+        ValidateName();
       }
       if (id === "PANNo") {
         let branch = this.state.branch;
@@ -853,12 +909,48 @@ class editbranch extends React.Component {
       if (id === "IECNo") {
         let branch = this.state.branch;
         branch.IECNo = e.target.value;
-        this.setState({ branch: branch, IECNo: e.target.value });
+        let v = this.state.Validations;
+        if (e.target.value.length > 20) {
+          v.IECNo = {
+            errorState: true,
+            errorMsg: "Only 20 numbers are allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          v.IECNo = { errorState: false, errorMsg: "" };
+          this.setState({
+            Validations: v,
+
+            branch: branch,
+            IECNo: e.target.value,
+          });
+        }
+        ValidateName();
       }
       if (id === "ARNNo") {
         let branch = this.state.branch;
         branch.ARNNo = e.target.value;
-        this.setState({ branch: branch, ARNNo: e.target.value });
+        let v = this.state.Validations;
+        if (e.target.value.length > 20) {
+          v.ARNNo = {
+            errorState: true,
+            errorMsg: "Only 20 numbers are allowed",
+          };
+          this.setState({
+            Validations: v,
+          });
+        } else {
+          v.ARNNo = { errorState: false, errorMsg: "" };
+          this.setState({
+            Validations: v,
+
+            branch: branch,
+            ARNNo: e.target.value,
+          });
+        }
+        ValidateName();
       }
       if (id === "IsSEZ") {
         let branch = this.state.branch;
@@ -892,51 +984,61 @@ class editbranch extends React.Component {
       if (id === "PSNo") {
         let branch = this.state.branch;
         branch.PSNo = e.target.value;
+
         this.setState({ branch: branch, PSNo: e.target.value });
       }
       if (id === "CPSNo") {
         let branch = this.state.branch;
         branch.CPSNo = e.target.value;
+
         this.setState({ branch: branch, CPSNo: e.target.value });
       }
       if (id === "CNNo") {
         let branch = this.state.branch;
         branch.CNNo = e.target.value;
+
         this.setState({ branch: branch, CNNo: e.target.value });
       }
       if (id === "DNNo") {
         let branch = this.state.branch;
         branch.DNNo = e.target.value;
+
         this.setState({ branch: branch, DNNo: e.target.value });
       }
       if (id === "PRNo") {
         let branch = this.state.branch;
         branch.PRNo = e.target.value;
+
         this.setState({ branch: branch, PRNo: e.target.value });
       }
       if (id === "PONo") {
         let branch = this.state.branch;
         branch.PONo = e.target.value;
+
         this.setState({ branch: branch, PONo: e.target.value });
       }
       if (id === "PurInvNo") {
         let branch = this.state.branch;
         branch.PurInvNo = e.target.value;
+
         this.setState({ branch: branch, PurInvNo: e.target.value });
       }
       if (id === "GITNo") {
         let branch = this.state.branch;
         branch.GITNo = e.target.value;
+
         this.setState({ branch: branch, GITNo: e.target.value });
       }
       if (id === "SRNo") {
         let branch = this.state.branch;
         branch.SRNo = e.target.value;
+
         this.setState({ branch: branch, SRNo: e.target.value });
       }
       if (id === "SIssueNo") {
         let branch = this.state.branch;
         branch.SIssueNo = e.target.value;
+
         this.setState({ branch: branch, SIssueNo: e.target.value });
       }
       if (id === "JVNo") {
@@ -947,48 +1049,55 @@ class editbranch extends React.Component {
       if (id === "PVNo") {
         let branch = this.state.branch;
         branch.PVNo = e.target.value;
+
         this.setState({ branch: branch, PVNo: e.target.value });
       }
       if (id === "CENo") {
         let branch = this.state.branch;
         branch.CENo = e.target.value;
+
         this.setState({ branch: branch, CENo: e.target.value });
       }
       if (id === "BankNo") {
         let branch = this.state.branch;
         branch.BankNo = e.target.value;
+
         this.setState({ branch: branch, BankNo: e.target.value });
       }
       if (id === "CashNo") {
         let branch = this.state.branch;
         branch.CashNo = e.target.value;
+
         this.setState({ branch: branch, CashNo: e.target.value });
       }
       if (id === "FGQCNo") {
         let branch = this.state.branch;
         branch.FGQCNo = e.target.value;
+
         this.setState({ branch: branch, FGQCNo: e.target.value });
       }
       if (id === "RMQCNo") {
         let branch = this.state.branch;
         branch.RMQCNo = e.target.value;
+
         this.setState({ branch: branch, RMQCNo: e.target.value });
       }
       if (id === "IJCNo") {
         let branch = this.state.branch;
         branch.IJCNo = e.target.value;
+
         this.setState({ branch: branch, IJCNo: e.target.value });
       }
       if (id === "RVNo") {
         let branch = this.state.branch;
         branch.RVNo = e.target.value;
-        this.setState({ branch: branch, RVNo: e.target.value });
       }
 
       if (id === "EffectiveDate") {
         // moment().format("YYYY-MM-DD")
         let branch = this.state.branch;
         branch.EffectiveDate = e.target.value;
+
         this.setState({ branch: branch, EffectiveDate: e.target.value });
       }
     };
@@ -1003,30 +1112,32 @@ class editbranch extends React.Component {
         let branch = this.state.branch;
 
         if (e.target.checked === true) {
-          branch.isVat = true;
+          branch.IsVat = true;
           this.setState({
             VATNoDisabled: false,
             VATPercentageDisabled: false,
             branch: branch,
+            IsVat: true,
           });
         }
         if (e.target.checked === false) {
-          branch.isVat = false;
+          branch.IsVat = false;
           this.setState({
             VATNoDisabled: true,
             VATPercentageDisabled: true,
             branch: branch,
+            IsVat: false,
           });
         }
       }
       if (param === "isgst") {
         let branch = this.state.branch;
         if (e.target.checked === true) {
-          branch.isGst = true;
+          branch.IsGST = true;
           this.setState({ GSTNoDisabled: false, IsGST: true, branch: branch });
         }
         if (e.target.checked === false) {
-          branch.isGst = false;
+          branch.IsGST = false;
           this.setState({ GSTNoDisabled: true, IsGST: false, branch: branch });
         }
       }
@@ -1687,7 +1798,7 @@ class editbranch extends React.Component {
                                   onChange={(e) => updateFormValue("PANNo", e)}
                                   InputProps={{
                                     className: "textFieldCss",
-                                    maxlength: 50,
+                                    maxlength: 20,
                                   }}
                                   value={this.state.PANNo}
                                   error={
@@ -1705,7 +1816,7 @@ class editbranch extends React.Component {
                                   onChange={(e) => updateFormValue("TANNo", e)}
                                   InputProps={{
                                     className: "textFieldCss",
-                                    maxlength: 50,
+                                    maxlength: 20,
                                   }}
                                   value={this.state.TANNo}
                                   error={
@@ -1723,7 +1834,7 @@ class editbranch extends React.Component {
                                   onChange={(e) => updateFormValue("CINNo", e)}
                                   InputProps={{
                                     className: "textFieldCss",
-                                    maxlength: 50,
+                                    maxlength: 20,
                                   }}
                                   value={this.state.CINNo}
                                   error={
@@ -1741,9 +1852,15 @@ class editbranch extends React.Component {
                                   onChange={(e) => updateFormValue("IECNo", e)}
                                   InputProps={{
                                     className: "textFieldCss",
-                                    maxlength: 50,
+                                    maxlength: 20,
                                   }}
                                   value={this.state.IECNo}
+                                  error={
+                                    this.state.Validations.IECNo.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.IECNo.errorMsg
+                                  }
                                 />
                                 <Tablerowcelltextboxinput
                                   id="ARNNo"
@@ -1753,9 +1870,15 @@ class editbranch extends React.Component {
                                   onChange={(e) => updateFormValue("ARNNo", e)}
                                   InputProps={{
                                     className: "textFieldCss",
-                                    maxlength: 50,
+                                    maxlength: 20,
                                   }}
                                   value={this.state.ARNNo}
+                                  error={
+                                    this.state.Validations.ARNNo.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.ARNNo.errorMsg
+                                  }
                                 />
 
                                 <TableRow>
@@ -1840,14 +1963,19 @@ class editbranch extends React.Component {
                                   onChange={(e) => updateFormValue("VATNo", e)}
                                   InputProps={{
                                     className: "textFieldCss",
-                                    maxlength: 50,
+                                    maxlength: 20,
                                   }}
                                   value={this.state.VATNo}
                                   disabled={this.state.VATNoDisabled}
-                                  // error={this.state.Validations.VATNo.errorState}
-                                  // helperText={this.state.Validations.VATNo.errorMsg}
+                                  error={
+                                    this.state.Validations.VATNo.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.VATNo.errorMsg
+                                  }
                                 />
                                 <Tablerowcelltextboxinput
+                                  type="number"
                                   id="VATPercentage"
                                   label="VAT Percentage"
                                   variant="outlined"
@@ -1857,10 +1985,18 @@ class editbranch extends React.Component {
                                   }
                                   InputProps={{
                                     className: "textFieldCss",
-                                    maxlength: 50,
+                                    maxlength: 8,
                                   }}
                                   value={this.state.VATPercentage}
                                   disabled={this.state.VATPercentageDisabled}
+                                  error={
+                                    this.state.Validations.VATPercentage
+                                      .errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.VATPercentage
+                                      .errorMsg
+                                  }
                                 />
 
                                 <TableRow>
@@ -1896,6 +2032,12 @@ class editbranch extends React.Component {
                                   }}
                                   value={this.state.GSTNo}
                                   disabled={this.state.GSTNoDisabled}
+                                  error={
+                                    this.state.Validations.GSTNo.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.GSTNo.errorMsg
+                                  }
                                 />
                               </TableBody>
                             </Table>
