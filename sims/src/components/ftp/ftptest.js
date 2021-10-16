@@ -30,7 +30,7 @@ class ftptest extends React.Component {
         const Save = () => {
             let compId = document.getElementById("compid").value;
             console.log("processFileAttach > compId > ", compId);
-          formData.append('compId', compId);
+            formData.append('compId', compId);
             console.log("processFileAttach > formData > ", formData);
 
             const url = "https://192.168.10.106:44356/api/Branch/FileUpload";
@@ -45,8 +45,6 @@ class ftptest extends React.Component {
                 .catch((error) => {
                     console.log("error > ", error);
                 });
-
-
         }
 
         return (

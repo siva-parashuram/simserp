@@ -56,6 +56,7 @@ class companyMaster extends React.Component {
       companyDialogStatus: false,
       UpdateCompany: true,
       urlparams: "",
+      filelist:[{id:1,name:"This is Attachment  File 1",link:"#"}],
     };
   }
 
@@ -164,6 +165,7 @@ class companyMaster extends React.Component {
     this.setState({ item:item,branch: branches,editUrl:editUrl});
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add('selectedRow');
+   // getAttachments(item.companyId);
 }
 
 InitialremoveIsSelectedRowClasses(){
@@ -171,6 +173,32 @@ InitialremoveIsSelectedRowClasses(){
         document.getElementById('row_' + i).className = '';
     }
 }
+
+  getAttachments(companyId) {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPUPLOAD;              
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    let params={
+      ValidUser:ValidUser,
+      companyId:companyId,
+      branchId:null,
+      file:null,
+      transactionId:null,
+      transactionType:null
+    };
+    axios
+      .post(FTPGetAttachmentsUrl, params, { headers })
+      .then((response) => {
+
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+      });
+  }
 
 
 
@@ -303,16 +331,7 @@ InitialremoveIsSelectedRowClasses(){
 
            
           <div className="breadcrumb-bottom"></div>
-          <Grid container spacing={0}>
-            <Grid className="style-all-Links" xs={1}>
-              <Link
-                className="style-link"
-                href={URLS.URLS.addNewCompany + this.state.urlparams}
-              >
-                NEW
-              </Link>
-            </Grid>
-          </Grid>
+          
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -372,7 +391,11 @@ InitialremoveIsSelectedRowClasses(){
               <Grid xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
                 <Grid xs={12} sm={12} md={11} lg={11}>
                   {/*<Branchlistbycompany data={this.state.branch} />*/}
-                  <CompanyQuickDetails data={this.state.branch} item={this.state.item}/>
+                  <CompanyQuickDetails 
+                  data={this.state.branch} 
+                  item={this.state.item}
+                  filelist={this.state.filelist}
+                  />
                 </Grid>
               </Grid>
             </Grid>

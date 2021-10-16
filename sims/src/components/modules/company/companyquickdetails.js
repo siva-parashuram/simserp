@@ -108,6 +108,9 @@ class companyquickdetails extends React.Component {
                     {this.state.showAttachments === true ? (
                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
                             <Attachmentmaster 
+                            filelist={this.props.filelist}
+                            category="company"
+                            type="info"
                             companyId={this.props.item.companyId} 
                             upload={true}
                             />
