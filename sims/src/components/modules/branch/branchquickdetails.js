@@ -15,6 +15,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import moment from "moment";
 import branchlogo from "../../../logo.png";
+import { formGroupClasses } from '@mui/material';
+import Attachmentmaster from '../../ftp/attachment/attachmentmaster';
 
 class branchquickdetails extends React.Component {
     constructor(props) {
@@ -111,7 +113,7 @@ class branchquickdetails extends React.Component {
                                             <div key="paymentPendingLink" to="#" className="card-link">
                                                 <Card className="dash-activity-card2" raised={false}>
                                                     <CardContent>
-                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
+                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
                                                             Total Customers
                                                         </Typography>
                                                         <Typography >
@@ -125,8 +127,8 @@ class branchquickdetails extends React.Component {
                                             <div key="paymentPendingLink" to="#" className="card-link">
                                                 <Card className="dash-activity-card2" raised={false}>
                                                     <CardContent>
-                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
-                                                            Total Sales
+                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                            Total Sales &nbsp;&nbsp;&nbsp;
                                                         </Typography>
                                                         <Typography>
                                                             5,735
@@ -139,8 +141,8 @@ class branchquickdetails extends React.Component {
                                             <div key="paymentPendingLink" to="#" className="card-link">
                                                 <Card className="dash-activity-card2" raised={false}>
                                                     <CardContent>
-                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={true} gutterBottom>
-                                                            Purchase Order Raised
+                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                            PO Raised &nbsp;&nbsp;&nbsp;
                                                         </Typography>
                                                         <Typography>
                                                             1,766
@@ -158,18 +160,7 @@ class branchquickdetails extends React.Component {
                     ) : null}
                     {this.state.showAttachments === true ? (
                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                            <TableContainer>
-                                <Table stickyHeader size="small" className="accordion-table" aria-label="table">
-                                    <TableBody className="tableBody">
-                                        <TableRow>
-                                            <TableCell align="left" className="no-border-table">Attachment 1</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell align="left" className="no-border-table">Attachment 2</TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+                             <Attachmentmaster companyId={0} branchId={0}/>
                         </Grid>
                     ) : null}
 

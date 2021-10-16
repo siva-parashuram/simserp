@@ -14,11 +14,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-
-
 import Button from "@material-ui/core/Button";
-
-
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -30,6 +26,8 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import Branchlistbycompany from "./branchlistbycompany";
 
+import CompanyQuickDetails from "./companyquickdetails";
+
 let columns = [];
 
 let rows = [];
@@ -40,6 +38,7 @@ class companyMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      item:null,
       editUrl:null,
       isLoggedIn: false,
       ProgressLoader: false,
@@ -162,7 +161,7 @@ class companyMaster extends React.Component {
     console.log("handleRowClick > vitem > ",item);
     let editUrl=URLS.URLS.editCompany+this.state.urlparams + "&compID=" + item.companyId;
     let branches = item.branches;
-    this.setState({branch: branches,editUrl:editUrl});
+    this.setState({ item:item,branch: branches,editUrl:editUrl});
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add('selectedRow');
 }
@@ -182,7 +181,7 @@ InitialremoveIsSelectedRowClasses(){
       let branches = item.branches;
       let editUrl=URLS.URLS.editCompany+this.state.urlparams + "&compID=" + item.companyId;
       // getCompanyBranchList(item.companyId);
-      this.setState({ branch: branches,editUrl:editUrl });
+      this.setState({ item:item,branch: branches,editUrl:editUrl });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     };
@@ -316,7 +315,7 @@ InitialremoveIsSelectedRowClasses(){
           </Grid>
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={6} lg={6}>
+            <Grid xs={12} sm={12} md={8} lg={8}>
               <TableContainer style={{ maxHeight: 440 }}>
                 <Table
                   stickyHeader
@@ -368,10 +367,12 @@ InitialremoveIsSelectedRowClasses(){
                 </Table>
               </TableContainer>
             </Grid>
-            <Grid xs={12} sm={12} md={6} lg={6}>
+            <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={10} lg={10}>
-                  <Branchlistbycompany data={this.state.branch} />
+              <Grid xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
+                <Grid xs={12} sm={12} md={11} lg={11}>
+                  {/*<Branchlistbycompany data={this.state.branch} />*/}
+                  <CompanyQuickDetails data={this.state.branch} item={this.state.item}/>
                 </Grid>
               </Grid>
             </Grid>
