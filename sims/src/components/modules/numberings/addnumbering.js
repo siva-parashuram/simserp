@@ -47,8 +47,8 @@ class addnumbering extends React.Component {
       startdate: "2021-10-06",
       noSeries: {
         NoSeriesId: 0,
-        Code: null,
-        Description: null,
+        Code: "",
+        Description: "",
         BranchId: 0,
         UserId: 0,
         CreationDate: null,
@@ -58,9 +58,9 @@ class addnumbering extends React.Component {
         NoSeriesId: 0,
         Lno: 1,
         StartDate: null,
-        Prefix: null,
+        Prefix: "",
         StartNo: 0,
-        Suffix: null,
+        Suffix: "",
         Increment: 0,
         LastNo: 0,
         LastNoDate: null,
@@ -89,8 +89,8 @@ class addnumbering extends React.Component {
   }
 
   getNumberingList(branchId, USERID) {
-   // console.log("----------------> getNumberingList > moment().format('mm-dd-yyyy') > ", moment().format("DD-MM-YYYY"));
-    let today = moment().format("DD-MM-YYYY");
+    
+    let today = moment().format("MM/DD/YYYY");
     let N = [];
     let numberings = this.state.noSeriesDetailList;
     numberings.StartDate = today;

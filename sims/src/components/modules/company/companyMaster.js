@@ -24,6 +24,10 @@ import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from '@mui/material/ButtonGroup';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import TablePagination from '@mui/material/TablePagination';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+
 import Branchlistbycompany from "./branchlistbycompany";
 
 import CompanyQuickDetails from "./companyquickdetails";
@@ -37,7 +41,13 @@ const initialCss = "";
 class companyMaster extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {    
+      pagination:{
+        page:0,
+        rowsPerPage:10,         
+      },  
+      page:1,
+      rowsPerPage:10,
       item:null,
       editUrl:null,
       isLoggedIn: false,
@@ -139,18 +149,30 @@ class companyMaster extends React.Component {
     axios
       .post(GetCompaniesUrl, ValidUser, { headers })
       .then((response) => {
-        let data = response.data;
-        console.log("getCompanyList > response > data > ", data);
-        rows = data;
-        this.setState({
-          masterCompanyData: rows,
-          companyData: rows,
-          ProgressLoader: true,
-        },()=>{
-          if(this.state.companyData.length>0){
-            this.InitialhandleRowClick(null,this.state.companyData[0],"row_0");
-        }
-        });
+        console.log("getCompanyList > response >  ", response);
+        if(response.status===200){
+          if(response.data==="Invalid User"){
+              alert("Un-Authorized Access Found!");
+              window.close();
+          }else{
+            let data = response.data;
+         
+            rows = data;
+            this.setState({
+              masterCompanyData: rows,
+              companyData: rows,
+              ProgressLoader: true,
+            },()=>{
+              if(this.state.companyData.length>0){
+                this.InitialhandleRowClick(null,this.state.companyData[0],"row_0");
+            }
+            });
+          }
+        }else{
+
+        }      
+
+        
       })
       .catch((error) => {
         console.log("error > ", error);
@@ -169,9 +191,14 @@ class companyMaster extends React.Component {
 }
 
 InitialremoveIsSelectedRowClasses(){
+  try{
     for (let i = 0; i < this.state.companyData.length; i++) {
-        document.getElementById('row_' + i).className = '';
-    }
+      document.getElementById('row_' + i).className = '';
+  }
+  }catch(e){
+    console.log("Error : ",e);
+  }
+   
 }
 
   getAttachments(companyId) {
@@ -203,6 +230,10 @@ InitialremoveIsSelectedRowClasses(){
 
 
   render() {
+    function Alert(props) {
+      return <MuiAlert elevation={6} variant="filled" {...props} />;
+    }
+
     const handleRowClick = (e, item, id) => {
       console.log("handleRowClick > e > ", e);
       console.log("handleRowClick > item > ", item);
@@ -215,8 +246,12 @@ InitialremoveIsSelectedRowClasses(){
     };
 
     const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.companyData.length; i++) {
-        document.getElementById("row_" + i).className = "";
+      try{
+        for (let i = 0; i < this.state.companyData.length; i++) {
+          document.getElementById('row_' + i).className = '';
+      }
+      }catch(e){
+        console.log("Error : ",e);
       }
     };
 
@@ -259,9 +294,21 @@ InitialremoveIsSelectedRowClasses(){
       }
     };
 
-    // const createNewCompanyRow=()=>{
-    //      this.setState({UpdateCompany:false,companyDialogStatus:true});
-    // }
+    const handlePageChange=(event, newPage)=>{
+          console.log("handlePageChange > event > ",event);
+          console.log("handlePageChange > newPage > ",newPage);
+          let pagination=this.state.pagination;
+          pagination.page=newPage;          
+          this.setState({pagination:pagination});
+    }
+
+    const getPageData=(data)=>{
+      let rows=data;
+      let page=parseInt(this.state.pagination.page);
+      let rowsPerPage=parseInt(this.state.pagination.rowsPerPage);
+      
+      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    }
 
     const openCompanyDetail = (e, item) => {
       console.log("openCompanyDetail > e > ", e);
@@ -284,6 +331,13 @@ InitialremoveIsSelectedRowClasses(){
       window.location = url;
   }
 
+  const closeErrorPrompt = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({ SuccessPrompt: false });
+  };
+
     return (
       <Fragment>
         <CssBaseline />
@@ -291,6 +345,16 @@ InitialremoveIsSelectedRowClasses(){
         {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress
           className="linearProgress-css"
         /> </div>) : null}
+
+        <Snackbar
+          open={this.state.ErrorPrompt}
+          autoHideDuration={3000}
+          onClose={closeErrorPrompt}
+        >
+          <Alert onClose={closeErrorPrompt} severity="error">
+            Error!
+          </Alert>
+        </Snackbar>
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
@@ -354,7 +418,10 @@ InitialremoveIsSelectedRowClasses(){
                     </TableRow>
                   </TableHead>
                   <TableBody className="tableBody">
-                    {this.state.companyData.map((item, i) => (
+                    
+
+                    {//this.state.companyData 
+                    getPageData(this.state.companyData).map((item, i) => (
                       <TableRow
                         id={"row_" + i}
                         className={this.state.initialCss}
@@ -385,6 +452,17 @@ InitialremoveIsSelectedRowClasses(){
                   </TableBody>
                 </Table>
               </TableContainer>
+
+              <TablePagination
+                rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                component="div"
+                count={this.state.companyData.length}
+                rowsPerPage={this.state.pagination.rowsPerPage}
+                page={this.state.pagination.page}
+                onPageChange={handlePageChange}
+                // onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+
             </Grid>
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
