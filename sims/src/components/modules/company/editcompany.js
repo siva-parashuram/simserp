@@ -639,7 +639,7 @@ class editcompany extends React.Component {
                   </Link>
                   <Link
                     color="inherit"
-                    href={URLS.URLS.companyMaster + this.state.urlparams}
+                    href={URLS.URLS.companyMaster + this.state.urlparams}  
                   >
                     Company master
                   </Link>
@@ -654,7 +654,7 @@ class editcompany extends React.Component {
                     className="action-btns"
                     startIcon={<UpdateIcon />}
                     onClick={(e) => updateCompanyDetails()}
-                    disabled={this.state.updateBtnDisabled}                                   
+                    disabled={this.state.updateBtnDisabled}                                     
                   >
                     
                       Update

@@ -4,7 +4,7 @@ import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
-
+import UpdateIcon from "@material-ui/icons/Update";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
@@ -13,7 +13,7 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";     
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -24,7 +24,7 @@ import Switch from "@mui/material/Switch";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-
+import ButtonGroup from '@mui/material/ButtonGroup';
 import axios from "axios";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
@@ -65,7 +65,7 @@ class editwarehouse extends React.Component {
       Description: null,
       Address: null,
       Address2: null,
-      Address3: null,
+      Address3: null,   
       IsEdi: false,
       Ediurl: null,
       EdiloginId: 0,
@@ -92,7 +92,7 @@ class editwarehouse extends React.Component {
 
   componentDidMount() {
     var url = new URL(window.location.href);
-    let branchId = url.searchParams.get("branchId");
+    let branchId = url.searchParams.get("branchId"); 
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
     let editwareHouseId = url.searchParams.get("editwareHouseId");
@@ -147,7 +147,7 @@ class editwarehouse extends React.Component {
           Description: response.data.description,
           Address: response.data.address,
           Address2: response.data.address2,
-          Address3: response.data.address3,
+          Address3: response.data.address3,   
           IsEdi: response.data.isEdi,
           Ediurl: response.data.ediurl,
           EdiloginId: response.data.ediloginId,
@@ -204,7 +204,7 @@ class editwarehouse extends React.Component {
           });
         }
       }
-      if (id === "Description") {
+      if (id === "Description") {   
         warehouse.Description = e.target.value;
         if (e.target.value.length > 50) {
           let v = this.state.Validations;
@@ -237,7 +237,7 @@ class editwarehouse extends React.Component {
             Validations: v,
           });
         } else {
-          let v = this.state.Validations;
+          let v = this.state.Validations;  
           v.ContactPerson = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
@@ -422,6 +422,7 @@ class editwarehouse extends React.Component {
 
     const handleUpdate = () => {
       this.setState({ ProgressLoader: false });
+      console.log("warehouse>",this.state.warehouse)
 
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -469,14 +470,14 @@ class editwarehouse extends React.Component {
 
     return (
       <Fragment>
-        <Header />s
+        <Header />
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: 5, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
+            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}  
           </div>
         ) : null}
         <Snackbar
-          open={this.state.SuccessPrompt}
+          open={this.state.SuccessPrompt}  
           autoHideDuration={3000}
           onClose={closeSuccessPrompt}
         >
@@ -495,39 +496,67 @@ class editwarehouse extends React.Component {
         </Snackbar>
         <div className="breadcrumb-height">
           <Grid className="table-adjust" container spacing={3}>
-            <Grid item xs={12}>
-              <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
-                <Link
-                  color="inherit"
-                  className="backLink"
-                  onClick={this.props.history.goBack}
+          <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
+              <div style={{ marginTop: 8 }}>
+                <Breadcrumbs
+                  className="style-breadcrumb"
+                  aria-label="breadcrumb"
                 >
-                  Back
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.userDashboard + this.state.urlparams}
+                  <Link
+                    color="inherit"
+                    className="backLink"
+                    onClick={this.props.history.goBack}
+                  >
+                    Back
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.warehouseMaster + this.state.urlparams}
+                  >
+                    
+                    Warehouse Master
+                  </Link>
+
+                  <Typography color="textPrimary">Edit Warehouse </Typography>
+                </Breadcrumbs>
+              </div>
+            </Grid>
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              <div style={{ marginLeft: 10, marginTop: 1 }}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
                 >
-                  Dashboard
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.warehouseMaster + this.state.urlparams}
-                >
-                  Warehouse master
-                </Link>
-                <Typography color="textPrimary">Add Warehouse</Typography>
-              </Breadcrumbs>
+                  <Button
+                    className="action-btns"
+                    startIcon={<UpdateIcon />}
+                    onClick={(e) => handleUpdate()}
+                  >
+                    Update
+                  </Button>
+                </ButtonGroup>
+              </div>
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          <Grid container spacing={3}>
-            <Grid className="style-buttons" xs={1}>
-              <Button style={{ marginLeft: 5 }} onClick={(e) => handleUpdate()}>
-                Update
-              </Button>
-            </Grid>
-          </Grid>
+         
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={7} lg={7}>
@@ -551,7 +580,7 @@ class editwarehouse extends React.Component {
                       style={{ minHeight: 20, height: "100%" }}
                     >
                       <Typography key="" className="accordion-Header-Title">
-                        General Details
+                        General Details  
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails key="" className="AccordionDetails-css">
@@ -565,6 +594,7 @@ class editwarehouse extends React.Component {
                               aria-label="table"
                             >
                               <TableBody className="tableBody">
+                             
                                 <Tablerowcelltextboxinput
                                   id="Code"
                                   label="Code"
@@ -575,7 +605,8 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  value={this.state.Code}
+                                   value={this.state.warehouse.Code}
+                                  // defaultValue={this.state.Code}
                                   error={this.state.Validations.Code.errorState}
                                   helperText={
                                     this.state.Validations.Code.errorMssg
@@ -594,7 +625,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  value={this.state.Description}
+                                  value={this.state.warehouse.Description}
                                   error={
                                     this.state.Validations.Description
                                       .errorState
@@ -615,7 +646,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.ContactPerson}
+                                  value={this.state.warehouse.ContactPerson}
                                   error={
                                     this.state.Validations.ContactPerson
                                       .errorState
@@ -639,7 +670,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.PhoneNo}
+                                  value={this.state.warehouse.PhoneNo}
                                   error={
                                     this.state.Validations.PhoneNo.errorState
                                   }
@@ -736,7 +767,7 @@ class editwarehouse extends React.Component {
                               size="small"
                               className="accordion-table"
                               aria-label="table"
-                            >
+                            >   
                               <TableBody className="tableBody">
                                 <Tablerowcelltextboxinput
                                   id="EmailID"
@@ -750,7 +781,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.EmailId}
+                                  value={this.state.warehouse.EmailId}
                                   error={
                                     this.state.Validations.EmailId.errorState
                                   }
@@ -771,7 +802,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  value={this.state.Address}
+                                  value={this.state.warehouse.Address}
                                   error={
                                     this.state.Validations.Address.errorState
                                   }
@@ -792,7 +823,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  value={this.state.Address2}
+                                  value={this.state.warehouse.Address2}
                                   error={
                                     this.state.Validations.Address2.errorState
                                   }
@@ -813,7 +844,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  value={this.state.Address3}
+                                  value={this.state.warehouse.Address3}
                                   error={
                                     this.state.Validations.Address3.errorState
                                   }
@@ -999,7 +1030,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  value={this.state.Ediurl}
+                                  value={this.state.warehouse.Ediurl}
                                   error={
                                     this.state.Validations.Ediurl.errorState
                                   }
@@ -1032,7 +1063,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  value={this.state.EdiloginId}
+                                  value={this.state.warehouse.EdiloginId}
                                   error={
                                     this.state.Validations.EdiloginId.errorState
                                   }
@@ -1054,7 +1085,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                  value={this.state.Edipassword}
+                                  value={this.state.warehouse.Edipassword}
                                   error={
                                     this.state.Validations.Edipassword
                                       .errorState

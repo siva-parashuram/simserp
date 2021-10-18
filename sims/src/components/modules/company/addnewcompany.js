@@ -505,47 +505,70 @@ class addnewcompany extends React.Component {
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
-                <Link
+          <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
+              <div style={{ marginTop: 8 }}>
+                <Breadcrumbs
+                  className="style-breadcrumb"
+                  aria-label="breadcrumb"
+                >
+                  <Link
+                    color="inherit"
+                    className="backLink"
+                    onClick={this.props.history.goBack}
+                  >
+                    Back
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
                   color="inherit"
                   className="backLink"
-                  href="javascript:history.go(-1)"
-                >
-                  Back
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.userDashboard + this.state.urlparams}
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.companyMaster + this.state.urlparams}
-                >
-                  Company master
-                </Link>
-                <Typography color="textPrimary">Add New Company</Typography>
-              </Breadcrumbs>
+                    href={URLS.URLS.companyMaster + this.state.urlparams}
+                  >
+                    
+                    Company Master
+                  </Link>
+
+                  <Typography color="textPrimary">Add Company </Typography>
+                </Breadcrumbs>
+              </div>
+            </Grid>
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              <div style={{ marginLeft: 10, marginTop: 1 }}>
+                <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">  
+                  <Button
+                    className="action-btns"
+                    startIcon={<AddIcon />}
+                    disabled={this.state.createBtnDisabled}    
+                   onClick={handleCreateCompanyClick}                                     
+                  >
+                    
+                      Add
+                   
+                  </Button>
+                 
+                </ButtonGroup>
+              </div>
             </Grid>
           </Grid>
+          </div>
 
           <div className="breadcrumb-bottom"></div>
-          <div>
-            <Grid container spacing={0}>
-              <Grid className="style-buttons" xs={1}>
-                <Button
-                  style={{ marginLeft: 5 }}
-                  onClick={handleCreateCompanyClick}
-                  disabled={this.state.createBtnDisabled}
-                >
-                  Create
-                </Button>
-                {/* <Link className="style-Links" onClick={handleCreateCompanyClick} disabled={this.state.createBtnDisabled} >CREATE</Link> */}
-              </Grid>
-            </Grid>
-          </div>
+          
           <div className="New-link-bottom"></div>
 
           <Grid className="table-adjust" container spacing={0}>
@@ -818,7 +841,7 @@ class addnewcompany extends React.Component {
             </Grid>
             <Grid item xs={4}></Grid>
           </Grid>
-        </div>
+        
       </Fragment>
     );
   }

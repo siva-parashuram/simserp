@@ -5,7 +5,8 @@ import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
 import Nav from "../../user/nav";
 import Menubar from "../../user/menubar";
-
+import ButtonGroup from '@mui/material/ButtonGroup';
+import AddIcon from '@material-ui/icons/Add'; 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
@@ -432,39 +433,68 @@ class addwarehouse extends React.Component {
         <Menubar />
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
-                <Link
-                  color="inherit"
-                  className="backLink"
-                  onClick={this.props.history.goBack}
+           
+                  <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
+              <div style={{ marginTop: 8 }}>
+                <Breadcrumbs
+                  className="style-breadcrumb"
+                  aria-label="breadcrumb"
                 >
-                  Back
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.userDashboard + this.state.urlparams}
+                  <Link
+                    color="inherit"
+                    className="backLink"
+                    onClick={this.props.history.goBack}
+                  >
+                    Back
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.warehouseMaster + this.state.urlparams}
+                  >
+                    
+                    Warehouse Master
+                  </Link>
+
+                  <Typography color="textPrimary">Add Warehouse </Typography>
+                </Breadcrumbs>
+              </div>
+            </Grid>
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              <div style={{ marginLeft: 10, marginTop: 1 }}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
                 >
-                  Dashboard
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.warehouseMaster + this.state.urlparams}
-                >
-                  Warehouse master
-                </Link>
-                <Typography color="textPrimary">Add Warehouse</Typography>
-              </Breadcrumbs>
+                  <Button
+                    className="action-btns"
+                    startIcon={<AddIcon />}
+                    onClick={(e) => handleCreate()}
+                  >
+                    ADD
+                  </Button>
+                </ButtonGroup>
+              </div>
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          <Grid container spacing={3}>
-            <Grid className="style-buttons" xs={1}>
-              <Button style={{ marginLeft: 5 }} onClick={(e) => handleCreate()}>
-                Create
-              </Button>
-            </Grid>
-          </Grid>
+          
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={7} lg={7}>

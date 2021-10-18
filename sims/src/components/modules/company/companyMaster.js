@@ -72,7 +72,7 @@ class companyMaster extends React.Component {
 
   componentDidMount() {
     if (getCookie(COOKIE.USERID) != null) {
-      this.getCompanyList();
+      this.getCompanyList();  
       this.setColumns();
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
@@ -373,7 +373,7 @@ InitialremoveIsSelectedRowClasses(){
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
               <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">
+                <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">  
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
@@ -392,6 +392,7 @@ InitialremoveIsSelectedRowClasses(){
               </div>
             </Grid>
           </Grid>
+          </div>
 
            
           <div className="breadcrumb-bottom"></div>
@@ -478,7 +479,7 @@ InitialremoveIsSelectedRowClasses(){
               </Grid>
             </Grid>
           </Grid>
-        </div>
+      
       </Fragment>
     );
   }

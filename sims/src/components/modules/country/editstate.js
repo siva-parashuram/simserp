@@ -21,7 +21,8 @@ import AddIcon from "@material-ui/icons/Add";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-
+import UpdateIcon from "@material-ui/icons/Update";
+import ButtonGroup from '@mui/material/ButtonGroup';
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
 
@@ -363,7 +364,7 @@ class editstate extends React.Component {
         </Snackbar>
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
                 <Link
                   color="inherit"
@@ -398,7 +399,38 @@ class editstate extends React.Component {
               >
                 Update
               </Button>
-            </Grid>
+            </Grid> */}
+            <Grid xs={12} sm={12} md={4} lg={4} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
+                            <div style={{marginTop:8}}>
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
+                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
+                                    Back
+                                </Link>
+                                <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
+                                    Dashboard
+                                </Link>  
+                                <Link
+                    color="inherit"
+                    href={URLS.URLS.stateMaster + this.state.urlparams}
+                  >
+                    State master
+                  </Link>                             
+                                <Typography color="textPrimary">Edit State</Typography> 
+                            </Breadcrumbs>
+                            </div>                            
+                        </Grid>
+                        <Grid xs={12} sm={12} md={8} lg={8}>
+                            <div style={{marginLeft:10,marginTop:1}}>  
+                            <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
+                                 <Button
+                                     className="action-btns"
+                                     startIcon={<UpdateIcon />}                                            
+                                     onClick={handleUpdate}                                     
+                                     >Update</Button>
+                                
+                             </ButtonGroup>
+                            </div>                           
+                        </Grid> 
           </Grid>
 
           <div className="New-link-bottom"></div>
@@ -496,7 +528,7 @@ class editstate extends React.Component {
                                 </option>
                               ))}
                             </select>
-                          </TableCell>
+                          </TableCell> 
                         </TableRow>
                       </TableBody>
                     </Table>

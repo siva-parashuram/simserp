@@ -16,7 +16,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TextField from "@material-ui/core/TextField";
-
+import ButtonGroup from '@mui/material/ButtonGroup';
+import AddIcon from '@material-ui/icons/Add';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -65,6 +66,10 @@ class addnumbering extends React.Component {
         LastNo: 0,
         LastNoDate: null,
       },
+      Validations:{
+        Code:{errorState:false,errorMssg:""},
+        Description:{errorState:false,errorMssg:""}
+      }
     };
   }
 
@@ -121,12 +126,28 @@ class addnumbering extends React.Component {
       console.log("In updateFormValue");
       let noSeries = this.state.noSeries;
       if (id === "Code") {
-        noSeries.Code = e.target.value;
-        this.setState({ noSeries: noSeries });
+        if(e.target.value.length>20){
+          let v=this.state.Validations;
+          v.Code={errorState:true,errorMssg:"Only 20 characters allowed!"}
+          this.setState({Validations:v})
+        }else{
+          noSeries.Code = e.target.value;
+          let v=this.state.Validations;
+          v.Code={errorState:false,errorMssg:""}
+          this.setState({ noSeries: noSeries,Validations:v });
+        }
       }
       if (id === "Description") {
-        noSeries.Description = e.target.value;
-        this.setState({ noSeries: noSeries });
+        if(e.target.value.length>50){
+          let v=this.state.Validations;
+          v.Description={errorState:true,errorMssg:"Only 50 characters allowed!"}
+          this.setState({Validations:v})
+        }else{
+          noSeries.Description = e.target.value;
+          let v=this.state.Validations;
+          v.Description={errorState:false,errorMssg:""}
+          this.setState({ noSeries: noSeries,Validations:v });
+        }
       }
     };
 
@@ -238,6 +259,7 @@ class addnumbering extends React.Component {
     };
 
     const handleCreate = (e) => {
+      console.log("noSeries>",this.state.noSeries)
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -324,42 +346,68 @@ class addnumbering extends React.Component {
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
-                <Link
-                  color="inherit"
-                  className="backLink"
-                  onClick={this.props.history.goBack}
+            
+            <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
+              <div style={{ marginTop: 8 }}>
+                <Breadcrumbs
+                  className="style-breadcrumb"
+                  aria-label="breadcrumb"
                 >
-                  Back
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.userDashboard + this.state.urlparams}
+                  <Link
+                    color="inherit"
+                    className="backLink"
+                    onClick={this.props.history.goBack}
+                  >
+                    Back
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.numberingMaster + this.state.urlparams}
+                  >
+                    
+                    Numbering Master
+                  </Link>
+
+                  <Typography color="textPrimary">Add Numbering </Typography>
+                </Breadcrumbs>
+              </div>
+            </Grid>
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              <div style={{ marginLeft: 10, marginTop: 1 }}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
                 >
-                  Dashboard
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.numberingMaster + this.state.urlparams}
-                >
-                  Numbering Master
-                </Link>
-                <Typography color="textPrimary">Add Numbering </Typography>
-              </Breadcrumbs>
+                  <Button
+                    className="action-btns"
+                    startIcon={<AddIcon />}
+                    onClick={(e) => handleCreate(e)}
+                  >
+                    ADD
+                  </Button>
+                </ButtonGroup>
+              </div>
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          <Grid container spacing={3}>
-            <Grid className="style-buttons" xs={1}>
-              <Button
-                style={{ marginLeft: 5 }}
-                onClick={(e) => handleCreate(e)}
-              >
-                Create
-              </Button>
-            </Grid>
-          </Grid>
+         
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -401,8 +449,11 @@ class addnumbering extends React.Component {
                           onChange={(e) => updateFormValue("Code", e)}
                           InputProps={{
                             className: "textFieldCss",
-                            maxlength: 50,
+                            maxlength: 20,
                           }}
+                          value={this.state.noSeries.Code}
+                          error={this.state.Validations.Code.errorState}
+                          helperText={this.state.Validations.Code.errorMssg}
                         />
 
                         <Tablerowcelltextboxinput
@@ -415,6 +466,10 @@ class addnumbering extends React.Component {
                             className: "textFieldCss",
                             maxlength: 50,
                           }}
+                          value={this.state.noSeries.Description}
+                          error={this.state.Validations.Description.errorState}
+                          helperText={this.state.Validations.Description.errorMssg}
+                        
                         />
                       </TableBody>
                     </Table>
@@ -473,7 +528,7 @@ class addnumbering extends React.Component {
                                   size="small"
                                   defaultValue={item.StartDate}
                                   onChange={(e) =>
-                                    updateStartDate(e.value, item)
+                                    updateStartDate(e.target.value, item)
                                   }
                                   onKeyDown={(e) =>
                                     updateListValue(
