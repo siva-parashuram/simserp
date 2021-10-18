@@ -11,14 +11,14 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import Divider from "@material-ui/core/Divider";
 import Switch from "@mui/material/Switch";
-
+import ButtonGroup from '@mui/material/ButtonGroup';
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
+import EditIcon from '@mui/icons-material/Edit';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -45,6 +45,7 @@ class usermaster extends React.Component {
       userId: 0,
       passData: [],
       userBranchMappingList: [],
+      editurl:null
     };
   }
 
@@ -189,20 +190,48 @@ class usermaster extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("getUsersList > response > data > ", data);
+        let rows=data
         this.setState({
           users: data,
           ProgressLoader: true,
-        });
+        },
+        () => {
+          if (rows.length > 0) {
+            this.InitialhandleRowClick(null,rows[0]  ,"row_0");
+         }
+       });
       })
       .catch((error) => {
         console.log("error > ", error);
       });
   }
 
+
+  InitialhandleRowClick(e, item, id) {
+    console.log("InitialhandleRowClick > id > ", id);
+    console.log("InitialhandleRowClick > vitem > ", item);
+    let editUrl =
+    URLS.URLS.editUser +
+    this.state.urlparams +
+    "&userId=" +
+    item.userId
+      console.log("InitialhandleRowClick   ",editUrl)
+    this.setState({  editurl: editUrl });
+    this.InitialremoveIsSelectedRowClasses();
+    document.getElementById(id).classList.add("selectedRow");
+  }
+
+  InitialremoveIsSelectedRowClasses() {
+    for (let i = 0; i < this.state.users.length; i++) {
+      document.getElementById("row_" + i).className = "";
+    }
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       console.log("handleAccordionClick > val > ", val);
       console.log("handleAccordionClick > e > ", e);
+     
       if (val === "allotBranch") {
         this.state.allotBranch === true
           ? this.setState({ allotBranch: false })
@@ -218,7 +247,13 @@ class usermaster extends React.Component {
     const handleRowClick = (e, item, id) => {
       this.setState({ passData: [] });
       console.log("handleRowClick > item > ", item);
-      this.setState({ userId: item.userId });
+      let editUrl =
+      URLS.URLS.editUser +
+      this.state.urlparams +
+      "&userId=" +
+      item.userId;
+      
+      this.setState({ userId: item.userId,editurl:editUrl });
       removeIsSelectedRowClasses();
       this.getUserBranches(item.userId);
       document.getElementById(id).classList.add("selectedRow");
@@ -263,6 +298,11 @@ class usermaster extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
+    const openPage = (url) => {             
+      this.setState({ ProgressLoader: false });
+      window.location = url;
+  }
+
     return (
       <Fragment>
         <Header />
@@ -294,45 +334,39 @@ class usermaster extends React.Component {
         </Snackbar>
 
         <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
-                <Link
-                  color="inherit"
-                  className="backLink"
-                  onClick={this.props.history.goBack}
-                >
-                  Back
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.userDashboard + this.state.urlparams}
-                >
-                  Dashboard
-                </Link>
-                <Typography color="textPrimary">User master</Typography>
-              </Breadcrumbs>
-            </Grid>
-          </Grid>
+        <Grid container spacing={1}>
+                        <Grid xs={12} sm={12} md={4} lg={4} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
+                            <div style={{marginTop:8}}>
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
+                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
+                                    Back
+                                </Link>
+                                <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
+                                    Dashboard
+                                </Link>                               
+                                <Typography color="textPrimary">User master</Typography>
+                            </Breadcrumbs>
+                            </div>                            
+                        </Grid>
+                        <Grid xs={12} sm={12} md={8} lg={8}>
+                            <div style={{marginLeft:10,marginTop:1}}>  
+                            <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
+                                 <Button
+                                     className="action-btns"
+                                     startIcon ={<AddIcon/>}                                               
+                                     onClick={(e) => openPage(URLS.URLS.addUser + this.state.urlparams)}                                     
+                                     >New</Button>
+                                 <Button
+                                 className="action-btns"
+                                     startIcon ={<EditIcon/>}                                               
+                                     onClick={(e) => openPage(this.state.editurl)}
+                                     >Edit</Button> 
+                             </ButtonGroup>
+                            </div>                           
+                        </Grid> 
+                    </Grid>
           <div className="breadcrumb-bottom"></div>
-          <Grid container spacing={0}>
-            <Grid className="style-all-Links" xs={1}>
-              <Link
-                className="style-link"
-                href={URLS.URLS.addUser + this.state.urlparams}
-              >
-                NEW
-              </Link>
-              {/* <Button style={{ marginLeft: 5 }} startIcon={<AddIcon />}>
-                <a
-                  className="button-link"
-                  href={URLS.URLS.addUser + this.state.urlparams}
-                >
-                  New
-                </a>
-              </Button> */}
-            </Grid>
-          </Grid>
+         
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>

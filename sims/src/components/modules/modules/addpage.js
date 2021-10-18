@@ -654,9 +654,10 @@ class addpage extends React.Component {
             <div style={{ height: 20 }}></div>
 
             <Grid container spacing={3}>
-              <Grid xs={12} sm={12} md={3} lg={3}>
+              {/* <Grid xs={12} sm={12} md={3} lg={3}> */}
+              <Grid xs={12} sm={12} md={8} lg={8}>
                 <Button
-                  style={{ marginLeft: 10 }}
+                  style={{ marginLeft: 10,marginTop:20}}
                   disabled={this.state.updateBtnDisable}
                   onClick={handleUpdate}
                 >

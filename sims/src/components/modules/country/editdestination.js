@@ -18,12 +18,12 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-
+import ButtonGroup from "@mui/material/ButtonGroup";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Destination from "./destination";
-
+import UpdateIcon from "@material-ui/icons/Update";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
 
@@ -56,8 +56,7 @@ class editdestination extends React.Component {
         destinationName: { errorState: false, errorMssg: "" },
         postcode: { errorState: false, errorMssg: "" },
       },
-    }
-    
+    };
   }
 
   componentDidMount() {
@@ -374,7 +373,7 @@ class editdestination extends React.Component {
         </Snackbar>
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
                 <Link
                   color="inherit"
@@ -391,16 +390,68 @@ class editdestination extends React.Component {
                 </Link>
                 <Typography color="textPrimary">Edit Destination</Typography>
               </Breadcrumbs>
+            </Grid> */}
+            <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
+              <div style={{ marginTop: 8 }}>
+                <Breadcrumbs
+                  className="style-breadcrumb"
+                  aria-label="breadcrumb"
+                >
+                  <Link
+                    color="inherit"
+                    className="backLink"
+                    onClick={this.props.history.goBack}
+                  >
+                    Back
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
+                  >
+                    Dashboard
+                  </Link>
+
+                  <Typography color="textPrimary">Edit Destination </Typography>
+                </Breadcrumbs>
+              </div>
+            </Grid>
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              <div style={{ marginLeft: 10, marginTop: 1 }}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
+                  <Button
+                    className="action-btns"
+                    startIcon={<UpdateIcon />}
+                    disabled={this.state.DisabledCreatebtn}
+                    onClick={updateDestination}
+                  >
+                    Update
+                  </Button>
+                </ButtonGroup>
+              </div>
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          <Grid container spacing={3}>
+          {/* <Grid container spacing={3}>
             <Grid className="style-buttons" xs={1}>
               <Button style={{ marginLeft: 5 }} onClick={updateDestination}>
                 Update
               </Button>
             </Grid>
-          </Grid>
+          </Grid> */}
           <div className="New-link-bottom"></div>
 
           <div style={{ marginLeft: 10 }}>
@@ -450,14 +501,14 @@ class editdestination extends React.Component {
                                     maxlength: 50,
                                   }}
                                   value={this.state.destinationName}
-                                error={
-                                  this.state.Validations.destinationName
-                                    .errorState
-                                }
-                                helperText={
-                                  this.state.Validations.destinationName
-                                    .errorMssg
-                                }
+                                  error={
+                                    this.state.Validations.destinationName
+                                      .errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.destinationName
+                                      .errorMssg
+                                  }
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -473,14 +524,12 @@ class editdestination extends React.Component {
                                     maxlength: 50,
                                   }}
                                   value={this.state.postcode}
-                                error={
-                                  this.state.Validations.postcode
-                                    .errorState
-                                }
-                                helperText={
-                                  this.state.Validations.postcode
-                                    .errorMssg
-                                }
+                                  error={
+                                    this.state.Validations.postcode.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.postcode.errorMssg
+                                  }
                                 />
 
                                 {/* <TableRow>

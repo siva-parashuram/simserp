@@ -13,7 +13,9 @@ import TableCell from '@material-ui/core/TableCell';
 
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
+import EditIcon from '@mui/icons-material/Edit';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -110,6 +112,11 @@ class currencymaster extends React.Component {
             return <MuiAlert elevation={6} variant="filled" {...props} />;
         }
 
+        const openPage = (url) => {             
+            this.setState({ ProgressLoader: false });
+            window.location = url;
+        }
+
         return (
             <Fragment>
                 <Header/>
@@ -126,7 +133,7 @@ class currencymaster extends React.Component {
 
                 <div className='breadcrumb-height'>
                     <Grid container spacing={3}>
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
                                 <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
                                     Back
@@ -137,22 +144,39 @@ class currencymaster extends React.Component {
                                 <Typography color="textPrimary">Currency Master</Typography> 
                             </Breadcrumbs>
 
+                        </Grid> */}
+                         <Grid xs={12} sm={12} md={4} lg={4} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
+                            <div style={{marginTop:8}}>
+                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
+                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
+                                    Back
+                                </Link>
+                                <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
+                                    Dashboard
+                                </Link>                               
+                                <Typography color="textPrimary">Currency Master</Typography>
+                            </Breadcrumbs>
+                            </div>                            
                         </Grid>
+                        <Grid xs={12} sm={12} md={8} lg={8}>
+                            <div style={{marginLeft:10,marginTop:1}}>  
+                            <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
+                                 <Button
+                                     className="action-btns"
+                                     startIcon ={<AddIcon/>}                                               
+                                     onClick={(e) => openPage(URLS.URLS.addCurrency + this.state.urlparams)}                                     
+                                     >New</Button>
+                                 <Button
+                                 className="action-btns"
+                                     startIcon ={<EditIcon/>}                                               
+                                     //onClick={(e) => openPage(this.state.editUrl)}
+                                     >Edit</Button> 
+                             </ButtonGroup>
+                            </div>                           
+                        </Grid> 
                     </Grid>
                     <div className="breadcrumb-bottom"></div>
-                    <Grid container spacing={0}>
-                    <Grid className="style-all-Links"  xs={1}>
-                            <Link className="style-link" href={URLS.URLS.addCurrency + this.state.urlparams}>NEW</Link> 
-
-                            {/* <Button
-                                style={{ marginLeft: 5 }}
-                            >
-                                <a className="button-link" href={URLS.URLS.addCurrency + this.state.urlparams}>
-                                    New
-                                </a>
-                            </Button> */}
-                        </Grid>
-                    </Grid>
+                    
                     <div className="New-link-bottom"></div>
                     <Grid className="table-adjust" container spacing={0}>
                         <Grid xs={12} sm={12} md={5} lg={5}>
