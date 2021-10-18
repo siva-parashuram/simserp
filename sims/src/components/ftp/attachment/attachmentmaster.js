@@ -114,11 +114,7 @@ class attachmentmaster extends React.Component {
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="" aria-label="Attachment Form table">                                            
                                             <TableRow>
-                                                {/*
-                                                <TableCell className="no-border-table">
-                                                    <span style={{ fontSize: 15 }}> Attach File</span>
-                                                </TableCell>
-                                                */}
+                                                 
                                                 <TableCell className="no-border-table">
                                                     <Button
                                                     className="file-browse-btn"

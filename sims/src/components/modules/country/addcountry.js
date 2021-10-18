@@ -64,6 +64,7 @@ class addcountry extends React.Component {
 
   componentDidMount() {
     this.getZones();
+    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -78,6 +79,12 @@ class addcountry extends React.Component {
     this.setState({
       urlparams: urlparams,
     });
+  }
+
+  initializeZone(){
+    let country = this.state.country;
+    country.ZoneID = document.getElementById("ZoneID").value;
+    this.setState({ country: country, selectedZone: document.getElementById("ZoneID").value });
   }
 
   getZones() {
@@ -95,6 +102,7 @@ class addcountry extends React.Component {
         let data = response.data;
         console.log("getZones > response > data > ", data);
         this.setState({ zones: data, ProgressLoader: true });
+        this.initializeZone();
       })
       .catch((error) => {
         console.log("error > ", error);

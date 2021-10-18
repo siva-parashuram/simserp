@@ -25,7 +25,8 @@ class branchquickdetails extends React.Component {
             showDetails: true,
             showAttachments: false,
             detailsUnderlineBtnCss: "btn-bottom-border-color",  //btn-bottom-border-color
-            attachmentUnderlineBtnCss: ""
+            attachmentUnderlineBtnCss: "",
+            filelist:[{id:1,name:"This is Attachment  File 1",link:"#"}],
         };
     }
     render() {
@@ -160,7 +161,14 @@ class branchquickdetails extends React.Component {
                     ) : null}
                     {this.state.showAttachments === true ? (
                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                             <Attachmentmaster companyId={0} branchId={0}/>
+                             <Attachmentmaster 
+                             companyId={this.props.branchItem.companyId} 
+                             branchId={this.props.branchItem.branchId}
+                             filelist={this.state.filelist}
+                             category="branch"
+                             type="info"                            
+                             upload={true}
+                             />
                         </Grid>
                     ) : null}
 

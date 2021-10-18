@@ -79,7 +79,7 @@ export default function ScrollableTabsButtonAuto() {
         getUrlParams();
         
        
-        console.log('On Load Event of UseEffect !');
+        //console.log('On Load Event of UseEffect !');
     }, []);
 
     const handleChange = (event, newValue) => {
@@ -121,7 +121,7 @@ export default function ScrollableTabsButtonAuto() {
             UserId:parseInt(getCookie(COOKIE.USERID)),
             userPermissionLists:userPermissionLists
         };
-        console.log("get Menu Links > Request data > ",data);
+       // console.log("get Menu Links > Request data > ",data);
 
         let URL=APIURLS.APIURL.GetUserPermissionByUserIDAndBranchID;
 
@@ -177,7 +177,7 @@ export default function ScrollableTabsButtonAuto() {
           }
 
           moduleHeader=Customfunctions.removeDuplicates(moduleHeader, 'moduleID');
-          console.log("In processData > moduleHeader > ",moduleHeader);
+         // console.log("In processData > moduleHeader > ",moduleHeader);
 
         for (let i = 0; i < data.length; i++) {
             let ml = {
@@ -194,14 +194,14 @@ export default function ScrollableTabsButtonAuto() {
                 if(data[i].moduleID===moduleHeader[j].moduleID){
                     if(data[i].isChecked===true){
                         moduleHeader[j].pages.push(ml);
-                        console.log("ml > ",ml);
+                      //  console.log("ml > ",ml);
                     }
                    
                 }
             }
         }
          
-        console.log("Menubar processData > moduleHeader > ",moduleHeader);
+        //console.log("Menubar processData > moduleHeader > ",moduleHeader);
         setmoduleHeader(moduleHeader);
         setmoduleList(moduleHeader);
     }

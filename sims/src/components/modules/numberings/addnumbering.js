@@ -84,12 +84,13 @@ class addnumbering extends React.Component {
     this.setState({
       urlparams: urlparams,
       branchId: branchId,
-    });
-    this.getNumberingList(branchId, USERID);
+    },()=>this.getNumberingList(branchId, USERID));
+    
   }
 
   getNumberingList(branchId, USERID) {
-    let today = moment().format("dd-mm-yyyy");
+   // console.log("----------------> getNumberingList > moment().format('mm-dd-yyyy') > ", moment().format("DD-MM-YYYY"));
+    let today = moment().format("DD-MM-YYYY");
     let N = [];
     let numberings = this.state.noSeriesDetailList;
     numberings.StartDate = today;
@@ -226,7 +227,7 @@ class addnumbering extends React.Component {
 
     const formatDate = () => {
       let noSeriesDetailList = this.state.numberings;
-
+        console.log("formatDate > noSeriesDetailList > ",noSeriesDetailList);
       for (let i = 0; i < noSeriesDetailList.length; i++) {
         noSeriesDetailList[i].startdate = moment(
           noSeriesDetailList[i].startdate
@@ -248,7 +249,7 @@ class addnumbering extends React.Component {
       const data = {
         validUser: ValidUser,
         noSeries: noSeries,
-        BranchId: BranchId,
+        BranchId: parseInt(BranchId),
         noSeriesDetailList: noSeriesDetailList,
       };
       const headers = {
@@ -470,7 +471,7 @@ class addnumbering extends React.Component {
                                   id={"startdate" + item.id}
                                   variant="outlined"
                                   size="small"
-                                  value={item.StartDate}
+                                  defaultValue={item.StartDate}
                                   onChange={(e) =>
                                     updateStartDate(e.value, item)
                                   }
