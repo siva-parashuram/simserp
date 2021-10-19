@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TablePagination from '@mui/material/TablePagination';
 
 import '../../user/dasboard.css'; 
 import { COOKIE, getCookie } from "../../../services/cookie";
@@ -16,6 +17,10 @@ class statesbycountry extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            pagination:{
+                page:0,
+                rowsPerPage:5,         
+              }, 
             urlparams: "",
             ProgressLoader: false,
             destinations: [],
@@ -38,6 +43,22 @@ class statesbycountry extends React.Component {
     
 
     render() {
+
+        const getPageData=(data)=>{
+            let rows=data;
+            let page=parseInt(this.state.pagination.page);
+            let rowsPerPage=parseInt(this.state.pagination.rowsPerPage);    
+            return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+          }
+        
+          const handlePageChange=(event, newPage)=>{
+            console.log("handlePageChange > event > ",event);
+            console.log("handlePageChange > newPage > ",newPage);
+            let pagination=this.state.pagination;
+            pagination.page=newPage;          
+            this.setState({pagination:pagination});
+        }
+
         return(
             <Fragment>
             <Grid container spacing={0}>
@@ -67,7 +88,7 @@ class statesbycountry extends React.Component {
                     <TableBody className="tableBody">
                    
                     {
-                        this.props.states?this.props.states.map((item, i) => (
+                        this.props.states?getPageData(this.props.states).map((item, i) => (
                            
                             <TableRow>
                             <TableCell>
@@ -87,6 +108,14 @@ class statesbycountry extends React.Component {
                         
                     </TableBody>
                 </Table>
+                <TablePagination
+                    rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                    component="div"
+                    count={this.props.states.length}
+                    rowsPerPage={this.state.pagination.rowsPerPage}
+                    page={this.state.pagination.page}
+                    onPageChange={handlePageChange}
+                  />
                     </Fragment>
                 ):<h5>No States!</h5>:null
             }

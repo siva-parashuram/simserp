@@ -352,9 +352,9 @@ class usermoduleassign extends React.Component {
                                                             value={this.state.UserAllotedRoleByBranch}
                                                         >
                                                             <option value="0" disabled >-Choose-</option>
-                                                            {this.state.roles.map((item, i) => (
+                                                            {this.props.data.List.length>0?this.state.roles.map((item, i) => (
                                                                 <option value={item.roleId}>{item.name}</option>
-                                                            ))}
+                                                            )):null}
                                                              
                                                         </select>
                                                     </td>
@@ -433,7 +433,7 @@ class usermoduleassign extends React.Component {
                             </Grid>
                         </Grid>
                     </Fragment>
-                ) : 'Please select User to proceed'}
+                ) : 'Nothing Selected.'}
 
 
             </Fragment>

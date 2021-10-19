@@ -22,6 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import TablePagination from '@mui/material/TablePagination';
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -36,6 +37,10 @@ class usermaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination:{
+        page:0,
+        rowsPerPage:10,         
+      }, 
       urlparams: "",
       allotBranch: false,
       allotModule: false,
@@ -222,9 +227,12 @@ class usermaster extends React.Component {
   }
 
   InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.users.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
+    try{
+      for (let i = 0; i < this.state.users.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    }catch(e){}
+    
   }
 
   render() {
@@ -245,24 +253,33 @@ class usermaster extends React.Component {
     };
 
     const handleRowClick = (e, item, id) => {
-      this.setState({ passData: [] });
-      console.log("handleRowClick > item > ", item);
-      let editUrl =
-      URLS.URLS.editUser +
-      this.state.urlparams +
-      "&userId=" +
-      item.userId;
-      
-      this.setState({ userId: item.userId,editurl:editUrl });
-      removeIsSelectedRowClasses();
-      this.getUserBranches(item.userId);
-      document.getElementById(id).classList.add("selectedRow");
+      console.log("handleRowClick > e > ",e);
+      console.log("handleRowClick > item > ",item);
+      console.log("handleRowClick > id > ",id);
+      try{
+        this.setState({ passData: [] });
+        console.log("handleRowClick > item > ", item);
+        let editUrl =
+        URLS.URLS.editUser +
+        this.state.urlparams +
+        "&userId=" +
+        item.userId;
+        
+        this.setState({ userId: item.userId,editurl:editUrl });
+        removeIsSelectedRowClasses();
+        this.getUserBranches(item.userId);
+        document.getElementById(id).classList.add("selectedRow");
+      }catch(e){}
+     
     };
 
     const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.users.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
+      try{
+        for (let i = 0; i < this.state.users.length; i++) {
+          document.getElementById("row_" + i).className = "";
+        }
+      }catch(e){}
+    
     };
 
     const changeUserStatus = (item, val) => {
@@ -303,12 +320,36 @@ class usermaster extends React.Component {
       window.location = url;
   }
 
+  const getPageData=(data)=>{
+   
+    let rows=data;
+    let page=parseInt(this.state.pagination.page);
+    let rowsPerPage=parseInt(this.state.pagination.rowsPerPage);    
+    
+     
+    return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  }
+
+  const handlePageChange=(event, newPage)=>{
+    removeSelected();
+    console.log("handlePageChange > event > ",event);
+    console.log("handlePageChange > newPage > ",newPage);
+    let pagination=this.state.pagination;
+    pagination.page=newPage;          
+    this.setState({pagination:pagination});
+}
+
+ const removeSelected=()=>{
+  removeIsSelectedRowClasses();
+  this.setState({userBranchMappingList:[],passData:[]});
+ }
+
     return (
       <Fragment>
         <Header />
 
         {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: -8, marginLeft: -10 }}>
+          <div style={{ marginTop: 0, marginLeft: -10 }}>
             <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
           </div>
         ) : null}
@@ -399,7 +440,7 @@ class usermaster extends React.Component {
                       </TableRow>
                     </TableHead>
                     <TableBody className="tableBody">
-                      {this.state.users.map((item, i) => (
+                      {getPageData(this.state.users).map((item, i) => (
                         <TableRow
                           id={"row_" + i}
                           className={this.state.initialCss}
@@ -438,6 +479,15 @@ class usermaster extends React.Component {
                       ))}
                     </TableBody>
                   </Table>
+                  <TablePagination
+                    rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                    component="div"
+                    count={this.state.users.length}
+                    rowsPerPage={this.state.pagination.rowsPerPage}
+                    page={this.state.pagination.page}
+                    onPageChange={handlePageChange}
+                  />
+
                 </Grid>
               </Grid>
             </Grid>

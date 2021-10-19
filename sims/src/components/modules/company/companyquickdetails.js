@@ -113,6 +113,7 @@ class companyquickdetails extends React.Component {
                             type="info"
                             companyId={this.props.item.companyId} 
                             upload={true}
+                            rowClicked={this.props.rowClicked}
                             />
                         </Grid>
                     ) : null}

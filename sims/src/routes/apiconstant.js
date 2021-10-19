@@ -1,7 +1,8 @@
 // const domain="http://192.168.10.106:44356/";
 const domain="http://192.168.10.200:8080/";
 export const APIURL = {   
-    FTPUPLOAD:domain+"", 
+    FTPUPLOAD:domain+"api/Common/FileUpload", 
+    FTPFILELIST:domain+"api/Common/ListOfFilesFromFTP",
     Login: domain+"api/users/login",
     Logout:domain+"api/users/Logout",
     addNewCompany:domain+"api/Company/CreateCompany",
@@ -70,11 +71,13 @@ export const APIURL = {
   export const CTimeOut = 10; 
   export const DFormat = "MM/DD/YYYY";
 
+  
+
   export const TrasactionType={
     PO:"",
     SO:"",
     
-    default:null
+    default:""
   };
 
 
