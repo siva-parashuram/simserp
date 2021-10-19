@@ -17,6 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import TablePagination from '@mui/material/TablePagination';
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -32,6 +33,10 @@ class countryMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination:{
+        page:0,
+        rowsPerPage:10,         
+      }, 
       urlparams: "",
       masterCountryData: rows,
       countryData: rows,
@@ -158,9 +163,12 @@ class countryMaster extends React.Component {
   }
 
   InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.countryData.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
+    try{
+      for (let i = 0; i < this.state.countryData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    }catch(e){}
+    
   }
 
   render() {
@@ -178,9 +186,12 @@ class countryMaster extends React.Component {
     };
 
     const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.countryData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
+      try{
+        for (let i = 0; i < this.state.countryData.length; i++) {
+          document.getElementById("row_" + i).className = "";
+        }
+      }catch(e){}
+      
     };
 
     const getDestinationsByState = (item) => {
@@ -284,12 +295,27 @@ class countryMaster extends React.Component {
       window.location = url;
     };
 
+    const getPageData=(data)=>{
+      let rows=data;
+      let page=parseInt(this.state.pagination.page);
+      let rowsPerPage=parseInt(this.state.pagination.rowsPerPage);    
+      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    }
+  
+    const handlePageChange=(event, newPage)=>{
+      console.log("handlePageChange > event > ",event);
+      console.log("handlePageChange > newPage > ",newPage);
+      let pagination=this.state.pagination;
+      pagination.page=newPage;          
+      this.setState({pagination:pagination});
+  }
+
     return (
       <Fragment>
         <Header />
 
         {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: -8, marginLeft: -10 }}>
+          <div style={{ marginTop: 0, marginLeft: -10 }}>
             <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
           </div>
         ) : null}
@@ -316,18 +342,7 @@ class countryMaster extends React.Component {
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-            {/* <Grid item xs={12}>
-                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
-                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
-                                    Back
-                                </Link>
-                                <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
-                                    Dashboard
-                                </Link>
-                                <Typography color="textPrimary">Country master</Typography> 
-                            </Breadcrumbs>
-
-                        </Grid> */}
+           
             <Grid
               xs={12}
               sm={12}
@@ -410,7 +425,7 @@ class countryMaster extends React.Component {
                       </TableRow>
                     </TableHead>
                     <TableBody className="tableBody">
-                      {this.state.countryData.map((item, i) => (
+                      {getPageData(this.state.countryData).map((item, i) => (
                         <TableRow
                           id={"row_" + i}
                           className={this.state.initialCss}
@@ -438,6 +453,14 @@ class countryMaster extends React.Component {
                       ))}
                     </TableBody>
                   </Table>
+                  <TablePagination
+                    rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                    component="div"
+                    count={this.state.countryData.length}
+                    rowsPerPage={this.state.pagination.rowsPerPage}
+                    page={this.state.pagination.page}
+                    onPageChange={handlePageChange}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -447,24 +470,21 @@ class countryMaster extends React.Component {
                   <Destination destinations={this.state.destinations} />
                 </Grid>
               </Grid>
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}>
-                  &nbsp;
-                </Grid>
-              </Grid>
+              
               <Grid container spacing={1}>
                 <Grid xs={12} sm={12} md={10} lg={11}>
                   <Divider className="divider-custom" />
                 </Grid>
               </Grid>
+              
               <Grid container spacing={1}>
                 <Grid xs={12} sm={12} md={10} lg={11}>
-                  &nbsp;
+                  <Statesbycountry states={this.state.states} />
                 </Grid>
               </Grid>
               <Grid container spacing={1}>
                 <Grid xs={12} sm={12} md={10} lg={11}>
-                  <Statesbycountry states={this.state.states} />
+                   &nbsp;
                 </Grid>
               </Grid>
             </Grid>

@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableContainer from '@material-ui/core/TableContainer';
 import TextField from '@mui/material/TextField';
+import TablePagination from '@mui/material/TablePagination';
 
 import '../../user/dasboard.css';
 import { COOKIE, getCookie } from "../../../services/cookie";
@@ -20,6 +21,10 @@ class destination extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            pagination:{
+                page:0,
+                rowsPerPage:5,         
+              },
             urlparams: "",
             ProgressLoader: false,
             destinations: [],
@@ -44,13 +49,28 @@ class destination extends React.Component {
     render() {
 
 
-        const updatePostcode=(id,e)=>{
+        const updatePostcode = (id, e) => {
             console.log("updatePostcode > ");
-                 console.log("id : ",id);
-                 console.log("e : ",e);
-                 console.log("e.target.value : ",e.target.value);
-                 console.log(" document.getElementById(id) : ", document.getElementById(id));
-                 document.getElementById(id).value=e.target.value;
+            console.log("id : ", id);
+            console.log("e : ", e);
+            console.log("e.target.value : ", e.target.value);
+            console.log(" document.getElementById(id) : ", document.getElementById(id));
+            document.getElementById(id).value = e.target.value;
+        }
+
+        const getPageData=(data)=>{
+            let rows=data;
+            let page=parseInt(this.state.pagination.page);
+            let rowsPerPage=parseInt(this.state.pagination.rowsPerPage);    
+            return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+          }
+        
+          const handlePageChange=(event, newPage)=>{
+            console.log("handlePageChange > event > ",event);
+            console.log("handlePageChange > newPage > ",newPage);
+            let pagination=this.state.pagination;
+            pagination.page=newPage;          
+            this.setState({pagination:pagination});
         }
 
         return (
@@ -83,23 +103,23 @@ class destination extends React.Component {
                                                 <TableBody className="tableBody">
 
                                                     {
-                                                        this.props.destinations ? this.props.destinations.map((item, i) => (
+                                                        this.props.destinations ? getPageData(this.props.destinations).map((item, i) => (
 
                                                             <TableRow>
                                                                 <TableCell>
-                                                                    <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams + "&&destinationId=" + item.destinationId + "&&countryId=" + item.countryId} >{URLS.PREFIX.destinationID+item.destinationId} </a>
+                                                                    <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams + "&&destinationId=" + item.destinationId + "&&countryId=" + item.countryId} >{URLS.PREFIX.destinationID + item.destinationId} </a>
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <a className="LINK tableLink" href={URLS.URLS.editDestination + this.state.urlparams + "&&destinationId=" + item.destinationId + "&&countryId=" + item.countryId} >{item.destinationName} </a>
 
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <input 
-                                                                     className="table-text-field"
-                                                                    id={"postcode_"+item.destinationId} 
-                                                                    size="small" 
-                                                                    defaultValue={item.postcode} 
-                                                                    onKeyUp={(e)=>updatePostcode("postcode_"+item.destinationId,e)}
+                                                                    <input
+                                                                        className="table-text-field"
+                                                                        id={"postcode_" + item.destinationId}
+                                                                        size="small"
+                                                                        defaultValue={item.postcode}
+                                                                        onKeyUp={(e) => updatePostcode("postcode_" + item.destinationId, e)}
                                                                     />
                                                                 </TableCell>
                                                             </TableRow>
@@ -110,6 +130,14 @@ class destination extends React.Component {
                                                 </TableBody>
                                             </Table>
                                         </TableContainer>
+                                        <TablePagination
+                                            rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                                            component="div"
+                                            count={this.props.destinations.length}
+                                            rowsPerPage={this.state.pagination.rowsPerPage}
+                                            page={this.state.pagination.page}
+                                            onPageChange={handlePageChange}
+                                        />
                                     </Fragment>
                                 ) : <h5>No Destinations!</h5> : null
                             }

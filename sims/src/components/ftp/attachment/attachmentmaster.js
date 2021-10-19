@@ -1,4 +1,5 @@
 import '../../../components/user/dasboard.css';
+import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from  "../../../routes/apiconstant";  
 import React, { Fragment } from 'react';
 import axios from "axios";
@@ -55,41 +56,48 @@ class attachmentmaster extends React.Component {
             switch (category) {
                 case "company":
                     let companyId = this.props.companyId;
-                    formData.append('companyId', companyId);
-                    formData.append('transactionType',APIURLS.TrasactionType.default);                    
-                    formData.append('file', file);
+                    formData.append('CompanyId', this.props.companyId);
+                    formData.append('BranchID', null);
+                    formData.append('Transaction',APIURLS.TrasactionType.default);
+                    formData.append('TransactionNo',null);
+                    formData.append('FileData', file);
                     processUploadPost(formData); 
                     break;
                 case "branch":           
-                    formData.append('companyId', this.props.companyId);
-                    formData.append('branchId', this.props.branchId);
-                    formData.append('transactionType',APIURLS.TrasactionType.default);
-                    formData.append('file', file);
+                    formData.append('CompanyId', this.props.companyId);
+                    formData.append('BranchID', this.props.branchId);
+                    formData.append('Transaction',APIURLS.TrasactionType.default);
+                    formData.append('TransactionNo',null);
+                    formData.append('FileData', file);
                     processUploadPost(formData); 
                     break;
                
             }
         }
 
-        const processUploadPost=(formData)=>{                   
-    
-                const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;              
-                const headers = {
-                    "Content-Type": "application/json",
-                };
-                getFileList();
-                reset();
-                this.setState({ShowLoader:false});
-                /*
-                axios
-                    .post(FTPUploadUrl, formData, { headers })
-                    .then((response) => {
-                         
-                    })
-                    .catch((error) => {
-                        console.log("error > ", error);
-                    });
-                    */
+        const processUploadPost = (formData) => {
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            formData.append('validUser', ValidUser);
+
+            const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+            const headers = {
+                "Content-Type": "application/json",
+            };
+            // getFileList();
+            // reset();
+            // this.setState({ShowLoader:false});
+
+            axios
+                .post(FTPUploadUrl, formData, { headers })
+                .then((response) => {
+
+                })
+                .catch((error) => {
+                    console.log("error > ", error);
+                });
+
         }
 
         const getFileList=()=>{

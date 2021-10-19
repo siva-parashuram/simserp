@@ -211,7 +211,7 @@ class userbranchalot extends React.Component {
         return (
             <Fragment>
 
-                {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
+               
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>
                     <Alert onClose={closeSuccessPrompt} severity="success">Success!</Alert>
@@ -225,6 +225,8 @@ class userbranchalot extends React.Component {
                 {
                     this.props.data.companyBranch?this.props.data.companyBranch.length > 0 ? (
                         <div style={{ marginLeft: 10, marginTop: 10 }}>
+
+{this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
                             <Grid container spacing={1}>
                                 <Grid xs={6} sm={6} md={6} lg={6}>
                                     <Button
@@ -322,7 +324,7 @@ class userbranchalot extends React.Component {
 
                         </div>
 
-                    ) : null:"Please select User to process"
+                    ) : null:"Nothing Selected."
                 }
 
 

@@ -169,13 +169,14 @@ class companyMaster extends React.Component {
             });
           }
         }else{
-
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
         }      
 
         
       })
       .catch((error) => {
         console.log("error > ", error);
+        this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
   }
 
@@ -335,7 +336,7 @@ InitialremoveIsSelectedRowClasses(){
     if (reason === "clickaway") {
       return;
     }
-    this.setState({ SuccessPrompt: false });
+    this.setState({ ErrorPrompt: false });
   };
 
     return (
@@ -410,7 +411,11 @@ InitialremoveIsSelectedRowClasses(){
                   <TableHead className="table-header-background">
                     <TableRow>
                       <TableCell className="table-header-font">#</TableCell>
-                      <TableCell className="table-header-font" align="left">
+                      <TableCell 
+                      className="table-header-font" 
+                      align="left"
+                      
+                      >
                         Company Name
                       </TableCell>
                       <TableCell className="table-header-font" align="left">
@@ -460,8 +465,7 @@ InitialremoveIsSelectedRowClasses(){
                 count={this.state.companyData.length}
                 rowsPerPage={this.state.pagination.rowsPerPage}
                 page={this.state.pagination.page}
-                onPageChange={handlePageChange}
-                // onRowsPerPageChange={handleChangeRowsPerPage}
+                onPageChange={handlePageChange}                
               />
 
             </Grid>
@@ -470,11 +474,14 @@ InitialremoveIsSelectedRowClasses(){
               <Grid xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
                 <Grid xs={12} sm={12} md={11} lg={11}>
                   {/*<Branchlistbycompany data={this.state.branch} />*/}
-                  <CompanyQuickDetails 
+                  {this.state.item===null || this.state.item==={}?null:(
+                    <CompanyQuickDetails 
                   data={this.state.branch} 
                   item={this.state.item}
                   filelist={this.state.filelist}
                   />
+                  ) }
+                  
                 </Grid>
               </Grid>
             </Grid>
