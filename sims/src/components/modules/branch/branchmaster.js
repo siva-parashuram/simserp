@@ -39,6 +39,7 @@ class branchMaster extends React.Component {
       SuccessPrompt: false,
       branchItem: {},
       editUrl: null,
+      filelist:[]
     };
   }
 
@@ -106,12 +107,41 @@ class branchMaster extends React.Component {
     this.setState({ branchItem: item, editUrl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
+    this.getAttachments(item.companyId,item.branchId);
   }
 
   InitialremoveIsSelectedRowClasses() {
     for (let i = 0; i < this.state.branchData.length; i++) {
       document.getElementById("row_" + i).className = "";
     }
+  }
+
+  getAttachments(companyId,branchId) {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;              
+    const headers = {
+        "Content-Type": "application/json",
+    };
+     
+    const formData = new FormData();
+    formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    formData.append('Token', getCookie(COOKIE.TOKEN));
+    formData.append('CompanyId', companyId);
+    formData.append('BranchID', branchId);
+    formData.append('Transaction', APIURLS.TrasactionType.default);
+    formData.append('TransactionNo', "");
+    formData.append('FileData', "");
+
+    axios
+      .post(FTPGetAttachmentsUrl, formData, { headers })
+      .then((response) => {
+        this.setState({ filelist: response.data });
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+      });
   }
 
   render() {
@@ -127,6 +157,7 @@ class branchMaster extends React.Component {
       this.setState({ branchItem: item, editUrl: editUrl });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
+      getAttachments(item.companyId,item.branchId);
     };
 
     const removeIsSelectedRowClasses = () => {
@@ -134,6 +165,35 @@ class branchMaster extends React.Component {
         document.getElementById("row_" + i).className = "";
       }
     };
+
+    const getAttachments=(companyId,branchId) =>{
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;              
+      const headers = {
+          "Content-Type": "application/json",
+      };
+       
+      const formData = new FormData();
+      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+      formData.append('Token', getCookie(COOKIE.TOKEN));
+      formData.append('CompanyId', companyId);
+      formData.append('BranchID', branchId);
+      formData.append('Transaction', APIURLS.TrasactionType.default);
+      formData.append('TransactionNo', "");
+      formData.append('FileData', "");
+  
+      axios
+        .post(FTPGetAttachmentsUrl, formData, { headers })
+        .then((response) => {
+          this.setState({ filelist: response.data });
+        })
+        .catch((error) => {
+          console.log("error > ", error);
+          this.setState({ filelist: [] });
+        });
+    }
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -323,10 +383,12 @@ class branchMaster extends React.Component {
                   Object.getPrototypeOf(this.state.branchItem) ===
                     Object.prototype ? null : (
                     <Fragment>
+                        {console.log("this.state.filelist > ",this.state.filelist)}
                       <BranchQuickDetails
                         new={URLS.URLS.addBranch + this.state.urlparams}
                         edit={this.state.editUrl}
                         branchItem={this.state.branchItem}
+                        filelist={this.state.filelist}
                       />
                     </Fragment>
                   )}

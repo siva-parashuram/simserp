@@ -59,9 +59,10 @@ class attachmentmaster extends React.Component {
             <Fragment>
                 <Grid container spacing={0}>
                     <Grid xs={11} sm={11} md={11} lg={11}>
+                        {console.log("-----------------> this.props.filelist > ",this.props.filelist)}
                         {this.props.filelist ? this.props.filelist.map((item, i) => (
                             <Fragment>
-                                 <List dense={true} id={"file"+item.id}>
+                                 <List dense={true} id={"file"+i}>
                                     <ListItem
                                     secondaryAction={
                                         <IconButton size="small" edge="end" aria-label="delete">
@@ -74,10 +75,9 @@ class attachmentmaster extends React.Component {
                                                 <FilePresentIcon className="avatar-hover" onClick={(e)=>handleClick(e,item)} />
                                             </Avatar>
                                         </ListItemAvatar>
-                                        <ListItemText  primary={item.name} secondary="Uploaded on 09 Oct 2021" />
+                                        <ListItemText  primary={item.fileName} secondary={"Uploaded on "+item.modifiedDateTime}  />
                                     </ListItem>
-                                </List>
-                                
+                                </List>                             
 
                                
 

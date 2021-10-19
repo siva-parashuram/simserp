@@ -66,7 +66,7 @@ class companyMaster extends React.Component {
       companyDialogStatus: false,
       UpdateCompany: true,
       urlparams: "",
-      filelist:[{id:1,name:"This is Attachment  File 1",link:"#"}],
+      filelist:[],
     };
   }
 
