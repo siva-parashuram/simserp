@@ -16,6 +16,11 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
+
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
  
 
 
@@ -60,30 +65,25 @@ class attachmentmaster extends React.Component {
                 <Grid container spacing={0}>
                     <Grid xs={11} sm={11} md={11} lg={11}>
                         {console.log("-----------------> this.props.filelist > ",this.props.filelist)}
+                        <Table size="small">
+                        <TableBody className="tableBody">
                         {this.props.filelist ? this.props.filelist.map((item, i) => (
-                            <Fragment>
-                                 <List dense={true} id={"file"+i}>
-                                    <ListItem
-                                    secondaryAction={
-                                        <IconButton size="small" edge="end" aria-label="delete">
-                                          <DeleteIcon  fontSize="small" style={{color:'#f44336'}} onClick={(e)=>handleDelete(e,item)}/>
-                                        </IconButton>
-                                      }
-                                    >
-                                        <ListItemAvatar>
-                                            <Avatar sx={{ width: 35, height: 35 }}>
-                                                <FilePresentIcon className="avatar-hover" onClick={(e)=>handleClick(e,item)} />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText  primary={item.fileName} secondary={"Uploaded on "+item.modifiedDateTime}  />
-                                    </ListItem>
-                                </List>                             
-
-                               
-
-
-                            </Fragment>
+                            
+                            <TableRow>
+                                <TableCell align="left">
+                                    <span className="avatar-hover" onClick={(e) => handleClick(e, item)}> {item.fileName} </span> <br/>
+                                    <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
+                                </TableCell>
+                                <TableCell align="left">
+                                    <IconButton size="small" edge="end" aria-label="delete">
+                                        <DeleteIcon fontSize="small" style={{ color: '#f44336' }} onClick={(e) => handleDelete(e, item)} />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                             
                         )) : null}
+                         </TableBody>
+                        </Table>
                     </Grid>
                 </Grid>
 

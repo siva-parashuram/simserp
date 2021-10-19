@@ -67,6 +67,7 @@ class companyMaster extends React.Component {
       UpdateCompany: true,
       urlparams: "",
       filelist:[],
+      rowClicked:1,
     };
   }
 
@@ -185,10 +186,10 @@ class companyMaster extends React.Component {
     console.log("handleRowClick > vitem > ",item);
     let editUrl=URLS.URLS.editCompany+this.state.urlparams + "&compID=" + item.companyId;
     let branches = item.branches;
-    this.setState({ item:item,branch: branches,editUrl:editUrl});
+    this.setState({ item:item,branch: branches,editUrl:editUrl,rowClicked:parseInt(this.state.rowClicked)+1 });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add('selectedRow');
-   // getAttachments(item.companyId);
+    this.getAttachments(item.companyId);
 }
 
 InitialremoveIsSelectedRowClasses(){
@@ -202,31 +203,33 @@ InitialremoveIsSelectedRowClasses(){
    
 }
 
-  getAttachments(companyId) {
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPUPLOAD;              
-    const headers = {
-        "Content-Type": "application/json",
-    };
-    let params={
-      ValidUser:ValidUser,
-      companyId:companyId,
-      branchId:null,
-      file:null,
-      transactionId:null,
-      transactionType:null
-    };
-    axios
-      .post(FTPGetAttachmentsUrl, params, { headers })
-      .then((response) => {
+getAttachments(companyId) {
+  let ValidUser = APIURLS.ValidUser;
+  ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  ValidUser.Token = getCookie(COOKIE.TOKEN);
+  const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;              
+  const headers = {
+      "Content-Type": "application/json",
+  };
+   
+  const formData = new FormData();
+  formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+  formData.append('Token', getCookie(COOKIE.TOKEN));
+  formData.append('CompanyId', companyId);
+  formData.append('BranchID', 0);
+  formData.append('Transaction', APIURLS.TrasactionType.default);
+  formData.append('TransactionNo', "");
+  formData.append('FileData', "");
 
-      })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
-  }
+  axios
+    .post(FTPGetAttachmentsUrl, formData, { headers })
+    .then((response) => {
+      this.setState({ filelist: response.data });
+    })
+    .catch((error) => {
+      console.log("error > ", error);
+    });
+}
 
 
 
@@ -241,9 +244,10 @@ InitialremoveIsSelectedRowClasses(){
       let branches = item.branches;
       let editUrl=URLS.URLS.editCompany+this.state.urlparams + "&compID=" + item.companyId;
       // getCompanyBranchList(item.companyId);
-      this.setState({ item:item,branch: branches,editUrl:editUrl });
+      this.setState({ item:item,branch: branches,editUrl:editUrl,rowClicked:parseInt(this.state.rowClicked)+1 });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
+      getAttachments(item.companyId);
     };
 
     const removeIsSelectedRowClasses = () => {
@@ -255,6 +259,34 @@ InitialremoveIsSelectedRowClasses(){
         console.log("Error : ",e);
       }
     };
+
+    const getAttachments=(companyId)=> {
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;              
+      const headers = {
+          "Content-Type": "application/json",
+      };
+       
+      const formData = new FormData();
+      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+      formData.append('Token', getCookie(COOKIE.TOKEN));
+      formData.append('CompanyId', companyId);
+      formData.append('BranchID', 0);
+      formData.append('Transaction', APIURLS.TrasactionType.default);
+      formData.append('TransactionNo', "");
+      formData.append('FileData', "");
+    
+      axios
+        .post(FTPGetAttachmentsUrl, formData, { headers })
+        .then((response) => {
+          this.setState({ filelist: response.data });
+        })
+        .catch((error) => {
+          console.log("error > ", error);
+        });
+    }
 
     const getCompanyBranchList = (companyId) => { };
 
@@ -479,6 +511,7 @@ InitialremoveIsSelectedRowClasses(){
                   data={this.state.branch} 
                   item={this.state.item}
                   filelist={this.state.filelist}
+                  rowClicked={this.state.rowClicked}
                   />
                   ) }
                   

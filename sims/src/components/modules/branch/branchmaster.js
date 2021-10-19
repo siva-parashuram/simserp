@@ -39,7 +39,8 @@ class branchMaster extends React.Component {
       SuccessPrompt: false,
       branchItem: {},
       editUrl: null,
-      filelist:[]
+      filelist:[],
+      rowClicked:1,
     };
   }
 
@@ -104,7 +105,7 @@ class branchMaster extends React.Component {
       this.state.urlparams +
       "&editbranchId=" +
       item.branchId;
-    this.setState({ branchItem: item, editUrl: editUrl });
+    this.setState({ branchItem: item, editUrl: editUrl,rowClicked:parseInt(this.state.rowClicked)+1 });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
     this.getAttachments(item.companyId,item.branchId);
@@ -154,7 +155,7 @@ class branchMaster extends React.Component {
         this.state.urlparams +
         "&editbranchId=" +
         item.branchId;
-      this.setState({ branchItem: item, editUrl: editUrl });
+      this.setState({ branchItem: item, editUrl: editUrl,rowClicked:parseInt(this.state.rowClicked)+1 });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
       getAttachments(item.companyId,item.branchId);
@@ -389,6 +390,7 @@ class branchMaster extends React.Component {
                         edit={this.state.editUrl}
                         branchItem={this.state.branchItem}
                         filelist={this.state.filelist}
+                        rowClicked={this.state.rowClicked}
                       />
                     </Fragment>
                   )}

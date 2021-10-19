@@ -29,7 +29,9 @@ class attachmentmaster extends React.Component {
             urlparams: "",
             ShowLoader: false,
             ErrorPrompt: false,
-            filelist: this.props.filelist
+            newAdded:false,
+            OldrowClicked:1,
+            filelist: []
         };
     }
     render() {
@@ -43,7 +45,7 @@ class attachmentmaster extends React.Component {
             var extension = e.target.files[0].type;
             console.log("filename > ", filename);
             console.log("extension > ", extension);
-            SWITCH(e, type, category,"upload");
+            SWITCH(e, type, category);
         }
 
         const SWITCH = (e, type, category,uploadOrList) => {
@@ -61,12 +63,12 @@ class attachmentmaster extends React.Component {
                 case "company":
                     let companyId = this.props.companyId;
                     formData.append('CompanyId', this.props.companyId);
-                    formData.append('BranchID', null);
+                    formData.append('BranchID', 0);
                     formData.append('Transaction', APIURLS.TrasactionType.default);
-                    formData.append('TransactionNo', null);
+                    formData.append('TransactionNo', "");
                     formData.append('FileData', file);
-                    if(uploadOrList==="upload"){processUploadPost(formData);}
-                    if(uploadOrList==="list"){getFileList(formData);}
+                    processUploadPost(formData,this.props.companyId,0,'company');
+                    
                     break;
                 case "branch":
                     formData.append('CompanyId', this.props.companyId);
@@ -74,14 +76,13 @@ class attachmentmaster extends React.Component {
                     formData.append('Transaction', APIURLS.TrasactionType.default);
                     formData.append('TransactionNo', "");
                     formData.append('FileData', file);
-                    if(uploadOrList==="upload"){processUploadPost(formData);}
-                    if(uploadOrList==="list"){getFileList(formData);}
+                    processUploadPost(formData,this.props.companyId,this.props.branchId,'branch');
                     break;
 
             }
         }
 
-        const processUploadPost = (formData) => {
+        const processUploadPost = (formData,companyId,branchId,listing) => {
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -92,43 +93,64 @@ class attachmentmaster extends React.Component {
             const headers = {
                 "Content-Type": "application/json",
             };
-            // getFileList();
-            // reset();
-            // this.setState({ShowLoader:false});
+           
 
             axios
                 .post(FTPUploadUrl, formData, { headers })
-                .then((response) => {                     
-                    getFileList(formData);
+                .then((response) => {
+                    if(response.status===200 || response.status===201){
+                        if (listing === "branch") {
+                            getBranchFileList(companyId,branchId);
+                        }
+                        if (listing === "company") {
+                            getBranchFileList(companyId,0);
+                        }
+                    }
+                   
                 })
                 .catch((error) => {
                     console.log("error > ", error);
                     this.setState({ ErrorPrompt: true, ShowLoader: false });
-                    
+
                 });
 
         }
 
-        const getFileList = (formData) => {
-            let filelist = [];
+    
 
-            const Url = APIURLS.APIURL.FTPFILELIST;
+        const getBranchFileList=(companyId,branchId) =>{
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;              
             const headers = {
                 "Content-Type": "application/json",
             };
+             
+            const fd = new FormData();
+            fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+            fd.append('Token', getCookie(COOKIE.TOKEN));
+            fd.append('CompanyId', companyId);
+            fd.append('BranchID', branchId);
+            fd.append('Transaction', APIURLS.TrasactionType.default);
+            fd.append('TransactionNo', "");
+            fd.append('FileData', "");
+        
             axios
-                .post(Url, formData, { headers })
-                .then((response) => {
-                    this.setState({filelist:response.data, ShowLoader: false });
-                    this.props.filelist=response.data;
-                })
-                .catch((error) => {
-                    console.log("error > ", error);
-                    this.setState({ ErrorPrompt: true, ShowLoader: false });
-                });
-
-            // this.setState({ filelist: filelist });
-        }
+              .post(FTPFILELIST, fd, { headers })
+              .then((response) => {
+                  console.log("getBranchFileList > response > ",response);
+                  if(response.status===200){
+                    // this.props.filelist=response.data;
+                    this.setState({ filelist:response.data, ShowLoader: false,newAdded:true,OldrowClicked:this.props.rowClicked });
+                  }
+                
+              })
+              .catch((error) => {
+                console.log("error > ", error);
+                this.setState({ filelist: [] });
+              });
+          }
 
         const reset = () => {
             document.getElementById("uploadInput").value = "";
@@ -145,6 +167,13 @@ class attachmentmaster extends React.Component {
             this.setState({ ErrorPrompt: false });
         };
 
+        const closeSuccessPrompt = (event, reason) => {
+            if (reason === "clickaway") {
+              return;
+            }
+            this.setState({ SuccessPrompt: false });
+          };
+
         return (
             <Fragment>
                 <div style={{ marginLeft: 10 }}>
@@ -158,6 +187,16 @@ class attachmentmaster extends React.Component {
                             >
                                 <Alert onClose={closeErrorPrompt} severity="error">
                                     Error!
+                                </Alert>
+                            </Snackbar>
+
+                            <Snackbar
+                                open={this.state.SuccessPrompt}
+                                autoHideDuration={3000}
+                                onClose={closeSuccessPrompt}
+                            >
+                                <Alert onClose={closeSuccessPrompt} severity="success">
+                                    Success!
                                 </Alert>
                             </Snackbar>
 
@@ -213,7 +252,16 @@ class attachmentmaster extends React.Component {
                     {/*****************************Attachment List as per Props input***********************************************/}
                     <div style={{ marginLeft: 10, marginTop: 20, marginBottom: 20 }}>
                         {this.props.companyId ? this.props.companyId > 0 ? (
-                            <Getattachments filelist={this.props.filelist} />
+                            <Fragment>
+                                {(parseInt(this.props.rowClicked)>parseInt(this.state.OldrowClicked) )?(
+                                   <Getattachments filelist={this.props.filelist} />  
+                                ):(
+                                    this.state.newAdded===true?(<Getattachments filelist={this.state.filelist} />):null
+                                    
+                                )}
+                               
+                            </Fragment>
+
                         ) : null : null}
                     </div>
                 </div>

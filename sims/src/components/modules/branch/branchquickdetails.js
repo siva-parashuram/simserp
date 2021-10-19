@@ -165,6 +165,7 @@ class branchquickdetails extends React.Component {
                              companyId={this.props.branchItem.companyId} 
                              branchId={this.props.branchItem.branchId}
                              filelist={this.props.filelist}
+                             rowClicked={this.props.rowClicked}
                              category="branch"
                              type="info"                            
                              upload={true}
