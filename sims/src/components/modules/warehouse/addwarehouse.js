@@ -159,6 +159,7 @@ class addwarehouse extends React.Component {
       // }
 
       if (id === "Code") {
+        console.log('code>',e.target.value)
         warehouse.Code = e.target.value;
         if (e.target.value.length > 10) {
           let v = this.state.Validations;
@@ -180,6 +181,7 @@ class addwarehouse extends React.Component {
         }
       }
       if (id === "Description") {
+        console.log('Description>',e.target.value)
         warehouse.Description = e.target.value;
         if (e.target.value.length > 50) {
           let v = this.state.Validations;
@@ -248,7 +250,7 @@ class addwarehouse extends React.Component {
           let v = this.state.Validations;
           v.EmailId = {
             errorState: true,
-            errorMssg: "Maximum 50 Numbers allowed",
+            errorMssg: "Maximum 50 characters allowed",
           };
           this.setState({
             Validations: v,
@@ -269,7 +271,7 @@ class addwarehouse extends React.Component {
           let v = this.state.Validations;
           v.Address = {
             errorState: true,
-            errorMssg: "Maximum 50 Numbers allowed",
+            errorMssg: "Maximum 50 characters allowed",
           };
           this.setState({
             Validations: v,
@@ -290,7 +292,7 @@ class addwarehouse extends React.Component {
           let v = this.state.Validations;
           v.Address2 = {
             errorState: true,
-            errorMssg: "Maximum 50 Numbers allowed",
+            errorMssg: "Maximum 50 characters allowed",
           };
           this.setState({
             Validations: v,
@@ -311,7 +313,7 @@ class addwarehouse extends React.Component {
           let v = this.state.Validations;
           v.Address3 = {
             errorState: true,
-            errorMssg: "Maximum 50 Numbers allowed",
+            errorMssg: "Maximum 50 characters allowed",
           };
           this.setState({
             Validations: v,
@@ -336,7 +338,7 @@ class addwarehouse extends React.Component {
           let v = this.state.Validations;
           v.Ediurl = {
             errorState: true,
-            errorMssg: "Maximum 50 Numbers allowed",
+            errorMssg: "Maximum 50 characters allowed",
           };
           this.setState({
             Validations: v,
@@ -357,7 +359,7 @@ class addwarehouse extends React.Component {
           let v = this.state.Validations;
           v.EdiloginId = {
             errorState: true,
-            errorMssg: "Maximum 50 Numbers allowed",
+            errorMssg: "Maximum 50 characters allowed",
           };
           this.setState({
             Validations: v,
@@ -378,7 +380,7 @@ class addwarehouse extends React.Component {
           let v = this.state.Validations;
           v.Edipassword = {
             errorState: true,
-            errorMssg: "Maximum 50 Numbers allowed",
+            errorMssg: "Maximum 50 characters allowed",
           };
           this.setState({
             Validations: v,

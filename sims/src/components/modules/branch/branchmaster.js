@@ -38,7 +38,7 @@ class branchMaster extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       branchItem: {},
-      editUrl: null,
+      editurl: null,
     };
   }
 
@@ -99,11 +99,11 @@ class branchMaster extends React.Component {
     console.log("handleRowClick > id > ", id);
     console.log("handleRowClick > vitem > ", item);
     let editUrl =
-      URLS.URLS.editBranch +
-      this.state.urlparams +
-      "&editbranchId=" +
-      item.branchId;
-    this.setState({ branchItem: item, editUrl: editUrl });
+    URLS.URLS.editBranch +
+    this.state.urlparams +
+    "&editbranchId=" +
+    item.branchId
+    this.setState({ branchItem: item, editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -120,11 +120,11 @@ class branchMaster extends React.Component {
       console.log("handleRowClick > id > ", id);
       console.log("handleRowClick > vitem > ", item);
       let editUrl =
-        URLS.URLS.editBranch +
-        this.state.urlparams +
-        "&editbranchId=" +
-        item.branchId;
-      this.setState({ branchItem: item, editUrl: editUrl });
+      URLS.URLS.editBranch +
+      this.state.urlparams +
+      "&editbranchId=" +
+      item.branchId
+      this.setState({ branchItem: item, editurl: editUrl });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     };
@@ -241,7 +241,7 @@ class branchMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage(this.state.editUrl)}
+                    onClick={(e) => openPage(this.state.editurl)}
                   >
                     Edit
                   </Button>

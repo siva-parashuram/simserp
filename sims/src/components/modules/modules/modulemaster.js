@@ -96,7 +96,7 @@ class modulemasters extends React.Component {
       this.state.urlparams +
       "&moduleId=" +
       item.moduleId;
-    this.setState({ editurl: editUrl });
+    this.setState({moduleId: item.moduleId , editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -116,8 +116,8 @@ class modulemasters extends React.Component {
         this.state.urlparams +
         "&moduleId=" +
         item.moduleId;
-      this.setState({ editurl: editUrl });
-      this.setState({ moduleId: item.moduleId });
+      
+      this.setState({ moduleId: item.moduleId,editurl: editUrl  });
       getPageList(item.moduleId);
 
       removeIsSelectedRowClasses();
@@ -155,6 +155,7 @@ class modulemasters extends React.Component {
           if (response.status === 200) {
             let data = response.data;
             resetDataList(data);
+
           } else {
           }
         })

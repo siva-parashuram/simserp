@@ -73,6 +73,7 @@ class addpage extends React.Component {
       pageLink: null,
       description: null,
       createBtnDisable: true,
+      moduleId:null,
 
       refreshPageLinkList: false,
       modules: [],
@@ -270,13 +271,14 @@ class addpage extends React.Component {
           let data = response.data;
           console.log("getPageList > response > data > ", data);
           this.refreshDataList(data);
-          this.setState({ ProgressLoader: true });
+          let rows=data;
+          this.setState({ ProgressLoader: true },);
         } else {
         }
       })
       .catch((error) => {
         console.log("refreshPageListByModuleId > error > ", error);
-        this.setState({ ProgressLoader: true });
+        this.setState({ ProgressLoader: true },);
       });
   }
 
@@ -298,6 +300,28 @@ class addpage extends React.Component {
 
   processResetData(data) {
     console.log("processResetData > data > ", data);
+  }
+
+  InitialhandleRowClick(e, item, id) {
+    console.log("handleRowClick > id > ", id);
+    console.log("handleRowClick > vitem > ", item);
+    let editUrl =
+      URLS.URLS.editModule +
+      this.state.urlparams +
+      "&moduleId=" +
+      item.moduleId;
+      let previousRowSelected = this.state.previousRowSelected;
+      if (parseInt(previousRowSelected) != parseInt(e.id)) {
+        this.setState({ isRowSelected: true, previousRowSelected: item });}
+    this.setState({ editurl: editUrl });
+    this.InitialremoveIsSelectedRowClasses();
+    document.getElementById(id).classList.add("selectedRow");
+  }
+
+  InitialremoveIsSelectedRowClasses() {
+    for (let i = 0; i < this.state.modules.length; i++) {
+      document.getElementById("row_" + i).className = "";
+    }
   }
 
   render() {
@@ -402,6 +426,7 @@ class addpage extends React.Component {
 
     const updateFormValue = (id, e) => {
       if (id === "pageName") {
+        console.log("Pagename>",this.state.pageName)
         if (e.target.value === "" || e.target.value.length > 20) {
           let Validations = this.state.Validations;
           if (e.target.value === "") {
@@ -428,9 +453,10 @@ class addpage extends React.Component {
         }
       }
       if (id === "pageLink") {
+        console.log("PageLink>",this.state.pageLink)
         if (e.target.value === "" || e.target.value.length > 100) {
           let Validations = this.state.Validations;
-          if (e.target.value === "") {
+          if (e.target.value === ""||e.target.value===null) {
             Validations.pageLink = {
               errorState: true,
               errorMsg: "Blank inputs not allowed!",
@@ -450,21 +476,21 @@ class addpage extends React.Component {
         }
       }
       if (id === "description") {
-        if (e.target.value === "" || e.target.value.length > 100) {
+        console.log("description>",this.state.description)
+        //if (e.target.value === "" || e.target.value.length > 100) {
           let Validations = this.state.Validations;
-          if (e.target.value === "") {
-            Validations.description = {
-              errorState: true,
-              errorMsg: "Blank inputs not allowed!",
-            };
-          }
+          // if (e.target.value === "") {
+          //   Validations.description = {
+          //     errorState: true,
+          //     errorMsg: "Blank inputs not allowed!",
+          //   };
+          // }
           if (e.target.value.length > 50) {
             Validations.description = {
               errorState: true,
               errorMsg: "Maximum 50 characters Allowed!",
             };
-          }
-          this.setState({ Validations: Validations });
+            this.setState({ Validations: Validations });
         } else {
           let Validations = this.state.Validations;
           Validations.description = { errorState: false, errorMsg: "" };
@@ -472,8 +498,11 @@ class addpage extends React.Component {
             description: e.target.value,
             Validations: Validations,
           });
+          }
+          
+         
         }
-      }
+     
     };
 
     const enableCreateBtn = () => {
@@ -747,7 +776,7 @@ class addpage extends React.Component {
                             }}
                             disabled={this.state.createBtnDisable}
                           >
-                            Create
+                            Create - {this.props.data.moduleId}
                           </Button>
                         </TableCell>
                         <TableCell align="left" className="no-border-table">
@@ -768,6 +797,7 @@ class addpage extends React.Component {
                             InputProps={{
                               className: "textFieldCss",
                             }}
+                           //value={this.state.pageName}
                             error={this.state.Validations.pageName.errorState}
                             helperText={
                               this.state.Validations.pageName.errorMsg
@@ -807,7 +837,7 @@ class addpage extends React.Component {
                             id="description"
                             variant="outlined"
                             size="small"
-                            onChange={(e) => updateFormValue("description", e)}
+                            onChange={(e) => updateFormValue("description", e)} 
                             fullWidth
                             InputProps={{
                               className: "textFieldCss",
