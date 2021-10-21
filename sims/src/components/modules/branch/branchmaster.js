@@ -84,7 +84,7 @@ class branchMaster extends React.Component {
       .post(GetBrachesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getBranches > response > data > ", data);
+       
         this.setState({ branchData: data, ProgressLoader: true }, () => {
           if (this.state.branchData.length > 0) {
             this.InitialhandleRowClick(null, data[0], "row_0");
@@ -92,14 +92,13 @@ class branchMaster extends React.Component {
         });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
         this.setState({ branchData: [], ProgressLoader: true });
       });
   }
 
   InitialhandleRowClick(e, item, id) {
-    console.log("handleRowClick > id > ", id);
-    console.log("handleRowClick > vitem > ", item);
+   
     let editUrl =
       URLS.URLS.editBranch +
       this.state.urlparams +
@@ -148,8 +147,7 @@ class branchMaster extends React.Component {
   render() {
     const handleRowClick = (e, item, id) => {
       this.setState({ selectedRow: id });
-      console.log("handleRowClick > id > ", id);
-      console.log("handleRowClick > vitem > ", item);
+     
       let editUrl =
         URLS.URLS.editBranch +
         this.state.urlparams +
@@ -162,7 +160,7 @@ class branchMaster extends React.Component {
     };
 
     const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.branchData.length; i++) {
+      for (let i = 0; i < this.state.branchData.length; i++) {      
         document.getElementById("row_" + i).className = "";
       }
     };
@@ -191,7 +189,7 @@ class branchMaster extends React.Component {
           this.setState({ filelist: response.data });
         })
         .catch((error) => {
-          console.log("error > ", error);
+          
           this.setState({ filelist: [] });
         });
     }
@@ -384,7 +382,7 @@ class branchMaster extends React.Component {
                   Object.getPrototypeOf(this.state.branchItem) ===
                     Object.prototype ? null : (
                     <Fragment>
-                        {console.log("this.state.filelist > ",this.state.filelist)}
+                      
                       <BranchQuickDetails
                         new={URLS.URLS.addBranch + this.state.urlparams}
                         edit={this.state.editUrl}

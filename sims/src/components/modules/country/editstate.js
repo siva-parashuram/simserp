@@ -113,7 +113,7 @@ class editstate extends React.Component {
       .post(GetSateUrl, getStateDetailsData, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getState > response > data > ", data);
+        
 
         this.setState({
           state: data,
@@ -127,7 +127,7 @@ class editstate extends React.Component {
         });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
@@ -145,12 +145,12 @@ class editstate extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountryList > response > data > ", data);
+        
         rows = data;
         this.setState({ countryData: rows });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
@@ -312,7 +312,7 @@ class editstate extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("error > ", error);
+          
         });
     };
 

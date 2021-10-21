@@ -84,11 +84,11 @@ class countryMaster extends React.Component {
       .post(GetDestinationsUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+        
         this.setState({ destinations: data, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   };
 
@@ -106,7 +106,7 @@ class countryMaster extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountryList > response > data > ", data);
+        
         rows = data;
         this.setState(
           {
@@ -122,7 +122,7 @@ class countryMaster extends React.Component {
         );
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
@@ -140,18 +140,17 @@ class countryMaster extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+        
         rows = data;
         this.setState({ states: rows, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
   InitialhandleRowClick(e, item, id) {
-    console.log("handleRowClick > id > ", id);
-    console.log("handleRowClick > vitem > ", item);
+    
     let editUrl =
       URLS.URLS.editCountry +
       this.state.urlparams +
@@ -220,7 +219,7 @@ class countryMaster extends React.Component {
         .post(GetDestinationByCountryIdUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("getStateList > response > data > ", data);
+          
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ destinations: data, ProgressLoader: true });
           } else {
@@ -228,7 +227,7 @@ class countryMaster extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("error > ", error);
+         
         });
     };
 
@@ -260,7 +259,7 @@ class countryMaster extends React.Component {
         .post(GetStateByCountryIdUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("getStatesByCountry > response > data > ", data);
+         
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ states: data, ProgressLoader: true });
           } else {
@@ -268,7 +267,7 @@ class countryMaster extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("error > ", error);
+         
         });
     };
 
@@ -303,8 +302,7 @@ class countryMaster extends React.Component {
     }
   
     const handlePageChange=(event, newPage)=>{
-      console.log("handlePageChange > event > ",event);
-      console.log("handlePageChange > newPage > ",newPage);
+     
       let pagination=this.state.pagination;
       pagination.page=newPage;          
       this.setState({pagination:pagination});

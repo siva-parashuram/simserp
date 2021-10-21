@@ -67,14 +67,14 @@ class currencymaster extends React.Component {
         axios.post(Url, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
-                console.log("getList > response > data > ", data);
+                
                 this.setState({
                     currency: data,
                     ProgressLoader: true
                 });
             }
             ).catch(error => {
-                console.log("error > ", error);
+                
             });
     }
 
@@ -83,7 +83,7 @@ class currencymaster extends React.Component {
     render() {
 
         const handleRowClick = (e, item, id) => {
-            console.log("handleRowClick > item > ", item);
+           
             removeIsSelectedRowClasses();
             document.getElementById(id).classList.add('selectedRow');
         }

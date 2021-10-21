@@ -237,6 +237,7 @@ input[type=number] {
 .navDiv{
     width: 100% !important;
     background-color: #0072bc !important;
+   
     /* height: 40px !important;
     line-height: 40px !important; */
     display: inline;
@@ -379,6 +380,16 @@ cursor: pointer;
 
 }
    */
+
+
+  .logo-style{
+    max-width: 150px;
+    padding-top:160px;
+    padding-left:15px ;
+    
+    
+
+  }
 
 
 

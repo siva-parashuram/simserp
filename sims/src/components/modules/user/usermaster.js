@@ -11,18 +11,18 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import Divider from "@material-ui/core/Divider";
 import Switch from "@mui/material/Switch";
-import ButtonGroup from '@mui/material/ButtonGroup';
+import ButtonGroup from "@mui/material/ButtonGroup";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import TablePagination from '@mui/material/TablePagination';
+import TablePagination from "@mui/material/TablePagination";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -37,10 +37,10 @@ class usermaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pagination:{
-        page:0,
-        rowsPerPage:10,         
-      }, 
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       urlparams: "",
       allotBranch: false,
       allotModule: false,
@@ -50,7 +50,7 @@ class usermaster extends React.Component {
       userId: 0,
       passData: [],
       userBranchMappingList: [],
-      editurl:null
+      editurl: null,
     };
   }
 
@@ -98,13 +98,11 @@ class usermaster extends React.Component {
         });
       })
       .catch((error) => {
-        //console.log("error > ", error);
         this.setState({ branchData: [], ProgressLoader: true });
       });
   }
 
   getUserBranches(userId) {
-    console.log("getUserBranches > ", userId);
     let userBranches = [];
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -123,7 +121,6 @@ class usermaster extends React.Component {
     axios
       .post(GetUserBranchMappedByUserIDUrl, data, { headers })
       .then((response) => {
-        console.log("getUserBranches > response.data > ", response.data);
         let data = response.data;
         this.setState({ userBranchMappingList: data.userBranchMappingList });
         this.processData(data.userBranchMappingList, userId);
@@ -142,7 +139,7 @@ class usermaster extends React.Component {
       };
       company.push(c);
     }
-    console.log("processData > company > ", company);
+
     let uniqueCompany = [];
     company.map((x) =>
       uniqueCompany.filter(
@@ -151,14 +148,11 @@ class usermaster extends React.Component {
         ? null
         : uniqueCompany.push(x)
     );
-    console.log("processData > uniqueCompany > ", uniqueCompany);
 
     let branches = [];
     for (let i = 0; i < uniqueCompany.length; i++) {
       let branch = uniqueCompany[i].branch;
       for (let j = 0; j < data.length; j++) {
-        // console.log("uniqueCompany[i] > ",uniqueCompany[i]);
-        // console.log("uniqueCompany[i] > ",uniqueCompany[i]);
         if (uniqueCompany[i].companyID === data[j].companyID) {
           let b = {
             branchID: data[j].branchID,
@@ -171,7 +165,7 @@ class usermaster extends React.Component {
       }
       uniqueCompany[i].branch = branch;
     }
-    console.log("-------> FINAL processData > uniqueCompany > ", uniqueCompany);
+
     let passData = {
       userId: userId,
       companyBranch: uniqueCompany,
@@ -194,52 +188,42 @@ class usermaster extends React.Component {
       .post(GetUsersUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getUsersList > response > data > ", data);
-        let rows=data
-        this.setState({
-          users: data,
-          ProgressLoader: true,
-        },
-        () => {
-          if (rows.length > 0) {
-            this.InitialhandleRowClick(null,rows[0]  ,"row_0");
-         }
-       });
+
+        let rows = data;
+        this.setState(
+          {
+            users: data,
+            ProgressLoader: true,
+          },
+          () => {
+            if (rows.length > 0) {
+              this.InitialhandleRowClick(null, rows[0], "row_0");
+            }
+          }
+        );
       })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
+      .catch((error) => {});
   }
 
-
   InitialhandleRowClick(e, item, id) {
-    console.log("InitialhandleRowClick > id > ", id);
-    console.log("InitialhandleRowClick > vitem > ", item);
     let editUrl =
-    URLS.URLS.editUser +
-    this.state.urlparams +
-    "&userId=" +
-    item.userId
-      console.log("InitialhandleRowClick   ",editUrl)
-    this.setState({  editurl: editUrl });
+      URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.userId;
+
+    this.setState({ editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
 
   InitialremoveIsSelectedRowClasses() {
-    try{
+    try {
       for (let i = 0; i < this.state.users.length; i++) {
         document.getElementById("row_" + i).className = "";
       }
-    }catch(e){}
-    
+    } catch (e) {}
   }
 
   render() {
     const handleAccordionClick = (val, e) => {
-      console.log("handleAccordionClick > val > ", val);
-      console.log("handleAccordionClick > e > ", e);
-     
       if (val === "allotBranch") {
         this.state.allotBranch === true
           ? this.setState({ allotBranch: false })
@@ -253,48 +237,36 @@ class usermaster extends React.Component {
     };
 
     const handleRowClick = (e, item, id) => {
-      console.log("handleRowClick > e > ",e);
-      console.log("handleRowClick > item > ",item);
-      console.log("handleRowClick > id > ",id);
-      try{
+      try {
         this.setState({ passData: [] });
-        console.log("handleRowClick > item > ", item);
+
         let editUrl =
-        URLS.URLS.editUser +
-        this.state.urlparams +
-        "&userId=" +
-        item.userId;
-        
-        this.setState({ userId: item.userId,editurl:editUrl });
+          URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.userId;
+
+        this.setState({ userId: item.userId, editurl: editUrl });
         removeIsSelectedRowClasses();
         this.getUserBranches(item.userId);
         document.getElementById(id).classList.add("selectedRow");
-      }catch(e){}
-     
+      } catch (e) {}
     };
 
     const removeIsSelectedRowClasses = () => {
-      try{
+      try {
         for (let i = 0; i < this.state.users.length; i++) {
           document.getElementById("row_" + i).className = "";
         }
-      }catch(e){}
-    
+      } catch (e) {}
     };
 
     const changeUserStatus = (item, val) => {
-      console.log("==================================");
-      console.log("item > ", item);
-      console.log("val > ", val);
       let users = this.state.users;
       let index = users.indexOf(item);
-      console.log("index > ", index);
+
       let user = users[index];
       user.isActive = val;
       users[index] = user;
-      console.log("New users > ", users);
+
       this.setState({ users: users });
-      console.log("==================================");
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -315,34 +287,31 @@ class usermaster extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
-    const openPage = (url) => {             
+    const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
-  }
+    };
 
-  const getPageData=(data)=>{
-   
-    let rows=data;
-    let page=parseInt(this.state.pagination.page);
-    let rowsPerPage=parseInt(this.state.pagination.rowsPerPage);    
-    
-     
-    return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-  }
+    const getPageData = (data) => {
+      let rows = data;
+      let page = parseInt(this.state.pagination.page);
+      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
 
-  const handlePageChange=(event, newPage)=>{
-    removeSelected();
-    console.log("handlePageChange > event > ",event);
-    console.log("handlePageChange > newPage > ",newPage);
-    let pagination=this.state.pagination;
-    pagination.page=newPage;          
-    this.setState({pagination:pagination});
-}
+      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    };
 
- const removeSelected=()=>{
-  removeIsSelectedRowClasses();
-  this.setState({userBranchMappingList:[],passData:[]});
- }
+    const handlePageChange = (event, newPage) => {
+      removeSelected();
+
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
+    };
+
+    const removeSelected = () => {
+      removeIsSelectedRowClasses();
+      this.setState({ userBranchMappingList: [], passData: [] });
+    };
 
     return (
       <Fragment>
@@ -375,39 +344,68 @@ class usermaster extends React.Component {
         </Snackbar>
 
         <div className="breadcrumb-height">
-        <Grid container spacing={1}>
-                        <Grid xs={12} sm={12} md={4} lg={4} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
-                            <div style={{marginTop:8}}>
-                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
-                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
-                                    Back
-                                </Link>
-                                <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
-                                    Dashboard
-                                </Link>                               
-                                <Typography color="textPrimary">User master</Typography>
-                            </Breadcrumbs>
-                            </div>                            
-                        </Grid>
-                        <Grid xs={12} sm={12} md={8} lg={8}>
-                            <div style={{marginLeft:10,marginTop:1}}>  
-                            <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
-                                 <Button
-                                     className="action-btns"
-                                     startIcon ={<AddIcon/>}                                               
-                                     onClick={(e) => openPage(URLS.URLS.addUser + this.state.urlparams)}                                     
-                                     >New</Button>
-                                 <Button
-                                 className="action-btns"
-                                     startIcon ={<EditIcon/>}                                               
-                                     onClick={(e) => openPage(this.state.editurl)}
-                                     >Edit</Button> 
-                             </ButtonGroup>
-                            </div>                           
-                        </Grid> 
-                    </Grid>
+          <Grid container spacing={1}>
+            <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
+              <div style={{ marginTop: 8 }}>
+                <Breadcrumbs
+                  className="style-breadcrumb"
+                  aria-label="breadcrumb"
+                >
+                  <Link
+                    color="inherit"
+                    className="backLink"
+                    onClick={this.props.history.goBack}
+                  >
+                    Back
+                  </Link>
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
+                  >
+                    Dashboard
+                  </Link>
+                  <Typography color="textPrimary">User master</Typography>
+                </Breadcrumbs>
+              </div>
+            </Grid>
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              <div style={{ marginLeft: 10, marginTop: 1 }}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
+                  <Button
+                    className="action-btns"
+                    startIcon={<AddIcon />}
+                    onClick={(e) =>
+                      openPage(URLS.URLS.addUser + this.state.urlparams)
+                    }
+                  >
+                    New
+                  </Button>
+                  <Button
+                    className="action-btns"
+                    startIcon={<EditIcon />}
+                    onClick={(e) => openPage(this.state.editurl)}
+                  >
+                    Edit
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </Grid>
+          </Grid>
           <div className="breadcrumb-bottom"></div>
-         
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
@@ -487,7 +485,6 @@ class usermaster extends React.Component {
                     page={this.state.pagination.page}
                     onPageChange={handlePageChange}
                   />
-
                 </Grid>
               </Grid>
             </Grid>

@@ -136,7 +136,7 @@ class addrole extends React.Component {
       //     Role:this.state.Role
       // };
       let CreateRoleUrl = APIURLS.APIURL.CreateRole;
-      console.log("CreateRoleUrl > ", CreateRoleUrl);
+      
       axios
         .post(CreateRoleUrl, data, { headers })
         .then((response) => {
@@ -147,7 +147,7 @@ class addrole extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("error > ", error);
+          
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
     };

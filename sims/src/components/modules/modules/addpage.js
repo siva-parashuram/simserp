@@ -73,7 +73,7 @@ class addpage extends React.Component {
       pageLink: null,
       description: null,
       createBtnDisable: true,
-      moduleId:null,
+      moduleId: null,
 
       refreshPageLinkList: false,
       modules: [],
@@ -121,7 +121,7 @@ class addpage extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           let data = response.data;
-          console.log("getModules > response > data > ", data);
+
           rows = data;
           this.setState({ modules: rows });
           this.updateColumns(rows);
@@ -129,7 +129,6 @@ class addpage extends React.Component {
         }
       })
       .catch((error) => {
-        console.log("error > ", error);
         this.setState({ ProgressLoader: false });
       });
   }
@@ -232,7 +231,6 @@ class addpage extends React.Component {
         }
       })
       .catch((error) => {
-        console.log("handleDropdownChange > error > ", error);
         this.setState({ ProgressLoader: true });
       });
   }
@@ -269,16 +267,15 @@ class addpage extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           let data = response.data;
-          console.log("getPageList > response > data > ", data);
+
           this.refreshDataList(data);
-          let rows=data;
-          this.setState({ ProgressLoader: true },);
+          let rows = data;
+          this.setState({ ProgressLoader: true });
         } else {
         }
       })
       .catch((error) => {
-        console.log("refreshPageListByModuleId > error > ", error);
-        this.setState({ ProgressLoader: true },);
+        this.setState({ ProgressLoader: true });
       });
   }
 
@@ -298,21 +295,18 @@ class addpage extends React.Component {
     this.props.data.rows = rows;
   }
 
-  processResetData(data) {
-    console.log("processResetData > data > ", data);
-  }
+  processResetData(data) {}
 
   InitialhandleRowClick(e, item, id) {
-    console.log("handleRowClick > id > ", id);
-    console.log("handleRowClick > vitem > ", item);
     let editUrl =
       URLS.URLS.editModule +
       this.state.urlparams +
       "&moduleId=" +
       item.moduleId;
-      let previousRowSelected = this.state.previousRowSelected;
-      if (parseInt(previousRowSelected) != parseInt(e.id)) {
-        this.setState({ isRowSelected: true, previousRowSelected: item });}
+    let previousRowSelected = this.state.previousRowSelected;
+    if (parseInt(previousRowSelected) != parseInt(e.id)) {
+      this.setState({ isRowSelected: true, previousRowSelected: item });
+    }
     this.setState({ editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
@@ -326,25 +320,18 @@ class addpage extends React.Component {
 
   render() {
     const handleRowClick = (e) => {
-      console.log("e > ", e);
       let previousRowSelected = this.state.previousRowSelected;
-      console.log("previousRowSelected > ", previousRowSelected);
-      console.log("e.id > ", e.id);
+
       if (parseInt(previousRowSelected) != parseInt(e.id)) {
         this.setState({ isRowSelected: true, previousRowSelected: e.id });
-        console.log("NOT EQUAL");
-        console.log("Perform operations here...");
       } else {
         this.setState({ isRowSelected: false, previousRowSelected: e.id });
       }
     };
 
-    const onSelectionModelChange = (e) => {
-      console.log("onSelectionModelChange > ", e);
-    };
+    const onSelectionModelChange = (e) => {};
 
     const onEditRowsModelChange = (e) => {
-      console.log("onEditRowsModelChange > ", e);
       var keys = Object.keys(e);
       if (keys.length === 0) {
       } else {
@@ -402,7 +389,7 @@ class addpage extends React.Component {
         validUser: ValidUser,
         pageLists: page,
       };
-      console.log("processUpdateData > data > ", data);
+
       const headers = {
         "Content-Type": "application/json",
       };
@@ -412,21 +399,19 @@ class addpage extends React.Component {
         .post(UpdateUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleUpdate > response > data > ", data);
+
           this.setState({ updateBtnDisable: true }, () => {
             getPageListByModuleId(moduleId);
           });
           this.setState({ ProgressLoader: true });
         })
         .catch((error) => {
-          console.log("handleUpdate > error > ", error);
           this.setState({ ProgressLoader: true });
         });
     };
 
     const updateFormValue = (id, e) => {
       if (id === "pageName") {
-        console.log("Pagename>",this.state.pageName)
         if (e.target.value === "" || e.target.value.length > 20) {
           let Validations = this.state.Validations;
           if (e.target.value === "") {
@@ -453,10 +438,9 @@ class addpage extends React.Component {
         }
       }
       if (id === "pageLink") {
-        console.log("PageLink>",this.state.pageLink)
         if (e.target.value === "" || e.target.value.length > 100) {
           let Validations = this.state.Validations;
-          if (e.target.value === ""||e.target.value===null) {
+          if (e.target.value === "" || e.target.value === null) {
             Validations.pageLink = {
               errorState: true,
               errorMsg: "Blank inputs not allowed!",
@@ -476,21 +460,20 @@ class addpage extends React.Component {
         }
       }
       if (id === "description") {
-        console.log("description>",this.state.description)
         //if (e.target.value === "" || e.target.value.length > 100) {
-          let Validations = this.state.Validations;
-          // if (e.target.value === "") {
-          //   Validations.description = {
-          //     errorState: true,
-          //     errorMsg: "Blank inputs not allowed!",
-          //   };
-          // }
-          if (e.target.value.length > 50) {
-            Validations.description = {
-              errorState: true,
-              errorMsg: "Maximum 50 characters Allowed!",
-            };
-            this.setState({ Validations: Validations });
+        let Validations = this.state.Validations;
+        // if (e.target.value === "") {
+        //   Validations.description = {
+        //     errorState: true,
+        //     errorMsg: "Blank inputs not allowed!",
+        //   };
+        // }
+        if (e.target.value.length > 50) {
+          Validations.description = {
+            errorState: true,
+            errorMsg: "Maximum 50 characters Allowed!",
+          };
+          this.setState({ Validations: Validations });
         } else {
           let Validations = this.state.Validations;
           Validations.description = { errorState: false, errorMsg: "" };
@@ -498,11 +481,8 @@ class addpage extends React.Component {
             description: e.target.value,
             Validations: Validations,
           });
-          }
-          
-         
         }
-     
+      }
     };
 
     const enableCreateBtn = () => {
@@ -530,7 +510,7 @@ class addpage extends React.Component {
 
     const handlecreate = (moduleId) => {
       this.setState({ ProgressLoader: false });
-      console.log("handlecreate > moduleId > ", moduleId);
+
       let pageName = this.state.pageName;
       let pageLink = this.state.pageLink;
       let description = this.state.description;
@@ -556,7 +536,7 @@ class addpage extends React.Component {
           "Content-Type": "application/json",
         };
         let CreatePageUrl = APIURLS.APIURL.CreatePage;
-        console.log("handlecreate > data > ", data);
+
         axios
           .post(CreatePageUrl, data, { headers })
           .then((response) => {
@@ -568,7 +548,6 @@ class addpage extends React.Component {
             this.setState({ ProgressLoader: true });
           })
           .catch((error) => {
-            console.log("error > ", error);
             this.setState({ ProgressLoader: true });
           });
       }
@@ -604,7 +583,6 @@ class addpage extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("getPageListByModuleId > error > ", error);
           this.setState({ ProgressLoader: true });
         });
     };
@@ -686,7 +664,7 @@ class addpage extends React.Component {
               {/* <Grid xs={12} sm={12} md={3} lg={3}> */}
               <Grid xs={12} sm={12} md={8} lg={8}>
                 <Button
-                  style={{ marginLeft: 10,marginTop:20}}
+                  style={{ marginLeft: 10, marginTop: 20 }}
                   disabled={this.state.updateBtnDisable}
                   onClick={handleUpdate}
                 >
@@ -797,7 +775,7 @@ class addpage extends React.Component {
                             InputProps={{
                               className: "textFieldCss",
                             }}
-                           //value={this.state.pageName}
+                            //value={this.state.pageName}
                             error={this.state.Validations.pageName.errorState}
                             helperText={
                               this.state.Validations.pageName.errorMsg
@@ -837,7 +815,7 @@ class addpage extends React.Component {
                             id="description"
                             variant="outlined"
                             size="small"
-                            onChange={(e) => updateFormValue("description", e)} 
+                            onChange={(e) => updateFormValue("description", e)}
                             fullWidth
                             InputProps={{
                               className: "textFieldCss",

@@ -16,8 +16,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TextField from "@material-ui/core/TextField";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import AddIcon from '@material-ui/icons/Add';
+import ButtonGroup from "@mui/material/ButtonGroup";
+import AddIcon from "@material-ui/icons/Add";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -36,8 +36,6 @@ import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 const Dformat = APIURLS.DFormat;
 const viewDate = "yyyy-mm-dd";
 const todayDate = new Date(); //moment().format(viewDate);
-console.log("Dformat > ", Dformat);
-console.log("todayDate > ", todayDate);
 
 class addcurrency extends React.Component {
   constructor(props) {
@@ -94,7 +92,6 @@ class addcurrency extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-      console.log("In updateFormValue");
       let Currency = this.state.Currency;
       if (id === "Code") {
         Currency.Code = e.target.value;
@@ -178,7 +175,7 @@ class addcurrency extends React.Component {
         .post(Url, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleCreate > response > data > ", data);
+
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
             let gobackURL = URLS.URLS.currencyMaster + this.state.urlparams;
@@ -187,9 +184,7 @@ class addcurrency extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -242,7 +237,6 @@ class addcurrency extends React.Component {
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-          
             <Grid
               xs={12}
               sm={12}
@@ -268,7 +262,7 @@ class addcurrency extends React.Component {
                   </Link>
                   <Link
                     color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
                   >
                     Dashboard
                   </Link>
@@ -276,7 +270,6 @@ class addcurrency extends React.Component {
                     color="inherit"
                     href={URLS.URLS.currencyMaster + this.state.urlparams}
                   >
-                    
                     Currency Master
                   </Link>
 
@@ -303,7 +296,7 @@ class addcurrency extends React.Component {
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-         
+
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>

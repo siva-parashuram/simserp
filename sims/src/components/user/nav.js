@@ -18,19 +18,29 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Badge from '@mui/material/Badge';
 import { Button } from "@material-ui/core";
+
+
 import { styled } from '@mui/material/styles';
 
 
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
+  // root: {
+  //   flexGrow: 1,
+  // },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
+
+    // textAlign:"center"
   },
+
+  // Logo: {
+  //   maxWidth: 80,
+  //   float:"left"
+  // },
 }));
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -58,8 +68,6 @@ export default function ButtonAppBar() {
   const [notificationCount, setnotificationCount] = React.useState(1);
 
   useEffect(() => {
-    console.log("On Load Event of UseEffect !");
-
     if (getCookie(COOKIE.USERID) != null) {
       let token = getCookie(COOKIE.TOKEN);
       let FIRSTNAME = getCookie(COOKIE.FIRSTNAME);
@@ -69,11 +77,6 @@ export default function ButtonAppBar() {
       let branchName = url.searchParams.get("branchName");
       let compName = url.searchParams.get("compName");
       let branchBtnId = url.searchParams.get("branchBtnId");
-      console.log("===========================================");
-      console.log("branchId > ", branchId);
-      console.log("branchName > ", branchName);
-      console.log("compName > ", compName);
-      console.log("===========================================");
 
       if (
         token === "null" ||
@@ -115,6 +118,10 @@ export default function ButtonAppBar() {
         <CssBaseline />
         <AppBar className="navDiv" position="static">
           <Toolbar>
+            {/* <Box>
+            <img src={logo} className={classes.Logo} />
+            </Box> */}
+
             <Typography variant="h6" className={classes.title}>
               {branchName}
             </Typography>

@@ -90,12 +90,12 @@ class adddestination extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountryList > response > data > ", data);
+       
         rows = data;
         this.setState({ countryData: rows });
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
       });
   }
 
@@ -113,12 +113,12 @@ class adddestination extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+        
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
       });
   }
 
@@ -137,11 +137,11 @@ class adddestination extends React.Component {
       .post(GetDestinationsUrl, ValidUser, { headers })   
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+        
         this.setState({ destinations: data, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   };
 
@@ -228,11 +228,11 @@ class adddestination extends React.Component {
         });
       }
 
-      console.log("updated > ", this.state);
+      
     };
 
     const addDestination = () => {
-      console.log("Starting addDestination");
+     
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -248,9 +248,7 @@ class adddestination extends React.Component {
         },
         validUser: ValidUser,
       };
-      console.log("state > ", this.state);
-      console.log("data > ", data);
-
+      
       const headers = {
         "Content-Type": "application/json",
       };
@@ -260,7 +258,7 @@ class adddestination extends React.Component {
         .post(CreateDestinationUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("updateDestination > response > data > ", data);
+          
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
             this.getAllDestinations();
@@ -270,7 +268,7 @@ class adddestination extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("error > ", error);
+          
         });
     };
 

@@ -74,7 +74,7 @@ class usermoduleassign extends React.Component {
 
         axios.post(GetRolesUrl, ValidUser, { headers })
             .then(response => {
-                console.log("getRoles > response > ", response);
+               
                 if (response.status === 200) {
                     let data = response.data;
                     rows = data;
@@ -84,7 +84,7 @@ class usermoduleassign extends React.Component {
                 }
             }
             ).catch(error => {
-                console.log("getRoles > error > ", error);
+                
                 this.setState({ roles: [], ProgressLoader: true });
             });
 
@@ -103,7 +103,7 @@ class usermoduleassign extends React.Component {
         const getPageListByRoleId = (roleId) => {
             this.setState({  ProgressLoader: false,roleId:roleId });
             let branchId = document.querySelector("#branchList option:checked").value;
-            console.log("getPageListByRoleId > branchId > ", branchId);
+           
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -133,12 +133,12 @@ class usermoduleassign extends React.Component {
             // let Url=APIURLS.APIURL.GetUserPermissionByUserIDAndBranchID;
             axios.post(GetRoleDetailByRoleIdUrl, data, { headers })
                 .then(response => {
-                    console.log("getPageListByRoleId > response > ", response);
+                   
                     processData(response.data.roleDetailLists);
                     
                 }
                 ).catch(error => {
-                    console.log("getRoles > error > ", error);
+                   
                     this.setState({ ModuleRoleList: [], ProgressLoader: true });
                 });
         }
@@ -228,8 +228,7 @@ class usermoduleassign extends React.Component {
             let URL=APIURLS.APIURL.CreateUserPermission; 
             axios.post(URL, data, { headers })
                 .then(response => {
-                    console.log("handleUpdate > response > ", response);
-                    console.log("handleUpdate > response.status > ", response.status);
+                    
                     if(response.status===200 || response.status===201){
                         this.setState({ ProgressLoader: true,SuccessPrompt:true });          
                     }else{
@@ -238,7 +237,7 @@ class usermoduleassign extends React.Component {
                           
                 }
                 ).catch(error => {
-                    console.log("getRoles > error > ", error);
+                   
                     this.setState({ ProgressLoader: true,ErrorPrompt:true });      
                 });
                 
@@ -261,7 +260,7 @@ class usermoduleassign extends React.Component {
                 let URL=APIURLS.APIURL.GetUserPermissionByRoleId; 
                 axios.post(URL, data, { headers })
                 .then(response => {
-                    console.log("selectBranchDropdown > response.data > ", response.data);     
+                     
                     this.setState({UserAllotedRoleByBranch:response.data},()=>{
                         if(response.data===0){
                             this.setState({ ModuleRoleList: [], ProgressLoader: true });
@@ -272,7 +271,7 @@ class usermoduleassign extends React.Component {
                     }); 
                 }
                 ).catch(error => {
-                    console.log("selectBranchDropdown > error > ", error);
+                   
                          
                 });
 
@@ -299,7 +298,7 @@ class usermoduleassign extends React.Component {
 
         return (
             <Fragment>
-                {console.log("-------------> this.props.data > ", this.props.data)}
+               
                 {this.state.ProgressLoader === false ? (<div style={{ marginTop: -8, marginLeft: -10 }}><LinearProgress style={{ backgroundColor: '#ffeb3b' }} /> </div>) : null}
 
                 <Snackbar open={this.state.SuccessPrompt} autoHideDuration={3000} onClose={closeSuccessPrompt}>

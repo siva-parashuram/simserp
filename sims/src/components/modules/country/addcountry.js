@@ -101,12 +101,12 @@ class addcountry extends React.Component {
       .post(GetZonesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getZones > response > data > ", data);
+        
         this.setState({ zones: data, ProgressLoader: true });
         this.initializeZone();
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
@@ -257,10 +257,10 @@ class addcountry extends React.Component {
             this.setState({ ErrorPrompt: true });
           }
 
-          console.log("handleCreate > response > data > ", data);
+         
         })
         .catch((error) => {
-          console.log("error > ", error);
+         
           this.setState({ ErrorPrompt: true });
         });
     };

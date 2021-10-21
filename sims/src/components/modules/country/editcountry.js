@@ -109,8 +109,7 @@ class editcountry extends React.Component {
       .post(GetCountryUrl, getCountryDetailsData, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountry > response > data > ", data);
-        console.log("getCountry > response > data > ", data);
+       
 
         this.setState({
           country: data,
@@ -122,7 +121,7 @@ class editcountry extends React.Component {
         });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
@@ -139,11 +138,11 @@ class editcountry extends React.Component {
       .post(GetZonesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getZones > response > data > ", data);
+        
         this.setState({ zones: data, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
       });
   }
 
@@ -287,7 +286,7 @@ class editcountry extends React.Component {
         .post(UpdateCountryUrl, handleUpdateData, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleCreate > response > data > ", data);
+         
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
@@ -295,7 +294,7 @@ class editcountry extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("error > ", error);
+          
         });
     };
 

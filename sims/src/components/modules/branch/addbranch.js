@@ -152,12 +152,12 @@ class addbranch extends React.Component {
       .post(GetCompaniesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCompanyList > response > data > ", data);
+       
         rows = data;
         this.setState({ companyData: rows, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
       });
   }
 
@@ -175,12 +175,12 @@ class addbranch extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+       
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
@@ -198,19 +198,18 @@ class addbranch extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountryList > response > data > ", data);
+        
         rows = data;
         this.setState({ countryData: rows });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
   render() {
     const handleAccordionClick = (val, e) => {
-      console.log("handleAccordionClick > val > ", val);
-      console.log("handleAccordionClick > e > ", e);
+     
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true
           ? this.setState({ GeneralDetailsExpanded: false })
@@ -511,7 +510,7 @@ class addbranch extends React.Component {
         validUser: ValidUser,
         branch: branch,
       };
-      console.log("data - > ", data);
+      
 
       const headers = {
         "Content-Type": "application/json",
@@ -520,7 +519,7 @@ class addbranch extends React.Component {
       axios
         .post(CreateBranchUrl, data, { headers })
         .then((response) => {
-          console.log("response > ", response);
+          
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
             this.props.history.push(
@@ -688,10 +687,7 @@ class addbranch extends React.Component {
                                     Company
                                   </TableCell>
 
-                                  {console.log(
-                                    "this.state.countryId > ",
-                                    this.state.countryId
-                                  )}
+                                 
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -875,10 +871,7 @@ class addbranch extends React.Component {
                                     Country
                                   </TableCell>
 
-                                  {console.log(
-                                    "this.state.countryId > ",
-                                    this.state.countryId
-                                  )}
+                                 
                                   <TableCell
                                     align="left"
                                     className="no-border-table"

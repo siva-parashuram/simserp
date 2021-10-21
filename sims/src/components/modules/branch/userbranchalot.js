@@ -76,12 +76,12 @@ class userbranchalot extends React.Component {
         axios.post(GetBrachesUrl, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
-                // console.log("getBranches > response > data > ", data);
+               
 
                 this.setState({ branchData: data, ProgressLoader: true });
             }
             ).catch(error => {
-                // console.log("error > ", error);
+               
                 this.setState({ branchData: [], ProgressLoader: true });
             });
 
@@ -105,11 +105,11 @@ class userbranchalot extends React.Component {
         const handleBranchAdd = (userId) => {
             let branch = [];
 
-            // console.log("handleBranchAdd > userId > ", userId);
+          
             let chkboxes = document.querySelectorAll(".branchchecks:checked");
-            // console.log("handleBranchAdd > chkboxes > ", chkboxes);
+            
             for (let i = 0; i < chkboxes.length; i++) {
-                console.log("chkboxes[i] > ", chkboxes[i]);
+               
                 branch.push(parseInt(chkboxes[i].value));
             }
             let ValidUser = APIURLS.ValidUser;
@@ -124,7 +124,7 @@ class userbranchalot extends React.Component {
                 "Content-Type": "application/json"
             };
 
-            console.log("handleBranchAdd > data > ", data);
+            
 
             let CreateUserBranchMappingUrl = APIURLS.APIURL.CreateUserBranchMapping;
             axios.post(CreateUserBranchMappingUrl, data, { headers })
@@ -142,19 +142,19 @@ class userbranchalot extends React.Component {
 
         const selectAllBranches = (e) => {
 
-            // console.log("selectAllBranches > e.target.checked ", e.target.checked);
+           
             if (e.target.checked) {
                 let chkboxes = document.getElementsByClassName("branchchecks");
-                // console.log("selectAllBranches > chkboxes > ", chkboxes);
+               
                 for (let i = 0; i < chkboxes.length; i++) {
-                    // console.log("chkboxes[i] > ", chkboxes[i]);
+                    
                     document.getElementById(chkboxes[i].id).checked = true;
                 }
             } else {
                 let chkboxes = document.getElementsByClassName("branchchecks");
-                // console.log("selectAllBranches > chkboxes > ", chkboxes);
+                
                 for (let i = 0; i < chkboxes.length; i++) {
-                    // console.log("chkboxes[i] > ", chkboxes[i]);
+                  
                     document.getElementById(chkboxes[i].id).checked = false;
                 }
             }

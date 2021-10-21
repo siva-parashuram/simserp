@@ -291,7 +291,7 @@ class assignpagestorole extends React.Component {
     if (this.state.refreshPageLinkList === true) {
       let newBool = bool === true ? false : true;
       let rows = this.state.PropsRows;
-      console.log("rows > ", rows);
+
       let newRows = [];
       for (let i = 0; i < rows.length; i++) {
         let row = rows[i];
@@ -325,7 +325,7 @@ class assignpagestorole extends React.Component {
     } else {
       let newBool = bool === true ? false : true;
       let rows = this.props.data.rows;
-      console.log("rows > ", rows);
+
       let newRows = [];
       for (let i = 0; i < rows.length; i++) {
         let row = rows[i];
@@ -363,10 +363,6 @@ class assignpagestorole extends React.Component {
   }
 
   performCheckAll(params, e, bool) {
-    console.log("params > ", params);
-    console.log("e > ", e);
-    console.log("bool > ", bool);
-
     if (this.state.refreshPageLinkList === true) {
       let newBool = bool === true ? false : true;
       let rows = this.state.PropsRows;
@@ -429,20 +425,16 @@ class assignpagestorole extends React.Component {
     }
   }
 
-  processResetData(data) {
-    console.log("processResetData > data > ", data);
-  }
+  processResetData(data) {}
 
   processSelectedRow(e, opt, bool) {
-    console.log("processSelectedRow > e > ", e);
-    console.log("processSelectedRow > opt > ", opt);
     this.setState({ allRowsChecked: bool });
   }
 
   render() {
     const selectedRows = () => {
       let rows = this.props.data.rows;
-      console.log("selectedRows > rows > ", rows);
+
       let selectedRows = [];
       for (let i = 0; i < rows.length; i++) {
         if (rows[i].chkAll === true) {
@@ -454,15 +446,10 @@ class assignpagestorole extends React.Component {
     };
 
     const updateSelectedRow = (e) => {
-      console.log("updateSelectedRow > e > ", e);
       let SelectedRows = this.state.SelectedRows;
       if (e.length > 0) {
         if (this.state.PropsRows.length === 0) {
           this.setState({ PropsRows: this.props.data.rows }, () => {
-            console.log(
-              "updateSelectedRow > Initialized fresh this.state.PropsRows > ",
-              this.state.PropsRows
-            );
             let newPropsRow = [];
             if (this.state.PropsRows.length === e.length) {
               newPropsRow = this.state.PropsRows;
@@ -481,10 +468,6 @@ class assignpagestorole extends React.Component {
             this.setState({ SelectedRows: newPropsRow });
           });
         } else {
-          console.log(
-            "updateSelectedRow > this.state.PropsRows > ",
-            this.state.PropsRows
-          );
           let newPropsRow = [];
           if (this.state.PropsRows.length === e.length) {
             newPropsRow = this.state.PropsRows;
@@ -505,13 +488,12 @@ class assignpagestorole extends React.Component {
     };
 
     const onSelectionModelChange = (e) => {
-      console.log("onSelectionModelChange > ", e);
       updateSelectedRow(e);
     };
 
     const getProcessedRoleDetailList = () => {
       let rows = this.state.SelectedRows;
-      console.log("getProcessedRoleDetailList > rows > ", rows);
+
       let ROWS = [];
       for (let i = 0; i < rows.length; i++) {
         let r = {
@@ -532,7 +514,7 @@ class assignpagestorole extends React.Component {
       if (this.state.SelectedRows.length > 0) {
         this.setState({ ProgressLoader: false });
         let RoleDetailList = getProcessedRoleDetailList();
-        console.log("handleUpdate > RoleDetailList > ", RoleDetailList);
+
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -545,7 +527,7 @@ class assignpagestorole extends React.Component {
                     RoleId: this.props.data.roleId,
                     RoleDetailLists: RoleDetailList
                 };*/
-        console.log("processUpdateData > data > ", data);
+
         const headers = {
           "Content-Type": "application/json",
         };
@@ -556,14 +538,12 @@ class assignpagestorole extends React.Component {
           .then((response) => {
             let data = response.data;
             if (response.status === 200 || response.status === 201) {
-              console.log("handleUpdate > response > data > ", data);
               this.setState({ ProgressLoader: true, SuccessPrompt: true });
             } else {
               this.setState({ ProgressLoader: true, ErrorPrompt: true });
             }
           })
           .catch((error) => {
-            console.log("handleUpdate > error > ", error);
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           });
       } else {
@@ -619,8 +599,6 @@ class assignpagestorole extends React.Component {
               </Alert>
             </Snackbar>
             <div style={{ height: 20 }}></div>
-
-            {console.log("this.props.data.rows > ", this.props.data.rows)}
 
             <Grid container spacing={3}>
               <Grid xs={12} sm={12} md={3} lg={3}>

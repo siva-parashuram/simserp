@@ -64,7 +64,7 @@ class attachmentmaster extends React.Component {
             <Fragment>
                 <Grid container spacing={0}>
                     <Grid xs={11} sm={11} md={11} lg={11}>
-                        {console.log("-----------------> this.props.filelist > ",this.props.filelist)}
+                        
                         <Table size="small">
                         <TableBody className="tableBody">
                         {this.props.filelist ? this.props.filelist.map((item, i) => (

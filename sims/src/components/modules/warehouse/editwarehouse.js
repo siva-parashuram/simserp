@@ -13,7 +13,7 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Button from "@material-ui/core/Button";     
+import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -24,7 +24,7 @@ import Switch from "@mui/material/Switch";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import ButtonGroup from '@mui/material/ButtonGroup';
+import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
@@ -65,7 +65,7 @@ class editwarehouse extends React.Component {
       Description: null,
       Address: null,
       Address2: null,
-      Address3: null,   
+      Address3: null,
       IsEdi: false,
       Ediurl: null,
       EdiloginId: 0,
@@ -92,7 +92,7 @@ class editwarehouse extends React.Component {
 
   componentDidMount() {
     var url = new URL(window.location.href);
-    let branchId = url.searchParams.get("branchId"); 
+    let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
     let editwareHouseId = url.searchParams.get("editwareHouseId");
@@ -119,7 +119,6 @@ class editwarehouse extends React.Component {
   }
 
   getWarehouseByID(wareHouseId) {
-    console.log("getWarehouseByID > wareHouseId > ", wareHouseId);
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -128,7 +127,7 @@ class editwarehouse extends React.Component {
       validUser: ValidUser,
       WareHouse: warehouse,
     };
-    console.log("data - > ", data);
+
     let Url = APIURLS.APIURL.GetWareHouse;
     const headers = {
       "Content-Type": "application/json",
@@ -136,10 +135,6 @@ class editwarehouse extends React.Component {
     axios
       .post(Url, data, { headers })
       .then((response) => {
-        console.log("===========================================");
-        console.log("response > ", response);
-        console.log("response.data > ", response.data);
-        console.log("===========================================");
         let warehouse = {
           WareHouseId: wareHouseId,
           BranchId: response.data.branchId,
@@ -147,7 +142,7 @@ class editwarehouse extends React.Component {
           Description: response.data.description,
           Address: response.data.address,
           Address2: response.data.address2,
-          Address3: response.data.address3,   
+          Address3: response.data.address3,
           IsEdi: response.data.isEdi,
           Ediurl: response.data.ediurl,
           EdiloginId: response.data.ediloginId,
@@ -204,7 +199,7 @@ class editwarehouse extends React.Component {
           });
         }
       }
-      if (id === "Description") {   
+      if (id === "Description") {
         warehouse.Description = e.target.value;
         if (e.target.value.length > 50) {
           let v = this.state.Validations;
@@ -237,7 +232,7 @@ class editwarehouse extends React.Component {
             Validations: v,
           });
         } else {
-          let v = this.state.Validations;  
+          let v = this.state.Validations;
           v.ContactPerson = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
@@ -403,7 +398,7 @@ class editwarehouse extends React.Component {
           let v = this.state.Validations;
           v.Edipassword = {
             errorState: true,
-            errorMssg: "Maximum 50 characters allowed",  
+            errorMssg: "Maximum 50 characters allowed",
           };
           this.setState({
             Validations: v,
@@ -422,7 +417,6 @@ class editwarehouse extends React.Component {
 
     const handleUpdate = () => {
       this.setState({ ProgressLoader: false });
-      console.log("warehouse>",this.state.warehouse)
 
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -432,7 +426,7 @@ class editwarehouse extends React.Component {
         validUser: ValidUser,
         WareHouse: warehouse,
       };
-      console.log("data - > ", data);
+
       let Url = APIURLS.APIURL.UpdateWareHouse;
       const headers = {
         "Content-Type": "application/json",
@@ -440,7 +434,6 @@ class editwarehouse extends React.Component {
       axios
         .post(Url, data, { headers })
         .then((response) => {
-          console.log("response > ", response);
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
@@ -473,11 +466,11 @@ class editwarehouse extends React.Component {
         
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: 5, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}  
+            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
           </div>
         ) : null}
         <Snackbar
-          open={this.state.SuccessPrompt}  
+          open={this.state.SuccessPrompt}
           autoHideDuration={3000}
           onClose={closeSuccessPrompt}
         >
@@ -496,7 +489,7 @@ class editwarehouse extends React.Component {
         </Snackbar>
         <div className="breadcrumb-height">
           <Grid className="table-adjust" container spacing={3}>
-          <Grid
+            <Grid
               xs={12}
               sm={12}
               md={4}
@@ -521,7 +514,7 @@ class editwarehouse extends React.Component {
                   </Link>
                   <Link
                     color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
                   >
                     Dashboard
                   </Link>
@@ -529,7 +522,6 @@ class editwarehouse extends React.Component {
                     color="inherit"
                     href={URLS.URLS.warehouseMaster + this.state.urlparams}
                   >
-                    
                     Warehouse Master
                   </Link>
 
@@ -556,7 +548,7 @@ class editwarehouse extends React.Component {
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-         
+
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={7} lg={7}>
@@ -580,7 +572,7 @@ class editwarehouse extends React.Component {
                       style={{ minHeight: 20, height: "100%" }}
                     >
                       <Typography key="" className="accordion-Header-Title">
-                        General Details  
+                        General Details
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails key="" className="AccordionDetails-css">
@@ -594,7 +586,6 @@ class editwarehouse extends React.Component {
                               aria-label="table"
                             >
                               <TableBody className="tableBody">
-                             
                                 <Tablerowcelltextboxinput
                                   id="Code"
                                   label="Code"
@@ -605,7 +596,7 @@ class editwarehouse extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 10,
                                   }}
-                                   value={this.state.warehouse.Code}
+                                  value={this.state.warehouse.Code}
                                   // defaultValue={this.state.Code}
                                   error={this.state.Validations.Code.errorState}
                                   helperText={
@@ -767,7 +758,7 @@ class editwarehouse extends React.Component {
                               size="small"
                               className="accordion-table"
                               aria-label="table"
-                            >   
+                            >
                               <TableBody className="tableBody">
                                 <Tablerowcelltextboxinput
                                   id="EmailID"

@@ -123,17 +123,17 @@ class editcompany extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountryList > response > data > ", data);
+        
         rows = data;
         this.setState({ countryData: rows });
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
       });
   }
 
   getCompanyDetails(CompanyID) {
-    console.log("getCompanyDetails > CompanyID > ", CompanyID);
+   
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -143,7 +143,7 @@ class editcompany extends React.Component {
       validUser: ValidUser,
       company: company,
     };
-    console.log("data - > ", data);
+   
     const headers = {
       "Content-Type": "application/json",
     };
@@ -151,12 +151,9 @@ class editcompany extends React.Component {
     axios
       .post(GetCompanyUrl, data, { headers })
       .then((response) => {
-        console.log("response > ", response);
+       
         if (response.status === 200) {
-          console.log(
-            "response.data.CompanyName > ",
-            response.data.companyName
-          );
+         
           company.CompanyName = response.data.companyName;
           company.Address = response.data.address;
           company.Address2 = response.data.address2;
@@ -184,9 +181,7 @@ class editcompany extends React.Component {
               ProgressLoader: true,
             },
             () => {
-              console.log("=============================");
-              console.log("State > ", this.state);
-              console.log("=============================");
+             
             }
           );
         } else {
@@ -213,26 +208,12 @@ class editcompany extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-      console.log("value >", e.target.value);
-      console.log("Length >", e.target.value.length);
+     
       let company = this.state.company;
-      // if (id === "PhoneNo") {
-      //   if (e.target.value.length > 20) {
-      //     let v = this.state.Validations;
-      //     v.phoneno = { errorState: true, errorMsg: "Only 20 digits are Allowed!" }
-      //     this.setState({ Validations: v,updateBtnDisabled : true })
-      // }else{
-      //     let v = this.state.Validations;
-      //     v.phoneno= { errorState: false, errorMsg: "" };
-      //     this.setState({ Validations: v, PhoneNo: e.target.value, updateBtnDisabled: false });
-      // }
-
-      // company.PhoneNo = e.target.value;
-      // this.setState({ PhoneNo: e.target.value, company: company });
-      // }
+    
       if (id === "companyName") {
         company.CompanyName = e.target.value;
-        // this.setState({ CompanyName: e.target.value, company: company });
+       
         if (
           e.target.value === "" ||
           e.target.value == null ||
@@ -250,7 +231,7 @@ class editcompany extends React.Component {
             });
           }
           if (e.target.value === "" || e.target.value == null) {
-            console.log("----------->  Blank ");
+           
             let v = this.state.Validations;
             v.companyName = {
               errorState: true,
@@ -258,13 +239,12 @@ class editcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-              //CompanyName:e.target.value,
+             
               updateBtnDisabled: true,
             });
           }
         } else {
-          console.log("-----------> Not Blank ");
-          console.log("-----------> Not Blank ");
+         
           let v = this.state.Validations;
           v.companyName = { errorState: false, errorMsg: "" };
           this.setState({
@@ -498,7 +478,7 @@ class editcompany extends React.Component {
         validUser: ValidUser,
         company: company,
       };
-      console.log("data - > ", data);
+     
       const headers = {
         "Content-Type": "application/json",
       };
@@ -506,7 +486,7 @@ class editcompany extends React.Component {
       axios
         .post(UpdateCompanyUrl, data, { headers })
         .then((response) => {
-          console.log("response > ", response);
+          
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
             //this.props.history.push(gobackURL);
@@ -519,7 +499,7 @@ class editcompany extends React.Component {
 
     const deleteCompany = () => {
       let gobackURL = URLS.URLS.companyMaster + this.state.urlparams;
-      console.log("deleteCompany > gobackURL > ", gobackURL);
+     
       this.setState({ ProgressLoader: false });
       let company = this.state.company;
       let ValidUser = APIURLS.ValidUser;
@@ -537,7 +517,7 @@ class editcompany extends React.Component {
       axios
         .post(DeleteCompanyUrl, data, { headers })
         .then((response) => {
-          console.log("response > ", response);
+         
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
             this.props.history.push(gobackURL);
@@ -549,8 +529,7 @@ class editcompany extends React.Component {
     };
 
     const handleAccordionClick = (val, e) => {
-      console.log("handleAccordionClick > val > ", val);
-      console.log("handleAccordionClick > e > ", e);
+     
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true
           ? this.setState({ GeneralDetailsExpanded: false })
