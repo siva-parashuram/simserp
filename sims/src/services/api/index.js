@@ -12,7 +12,11 @@ import moment from "moment";
  */
 export const fetchApi = (param = null, method = null, variables = null) => {
   if (getCookie(COOKIE.ID_TOKEN))
-    createCookie(COOKIE.ID_TOKEN, getCookie(COOKIE.ID_TOKEN), APIConstants.CTimeOut);
+    createCookie(
+      COOKIE.ID_TOKEN,
+      getCookie(COOKIE.ID_TOKEN),
+      APIConstants.CTimeOut
+    );
   else {
     deleteCookie(COOKIE.ID_TOKEN);
     deleteCookie(COOKIE.NAME);
@@ -27,9 +31,10 @@ export const fetchApi = (param = null, method = null, variables = null) => {
   }
   return axios({
     method: method,
-    url: `${process.env.NODE_ENV === "development"
-      ? APIConstants.ApiUrl
-      : process.env.NODE_ENV === "test"
+    url: `${
+      process.env.NODE_ENV === "development"
+        ? APIConstants.ApiUrl
+        : process.env.NODE_ENV === "test"
         ? APIConstants.TestUrl
         : APIConstants.LiveUrl
       // process.env.NODE_ENV == "development"
@@ -37,7 +42,7 @@ export const fetchApi = (param = null, method = null, variables = null) => {
       //     // : "http://api.stockex.ho.opspl.com/"
       //     "https://api.stockex.opspldev.in/"
       //   : "https://api.stockex.opspldev.in/"
-      }${param}`,
+    }${param}`,
     data: variables,
     headers: {
       accept: "application/json",
@@ -72,7 +77,6 @@ export const fetchApi = (param = null, method = null, variables = null) => {
             ) {
               return err.response.data;
             } else if (err.response.data) {
-              console.log(err.response,"error tojson");
               return err.response.data;
             } else {
               return false;
@@ -85,10 +89,14 @@ export const fetchApi = (param = null, method = null, variables = null) => {
         }
       } else return false;
     });
-}
+};
 export const fetchApi2 = (param = null, method = null, variables = null) => {
   if (getCookie(COOKIE.ID_TOKEN))
-    createCookie(COOKIE.ID_TOKEN, getCookie(COOKIE.ID_TOKEN), APIConstants.CTimeOut);
+    createCookie(
+      COOKIE.ID_TOKEN,
+      getCookie(COOKIE.ID_TOKEN),
+      APIConstants.CTimeOut
+    );
   else {
     deleteCookie(COOKIE.ID_TOKEN);
     deleteCookie(COOKIE.NAME);
@@ -103,9 +111,10 @@ export const fetchApi2 = (param = null, method = null, variables = null) => {
   }
   return axios({
     method: method,
-    url: `${process.env.NODE_ENV === "development"
-      ? APIConstants.ApiUrl
-      : process.env.NODE_ENV === "test"
+    url: `${
+      process.env.NODE_ENV === "development"
+        ? APIConstants.ApiUrl
+        : process.env.NODE_ENV === "test"
         ? APIConstants.TestUrl
         : APIConstants.LiveUrl
       // process.env.NODE_ENV == "development"
@@ -113,7 +122,7 @@ export const fetchApi2 = (param = null, method = null, variables = null) => {
       //     // : "http://api.stockex.ho.opspl.com/"
       //     "https://api.stockex.opspldev.in/"
       //   : "https://api.stockex.opspldev.in/"
-      }${param}`,
+    }${param}`,
     data: variables,
     headers: {
       accept: "application/json",
@@ -157,10 +166,14 @@ export const fetchApi2 = (param = null, method = null, variables = null) => {
         }
       } else return false;
     });
-}
+};
 export const fetchPdfApi = (param = null, method = null, variables = null) => {
   if (getCookie(COOKIE.ID_TOKEN))
-    createCookie(COOKIE.ID_TOKEN, getCookie(COOKIE.ID_TOKEN), APIConstants.CTimeOut);
+    createCookie(
+      COOKIE.ID_TOKEN,
+      getCookie(COOKIE.ID_TOKEN),
+      APIConstants.CTimeOut
+    );
   else {
     deleteCookie(COOKIE.ID_TOKEN);
     deleteCookie(COOKIE.NAME);
@@ -175,12 +188,13 @@ export const fetchPdfApi = (param = null, method = null, variables = null) => {
   }
   return axios({
     method: method,
-    url: `${process.env.NODE_ENV === "development"
-      ? APIConstants.ApiUrl
-      : process.env.NODE_ENV === "test"
+    url: `${
+      process.env.NODE_ENV === "development"
+        ? APIConstants.ApiUrl
+        : process.env.NODE_ENV === "test"
         ? APIConstants.TestUrl
         : APIConstants.LiveUrl
-      }${param}`,
+    }${param}`,
     data: variables,
     headers: {
       Accept: "application/json",
@@ -189,16 +203,23 @@ export const fetchPdfApi = (param = null, method = null, variables = null) => {
     responseType: "arraybuffer",
   })
     .then((res) => {
-      const url = window.webkitURL.createObjectURL(new Blob([res.data]), { type: res.headers["content-type"] });
+      const url = window.webkitURL.createObjectURL(new Blob([res.data]), {
+        type: res.headers["content-type"],
+      });
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute(
-        "download", variables && variables[0].returningQuantity ? "Return.pdf" :
-        variables ? variables : "download.pdf");
+        "download",
+        variables && variables[0].returningQuantity
+          ? "Return.pdf"
+          : variables
+          ? variables
+          : "download.pdf"
+      );
 
       document.body.appendChild(link);
       link.click();
-      return res.code="200";
+      return (res.code = "200");
     })
     .catch((err) => {
       if (err.response) {
@@ -234,11 +255,15 @@ export const fetchPdfApi = (param = null, method = null, variables = null) => {
         }
       } else return false;
     });
-}
+};
 
 export const fetchFileApi = (param = null, method = null, variables = null) => {
   if (getCookie(COOKIE.ID_TOKEN))
-    createCookie(COOKIE.ID_TOKEN, getCookie(COOKIE.ID_TOKEN), APIConstants.CTimeOut);
+    createCookie(
+      COOKIE.ID_TOKEN,
+      getCookie(COOKIE.ID_TOKEN),
+      APIConstants.CTimeOut
+    );
   else {
     deleteCookie(COOKIE.ID_TOKEN);
     deleteCookie(COOKIE.NAME);
@@ -253,12 +278,13 @@ export const fetchFileApi = (param = null, method = null, variables = null) => {
   }
   return axios({
     method: method,
-    url: `${process.env.NODE_ENV === "development"
-      ? APIConstants.ApiUrl
-      : process.env.NODE_ENV === "test"
+    url: `${
+      process.env.NODE_ENV === "development"
+        ? APIConstants.ApiUrl
+        : process.env.NODE_ENV === "test"
         ? APIConstants.TestUrl
         : APIConstants.LiveUrl
-      }${param}`,
+    }${param}`,
     data: variables,
     headers: {
       Accept: "application/json",
@@ -267,11 +293,9 @@ export const fetchFileApi = (param = null, method = null, variables = null) => {
     responseType: "arraybuffer",
   })
     .then((res) => {
-      //console.log(res,"res");
       let contype = res.headers["content-type"];
       if (contype === "application/json") {
         return true;
-        
       } else {
         let header_res = res.headers;
         const url = window.webkitURL.createObjectURL(
@@ -281,7 +305,10 @@ export const fetchFileApi = (param = null, method = null, variables = null) => {
         link.href = url;
         let ctype = res.headers["content-type"];
         if (ctype === "application/zip") {
-          link.setAttribute("download", "Orders" + moment().format("DD_MM_YYYY") + ".zip");
+          link.setAttribute(
+            "download",
+            "Orders" + moment().format("DD_MM_YYYY") + ".zip"
+          );
         } else {
           link.setAttribute("download", "Invoice.pdf");
         }
@@ -289,10 +316,8 @@ export const fetchFileApi = (param = null, method = null, variables = null) => {
         link.click();
         return true;
       }
-
     })
     .catch((err) => {
-      //console.log(err,"error resp");
       if (err.response) {
         let { status } = err.response;
         if (status === 401) {
@@ -317,9 +342,12 @@ export const fetchFileApi = (param = null, method = null, variables = null) => {
             ) {
               return err.response.data;
             } else if (err.response.data) {
-              const text = String.fromCharCode.apply(null, Array.from(new Uint8Array(err.response.data)));
+              const text = String.fromCharCode.apply(
+                null,
+                Array.from(new Uint8Array(err.response.data))
+              );
               if (!text) return undefined;
-              return JSON.parse(text)
+              return JSON.parse(text);
               //return JSON.stringify(err.response);;
             } else {
               return false;
@@ -333,11 +361,19 @@ export const fetchFileApi = (param = null, method = null, variables = null) => {
       } else return false;
       //return false;
     });
-}
+};
 
-export const fetchApiExcel = (param = null, method = null, variables = null) => {
+export const fetchApiExcel = (
+  param = null,
+  method = null,
+  variables = null
+) => {
   if (getCookie(COOKIE.ID_TOKEN))
-    createCookie(COOKIE.ID_TOKEN, getCookie(COOKIE.ID_TOKEN), APIConstants.CTimeOut);
+    createCookie(
+      COOKIE.ID_TOKEN,
+      getCookie(COOKIE.ID_TOKEN),
+      APIConstants.CTimeOut
+    );
   else {
     deleteCookie(COOKIE.ID_TOKEN);
     deleteCookie(COOKIE.NAME);
@@ -352,12 +388,13 @@ export const fetchApiExcel = (param = null, method = null, variables = null) => 
   }
   return axios({
     method: method,
-    url: `${process.env.NODE_ENV === "development"
-      ? APIConstants.ApiUrl
-      : process.env.NODE_ENV === "test"
+    url: `${
+      process.env.NODE_ENV === "development"
+        ? APIConstants.ApiUrl
+        : process.env.NODE_ENV === "test"
         ? APIConstants.TestUrl
         : APIConstants.LiveUrl
-      }${param}`,
+    }${param}`,
     data: variables,
     headers: {
       Accept: "application/vnd.ms-excel",
@@ -376,13 +413,20 @@ export const fetchApiExcel = (param = null, method = null, variables = null) => 
       document.body.appendChild(link);
       link.click();
     })
-    .catch((err) => {
-    });
-}
+    .catch((err) => {});
+};
 
-export const fetchPublicApi = (param = null, method = null, variables = null) => {
+export const fetchPublicApi = (
+  param = null,
+  method = null,
+  variables = null
+) => {
   if (getCookie(COOKIE.ID_TOKEN))
-    createCookie(COOKIE.ID_TOKEN, getCookie(COOKIE.ID_TOKEN), APIConstants.CTimeOut);
+    createCookie(
+      COOKIE.ID_TOKEN,
+      getCookie(COOKIE.ID_TOKEN),
+      APIConstants.CTimeOut
+    );
   else {
     deleteCookie(COOKIE.ID_TOKEN);
     deleteCookie(COOKIE.NAME);
@@ -397,15 +441,16 @@ export const fetchPublicApi = (param = null, method = null, variables = null) =>
   }
   return axios({
     method: method,
-    url: `${process.env.NODE_ENV === "development"
-      ? APIConstants.ApiUrl
-      : process.env.NODE_ENV === "test"
+    url: `${
+      process.env.NODE_ENV === "development"
+        ? APIConstants.ApiUrl
+        : process.env.NODE_ENV === "test"
         ? APIConstants.TestUrl
         : APIConstants.LiveUrl
-      }${param}`,
+    }${param}`,
     data: variables,
     headers: {
-      accept: "application/json"
+      accept: "application/json",
     },
   })
     .then((res) => res.data)
@@ -447,4 +492,4 @@ export const fetchPublicApi = (param = null, method = null, variables = null) =>
         }
       } else return false;
     });
-}
+};

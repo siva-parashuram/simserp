@@ -6,7 +6,7 @@ import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
-
+import logo from "../../../logo.png";
 import Header from "../../user/userheaderconstants";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import axios from "axios";
@@ -21,10 +21,10 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import TablePagination from '@mui/material/TablePagination';
+import ButtonGroup from "@mui/material/ButtonGroup";
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import TablePagination from "@mui/material/TablePagination";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
@@ -41,15 +41,15 @@ const initialCss = "";
 class companyMaster extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {    
-      pagination:{
-        page:0,
-        rowsPerPage:10,         
-      },  
-      page:1,
-      rowsPerPage:10,
-      item:null,
-      editUrl:null,
+    this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
+      page: 1,
+      rowsPerPage: 10,
+      item: null,
+      editUrl: null,
       isLoggedIn: false,
       ProgressLoader: false,
       branchName: "",
@@ -66,14 +66,14 @@ class companyMaster extends React.Component {
       companyDialogStatus: false,
       UpdateCompany: true,
       urlparams: "",
-      filelist:[],
-      rowClicked:1,
+      filelist: [],
+      rowClicked: 1,
     };
   }
 
   componentDidMount() {
     if (getCookie(COOKIE.USERID) != null) {
-      this.getCompanyList();  
+      this.getCompanyList();
       this.setColumns();
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
@@ -99,13 +99,8 @@ class companyMaster extends React.Component {
   }
 
   handleCheckboxChange = (e, id) => {
-    console.log("handleCheckboxChange > e > ", e);
-    console.log("handleCheckboxChange > e.target > ", e.target);
     var elementCheckedChk = document.getElementById(id).checked;
-    console.log(
-      "handleCheckboxChange > elementCheckedChk > ",
-      elementCheckedChk
-    );
+
     if (elementCheckedChk === true) {
       document.getElementById(id).checked = true;
     }
@@ -150,88 +145,91 @@ class companyMaster extends React.Component {
     axios
       .post(GetCompaniesUrl, ValidUser, { headers })
       .then((response) => {
-        console.log("getCompanyList > response >  ", response);
-        if(response.status===200){
-          if(response.data==="Invalid User"){
-              alert("Un-Authorized Access Found!");
-              window.close();
-          }else{
+        if (response.status === 200) {
+          if (response.data === "Invalid User") {
+            alert("Un-Authorized Access Found!");
+            window.close();
+          } else {
             let data = response.data;
-         
-            rows = data;
-            this.setState({
-              masterCompanyData: rows,
-              companyData: rows,
-              ProgressLoader: true,
-            },()=>{
-              if(this.state.companyData.length>0){
-                this.InitialhandleRowClick(null,this.state.companyData[0],"row_0");
-            }
-            });
-          }
-        }else{
-          this.setState({ ErrorPrompt: true, ProgressLoader: true });
-        }      
 
-        
+            rows = data;
+            this.setState(
+              {
+                masterCompanyData: rows,
+                companyData: rows,
+                ProgressLoader: true,
+              },
+              () => {
+                if (this.state.companyData.length > 0) {
+                  this.InitialhandleRowClick(
+                    null,
+                    this.state.companyData[0],
+                    "row_0"
+                  );
+                }
+              }
+            );
+          }
+        } else {
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
+        }
       })
       .catch((error) => {
-        console.log("error > ", error);
         this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
   }
 
-  InitialhandleRowClick (e, item, id){
-    console.log("handleRowClick > id > ",id);
-    console.log("handleRowClick > vitem > ",item);
-    let editUrl=URLS.URLS.editCompany+this.state.urlparams + "&compID=" + item.companyId;
+  InitialhandleRowClick(e, item, id) {
+    let editUrl =
+      URLS.URLS.editCompany +
+      this.state.urlparams +
+      "&compID=" +
+      item.companyId;
     let branches = item.branches;
-    this.setState({ item:item,branch: branches,editUrl:editUrl,rowClicked:parseInt(this.state.rowClicked)+1 });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add('selectedRow');
-    this.getAttachments(item.companyId);
-}
-
-InitialremoveIsSelectedRowClasses(){
-  try{
-    for (let i = 0; i < this.state.companyData.length; i++) {
-      document.getElementById('row_' + i).className = '';
-  }
-  }catch(e){
-    console.log("Error : ",e);
-  }
-   
-}
-
-getAttachments(companyId) {
-  let ValidUser = APIURLS.ValidUser;
-  ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  ValidUser.Token = getCookie(COOKIE.TOKEN);
-  const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;              
-  const headers = {
-      "Content-Type": "application/json",
-  };
-   
-  const formData = new FormData();
-  formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-  formData.append('Token', getCookie(COOKIE.TOKEN));
-  formData.append('CompanyId', companyId);
-  formData.append('BranchID', 0);
-  formData.append('Transaction', APIURLS.TrasactionType.default);
-  formData.append('TransactionNo', "");
-  formData.append('FileData', "");
-
-  axios
-    .post(FTPGetAttachmentsUrl, formData, { headers })
-    .then((response) => {
-      this.setState({ filelist: response.data });
-    })
-    .catch((error) => {
-      console.log("error > ", error);
+    this.setState({
+      item: item,
+      branch: branches,
+      editUrl: editUrl,
+      rowClicked: parseInt(this.state.rowClicked) + 1,
     });
-}
+    this.InitialremoveIsSelectedRowClasses();
+    document.getElementById(id).classList.add("selectedRow");
+    this.getAttachments(item.companyId);
+  }
 
+  InitialremoveIsSelectedRowClasses() {
+    try {
+      for (let i = 0; i < this.state.companyData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    } catch (e) {}
+  }
 
+  getAttachments(companyId) {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    const formData = new FormData();
+    formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
+    formData.append("Token", getCookie(COOKIE.TOKEN));
+    formData.append("CompanyId", companyId);
+    formData.append("BranchID", 0);
+    formData.append("Transaction", APIURLS.TrasactionType.default);
+    formData.append("TransactionNo", "");
+    formData.append("FileData", "");
+
+    axios
+      .post(FTPGetAttachmentsUrl, formData, { headers })
+      .then((response) => {
+        this.setState({ filelist: response.data });
+      })
+      .catch((error) => {});
+  }
 
   render() {
     function Alert(props) {
@@ -239,64 +237,65 @@ getAttachments(companyId) {
     }
 
     const handleRowClick = (e, item, id) => {
-      console.log("handleRowClick > e > ", e);
-      console.log("handleRowClick > item > ", item);
       let branches = item.branches;
-      let editUrl=URLS.URLS.editCompany+this.state.urlparams + "&compID=" + item.companyId;
+      let editUrl =
+        URLS.URLS.editCompany +
+        this.state.urlparams +
+        "&compID=" +
+        item.companyId;
       // getCompanyBranchList(item.companyId);
-      this.setState({ item:item,branch: branches,editUrl:editUrl,rowClicked:parseInt(this.state.rowClicked)+1 });
+      this.setState({
+        item: item,
+        branch: branches,
+        editUrl: editUrl,
+        rowClicked: parseInt(this.state.rowClicked) + 1,
+      });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
       getAttachments(item.companyId);
     };
 
     const removeIsSelectedRowClasses = () => {
-      try{
+      try {
         for (let i = 0; i < this.state.companyData.length; i++) {
-          document.getElementById('row_' + i).className = '';
-      }
-      }catch(e){
-        console.log("Error : ",e);
-      }
+          document.getElementById("row_" + i).className = "";
+        }
+      } catch (e) {}
     };
 
-    const getAttachments=(companyId)=> {
+    const getAttachments = (companyId) => {
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;              
+      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
       const headers = {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       };
-       
+
       const formData = new FormData();
-      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-      formData.append('Token', getCookie(COOKIE.TOKEN));
-      formData.append('CompanyId', companyId);
-      formData.append('BranchID', 0);
-      formData.append('Transaction', APIURLS.TrasactionType.default);
-      formData.append('TransactionNo', "");
-      formData.append('FileData', "");
-    
+      formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
+      formData.append("Token", getCookie(COOKIE.TOKEN));
+      formData.append("CompanyId", companyId);
+      formData.append("BranchID", 0);
+      formData.append("Transaction", APIURLS.TrasactionType.default);
+      formData.append("TransactionNo", "");
+      formData.append("FileData", "");
+
       axios
         .post(FTPGetAttachmentsUrl, formData, { headers })
         .then((response) => {
           this.setState({ filelist: response.data });
         })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
-    }
+        .catch((error) => {});
+    };
 
-    const getCompanyBranchList = (companyId) => { };
+    const getCompanyBranchList = (companyId) => {};
 
     const searchInput = (e) => {
       removeIsSelectedRowClasses();
-      console.log("searchInput > e > ", e);
-      console.log("searchInput > e.target > ", e.target);
-      console.log("searchInput > e.value > ", e.value);
+
       let key = document.getElementById("searchBox").value;
-      console.log("searchInput > key > ", key);
+
       sortAsPerKey(key);
     };
 
@@ -312,13 +311,13 @@ getAttachments(companyId) {
             masterCompanyData[i].companyName != null
               ? masterCompanyData[i].companyName.toLowerCase().includes(key)
               : null || masterCompanyData[i].address != null
-                ? masterCompanyData[i].address.toLowerCase().includes(key)
-                : null || masterCompanyData[i].companyId != null
-                  ? masterCompanyData[i].companyId
-                    .toString()
-                    .toLowerCase()
-                    .includes(key)
-                  : null
+              ? masterCompanyData[i].address.toLowerCase().includes(key)
+              : null || masterCompanyData[i].companyId != null
+              ? masterCompanyData[i].companyId
+                  .toString()
+                  .toLowerCase()
+                  .includes(key)
+              : null
           ) {
             rows.push(masterCompanyData[i]);
           }
@@ -327,26 +326,21 @@ getAttachments(companyId) {
       }
     };
 
-    const handlePageChange=(event, newPage)=>{
-          console.log("handlePageChange > event > ",event);
-          console.log("handlePageChange > newPage > ",newPage);
-          let pagination=this.state.pagination;
-          pagination.page=newPage;          
-          this.setState({pagination:pagination});
-    }
-
-    const getPageData=(data)=>{
-      let rows=data;
-      let page=parseInt(this.state.pagination.page);
-      let rowsPerPage=parseInt(this.state.pagination.rowsPerPage);
-      
-      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-    }
-
-    const openCompanyDetail = (e, item) => {
-      console.log("openCompanyDetail > e > ", e);
-      console.log("openCompanyDetail > item > ", item);
+    const handlePageChange = (event, newPage) => {
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
     };
+
+    const getPageData = (data) => {
+      let rows = data;
+      let page = parseInt(this.state.pagination.page);
+      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
+
+      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    };
+
+    const openCompanyDetail = (e, item) => {};
 
     const handleClose = (reason) => {
       if (reason === "YES") {
@@ -354,30 +348,29 @@ getAttachments(companyId) {
       }
     };
 
-    const updateCompanyMasterDetail = (key, e) => {
-      console.log("updateCompanyMasterDetail > key > ", key);
-      console.log("updateCompanyMasterDetail > e > ", e.target);
-    };
+    const updateCompanyMasterDetail = (key, e) => {};
 
-    const openPage = (url) => {             
+    const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
-  }
+    };
 
-  const closeErrorPrompt = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    this.setState({ ErrorPrompt: false });
-  };
+    const closeErrorPrompt = (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      this.setState({ ErrorPrompt: false });
+    };
 
     return (
       <Fragment>
         <CssBaseline />
         <Header />
-        {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress
-          className="linearProgress-css"
-        /> </div>) : null}
+        {this.state.ProgressLoader === false ? (
+          <div style={{ marginTop: 5, marginLeft: -10 }}>
+            <LinearProgress className="linearProgress-css" />{" "}
+          </div>
+        ) : null}
 
         <Snackbar
           open={this.state.ErrorPrompt}
@@ -391,13 +384,33 @@ getAttachments(companyId) {
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
-            <Grid xs={12} sm={12} md={4} lg={4} style={{ borderRightStyle: 'solid', borderRightColor: '#bdbdbd', borderRightWidth: 1 }}>
+            <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
-                  <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
+                <Breadcrumbs
+                  className="style-breadcrumb"
+                  aria-label="breadcrumb"
+                >
+                  <Link
+                    color="inherit"
+                    className="backLink"
+                    onClick={this.props.history.goBack}
+                  >
                     Back
                   </Link>
-                  <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
+                  <Link
+                    color="inherit"
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
+                  >
                     Dashboard
                   </Link>
                   <Typography color="textPrimary"> Company master</Typography>
@@ -406,59 +419,59 @@ getAttachments(companyId) {
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
               <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">  
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                   onClick={(e) => openPage(URLS.URLS.addNewCompany + this.state.urlparams)}                                     
+                    onClick={(e) =>
+                      openPage(URLS.URLS.addNewCompany + this.state.urlparams)
+                    }
                   >
-                    
-                      NEW
-                   
+                    NEW
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                  onClick={(e) => openPage(this.state.editUrl)}
-                  >Edit</Button>
+                    onClick={(e) => openPage(this.state.editUrl)}
+                  >
+                    Edit
+                  </Button>
                 </ButtonGroup>
               </div>
             </Grid>
           </Grid>
-          </div>
+        </div>
 
-           
-          <div className="breadcrumb-bottom"></div>
-          
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <TableContainer style={{ maxHeight: 440 }}>
-                <Table
-                  stickyHeader
-                  size="small"
-                  className=""
-                  aria-label="company List table"
-                >
-                  <TableHead className="table-header-background">
-                    <TableRow>
-                      <TableCell className="table-header-font">#</TableCell>
-                      <TableCell 
-                      className="table-header-font" 
-                      align="left"
-                      
-                      >
-                        Company Name
-                      </TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        Address
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody className="tableBody">
-                    
+        <div className="breadcrumb-bottom"></div>
 
-                    {//this.state.companyData 
+        <div className="New-link-bottom"></div>
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
+            <TableContainer style={{ maxHeight: 440 }}>
+              <Table
+                stickyHeader
+                size="small"
+                className=""
+                aria-label="company List table"
+              >
+                <TableHead className="table-header-background">
+                  <TableRow>
+                    <TableCell className="table-header-font">#</TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Company Name
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Address
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody className="tableBody">
+                  {
+                    //this.state.companyData
                     getPageData(this.state.companyData).map((item, i) => (
                       <TableRow
                         id={"row_" + i}
@@ -486,40 +499,42 @@ getAttachments(companyId) {
                         <TableCell align="left">{item.companyName}</TableCell>
                         <TableCell align="left">{item.address}</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    ))
+                  }
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-              <TablePagination
-                rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                component="div"
-                count={this.state.companyData.length}
-                rowsPerPage={this.state.pagination.rowsPerPage}
-                page={this.state.pagination.page}
-                onPageChange={handlePageChange}                
-              />
-
-            </Grid>
-            <Grid xs={12} sm={12} md={4} lg={4}>
-              <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
-                <Grid xs={12} sm={12} md={11} lg={11}>
-                  {/*<Branchlistbycompany data={this.state.branch} />*/}
-                  {this.state.item===null || this.state.item==={}?null:(
-                    <CompanyQuickDetails 
-                  data={this.state.branch} 
-                  item={this.state.item}
-                  filelist={this.state.filelist}
-                  rowClicked={this.state.rowClicked}
+            <TablePagination
+              rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+              component="div"
+              count={this.state.companyData.length}
+              rowsPerPage={this.state.pagination.rowsPerPage}
+              page={this.state.pagination.page}
+              onPageChange={handlePageChange}
+            />
+          </Grid>
+          <Grid xs={12} sm={12} md={4} lg={4}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={1} lg={1}>
+                &nbsp;
+              </Grid>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                {/*<Branchlistbycompany data={this.state.branch} />*/}
+                {this.state.item === null || this.state.item === {} ? null : (
+                  <CompanyQuickDetails
+                    data={this.state.branch}
+                    item={this.state.item}
+                    filelist={this.state.filelist}
+                    rowClicked={this.state.rowClicked}
                   />
-                  ) }
-                  
-                </Grid>
+                )}
               </Grid>
             </Grid>
           </Grid>
-      
+          
+        </Grid>
+        
       </Fragment>
     );
   }

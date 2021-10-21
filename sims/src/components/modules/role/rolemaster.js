@@ -77,7 +77,6 @@ class rolemaster extends React.Component {
     axios
       .post(GetRolesUrl, ValidUser, { headers })
       .then((response) => {
-        console.log("getRoles > response > ", response);
         if (response.status === 200) {
           let data = response.data;
           rows = data;
@@ -90,17 +89,14 @@ class rolemaster extends React.Component {
         }
       })
       .catch((error) => {
-        console.log("getRoles > error > ", error);
         this.setState({ roles: [], ProgressLoader: true });
       });
   }
 
   InitialhandleRowClick(e, item, id) {
-    console.log("InitialhandleRowClick > id > ", id);
-    console.log("InitialhandleRowClick > vitem > ", item);
     let editUrl =
       URLS.URLS.editModule + this.state.urlparams + "&roleID=" + item.moduleId;
-    console.log("InitialhandleRowClick   ", editUrl);
+
     this.setState({ editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
@@ -114,8 +110,6 @@ class rolemaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      console.log("id > ", id);
-      console.log("item > ", item);
       let editUrl =
         URLS.URLS.editModule +
         this.state.urlparams +
@@ -144,20 +138,17 @@ class rolemaster extends React.Component {
       axios
         .post(GetRoleDetailByRoleIdUrl, data, { headers })
         .then((response) => {
-          console.log("getPageListByRoleId > response > ", response);
           if (response.status === 200) {
             processPageData(response.data.roleDetailLists);
           } else {
           }
         })
         .catch((error) => {
-          console.log("getRoles > error > ", error);
           this.setState({ pages: [], ProgressLoader: true });
         });
     };
 
     const processPageData = (data) => {
-      console.log("processPageData > ", data);
       let rows = [];
       var i = 0,
         len = data.length;
@@ -371,8 +362,8 @@ class rolemaster extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid  xs={12} sm={12} md={10} lg={10}>
-              <Grid style={{marginTop:'40px'}} container spacing={0}>
+            <Grid xs={12} sm={12} md={10} lg={10}>
+              <Grid style={{ marginTop: "40px" }} container spacing={0}>
                 <Grid xs={12} sm={12} md={12} lg={12}>
                   <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11}>

@@ -10,7 +10,7 @@ export const roleMasterDetail=[
         headerClassName: 'table-header-font',
         renderCell: (params) => (
             <Fragment>
-            {console.log("params > ",params)}
+           
             
             </Fragment>
         )

@@ -99,7 +99,7 @@ class quickactionsection extends React.Component {
 
 
      refreshActivityList=()=>{
-        console.log("function Called continue");
+        
         this.setState({ActivityRefresh:true}); 
         this.fetchGreetings();
         //fetch last visited pages

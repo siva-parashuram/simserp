@@ -113,7 +113,7 @@ class editnumbering extends React.Component {
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getList > response > data > ", data);
+        
         if (response.status === 200) {
           let d = {
             NoSeriesId: data.noSeries.noSeriesId,
@@ -161,7 +161,7 @@ class editnumbering extends React.Component {
         }
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
         this.setState({
           numberings: [],
           ProgressLoader: true,
@@ -191,7 +191,7 @@ class editnumbering extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-      console.log("In updateFormValue");
+     
       let noSeries = this.state.noSeries;
       if (id === "Code") {
         
@@ -234,19 +234,15 @@ class editnumbering extends React.Component {
     };
 
     const updateListValue = (param, item, id, nextid, e) => {
-      // console.log("In updateFormValue");
-      // console.log(" > id > ", id);
-      // console.log(" > nextid > ", nextid);
-      // console.log(" > e > ", e);
-      // console.log(" > e.key > ", e.key);
+      
       if (e.key === "Enter") {
-        // console.log('do validate');
+        
         let value = document.getElementById(id).value;
-        // console.log('> value > ', value);
+        
         if (value === "" || value === null) {
-          // alert("Cannot be blank!");
+         
         } else {
-          // console.log('In OK > value > ', value);
+          
 
           updateNumberingListState(param, item, id, e);
 
@@ -262,16 +258,7 @@ class editnumbering extends React.Component {
 
     const updateNumberingListState = (param, item, id, e) => {
       let numberings = this.state.numberings;
-      console.log("====================================");
-      console.log("updateNumberingListState > item : ", item);
-      console.log("updateNumberingListState > id : ", id);
-      console.log("updateNumberingListState > e : ", e);
-      console.log("updateNumberingListState > e.target : ", e.target);
-      console.log(
-        "updateNumberingListState > e.target.value : ",
-        e.target.value
-      );
-      console.log("====================================");
+     
       for (let i = 0; i < numberings.length; i++) {
         if (numberings[i].id === item.id) {
           if (param === "Increment") {
@@ -350,13 +337,13 @@ class editnumbering extends React.Component {
         "Content-Type": "application/json",
       };
       let Url = APIURLS.APIURL.UpdateNoSeries;
-      console.log("handleCreateData >   ", data);
+      
 
       axios
         .post(Url, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleCreate > response > data > ", data);
+          
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
@@ -364,7 +351,7 @@ class editnumbering extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("error > ", error);
+         
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
     };
@@ -541,45 +528,7 @@ class editnumbering extends React.Component {
                           error={this.state.Validations.Description.errorState}
                           helperText={this.state.Validations.Description.errorMssg}
                         />
-                        {/* <TableRow>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        Code
-                                                    </TableCell>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <TextField
-                                                            id="Code"
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onChange={(e) => updateFormValue('Code', e)}
-                                                            fullWidth
-                                                            InputProps={{
-                                                                className: "textFieldCss",
-                                                                maxlength: 50
-                                                            }}
-                                                            value={this.state.noSeries["Code"]}
-
-                                                        />
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">
-                                                         Description
-                                                    </TableCell>
-                                                    <TableCell align="left" className="no-border-table">
-                                                        <TextField
-                                                            id="Description"
-                                                            variant="outlined"
-                                                            size="small"
-                                                            onChange={(e) => updateFormValue('Description', e)}
-                                                            fullWidth
-                                                            InputProps={{
-                                                                className: "textFieldCss",
-                                                                maxlength: 50
-                                                            }}
-                                                            value={this.state.noSeries.Description}
-                                                        />
-                                                    </TableCell>
-                                                </TableRow> */}
+                        
                       </TableBody>
                     </Table>
                   </TableContainer>

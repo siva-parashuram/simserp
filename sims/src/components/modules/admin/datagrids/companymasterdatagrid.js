@@ -104,10 +104,9 @@ class companymasterdatagrid extends React.Component {
 
 
     handleCheckboxChange = (e, id) => {
-        console.log("handleCheckboxChange > e > ", e);
-        console.log("handleCheckboxChange > e.target > ", e.target);
+       
         var elementCheckedChk = document.getElementById(id).checked;
-        console.log("handleCheckboxChange > elementCheckedChk > ", elementCheckedChk);
+        
         if (elementCheckedChk === true) {
             document.getElementById(id).checked = true;
         }
@@ -140,12 +139,12 @@ class companymasterdatagrid extends React.Component {
         axios.post(GetCompaniesUrl, ValidUser, { headers })
             .then(response => {
                 let data = response.data;
-                console.log("getCompanyList > response > data > ", data);
+                
                 rows = data;
                 this.setState({ masterCompanyData: rows, companyData: rows, ProgressLoader: true });
             }
             ).catch(error => {
-                console.log("error > ", error);
+                
             });
 
 
@@ -166,8 +165,7 @@ class companymasterdatagrid extends React.Component {
         // }     
 
         const handleRowClick = (e, item, id) => {
-            console.log("handleRowClick > e > ", e);
-            console.log("handleRowClick > item > ", item);
+           ;
             this.setState({ DeleteDisabled: false });
             removeIsSelectedRowClasses();
             document.getElementById(id).classList.add('selectedRow');
@@ -181,11 +179,9 @@ class companymasterdatagrid extends React.Component {
 
         const searchInput = (e) => {
             removeIsSelectedRowClasses();
-            console.log("searchInput > e > ", e);
-            console.log("searchInput > e.target > ", e.target);
-            console.log("searchInput > e.value > ", e.value);
+           
             let key = document.getElementById("searchBox").value;
-            console.log("searchInput > key > ", key);
+            
             sortAsPerKey(key);
 
         }
@@ -217,8 +213,7 @@ class companymasterdatagrid extends React.Component {
         // }
 
         const openCompanyDetail = (e, item) => {
-            console.log("openCompanyDetail > e > ", e);
-            console.log("openCompanyDetail > item > ", item);
+            
 
         }
 
@@ -230,8 +225,7 @@ class companymasterdatagrid extends React.Component {
         };
 
         const updateCompanyMasterDetail = (key, e) => {
-            console.log("updateCompanyMasterDetail > key > ", key);
-            console.log("updateCompanyMasterDetail > e > ", e.target);
+            
         }
 
         return (

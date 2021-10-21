@@ -263,12 +263,12 @@ class editbranch extends React.Component {
       .post(GetCompaniesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCompanyList > response > data > ", data);
+       
         rows = data;
         this.setState({ companyData: rows, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
       });
   }
 
@@ -286,12 +286,12 @@ class editbranch extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+       
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
       });
   }
 
@@ -309,12 +309,12 @@ class editbranch extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountryList > response > data > ", data);
+       
         rows = data;
         this.setState({ countryData: rows });
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
       });
   }
 
@@ -337,17 +337,17 @@ class editbranch extends React.Component {
       .post(GetBranchUrl, data, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getBranchDetail > response > data > ", data);
+      
         this.setStateParams(data);
       })
       .catch((error) => {
-        console.log("error > ", error);
+      
         this.setState({ branch: null, ProgressLoader: true });
       });
   }
 
   setStateParams(data) {
-    console.log("-> data : ", data);
+    
     this.setState({
       branch: data,
       address: data.address,
@@ -432,7 +432,7 @@ class editbranch extends React.Component {
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getNumberSeries > response > data > ", data);
+       
         if (response.status === 200) {
           let newData = [];
           let responseData = data.noSeriesDetailList;
@@ -457,7 +457,7 @@ class editbranch extends React.Component {
         }
       })
       .catch((error) => {
-        console.log("error > ", error);
+       
         this.setState({
           numberSeries: [],
           ProgressLoader: true,
@@ -470,8 +470,7 @@ class editbranch extends React.Component {
 
   render() {
     const handleAccordionClick = (val, e) => {
-      console.log("handleAccordionClick > val > ", val);
-      console.log("handleAccordionClick > e > ", e);
+     
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true
           ? this.setState({ GeneralDetailsExpanded: false })
@@ -966,8 +965,7 @@ class editbranch extends React.Component {
       }
       if (id === "IsSEZ") {
         let branch = this.state.branch;
-        console.log("IsSEZ set > this.state > ", this.state);
-        console.log("IsSEZ set > branch > ", branch);
+       
         branch.IsSEZ = e.target.checked;
         this.setState({ branch: branch, IsSEZ: e.target.checked });
       }
@@ -1118,8 +1116,7 @@ class editbranch extends React.Component {
     //   VATPercentageDisabled:true,
 
     const VAT_GST_Checkbox_Click = (e, param) => {
-      console.log("param > ", param);
-      console.log("e.target.checked > ", e.target.checked);
+     
       if (param === "isvat") {
         let branch = this.state.branch;
 
@@ -1166,7 +1163,7 @@ class editbranch extends React.Component {
         validUser: ValidUser,
         branch: branch,
       };
-      console.log("data - > ", data);
+      
 
       const headers = {
         "Content-Type": "application/json",
@@ -1175,7 +1172,7 @@ class editbranch extends React.Component {
       axios
         .post(UpdateBranchUrl, data, { headers })
         .then((response) => {
-          console.log("response > ", response);
+         
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
@@ -1338,10 +1335,7 @@ class editbranch extends React.Component {
                                     Company
                                   </TableCell>
 
-                                  {console.log(
-                                    "this.state.countryId > ",
-                                    this.state.countryId
-                                  )}
+                                 
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -1383,32 +1377,7 @@ class editbranch extends React.Component {
                                     this.state.Validations.name.errorMsg
                                   }
                                 />
-                                {/*
-                                <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    Name 
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="Name"
-                                      variant="outlined"
-                                      size="small"
-
-                                      onChange={(e) => updateFormValue('Name', e)}
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50
-                                      }}
-
-                                      value={this.state.name}
-                                      error={this.state.Validations.name.errorState}
-                                      helperText={this.state.Validations.name.errorMsg}
-
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                                */}
+                                
                                 <Tablerowcelltextboxinput
                                   id="shortName"
                                   label="ShortName"
@@ -1429,30 +1398,7 @@ class editbranch extends React.Component {
                                     this.state.Validations.shortName.errorMsg
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell align="left" className="no-border-table">
-                                    Short Name 
-                                  </TableCell>
-                                  <TableCell align="left" className="no-border-table">
-                                    <TextField
-                                      id="shortName"
-                                      variant="outlined"
-                                      size="small"
-                                      maxlength={10}
-                                      onChange={(e) => updateFormValue('shortName', e)}
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50
-                                      }}
-
-                                      value={this.state.shortName}
-                                      error={this.state.Validations.shortName.errorState}
-                                      helperText={this.state.Validations.shortName.errorMsg}
-
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                              
 
                                 <TableRow>
                                   <TableCell

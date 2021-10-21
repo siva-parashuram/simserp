@@ -70,7 +70,6 @@ class modulemasters extends React.Component {
     axios
       .post(GetModulesUrl, ValidUser, { headers })
       .then((response) => {
-        console.log("getModules > response > ", response);
         if (response.status === 200) {
           let data = response.data;
           rows = data;
@@ -83,20 +82,17 @@ class modulemasters extends React.Component {
         }
       })
       .catch((error) => {
-        console.log("getModules > error > ", error);
         this.setState({ modules: [], ProgressLoader: true });
       });
   }
 
   InitialhandleRowClick(e, item, id) {
-    console.log("handleRowClick > id > ", id);
-    console.log("handleRowClick > vitem > ", item);
     let editUrl =
       URLS.URLS.editModule +
       this.state.urlparams +
       "&moduleId=" +
       item.moduleId;
-    this.setState({moduleId: item.moduleId , editurl: editUrl });
+    this.setState({ moduleId: item.moduleId, editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -109,15 +105,13 @@ class modulemasters extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      console.log("id > ", id);
-      console.log("item > ", item);
       let editUrl =
         URLS.URLS.editModule +
         this.state.urlparams +
         "&moduleId=" +
         item.moduleId;
-      
-      this.setState({ moduleId: item.moduleId,editurl: editUrl  });
+
+      this.setState({ moduleId: item.moduleId, editurl: editUrl });
       getPageList(item.moduleId);
 
       removeIsSelectedRowClasses();
@@ -155,13 +149,10 @@ class modulemasters extends React.Component {
           if (response.status === 200) {
             let data = response.data;
             resetDataList(data);
-
           } else {
           }
         })
-        .catch((error) => {
-          console.log("getPageList > error > ", error);
-        });
+        .catch((error) => {});
     };
 
     const resetDataList = (data) => {
@@ -177,7 +168,7 @@ class modulemasters extends React.Component {
         };
         rows.push(r);
       }
-      console.log("rows > ", rows);
+
       this.setState({ pageLinkRow: rows });
     };
 

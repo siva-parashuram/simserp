@@ -16,8 +16,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TextField from "@material-ui/core/TextField";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import AddIcon from '@material-ui/icons/Add';
+import ButtonGroup from "@mui/material/ButtonGroup";
+import AddIcon from "@material-ui/icons/Add";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -66,10 +66,10 @@ class addnumbering extends React.Component {
         LastNo: 0,
         LastNoDate: null,
       },
-      Validations:{
-        Code:{errorState:false,errorMssg:""},
-        Description:{errorState:false,errorMssg:""}
-      }
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Description: { errorState: false, errorMssg: "" },
+      },
     };
   }
 
@@ -86,15 +86,16 @@ class addnumbering extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    this.setState({
-      urlparams: urlparams,
-      branchId: branchId,
-    },()=>this.getNumberingList(branchId, USERID));
-    
+    this.setState(
+      {
+        urlparams: urlparams,
+        branchId: branchId,
+      },
+      () => this.getNumberingList(branchId, USERID)
+    );
   }
 
   getNumberingList(branchId, USERID) {
-    
     let today = moment().format("MM/DD/YYYY");
     let N = [];
     let numberings = this.state.noSeriesDetailList;
@@ -123,30 +124,35 @@ class addnumbering extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-      console.log("In updateFormValue");
       let noSeries = this.state.noSeries;
       if (id === "Code") {
-        if(e.target.value.length>20){
-          let v=this.state.Validations;
-          v.Code={errorState:true,errorMssg:"Only 20 characters allowed!"}
-          this.setState({Validations:v})
-        }else{
+        if (e.target.value.length > 20) {
+          let v = this.state.Validations;
+          v.Code = {
+            errorState: true,
+            errorMssg: "Only 20 characters allowed!",
+          };
+          this.setState({ Validations: v });
+        } else {
           noSeries.Code = e.target.value;
-          let v=this.state.Validations;
-          v.Code={errorState:false,errorMssg:""}
-          this.setState({ noSeries: noSeries,Validations:v });
+          let v = this.state.Validations;
+          v.Code = { errorState: false, errorMssg: "" };
+          this.setState({ noSeries: noSeries, Validations: v });
         }
       }
       if (id === "Description") {
-        if(e.target.value.length>50){
-          let v=this.state.Validations;
-          v.Description={errorState:true,errorMssg:"Only 50 characters allowed!"}
-          this.setState({Validations:v})
-        }else{
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Description = {
+            errorState: true,
+            errorMssg: "Only 50 characters allowed!",
+          };
+          this.setState({ Validations: v });
+        } else {
           noSeries.Description = e.target.value;
-          let v=this.state.Validations;
-          v.Description={errorState:false,errorMssg:""}
-          this.setState({ noSeries: noSeries,Validations:v });
+          let v = this.state.Validations;
+          v.Description = { errorState: false, errorMssg: "" };
+          this.setState({ noSeries: noSeries, Validations: v });
         }
       }
     };
@@ -162,20 +168,12 @@ class addnumbering extends React.Component {
     };
 
     const updateListValue = (param, item, id, nextid, e) => {
-      // console.log("In updateFormValue");
-      // console.log(" > id > ", id);
-      // console.log(" > nextid > ", nextid);
-      // console.log(" > e > ", e);
-      // console.log(" > e.key > ", e.key);
       if (e.key === "Enter") {
-        // console.log('do validate');
         let value = document.getElementById(id).value;
-        // console.log('> value > ', value);
+
         if (value === "" || value === null) {
           // alert("Cannot be blank!");
         } else {
-          // console.log('In OK > value > ', value);
-
           updateNumberingListState(param, item, id, e);
 
           if (nextid === "newline") {
@@ -190,16 +188,7 @@ class addnumbering extends React.Component {
 
     const updateNumberingListState = (param, item, id, e) => {
       let numberings = this.state.numberings;
-      console.log("====================================");
-      console.log("updateNumberingListState > item : ", item);
-      console.log("updateNumberingListState > id : ", id);
-      console.log("updateNumberingListState > e : ", e);
-      console.log("updateNumberingListState > e.target : ", e.target);
-      console.log(
-        "updateNumberingListState > e.target.value : ",
-        e.target.value
-      );
-      console.log("====================================");
+
       for (let i = 0; i < numberings.length; i++) {
         if (numberings[i].id === item.id) {
           if (param === "Increment") {
@@ -248,7 +237,7 @@ class addnumbering extends React.Component {
 
     const formatDate = () => {
       let noSeriesDetailList = this.state.numberings;
-        console.log("formatDate > noSeriesDetailList > ",noSeriesDetailList);
+
       for (let i = 0; i < noSeriesDetailList.length; i++) {
         noSeriesDetailList[i].startdate = moment(
           noSeriesDetailList[i].startdate
@@ -259,7 +248,6 @@ class addnumbering extends React.Component {
     };
 
     const handleCreate = (e) => {
-      console.log("noSeries>",this.state.noSeries)
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -278,22 +266,19 @@ class addnumbering extends React.Component {
         "Content-Type": "application/json",
       };
       let Url = APIURLS.APIURL.CreateNoSeries;
-      console.log("handleCreateData >   ", data);
 
       axios
         .post(Url, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleCreate > response > data > ", data);
+
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -346,7 +331,6 @@ class addnumbering extends React.Component {
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-            
             <Grid
               xs={12}
               sm={12}
@@ -372,7 +356,7 @@ class addnumbering extends React.Component {
                   </Link>
                   <Link
                     color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
                   >
                     Dashboard
                   </Link>
@@ -380,7 +364,6 @@ class addnumbering extends React.Component {
                     color="inherit"
                     href={URLS.URLS.numberingMaster + this.state.urlparams}
                   >
-                    
                     Numbering Master
                   </Link>
 
@@ -407,7 +390,7 @@ class addnumbering extends React.Component {
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-         
+
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -468,8 +451,9 @@ class addnumbering extends React.Component {
                           }}
                           value={this.state.noSeries.Description}
                           error={this.state.Validations.Description.errorState}
-                          helperText={this.state.Validations.Description.errorMssg}
-                        
+                          helperText={
+                            this.state.Validations.Description.errorMssg
+                          }
                         />
                       </TableBody>
                     </Table>
@@ -516,7 +500,6 @@ class addnumbering extends React.Component {
                         <tbody>
                           {this.state.numberings.map((item, i) => (
                             <tr>
-                              {console.log("--------> ", item)}
                               <td>
                                 <ArrowRightIcon />
                               </td>

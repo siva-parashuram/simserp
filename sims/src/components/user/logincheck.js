@@ -17,7 +17,7 @@ class logincheck extends React.Component {
 
     componentDidMount() {
         this.interval = setInterval(() => {
-          console.log("Checking Log In");
+          
             let token = getCookie(COOKIE.USERID);
             if (token === "null" || token == null) {
               this.setState({ isLoggedIn: false });              

@@ -21,7 +21,7 @@ import AddIcon from "@material-ui/icons/Add";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import ButtonGroup from '@mui/material/ButtonGroup';
+import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
 
@@ -99,13 +99,11 @@ class addstate extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountryList > response > data > ", data);
+
         rows = data;
         this.setState({ countryData: rows, ProgressLoader: true });
       })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
+      .catch((error) => {});
   }
 
   render() {
@@ -198,7 +196,7 @@ class addstate extends React.Component {
             state: state,
           });
         }
-        checkName();  
+        checkName();
       }
 
       if (id === "GSTCode") {
@@ -255,22 +253,19 @@ class addstate extends React.Component {
         "Content-Type": "application/json",
       };
       let CreateStateUrl = APIURLS.APIURL.CreateState;
-      console.log("handleCreate > handleCreateData > ", handleCreateData);
 
       axios
         .post(CreateStateUrl, handleCreateData, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleCreate > response > data > ", data);
+
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -321,7 +316,7 @@ class addstate extends React.Component {
         </Snackbar>
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-          <Grid
+            <Grid
               xs={12}
               sm={12}
               md={4}
@@ -354,7 +349,6 @@ class addstate extends React.Component {
                     color="inherit"
                     href={URLS.URLS.stateMaster + this.state.urlparams}
                   >
-                    
                     State Master
                   </Link>
 
@@ -364,18 +358,19 @@ class addstate extends React.Component {
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
               <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">  
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
                     disabled={this.state.disableCreateBtn}
-                    onClick={handleCreate}                                
+                    onClick={handleCreate}
                   >
-                    
-                      Add
-                   
+                    Add
                   </Button>
-                 
                 </ButtonGroup>
               </div>
             </Grid>

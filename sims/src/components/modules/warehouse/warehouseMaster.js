@@ -84,21 +84,17 @@ class warehouseMaster extends React.Component {
           this.setState({ branchData: [], ProgressLoader: true });
         }
       })
-      .catch((error) => {
-        //console.log("error > ", error);
-      });
+      .catch((error) => {});
   }
 
   InitialhandleRowClick(e, item, id) {
-    console.log("InitialhandleRowClick > id > ", id);
-    console.log("InitialhandleRowClick > vitem > ", item);
     let editUrl =
       URLS.URLS.editWarehouse +
       this.state.urlparams +
       "&editwareHouseId=" +
       item.wareHouseId;
-    console.log("InitialhandleRowClick   ", editUrl);
-    this.setState({ editurl: editUrl });  
+
+    this.setState({ editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }

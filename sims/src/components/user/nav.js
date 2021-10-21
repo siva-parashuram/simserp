@@ -17,18 +17,26 @@ import PowerSettingsNewSharpIcon from "@mui/icons-material/PowerSettingsNewSharp
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import { Button } from "@material-ui/core";
-
+import logo from "../../logo.png";
+import { Box } from "@mui/system";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
+  // root: {
+  //   flexGrow: 1,
+  // },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
+
+    // textAlign:"center"
   },
+
+  // Logo: {
+  //   maxWidth: 80,
+  //   float:"left"
+  // },
 }));
 
 export default function ButtonAppBar() {
@@ -44,8 +52,6 @@ export default function ButtonAppBar() {
   const [token, settoken] = React.useState("");
 
   useEffect(() => {
-    console.log("On Load Event of UseEffect !");
-
     if (getCookie(COOKIE.USERID) != null) {
       let token = getCookie(COOKIE.TOKEN);
       let FIRSTNAME = getCookie(COOKIE.FIRSTNAME);
@@ -55,11 +61,6 @@ export default function ButtonAppBar() {
       let branchName = url.searchParams.get("branchName");
       let compName = url.searchParams.get("compName");
       let branchBtnId = url.searchParams.get("branchBtnId");
-      console.log("===========================================");
-      console.log("branchId > ", branchId);
-      console.log("branchName > ", branchName);
-      console.log("compName > ", compName);
-      console.log("===========================================");
 
       if (
         token === "null" ||
@@ -101,6 +102,10 @@ export default function ButtonAppBar() {
         <CssBaseline />
         <AppBar className="navDiv" position="static">
           <Toolbar>
+            {/* <Box>
+            <img src={logo} className={classes.Logo} />
+            </Box> */}
+
             <Typography variant="h6" className={classes.title}>
               {branchName}
             </Typography>
@@ -111,11 +116,30 @@ export default function ButtonAppBar() {
             <Link className="nav-exit-link">
               <NotificationsIcon />
             </Link> */}
-            
-              <Avatar className='nav-avatar' sx={{ bgcolor:'rgb(19, 163, 38)',fontSize:18 , color:'white', width: 24, height: 24,marginRight:2 }}>{userInitial}</Avatar>
-             <IconButton><NotificationsIcon  style={{color:"white"}}  /></IconButton>
-             <IconButton><PowerSettingsNewSharpIcon style={{color:"white"}} onClick={closeWindow} /></IconButton>
-            
+
+            <Avatar
+              className="nav-avatar"
+              sx={{
+                bgcolor: "rgb(19, 163, 38)",
+                fontSize: 18,
+                color: "white",
+                width: 24,
+                height: 24,
+                marginRight: 2,
+              }}
+            >
+              {userInitial}
+            </Avatar>
+            <IconButton>
+              <NotificationsIcon style={{ color: "white" }} />
+            </IconButton>
+            <IconButton>
+              <PowerSettingsNewSharpIcon
+                style={{ color: "white" }}
+                onClick={closeWindow}
+              />
+            </IconButton>
+
             {/* <Link className="nav-exit-link" onClick={closeWindow}>
             
               <PowerSettingsNewSharpIcon />

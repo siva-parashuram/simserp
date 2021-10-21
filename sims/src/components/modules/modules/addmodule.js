@@ -227,10 +227,10 @@ class addmodule extends React.Component {
         .post(CreateModuleUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleCreate > response > data > ", data);
+         
         })
         .catch((error) => {
-          console.log("error > ", error);
+          
         });
     };
 

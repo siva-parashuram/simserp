@@ -75,7 +75,7 @@ class numberingmaster extends React.Component {
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getList > response > data > ", data);
+       
         if (response.status === 200) {
           this.setState(
             {
@@ -96,7 +96,7 @@ class numberingmaster extends React.Component {
         }
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
         this.setState({
           numberings: [],
           ProgressLoader: true,
@@ -106,14 +106,13 @@ class numberingmaster extends React.Component {
   }
 
   InitialhandleRowClick(e, item, id) {
-    console.log("InitialhandleRowClick > id > ", id);
-    console.log("InitialhandleRowClick > vitem > ", item);
+    
     let editUrl =
       URLS.URLS.editNumbering +
       this.state.urlparams +
       "&noSeriesId=" +
       item.noSeriesId;
-    console.log("InitialhandleRowClick   ", editUrl);
+    
     this.setState({ editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
@@ -127,7 +126,7 @@ class numberingmaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      console.log("handleRowClick > item > ", item);
+      
       let editUrl =
         URLS.URLS.editNumbering +
         this.state.urlparams +

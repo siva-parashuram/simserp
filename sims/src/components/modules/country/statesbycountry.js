@@ -52,8 +52,7 @@ class statesbycountry extends React.Component {
           }
         
           const handlePageChange=(event, newPage)=>{
-            console.log("handlePageChange > event > ",event);
-            console.log("handlePageChange > newPage > ",newPage);
+           
             let pagination=this.state.pagination;
             pagination.page=newPage;          
             this.setState({pagination:pagination});

@@ -57,6 +57,7 @@ class login extends React.Component {
       anchorEl: null,
       open: false,
       clientlog: "",
+      status:'',
       disableLoginBtn:false
     };
     this.handleChange = this.handleChange.bind(this);
@@ -114,7 +115,7 @@ class login extends React.Component {
     }else{
       try {
         let loginState = this.loadState();
-        console.log("loginState > ", loginState);
+        
         this.setState({
           ErrorPrompt: loginState.ErrorPrompt,
           isLoggedIn: true,
@@ -189,7 +190,7 @@ class login extends React.Component {
           password: this.state.password,
           ClientInfo: clientlog
         };
-        console.log("data -> ", data);
+        
         const headers = {
           "Content-Type": "application/json"
         };

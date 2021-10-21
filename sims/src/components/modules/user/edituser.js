@@ -22,7 +22,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Switch from "@mui/material/Switch";
-import ButtonGroup from '@mui/material/ButtonGroup';
+import ButtonGroup from "@mui/material/ButtonGroup";
 import UpdateIcon from "@material-ui/icons/Update";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
@@ -114,7 +114,6 @@ class edituser extends React.Component {
       .post(GetUserUrl, getUserDetailsData, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getUserDetails > response > data > ", data);
 
         let user = this.state.user;
         user.UserID = parseInt(this.state.UserID);
@@ -139,9 +138,7 @@ class edituser extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
+      .catch((error) => {});
   }
 
   render() {
@@ -170,12 +167,6 @@ class edituser extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-      console.log("====================================");
-      console.log("id > ", id);
-      console.log("e > ", e);
-
-      console.log("====================================");
-
       if (id === "isActive") {
         let user = this.state.user;
         user.isActive = e.target.checked;
@@ -332,16 +323,14 @@ class edituser extends React.Component {
         .post(UpdateUserUrl, handleUpdateData, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleUpdate > response > data > ", data);
+
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -392,7 +381,7 @@ class edituser extends React.Component {
         </Snackbar>
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-          <Grid
+            <Grid
               xs={12}
               sm={12}
               md={4}
@@ -417,7 +406,7 @@ class edituser extends React.Component {
                   </Link>
                   <Link
                     color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
                   >
                     Dashboard
                   </Link>
@@ -425,7 +414,6 @@ class edituser extends React.Component {
                     color="inherit"
                     href={URLS.URLS.userMaster + this.state.urlparams}
                   >
-                    
                     User Master
                   </Link>
 
@@ -434,21 +422,25 @@ class edituser extends React.Component {
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
-                            <div style={{marginLeft:10,marginTop:1}}>  
-                            <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
-                                 <Button
-                                     className="action-btns"
-                                     startIcon={<UpdateIcon />}                                            
-                                     onClick={handleUpdate}
-                                     disabled={this.state.DisableUpdatebtn}                                  
-                                     >Update</Button>
-                                
-                             </ButtonGroup>
-                            </div>                           
-                        </Grid> 
+              <div style={{ marginLeft: 10, marginTop: 1 }}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
+                  <Button
+                    className="action-btns"
+                    startIcon={<UpdateIcon />}
+                    onClick={handleUpdate}
+                    disabled={this.state.DisableUpdatebtn}
+                  >
+                    Update
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-         
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
@@ -475,7 +467,6 @@ class edituser extends React.Component {
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails key="" className="AccordionDetails-css">
-                  {console.log("state user > ", this.state.user)}
                   <TableContainer>
                     <Table
                       stickyHeader
@@ -681,10 +672,6 @@ class edituser extends React.Component {
                             is Active?
                           </TableCell>
                           <TableCell align="left" className="no-border-table">
-                            {console.log(
-                              "this.state.isActive ------------------------------> ",
-                              this.state.isActive
-                            )}
                             {this.state.isActive === true ? (
                               <Switch
                                 key="isactiuveswitch"

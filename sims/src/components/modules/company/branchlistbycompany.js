@@ -39,7 +39,7 @@ class branchlistbycompany extends React.Component {
     render() {
         return (
             <Fragment>
-            {console.log("this.props.data > ",this.props.data)}
+           
                 {this.props.data ? (
                     <div style={{marginLeft:10}}>
                         <Grid container spacing={0}>                            

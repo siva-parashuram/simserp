@@ -50,11 +50,7 @@ class destination extends React.Component {
 
 
         const updatePostcode = (id, e) => {
-            console.log("updatePostcode > ");
-            console.log("id : ", id);
-            console.log("e : ", e);
-            console.log("e.target.value : ", e.target.value);
-            console.log(" document.getElementById(id) : ", document.getElementById(id));
+           
             document.getElementById(id).value = e.target.value;
         }
 
@@ -66,8 +62,7 @@ class destination extends React.Component {
           }
         
           const handlePageChange=(event, newPage)=>{
-            console.log("handlePageChange > event > ",event);
-            console.log("handlePageChange > newPage > ",newPage);
+           
             let pagination=this.state.pagination;
             pagination.page=newPage;          
             this.setState({pagination:pagination});

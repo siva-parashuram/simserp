@@ -107,8 +107,7 @@ class editmodule extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           let data = response.data;
-          console.log("getModule > response > data > ", data);
-
+          
           this.setState({
             Module: data,
             Name: data.name,
@@ -120,7 +119,7 @@ class editmodule extends React.Component {
         }
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   }
 
@@ -278,10 +277,10 @@ class editmodule extends React.Component {
         .post(UpdateModuleUrl, handleCreateData, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleUpdate > response > data > ", data);
+          
         })
         .catch((error) => {
-          console.log("error > ", error);
+          
         });
     };
 

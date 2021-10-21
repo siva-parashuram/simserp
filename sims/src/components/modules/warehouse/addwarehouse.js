@@ -5,8 +5,8 @@ import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
 import Nav from "../../user/nav";
 import Menubar from "../../user/menubar";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import AddIcon from '@material-ui/icons/Add'; 
+import ButtonGroup from "@mui/material/ButtonGroup";
+import AddIcon from "@material-ui/icons/Add";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
@@ -123,12 +123,10 @@ class addwarehouse extends React.Component {
       .post(GetBrachesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getBranches > response > data > ", data);
 
         this.setState({ branches: data, ProgressLoader: true });
       })
       .catch((error) => {
-        console.log("error > ", error);
         this.setState({ branches: [], ProgressLoader: true });
       });
   }
@@ -159,7 +157,6 @@ class addwarehouse extends React.Component {
       // }
 
       if (id === "Code") {
-        console.log('code>',e.target.value)
         warehouse.Code = e.target.value;
         if (e.target.value.length > 10) {
           let v = this.state.Validations;
@@ -181,7 +178,6 @@ class addwarehouse extends React.Component {
         }
       }
       if (id === "Description") {
-        console.log('Description>',e.target.value)
         warehouse.Description = e.target.value;
         if (e.target.value.length > 50) {
           let v = this.state.Validations;
@@ -408,7 +404,7 @@ class addwarehouse extends React.Component {
         validUser: ValidUser,
         WareHouse: warehouse,
       };
-      console.log("data - > ", data);
+
       let Url = APIURLS.APIURL.CreateWareHouse;
       const headers = {
         "Content-Type": "application/json",
@@ -416,7 +412,6 @@ class addwarehouse extends React.Component {
       axios
         .post(Url, data, { headers })
         .then((response) => {
-          console.log("response > ", response);
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
             this.props.history.push(
@@ -435,8 +430,7 @@ class addwarehouse extends React.Component {
         <Menubar />
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-           
-                  <Grid
+            <Grid
               xs={12}
               sm={12}
               md={4}
@@ -461,7 +455,7 @@ class addwarehouse extends React.Component {
                   </Link>
                   <Link
                     color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
                   >
                     Dashboard
                   </Link>
@@ -469,7 +463,6 @@ class addwarehouse extends React.Component {
                     color="inherit"
                     href={URLS.URLS.warehouseMaster + this.state.urlparams}
                   >
-                    
                     Warehouse Master
                   </Link>
 
@@ -496,7 +489,7 @@ class addwarehouse extends React.Component {
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          
+
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={7} lg={7}>

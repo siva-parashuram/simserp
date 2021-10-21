@@ -40,7 +40,7 @@ class companyquickdetails extends React.Component {
         }
 
         const openPage = (url) => {
-            console.log("url > ", url);
+           
 
             this.setState({ ProgressLoader: false });
             window.location = url;
@@ -69,7 +69,7 @@ class companyquickdetails extends React.Component {
                     </Grid>
                 </Grid>
                 <Grid container spacing={0}>
-                    {console.log("----------------> Props > ",this.props)}
+                   
                     {this.state.showDetails === true ? (
                         <Fragment>
                             <Grid container spacing={0}>

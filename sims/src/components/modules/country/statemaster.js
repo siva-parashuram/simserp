@@ -75,7 +75,7 @@ class statemaster extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+        
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true },
             () => {
@@ -85,7 +85,7 @@ class statemaster extends React.Component {
        });
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
        
       });
   }
@@ -105,23 +105,22 @@ class statemaster extends React.Component {
       .post(GetDestinationsUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+        
         this.setState({ destinations: data, ProgressLoader: true });
         
       })
       .catch((error) => {
-        console.log("error > ", error);
+        
       });
   };
 
   InitialhandleRowClick(e, item, id) {
-    console.log("InitialhandleRowClick > id > ", id);
-    console.log("InitialhandleRowClick > vitem > ", item);
+    
     let editUrl =
       URLS.URLS.editState +
       this.state.urlparams +
       "&StateId=" +item.stateId;
-      console.log("InitialhandleRowClick   ",editUrl)
+     
     this.setState({  editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
@@ -135,13 +134,13 @@ class statemaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      console.log("handleRowClick > item > ", item);
+     
       getDestinationsByState(item);
       let editUrl =
       URLS.URLS.editState +
       this.state.urlparams +
       "&StateId=" +item.stateId;
-      console.log("handleRowClick   ",editUrl)
+      
       this.setState({editurl:editUrl})
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
@@ -180,7 +179,7 @@ class statemaster extends React.Component {
         .post(GetDestinationByCountryIdAndStateIdUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("getDestinationsByState > response > data > ", data);
+          
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ destinations: data, ProgressLoader: true });
           } else {
@@ -188,7 +187,7 @@ class statemaster extends React.Component {
           }
         })
         .catch((error) => {
-          console.log("error > ", error);
+          
         });
     };
 
@@ -211,7 +210,7 @@ class statemaster extends React.Component {
     }
 
     const openPage = (url) => {
-        console.log("openPage >",url)
+        
       this.setState({ ProgressLoader: false });
      window.location = url;
     };

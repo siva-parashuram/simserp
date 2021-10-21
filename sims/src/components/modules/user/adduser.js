@@ -22,7 +22,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Switch from "@mui/material/Switch";
-import ButtonGroup from '@mui/material/ButtonGroup';
+import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
 
@@ -113,12 +113,6 @@ class adduser extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-      console.log("====================================");
-      console.log("id > ", id);
-      console.log("e > ", e);
-      console.log("e.target.value > ", e.target.checked);
-      console.log("====================================");
-
       if (id === "isActive") {
         let user = this.state.user;
         user.isActive = e.target.checked;
@@ -282,22 +276,19 @@ class adduser extends React.Component {
         "Content-Type": "application/json",
       };
       let AddUserUrl = APIURLS.APIURL.AddUser;
-      console.log("handleCreateData >   ", handleCreateData);
 
       axios
         .post(AddUserUrl, handleCreateData, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("handleCreate > response > data > ", data);
+
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -349,7 +340,7 @@ class adduser extends React.Component {
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-          <Grid
+            <Grid
               xs={12}
               sm={12}
               md={4}
@@ -374,7 +365,7 @@ class adduser extends React.Component {
                   </Link>
                   <Link
                     color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams} 
+                    href={URLS.URLS.userDashboard + this.state.urlparams}
                   >
                     Dashboard
                   </Link>
@@ -382,7 +373,6 @@ class adduser extends React.Component {
                     color="inherit"
                     href={URLS.URLS.userMaster + this.state.urlparams}
                   >
-                    
                     User Master
                   </Link>
 
@@ -410,7 +400,6 @@ class adduser extends React.Component {
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>

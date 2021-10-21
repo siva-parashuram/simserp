@@ -40,8 +40,7 @@ class branchquickdetails extends React.Component {
         }
 
         const openPage = (url) => {
-            console.log("url > ", url);
-
+           
             this.setState({ ProgressLoader: false });
             window.location = url;
         }
@@ -72,7 +71,7 @@ class branchquickdetails extends React.Component {
                         <Fragment>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                                    {console.log("props > branchItem > ", this.props.branchItem)}
+                                   
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="table">
                                             <TableBody className="tableBody">

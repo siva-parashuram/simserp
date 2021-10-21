@@ -102,13 +102,11 @@ class editdestination extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getCountryList > response > data > ", data);
+
         rows = data;
         this.setState({ countryData: rows });
       })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
+      .catch((error) => {});
   }
 
   getStateList() {
@@ -125,13 +123,11 @@ class editdestination extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true });
       })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
+      .catch((error) => {});
   }
 
   getDestination = () => {
@@ -159,7 +155,7 @@ class editdestination extends React.Component {
       .post(GetDestinationUrl, data, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getDestination > response > data > ", data);
+
         this.setState({
           destinationId: data.destinationId,
           countryId: data.countryId,
@@ -169,9 +165,7 @@ class editdestination extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
+      .catch((error) => {});
   };
 
   getAllDestinations = () => {
@@ -189,12 +183,10 @@ class editdestination extends React.Component {
       .post(GetDestinationsUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > response > data > ", data);
+
         this.setState({ destinations: data, ProgressLoader: true });
       })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
+      .catch((error) => {});
   };
 
   render() {
@@ -282,7 +274,6 @@ class editdestination extends React.Component {
     };
 
     const updateDestination = () => {
-      console.log("Starting Update");
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -304,14 +295,11 @@ class editdestination extends React.Component {
       };
       let UpdateDestinationUrl = APIURLS.APIURL.UpdateDestination;
 
-      console.log("data > ", data);
-      console.log("UpdateDestinationUrl > ", UpdateDestinationUrl);
-
       axios
         .post(UpdateDestinationUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("updateDestination > response > data > ", data);
+
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
             this.getAllDestinations();
@@ -320,9 +308,7 @@ class editdestination extends React.Component {
             this.getAllDestinations();
           }
         })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
