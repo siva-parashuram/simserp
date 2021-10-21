@@ -346,7 +346,7 @@ class usermaster extends React.Component {
 
     return (
       <Fragment>
-        <Header />
+        
 
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: 0, marginLeft: -10 }}>

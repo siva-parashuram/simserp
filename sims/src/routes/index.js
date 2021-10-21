@@ -53,10 +53,13 @@ import testformat from "../components/modules/accounts/reports/testformat";
 import Ftptest from "../components/ftp/ftptest";
 
 
+import Header from "../components/user/userheaderconstants";
+
+
 let routes = ({ location, ...rest }) => {
   return (
     <Router>
-       
+     <Header/>  
     <Switch>
     <Route path={URLS.URLS.LoginPage} exact  component={LoginPage} />
     <Route path={URLS.URLS.userDashboard}  component={userDashboard} />

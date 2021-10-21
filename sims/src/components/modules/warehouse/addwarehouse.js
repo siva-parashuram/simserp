@@ -431,8 +431,7 @@ class addwarehouse extends React.Component {
 
     return (
       <Fragment>
-        <Nav />
-        <Menubar />
+        
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
            

@@ -293,7 +293,7 @@ class addstate extends React.Component {
 
     return (
       <Fragment>
-        <Header />
+         
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: -8, marginLeft: -10 }}>
             <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}

@@ -43,7 +43,7 @@ let rows = [];
 
 const initialCss = "";
 
-class companyMaster extends React.Component {
+class itemMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,7 +56,7 @@ class companyMaster extends React.Component {
       item: null,
       editUrl: null,
       isLoggedIn: false,
-      ProgressLoader: true,
+      ProgressLoader: false,
       branchName: "",
       branchId: "",
       compName: "",
@@ -305,36 +305,10 @@ class companyMaster extends React.Component {
       sortAsPerKey(key);
     };
 
-    const sortAsPerKey = (key) => {
-      key = key.toLowerCase();
-      let rows = [];
-      let masterCompanyData = this.state.masterCompanyData;
-      if (key === "" || key == null) {
-        this.setState({ companyData: masterCompanyData });
-      } else {
-        for (let i = 0; i < masterCompanyData.length; i++) {
-          if (
-            masterCompanyData[i].companyName != null
-              ? masterCompanyData[i].companyName.toLowerCase().includes(key)
-              : null || masterCompanyData[i].address != null
-                ? masterCompanyData[i].address.toLowerCase().includes(key)
-                : null || masterCompanyData[i].companyId != null
-                  ? masterCompanyData[i].companyId
-                    .toString()
-                    .toLowerCase()
-                    .includes(key)
-                  : null
-          ) {
-            rows.push(masterCompanyData[i]);
-          }
-        }
-        this.setState({ companyData: rows });
-      }
-    };
+    
 
     const handlePageChange = (event, newPage) => {
-      console.log("handlePageChange > event > ", event);
-      console.log("handlePageChange > newPage > ", newPage);
+       
       let pagination = this.state.pagination;
       pagination.page = newPage;
       this.setState({ pagination: pagination });
@@ -344,25 +318,9 @@ class companyMaster extends React.Component {
       let rows = data;
       let page = parseInt(this.state.pagination.page);
       let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
-
       return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     }
-
-    const openCompanyDetail = (e, item) => {
-      console.log("openCompanyDetail > e > ", e);
-      console.log("openCompanyDetail > item > ", item);
-    };
-
-    const handleClose = (reason) => {
-      if (reason === "YES") {
-        this.setState({ companyDialogStatus: false });
-      }
-    };
-
-    const updateCompanyMasterDetail = (key, e) => {
-      console.log("updateCompanyMasterDetail > key > ", key);
-      console.log("updateCompanyMasterDetail > e > ", e.target);
-    };
+   
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -405,7 +363,7 @@ class companyMaster extends React.Component {
                   <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
                     Dashboard
                   </Link>
-                  <Typography color="textPrimary"> Company master</Typography>
+                  <Typography color="textPrimary"> Item master</Typography>
                 </Breadcrumbs>
               </div>
             </Grid>
@@ -415,7 +373,7 @@ class companyMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) => openPage(URLS.URLS.addNewCompany + this.state.urlparams)}
+                    onClick={(e) => openPage(URLS.URLS.addNewItem + this.state.urlparams)}
                   >
 
                     NEW
@@ -427,19 +385,7 @@ class companyMaster extends React.Component {
                     onClick={(e) => openPage(this.state.editUrl)}
                   >Edit</Button>
 
-                  <Button
-                    className="action-btns"
-                    startIcon={<FileDownloadIcon />}
-
-                  >
-                    <Csvexport
-                      data={this.state.companyData}
-                      filename="companieslist.csv"
-                      buttonName="CSV"
-
-                    />
-
-                  </Button>
+                   
 
                 </ButtonGroup>
               </div>
@@ -458,7 +404,7 @@ class companyMaster extends React.Component {
                 stickyHeader
                 size="small"
                 className=""
-                aria-label="company List table"
+                aria-label="item List table"
               >
                 <TableHead className="table-header-background">
                   <TableRow>
@@ -468,11 +414,9 @@ class companyMaster extends React.Component {
                       align="left"
 
                     >
-                      Company Name
+                      Item Name
                     </TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Address
-                    </TableCell>
+                   
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
@@ -504,7 +448,7 @@ class companyMaster extends React.Component {
                           </a>
                         </TableCell>
                         <TableCell align="left">{item.companyName}</TableCell>
-                        <TableCell align="left">{item.address}</TableCell>
+                       
                       </TableRow>
                     ))}
                 </TableBody>
@@ -525,15 +469,7 @@ class companyMaster extends React.Component {
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
               <Grid xs={12} sm={12} md={11} lg={11}>
-                {/*<Branchlistbycompany data={this.state.branch} />*/}
-                {this.state.item === null || this.state.item === {} ? null : (
-                  <CompanyQuickDetails
-                    data={this.state.branch}
-                    item={this.state.item}
-                    filelist={this.state.filelist}
-                    rowClicked={this.state.rowClicked}
-                  />
-                )}
+
 
               </Grid>
             </Grid>
@@ -544,4 +480,4 @@ class companyMaster extends React.Component {
     );
   }
 }
-export default companyMaster;
+export default itemMaster;

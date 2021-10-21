@@ -597,8 +597,7 @@ class editcompany extends React.Component {
 
     return (
       <Fragment>
-        <Header />
-
+       
         <div>
           {this.state.ProgressLoader === false ? (
             <div style={{ marginTop: -8, marginLeft: -10 }}>
