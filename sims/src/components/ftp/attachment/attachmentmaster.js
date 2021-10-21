@@ -31,7 +31,8 @@ class attachmentmaster extends React.Component {
             ErrorPrompt: false,
             newAdded:false,
             OldrowClicked:1,
-            filelist: []
+            filelist: [],
+            fileSizeError:"Uploaded file size is not accepted",
         };
     }
     render() {
@@ -98,6 +99,7 @@ class attachmentmaster extends React.Component {
             axios
                 .post(FTPUploadUrl, formData, { headers })
                 .then((response) => {
+                    reset();
                     if(response.status===200 || response.status===201){
                         if (listing === "branch") {
                             getBranchFileList(companyId,branchId);
@@ -106,12 +108,15 @@ class attachmentmaster extends React.Component {
                             getBranchFileList(companyId,0);
                         }
                     }
+                    if(response.status===403){
+                        this.setState({ ErrorPrompt: true, ShowLoader: false });
+                    }
                    
                 })
                 .catch((error) => {
                     console.log("error > ", error);
                     this.setState({ ErrorPrompt: true, ShowLoader: false });
-
+                    reset();
                 });
 
         }
@@ -186,7 +191,7 @@ class attachmentmaster extends React.Component {
                                 onClose={closeErrorPrompt}
                             >
                                 <Alert onClose={closeErrorPrompt} severity="error">
-                                    Error!
+                                    Error! {this.state.fileSizeError}
                                 </Alert>
                             </Snackbar>
 

@@ -27,10 +27,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import TablePagination from '@mui/material/TablePagination';
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 import Branchlistbycompany from "./branchlistbycompany";
 
 import CompanyQuickDetails from "./companyquickdetails";
+
+// import CsvDownload from 'react-json-to-csv';
+import Csvexport from "../../compo/csvexport";
+
 
 let columns = [];
 
@@ -421,6 +426,21 @@ getAttachments(companyId) {
                     startIcon={<EditIcon />}
                   onClick={(e) => openPage(this.state.editUrl)}
                   >Edit</Button>
+
+                  <Button
+                    className="action-btns"
+                    startIcon={<FileDownloadIcon />}
+                   
+                  >
+                    <Csvexport
+                     data={this.state.companyData}
+                     filename="companieslist.csv"
+                     buttonName="CSV"
+                     
+                    />
+                    
+                  </Button>
+                  
                 </ButtonGroup>
               </div>
             </Grid>

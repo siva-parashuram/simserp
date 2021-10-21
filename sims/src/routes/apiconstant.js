@@ -1,6 +1,7 @@
 // const domain="http://192.168.10.106:44356/";
 const domain="http://192.168.10.200:8080/";
 export const APIURL = {   
+    FileDownloadTEST:domain+"api/Common/FileDownload",
     FTPUPLOAD:domain+"api/Common/FileUpload", 
     FTPFILELIST:domain+"api/Common/ListOfFilesFromFTP",
     Login: domain+"api/users/login",
