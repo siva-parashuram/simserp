@@ -34,6 +34,7 @@ import UpdateIcon from "@material-ui/icons/Update";
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class editbranch extends React.Component {
   constructor(props) {
@@ -268,12 +269,12 @@ class editbranch extends React.Component {
       .post(GetCompaniesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-       
+
         rows = data;
         this.setState({ companyData: rows, ProgressLoader: true });
       })
       .catch((error) => {
-       
+
       });
   }
 
@@ -291,12 +292,12 @@ class editbranch extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-       
+
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true });
       })
       .catch((error) => {
-       
+
       });
   }
 
@@ -314,12 +315,12 @@ class editbranch extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-       
+
         rows = data;
         this.setState({ countryData: rows });
       })
       .catch((error) => {
-       
+
       });
   }
 
@@ -342,17 +343,17 @@ class editbranch extends React.Component {
       .post(GetBranchUrl, data, { headers })
       .then((response) => {
         let data = response.data;
-      
+
         this.setStateParams(data);
       })
       .catch((error) => {
-      
+
         this.setState({ branch: null, ProgressLoader: true });
       });
   }
 
   setStateParams(data) {
-    
+
     this.setState({
       branch: data,
       address: data.address,
@@ -437,7 +438,7 @@ class editbranch extends React.Component {
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-       
+
         if (response.status === 200) {
           let newData = [];
           let responseData = data.noSeriesDetailList;
@@ -462,7 +463,7 @@ class editbranch extends React.Component {
         }
       })
       .catch((error) => {
-       
+
         this.setState({
           numberSeries: [],
           ProgressLoader: true,
@@ -475,7 +476,7 @@ class editbranch extends React.Component {
 
   render() {
     const handleAccordionClick = (val, e) => {
-     
+
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true
           ? this.setState({ GeneralDetailsExpanded: false })
@@ -970,7 +971,7 @@ class editbranch extends React.Component {
       }
       if (id === "IsSEZ") {
         let branch = this.state.branch;
-       
+
         branch.IsSEZ = e.target.checked;
         this.setState({ branch: branch, IsSEZ: e.target.checked });
       }
@@ -1121,7 +1122,7 @@ class editbranch extends React.Component {
     //   VATPercentageDisabled:true,
 
     const VAT_GST_Checkbox_Click = (e, param) => {
-     
+
       if (param === "isvat") {
         let branch = this.state.branch;
 
@@ -1168,7 +1169,7 @@ class editbranch extends React.Component {
         validUser: ValidUser,
         branch: branch,
       };
-      
+
 
       const headers = {
         "Content-Type": "application/json",
@@ -1177,14 +1178,14 @@ class editbranch extends React.Component {
       axios
         .post(UpdateBranchUrl, data, { headers })
         .then((response) => {
-         
+
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -1209,34 +1210,9 @@ class editbranch extends React.Component {
       <Fragment>
 
         <Loader ProgressLoader={this.state.ProgressLoader} />
-        <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeSuccessPrompt} />
+        <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeErrorPrompt} />
         <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
-{/* 
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: -8, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
 
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar> */}
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
@@ -1252,31 +1228,15 @@ class editbranch extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.branchMaster + this.state.urlparams}
-                  >
-                    Branch Master
-                  </Link>
-                  <Typography color="textPrimary">Edit Branch </Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.branchMaster + this.state.urlparams}
+                  masterLinkTitle="Branch Master"
+                  typoTitle="Edit Branch"
+                  level={2}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -1344,7 +1304,7 @@ class editbranch extends React.Component {
                                     Company
                                   </TableCell>
 
-                                 
+
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -1386,7 +1346,7 @@ class editbranch extends React.Component {
                                     this.state.Validations.name.errorMsg
                                   }
                                 />
-                                
+
                                 <Tablerowcelltextboxinput
                                   id="shortName"
                                   label="ShortName"
@@ -1407,7 +1367,7 @@ class editbranch extends React.Component {
                                     this.state.Validations.shortName.errorMsg
                                   }
                                 />
-                              
+
 
                                 <TableRow>
                                   <TableCell

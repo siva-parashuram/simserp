@@ -4,7 +4,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import '../user/dasboard.css';
 
 
-class loader extends React.Component {
+class successSnackbar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {}
@@ -30,5 +30,5 @@ class loader extends React.Component {
     }
 
 }
-export default loader;
+export default successSnackbar;
 
