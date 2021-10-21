@@ -33,6 +33,7 @@ import UpdateIcon from "@material-ui/icons/Update";
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class editbranch extends React.Component {
   constructor(props) {
@@ -271,7 +272,9 @@ class editbranch extends React.Component {
         rows = data;
         this.setState({ companyData: rows, ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => {
+
+      });
   }
 
   getStateList() {
@@ -292,7 +295,9 @@ class editbranch extends React.Component {
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => {
+
+      });
   }
 
   getCountryList() {
@@ -313,7 +318,9 @@ class editbranch extends React.Component {
         rows = data;
         this.setState({ countryData: rows });
       })
-      .catch((error) => {});
+      .catch((error) => {
+
+      });
   }
 
   getBranchDetail() {
@@ -1170,7 +1177,7 @@ class editbranch extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -1194,14 +1201,9 @@ class editbranch extends React.Component {
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
-        <ErrorSnackBar
-          ErrorPrompt={this.state.ErrorPrompt}
-          closeErrorPrompt={closeErrorPrompt}
-        />
-        <SuccessSnackBar
-          SuccessPrompt={this.state.SuccessPrompt}
-          closeSuccessPrompt={closeSuccessPrompt}
-        />
+        <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeErrorPrompt} />
+        <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
+
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
@@ -1217,31 +1219,15 @@ class editbranch extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.branchMaster + this.state.urlparams}
-                  >
-                    Branch Master
-                  </Link>
-                  <Typography color="textPrimary">Edit Branch </Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.branchMaster + this.state.urlparams}
+                  masterLinkTitle="Branch Master"
+                  typoTitle="Edit Branch"
+                  level={2}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>

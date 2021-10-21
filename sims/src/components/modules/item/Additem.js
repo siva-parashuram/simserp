@@ -14,7 +14,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link"; 
+import Link from "@material-ui/core/Link";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -27,6 +27,10 @@ import MuiAlert from "@material-ui/lab/Alert";
 
 import Header from "../../user/userheaderconstants";
 import { withStyles } from "@material-ui/styles";
+
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
 
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
@@ -42,7 +46,7 @@ class addItem extends React.Component {
   }
 
   componentDidMount() {
-     
+
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -54,7 +58,7 @@ class addItem extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-     
+
     this.setState({
       urlparams: urlparams,
     });
@@ -89,31 +93,11 @@ class addItem extends React.Component {
 
     return (
       <Fragment>
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: 0, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeErrorPrompt} />
+        <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
 
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Items Details Added!
-          </Alert>
-        </Snackbar>
 
-        <Snackbar
-          //   open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
@@ -147,7 +131,7 @@ class addItem extends React.Component {
                     Dashboard
                   </Link>
                   <Link color="inherit" className="backLink"
-                   href={URLS.URLS.itemMaster + this.state.urlparams}
+                    href={URLS.URLS.itemMaster + this.state.urlparams}
                   >
                     Item Master
                   </Link>
@@ -206,7 +190,7 @@ class addItem extends React.Component {
                         aria-label="Item List table"
                       >
                         <TableBody className="tableBody">
-                          
+
                         </TableBody>
                       </Table>
                     </TableContainer>

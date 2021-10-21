@@ -22,10 +22,13 @@ import TableCell from "@material-ui/core/TableCell";
 import Divider from "@material-ui/core/Divider";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-
+import BranchQuickDetails from "./branchquickdetails";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
-import BranchQuickDetails from "./branchquickdetails";
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class branchMaster extends React.Component {
   constructor(props) {
@@ -260,25 +263,13 @@ class branchMaster extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Typography color="textPrimary">Branch master</Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  typoTitle="Branch Master"
+                  level={1}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
