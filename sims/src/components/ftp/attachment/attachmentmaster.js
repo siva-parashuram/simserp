@@ -89,27 +89,28 @@ class attachmentmaster extends React.Component {
       formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
       formData.append("Token", getCookie(COOKIE.TOKEN));
 
-      const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
-      axios
-        .post(FTPUploadUrl, formData, { headers })
-        .then((response) => {
-          if (response.status === 200 || response.status === 201) {
-            if (listing === "branch") {
-              getBranchFileList(companyId, branchId);
-            }
-            if (listing === "company") {
-              getBranchFileList(companyId, 0);
-            }
-          }
-        })
-        .catch((error) => {
-          this.setState({ ErrorPrompt: true, ShowLoader: false });
-        });
-    };
+            axios
+                .post(FTPUploadUrl, formData, { headers })
+                .then((response) => {
+                    reset();
+                    if(response.status===200 || response.status===201){
+                        if (listing === "branch") {
+                            getBranchFileList(companyId,branchId);
+                        }
+                        if (listing === "company") {
+                            getBranchFileList(companyId,0);
+                        }
+                    }
+                    if(response.status===403){
+                        this.setState({ ErrorPrompt: true, ShowLoader: false });
+                    }
+                   
+                })
+                .catch((error) => {
+                    console.log("error > ", error);
+                    this.setState({ ErrorPrompt: true, ShowLoader: false });
+                    reset();
+                });
 
     const getBranchFileList = (companyId, branchId) => {
       let ValidUser = APIURLS.ValidUser;
@@ -274,5 +275,6 @@ class attachmentmaster extends React.Component {
       </Fragment>
     );
   }
+}
 }
 export default attachmentmaster;

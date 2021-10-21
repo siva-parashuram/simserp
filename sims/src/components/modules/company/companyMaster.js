@@ -6,7 +6,7 @@ import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
-import logo from "../../../logo.png";
+
 import Header from "../../user/userheaderconstants";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import axios from "axios";
@@ -27,10 +27,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import TablePagination from "@mui/material/TablePagination";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 import Branchlistbycompany from "./branchlistbycompany";
 
 import CompanyQuickDetails from "./companyquickdetails";
+
+// import CsvDownload from 'react-json-to-csv';
+import Csvexport from "../../compo/csvexport";
+
 
 let columns = [];
 
@@ -436,10 +441,23 @@ class companyMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage(this.state.editUrl)}
+                  onClick={(e) => openPage(this.state.editUrl)}
+                  >Edit</Button>
+
+                  <Button
+                    className="action-btns"
+                    startIcon={<FileDownloadIcon />}
+                   
                   >
-                    Edit
+                    <Csvexport
+                     data={this.state.companyData}
+                     filename="companieslist.csv"
+                     buttonName="CSV"
+                     
+                    />
+                    
                   </Button>
+                  
                 </ButtonGroup>
               </div>
             </Grid>

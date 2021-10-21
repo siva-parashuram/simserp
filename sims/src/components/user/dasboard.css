@@ -21,7 +21,14 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
- 
+ .csvExportComponent{
+  border-style:none !important;
+  background-color: inherit !important;
+  color: rgb(0, 126, 135) !important;
+ }
+ .csvExportComponent:hover{
+  cursor: pointer !important;
+ }
 
 .file-browse-btn{
  color: #3e2723 !important;

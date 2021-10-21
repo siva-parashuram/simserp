@@ -3,24 +3,7 @@ import '../user/dasboard.css';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TextField from '@material-ui/core/TextField';
- 
- /*
-<TextField
-type="date"
-id={"startdate" + item.id}
-variant="outlined"
-size="small"
-defaultValue={item.StartDate}
-onChange={(e) => updateStartDate(e.value, item)}
-onKeyDown={(e) => updateListValue("startdate", item, 'startdate' + item.id, 'startno' + item.id, e)}
-style={{ width: 125 }}
-InputProps={{
-    className: "textFieldCss"
-}}
-/>
-*/
-
- 
+  
 class tablerowcelltextboxinput extends React.Component {
     constructor(props) {
         super(props);
