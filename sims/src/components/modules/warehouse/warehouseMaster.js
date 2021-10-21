@@ -130,7 +130,7 @@ class warehouseMaster extends React.Component {
 
     return (
       <Fragment>
-        <Header />
+       
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
             <Grid

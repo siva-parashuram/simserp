@@ -36,20 +36,15 @@ class pageNotFound extends React.Component {
         return (
             <Fragment>
                 <div style={{ marginLeft: 20 }}>
-                <p className="pageNotFound-p"  style={{ textAlign:'right',marginRight:20 }}>
-                        
-                        <Link color="inherit" style={{ color: 'blue' }} href={URLS.URLS.userDashboard + this.state.urlparams} >
-                            Dashboard
-                        </Link>
+                    
+                    <p className="pageNotFound-p" style={{ fontSize: 50, textAlign: 'center',marginBottom:-20 }}>
+                        Oops!
                     </p>
-                    <p className="pageNotFound-p"  style={{ fontSize:50,textAlign:'center'}}>
-                        Oops! Page not found. 
+                    <p style={{ textAlign: 'center' }}>
+                        <PriorityHighIcon style={{ fontSize: 350, color: 'red' }} />
                     </p>
-                    <p style={{ textAlign:'center' }}>
-                       <PriorityHighIcon style={{fontSize:400,color:'red'}}/>
-                    </p>
-                    <p  style={{ textAlign:'center' }}>
-                    <img src={logo} className="App-logo" alt="logo" />
+                    <p style={{ textAlign: 'center' }}>
+                        <img src={logo} className="App-logo" alt="logo" />
                     </p>
                 </div>
             </Fragment>

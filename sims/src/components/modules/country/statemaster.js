@@ -217,7 +217,7 @@ class statemaster extends React.Component {
 
     return (
       <Fragment>
-        <Header />
+         
 
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: -8, marginLeft: -10 }}>
