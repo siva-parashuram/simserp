@@ -56,7 +56,7 @@ class companyMaster extends React.Component {
       item: null,
       editUrl: null,
       isLoggedIn: false,
-      ProgressLoader: true,
+      ProgressLoader: false,
       branchName: "",
       branchId: "",
       compName: "",
@@ -378,8 +378,7 @@ class companyMaster extends React.Component {
 
     return (
       <Fragment>
-        <CssBaseline />
-        
+        <CssBaseline />        
         {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress
           className="linearProgress-css"
         /> </div>) : null}
