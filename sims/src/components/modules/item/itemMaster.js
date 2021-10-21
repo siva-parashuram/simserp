@@ -1,15 +1,13 @@
 import React, { Fragment } from "react";
-
-import CssBaseline from "@material-ui/core/CssBaseline";
-
+import axios from "axios";
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
-import Header from "../../user/userheaderconstants";
+
 import LinearProgress from "@material-ui/core/LinearProgress";
-import axios from "axios";
+
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
@@ -27,21 +25,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import TablePagination from '@mui/material/TablePagination';
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-
-import Branchlistbycompany from "./branchlistbycompany";
-
-import CompanyQuickDetails from "./companyquickdetails";
-
- 
-import Csvexport from "../../compo/csvexport";
 
 
-let columns = [];
-
-let rows = [];
-
-const initialCss = "";
 
 class itemMaster extends React.Component {
   constructor(props) {
@@ -51,35 +36,15 @@ class itemMaster extends React.Component {
         page: 0,
         rowsPerPage: 10,
       },
-      page: 1,
-      rowsPerPage: 10,
-      item: null,
       editUrl: null,
       isLoggedIn: false,
       ProgressLoader: false,
-      branchName: "",
-      branchId: "",
-      compName: "",
-      branch: [],
-      columns: columns,
-      masterCompanyData: rows,
-      companyData: rows,
-      showSavedAlert: false,
-      selectedCompanyId: 0,
-      initialCss: initialCss,
-      DeleteDisabled: true,
-      companyDialogStatus: false,
-      UpdateCompany: true,
-      urlparams: "",
-      filelist: [],
-      rowClicked: 1,
+      initialCss:"",
     };
   }
 
   componentDidMount() {
-    if (getCookie(COOKIE.USERID) != null) {
-      this.getCompanyList();
-      this.setColumns();
+    if (getCookie(COOKIE.USERID) != null) {      
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
       let branchId = url.searchParams.get("branchId");
@@ -92,150 +57,15 @@ class itemMaster extends React.Component {
         compName +
         "&branchName=" +
         branchName;
-      this.setState({
-        branchName: branchName,
-        branchId: branchId,
-        compName: compName,
-        urlparams: urlparams,
-      });
+        this.getItems();
+       
     } else {
       this.setState({ isLoggedIn: false });
     }
   }
-
-  handleCheckboxChange = (e, id) => {
-    console.log("handleCheckboxChange > e > ", e);
-    console.log("handleCheckboxChange > e.target > ", e.target);
-    var elementCheckedChk = document.getElementById(id).checked;
-    console.log(
-      "handleCheckboxChange > elementCheckedChk > ",
-      elementCheckedChk
-    );
-    if (elementCheckedChk === true) {
-      document.getElementById(id).checked = true;
-    }
-    if (elementCheckedChk === false) {
-      document.getElementById(id).checked = false;
-    }
-  };
-
-  setColumns() {
-    let columns = [
-      {
-        field: "sno",
-        headerName: "sno",
-        type: "number",
-        width: 100,
-        editable: false,
-        headerClassName: "tbl-hdr-css",
-      },
-      {
-        field: "company",
-        headerName: "company",
-        width: 300,
-        editable: true,
-        headerClassName: "tbl-hdr-css",
-      },
-    ];
-
-    this.setState({ columns: columns });
+  getItems(){
+    this.setState({ProgressLoader: true});
   }
-
-  getCompanyList() {
-    let rows = [];
-
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetCompaniesUrl = APIURLS.APIURL.GetCompanies;
-
-    axios
-      .post(GetCompaniesUrl, ValidUser, { headers })
-      .then((response) => {
-        console.log("getCompanyList > response >  ", response);
-        if (response.status === 200) {
-          if (response.data === "Invalid User") {
-            alert("Un-Authorized Access Found!");
-            window.close();
-          } else {
-            let data = response.data;
-
-            rows = data;
-            this.setState({
-              masterCompanyData: rows,
-              companyData: rows,
-              ProgressLoader: true,
-            }, () => {
-              if (this.state.companyData.length > 0) {
-                this.InitialhandleRowClick(null, this.state.companyData[0], "row_0");
-              }
-            });
-          }
-        } else {
-          this.setState({ ErrorPrompt: true, ProgressLoader: true });
-        }
-
-
-      })
-      .catch((error) => {
-        console.log("error > ", error);
-        this.setState({ ErrorPrompt: true, ProgressLoader: true });
-      });
-  }
-
-  InitialhandleRowClick(e, item, id) {
-    console.log("handleRowClick > id > ", id);
-    console.log("handleRowClick > vitem > ", item);
-    let editUrl = URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId;
-    let branches = item.branches;
-    this.setState({ item: item, branch: branches, editUrl: editUrl, rowClicked: parseInt(this.state.rowClicked) + 1 });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add('selectedRow');
-    this.getAttachments(item.companyId);
-  }
-
-  InitialremoveIsSelectedRowClasses() {
-    try {
-      for (let i = 0; i < this.state.companyData.length; i++) {
-        document.getElementById('row_' + i).className = '';
-      }
-    } catch (e) {
-      console.log("Error : ", e);
-    }
-
-  }
-
-  getAttachments(companyId) {
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
-    const headers = {
-      "Content-Type": "application/json",
-    };
-
-    const formData = new FormData();
-    formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-    formData.append('Token', getCookie(COOKIE.TOKEN));
-    formData.append('CompanyId', companyId);
-    formData.append('BranchID', 0);
-    formData.append('Transaction', APIURLS.TrasactionType.default);
-    formData.append('TransactionNo', "");
-    formData.append('FileData', "");
-
-    axios
-      .post(FTPGetAttachmentsUrl, formData, { headers })
-      .then((response) => {
-        this.setState({ filelist: response.data });
-      })
-      .catch((error) => {
-        console.log("error > ", error);
-      });
-  }
-
 
 
   render() {
@@ -243,84 +73,7 @@ class itemMaster extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
-    const handleRowClick = (e, item, id) => {
-      console.log("handleRowClick > e > ", e);
-      console.log("handleRowClick > item > ", item);
-      let branches = item.branches;
-      let editUrl = URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId;
-      // getCompanyBranchList(item.companyId);
-      this.setState({ item: item, branch: branches, editUrl: editUrl, rowClicked: parseInt(this.state.rowClicked) + 1 });
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-      getAttachments(item.companyId);
-    };
 
-    const removeIsSelectedRowClasses = () => {
-      try {
-        for (let i = 0; i < this.state.companyData.length; i++) {
-          document.getElementById('row_' + i).className = '';
-        }
-      } catch (e) {
-        console.log("Error : ", e);
-      }
-    };
-
-    const getAttachments = (companyId) => {
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
-      const formData = new FormData();
-      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-      formData.append('Token', getCookie(COOKIE.TOKEN));
-      formData.append('CompanyId', companyId);
-      formData.append('BranchID', 0);
-      formData.append('Transaction', APIURLS.TrasactionType.default);
-      formData.append('TransactionNo', "");
-      formData.append('FileData', "");
-
-      axios
-        .post(FTPGetAttachmentsUrl, formData, { headers })
-        .then((response) => {
-          this.setState({ filelist: response.data });
-        })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
-    }
-
-    const getCompanyBranchList = (companyId) => { };
-
-    const searchInput = (e) => {
-      removeIsSelectedRowClasses();
-      console.log("searchInput > e > ", e);
-      console.log("searchInput > e.target > ", e.target);
-      console.log("searchInput > e.value > ", e.value);
-      let key = document.getElementById("searchBox").value;
-      console.log("searchInput > key > ", key);
-      sortAsPerKey(key);
-    };
-
-    
-
-    const handlePageChange = (event, newPage) => {
-       
-      let pagination = this.state.pagination;
-      pagination.page = newPage;
-      this.setState({ pagination: pagination });
-    }
-
-    const getPageData = (data) => {
-      let rows = data;
-      let page = parseInt(this.state.pagination.page);
-      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
-      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-    }
-   
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -336,8 +89,8 @@ class itemMaster extends React.Component {
 
     return (
       <Fragment>
-        <CssBaseline />
         
+
         {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress
           className="linearProgress-css"
         /> </div>) : null}
@@ -373,7 +126,7 @@ class itemMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) => openPage(URLS.URLS.addNewItem + this.state.urlparams)}
+                    onClick={(e) => openPage(URLS.URLS.addItem + this.state.urlparams)}
                   >
 
                     NEW
@@ -385,7 +138,7 @@ class itemMaster extends React.Component {
                     onClick={(e) => openPage(this.state.editUrl)}
                   >Edit</Button>
 
-                   
+
 
                 </ButtonGroup>
               </div>
@@ -416,53 +169,18 @@ class itemMaster extends React.Component {
                     >
                       Item Name
                     </TableCell>
-                   
+
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
 
 
-                  {//this.state.companyData 
-                    getPageData(this.state.companyData).map((item, i) => (
-                      <TableRow
-                        id={"row_" + i}
-                        className={this.state.initialCss}
-                        hover
-                        key={i}
-                        onClick={(event) =>
-                          handleRowClick(event, item, "row_" + i)
-                        }
-                      >
-                        <TableCell align="left">
-                          <a
-                            className="LINK tableLink"
-                            href={
-                              URLS.URLS.editCompany +
-                              this.state.urlparams +
-                              "&compID=" +
-                              item.companyId
-                            }
-                            onClick={(e) => openCompanyDetail(e, item)}
-                          >
-                            {URLS.PREFIX.companyID + item.companyId}
-                          </a>
-                        </TableCell>
-                        <TableCell align="left">{item.companyName}</TableCell>
-                       
-                      </TableRow>
-                    ))}
+
                 </TableBody>
               </Table>
             </TableContainer>
 
-            <TablePagination
-              rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-              component="div"
-              count={this.state.companyData.length}
-              rowsPerPage={this.state.pagination.rowsPerPage}
-              page={this.state.pagination.page}
-              onPageChange={handlePageChange}
-            />
+
 
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>

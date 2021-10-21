@@ -302,7 +302,7 @@ class branchMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage(this.state.editurl)}
+                    onClick={(e) => openPage(this.state.editUrl)}
                   >
                     Edit
                   </Button>
