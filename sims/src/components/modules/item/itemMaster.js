@@ -26,7 +26,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
-
 import Loader from "../../compo/loader";
 
 class itemMaster extends React.Component {
@@ -83,9 +82,6 @@ class itemMaster extends React.Component {
       <Fragment>
        
        <Loader ProgressLoader={this.state.ProgressLoader}/>
-
-        
-
         
 
         <div className="breadcrumb-height">

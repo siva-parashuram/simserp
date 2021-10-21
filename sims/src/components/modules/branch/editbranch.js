@@ -30,6 +30,11 @@ import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 import UpdateIcon from "@material-ui/icons/Update";
 
+
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+
 class editbranch extends React.Component {
   constructor(props) {
     super(props);
@@ -1202,7 +1207,11 @@ class editbranch extends React.Component {
 
     return (
       <Fragment>
-         
+
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeSuccessPrompt} />
+        <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
+{/* 
         {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: -8, marginLeft: -10 }}>
             <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
@@ -1227,7 +1236,7 @@ class editbranch extends React.Component {
           <Alert onClose={closeErrorPrompt} severity="error">
             Error!
           </Alert>
-        </Snackbar>
+        </Snackbar> */}
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
