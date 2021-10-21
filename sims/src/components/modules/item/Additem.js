@@ -1,13 +1,12 @@
 import React, { Fragment } from "react";
+import axios from "axios";
 import "../../user/dasboard.css";
 import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
 import { COOKIE, getCookie } from "../../../services/cookie";
 
 import { Divider } from "@material-ui/core";
-
 import Grid from "@material-ui/core/Grid";
-
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -15,26 +14,13 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
-
-import TextField from "@material-ui/core/TextField";
-
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import Link from "@material-ui/core/Link"; 
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
-
+import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-
-import TableRow from "@material-ui/core/TableRow";
-
 import AddIcon from "@material-ui/icons/Add";
-
-import axios from "axios";
-
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -44,19 +30,19 @@ import { withStyles } from "@material-ui/styles";
 
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
-class addnewcompany extends React.Component {
+class addItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       GeneralDetailsExpanded: false,
       SuccessPrompt: false,
-      ProgressLoader: false,
+      ProgressLoader: true,
       urlparams: "",
     };
   }
 
   componentDidMount() {
-    this.getCountryList();
+     
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -68,7 +54,7 @@ class addnewcompany extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    // let urlparams = "?branchId=" + null + "&compName=" + null + "&branchName=" + null; //for testing null values
+     
     this.setState({
       urlparams: urlparams,
     });
@@ -104,7 +90,7 @@ class addnewcompany extends React.Component {
     return (
       <Fragment>
         {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: -8, marginLeft: -10 }}>
+          <div style={{ marginTop: 0, marginLeft: -10 }}>
             <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
           </div>
         ) : null}
@@ -115,7 +101,7 @@ class addnewcompany extends React.Component {
           onClose={closeSuccessPrompt}
         >
           <Alert onClose={closeSuccessPrompt} severity="success">
-            Items Details Updated!
+            Items Details Added!
           </Alert>
         </Snackbar>
 
@@ -160,7 +146,9 @@ class addnewcompany extends React.Component {
                   >
                     Dashboard
                   </Link>
-                  <Link color="inherit" className="backLink">
+                  <Link color="inherit" className="backLink"
+                   href={URLS.URLS.itemMaster + this.state.urlparams}
+                  >
                     Item Master
                   </Link>
 
@@ -206,7 +194,7 @@ class addnewcompany extends React.Component {
                     <Typography
                       key=""
                       className="accordion-Header-Title"
-                    ></Typography>
+                    >General Details</Typography>
                   </AccordionSummary>
 
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -218,7 +206,7 @@ class addnewcompany extends React.Component {
                         aria-label="Item List table"
                       >
                         <TableBody className="tableBody">
-                          <tableCell></tableCell>
+                          
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -233,4 +221,4 @@ class addnewcompany extends React.Component {
     );
   }
 }
-export default addnewcompany;
+export default addItem;

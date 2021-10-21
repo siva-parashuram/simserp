@@ -26,6 +26,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
+
+import Loader from "../../compo/loader";
+
 class itemMaster extends React.Component {
   constructor(props) {
     super(props);
@@ -50,11 +53,16 @@ class itemMaster extends React.Component {
         compName +
         "&branchName=" +
         branchName;
+        this.setState({urlparams: urlparams});
         this.getItems();
        
     } else {
       this.setState({ isLoggedIn: false });
     }
+  }
+
+  getItems(){
+  this.setState({ProgressLoader: true});
   }
 
   render() {
@@ -65,15 +73,18 @@ class itemMaster extends React.Component {
       this.setState({ ErrorPrompt: false });
     };
 
+    const openPage = (url) => {
+      this.setState({ ProgressLoader: false });
+      window.location = url;
+    };
+
+
     return (
       <Fragment>
        
+       <Loader ProgressLoader={this.state.ProgressLoader}/>
 
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: 5, marginLeft: -10 }}>
-            <LinearProgress className="linearProgress-css" />{" "}
-          </div>
-        ) : null}
+        
 
         
 
@@ -119,7 +130,12 @@ class itemMaster extends React.Component {
                   variant="text"
                   aria-label="Action Menu Button group"
                 >
-                  <Button className="action-btns" startIcon={<AddIcon />}>
+                  <Button className="action-btns" 
+                  startIcon={<AddIcon />}
+                  onClick={(e) =>
+                    openPage(URLS.URLS.addItem + this.state.urlparams)
+                  }
+                  >
                     NEW
                   </Button>
                   <Button className="action-btns" startIcon={<EditIcon />}>

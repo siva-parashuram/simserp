@@ -42,6 +42,7 @@ export const URLS = {
   addCurrency:"/addCurrency",
   itemMaster:"/itemMaster",
   addItem:"/addItem",
+  editItem:"/editItem",
 
   coa:"/coa",
 };

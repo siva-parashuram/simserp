@@ -17,7 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 
-import TextField from "@material-ui/core/TextField";
+import UpdateIcon from "@material-ui/icons/Update";
 
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -44,7 +44,7 @@ import { withStyles } from "@material-ui/styles";
 
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
-class addnewcompany extends React.Component {
+class editItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -234,4 +234,4 @@ class addnewcompany extends React.Component {
     );
   }
 }
-export default addnewcompany;
+export default editItem;
