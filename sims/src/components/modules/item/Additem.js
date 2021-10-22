@@ -515,7 +515,7 @@ console.log("data > ",Data);
                           className="accordion-table"
                           aria-label="Item List table"
                         >
-                          <TableBody className="tableBody">
+                          <TableBody className="tableBody">     
                             <SwitchInput
                               key="IsTrading"
                               id="IsTrading"
