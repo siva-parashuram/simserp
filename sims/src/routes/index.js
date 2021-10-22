@@ -45,7 +45,7 @@ import editItem from "../components/modules/item/editItem";
 import itemCategoryMaster from "../components/modules/item/category/itemCategoryMaster";
 import addItemCategory from "../components/modules/item/category/addItemCategory";
 import editItemCategory from "../components/modules/item/category/editItemCategory";
-import addItem from "../components/modules/item/addItem";
+import addItem from "../components/modules/item/additem";
 import itemMainCategoryMaster from "../components/modules/item/category/itemMainCategoryMaster";
 import addItemMainCategory from "../components/modules/item/category/addItemMainCategory";
 import editItemMainCategory from "../components/modules/item/category/editItemMainCategory";
@@ -71,11 +71,21 @@ import Ftptest from "../components/ftp/ftptest";
 
 import Header from "../components/user/userheaderconstants";
 
+import ErrorBoundary from "./ErrorBoundary";
+ 
+
 
 let routes = ({ location, ...rest }) => {
   return (
+    
     <Router>
+   
+  
+      
+
       {window.location.pathname === "/" ? null : <Header />}
+
+      
 
       <Switch>
         <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
@@ -163,6 +173,7 @@ let routes = ({ location, ...rest }) => {
         <Route component={pageNotFound} />
       </Switch>
     </Router>
+     
   );
 };
 export default routes;
