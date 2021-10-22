@@ -21,36 +21,43 @@ import AddIcon from "@material-ui/icons/Add";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
-
-import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
-
-import { COOKIE, getCookie } from "../../../services/cookie";
-import * as APIURLS from "../../../routes/apiconstant";
-import * as URLS from "../../../routes/constants";
-import Loader from "../../compo/loader";
-import ErrorSnackBar from "../../compo/errorSnackbar";
-import SuccessSnackBar from "../../compo/successSnackbar";
-import Breadcrumb from "../../compo/breadcrumb";
+import UpdateIcon from "@material-ui/icons/Update";
+import "../../../user/dasboard.css";
+import Header from "../../../user/userheaderconstants";
+import SwitchInput from "../../../compo/tablerowcellswitchinput";
+import { COOKIE, getCookie } from "../../../../services/cookie";
+import * as APIURLS from "../../../../routes/apiconstant";
+import * as URLS from "../../../../routes/constants";
+import Loader from "../../../compo/loader";
+import ErrorSnackBar from "../../../compo/errorSnackbar";
+import SuccessSnackBar from "../../../compo/successSnackbar";
+import Breadcrumb from "../../../compo/breadcrumb";
+import DropdownInput from "../../../compo/Tablerowcelldropdown";
 
 class editItemCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       urlparams: "",
-      ProgressLoader: false,
+      ProgressLoader: true,
       GeneralDetailsExpanded: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
+      IsActive: false,
+      Code: "",
+      Description: "",
+      HSNCode: "",
+
+      IsTrading: false,
+      IsNonStockV: false,
+      IsPriceRange: false,
     };
   }
 
   componentDidMount() {
-    this.getZones();
-
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -68,6 +75,15 @@ class editItemCategory extends React.Component {
   }
 
   render() {
+    const handleAccordionClick = (val, e) => {
+      if (val === "GeneralDetailsExpanded") {
+        this.state.GeneralDetailsExpanded === true
+          ? this.setState({ GeneralDetailsExpanded: false })
+          : this.setState({ GeneralDetailsExpanded: true });
+      }
+    };
+    const updateFormValue = (id, e) => {};
+
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -132,11 +148,11 @@ class editItemCategory extends React.Component {
                 >
                   <Button
                     className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={handleCreate}
-                    disabled={this.state. DisableUpdatebtn}
+                    startIcon={<UpdateIcon />}
+                    // onClick={handleCreate}
+                    disabled={this.state.DisableUpdatebtn}
                   >
-                    ADD
+                    Update
                   </Button>
                 </ButtonGroup>
               </div>
@@ -177,16 +193,78 @@ class editItemCategory extends React.Component {
                       aria-label=" Item-category List table"
                     >
                       <TableBody className="tableBody">
-                        <TableRow>
-                          <TableCell
-                            align="left"
-                            className="no-border-table"
-                          ></TableCell>
-                          <TableCell
-                            align="left"
-                            className="no-border-table"
-                          ></TableCell>
-                        </TableRow>
+                        <DropdownInput
+                          id="MainCatID"
+                          label="MainCatID"
+                          onChange={(e) => updateFormValue("MainCatID", e)}
+                          options={[]}
+                          value={0}
+                        />
+                        <TextboxInput
+                          id="Code"
+                          label="Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Code", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 20,
+                          }}
+                          value={this.state.Code}
+                        />
+                        <TextboxInput
+                          id="Description"
+                          label="Description"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Description", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 50,
+                          }}
+                          value={this.state.Description}
+                        />
+
+                        <TextboxInput
+                          id="HSNCode"
+                          label="HSN Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("HSNCode", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 10,
+                          }}
+                          value={this.state.HSNCode}
+                        />
+                        <SwitchInput
+                          key="IsActive"
+                          id="IsActive"
+                          label="IsActive"
+                          param={this.state.IsActive}
+                          onChange={(e) => updateFormValue("IsActive", e)}
+                        />
+                        <SwitchInput
+                          key="IsNonStockV"
+                          id="IsNonStockV"
+                          label="IsNonStockV"
+                          param={this.state.IsNonStockV}
+                          onChange={(e) => updateFormValue("IsNonStockV", e)}
+                        />
+                        <SwitchInput
+                          key="IsPriceRange"
+                          id="IsPriceRange"
+                          label="IsPriceRange"
+                          param={this.state.IsPriceRange}
+                          onChange={(e) => updateFormValue("IsPriceRange", e)}
+                        />
+                        <SwitchInput
+                          key="IsCustomized"
+                          id="IsCustomized"
+                          label="IsCustomized"
+                          param={this.state.IsCustomized}
+                          onChange={(e) => updateFormValue("IsCustomized", e)}
+                        />
                       </TableBody>
                     </Table>
                   </TableContainer>

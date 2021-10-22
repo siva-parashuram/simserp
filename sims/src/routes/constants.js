@@ -44,6 +44,9 @@ export const URLS = {
   addItem:"/addItem",
   editItem:"/editItem",
   itemCategoryMaster:"/itemCategoryMaster",
+  addItemCategory:"/addItemCategory",
+  editItemCategory:"/editItemCategory",
+  
   coa:"/coa",
 };
 

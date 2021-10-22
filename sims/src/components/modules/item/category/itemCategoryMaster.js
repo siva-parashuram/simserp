@@ -41,9 +41,7 @@ class itemCategoryMaster extends React.Component {
   }
 
   componentDidMount() {
-    this.getStateList();
-    this.getCountryList();
-    this.getAllDestinations();
+    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -107,14 +105,14 @@ class itemCategoryMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) => openPage("")}
+                   onClick={(e) => openPage(URLS.URLS.addItemCategory + this.state.urlparams)}
                   >
                     New
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage()}
+                    onClick={(e) => openPage(URLS.URLS.editItemCategory + this.state.urlparams)}
                   >
                     Edit
                   </Button>
@@ -154,24 +152,8 @@ class itemCategoryMaster extends React.Component {
               </Grid>
             </Grid>
             <Grid xs={12} sm={12} md={4} lg={4}>
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}></Grid>
-              </Grid>
-
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}>
-                  <Divider className="divider-custom" />
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}></Grid>
-              </Grid>
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}>
-                  &nbsp;
-                </Grid>
-              </Grid>
+              
+           
             </Grid>
           </Grid>
         </div>
