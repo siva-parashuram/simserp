@@ -43,7 +43,6 @@ class addItem extends React.Component {
     this.state = {
       GeneralDetailsExpanded: true,
       SuccessPrompt: false,
-      ErrorPrompt: false,
       ProgressLoader: true,
       urlparams: "",
       ItemTypeMaster: APIURLS.ItemType,
@@ -107,7 +106,7 @@ class addItem extends React.Component {
       if (reason === "clickaway") {
         return;
       }
-      this.setState({ ErrorPrompt: false });
+      this.setState({ SuccessPrompt: false });
     };
 
     const closeSuccessPrompt = (event, reason) => {
