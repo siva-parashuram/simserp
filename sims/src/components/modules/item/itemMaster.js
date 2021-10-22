@@ -31,6 +31,11 @@ class itemMaster extends React.Component {
     };
   }
 
+  componentDidCatch(error, errorInfo) {
+ 
+    console.log("Error Cought");
+  }
+
   componentDidMount() {
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });

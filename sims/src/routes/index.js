@@ -68,11 +68,21 @@ import Ftptest from "../components/ftp/ftptest";
 
 import Header from "../components/user/userheaderconstants";
 
+import ErrorBoundary from "./ErrorBoundary";
+ 
+
 
 let routes = ({ location, ...rest }) => {
   return (
+    
     <Router>
+   
+  
+      
+
       {window.location.pathname === "/" ? null : <Header />}
+
+      
 
       <Switch>
         <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
@@ -156,6 +166,7 @@ let routes = ({ location, ...rest }) => {
         <Route component={pageNotFound} />
       </Switch>
     </Router>
+     
   );
 };
 export default routes;
