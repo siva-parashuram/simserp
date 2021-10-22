@@ -41,9 +41,17 @@ import editNumbering from "../components/modules/numberings/editnumbering";
 import currencyMaster from "../components/modules/currency/currencymaster";
 import addCurrency from "../components/modules/currency/addcurrency";
 import itemMaster from "../components/modules/item/itemMaster";
-import addItem from "../components/modules/item/addItem";
 import editItem from "../components/modules/item/editItem";
-
+import itemCategoryMaster from "../components/modules/item/category/itemCategoryMaster";
+import addItemCategory from "../components/modules/item/category/addItemCategory";
+import editItemCategory from "../components/modules/item/category/editItemCategory";
+import addItem from "../components/modules/item/addItem";
+import itemMainCategoryMaster from "../components/modules/item/category/itemMainCategoryMaster";
+import addItemMainCategory from "../components/modules/item/category/addItemMainCategory";
+import editItemMainCategory from "../components/modules/item/category/editItemMainCategory";
+import itemSuperCategoryMaster from "../components/modules/item/category/itemSuperCategoryMaster";
+import addItemSuperCategory from "../components/modules/item/category/addItemSuperCategory"; 
+import editItemSuperCategory from "../components/modules/item/category/editItemSuperCategory";
 
 import coa from "../components/modules/accounts/reports/coa";
 
@@ -126,6 +134,15 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.itemMaster} component={itemMaster} />
         <Route path={URLS.URLS.addItem} component={addItem} />
         <Route path={URLS.URLS.editItem} component={editItem} />
+        <Route path={URLS.URLS.itemCategoryMaster} component={itemCategoryMaster} />
+        <Route path={URLS.URLS.addItemCategory} component={addItemCategory} />
+        <Route path={URLS.URLS.editItemCategory} component={editItemCategory} />
+        <Route path={URLS.URLS.itemMainCategoryMaster} component={itemMainCategoryMaster} />
+        <Route path={URLS.URLS.addItemMainCategory} component={addItemMainCategory} />
+        <Route path={URLS.URLS.editItemMainCategory} component={editItemMainCategory} />
+        <Route path={URLS.URLS.itemSuperCategoryMaster} component={itemSuperCategoryMaster} />
+        <Route path={URLS.URLS.addItemSuperCategory} component={addItemSuperCategory} />
+        <Route path={URLS.URLS.editItemSuperCategory} component={editItemSuperCategory} />
 
         {/* Chart of Account */}
         <Route path={URLS.URLS.coa} component={coa} />

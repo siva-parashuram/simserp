@@ -19,6 +19,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 
+
+
 class itemMaster extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +32,7 @@ class itemMaster extends React.Component {
   }
 
   componentDidMount() {
-    if (getCookie(COOKIE.USERID) != null) {      
+    if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
       let branchId = url.searchParams.get("branchId");
@@ -43,37 +45,26 @@ class itemMaster extends React.Component {
         compName +
         "&branchName=" +
         branchName;
-        this.setState({urlparams: urlparams});
-        this.getItems();
-       
+      this.setState({ urlparams: urlparams });
+      this.getItems();
     } else {
       this.setState({ isLoggedIn: false });
     }
   }
 
-  getItems(){
-  this.setState({ProgressLoader: true});
+  getItems() {
+    this.setState({ ProgressLoader: true });
   }
 
   render() {
-    const closeErrorPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ ErrorPrompt: false });
-    };
-
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
     };
 
-
     return (
       <Fragment>
-       
-       <Loader ProgressLoader={this.state.ProgressLoader}/>
-        
+        <Loader ProgressLoader={this.state.ProgressLoader} />
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
@@ -105,11 +96,12 @@ class itemMaster extends React.Component {
                   variant="text"
                   aria-label="Action Menu Button group"
                 >
-                  <Button className="action-btns" 
-                  startIcon={<AddIcon />}
-                  onClick={(e) =>
-                    openPage(URLS.URLS.addItem + this.state.urlparams)
-                  }
+                  <Button
+                    className="action-btns"
+                    startIcon={<AddIcon />}
+                    onClick={(e) =>
+                      openPage(URLS.URLS.addItem + this.state.urlparams)
+                    }
                   >
                     NEW
                   </Button>

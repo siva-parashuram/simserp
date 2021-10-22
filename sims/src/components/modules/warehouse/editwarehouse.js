@@ -27,6 +27,10 @@ import MuiAlert from "@material-ui/lab/Alert";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class editwarehouse extends React.Component {
   constructor(props) {
@@ -38,6 +42,8 @@ class editwarehouse extends React.Component {
       ProgressLoader: false,
       GeneralDetailsExpanded: true,
       OtherDetailsExpanded: false,
+      SuccessPrompt: false,
+      ErrorPrompt: false,
       initialCss: "",
       branchId: 0,
       branches: [],
@@ -463,30 +469,16 @@ class editwarehouse extends React.Component {
 
     return (
       <Fragment>
-        
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: 5, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
+
         <div className="breadcrumb-height">
           <Grid className="table-adjust" container spacing={3}>
             <Grid
@@ -501,32 +493,15 @@ class editwarehouse extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.warehouseMaster + this.state.urlparams}
-                  >
-                    Warehouse Master
-                  </Link>
-
-                  <Typography color="textPrimary">Edit Warehouse </Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.warehouseMaster + this.state.urlparams}
+                  masterLinkTitle="Warehouse Master"
+                  typoTitle="Edit Warehouse"
+                  level={2}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -669,84 +644,6 @@ class editwarehouse extends React.Component {
                                     this.state.Validations.PhoneNo.errorMssg
                                   }
                                 />
-
-                                {/* <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                         Code
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Code"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Code', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 10
-                                                                            }}
-                                                                            value={this.state.warehouse.Code}
-
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                         Description
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Description"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Description', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 10
-                                                                            }}
-                                                                            value={this.state.warehouse.Description}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                         Contact Person
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="contactPerson"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('contactPerson', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 50
-                                                                            }}
-                                                                            value={this.state.warehouse.ContactPerson}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                         Phone No
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="phoneNo"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('phoneNo', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 50
-                                                                            }}
-                                                                            value={this.state.warehouse.PhoneNo}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow> */}
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -843,82 +740,7 @@ class editwarehouse extends React.Component {
                                     this.state.Validations.Address3.errorMssg
                                   }
                                 />
-                                {/* <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                         EmailID
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="EmailID"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('EmailID', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 50
-                                                                            }}
-                                                                            value={this.state.warehouse.EmailId}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                         Address Line 1
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Address"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Address', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 10
-                                                                            }}
-                                                                            value={this.state.warehouse.Address}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        Address Line 2
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Address2"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Address2', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 10
-                                                                            }}
-                                                                            value={this.state.warehouse.Address1}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                                <TableRow>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                         Address Line 3
-                                                                    </TableCell>
-                                                                    <TableCell align="left" className="no-border-table">
-                                                                        <TextField
-                                                                            id="Address3"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => updateFormValue('Address3', e)}
-                                                                            fullWidth
-                                                                            InputProps={{
-                                                                                className: "textFieldCss",
-                                                                                maxlength: 10
-                                                                            }}
-                                                                            value={this.state.warehouse.Address2}
-                                                                        />
-                                                                    </TableCell>
-                                                                </TableRow> */}
+
                                 <TableRow>
                                   <TableCell
                                     align="left"

@@ -29,6 +29,10 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class addstate extends React.Component {
   constructor(props) {
@@ -272,7 +276,7 @@ class addstate extends React.Component {
       if (reason === "clickaway") {
         return;
       }
-      this.setState({ SuccessPrompt: false });
+      this.setState({ ErrorPrompt: false });
     };
 
     const closeSuccessPrompt = (event, reason) => {
@@ -288,32 +292,16 @@ class addstate extends React.Component {
 
     return (
       <Fragment>
-         
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: -8, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
 
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
             <Grid
@@ -328,32 +316,15 @@ class addstate extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.stateMaster + this.state.urlparams}
-                  >
-                    State Master
-                  </Link>
-
-                  <Typography color="textPrimary">Add State </Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.stateMaster + this.state.urlparams}
+                  masterLinkTitle="State Master"
+                  typoTitle="Add State"
+                  level={2}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -376,17 +347,6 @@ class addstate extends React.Component {
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          {/* <Grid container spacing={3}>
-            <Grid className="style-buttons" xs={1}>
-              <Button
-                style={{ marginLeft: 5 }}
-                onClick={handleCreate}
-                disabled={this.state.disableCreateBtn}
-              >
-                Create
-              </Button>
-            </Grid>
-          </Grid> */}
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>

@@ -4,8 +4,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Button from "@material-ui/core/Button";
-
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -16,59 +14,46 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TextField from "@material-ui/core/TextField";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import TextboxInput from "../../../compo/tablerowcelltextboxinput";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import SwitchInput from "../../../compo/tablerowcellswitchinput";
+import DropdownInput from "../../../compo/Tablerowcelldropdown";
+import "../../../user/dasboard.css";
+import Header from "../../../user/userheaderconstants";
 
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { COOKIE, getCookie } from "../../../../services/cookie";
+import * as APIURLS from "../../../../routes/apiconstant";
+import * as URLS from "../../../../routes/constants";
+import Loader from "../../../compo/loader";
+import ErrorSnackBar from "../../../compo/errorSnackbar";
+import SuccessSnackBar from "../../../compo/successSnackbar";
+import Breadcrumb from "../../../compo/breadcrumb";
 
-import { COOKIE, getCookie } from "../../../services/cookie";
-import * as APIURLS from "../../../routes/apiconstant";
-import * as URLS from "../../../routes/constants";
-import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
-
-import moment from "moment";
-import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
-import Loader from "../../compo/loader";
-import ErrorSnackBar from "../../compo/errorSnackbar";
-import SuccessSnackBar from "../../compo/successSnackbar";
-import Breadcrumb from "../../compo/breadcrumb";
-
-const Dformat = APIURLS.DFormat;
-const viewDate = "yyyy-mm-dd";
-const todayDate = new Date(); //moment().format(viewDate);
-
-class addcurrency extends React.Component {
+class addItemCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       urlparams: "",
-      GeneralDetailsExpanded: true,
       ProgressLoader: true,
-      initialCss: "",
-      SuccessPrompt: false,
+      GeneralDetailsExpanded: true,
       ErrorPrompt: false,
-      Currency: {
-        CurrId: 0,
-        Code: null,
-        Description: null,
-        Symbol: null,
-        RealizedGainId: 0,
-        RealizedLossId: 0,
-        Rounding: 0,
-       
-      },
-      Code: null,
-      Description: null,
-      Symbol: null,
-      Validations: {
-        Code: { errorState: false, errorMssg: "" },
-        Description: { errorState: false, errorMssg: "" },
-        Symbol: { errorState: false, errorMssg: "" },
-      },
+      SuccessPrompt: false,
+      DisableCreatebtn: true,
+      IsActive: false,
+      Code: "",
+      Description: "",
+      HSNCode: "",
+
+      IsTrading: false,
+      IsNonStockV: false,
+      IsPriceRange: false,
     };
   }
 
@@ -98,101 +83,7 @@ class addcurrency extends React.Component {
       }
     };
 
-    const updateFormValue = (id, e) => {
-      let Currency = this.state.Currency;
-      if (id === "Code") {
-        Currency.Code = e.target.value;
-        if (e.target.value.length > 10) {
-          let v = this.state.Validations;
-          v.Code = {
-            errorState: true,
-            errorMssg: "MAximum 10 characters allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.Code = { errorState: false, errorMssg: "" };
-          this.setState({
-            Validations: v,
-            Currency: Currency,
-            Code: e.target.value,
-          });
-        }
-      }
-      if (id === "Description") {
-        Currency.Description = e.target.value;
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.Description = {
-            errorState: true,
-            errorMssg: "MAximum 50 characters allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.Description = { errorState: false, errorMssg: "" };
-          this.setState({
-            Validations: v,
-            Currency: Currency,
-            Description: e.target.value,
-          });
-        }
-      }
-      if (id === "Symbol") {
-        Currency.Symbol = e.target.value;
-        if (e.target.value.length > 5) {
-          let v = this.state.Validations;
-          v.Symbol = {
-            errorState: true,
-            errorMssg: "MAximum 5 characters allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.Symbol = { errorState: false, errorMssg: "" };
-          this.setState({
-            Validations: v,
-            Currency: Currency,
-            Symbol: e.target.value,
-          });
-        }
-      }
-    };
-
-    const handleCreate = (e) => {
-      this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const data = {
-        validUser: ValidUser,
-        Currency: this.state.Currency,
-      };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let Url = APIURLS.APIURL.CreateCurrency;
-      axios
-        .post(Url, data, { headers })
-        .then((response) => {
-          let data = response.data;
-
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-            let gobackURL = URLS.URLS.currencyMaster + this.state.urlparams;
-            this.props.history.push(gobackURL);
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => {});
-    };
+    const updateFormValue = (id, e) => {};
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -207,10 +98,6 @@ class addcurrency extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
 
     return (
       <Fragment>
@@ -242,9 +129,9 @@ class addcurrency extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  masterHref={URLS.URLS.currencyMaster + this.state.urlparams}
-                  masterLinkTitle="Currency Master"
-                  typoTitle="Add Currency"
+                  //   masterHref={}
+                  masterLinkTitle="Item Category Master"
+                  typoTitle="Add Item Category"
                   level={2}
                 />
               </div>
@@ -259,7 +146,8 @@ class addcurrency extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) => handleCreate(e)}
+                    // onClick={handleCreate}
+                    disabled={this.state.DisableCreatebtn}
                   >
                     ADD
                   </Button>
@@ -271,9 +159,9 @@ class addcurrency extends React.Component {
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={8} lg={8}>
+            <Grid xs={12} sm={6} md={6} lg={6}>
               <Accordion
-                key="numbering-General-Details"
+                key="itemCategory-General-Details"
                 expanded={this.state.GeneralDetailsExpanded}
               >
                 <AccordionSummary
@@ -299,10 +187,18 @@ class addcurrency extends React.Component {
                       stickyHeader
                       size="small"
                       className="accordion-table"
-                      aria-label="company List table"
+                      aria-label=" Item-category List table"
                     >
+                      
                       <TableBody className="tableBody">
-                        <Tablerowcelltextboxinput
+                      <DropdownInput
+                        id="MainCatID"
+                        label="MainCatID"
+                        onChange={(e) => updateFormValue("MainCatID", e)}
+                        options={[]}
+                        value={0}
+                      />
+                        <TextboxInput
                           id="Code"
                           label="Code"
                           variant="outlined"
@@ -310,13 +206,11 @@ class addcurrency extends React.Component {
                           onChange={(e) => updateFormValue("Code", e)}
                           InputProps={{
                             className: "textFieldCss",
+                            maxlength: 20,
                           }}
                           value={this.state.Code}
-                          error={this.state.Validations.Code.errorState}
-                          helperText={this.state.Validations.Code.errorMssg}
                         />
-
-                        <Tablerowcelltextboxinput
+                        <TextboxInput
                           id="Description"
                           label="Description"
                           variant="outlined"
@@ -324,26 +218,56 @@ class addcurrency extends React.Component {
                           onChange={(e) => updateFormValue("Description", e)}
                           InputProps={{
                             className: "textFieldCss",
+                            maxlength: 50,
                           }}
                           value={this.state.Description}
-                          error={this.state.Validations.Description.errorState}
-                          helperText={
-                            this.state.Validations.Description.errorMssg
-                          }
                         />
-
-                        <Tablerowcelltextboxinput
-                          id="Symbol"
-                          label="Symbol"
+                        <TextboxInput
+                          id="HSNCode"
+                          label="HSN Code"
                           variant="outlined"
                           size="small"
-                          onChange={(e) => updateFormValue("Symbol", e)}
+                          onChange={(e) => updateFormValue("HSNCode", e)}
                           InputProps={{
                             className: "textFieldCss",
+                            maxlength: 10,
                           }}
-                          value={this.state.Symbol}
-                          error={this.state.Validations.Symbol.errorState}
-                          helperText={this.state.Validations.Symbol.errorMssg}
+                          value={this.state.HSNCode}
+                        />
+                        <SwitchInput
+                          key="IsActive"
+                          id="IsActive"
+                          label="IsActive"
+                          param={this.state.IsActive}
+                          onChange={(e) => updateFormValue("IsActive", e)}
+                        />
+                        <SwitchInput
+                          key="IsTrading"
+                          id="IsTrading"
+                          label="IsTrading"
+                          param={this.state.IsTrading}
+                          onChange={(e) => updateFormValue("IsTrading", e)}
+                        />
+                        <SwitchInput
+                          key="IsNonStockV"
+                          id="IsNonStockV"
+                          label="IsNonStockV"
+                          param={this.state.IsNonStockV}
+                          onChange={(e) => updateFormValue("IsNonStockV", e)}
+                        />
+                        <SwitchInput
+                          key="IsPriceRange"
+                          id="IsPriceRange"
+                          label="IsPriceRange"
+                          param={this.state.IsPriceRange}
+                          onChange={(e) => updateFormValue("IsPriceRange", e)}
+                        />
+                        <SwitchInput
+                          key="IsCustomized"
+                          id="IsCustomized"
+                          label="IsCustomized"
+                          param={this.state.IsCustomized}
+                          onChange={(e) => updateFormValue("IsCustomized", e)}
                         />
                       </TableBody>
                     </Table>
@@ -351,15 +275,10 @@ class addcurrency extends React.Component {
                 </AccordionDetails>
               </Accordion>
             </Grid>
-            <Grid xs={12} sm={12} md={7} lg={7}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}></Grid>
-              </Grid>
-            </Grid>
           </Grid>
         </div>
       </Fragment>
     );
   }
 }
-export default addcurrency;
+export default addItemCategory;

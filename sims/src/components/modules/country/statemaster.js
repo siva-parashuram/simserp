@@ -28,6 +28,10 @@ import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import Destination from "./destination";
 
+import Loader from "../../compo/loader";
+
+import Breadcrumb from "../../compo/breadcrumb";
+
 // import Datagrid from "./datagrid";
 
 class statemaster extends React.Component {
@@ -50,7 +54,7 @@ class statemaster extends React.Component {
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
     let urlparams =
-      "?branchId=" +   
+      "?branchId=" +
       branchId +
       "&compName=" +
       compName +
@@ -75,19 +79,15 @@ class statemaster extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        
+
         rows = data;
-        this.setState({ stateData: rows, ProgressLoader: true },
-            () => {
+        this.setState({ stateData: rows, ProgressLoader: true }, () => {
           if (rows.length > 0) {
-            this.InitialhandleRowClick(null,rows[0]  ,"row_0");
-         }
-       });
+            this.InitialhandleRowClick(null, rows[0], "row_0");
+          }
+        });
       })
-      .catch((error) => {
-        
-       
-      });
+      .catch((error) => {});
   }
 
   getAllDestinations = () => {
@@ -105,23 +105,17 @@ class statemaster extends React.Component {
       .post(GetDestinationsUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        
+
         this.setState({ destinations: data, ProgressLoader: true });
-        
       })
-      .catch((error) => {
-        
-      });
+      .catch((error) => {});
   };
 
   InitialhandleRowClick(e, item, id) {
-    
     let editUrl =
-      URLS.URLS.editState +
-      this.state.urlparams +
-      "&StateId=" +item.stateId;
-     
-    this.setState({  editurl: editUrl });
+      URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
+
+    this.setState({ editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -134,14 +128,11 @@ class statemaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-     
       getDestinationsByState(item);
       let editUrl =
-      URLS.URLS.editState +
-      this.state.urlparams +
-      "&StateId=" +item.stateId;
-      
-      this.setState({editurl:editUrl})
+        URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
+
+      this.setState({ editurl: editUrl });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     };
@@ -179,30 +170,14 @@ class statemaster extends React.Component {
         .post(GetDestinationByCountryIdAndStateIdUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          
+
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ destinations: data, ProgressLoader: true });
           } else {
             this.setState({ destinations: [], ProgressLoader: true });
           }
         })
-        .catch((error) => {
-          
-        });
-    };
-
-    const closeErrorPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ SuccessPrompt: false });
-    };
-
-    const closeSuccessPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ SuccessPrompt: false });
+        .catch((error) => {});
     };
 
     function Alert(props) {
@@ -210,40 +185,13 @@ class statemaster extends React.Component {
     }
 
     const openPage = (url) => {
-        
       this.setState({ ProgressLoader: false });
-     window.location = url;
+      window.location = url;
     };
 
     return (
       <Fragment>
-         
-
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: -8, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
-
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
@@ -259,25 +207,13 @@ class statemaster extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Typography color="textPrimary">State master</Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  typoTitle="State Master"
+                  level={1}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>

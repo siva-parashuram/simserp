@@ -21,21 +21,22 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import TablePagination from '@mui/material/TablePagination';
+import ButtonGroup from "@mui/material/ButtonGroup";
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import TablePagination from "@mui/material/TablePagination";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 import Branchlistbycompany from "./branchlistbycompany";
 
 import CompanyQuickDetails from "./companyquickdetails";
 
- 
 import Csvexport from "../../compo/csvexport";
+import Loader from "../../compo/loader";
 
+import Breadcrumb from "../../compo/breadcrumb";
 
 let columns = [];
 
@@ -164,21 +165,26 @@ class companyMaster extends React.Component {
             let data = response.data;
 
             rows = data;
-            this.setState({
-              masterCompanyData: rows,
-              companyData: rows,
-              ProgressLoader: true,
-            }, () => {
-              if (this.state.companyData.length > 0) {
-                this.InitialhandleRowClick(null, this.state.companyData[0], "row_0");
+            this.setState(
+              {
+                masterCompanyData: rows,
+                companyData: rows,
+                ProgressLoader: true,
+              },
+              () => {
+                if (this.state.companyData.length > 0) {
+                  this.InitialhandleRowClick(
+                    null,
+                    this.state.companyData[0],
+                    "row_0"
+                  );
+                }
               }
-            });
+            );
           }
         } else {
           this.setState({ ErrorPrompt: true, ProgressLoader: true });
         }
-
-
       })
       .catch((error) => {
         console.log("error > ", error);
@@ -189,23 +195,31 @@ class companyMaster extends React.Component {
   InitialhandleRowClick(e, item, id) {
     console.log("handleRowClick > id > ", id);
     console.log("handleRowClick > vitem > ", item);
-    let editUrl = URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId;
+    let editUrl =
+      URLS.URLS.editCompany +
+      this.state.urlparams +
+      "&compID=" +
+      item.companyId;
     let branches = item.branches;
-    this.setState({ item: item, branch: branches, editUrl: editUrl, rowClicked: parseInt(this.state.rowClicked) + 1 });
+    this.setState({
+      item: item,
+      branch: branches,
+      editUrl: editUrl,
+      rowClicked: parseInt(this.state.rowClicked) + 1,
+    });
     this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add('selectedRow');
+    document.getElementById(id).classList.add("selectedRow");
     this.getAttachments(item.companyId);
   }
 
   InitialremoveIsSelectedRowClasses() {
     try {
       for (let i = 0; i < this.state.companyData.length; i++) {
-        document.getElementById('row_' + i).className = '';
+        document.getElementById("row_" + i).className = "";
       }
     } catch (e) {
       console.log("Error : ", e);
     }
-
   }
 
   getAttachments(companyId) {
@@ -218,13 +232,13 @@ class companyMaster extends React.Component {
     };
 
     const formData = new FormData();
-    formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-    formData.append('Token', getCookie(COOKIE.TOKEN));
-    formData.append('CompanyId', companyId);
-    formData.append('BranchID', 0);
-    formData.append('Transaction', APIURLS.TrasactionType.default);
-    formData.append('TransactionNo', "");
-    formData.append('FileData', "");
+    formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
+    formData.append("Token", getCookie(COOKIE.TOKEN));
+    formData.append("CompanyId", companyId);
+    formData.append("BranchID", 0);
+    formData.append("Transaction", APIURLS.TrasactionType.default);
+    formData.append("TransactionNo", "");
+    formData.append("FileData", "");
 
     axios
       .post(FTPGetAttachmentsUrl, formData, { headers })
@@ -236,8 +250,6 @@ class companyMaster extends React.Component {
       });
   }
 
-
-
   render() {
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -247,9 +259,18 @@ class companyMaster extends React.Component {
       console.log("handleRowClick > e > ", e);
       console.log("handleRowClick > item > ", item);
       let branches = item.branches;
-      let editUrl = URLS.URLS.editCompany + this.state.urlparams + "&compID=" + item.companyId;
+      let editUrl =
+        URLS.URLS.editCompany +
+        this.state.urlparams +
+        "&compID=" +
+        item.companyId;
       // getCompanyBranchList(item.companyId);
-      this.setState({ item: item, branch: branches, editUrl: editUrl, rowClicked: parseInt(this.state.rowClicked) + 1 });
+      this.setState({
+        item: item,
+        branch: branches,
+        editUrl: editUrl,
+        rowClicked: parseInt(this.state.rowClicked) + 1,
+      });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
       getAttachments(item.companyId);
@@ -258,7 +279,7 @@ class companyMaster extends React.Component {
     const removeIsSelectedRowClasses = () => {
       try {
         for (let i = 0; i < this.state.companyData.length; i++) {
-          document.getElementById('row_' + i).className = '';
+          document.getElementById("row_" + i).className = "";
         }
       } catch (e) {
         console.log("Error : ", e);
@@ -275,13 +296,13 @@ class companyMaster extends React.Component {
       };
 
       const formData = new FormData();
-      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-      formData.append('Token', getCookie(COOKIE.TOKEN));
-      formData.append('CompanyId', companyId);
-      formData.append('BranchID', 0);
-      formData.append('Transaction', APIURLS.TrasactionType.default);
-      formData.append('TransactionNo', "");
-      formData.append('FileData', "");
+      formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
+      formData.append("Token", getCookie(COOKIE.TOKEN));
+      formData.append("CompanyId", companyId);
+      formData.append("BranchID", 0);
+      formData.append("Transaction", APIURLS.TrasactionType.default);
+      formData.append("TransactionNo", "");
+      formData.append("FileData", "");
 
       axios
         .post(FTPGetAttachmentsUrl, formData, { headers })
@@ -291,9 +312,9 @@ class companyMaster extends React.Component {
         .catch((error) => {
           console.log("error > ", error);
         });
-    }
+    };
 
-    const getCompanyBranchList = (companyId) => { };
+    const getCompanyBranchList = (companyId) => {};
 
     const searchInput = (e) => {
       removeIsSelectedRowClasses();
@@ -317,13 +338,13 @@ class companyMaster extends React.Component {
             masterCompanyData[i].companyName != null
               ? masterCompanyData[i].companyName.toLowerCase().includes(key)
               : null || masterCompanyData[i].address != null
-                ? masterCompanyData[i].address.toLowerCase().includes(key)
-                : null || masterCompanyData[i].companyId != null
-                  ? masterCompanyData[i].companyId
-                    .toString()
-                    .toLowerCase()
-                    .includes(key)
-                  : null
+              ? masterCompanyData[i].address.toLowerCase().includes(key)
+              : null || masterCompanyData[i].companyId != null
+              ? masterCompanyData[i].companyId
+                  .toString()
+                  .toLowerCase()
+                  .includes(key)
+              : null
           ) {
             rows.push(masterCompanyData[i]);
           }
@@ -338,7 +359,7 @@ class companyMaster extends React.Component {
       let pagination = this.state.pagination;
       pagination.page = newPage;
       this.setState({ pagination: pagination });
-    }
+    };
 
     const getPageData = (data) => {
       let rows = data;
@@ -346,7 +367,7 @@ class companyMaster extends React.Component {
       let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
 
       return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-    }
+    };
 
     const openCompanyDetail = (e, item) => {
       console.log("openCompanyDetail > e > ", e);
@@ -367,85 +388,76 @@ class companyMaster extends React.Component {
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
-    }
-
-    const closeErrorPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ ErrorPrompt: false });
     };
 
     return (
       <Fragment>
-        <CssBaseline />        
-        {this.state.ProgressLoader === false ? (<div style={{ marginTop: 5, marginLeft: -10 }}><LinearProgress
-          className="linearProgress-css"
-        /> </div>) : null}
+        <CssBaseline />
 
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
-            <Grid xs={12} sm={12} md={4} lg={4} style={{ borderRightStyle: 'solid', borderRightColor: '#bdbdbd', borderRightWidth: 1 }}>
+            <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
-                  <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
-                    Back
-                  </Link>
-                  <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
-                    Dashboard
-                  </Link>
-                  <Typography color="textPrimary"> Company master</Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  typoTitle="Company Master"
+                  level={1}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
               <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) => openPage(URLS.URLS.addNewCompany + this.state.urlparams)}
+                    onClick={(e) =>
+                      openPage(URLS.URLS.addNewCompany + this.state.urlparams)
+                    }
                   >
-
                     NEW
-
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editUrl)}
-                  >Edit</Button>
+                  >
+                    Edit
+                  </Button>
 
                   <Button
                     className="action-btns"
                     startIcon={<FileDownloadIcon />}
-
                   >
                     <Csvexport
                       data={this.state.companyData}
                       filename="companieslist.csv"
                       buttonName="CSV"
-
                     />
-
                   </Button>
-
                 </ButtonGroup>
               </div>
             </Grid>
           </Grid>
         </div>
-
 
         <div className="breadcrumb-bottom"></div>
 
@@ -462,11 +474,7 @@ class companyMaster extends React.Component {
                 <TableHead className="table-header-background">
                   <TableRow>
                     <TableCell className="table-header-font">#</TableCell>
-                    <TableCell
-                      className="table-header-font"
-                      align="left"
-
-                    >
+                    <TableCell className="table-header-font" align="left">
                       Company Name
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
@@ -475,9 +483,8 @@ class companyMaster extends React.Component {
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
-
-
-                  {//this.state.companyData 
+                  {
+                    //this.state.companyData
                     getPageData(this.state.companyData).map((item, i) => (
                       <TableRow
                         id={"row_" + i}
@@ -505,7 +512,8 @@ class companyMaster extends React.Component {
                         <TableCell align="left">{item.companyName}</TableCell>
                         <TableCell align="left">{item.address}</TableCell>
                       </TableRow>
-                    ))}
+                    ))
+                  }
                 </TableBody>
               </Table>
             </TableContainer>
@@ -518,11 +526,12 @@ class companyMaster extends React.Component {
               page={this.state.pagination.page}
               onPageChange={handlePageChange}
             />
-
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
+              <Grid xs={12} sm={12} md={1} lg={1}>
+                &nbsp;
+              </Grid>
               <Grid xs={12} sm={12} md={11} lg={11}>
                 {/*<Branchlistbycompany data={this.state.branch} />*/}
                 {this.state.item === null || this.state.item === {} ? null : (
@@ -533,12 +542,10 @@ class companyMaster extends React.Component {
                     rowClicked={this.state.rowClicked}
                   />
                 )}
-
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-
       </Fragment>
     );
   }

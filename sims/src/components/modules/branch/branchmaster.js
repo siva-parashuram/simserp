@@ -38,12 +38,11 @@ class branchMaster extends React.Component {
       ProgressLoader: false,
       urlparams: null,
       branchData: [],
-      ErrorPrompt: false,
-      SuccessPrompt: false,
+
       branchItem: {},
       editUrl: null,
-      filelist:[],
-      rowClicked:1,
+      filelist: [],
+      rowClicked: 1,
     };
   }
 
@@ -87,7 +86,7 @@ class branchMaster extends React.Component {
       .post(GetBrachesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-       
+
         this.setState({ branchData: data, ProgressLoader: true }, () => {
           if (this.state.branchData.length > 0) {
             this.InitialhandleRowClick(null, data[0], "row_0");
@@ -95,22 +94,24 @@ class branchMaster extends React.Component {
         });
       })
       .catch((error) => {
-        
         this.setState({ branchData: [], ProgressLoader: true });
       });
   }
 
   InitialhandleRowClick(e, item, id) {
-   
     let editUrl =
       URLS.URLS.editBranch +
       this.state.urlparams +
       "&editbranchId=" +
       item.branchId;
-    this.setState({ branchItem: item, editUrl: editUrl,rowClicked:parseInt(this.state.rowClicked)+1 });
+    this.setState({
+      branchItem: item,
+      editUrl: editUrl,
+      rowClicked: parseInt(this.state.rowClicked) + 1,
+    });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
-    this.getAttachments(item.companyId,item.branchId);
+    this.getAttachments(item.companyId, item.branchId);
   }
 
   InitialremoveIsSelectedRowClasses() {
@@ -119,23 +120,23 @@ class branchMaster extends React.Component {
     }
   }
 
-  getAttachments(companyId,branchId) {
+  getAttachments(companyId, branchId) {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;              
+    const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
     const headers = {
-        "Content-Type": "application/json",
+      "Content-Type": "application/json",
     };
-     
+
     const formData = new FormData();
-    formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-    formData.append('Token', getCookie(COOKIE.TOKEN));
-    formData.append('CompanyId', companyId);
-    formData.append('BranchID', branchId);
-    formData.append('Transaction', APIURLS.TrasactionType.default);
-    formData.append('TransactionNo', "");
-    formData.append('FileData', "");
+    formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
+    formData.append("Token", getCookie(COOKIE.TOKEN));
+    formData.append("CompanyId", companyId);
+    formData.append("BranchID", branchId);
+    formData.append("Transaction", APIURLS.TrasactionType.default);
+    formData.append("TransactionNo", "");
+    formData.append("FileData", "");
 
     axios
       .post(FTPGetAttachmentsUrl, formData, { headers })
@@ -150,65 +151,54 @@ class branchMaster extends React.Component {
   render() {
     const handleRowClick = (e, item, id) => {
       this.setState({ selectedRow: id });
-     
+
       let editUrl =
         URLS.URLS.editBranch +
         this.state.urlparams +
         "&editbranchId=" +
         item.branchId;
-      this.setState({ branchItem: item, editUrl: editUrl,rowClicked:parseInt(this.state.rowClicked)+1 });
+      this.setState({
+        branchItem: item,
+        editUrl: editUrl,
+        rowClicked: parseInt(this.state.rowClicked) + 1,
+      });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
-      getAttachments(item.companyId,item.branchId);
+      getAttachments(item.companyId, item.branchId);
     };
 
     const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.branchData.length; i++) {      
+      for (let i = 0; i < this.state.branchData.length; i++) {
         document.getElementById("row_" + i).className = "";
       }
     };
 
-    const getAttachments=(companyId,branchId) =>{
+    const getAttachments = (companyId, branchId) => {
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;              
+      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
       const headers = {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       };
-       
+
       const formData = new FormData();
-      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-      formData.append('Token', getCookie(COOKIE.TOKEN));
-      formData.append('CompanyId', companyId);
-      formData.append('BranchID', branchId);
-      formData.append('Transaction', APIURLS.TrasactionType.default);
-      formData.append('TransactionNo', "");
-      formData.append('FileData', "");
-  
+      formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
+      formData.append("Token", getCookie(COOKIE.TOKEN));
+      formData.append("CompanyId", companyId);
+      formData.append("BranchID", branchId);
+      formData.append("Transaction", APIURLS.TrasactionType.default);
+      formData.append("TransactionNo", "");
+      formData.append("FileData", "");
+
       axios
         .post(FTPGetAttachmentsUrl, formData, { headers })
         .then((response) => {
           this.setState({ filelist: response.data });
         })
         .catch((error) => {
-          
           this.setState({ filelist: [] });
         });
-    }
-
-    const closeErrorPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ SuccessPrompt: false });
-    };
-
-    const closeSuccessPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ SuccessPrompt: false });
     };
 
     function Alert(props) {
@@ -222,32 +212,7 @@ class branchMaster extends React.Component {
 
     return (
       <Fragment>
-         
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: 5, marginLeft: -10 }}>
-            <LinearProgress className="linearProgress-css" />{" "}
-          </div>
-        ) : null}
-
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
@@ -373,7 +338,6 @@ class branchMaster extends React.Component {
                   Object.getPrototypeOf(this.state.branchItem) ===
                     Object.prototype ? null : (
                     <Fragment>
-                      
                       <BranchQuickDetails
                         new={URLS.URLS.addBranch + this.state.urlparams}
                         edit={this.state.editUrl}

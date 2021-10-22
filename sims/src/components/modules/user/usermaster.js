@@ -32,6 +32,10 @@ import Header from "../../user/userheaderconstants";
 
 import Userbranchalot from "../branch/userbranchalot";
 import Usermoduleassign from "../modules/usermoduleassign";
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class usermaster extends React.Component {
   constructor(props) {
@@ -269,20 +273,6 @@ class usermaster extends React.Component {
       this.setState({ users: users });
     };
 
-    const closeErrorPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ SuccessPrompt: false });
-    };
-
-    const closeSuccessPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ SuccessPrompt: false });
-    };
-
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -315,33 +305,7 @@ class usermaster extends React.Component {
 
     return (
       <Fragment>
-        
-
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: 0, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
-
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
@@ -357,25 +321,13 @@ class usermaster extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Typography color="textPrimary">User master</Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  typoTitle="User Master"
+                  level={1}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>

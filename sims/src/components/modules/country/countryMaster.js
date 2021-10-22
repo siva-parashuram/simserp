@@ -17,7 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import TablePagination from '@mui/material/TablePagination';
+import TablePagination from "@mui/material/TablePagination";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -27,16 +27,19 @@ import Header from "../../user/userheaderconstants";
 
 import Destination from "./destination";
 import Statesbycountry from "./statesbycountry";
+import Loader from "../../compo/loader";
+
+import Breadcrumb from "../../compo/breadcrumb";
 
 let rows = [];
 class countryMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      pagination:{
-        page:0,
-        rowsPerPage:10,         
-      }, 
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       urlparams: "",
       masterCountryData: rows,
       countryData: rows,
@@ -84,12 +87,10 @@ class countryMaster extends React.Component {
       .post(GetDestinationsUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        
+
         this.setState({ destinations: data, ProgressLoader: true });
       })
-      .catch((error) => {
-        
-      });
+      .catch((error) => {});
   };
 
   getCountryList() {
@@ -106,7 +107,7 @@ class countryMaster extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        
+
         rows = data;
         this.setState(
           {
@@ -121,9 +122,7 @@ class countryMaster extends React.Component {
           }
         );
       })
-      .catch((error) => {
-        
-      });
+      .catch((error) => {});
   }
 
   getStateList() {
@@ -140,17 +139,14 @@ class countryMaster extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        
+
         rows = data;
         this.setState({ states: rows, ProgressLoader: true });
       })
-      .catch((error) => {
-        
-      });
+      .catch((error) => {});
   }
 
   InitialhandleRowClick(e, item, id) {
-    
     let editUrl =
       URLS.URLS.editCountry +
       this.state.urlparams +
@@ -162,12 +158,11 @@ class countryMaster extends React.Component {
   }
 
   InitialremoveIsSelectedRowClasses() {
-    try{
+    try {
       for (let i = 0; i < this.state.countryData.length; i++) {
         document.getElementById("row_" + i).className = "";
       }
-    }catch(e){}
-    
+    } catch (e) {}
   }
 
   render() {
@@ -185,12 +180,11 @@ class countryMaster extends React.Component {
     };
 
     const removeIsSelectedRowClasses = () => {
-      try{
+      try {
         for (let i = 0; i < this.state.countryData.length; i++) {
           document.getElementById("row_" + i).className = "";
         }
-      }catch(e){}
-      
+      } catch (e) {}
     };
 
     const getDestinationsByState = (item) => {
@@ -219,16 +213,14 @@ class countryMaster extends React.Component {
         .post(GetDestinationByCountryIdUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          
+
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ destinations: data, ProgressLoader: true });
           } else {
             this.setState({ destinations: [], ProgressLoader: true });
           }
         })
-        .catch((error) => {
-         
-        });
+        .catch((error) => {});
     };
 
     const getStatesByCountry = (item) => {
@@ -259,30 +251,14 @@ class countryMaster extends React.Component {
         .post(GetStateByCountryIdUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-         
+
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ states: data, ProgressLoader: true });
           } else {
             this.setState({ states: [], ProgressLoader: true });
           }
         })
-        .catch((error) => {
-         
-        });
-    };
-
-    const closeErrorPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ SuccessPrompt: false });
-    };
-
-    const closeSuccessPrompt = (event, reason) => {
-      if (reason === "clickaway") {
-        return;
-      }
-      this.setState({ SuccessPrompt: false });
+        .catch((error) => {});
     };
 
     function Alert(props) {
@@ -294,53 +270,25 @@ class countryMaster extends React.Component {
       window.location = url;
     };
 
-    const getPageData=(data)=>{
-      let rows=data;
-      let page=parseInt(this.state.pagination.page);
-      let rowsPerPage=parseInt(this.state.pagination.rowsPerPage);    
+    const getPageData = (data) => {
+      let rows = data;
+      let page = parseInt(this.state.pagination.page);
+      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
       return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-    }
-  
-    const handlePageChange=(event, newPage)=>{
-     
-      let pagination=this.state.pagination;
-      pagination.page=newPage;          
-      this.setState({pagination:pagination});
-  }
+    };
+
+    const handlePageChange = (event, newPage) => {
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
+    };
 
     return (
       <Fragment>
-       
-
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: 0, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
-
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-           
             <Grid
               xs={12}
               sm={12}
@@ -353,25 +301,13 @@ class countryMaster extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Typography color="textPrimary">Country master</Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  typoTitle="Country Master"
+                  level={1}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -468,13 +404,13 @@ class countryMaster extends React.Component {
                   <Destination destinations={this.state.destinations} />
                 </Grid>
               </Grid>
-              
+
               <Grid container spacing={1}>
                 <Grid xs={12} sm={12} md={10} lg={11}>
                   <Divider className="divider-custom" />
                 </Grid>
               </Grid>
-              
+
               <Grid container spacing={1}>
                 <Grid xs={12} sm={12} md={10} lg={11}>
                   <Statesbycountry states={this.state.states} />
@@ -482,7 +418,7 @@ class countryMaster extends React.Component {
               </Grid>
               <Grid container spacing={1}>
                 <Grid xs={12} sm={12} md={10} lg={11}>
-                   &nbsp;
+                  &nbsp;
                 </Grid>
               </Grid>
             </Grid>

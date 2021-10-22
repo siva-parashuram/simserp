@@ -1,5 +1,7 @@
 //--------------------URL CONSTANTS-------------------------------------
 
+import addItemSuperCategory from "../components/modules/item/category/addItemSuperCategory";
+
 export const URLS = {
   Ftptest:"/Ftptest",
   testformat:"/testformat",
@@ -43,7 +45,16 @@ export const URLS = {
   itemMaster:"/itemMaster",
   addItem:"/addItem",
   editItem:"/editItem",
-
+  itemCategoryMaster:"/itemCategoryMaster",
+  addItemCategory:"/addItemCategory",
+  editItemCategory:"/editItemCategory",
+  itemMainCategoryMaster:"/itemMainCategoryMaster",
+  addItemMainCategory:"/addItemMainCategory",
+  editItemMainCategory:"/editItemMainCategory",
+  itemSuperCategoryMaster:"/itemSuperCategoryMaster",
+  addItemSuperCategory:"/ addItemSuperCategory",
+  editItemSuperCategory:"/editItemSuperCategory",
+  
   coa:"/coa",
 };
 
