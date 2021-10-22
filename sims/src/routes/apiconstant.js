@@ -67,12 +67,26 @@ export const APIURL = {
     GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
     GetNoSeriesByNoSeriesId:domain+"api/NoSeriesDetails/GetNoSeriesByNoSeriesId",
     UpdateNoSeries:domain+"api/NoSeriesDetails/UpdateNoSeries",
+    CreateItem:domain+"api/ItemMaster/CreateItem",
   };
 
   export const CTimeOut = 10; 
   export const DFormat = "MM/DD/YYYY";
 
-  
+  export let ItemType=[
+    {
+      name:"Finish Good",
+      value:0
+    },{
+      name:"Raw Material",
+      value:1
+    },{
+      name:"Work In Progres",
+      value:2
+    }
+  ];
+
+ 
 
   export const TrasactionType={
     PO:"",

@@ -5,13 +5,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
-
-import LinearProgress from "@material-ui/core/LinearProgress";
-
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -22,11 +16,8 @@ import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
-
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-
 import Loader from "../../compo/loader";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class itemMaster extends React.Component {
   constructor(props) {
@@ -98,25 +89,13 @@ class itemMaster extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Typography color="textPrimary"> Item master</Typography>
-                </Breadcrumbs>
+              <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  typoTitle="Item Master"
+                  level={1}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -164,9 +143,7 @@ class itemMaster extends React.Component {
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
-                  <TableRow>
-                    <TableCell align="left"></TableCell>
-                  </TableRow>
+                 
                 </TableBody>
               </Table>
             </TableContainer>
