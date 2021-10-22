@@ -68,6 +68,7 @@ export const APIURL = {
     GetNoSeriesByNoSeriesId:domain+"api/NoSeriesDetails/GetNoSeriesByNoSeriesId",
     UpdateNoSeries:domain+"api/NoSeriesDetails/UpdateNoSeries",
     CreateItem:domain+"api/ItemMaster/CreateItem",
+    UpdateItem:domain+"api/ItemMaster/UpdateItem",
   };
 
   export const CTimeOut = 10; 

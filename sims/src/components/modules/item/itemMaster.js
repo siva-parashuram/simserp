@@ -113,7 +113,12 @@ class itemMaster extends React.Component {
                   >
                     NEW
                   </Button>
-                  <Button className="action-btns" startIcon={<EditIcon />}>
+                  <Button className="action-btns" 
+                  startIcon={<EditIcon />}
+                  onClick={(e) =>
+                    openPage(URLS.URLS.editItem + this.state.urlparams)
+                  }
+                  >
                     Edit
                   </Button>
                 </ButtonGroup>
