@@ -9,39 +9,42 @@ import AddIcon from "@material-ui/icons/Add";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-
+import Divider from "@material-ui/core/Divider";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ButtonGroup from "@mui/material/ButtonGroup";
-
 import EditIcon from "@mui/icons-material/Edit";
-
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import TablePagination from "@mui/material/TablePagination";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
+
+import Destination from "./destination";
+import Statesbycountry from "./statesbycountry";
 import Loader from "../../compo/loader";
 
 import Breadcrumb from "../../compo/breadcrumb";
 
-class currencymaster extends React.Component {
+let rows = [];
+class itemDepartmentMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      urlparams: "",
-      ProgressLoader: true,
-      initialCss: "",
-      currency: [],
+        urlparams: "",
+        ProgressLoader:true
     };
   }
 
   componentDidMount() {
-    this.getList();
+    this.getStateList();
+    this.getCountryList();
+    this.getAllDestinations();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -58,41 +61,7 @@ class currencymaster extends React.Component {
     });
   }
 
-  getList() {
-    this.setState({ ProgressLoader: false });
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetCurrencies;
-
-    axios
-      .post(Url, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-
-        this.setState({
-          currency: data,
-          ProgressLoader: true,
-        });
-      })
-      .catch((error) => {});
-  }
-
   render() {
-    const handleRowClick = (e, item, id) => {
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-    };
-
-    const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.currency.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    };
-
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -124,7 +93,7 @@ class currencymaster extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  typoTitle="Currency Master"
+                  typoTitle="Item Department Master"
                   level={1}
                 />
               </div>
@@ -139,16 +108,14 @@ class currencymaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addCurrency + this.state.urlparams)
-                    }
+                    onClick={(e) => openPage("")}
                   >
                     New
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    //onClick={(e) => openPage(this.state.editUrl)}
+                    onClick={(e) => openPage()}
                   >
                     Edit
                   </Button>
@@ -160,59 +127,51 @@ class currencymaster extends React.Component {
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={5} lg={5}>
+            <Grid xs={12} sm={12} md={8} lg={8}>
               <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}>
+                <Grid xs={12} sm={12} md={10} lg={10}>
                   <Table
                     stickyHeader
                     size="small"
                     className=""
-                    aria-label="Country List table"
+                    aria-label="Item-Department List table"
                   >
                     <TableHead className="table-header-background">
                       <TableRow>
                         <TableCell className="table-header-font">#</TableCell>
                         <TableCell className="table-header-font" align="left">
-                          Code
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Description
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Symbol
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          {" "}
-                          Rounding
+                          Item Department Name
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody className="tableBody">
-                      {this.state.currency.map((item, i) => (
-                        <TableRow
-                          id={"row_" + i}
-                          className={this.state.initialCss}
-                          hover
-                          key={i}
-                          onClick={(event) =>
-                            handleRowClick(event, item, "row_" + i)
-                          }
-                        >
-                          <TableCell align="left"></TableCell>
-                          <TableCell align="left"></TableCell>
-                          <TableCell align="left"></TableCell>
-                          <TableCell align="left"></TableCell>
-                          <TableCell align="left"></TableCell>
-                        </TableRow>
-                      ))}
+                      <TableRow>
+                        <TableCell align="left"></TableCell>
+                        <TableCell align="left"></TableCell>
+                      </TableRow>
                     </TableBody>
                   </Table>
                 </Grid>
               </Grid>
             </Grid>
-            <Grid xs={12} sm={12} md={7} lg={7}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}></Grid>
+            <Grid xs={12} sm={12} md={4} lg={4}>
+              <Grid container spacing={1}>
+                <Grid xs={12} sm={12} md={10} lg={11}></Grid>
+              </Grid>
+
+              <Grid container spacing={1}>
+                <Grid xs={12} sm={12} md={10} lg={11}>
+                  <Divider className="divider-custom" />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={1}>
+                <Grid xs={12} sm={12} md={10} lg={11}></Grid>
+              </Grid>
+              <Grid container spacing={1}>
+                <Grid xs={12} sm={12} md={10} lg={11}>
+                  &nbsp;
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -221,4 +180,4 @@ class currencymaster extends React.Component {
     );
   }
 }
-export default currencymaster;
+export default itemDepartmentMaster;

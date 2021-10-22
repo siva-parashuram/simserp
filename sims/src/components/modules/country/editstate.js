@@ -22,7 +22,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import UpdateIcon from "@material-ui/icons/Update";
-import ButtonGroup from '@mui/material/ButtonGroup';
+import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
 
@@ -30,6 +30,11 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class editstate extends React.Component {
   constructor(props) {
@@ -113,7 +118,6 @@ class editstate extends React.Component {
       .post(GetSateUrl, getStateDetailsData, { headers })
       .then((response) => {
         let data = response.data;
-        
 
         this.setState({
           state: data,
@@ -126,9 +130,7 @@ class editstate extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => {
-        
-      });
+      .catch((error) => {});
   }
 
   getCountryList() {
@@ -145,13 +147,11 @@ class editstate extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        
+
         rows = data;
         this.setState({ countryData: rows });
       })
-      .catch((error) => {
-        
-      });
+      .catch((error) => {});
   }
 
   render() {
@@ -311,16 +311,14 @@ class editstate extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {
-          
-        });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
       }
-      this.setState({ SuccessPrompt: false });
+      this.setState({ ErrorPrompt: false });
     };
 
     const closeSuccessPrompt = (event, reason) => {
@@ -336,106 +334,63 @@ class editstate extends React.Component {
 
     return (
       <Fragment>
-         
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: -8, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
 
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
-            {/* <Grid item xs={12}>
-              <Breadcrumbs className="style-breadcrumb" aria-label="breadcrumb">
-                <Link
-                  color="inherit"
-                  className="backLink"
-                  onClick={this.props.history.goBack}
-                >
-                  Back
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.userDashboard + this.state.urlparams}
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  color="inherit"
-                  href={URLS.URLS.stateMaster + this.state.urlparams}
-                >
-                  State Master
-                </Link>
-                <Typography color="textPrimary">Edit State</Typography>
-              </Breadcrumbs>
+            <Grid
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+              style={{
+                borderRightStyle: "solid",
+                borderRightColor: "#bdbdbd",
+                borderRightWidth: 1,
+              }}
+            >
+              <div style={{ marginTop: 8 }}>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.stateMaster + this.state.urlparams}
+                  masterLinkTitle="State Master"
+                  typoTitle="Edit State"
+                  level={2}
+                />
+              </div>
             </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-          <Grid container spacing={3}>
-            <Grid className="style-buttons" xs={1}>
-              <Button
-                style={{ marginLeft: 5 }}
-                onClick={handleUpdate}
-                disabled={this.state.disableUpdateBtn}
-              >
-                Update
-              </Button>
-            </Grid> */}
-            <Grid xs={12} sm={12} md={4} lg={4} style={{borderRightStyle:'solid',borderRightColor:'#bdbdbd',borderRightWidth:1}}>
-                            <div style={{marginTop:8}}>
-                            <Breadcrumbs className='style-breadcrumb' aria-label="breadcrumb">
-                                <Link color="inherit" className="backLink" onClick={this.props.history.goBack}>
-                                    Back
-                                </Link>
-                                <Link color="inherit" href={URLS.URLS.userDashboard + this.state.urlparams} >
-                                    Dashboard
-                                </Link>  
-                                <Link
-                    color="inherit"
-                    href={URLS.URLS.stateMaster + this.state.urlparams}
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              <div style={{ marginLeft: 10, marginTop: 1 }}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
+                  <Button
+                    className="action-btns"
+                    startIcon={<UpdateIcon />}
+                    onClick={handleUpdate}
                   >
-                    State master
-                  </Link>                             
-                                <Typography color="textPrimary">Edit State</Typography> 
-                            </Breadcrumbs>
-                            </div>                            
-                        </Grid>
-                        <Grid xs={12} sm={12} md={8} lg={8}>
-                            <div style={{marginLeft:10,marginTop:1}}>  
-                            <ButtonGroup size="small" variant="text" aria-label="Action Menu Button group">                                 
-                                 <Button
-                                     className="action-btns"
-                                     startIcon={<UpdateIcon />}                                            
-                                     onClick={handleUpdate}                                     
-                                     >Update</Button>
-                                
-                             </ButtonGroup>
-                            </div>                           
-                        </Grid> 
+                    Update
+                  </Button>
+                </ButtonGroup>
+              </div>
+            </Grid>
           </Grid>
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={6} md={6} lg={6}>   
+            <Grid xs={12} sm={6} md={6} lg={6}>
               <Accordion
                 key="country-General-Details"
                 expanded={this.state.GeneralDetailsExpanded}
@@ -528,7 +483,7 @@ class editstate extends React.Component {
                                 </option>
                               ))}
                             </select>
-                          </TableCell> 
+                          </TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>

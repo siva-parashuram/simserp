@@ -23,6 +23,9 @@ import MuiAlert from "@material-ui/lab/Alert";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
 
 let columns = [
   {
@@ -74,7 +77,9 @@ class addpage extends React.Component {
       description: null,
       createBtnDisable: true,
       moduleId: null,
-
+      ErrorPrompt: false,
+      SuccessPrompt: false,
+      GeneralDetailsExpanded:false,
       refreshPageLinkList: false,
       modules: [],
       rowsPerPageOptions: 5,
@@ -615,7 +620,7 @@ class addpage extends React.Component {
       if (reason === "clickaway") {
         return;
       }
-      this.setState({ SuccessPrompt: false });
+      this.setState({ ErrorPrompt: false });
     };
 
     const closeSuccessPrompt = (event, reason) => {
@@ -633,31 +638,16 @@ class addpage extends React.Component {
       <Fragment>
         {this.props.data ? (
           <div style={{ marginTop: -50 }}>
-            {this.state.ProgressLoader === false ? (
-              <div style={{ marginTop: -8, marginLeft: -10 }}>
-                <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-              </div>
-            ) : null}
-
-            <Snackbar
-              open={this.state.SuccessPrompt}
-              autoHideDuration={3000}
-              onClose={closeSuccessPrompt}
-            >
-              <Alert onClose={closeSuccessPrompt} severity="success">
-                Success!
-              </Alert>
-            </Snackbar>
-
-            <Snackbar
-              open={this.state.ErrorPrompt}
-              autoHideDuration={3000}
-              onClose={closeErrorPrompt}
-            >
-              <Alert onClose={closeErrorPrompt} severity="error">
-                Error!
-              </Alert>
-            </Snackbar>
+            <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
+            
             <div style={{ height: 20 }}></div>
 
             <Grid container spacing={3}>

@@ -34,6 +34,10 @@ import Header from "../../user/userheaderconstants";
 
 import moment from "moment";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class editnumbering extends React.Component {
   constructor(props) {
@@ -48,6 +52,8 @@ class editnumbering extends React.Component {
       branchId: 0,
       numberings: [],
       startdate: "2021-10-06",
+      SuccessPrompt: false,
+      ErrorPrompt: false,
       noSeries: {
         NoSeriesId: 0,
         Code: null,
@@ -68,10 +74,10 @@ class editnumbering extends React.Component {
         LastNo: 0,
         LastNoDate: null,
       },
-      Validations:{
-        Code:{errorState:false,errorMssg:""},
-        Description:{errorState:false,errorMssg:""}
-      }
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Description: { errorState: false, errorMssg: "" },
+      },
     };
   }
 
@@ -113,7 +119,7 @@ class editnumbering extends React.Component {
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-        
+
         if (response.status === 200) {
           let d = {
             NoSeriesId: data.noSeries.noSeriesId,
@@ -161,7 +167,6 @@ class editnumbering extends React.Component {
         }
       })
       .catch((error) => {
-        
         this.setState({
           numberings: [],
           ProgressLoader: true,
@@ -191,35 +196,36 @@ class editnumbering extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-     
       let noSeries = this.state.noSeries;
       if (id === "Code") {
-        
-        if(e.target.value.length>20){
-          let v=this.state.Validations;
-          v.Code={errorState:true,errorMssg:"Only 20 characters allowed!"}
-          this.setState({Validations:v})
-        }else{
+        if (e.target.value.length > 20) {
+          let v = this.state.Validations;
+          v.Code = {
+            errorState: true,
+            errorMssg: "Only 20 characters allowed!",
+          };
+          this.setState({ Validations: v });
+        } else {
           noSeries.Code = e.target.value;
-          let v=this.state.Validations;
-          v.Code={errorState:false,errorMssg:""}
-          this.setState({ noSeries: noSeries,Validations:v });
+          let v = this.state.Validations;
+          v.Code = { errorState: false, errorMssg: "" };
+          this.setState({ noSeries: noSeries, Validations: v });
         }
-       
       }
       if (id === "Description") {
-        
-        if(e.target.value.length>50){
-          let v=this.state.Validations;
-          v.Description={errorState:true,errorMssg:"Only 50 characters allowed!"}
-          this.setState({Validations:v})
-        }else{
+        if (e.target.value.length > 50) {
+          let v = this.state.Validations;
+          v.Description = {
+            errorState: true,
+            errorMssg: "Only 50 characters allowed!",
+          };
+          this.setState({ Validations: v });
+        } else {
           noSeries.Description = e.target.value;
-          let v=this.state.Validations;
-          v.Description={errorState:false,errorMssg:""}
-          this.setState({ noSeries: noSeries,Validations:v });
+          let v = this.state.Validations;
+          v.Description = { errorState: false, errorMssg: "" };
+          this.setState({ noSeries: noSeries, Validations: v });
         }
-        
       }
     };
 
@@ -234,16 +240,11 @@ class editnumbering extends React.Component {
     };
 
     const updateListValue = (param, item, id, nextid, e) => {
-      
       if (e.key === "Enter") {
-        
         let value = document.getElementById(id).value;
-        
-        if (value === "" || value === null) {
-         
-        } else {
-          
 
+        if (value === "" || value === null) {
+        } else {
           updateNumberingListState(param, item, id, e);
 
           if (nextid === "newline") {
@@ -258,7 +259,7 @@ class editnumbering extends React.Component {
 
     const updateNumberingListState = (param, item, id, e) => {
       let numberings = this.state.numberings;
-     
+
       for (let i = 0; i < numberings.length; i++) {
         if (numberings[i].id === item.id) {
           if (param === "Increment") {
@@ -337,13 +338,12 @@ class editnumbering extends React.Component {
         "Content-Type": "application/json",
       };
       let Url = APIURLS.APIURL.UpdateNoSeries;
-      
 
       axios
         .post(Url, data, { headers })
         .then((response) => {
           let data = response.data;
-          
+
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
@@ -351,7 +351,6 @@ class editnumbering extends React.Component {
           }
         })
         .catch((error) => {
-         
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
     };
@@ -376,32 +375,15 @@ class editnumbering extends React.Component {
 
     return (
       <Fragment>
-        
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: 0, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
-
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
@@ -417,32 +399,15 @@ class editnumbering extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.numberingMaster + this.state.urlparams}
-                  >
-                    Numbering Master
-                  </Link>
-
-                  <Typography color="textPrimary">Edit Numbering </Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.numberingMaster + this.state.urlparams}
+                  masterLinkTitle="Numbering Master"
+                  typoTitle="Edit Numbering"
+                  level={2}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -526,9 +491,10 @@ class editnumbering extends React.Component {
                           }}
                           value={this.state.noSeries.Description}
                           error={this.state.Validations.Description.errorState}
-                          helperText={this.state.Validations.Description.errorMssg}
+                          helperText={
+                            this.state.Validations.Description.errorMssg
+                          }
                         />
-                        
                       </TableBody>
                     </Table>
                   </TableContainer>

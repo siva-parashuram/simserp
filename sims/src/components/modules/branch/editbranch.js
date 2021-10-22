@@ -272,9 +272,7 @@ class editbranch extends React.Component {
         rows = data;
         this.setState({ companyData: rows, ProgressLoader: true });
       })
-      .catch((error) => {
-
-      });
+      .catch((error) => {});
   }
 
   getStateList() {
@@ -295,9 +293,7 @@ class editbranch extends React.Component {
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true });
       })
-      .catch((error) => {
-
-      });
+      .catch((error) => {});
   }
 
   getCountryList() {
@@ -318,9 +314,7 @@ class editbranch extends React.Component {
         rows = data;
         this.setState({ countryData: rows });
       })
-      .catch((error) => {
-
-      });
+      .catch((error) => {});
   }
 
   getBranchDetail() {
@@ -1177,7 +1171,7 @@ class editbranch extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => { });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -1201,9 +1195,14 @@ class editbranch extends React.Component {
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
-        <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeErrorPrompt} />
-        <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
-
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>

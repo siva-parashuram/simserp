@@ -29,6 +29,10 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class editcountry extends React.Component {
   constructor(props) {
@@ -109,7 +113,6 @@ class editcountry extends React.Component {
       .post(GetCountryUrl, getCountryDetailsData, { headers })
       .then((response) => {
         let data = response.data;
-       
 
         this.setState({
           country: data,
@@ -120,9 +123,7 @@ class editcountry extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => {
-        
-      });
+      .catch((error) => {});
   }
 
   getZones() {
@@ -138,12 +139,10 @@ class editcountry extends React.Component {
       .post(GetZonesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        
+
         this.setState({ zones: data, ProgressLoader: true });
       })
-      .catch((error) => {
-       
-      });
+      .catch((error) => {});
   }
 
   render() {
@@ -268,6 +267,7 @@ class editcountry extends React.Component {
     };
 
     const handleUpdate = () => {
+      CheckName();
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -286,23 +286,21 @@ class editcountry extends React.Component {
         .post(UpdateCountryUrl, handleUpdateData, { headers })
         .then((response) => {
           let data = response.data;
-         
+
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {
-          
-        });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
       }
-      this.setState({ SuccessPrompt: false });
+      this.setState({ ErrorPrompt: false });
     };
 
     const closeSuccessPrompt = (event, reason) => {
@@ -318,32 +316,15 @@ class editcountry extends React.Component {
 
     return (
       <Fragment>
-       
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: -8, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
-
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
@@ -359,31 +340,15 @@ class editcountry extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.countryMaster + this.state.urlparams}
-                  >
-                    Country Master
-                  </Link>
-                  <Typography color="textPrimary">Edit Country </Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.countryMaster + this.state.urlparams}
+                  masterLinkTitle="Country Master"
+                  typoTitle="Edit Country"
+                  level={2}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -397,6 +362,7 @@ class editcountry extends React.Component {
                     className="action-btns"
                     startIcon={<UpdateIcon />}
                     onClick={handleUpdate}
+                    disabled={this.state.DisableUpdatebtn}
                   >
                     Update
                   </Button>

@@ -31,6 +31,8 @@ import { withStyles } from "@material-ui/styles";
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
+
 
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
@@ -40,6 +42,7 @@ class addItem extends React.Component {
     this.state = {
       GeneralDetailsExpanded: false,
       SuccessPrompt: false,
+      ErrorPrompt: false,
       ProgressLoader: true,
       urlparams: "",
     };
@@ -81,7 +84,7 @@ class addItem extends React.Component {
       if (reason === "clickaway") {
         return;
       }
-      this.setState({ SuccessPrompt: false });
+      this.setState({ ErrorPrompt: false });
     };
 
     const closeSuccessPrompt = (event, reason) => {
@@ -113,31 +116,16 @@ class addItem extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link color="inherit" className="backLink"
-                    href={URLS.URLS.itemMaster + this.state.urlparams}
-                  >
-                    Item Master
-                  </Link>
-
-                  <Typography color="textPrimary">Add Item </Typography>
-                </Breadcrumbs>
+              <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.itemMaster + this.state.urlparams}
+                  masterLinkTitle="Item Master"
+                  typoTitle="Add Item"
+                  level={2}
+                />
+               
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>

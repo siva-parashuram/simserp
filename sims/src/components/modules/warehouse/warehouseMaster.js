@@ -21,6 +21,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 import axios from "axios";
+import Loader from "../../compo/loader";
+
+import Breadcrumb from "../../compo/breadcrumb";
 
 class warehouseMaster extends React.Component {
   constructor(props) {
@@ -130,7 +133,8 @@ class warehouseMaster extends React.Component {
 
     return (
       <Fragment>
-       
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
             <Grid
@@ -145,25 +149,13 @@ class warehouseMaster extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Typography color="textPrimary">Warehouse Master</Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  typoTitle="Warehouse Master"
+                  level={1}
+                />
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>

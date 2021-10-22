@@ -33,6 +33,10 @@ import Header from "../../user/userheaderconstants";
 
 import moment from "moment";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+import Loader from "../../compo/loader";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
+import Breadcrumb from "../../compo/breadcrumb";
 
 class addnumbering extends React.Component {
   constructor(props) {
@@ -46,6 +50,8 @@ class addnumbering extends React.Component {
       branchId: 0,
       numberings: [],
       startdate: "2021-10-06",
+      ErrorPrompt: false,
+      SuccessPrompt: false,
       noSeries: {
         NoSeriesId: 0,
         Code: "",
@@ -285,7 +291,7 @@ class addnumbering extends React.Component {
       if (reason === "clickaway") {
         return;
       }
-      this.setState({ SuccessPrompt: false });
+      this.setState({ ErrorPrompt: false });
     };
 
     const closeSuccessPrompt = (event, reason) => {
@@ -301,33 +307,16 @@ class addnumbering extends React.Component {
 
     return (
       <Fragment>
-         
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
 
-        {this.state.ProgressLoader === false ? (
-          <div style={{ marginTop: 0, marginLeft: -10 }}>
-            <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
-          </div>
-        ) : null}
-
-        <Snackbar
-          open={this.state.SuccessPrompt}
-          autoHideDuration={3000}
-          onClose={closeSuccessPrompt}
-        >
-          <Alert onClose={closeSuccessPrompt} severity="success">
-            Success!
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={this.state.ErrorPrompt}
-          autoHideDuration={3000}
-          onClose={closeErrorPrompt}
-        >
-          <Alert onClose={closeErrorPrompt} severity="error">
-            Error!
-          </Alert>
-        </Snackbar>
 
         <div className="breadcrumb-height">
           <Grid container spacing={3}>
@@ -343,32 +332,16 @@ class addnumbering extends React.Component {
               }}
             >
               <div style={{ marginTop: 8 }}>
-                <Breadcrumbs
-                  className="style-breadcrumb"
-                  aria-label="breadcrumb"
-                >
-                  <Link
-                    color="inherit"
-                    className="backLink"
-                    onClick={this.props.history.goBack}
-                  >
-                    Back
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.userDashboard + this.state.urlparams}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    color="inherit"
-                    href={URLS.URLS.numberingMaster + this.state.urlparams}
-                  >
-                    Numbering Master
-                  </Link>
-
-                  <Typography color="textPrimary">Add Numbering </Typography>
-                </Breadcrumbs>
+                <Breadcrumb
+                  backOnClick={this.props.history.goBack}
+                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                  linkTitle="Dashboard"
+                  masterHref={URLS.URLS.numberingMaster + this.state.urlparams}
+                  masterLinkTitle="Numbering Master"
+                  typoTitle="Add Numbering"
+                  level={2}
+                />
+               
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
