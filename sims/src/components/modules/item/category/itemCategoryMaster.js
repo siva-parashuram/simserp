@@ -19,20 +19,19 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import TablePagination from "@mui/material/TablePagination";
 
-import { COOKIE, getCookie } from "../../../services/cookie";
-import * as APIURLS from "../../../routes/apiconstant";
-import * as URLS from "../../../routes/constants";
-import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+import { COOKIE, getCookie } from "../../../../services/cookie";
+import * as APIURLS from "../../../../routes/apiconstant";
+import * as URLS from "../../../../routes/constants";
+import "../../../user/dasboard.css";
+import Header from "../../../user/userheaderconstants";
 
-import Destination from "./destination";
-import Statesbycountry from "./statesbycountry";
-import Loader from "../../compo/loader";
+ 
+import Loader from "../../../compo/loader";
 
-import Breadcrumb from "../../compo/breadcrumb";
+import Breadcrumb from "../../../compo/breadcrumb";
 
 let rows = [];
-class itemCatagoryMaster extends React.Component {
+class itemCategoryMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -180,4 +179,4 @@ class itemCatagoryMaster extends React.Component {
     );
   }
 }
-export default itemCatagoryMaster;
+export default itemCategoryMaster;

@@ -35,7 +35,7 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 
-class addItemCatagory extends React.Component {
+class editItemCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +44,7 @@ class addItemCatagory extends React.Component {
       GeneralDetailsExpanded: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      DisableCreatebtn: true,
+      DisableUpdatebtn: true,
     };
   }
 
@@ -117,8 +117,8 @@ class addItemCatagory extends React.Component {
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
                   //   masterHref={}
-                  masterLinkTitle="Item Catagory Master"
-                  typoTitle="Add Item Catagory"
+                  masterLinkTitle="Item Category Master"
+                  typoTitle="edit Item Category"
                   level={2}
                 />
               </div>
@@ -134,7 +134,7 @@ class addItemCatagory extends React.Component {
                     className="action-btns"
                     startIcon={<AddIcon />}
                     onClick={handleCreate}
-                    disabled={this.state.DisableCreatebtn}
+                    disabled={this.state. DisableUpdatebtn}
                   >
                     ADD
                   </Button>
@@ -148,7 +148,7 @@ class addItemCatagory extends React.Component {
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={6} md={6} lg={6}>
               <Accordion
-                key="itemCatagory-General-Details"
+                key="itemCategory-General-Details"
                 expanded={this.state.GeneralDetailsExpanded}
               >
                 <AccordionSummary
@@ -174,7 +174,7 @@ class addItemCatagory extends React.Component {
                       stickyHeader
                       size="small"
                       className="accordion-table"
-                      aria-label=" Item-catagory List table"
+                      aria-label=" Item-category List table"
                     >
                       <TableBody className="tableBody">
                         <TableRow>
@@ -199,4 +199,4 @@ class addItemCatagory extends React.Component {
     );
   }
 }
-export default addItemCatagory;
+export default editItemCategory;

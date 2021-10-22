@@ -43,7 +43,7 @@ export const URLS = {
   itemMaster:"/itemMaster",
   addItem:"/addItem",
   editItem:"/editItem",
-
+  itemCategoryMaster:"/itemCategoryMaster",
   coa:"/coa",
 };
 

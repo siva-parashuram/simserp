@@ -41,8 +41,9 @@ import editNumbering from "../components/modules/numberings/editnumbering";
 import currencyMaster from "../components/modules/currency/currencymaster";
 import addCurrency from "../components/modules/currency/addcurrency";
 import itemMaster from "../components/modules/item/itemMaster";
-import addItem from "../components/modules/item/addItem";
+
 import editItem from "../components/modules/item/editItem";
+import itemCategoryMaster from "../components/modules/item/category/itemCategoryMaster";
 
 
 import coa from "../components/modules/accounts/reports/coa";
@@ -124,8 +125,9 @@ let routes = ({ location, ...rest }) => {
 
         {/* Chart of Account */}
         <Route path={URLS.URLS.itemMaster} component={itemMaster} />
-        <Route path={URLS.URLS.addItem} component={addItem} />
+       
         <Route path={URLS.URLS.editItem} component={editItem} />
+        <Route path={URLS.URLS.itemCategoryMaster} component={itemCategoryMaster} />
 
         {/* Chart of Account */}
         <Route path={URLS.URLS.coa} component={coa} />
