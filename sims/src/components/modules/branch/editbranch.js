@@ -30,7 +30,6 @@ import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 import UpdateIcon from "@material-ui/icons/Update";
 
-
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -347,13 +346,11 @@ class editbranch extends React.Component {
         this.setStateParams(data);
       })
       .catch((error) => {
-
         this.setState({ branch: null, ProgressLoader: true });
       });
   }
 
   setStateParams(data) {
-
     this.setState({
       branch: data,
       address: data.address,
@@ -463,7 +460,6 @@ class editbranch extends React.Component {
         }
       })
       .catch((error) => {
-
         this.setState({
           numberSeries: [],
           ProgressLoader: true,
@@ -476,7 +472,6 @@ class editbranch extends React.Component {
 
   render() {
     const handleAccordionClick = (val, e) => {
-
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true
           ? this.setState({ GeneralDetailsExpanded: false })
@@ -1122,7 +1117,6 @@ class editbranch extends React.Component {
     //   VATPercentageDisabled:true,
 
     const VAT_GST_Checkbox_Click = (e, param) => {
-
       if (param === "isvat") {
         let branch = this.state.branch;
 
@@ -1170,7 +1164,6 @@ class editbranch extends React.Component {
         branch: branch,
       };
 
-
       const headers = {
         "Content-Type": "application/json",
       };
@@ -1178,7 +1171,6 @@ class editbranch extends React.Component {
       axios
         .post(UpdateBranchUrl, data, { headers })
         .then((response) => {
-
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
@@ -1208,7 +1200,6 @@ class editbranch extends React.Component {
 
     return (
       <Fragment>
-
         <Loader ProgressLoader={this.state.ProgressLoader} />
         <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeErrorPrompt} />
         <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
@@ -1304,7 +1295,6 @@ class editbranch extends React.Component {
                                     Company
                                   </TableCell>
 
-
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -1367,7 +1357,6 @@ class editbranch extends React.Component {
                                     this.state.Validations.shortName.errorMsg
                                   }
                                 />
-
 
                                 <TableRow>
                                   <TableCell

@@ -22,9 +22,8 @@ import TableCell from "@material-ui/core/TableCell";
 import Divider from "@material-ui/core/Divider";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-
-import ButtonGroup from "@mui/material/ButtonGroup";
 import BranchQuickDetails from "./branchquickdetails";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
@@ -223,18 +222,14 @@ class branchMaster extends React.Component {
 
     return (
       <Fragment>
-
-        <Loader ProgressLoader={this.state.ProgressLoader} />
-        <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeSuccessPrompt} />
-        <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
          
-        {/* {this.state.ProgressLoader === false ? (
+        {this.state.ProgressLoader === false ? (
           <div style={{ marginTop: 5, marginLeft: -10 }}>
             <LinearProgress className="linearProgress-css" />{" "}
           </div>
-        ) : null} */}
+        ) : null}
 
-        {/* <Snackbar
+        <Snackbar
           open={this.state.SuccessPrompt}
           autoHideDuration={3000}
           onClose={closeSuccessPrompt}
@@ -252,7 +247,7 @@ class branchMaster extends React.Component {
           <Alert onClose={closeErrorPrompt} severity="error">
             Error!
           </Alert>
-        </Snackbar> */}
+        </Snackbar>
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
