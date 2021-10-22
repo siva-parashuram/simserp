@@ -15,10 +15,10 @@ class tablerowcelltextboxinput extends React.Component {
     componentDidMount() { }
     render() {
         return (
-            <TableRow>  
+            <TableRow>   
                 <TableCell align="left" className="no-border-table">{this.props.label}</TableCell>
                 <TableCell align="left" className="no-border-table">
-                <TextField
+                <TextField                  
                     type={this.props.type}
                     id={this.props.id}
                     variant={this.props.variant}
@@ -26,11 +26,13 @@ class tablerowcelltextboxinput extends React.Component {
                     onChange={this.props.onChange}
                     fullWidth
                     defaultValue={this.props.value}
-                    value={this.props.value}
-                    InputProps={this.props.InputProps}
+                    value={this.props.value}                    
                     error={this.props.error}
                     helperText={this.props.helperText}
                     disabled={this.props.disabled}
+                    InputProps={{
+                        className: "textFieldCss",
+                      }} 
                     />
                 </TableCell>
             </TableRow>
