@@ -52,6 +52,9 @@ import editItemMainCategory from "../components/modules/item/category/editItemMa
 import itemSuperCategoryMaster from "../components/modules/item/category/itemSuperCategoryMaster";
 import addItemSuperCategory from "../components/modules/item/category/addItemSuperCategory"; 
 import editItemSuperCategory from "../components/modules/item/category/editItemSuperCategory";
+import itemDepartmentMaster from "../components/modules/item/department/itemDepartmentMaster";
+import addItemDepartment from "../components/modules/item/department/addItemDepartment";
+import editItemDepartment from "../components/modules/item/department/editItemDepartment";
 
 import coa from "../components/modules/accounts/reports/coa";
 
@@ -143,6 +146,10 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.itemSuperCategoryMaster} component={itemSuperCategoryMaster} />
         <Route path={URLS.URLS.addItemSuperCategory} component={addItemSuperCategory} />
         <Route path={URLS.URLS.editItemSuperCategory} component={editItemSuperCategory} />
+        <Route path={URLS.URLS.itemDepartmentMaster} component={itemDepartmentMaster} />
+        <Route path={URLS.URLS.addItemDepartment} component={addItemDepartment} />
+        <Route path={URLS.URLS.editItemDepartment} component={editItemDepartment} />
+
 
         {/* Chart of Account */}
         <Route path={URLS.URLS.coa} component={coa} />

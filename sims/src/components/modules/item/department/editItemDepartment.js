@@ -2,8 +2,7 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,43 +12,42 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import UpdateIcon from "@material-ui/icons/Update";
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+
+import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import SwitchInput from "../../../compo/tablerowcellswitchinput";
 
-import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+import "../../../user/dasboard.css";
 
-import { COOKIE, getCookie } from "../../../services/cookie";
-import * as APIURLS from "../../../routes/apiconstant";
-import * as URLS from "../../../routes/constants";
-import Loader from "../../compo/loader";
-import ErrorSnackBar from "../../compo/errorSnackbar";
-import SuccessSnackBar from "../../compo/successSnackbar";
-import Breadcrumb from "../../compo/breadcrumb";
+
+import { COOKIE, getCookie } from "../../../../services/cookie";
+import * as APIURLS from "../../../../routes/apiconstant";
+import * as URLS from "../../../../routes/constants";
+import Loader from "../../../compo/loader";
+import ErrorSnackBar from "../../../compo/errorSnackbar";
+import SuccessSnackBar from "../../../compo/successSnackbar";
+import Breadcrumb from "../../../compo/breadcrumb";
 
 class editItemDepartment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       urlparams: "",
-      ProgressLoader: false,
+      ProgressLoader: true,
       GeneralDetailsExpanded: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
+      Code:"",
+      Name:"",
+      IsActive:false
     };
   }
 
   componentDidMount() {
-    this.getZones();
+   
 
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -68,6 +66,16 @@ class editItemDepartment extends React.Component {
   }
 
   render() {
+    const handleAccordionClick = (val, e) => {
+      if (val === "GeneralDetailsExpanded") {
+        this.state.GeneralDetailsExpanded === true
+          ? this.setState({ GeneralDetailsExpanded: false })
+          : this.setState({ GeneralDetailsExpanded: true });
+      }
+    };
+
+    const updateFormValue = (id, e) => {};
+
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -82,10 +90,7 @@ class editItemDepartment extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
-
+  
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -116,7 +121,7 @@ class editItemDepartment extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  //   masterHref={}
+                     masterHref={URLS.URLS.itemDepartmentMaster + this.state.urlparams}
                   masterLinkTitle="Item Department Master"
                   typoTitle="Add Item Department"
                   level={2}
@@ -132,11 +137,11 @@ class editItemDepartment extends React.Component {
                 >
                   <Button
                     className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={handleCreate}
-                    disabled={this.state. DisableUpdatebtn}
+                    startIcon={<UpdateIcon />}s
+                   // onClick={handleCreate}
+                    disabled={this.state.DisableUpdatebtn}
                   >
-                    ADD
+                    Update
                   </Button>
                 </ButtonGroup>
               </div>
@@ -177,16 +182,37 @@ class editItemDepartment extends React.Component {
                       aria-label=" Item-catagory List table"
                     >
                       <TableBody className="tableBody">
-                        <TableRow>
-                          <TableCell
-                            align="left"
-                            className="no-border-table"
-                          ></TableCell>
-                          <TableCell
-                            align="left"
-                            className="no-border-table"
-                          ></TableCell>
-                        </TableRow>
+                        <TextboxInput
+                          id="Code"
+                          label="Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Code", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 20,
+                          }}
+                          value={this.state.Code}
+                        />
+                        <TextboxInput
+                          id="Name"
+                          label="Name"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Name", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 50,
+                          }}
+                          value={this.state.Name}
+                        />
+                        <SwitchInput
+                          key="IsActive"
+                          id="IsActive"
+                          label="IsActive"
+                          param={this.state.IsActive}
+                          onChange={(e) => updateFormValue("IsActive", e)}
+                        />
                       </TableBody>
                     </Table>
                   </TableContainer>
