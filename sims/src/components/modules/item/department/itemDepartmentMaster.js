@@ -15,18 +15,18 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import TablePagination from "@mui/material/TablePagination";
 
-import { COOKIE, getCookie } from "../../../services/cookie";
-import * as APIURLS from "../../../routes/apiconstant";
-import * as URLS from "../../../routes/constants";
-import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+import { COOKIE, getCookie } from "../../../../services/cookie";
+import * as APIURLS from "../../../../routes/apiconstant";
+import * as URLS from "../../../../routes/constants";
+import "../../../user/dasboard.css";
 
 
-import Loader from "../../compo/loader";
 
-import Breadcrumb from "../../compo/breadcrumb";
+import Loader from "../../../compo/loader";
 
-let rows = [];
+import Breadcrumb from "../../../compo/breadcrumb";
+
+
 class itemDepartmentMaster extends React.Component {
   constructor(props) {
     super(props);
@@ -37,9 +37,7 @@ class itemDepartmentMaster extends React.Component {
   }
 
   componentDidMount() {
-    this.getStateList();
-    this.getCountryList();
-    this.getAllDestinations();
+    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -101,14 +99,14 @@ class itemDepartmentMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) => openPage("")}
+                    onClick={(e) => openPage(URLS.URLS.addItemDepartment + this.state.urlparams)}
                   >
                     New
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage()}
+                    onClick={(e) => openPage(URLS.URLS.editItemDepartment + this.state.urlparams)}
                   >
                     Edit
                   </Button>

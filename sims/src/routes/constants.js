@@ -54,6 +54,9 @@ export const URLS = {
   itemSuperCategoryMaster:"/itemSuperCategoryMaster",
   addItemSuperCategory:"/ addItemSuperCategory",
   editItemSuperCategory:"/editItemSuperCategory",
+  itemDepartmentMaster:"/itemDepartmentMaster",
+  addItemDepartment:"/addItemDepartment",
+  editItemDepartment:"/editItemDepartment",
   
   coa:"/coa",
 };

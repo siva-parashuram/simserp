@@ -45,7 +45,7 @@ class addItemMainCategory extends React.Component {
       Code: "",
       Description: "",
       HSNCode: "",
-
+      SuperCatID:0,
       IsTrading: false,
       IsNonStockV: false,
       IsPriceRange: false,
@@ -124,7 +124,7 @@ class addItemMainCategory extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  //   masterHref={}
+                 masterHref={URLS.URLS.itemMainCategoryMaster + this.state.urlparams}
                   masterLinkTitle="Item Main-Category Master"
                   typoTitle="Add..."
                   level={2}
@@ -192,6 +192,13 @@ class addItemMainCategory extends React.Component {
                           options={[]}
                           value={0}
                         />
+                        <DropdownInput
+                          id="SuperCatID"
+                          label="SuperCatID"
+                          onChange={(e) => updateFormValue("SuperCatID", e)}
+                          options={[]}
+                          value={0}
+                        />
                         <TextboxInput
                           id="Code"
                           label="Code"
@@ -214,7 +221,7 @@ class addItemMainCategory extends React.Component {
                             className: "textFieldCss",
                             maxlength: 50,
                           }}
-                          value={this.state.Description}
+                          value={this.state.Description} 
                         />
                         <TextboxInput
                           id="HSNCode"
@@ -256,13 +263,7 @@ class addItemMainCategory extends React.Component {
                           param={this.state.IsPriceRange}
                           onChange={(e) => updateFormValue("IsPriceRange", e)}
                         />
-                        <SwitchInput
-                          key="IsCustomized"
-                          id="IsCustomized"
-                          label="IsCustomized"
-                          param={this.state.IsCustomized}
-                          onChange={(e) => updateFormValue("IsCustomized", e)}
-                        />
+                        
                       </TableBody>
                     </Table>
                   </TableContainer>

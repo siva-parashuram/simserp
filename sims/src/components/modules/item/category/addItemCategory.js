@@ -50,7 +50,7 @@ class addItemCategory extends React.Component {
       Code: "",
       Description: "",
       HSNCode: "",
-
+      CatID:0,
       IsTrading: false,
       IsNonStockV: false,
       IsPriceRange: false,
@@ -191,6 +191,13 @@ class addItemCategory extends React.Component {
                     >
                       
                       <TableBody className="tableBody">
+                      <DropdownInput
+                        id="CatID"
+                        label="CatID"
+                        onChange={(e) => updateFormValue("CatID", e)}
+                        options={[]}
+                        value={0}
+                      />
                       <DropdownInput
                         id="MainCatID"
                         label="MainCatID"

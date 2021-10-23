@@ -15,8 +15,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Button from "@material-ui/core/Button";
 
-
-
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import UpdateIcon from "@material-ui/icons/Update";
@@ -46,7 +44,7 @@ class editItemMainCategory extends React.Component {
       Code: "",
       Description: "",
       HSNCode: "",
-
+      SuperCatID: 0,
       IsTrading: false,
       IsNonStockV: false,
       IsPriceRange: false,
@@ -94,8 +92,6 @@ class editItemMainCategory extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    
-
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -126,7 +122,8 @@ class editItemMainCategory extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  //   masterHref={}
+                  masterHref={URLS.URLS.itemMainCategoryMaster + this.state.urlparams}
+
                   masterLinkTitle="Item Main-Category Master"
                   typoTitle="Edit..."
                   level={2}
@@ -194,6 +191,14 @@ class editItemMainCategory extends React.Component {
                           options={[]}
                           value={0}
                         />
+
+                        <DropdownInput
+                          id="SuperCatID"
+                          label="SuperCatID"
+                          onChange={(e) => updateFormValue("SuperCatID", e)}
+                          options={[]}
+                          value={0}
+                        />
                         <TextboxInput
                           id="Code"
                           label="Code"
@@ -239,6 +244,13 @@ class editItemMainCategory extends React.Component {
                           onChange={(e) => updateFormValue("IsActive", e)}
                         />
                         <SwitchInput
+                          key="IsTrading"
+                          id="IsTrading"
+                          label="IsTrading"
+                          param={this.state.IsTrading}
+                          onChange={(e) => updateFormValue("IsTrading", e)}
+                        />
+                        <SwitchInput
                           key="IsNonStockV"
                           id="IsNonStockV"
                           label="IsNonStockV"
@@ -252,13 +264,7 @@ class editItemMainCategory extends React.Component {
                           param={this.state.IsPriceRange}
                           onChange={(e) => updateFormValue("IsPriceRange", e)}
                         />
-                        <SwitchInput
-                          key="IsCustomized"
-                          id="IsCustomized"
-                          label="IsCustomized"
-                          param={this.state.IsCustomized}
-                          onChange={(e) => updateFormValue("IsCustomized", e)}
-                        />
+                        
                       </TableBody>
                     </Table>
                   </TableContainer>
