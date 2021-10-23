@@ -29,6 +29,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import Tableskeleton from "../../compo/tableskeleton";
 
 class branchMaster extends React.Component {
   constructor(props) {
@@ -271,7 +272,9 @@ class branchMaster extends React.Component {
             <Grid xs={12} sm={12} md={8} lg={8}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Table
+                  {this.state.branchData.length>0?(
+                    <Fragment>
+                      <Table
                     stickyHeader
                     size="small"
                     className=""
@@ -324,6 +327,11 @@ class branchMaster extends React.Component {
                       ))}
                     </TableBody>
                   </Table>
+                    </Fragment>
+                  ):(
+                    <Tableskeleton/>
+                  )}
+                  
                 </Grid>
               </Grid>
             </Grid>
@@ -336,7 +344,7 @@ class branchMaster extends React.Component {
                   {this.state.branchItem &&
                   Object.keys(this.state.branchItem).length === 0 &&
                   Object.getPrototypeOf(this.state.branchItem) ===
-                    Object.prototype ? null : (
+                    Object.prototype ? null: (
                     <Fragment>
                       <BranchQuickDetails
                         new={URLS.URLS.addBranch + this.state.urlparams}

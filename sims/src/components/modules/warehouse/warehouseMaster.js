@@ -8,9 +8,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+ 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -24,6 +22,7 @@ import axios from "axios";
 import Loader from "../../compo/loader";
 
 import Breadcrumb from "../../compo/breadcrumb";
+import Tableskeleton from "../../compo/tableskeleton";
 
 class warehouseMaster extends React.Component {
   constructor(props) {
@@ -192,7 +191,9 @@ class warehouseMaster extends React.Component {
             <Grid xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Table
+                  {this.state.warehouses.length>0?(
+                   <Fragment>
+                     <Table
                     stickyHeader
                     size="small"
                     className=""
@@ -249,6 +250,11 @@ class warehouseMaster extends React.Component {
                       ))}
                     </TableBody>
                   </Table>
+                   </Fragment>
+                  ):(
+                    <Tableskeleton/>
+                  )}
+                  
                 </Grid>
               </Grid>
             </Grid>

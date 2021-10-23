@@ -32,7 +32,7 @@ import Loader from "../../compo/loader";
 
 import Breadcrumb from "../../compo/breadcrumb";
 
-// import Datagrid from "./datagrid";
+import Tableskeleton from "../../compo/tableskeleton";
 
 class statemaster extends React.Component {
   constructor(props) {
@@ -250,7 +250,9 @@ class statemaster extends React.Component {
             <Grid xs={12} sm={12} md={8} lg={8}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={10} lg={10}>
-                  <Table
+                  {this.state.stateData.length>0?(
+                    <Fragment>
+                       <Table
                     stickyHeader
                     size="small"
                     className=""
@@ -302,6 +304,11 @@ class statemaster extends React.Component {
                       ))}
                     </TableBody>
                   </Table>
+                    </Fragment>
+                  ):(
+                    <Tableskeleton/>
+                  )}
+                 
                 </Grid>
               </Grid>
             </Grid>

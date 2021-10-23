@@ -13,15 +13,13 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+ 
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+ 
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -29,6 +27,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import Loader from "../../compo/loader";
 
 import Breadcrumb from "../../compo/breadcrumb";
+import Tableskeleton from "../../compo/tableskeleton";
 
 class numberingmaster extends React.Component {
   constructor(props) {
@@ -144,9 +143,7 @@ class numberingmaster extends React.Component {
       }
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -214,7 +211,9 @@ class numberingmaster extends React.Component {
             <Grid xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Table
+                  {this.state.numberings.length > 0?(
+                    <Fragment>
+                      <Table
                     stickyHeader
                     size="small"
                     className=""
@@ -274,6 +273,11 @@ class numberingmaster extends React.Component {
                         : null}
                     </TableBody>
                   </Table>
+                    </Fragment>
+                  ):(
+                    <Tableskeleton/>
+                  )}
+                  
                 </Grid>
               </Grid>
             </Grid>

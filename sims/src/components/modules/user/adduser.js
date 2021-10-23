@@ -13,19 +13,13 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+ 
 import Switch from "@mui/material/Switch";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
-
+import * as CF from "../../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -39,6 +33,8 @@ class adduser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      duplicateExist:false,
+      users:[],
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
@@ -74,6 +70,7 @@ class adduser extends React.Component {
   }
 
   componentDidMount() {
+    this.getUsersList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -88,6 +85,27 @@ class adduser extends React.Component {
     this.setState({
       urlparams: urlparams,
     });
+  }
+
+  getUsersList() {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetUsersUrl = APIURLS.APIURL.GetUsers;
+
+    axios
+      .post(GetUsersUrl, ValidUser, { headers })
+      .then((response) => {
+        console.log("getUsersList >  response.data > ", response.data);
+        let data = response.data;
+        let rows = data;
+        this.setState({users: data,ProgressLoader: true,});
+      })
+      .catch((error) => {});
   }
 
   render() {
@@ -189,23 +207,42 @@ class adduser extends React.Component {
         CheckFirstName();
       }
       if (id === "EmailID") {
+        let duplicateExist= CF.chkDuplicateName(this.state.users,"emailId",e.target.value);
         let user = this.state.user;
         user.EmailID = e.target.value;
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.EmailID = {
-            errorState: true,
-            errorMssg: "only 50 characters are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
+        if (e.target.value.length > 50 || duplicateExist===true) {
+          if (e.target.value.length > 50) {
+            let v = this.state.Validations;
+            v.EmailID = {
+              errorState: true,
+              errorMssg: "only 50 characters are allowed",
+            };
+            this.setState({
+              Validations: v,
+              EmailID: e.target.value,
+              DisabledCreatebtn: true,
+            });
+          }
+          if(duplicateExist===true){
+            let v = this.state.Validations;
+            v.EmailID = {
+              errorState: true,
+              errorMssg: "Email with same name already exist!",
+            };
+            this.setState({
+              Validations: v,
+              EmailID: e.target.value,
+              DisabledCreatebtn: true,
+              duplicateExist:true
+            });
+          }
+          
         } else {
           let v = this.state.Validations;
           v.EmailID = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-
+            duplicateExist:false,
             EmailID: e.target.value,
             user: user,
           });
@@ -263,6 +300,11 @@ class adduser extends React.Component {
         }
         CheckFirstName();
       }
+      
+     this.state.duplicateExist===true?this.setState({DisabledCreatebtn: true}):this.setState({DisabledCreatebtn: false});
+
+     
+
     };
 
     const handleCreate = () => {
@@ -309,9 +351,7 @@ class adduser extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     return (
       <Fragment>

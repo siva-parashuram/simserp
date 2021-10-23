@@ -2,15 +2,13 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+ 
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import Divider from "@material-ui/core/Divider";
-import Switch from "@mui/material/Switch";
+ 
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -19,16 +17,14 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+ 
 import TablePagination from "@mui/material/TablePagination";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+ 
 
 import Userbranchalot from "../branch/userbranchalot";
 import Usermoduleassign from "../modules/usermoduleassign";
@@ -36,6 +32,9 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+
+
+import Tableskeleton from "../../compo/tableskeleton";
 
 class usermaster extends React.Component {
   constructor(props) {
@@ -273,10 +272,6 @@ class usermaster extends React.Component {
       this.setState({ users: users });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
-
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
@@ -364,6 +359,8 @@ class usermaster extends React.Component {
             <Grid xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
+                  {this.state.users.length>0?(
+                    <Fragment>
                   <Table
                     stickyHeader
                     size="small"
@@ -437,6 +434,12 @@ class usermaster extends React.Component {
                     page={this.state.pagination.page}
                     onPageChange={handlePageChange}
                   />
+                    </Fragment>
+                  ):(
+                     <Tableskeleton/>
+                  )}
+
+                 
                 </Grid>
               </Grid>
             </Grid>

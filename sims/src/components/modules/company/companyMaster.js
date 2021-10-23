@@ -37,6 +37,7 @@ import Csvexport from "../../compo/csvexport";
 import Loader from "../../compo/loader";
 
 import Breadcrumb from "../../compo/breadcrumb";
+import Tableskeleton from "../../compo/tableskeleton";
 
 let columns = [];
 
@@ -464,7 +465,9 @@ class companyMaster extends React.Component {
         <div className="New-link-bottom"></div>
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <TableContainer style={{ maxHeight: 440 }}>
+             {this.state.companyData.length>0?(
+               <Fragment>
+                 <TableContainer style={{ maxHeight: 440 }}>
               <Table
                 stickyHeader
                 size="small"
@@ -526,6 +529,11 @@ class companyMaster extends React.Component {
               page={this.state.pagination.page}
               onPageChange={handlePageChange}
             />
+               </Fragment>
+             ):(
+               <Tableskeleton/>
+             )}
+            
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>

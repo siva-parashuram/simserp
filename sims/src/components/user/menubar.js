@@ -17,6 +17,7 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import * as Customfunctions from "../../services/functions/customfunctions";
+import Tableskeleton from "../compo/tableskeleton"; 
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -207,7 +208,9 @@ export default function ScrollableTabsButtonAuto() {
               allowScrollButtonsMobile={true}
               className="menubar-tab-height"
             >
-              {moduleList.map((item, i) => (
+              {moduleList.length>0?(
+                <Fragment>
+                  {moduleList.map((item, i) => (
                 <Tab
                   disableRipple={true}
                   className="menubar-tab-app-bar"
@@ -218,6 +221,11 @@ export default function ScrollableTabsButtonAuto() {
                   wrapped
                 />
               ))}
+                </Fragment>
+              ):(
+                <Tableskeleton/>
+              )}
+              
             </Tabs>
           </div>
           {moduleList.map((item, i) => (
