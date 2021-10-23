@@ -55,7 +55,7 @@ class addItem extends React.Component {
       PackingDesc1: "",
       PackingDesc2: "",
       ItemDeptID: 0,
-      CatID: 0,
+      CatID: 1,
       IsTrading: false,
       IsActive: false,
       IsNonStockValuation: false,
@@ -106,7 +106,7 @@ class addItem extends React.Component {
       if (reason === "clickaway") {
         return;
       }
-      this.setState({ SuccessPrompt: false });
+      this.setState({ ErrorPrompt: false });
     };
 
     const closeSuccessPrompt = (event, reason) => {
@@ -117,7 +117,6 @@ class addItem extends React.Component {
     };
 
     const updateFormValue = (param, e) => {
-
       switch (param) {
         case "ItemType":
           this.setState({ ItemType: e.target.value });
@@ -190,86 +189,84 @@ class addItem extends React.Component {
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
+      let Item={
+        ItemId : 0,
+        ItemNo : this.state.ItemNo,
+        ItemType : parseInt(this.state.ItemType),
+        Code : this.state.Code,
+        Alias : this.state.Alias,
+        Description1 : this.state.Description1,
+        Description2 : this.state.Description2,
+        PackingDesc1 : this.state.PackingDesc1,
+        PackingDesc2 : this.state.PackingDesc2,
+        ItemDeptId : this.state.ItemDeptID,
+        CatId : this.state.CatID,
+        IsActive : this.state.IsActive,
+        IsTrading : this.state.IsTrading,
+        IsNonStockValuation : this.state.IsNonStockValuation,
+        IsCustomized : this.state.IsCustomized,
+        IsCertified : this.state.IsCertified,
+        CertificateNo : this.state.CertificateNo,
+        IsSaleEvenQuantity : this.state.IsSaleEvenQuantity,
+        Location : "",
+        BarcodeNo : "",
+        CartonHeight : 0,
+        CartonLength : 0,
+        CartonWidth : 0,
+        NetWeight : 0,
+        GrossWeight : 0,
+        WarningLevel : 0,
+        MinStockLevel : 0,
+        Amsf : 0,
+        Msf : 0,
+        Bsf : 0,
+        Moq : 0,
+        ShipperQuantiry : 0,
+        CbmperShipper : 0,
+        IsDiscontine : this.state.IsDiscontine,
+        Reason : this.state.Reason,
+        UserId : parseInt(getCookie(COOKIE.USERID)),
+        ModifyDate : "",
+        TolerancePercentage : 0,
+        IsQuality : false,
+        SpecId : 0,
+        AllowNegativeStock : false,
+        PostingGroup : 0,
+        CostingMethod : 0,
+        StandardCost : 0,
+        IndirectCostPercentage : 0,
+        ProfitPercentage : 0,
+        GstgroupId :0,
+        Hsncode : "",
+        BaseUom : 0,
+        SalesUom : 0,
+        PurchaseUom : 0,
+        PackingUom : 0,
+        Replenishment : 0,
+        LeadTime : 0,
+        IsLot : false,
+        ManufacturingPolicy : 0,
+        RoutingId : 0,
+        Bomid : 0,
+      };
       
       const headers = {
         "Content-Type": "application/json",
       };
       let Url = APIURLS.APIURL.CreateItem;
-      let Data = {
-        "validUser": {
-          "UserID": 1,
-          "Token": "EsNvnXGUkc7fQflQ"
-        },
-        "Item": {
-          ItemId : this.state.ItemId,
-          ItemNo : this.state.ItemNo,
-          ItemType : parseInt(this.state.ItemType),
-          Code : this.state.Code,
-          Alias : this.state.Alias,
-          Description1 : this.state.Description1,
-          Description2 : this.state.Description2,
-          PackingDesc1 : this.state.PackingDesc1,
-          PackingDesc2 : this.state.PackingDesc2,
-          ItemDeptId : this.state.ItemDeptId,
-          CatId : this.state.CatId,
-          IsActive : this.state.IsActive,
-          IsTrading : this.state.IsTrading,
-          IsNonStockValuation : this.state.IsNonStockValuation,
-          IsCustomized : this.state.IsCustomized,
-          IsCertified : this.state.IsCertified,
-          CertificateNo : this.state.CertificateNo,
-          IsSaleEvenQuantity : this.state.IsSaleEvenQuantity,
-          Location : "",
-          BarcodeNo : "",
-          CartonHeight : 0,
-          CartonLength : 0,
-          CartonWidth : 0,
-          NetWeight : 0,
-          GrossWeight : 0,
-          WarningLevel : 0,
-          MinStockLevel : 0,
-          Amsf : 0,
-          Msf : 0,
-          Bsf : 0,
-          Moq : 0,
-          ShipperQuantiry : 0,
-          CbmperShipper : 0,
-          IsDiscontine : this.state.IsDiscontine,
-          Reason : this.state.Reason,
-          UserId : parseInt(getCookie(COOKIE.USERID)),
-          ModifyDate : "",
-          TolerancePercentage : 0,
-          IsQuality : false,
-          SpecId : 0,
-          AllowNegativeStock : false,
-          PostingGroup : 0,
-          CostingMethod : 0,
-          StandardCost : 0,
-          IndirectCostPercentage : 0,
-          ProfitPercentage : 0,
-          GstgroupId :0,
-          Hsncode : "",
-          BaseUom : 0,
-          SalesUom : 0,
-          PurchaseUom : 0,
-          PackingUom : 0,
-          Replenishment : 0,
-          LeadTime : 0,
-          IsLot : false,
-          ManufacturingPolicy : 0,
-          RoutingId : 0,
-          Bomid : 0,
-        }
+      let ReqData = {
+        validUser: ValidUser,
+        Item: Item
       };
 
-console.log("data > ",Data);
+      console.log("ReqData > ",ReqData);
 
  
       axios
-        .post(Url, Data, { headers })
+        .post(Url, ReqData, { headers })
         .then((response) => {
           let data = response.data;
-          if (response.status === 200) {
+          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });

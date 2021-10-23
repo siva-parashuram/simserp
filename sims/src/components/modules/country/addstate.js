@@ -2,8 +2,7 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+ 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,18 +12,14 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+ 
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+ 
 import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
-
+ 
+import * as CF from "../../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -41,7 +36,7 @@ class addstate extends React.Component {
       urlparams: "",
       ProgressLoader: false,
       GeneralDetailsExpanded: true,
-
+      stateData:[],
       state: {
         StateId: 0,
         CountryId: 0,
@@ -72,6 +67,7 @@ class addstate extends React.Component {
   }
 
   componentDidMount() {
+    this.getStateList();
     this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -87,6 +83,27 @@ class addstate extends React.Component {
     this.setState({
       urlparams: urlparams,
     });
+  }
+
+  getStateList() {
+    let rows = [];
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetStatesUrl = APIURLS.APIURL.GetStates;
+
+    axios
+      .post(GetStatesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("getStateList > ",data);
+        rows = data;
+        this.setState({ stateData: rows, ProgressLoader: true });
+      })
+      .catch((error) => {});
   }
 
   getCountryList() {
@@ -138,14 +155,29 @@ class addstate extends React.Component {
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
+        let duplicateExist= CF.chkDuplicateName(this.state.stateData,"name",e.target.value);
         let state = this.state.state;
         state.Name = e.target.value;
 
         if (
           e.target.value === "" ||
           e.target.value == null ||
-          e.target.value.length > 50
+          e.target.value.length > 50 ||
+          duplicateExist===true
         ) {
+
+          if(duplicateExist===true){
+            let v = this.state.Validations;
+            v.name = {
+              errorState: true,
+              errorMsg: "State with same name already exist!",
+            };
+            this.setState({
+              Validations: v,
+              name: e.target.value,
+              disableCreateBtn: true,
+            });
+          }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.name = {
@@ -154,6 +186,7 @@ class addstate extends React.Component {
             };
             this.setState({
               Validations: v,
+              name: e.target.value,
               disableCreateBtn: true,
             });
           }
@@ -165,6 +198,7 @@ class addstate extends React.Component {
             };
             this.setState({
               Validations: v,
+              name: e.target.value,
               disableCreateBtn: true,
             });
           }
@@ -188,6 +222,7 @@ class addstate extends React.Component {
           v.code = { errorState: true, errorMsg: "Only 5 numbers are allowed" };
           this.setState({
             Validations: v,
+            code: e.target.value,
             disableCreateBtn: true,
           });
         } else {
@@ -215,6 +250,7 @@ class addstate extends React.Component {
           };
           this.setState({
             Validations: v,
+            gstcode: e.target.value,
             disableCreateBtn: true,
           });
         } else {
@@ -286,9 +322,7 @@ class addstate extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+   
 
     return (
       <Fragment>

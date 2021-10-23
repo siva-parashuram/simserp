@@ -3,8 +3,8 @@ import "../../user/dasboard.css";
 import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
 import { COOKIE, getCookie } from "../../../services/cookie";
-
-import { Divider } from "@material-ui/core";
+import * as CF from "../../../services/functions/customfunctions";
+ 
 
 import Grid from "@material-ui/core/Grid";
 
@@ -14,8 +14,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
+ 
 
 import TextField from "@material-ui/core/TextField";
 
@@ -35,9 +34,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 import axios from "axios";
 
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+ 
 
 import Header from "../../user/userheaderconstants";
 import { withStyles } from "@material-ui/styles";
@@ -53,6 +50,7 @@ class addnewcompany extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      companyData:[],
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
@@ -87,6 +85,7 @@ class addnewcompany extends React.Component {
   }
 
   componentDidMount() {
+    this.getCompanyList();
     this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -104,6 +103,40 @@ class addnewcompany extends React.Component {
       urlparams: urlparams,
     });
   }
+
+  getCompanyList() {     
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetCompaniesUrl = APIURLS.APIURL.GetCompanies;
+
+    axios
+      .post(GetCompaniesUrl, ValidUser, { headers })
+      .then((response) => {
+        console.log("getCompanyList > response >  ", response);
+        if (response.status === 200) {
+          if (response.data === "Invalid User") {
+            alert("Un-Authorized Access Found!");
+            window.close();
+          } else {
+            let data = response.data;            
+
+            this.setState({companyData: data,ProgressLoader: true});
+          }
+        } else {
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
+        }
+      })
+      .catch((error) => {
+        
+        this.setState({ ErrorPrompt: true, ProgressLoader: true });
+      });
+  }
+
+
 
   getCountryList() {
     let rows = [];
@@ -127,9 +160,7 @@ class addnewcompany extends React.Component {
   }
 
   render() {
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     const Checktrue = () => {
       if (
@@ -144,13 +175,31 @@ class addnewcompany extends React.Component {
       return;
     };
 
+    
+
     const updateFormValue = (id, e) => {
       if (id === "companyName") {
+        let duplicateExist= CF.chkDuplicateName(this.state.companyData,"companyName",e.target.value);
+        
         if (
           e.target.value === "" ||
           e.target.value == null ||
-          e.target.value.length > 50
+          e.target.value.length > 50 ||
+          duplicateExist===true
         ) {
+          if(duplicateExist===true){
+            let v = this.state.Validations;
+            v.companyName = {
+              errorState: true,
+              errorMsg: "Company with same name already exist!",
+            };
+            this.setState({
+              Validations: v,
+              companyName: e.target.value,
+              updateBtnDisabled: true,
+              createBtnDisabled: true,
+            });
+          }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.companyName = {
@@ -159,6 +208,7 @@ class addnewcompany extends React.Component {
             };
             this.setState({
               Validations: v,
+              companyName: e.target.value,
               updateBtnDisabled: true,
               createBtnDisabled: true,
             });
@@ -171,6 +221,7 @@ class addnewcompany extends React.Component {
             };
             this.setState({
               Validations: v,
+              companyName: e.target.value,
               updateBtnDisabled: true,
               createBtnDisabled: true,
             });
@@ -184,7 +235,7 @@ class addnewcompany extends React.Component {
             createBtnDisabled: false,
           });
         }
-        Checktrue();
+       // Checktrue();
       }
       if (id === "Address") {
         if (
@@ -200,6 +251,7 @@ class addnewcompany extends React.Component {
             };
             this.setState({
               Validations: v,
+              address: e.target.value,
               updateBtnDisabled: true,
               createBtnDisabled: true,
             });
@@ -212,6 +264,7 @@ class addnewcompany extends React.Component {
             };
             this.setState({
               Validations: v,
+              address: e.target.value,
               updateBtnDisabled: true,
               createBtnDisabled: true,
             });
@@ -237,6 +290,7 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
+            address2: e.target.value,
             createBtnDisabled: true,
           });
         } else {
@@ -258,7 +312,7 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 50 Characters are Allowed!",
           };
-          this.setState({ Validations: v, createBtnDisabled: true });
+          this.setState({ Validations: v,  address3: e.target.value,createBtnDisabled: true });
         } else {
           let v = this.state.Validations;
           v.address3 = { errorState: false, errorMsg: "" };
@@ -278,7 +332,7 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 50 Characters are Allowed!",
           };
-          this.setState({ Validations: v, createBtnDisabled: true });
+          this.setState({ Validations: v, city: e.target.value, createBtnDisabled: true });
         } else {
           let v = this.state.Validations;
           v.city = { errorState: false, errorMsg: "" };
@@ -298,7 +352,7 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 10 Characters are Allowed!",
           };
-          this.setState({ Validations: v, createBtnDisabled: true });
+          this.setState({ Validations: v, postcode: e.target.value, createBtnDisabled: true });
         } else {
           let v = this.state.Validations;
           v.postcode = { errorState: false, errorMsg: "" };
@@ -318,7 +372,7 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 20 digits are Allowed!",
           };
-          this.setState({ Validations: v, createBtnDisabled: true });
+          this.setState({ Validations: v,phoneno: e.target.value, createBtnDisabled: true });
         } else {
           let v = this.state.Validations;
           v.phoneno = { errorState: false, errorMsg: "" };
@@ -338,7 +392,7 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 50 Characters are Allowed!",
           };
-          this.setState({ Validations: v, createBtnDisabled: true });
+          this.setState({ Validations: v,website: e.target.value, createBtnDisabled: true });
         } else {
           let v = this.state.Validations;
           v.website = { errorState: false, errorMsg: "" };
@@ -352,28 +406,7 @@ class addnewcompany extends React.Component {
       }
     };
 
-    // if (id === "country") this.setState({ country: e.target.value });
-    // if (id === "state") this.setState({ state: e.target.value });
-
-    // //processEnableCreateBtn();
-
-    // const processEnableCreateBtn = () => {
-    //     if (this.state.companyName !== "" &&
-    //         this.state.address !== "" &&
-    //         this.state.address2 !== "" &&
-    //         this.state.address3 !== "" &&
-    //         this.state.country !== "" &&
-    //         this.state.state !== "" &&
-    //         this.state.city !== "" &&
-    //         this.state.postcode !== "" &&
-    //         this.state.phoneno !== "" &&
-    //         this.state.website !== ""
-    //     ) {
-    //         this.setState({ createBtnDisabled: false });
-    //     } else {
-    //         this.setState({ createBtnDisabled: true });
-    //     }
-    // }
+   
 
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -451,19 +484,7 @@ class addnewcompany extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    // const StyledAccordionSummary = withStyles({
-    //     root: {
-    //         minHeight:"40px",
-    //         maxHeight: "40px",
-
-    //         '&.Mui-expanded': {
-    //           minHeight: '50px',
-    //           maxHeight: '50px',
-
-    //         }
-    //     },
-
-    //     })(AccordionSummary);
+  
 
     return (
       <Fragment>

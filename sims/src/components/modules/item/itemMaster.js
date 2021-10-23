@@ -31,11 +31,7 @@ class itemMaster extends React.Component {
     };
   }
 
-  componentDidCatch(error, errorInfo) {
- 
-    console.log("Error Cought");
-  }
-
+  
   componentDidMount() {
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
@@ -58,7 +54,28 @@ class itemMaster extends React.Component {
   }
 
   getItems() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetAllItems;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let ReqData = {
+      validUser: ValidUser
+    };
+
+    axios
+      .post(Url, ReqData, { headers })
+      .then((response) => {
+        let data = response.data; 
+        console.log("data > ",data);
+      })
+      .catch((error) => { });
+
     this.setState({ ProgressLoader: true });
+
   }
 
   render() {
