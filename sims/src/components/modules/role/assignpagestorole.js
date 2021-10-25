@@ -15,7 +15,7 @@ import * as APIURLS from "../../../routes/apiconstant";
 import * as Customfunctions from "../../../services/functions/customfunctions";
 import * as Tablecolumns from "../../../services/functions/tablecolumns";
 
-let columns = Tablecolumns.roleMasterDetail;
+let columns = Tablecolumns.roleMasterDetail; 
 
 class assignpagestorole extends React.Component {
   constructor(props) {

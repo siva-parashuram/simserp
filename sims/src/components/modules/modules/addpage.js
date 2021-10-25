@@ -16,9 +16,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+ 
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -83,7 +81,7 @@ class addpage extends React.Component {
       refreshPageLinkList: false,
       modules: [],
       rowsPerPageOptions: 5,
-      pageSize: 100,
+      pageSize: 5,
       Validations: {
         pageName: { errorState: false, errorMsg: "" },
         pageLink: { errorState: false, errorMsg: "" },
@@ -211,16 +209,6 @@ class addpage extends React.Component {
     data.validUser = ValidUser;
     data.page = page;
 
-    // {
-    //     "validUser": ValidUser,
-    //     "page": {
-    //         PageId: PageId,
-    //         ModuleId:  parseInt(e.target.value),
-    //         PageName: null,
-    //         PageLink: null,
-    //         Description: null,
-    //     }
-    // };
     const headers = {
       "Content-Type": "application/json",
     };
@@ -253,16 +241,6 @@ class addpage extends React.Component {
     data.validUser = ValidUser;
     data.page = page;
 
-    // const data = {
-    //     "validUser": ValidUser,
-    //     "page": {
-    //         PageId: 0,
-    //         ModuleId: moduleId,
-    //         PageName: null,
-    //         PageLink: null,
-    //         Description: null,
-    //     }
-    // };
     const headers = {
       "Content-Type": "application/json",
     };
@@ -431,7 +409,7 @@ class addpage extends React.Component {
               errorMsg: "Maximum 20 characters Allowed!",
             };
           }
-          this.setState({ createBtnDisable: true, Validations: Validations });
+          this.setState({ createBtnDisable: true, Validations: Validations,pageName: e.target.value });
         } else {
           let Validations = this.state.Validations;
           Validations.pageName = { errorState: false, errorMsg: "" };
@@ -457,7 +435,7 @@ class addpage extends React.Component {
               errorMsg: "Maximum 100 characters Allowed!",
             };
           }
-          this.setState({ Validations: Validations });
+          this.setState({pageLink: e.target.value, Validations: Validations });
         } else {
           let Validations = this.state.Validations;
           Validations.pageLink = { errorState: false, errorMsg: "" };
@@ -465,20 +443,15 @@ class addpage extends React.Component {
         }
       }
       if (id === "description") {
-        //if (e.target.value === "" || e.target.value.length > 100) {
+       
         let Validations = this.state.Validations;
-        // if (e.target.value === "") {
-        //   Validations.description = {
-        //     errorState: true,
-        //     errorMsg: "Blank inputs not allowed!",
-        //   };
-        // }
+        
         if (e.target.value.length > 50) {
           Validations.description = {
             errorState: true,
             errorMsg: "Maximum 50 characters Allowed!",
           };
-          this.setState({ Validations: Validations });
+          this.setState({ Validations: Validations,description: e.target.value, });
         } else {
           let Validations = this.state.Validations;
           Validations.description = { errorState: false, errorMsg: "" };
@@ -630,9 +603,7 @@ class addpage extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+ 
 
     return (
       <Fragment>
@@ -663,7 +634,7 @@ class addpage extends React.Component {
               </Grid>
             </Grid>
             <div style={{ height: 20 }}></div>
-            <div style={{ height: 300, width: "100%" }}>
+            <div style={{ height: 400, width: "100%" }}>
               {this.state.refreshPageLinkList ? (
                 <DataGrid
                   rows={this.state.rows}
@@ -744,7 +715,7 @@ class addpage extends React.Component {
                             }}
                             disabled={this.state.createBtnDisable}
                           >
-                            Create - {this.props.data.moduleId}
+                            Create 
                           </Button>
                         </TableCell>
                         <TableCell align="left" className="no-border-table">
@@ -826,6 +797,7 @@ class addpage extends React.Component {
                 </TableContainer>
               </AccordionDetails>
             </Accordion>
+            <div style={{height:50}}>&nbsp;</div>
           </div>
         ) : null}
       </Fragment>
