@@ -67,7 +67,6 @@ class addstate extends React.Component {
   }
 
   componentDidMount() {
-    this.getStateList();
     this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -120,9 +119,9 @@ class addstate extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-
         rows = data;
-        this.setState({ countryData: rows, ProgressLoader: true });
+        this.setState({ countryData: rows });
+        this.getStateList();
       })
       .catch((error) => {});
   }
@@ -390,6 +389,7 @@ class addstate extends React.Component {
                 expanded={this.state.GeneralDetailsExpanded}
               >
                 <AccordionSummary
+                key="AS-1"
                   className="accordion-Header-Design"
                   expandIcon={
                     <ExpandMoreIcon
@@ -402,11 +402,11 @@ class addstate extends React.Component {
                   id="panel1a-header"
                   style={{ minHeight: 20, height: "100%" }}
                 >
-                  <Typography key="" className="accordion-Header-Title">
+                  <Typography key="typo-1" className="accordion-Header-Title">
                     General Details
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
+                <AccordionDetails key="Ac-1" className="AccordionDetails-css">
                   <TableContainer>
                     <Table
                       stickyHeader
@@ -460,20 +460,6 @@ class addstate extends React.Component {
                           helperText={this.state.Validations.gstcode.errorMsg}
                         />
 
-                        {/* <Tablerowcelltextboxinput
-                              id="Website"
-                              label="Website"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue('Website', e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 20
-                              }}
-                              value={this.state.Website}
-                              error={this.state.Validations.website.errorState}
-                              helperText={this.state.Validations.website.errorMsg}
-                            /> */}
                         <TableRow>
                           <TableCell align="left" className="no-border-table">
                             Country
