@@ -45,7 +45,7 @@ import editItem from "../components/modules/item/editItem";
 import itemCategoryMaster from "../components/modules/item/category/itemCategoryMaster";
 import addItemCategory from "../components/modules/item/category/addItemCategory";
 import editItemCategory from "../components/modules/item/category/editItemCategory";
-import addItem from "../components/modules/item/additem";
+import addItem from "../components/modules/item/addItem";
 import itemMainCategoryMaster from "../components/modules/item/category/itemMainCategoryMaster";
 import addItemMainCategory from "../components/modules/item/category/addItemMainCategory";
 import editItemMainCategory from "../components/modules/item/category/editItemMainCategory";
@@ -57,7 +57,6 @@ import addItemDepartment from "../components/modules/item/department/addItemDepa
 import editItemDepartment from "../components/modules/item/department/editItemDepartment";
 
 import coa from "../components/modules/accounts/reports/coa";
-
 
 import pageNotFound from "../../src/pagenotfound";
 

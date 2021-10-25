@@ -20,24 +20,20 @@ import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
 
-
-
 import Loader from "../../../compo/loader";
 
 import Breadcrumb from "../../../compo/breadcrumb";
-
 
 class itemDepartmentMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        urlparams: "",
-        ProgressLoader:true
+      urlparams: "",
+      ProgressLoader: true,
     };
   }
 
   componentDidMount() {
-    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -55,8 +51,6 @@ class itemDepartmentMaster extends React.Component {
   }
 
   render() {
-    
-
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
@@ -99,14 +93,22 @@ class itemDepartmentMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) => openPage(URLS.URLS.addItemDepartment + this.state.urlparams)}
+                    onClick={(e) =>
+                      openPage(
+                        URLS.URLS.addItemDepartment + this.state.urlparams
+                      )
+                    }
                   >
                     New
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage(URLS.URLS.editItemDepartment + this.state.urlparams)}
+                    onClick={(e) =>
+                      openPage(
+                        URLS.URLS.editItemDepartment + this.state.urlparams
+                      )
+                    }
                   >
                     Edit
                   </Button>
@@ -142,26 +144,6 @@ class itemDepartmentMaster extends React.Component {
                       </TableRow>
                     </TableBody>
                   </Table>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid xs={12} sm={12} md={4} lg={4}>
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}></Grid>
-              </Grid>
-
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}>
-                  <Divider className="divider-custom" />
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}></Grid>
-              </Grid>
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={10} lg={11}>
-                  &nbsp;
                 </Grid>
               </Grid>
             </Grid>

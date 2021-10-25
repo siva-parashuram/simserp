@@ -123,7 +123,7 @@ class editItemDepartment extends React.Component {
                   linkTitle="Dashboard"
                      masterHref={URLS.URLS.itemDepartmentMaster + this.state.urlparams}
                   masterLinkTitle="Item Department Master"
-                  typoTitle="Add Item Department"
+                  typoTitle="Edit..."
                   level={2}
                 />
               </div>
