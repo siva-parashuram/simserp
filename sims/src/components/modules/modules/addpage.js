@@ -3,7 +3,10 @@ import axios from "axios";
 import React, { Fragment } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import Grid from "@material-ui/core/Grid";
+import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from "@material-ui/core/Button";
+import InfoIcon from '@mui/icons-material/Info';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import AddIcon from "@material-ui/icons/Add";
 import TextField from "@material-ui/core/TextField";
 import Table from "@material-ui/core/Table";
@@ -11,12 +14,10 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Typography from "@material-ui/core/Typography";
- 
+
+
+import TextboxInput from "../../compo/tablerowcelltextboxinput";
+
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -65,6 +66,10 @@ class addpage extends React.Component {
     super(props);
     this.state = {
       urlparams: "",
+      showDetails: true,
+      addNewPageSection: false,
+      detailsUnderlineBtnCss: "btn-bottom-border-color",
+      attachmentUnderlineBtnCss: "",
       ProgressLoader: true,
       columns: columns,
       rows: rows,
@@ -77,7 +82,7 @@ class addpage extends React.Component {
       moduleId: null,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      GeneralDetailsExpanded:false,
+      GeneralDetailsExpanded: false,
       refreshPageLinkList: false,
       modules: [],
       rowsPerPageOptions: 5,
@@ -278,7 +283,7 @@ class addpage extends React.Component {
     this.props.data.rows = rows;
   }
 
-  processResetData(data) {}
+  processResetData(data) { }
 
   InitialhandleRowClick(e, item, id) {
     let editUrl =
@@ -312,7 +317,7 @@ class addpage extends React.Component {
       }
     };
 
-    const onSelectionModelChange = (e) => {};
+    const onSelectionModelChange = (e) => { };
 
     const onEditRowsModelChange = (e) => {
       var keys = Object.keys(e);
@@ -409,7 +414,7 @@ class addpage extends React.Component {
               errorMsg: "Maximum 20 characters Allowed!",
             };
           }
-          this.setState({ createBtnDisable: true, Validations: Validations,pageName: e.target.value });
+          this.setState({ createBtnDisable: true, Validations: Validations, pageName: e.target.value });
         } else {
           let Validations = this.state.Validations;
           Validations.pageName = { errorState: false, errorMsg: "" };
@@ -435,7 +440,7 @@ class addpage extends React.Component {
               errorMsg: "Maximum 100 characters Allowed!",
             };
           }
-          this.setState({pageLink: e.target.value, Validations: Validations });
+          this.setState({ pageLink: e.target.value, Validations: Validations });
         } else {
           let Validations = this.state.Validations;
           Validations.pageLink = { errorState: false, errorMsg: "" };
@@ -443,15 +448,15 @@ class addpage extends React.Component {
         }
       }
       if (id === "description") {
-       
+
         let Validations = this.state.Validations;
-        
+
         if (e.target.value.length > 50) {
           Validations.description = {
             errorState: true,
             errorMsg: "Maximum 50 characters Allowed!",
           };
-          this.setState({ Validations: Validations,description: e.target.value, });
+          this.setState({ Validations: Validations, description: e.target.value, });
         } else {
           let Validations = this.state.Validations;
           Validations.description = { errorState: false, errorMsg: "" };
@@ -522,11 +527,10 @@ class addpage extends React.Component {
             document.getElementById("pageName").value = null;
             document.getElementById("pageLink").value = null;
             document.getElementById("description").value = null;
-
-            this.setState({ ProgressLoader: true });
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
           })
           .catch((error) => {
-            this.setState({ ProgressLoader: true });
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
           });
       }
     };
@@ -603,201 +607,182 @@ class addpage extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
- 
+    const customTabButton = (e, params) => {
+      if (params === "details") {
+        this.setState({ showDetails: true, addNewPageSection: false, detailsUnderlineBtnCss: "btn-bottom-border-color", attachmentUnderlineBtnCss: "" });
+      }
+      if (params === "addNewPage") {
+        this.setState({ showDetails: false, addNewPageSection: true, attachmentUnderlineBtnCss: "btn-bottom-border-color", detailsUnderlineBtnCss: "" });
+      }
+    }
+
+
 
     return (
       <Fragment>
         {this.props.data ? (
           <div style={{ marginTop: -50 }}>
             <Loader ProgressLoader={this.state.ProgressLoader} />
-        <ErrorSnackBar
-          ErrorPrompt={this.state.ErrorPrompt}
-          closeErrorPrompt={closeErrorPrompt}
-        />
-        <SuccessSnackBar
-          SuccessPrompt={this.state.SuccessPrompt}
-          closeSuccessPrompt={closeSuccessPrompt}
-        />
-            
+            <ErrorSnackBar
+              ErrorPrompt={this.state.ErrorPrompt}
+              closeErrorPrompt={closeErrorPrompt}
+            />
+            <SuccessSnackBar
+              SuccessPrompt={this.state.SuccessPrompt}
+              closeSuccessPrompt={closeSuccessPrompt}
+            />
             <div style={{ height: 20 }}></div>
-
-            <Grid container spacing={3}>
-              {/* <Grid xs={12} sm={12} md={3} lg={3}> */}
-              <Grid xs={12} sm={12} md={8} lg={8}>
-                <Button
-                  style={{ marginLeft: 10, marginTop: 20 }}
-                  disabled={this.state.updateBtnDisable}
-                  onClick={handleUpdate}
-                >
-                  Update
-                </Button>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: '#fff' }}>
+                <ButtonGroup variant="text" aria-label="text button group">
+                  <Button
+                    startIcon={<InfoIcon />}
+                    className={this.state.detailsUnderlineBtnCss}
+                    onClick={(e) => customTabButton(e, "details")}>Details</Button>
+                  <Button
+                    startIcon={<AddIcon />}
+                    className={this.state.attachmentUnderlineBtnCss}
+                    onClick={(e) => customTabButton(e, "addNewPage")}>Create Page</Button>
+                </ButtonGroup>
               </Grid>
             </Grid>
-            <div style={{ height: 20 }}></div>
-            <div style={{ height: 400, width: "100%" }}>
-              {this.state.refreshPageLinkList ? (
-                <DataGrid
-                  rows={this.state.rows}
-                  columns={this.state.columns}
-                  pageSize={this.state.pageSize}
-                  rowsPerPageOptions={[this.state.rowsPerPageOptions]}
-                  // checkboxSelection={true}
-                  // onRowClick={(e) => {
-                  //     handleRowClick(e)
-                  // }}
-                  // onSelectionModelChange={(e) => {
-                  //     onSelectionModelChange(e)
-                  // }}
-                  onEditRowsModelChange={(e) => {
-                    onEditRowsModelChange(e);
-                  }}
-                />
-              ) : (
+            <Grid container spacing={0}>
+              {this.state.showDetails === true ? (
                 <Fragment>
-                  <DataGrid
-                    rows={this.props.data.rows}
-                    columns={this.state.columns}
-                    pageSize={this.state.pageSize}
-                    rowsPerPageOptions={[this.state.rowsPerPageOptions]}
-                    // checkboxSelection={true}
-                    // onRowClick={(e) => {
-                    //     handleRowClick(e)
-                    // }}
-                    // onSelectionModelChange={(e) => {
-                    //     onSelectionModelChange(e)
-                    // }}
-                    onEditRowsModelChange={(e) => {
-                      onEditRowsModelChange(e);
-                    }}
-                  />
-                </Fragment>
-              )}
-            </div>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: '#fff' }}>
+                    <Grid container spacing={3}>
+                      <Grid xs={12} sm={12} md={8} lg={8}>
+                        <Button
+                          style={{ marginLeft: 10, marginTop: 20 }}
+                          disabled={this.state.updateBtnDisable}
+                          onClick={handleUpdate}
+                        >
+                          Update
+                        </Button>
+                      </Grid>
+                    </Grid>
 
-            <div style={{ height: 20 }}></div>
-            <Accordion
-              key="country-General-Details"
-              expanded={this.state.GeneralDetailsExpanded}
-            >
-              <AccordionSummary
-                className="accordion-Header-Design"
-                expandIcon={
-                  <ExpandMoreIcon
-                    onClick={(e) =>
-                      handleAccordionClick("GeneralDetailsExpanded", e)
-                    }
-                  />
-                }
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                style={{ minHeight: 20, height: "100%" }}
-              >
-                <Typography key="" className="accordion-Header-Title">
-                  Create New Page
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails key="" className="AccordionDetails-css">
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="company List table"
-                  >
-                    <TableBody className="tableBody">
-                      <TableRow>
-                        <TableCell align="left" className="no-border-table">
-                          <Button
-                            style={{ marginLeft: 5 }}
-                            startIcon={<AddIcon />}
-                            onClick={(e) => {
-                              handlecreate(this.props.data.moduleId);
+                    <div style={{ height: 20 }}></div>
+                    <div style={{ height: 400, width: "100%" }}>
+                      {this.state.refreshPageLinkList ? (
+                        <DataGrid
+                          rows={this.state.rows}
+                          columns={this.state.columns}
+                          pageSize={this.state.pageSize}
+                          rowsPerPageOptions={[this.state.rowsPerPageOptions]}
+                          onEditRowsModelChange={(e) => {
+                            onEditRowsModelChange(e);
+                          }}
+                        />
+                      ) : (
+                        <Fragment>
+                          <DataGrid
+                            rows={this.props.data.rows}
+                            columns={this.state.columns}
+                            pageSize={this.state.pageSize}
+                            rowsPerPageOptions={[this.state.rowsPerPageOptions]}
+                            onEditRowsModelChange={(e) => {
+                              onEditRowsModelChange(e);
                             }}
-                            disabled={this.state.createBtnDisable}
+                          />
+                        </Fragment>
+                      )}
+                    </div>
+                  </Grid>
+                </Fragment>
+              ) : null}
+
+              {this.state.addNewPageSection === true ? (
+                <Fragment>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: '#fff' }}>
+                  <div style={{ height: 20 }}></div>
+                  <div style={{marginLeft:10}}>
+                  <Grid container spacing={3}>
+                      <Grid xs={12} sm={12} md={8} lg={8}>
+                        <Button
+                          style={{ marginLeft: 5 }}                          
+                          onClick={(e) => {
+                            handlecreate(this.props.data.moduleId);
+                          }}
+                          disabled={this.state.createBtnDisable}
+                        >
+                          Create
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </div>
+                   
+                    <div style={{ height: 20 }}></div>
+                    <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="company List table"
                           >
-                            Create 
-                          </Button>
-                        </TableCell>
-                        <TableCell align="left" className="no-border-table">
-                          &nbsp;
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell align="left" className="no-border-table">
-                          Page Name
-                        </TableCell>
-                        <TableCell align="left" className="no-border-table">
-                          <TextField
-                            id="pageName"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("pageName", e)}
-                            fullWidth
-                            InputProps={{
-                              className: "textFieldCss",
-                            }}
-                            //value={this.state.pageName}
-                            error={this.state.Validations.pageName.errorState}
-                            helperText={
-                              this.state.Validations.pageName.errorMsg
-                            }
-                          />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell align="left" className="no-border-table">
-                          Page Link
-                        </TableCell>
-                        <TableCell align="left" className="no-border-table">
-                          <TextField
-                            id="pageLink"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("pageLink", e)}
-                            fullWidth
-                            InputProps={{
-                              className: "textFieldCss",
-                            }}
-                            value={this.state.pageLink}
-                            error={this.state.Validations.pageLink.errorState}
-                            d
-                            helperText={
-                              this.state.Validations.pageLink.errorMsg
-                            }
-                          />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell align="left" className="no-border-table">
-                          Description
-                        </TableCell>
-                        <TableCell align="left" className="no-border-table">
-                          <TextField
-                            id="description"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("description", e)}
-                            fullWidth
-                            InputProps={{
-                              className: "textFieldCss",
-                            }}
-                            maxlength={20}
-                            value={this.state.description}
-                            error={
-                              this.state.Validations.description.errorState
-                            }
-                            helperText={
-                              this.state.Validations.description.errorMsg
-                            }
-                          />
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </AccordionDetails>
-            </Accordion>
-            <div style={{height:50}}>&nbsp;</div>
+                            <TableBody className="tableBody">
+                              
+                              <TextboxInput
+                                id="pageName"
+                                label="Page Name"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("pageName", e)
+                                }
+                                fullWidth
+                                error={this.state.Validations.pageName.errorState}
+                                helperText={
+                                  this.state.Validations.pageName.errorMsg
+                                }
+                              />
+                              <TextboxInput
+                                id="pageLink"
+                                label="Page Link"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("pageLink", e)
+                                }
+                                fullWidth
+                                value={this.state.pageLink}
+                                error={this.state.Validations.pageLink.errorState}
+                                helperText={
+                                  this.state.Validations.pageLink.errorMsg
+                                }
+                              />
+                              <TextboxInput
+                                id="description"
+                                label="Description"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("description", e)
+                                }
+                                fullWidth
+                                value={this.state.description}
+                                error={
+                                  this.state.Validations.description.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.description.errorMsg
+                                }
+                                maxlength={20}
+                              />
+
+
+
+
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+
+                  </Grid>
+                </Fragment>
+              ) : null}
+
+
+            </Grid>
           </div>
         ) : null}
       </Fragment>
