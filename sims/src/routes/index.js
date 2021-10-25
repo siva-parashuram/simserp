@@ -45,7 +45,8 @@ import editItem from "../components/modules/item/editItem";
 import itemCategoryMaster from "../components/modules/item/category/itemCategoryMaster";
 import addItemCategory from "../components/modules/item/category/addItemCategory";
 import editItemCategory from "../components/modules/item/category/editItemCategory";
-import addItem from "../components/modules/item/addItem";
+ 
+import addItem from "../components/modules/item/additem";
  
 import itemMainCategoryMaster from "../components/modules/item/category/itemMainCategoryMaster";
 import addItemMainCategory from "../components/modules/item/category/addItemMainCategory";
