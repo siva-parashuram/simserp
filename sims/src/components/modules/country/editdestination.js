@@ -4,14 +4,13 @@ import Grid from "@material-ui/core/Grid";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
+
 import TableRow from "@material-ui/core/TableRow";
-import TextField from "@material-ui/core/TextField";
+
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
+
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -19,13 +18,12 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
+
 import MuiAlert from "@material-ui/lab/Alert";
 import Destination from "./destination";
 import UpdateIcon from "@material-ui/icons/Update";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -51,6 +49,7 @@ class editdestination extends React.Component {
       stateId: 0,
       destinationName: null,
       postcode: null,
+      oldName:"",
 
       countryData: [],
       stateData: [],
@@ -160,6 +159,7 @@ class editdestination extends React.Component {
         let data = response.data;
 
         this.setState({
+          oldName:data.destinationName,
           destinationId: data.destinationId,
           countryId: data.countryId,
           destinationName: data.destinationName,
