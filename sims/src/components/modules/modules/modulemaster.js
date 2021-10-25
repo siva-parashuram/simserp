@@ -31,6 +31,7 @@ class modulemasters extends React.Component {
         page: 0,
         rowsPerPage: 10,
       },
+      initialCss: "",
       urlparams: "",
       ProgressLoader: false,
       modules: [],

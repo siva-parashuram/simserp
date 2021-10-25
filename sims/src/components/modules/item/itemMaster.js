@@ -20,7 +20,7 @@ import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 
-
+import Itemquickdetails from "./itemquickdetails";
 
 class itemMaster extends React.Component {
   constructor(props) {
@@ -28,8 +28,12 @@ class itemMaster extends React.Component {
     this.state = {
       ProgressLoader: false,
       isLoggedIn: false,
+      editBtnDisable:true,
+      initialCss: "",
       urlparams: "",
+      editUrl:"",
       itemData: [],
+      selectedItem:{},
     };
   }
 
@@ -64,13 +68,12 @@ class itemMaster extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-
-
     axios
       .post(Url, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
+        this.setState({itemData:data},()=>{this.InitialhandleRowClick(null, data[0], "row_0");});
       })
       .catch((error) => { });
 
@@ -78,7 +81,42 @@ class itemMaster extends React.Component {
 
   }
 
+  InitialhandleRowClick(e, item, id) {
+    let editUrl =
+      URLS.URLS.editModule +
+      this.state.urlparams +
+      "&moduleId=" +
+      item.moduleId;
+    this.setState({ moduleId: item.moduleId, editurl: editUrl,selectedItem:item });
+    this.InitialremoveIsSelectedRowClasses(); 
+    document.getElementById(id).classList.add("selectedRow");
+  }
+  InitialremoveIsSelectedRowClasses() {
+    for (let i = 0; i < this.state.itemData.length; i++) {
+      document.getElementById("row_" + i).className = "";
+    }
+  }
+
   render() {
+
+    const handleRowClick = (e, item, id) => {
+      let editUrl =
+        URLS.URLS.editModule +
+        this.state.urlparams +
+        "&moduleId=" +
+        item.moduleId;
+      this.setState({ moduleId: item.moduleId, editurl: editUrl,editBtnDisable:false,selectedItem:item });
+      removeIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+    };
+
+    const removeIsSelectedRowClasses = () => {
+      for (let i = 0; i < this.state.itemData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    };
+
+
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
@@ -132,6 +170,7 @@ class itemMaster extends React.Component {
                     onClick={(e) =>
                       openPage(URLS.URLS.editItem + this.state.urlparams)
                     }
+                    disabled={this.state.editBtnDisable}
                   >
                     Edit
                   </Button>
@@ -159,11 +198,37 @@ class itemMaster extends React.Component {
                       <TableRow>
                         <TableCell className="table-header-font">#</TableCell>
                         <TableCell className="table-header-font" align="left">
-                          Item Name
+                          Item Code
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Alias
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody className="tableBody">
+                      {this.state.itemData.map((item, i) => (
+                        <TableRow
+                          id={"row_" + i}
+                          className={this.state.initialCss}
+                          hover
+                          key={i}
+                          onClick={(event) =>
+                            handleRowClick(event, item, "row_" + i)
+                          }
+                        >
+                          <TableCell align="left">
+                            <a className="LINK tableLink" href="">
+                              {item.itemNo}
+                            </a>
+                          </TableCell>
+                          <TableCell align="left">
+                            {item.code}
+                          </TableCell>
+                          <TableCell align="left">
+                            {item.alias}
+                          </TableCell>
+                        </TableRow>
+                      ))}
 
                     </TableBody>
                   </Table>
@@ -179,7 +244,9 @@ class itemMaster extends React.Component {
               <Grid xs={12} sm={12} md={1} lg={1}>
                 &nbsp;
               </Grid>
-              <Grid xs={12} sm={12} md={11} lg={11}></Grid>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                  <Itemquickdetails item={this.state.selectedItem}/>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
