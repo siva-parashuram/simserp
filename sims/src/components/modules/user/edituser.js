@@ -2,8 +2,7 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,19 +12,16 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
+
 import MuiAlert from "@material-ui/lab/Alert";
 import Switch from "@mui/material/Switch";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import UpdateIcon from "@material-ui/icons/Update";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+
+import * as CF from "../../../services/functions/customfunctions";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -46,6 +42,9 @@ class edituser extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
+      duplicateExist:false,
+      users:[],
+      oldID:"",
       user: {
         UserID: 0,
         LoginID: null,
@@ -75,6 +74,7 @@ class edituser extends React.Component {
   }
 
   componentDidMount() {
+    this.getUsersList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -99,6 +99,26 @@ class edituser extends React.Component {
       }
     );
   }
+  getUsersList() {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetUsersUrl = APIURLS.APIURL.GetUsers;
+
+    axios
+      .post(GetUsersUrl, ValidUser, { headers })
+      .then((response) => {
+        console.log("getUsersList >  response.data > ", response.data);
+        let data = response.data;
+        let rows = data;
+        this.setState({users: data,ProgressLoader: true,});
+      })
+      .catch((error) => {});
+  }
 
   getUserDetails() {
     let user = this.state.user;
@@ -120,6 +140,7 @@ class edituser extends React.Component {
         let data = response.data;
 
         let user = this.state.user;
+
         user.UserID = parseInt(this.state.UserID);
         user.LoginID = data.loginId;
         user.Password = data.password;
@@ -130,6 +151,7 @@ class edituser extends React.Component {
         user.IsAdmin = data.isAdmin;
 
         this.setState({
+          oldID:data.emailId,
           user: user,
           country: data,
           LoginID: data.loginId,
@@ -232,18 +254,40 @@ class edituser extends React.Component {
         CheckFirstName();
       }
       if (id === "EmailID") {
+        let duplicateExist = CF.chkDuplicateButExcludeName(
+          this.state.users,"emailId",this.state.oldID,e.target.value
+        );
         let user = this.state.user;
         user.EmailID = e.target.value;
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.EmailID = {
-            errorState: true,
-            errorMssg: "only 50 characters are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
+        if (e.target.value.length > 50 || duplicateExist===true) {
+          if(duplicateExist===true){
+            let v = this.state.Validations;
+            v.EmailID = {
+              errorState: true,
+              errorMssg: "Email  already exist!",
+            };
+            this.setState({
+              Validations: v,
+              EmailID: e.target.value,
+              DisableUpdatebtn: true,
+              duplicateExist:true
+            });
+          }
+          if (e.target.value.length > 50) {
+            let v = this.state.Validations;
+            v.EmailID = {
+              errorState: true,
+              errorMssg: "only 50 characters are allowed",
+            };
+            this.setState({
+              Validations: v,
+              EmailID: e.target.value,
+              DisableUpdatebtn: true,
+            });
+          }
+          
+          
+        }  else {
           let v = this.state.Validations;
           v.EmailID = { errorState: false, errorMssg: "" };
           this.setState({

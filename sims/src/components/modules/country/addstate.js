@@ -67,6 +67,7 @@ class addstate extends React.Component {
   }
 
   componentDidMount() {
+    this.getStateList();
     this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
