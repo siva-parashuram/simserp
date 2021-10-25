@@ -62,12 +62,10 @@ class itemMaster extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let ReqData = {
-      validUser: ValidUser
-    };
+    
 
     axios
-      .post(Url, ReqData, { headers })
+      .post(Url, ValidUser, { headers })
       .then((response) => {
         let data = response.data; 
         console.log("data > ",data);

@@ -68,3 +68,17 @@ export const chkDuplicateName = (inputArray, parameter, value) => {
   }
   return duplicateExist;
 };
+
+export const chkDuplicateButExcludeName = (inputArray, parameter,oldValue, value) => {
+  let duplicateExist = false;
+  for (let i = 0; i < inputArray.length; i++) {
+    let v = inputArray[i][parameter];
+    v = v.toLowerCase();
+    console.log("chkDuplicateName > v > ",v);
+    console.log("chkDuplicateName > value > ",value.toLowerCase());
+    if (v === value.toLowerCase() && v!==oldValue.toLowerCase()) {
+      duplicateExist = true;
+    }
+  }
+  return duplicateExist;
+};

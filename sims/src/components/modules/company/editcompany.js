@@ -3,9 +3,9 @@ import "../../user/dasboard.css";
 import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
 import { COOKIE, getCookie } from "../../../services/cookie";
-import Header from "../../user/userheaderconstants";
+import * as CF from "../../../services/functions/customfunctions";
 
-import { makeStyles } from "@material-ui/core/styles";
+ 
 import Grid from "@material-ui/core/Grid";
 
 import Typography from "@material-ui/core/Typography";
@@ -49,6 +49,7 @@ class editcompany extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      companyData:[],
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: false,
@@ -69,6 +70,7 @@ class editcompany extends React.Component {
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: false,
+      oldName:"",
       Validations: {
         companyName: { errorState: false, errorMsg: "" },
         address: { errorState: false, errorMsg: "" },
@@ -90,6 +92,7 @@ class editcompany extends React.Component {
 
   componentDidMount() {
     this.getCountryList();
+    this.getCompanyList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -111,6 +114,38 @@ class editcompany extends React.Component {
         this.getCompanyDetails(CompanyID);
       }
     );
+  }
+
+  getCompanyList() {     
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetCompaniesUrl = APIURLS.APIURL.GetCompanies;
+
+    axios
+      .post(GetCompaniesUrl, ValidUser, { headers })
+      .then((response) => {
+        console.log("getCompanyList > response >  ", response);
+        if (response.status === 200) {
+          if (response.data === "Invalid User") {
+            alert("Un-Authorized Access Found!");
+            window.close();
+          } else {
+            let data = response.data;            
+
+            this.setState({companyData: data,ProgressLoader: true});
+          }
+        } else {
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
+        }
+      })
+      .catch((error) => {
+        
+        this.setState({ ErrorPrompt: true, ProgressLoader: true });
+      });
   }
 
   getCountryList() {
@@ -165,6 +200,7 @@ class editcompany extends React.Component {
           company.Website = response.data.website;
           this.setState(
             {
+              oldName: response.data.companyName,
               company: company,
               CompanyName: response.data.companyName,
               Address: response.data.address,
@@ -208,13 +244,28 @@ class editcompany extends React.Component {
       let company = this.state.company;
 
       if (id === "companyName") {
+        let duplicateExist= CF.chkDuplicateButExcludeName(this.state.companyData,"companyName",this.state.oldName,e.target.value);
         company.CompanyName = e.target.value;
 
         if (
           e.target.value === "" ||
           e.target.value == null ||
-          e.target.value.length > 50
+          e.target.value.length > 50||
+          duplicateExist===true
         ) {
+          if(duplicateExist===true){
+            let v = this.state.Validations;
+            v.companyName = {
+              errorState: true,
+              errorMsg: "Company with same name already exist!",
+            };
+            this.setState({
+              Validations: v,
+              CompanyName: e.target.value,
+              updateBtnDisabled: true,              
+            });
+          }
+
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.companyName = {
@@ -223,6 +274,7 @@ class editcompany extends React.Component {
             };
             this.setState({
               Validations: v,
+              CompanyName: e.target.value,
               updateBtnDisabled: true,
             });
           }
@@ -234,10 +286,12 @@ class editcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-
+              CompanyName: e.target.value,
               updateBtnDisabled: true,
             });
           }
+
+
         } else {
           let v = this.state.Validations;
           v.companyName = { errorState: false, errorMsg: "" };
