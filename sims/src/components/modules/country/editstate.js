@@ -62,7 +62,7 @@ class editstate extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       disableUpdateBtn: true,
-      duplicate:"",
+      duplicate:false,
       Validations: {
         name: { errorState: false, errorMsg: "" },
         gstcode: { errorState: false, errorMsg: "" },

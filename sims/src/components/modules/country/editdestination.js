@@ -269,7 +269,7 @@ class editdestination extends React.Component {
             DisabledUpdatebtn: false,
             destinationName: e.target.value,
           });
-        }
+        }checkName();
       }
       if (id === "PostCode") {
         if (e.target.value.length > 20) {
@@ -288,7 +288,7 @@ class editdestination extends React.Component {
             Validations: v,
             postcode: e.target.value,
           });
-        }
+        }checkName();
       }
       if (id === "CountryID") {
         this.setState({
