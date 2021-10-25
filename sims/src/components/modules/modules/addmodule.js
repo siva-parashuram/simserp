@@ -2,29 +2,25 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
+
 import MuiAlert from "@material-ui/lab/Alert";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import * as CF from "../../../services/functions/customfunctions";
 
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -44,6 +40,8 @@ class addmodule extends React.Component {
       GeneralDetailsExpanded: true,
       CreateBtnDisable: true,
       ModuleId: 0,
+      modules: [],
+      duplicate:false,
       Name: null,
       Description: null,
       IconName: null,
@@ -64,6 +62,7 @@ class addmodule extends React.Component {
   }
 
   componentDidMount() {
+    this.getModules()
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -78,6 +77,31 @@ class addmodule extends React.Component {
     this.setState({
       urlparams: urlparams,
     });
+  }
+
+  getModules() {
+    let rows = [];
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetModulesUrl = APIURLS.APIURL.GetModules;
+
+    axios
+      .post(GetModulesUrl, ValidUser, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          let data = response.data;
+          rows = data;
+          this.setState({ modules: rows, ProgressLoader: true })
+        } else {
+        }
+      })
+      .catch((error) => {
+        this.setState({ modules: [], ProgressLoader: true });
+      });
   }
 
   render() {
@@ -98,20 +122,29 @@ class addmodule extends React.Component {
       if (
         this.state.Name === "" ||
         this.state.Name === null ||
-        this.state.Name.length > 20
+        this.state.Name.length > 20||this.state.duplicate===true
       ) {
         this.setState({ CreateBtnDisable: true });
-      } else {
-        this.setState({ CreateBtnDisable: false });
-      }
+      } 
     };
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
-        if (e.target.value === "" || e.target.value.length > 20) {
+        let duplicateExist= CF.chkDuplicateName(this.state.modules,"name",e.target.value);
+        this.setState({duplicate:duplicateExist})
+if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) {
           let Module = this.state.Module;
           Module.Name = e.target.value;
           let Validations = this.state.Validations;
+          if(duplicateExist===true){
+            Validations.Name={errorState:true,errorMsg:'Module already exists'}
+            this.setState({
+              Validations:Validations,
+              CreateBtnDisable: true,
+              Name: e.target.value,
+             
+            })
+          }
           if (e.target.value === "") {
             Validations.Name = {
               errorState: true,
@@ -127,6 +160,7 @@ class addmodule extends React.Component {
           this.setState({
             CreateBtnDisable: true,
             Validations: Validations,
+            Name: e.target.value,
           });
         } else {
           let Module = this.state.Module;
@@ -139,7 +173,7 @@ class addmodule extends React.Component {
             Validations: Validations,
             Name: e.target.value,
           });
-        }
+        }CheckName();
       }
       if (id === "Description") {
         if (e.target.value === "" || e.target.value.length > 50) {
@@ -151,16 +185,24 @@ class addmodule extends React.Component {
               errorState: true,
               errorMsg: "Blank inputs not allowed!",
             };
+            this.setState({
+              Validations: Validations,
+              Description: e.target.value,
+              CreateBtnDisable: true,
+            });
           }
           if (e.target.value.length > 20) {
             Validations.Description = {
               errorState: true,
               errorMsg: "Maximum 50 characters Allowed!",
             };
+            this.setState({
+              Validations: Validations,
+             
+              CreateBtnDisable: true,
+            });
           }
-          this.setState({
-            Validations: Validations,
-          });
+         
         } else {
           let Module = this.state.Module;
           Module.Description = e.target.value;
@@ -184,6 +226,10 @@ class addmodule extends React.Component {
               errorState: true,
               errorMsg: "Blank inputs not allowed!",
             };
+            this.setState({
+              Validations: Validations,
+              IconName: e.target.value,
+            });
           }
           if (e.target.value.length > 20) {
             Validations.IconName = {

@@ -62,7 +62,7 @@ class editstate extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       disableUpdateBtn: true,
-      duplicate:"",
+      duplicate:false,
       Validations: {
         name: { errorState: false, errorMsg: "" },
         gstcode: { errorState: false, errorMsg: "" },
@@ -207,7 +207,7 @@ class editstate extends React.Component {
           this.state.oldName,
           e.target.value
         );
-        this.state.duplicate=duplicateExist;
+        this.setState({duplicate:duplicateExist})
         let state = this.state.state;
         state.Name = e.target.value;
         
