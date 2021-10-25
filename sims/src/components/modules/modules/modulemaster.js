@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -8,12 +8,7 @@ import * as URLS from "../../../routes/constants";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import TablePagination from "@mui/material/TablePagination";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import Table from "@material-ui/core/Table";
@@ -25,13 +20,17 @@ import TableCell from "@material-ui/core/TableCell";
 import EditIcon from "@mui/icons-material/Edit";
 import Addpage from "./addpage";
 import Loader from "../../compo/loader";
-
 import Breadcrumb from "../../compo/breadcrumb";
+import Tableskeleton from "../../compo/tableskeleton";
 
 class modulemasters extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       urlparams: "",
       ProgressLoader: false,
       modules: [],
@@ -97,6 +96,7 @@ class modulemasters extends React.Component {
       item.moduleId;
     this.setState({ moduleId: item.moduleId, editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
+    this.InitialgetPageList(item.moduleId);
     document.getElementById(id).classList.add("selectedRow");
   }
 
@@ -105,6 +105,54 @@ class modulemasters extends React.Component {
       document.getElementById("row_" + i).className = "";
     }
   }
+
+  InitialgetPageList(moduleId){
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const data = {
+      validUser: ValidUser,
+      page: {
+        PageId: 0,
+        ModuleId: moduleId,
+        PageName: null,
+        PageLink: null,
+        Description: null,
+      },
+    };
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetPageByModuleIdUrl = APIURLS.APIURL.GetPageByModuleId;
+
+    axios
+      .post(GetPageByModuleIdUrl, data, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          let data = response.data;
+          this.InitialresetDataList(data);
+        } else {
+        }
+      })
+      .catch((error) => { });
+  };
+
+  InitialresetDataList(data){
+    let rows = [];
+    for (let i = 0; i < data.length; i++) {
+      let r = {
+        id: data[i].pageId,
+        moduleId: data[i].moduleId,
+        pageId: "PL" + data[i].pageId,
+        pageName: data[i].pageName,
+        pageLink: data[i].pageLink,
+        description: data[i].description,
+      };
+      rows.push(r);
+    }
+
+    this.setState({ pageLinkRow: rows });
+  };
 
   render() {
     const handleRowClick = (e, item, id) => {
@@ -155,7 +203,7 @@ class modulemasters extends React.Component {
           } else {
           }
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     const resetDataList = (data) => {
@@ -175,9 +223,7 @@ class modulemasters extends React.Component {
       this.setState({ pageLinkRow: rows });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -245,57 +291,63 @@ class modulemasters extends React.Component {
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={10} lg={10}>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className=""
-                    aria-label="Country List table"
-                  >
-                    <TableHead className="table-header-background">
-                      <TableRow>
-                        <TableCell className="table-header-font">#</TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Module Name
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Module Description
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody className="tableBody">
-                      {this.state.modules
-                        ? this.state.modules.map((item, i) => (
-                            <TableRow
-                              id={"row_" + i}
-                              className={this.state.initialCss}
-                              hover
-                              key={i}
-                              onClick={(event) =>
-                                handleRowClick(event, item, "row_" + i)
-                              }
-                            >
-                              <TableCell align="left">
-                                <a
-                                  className="LINK tableLink"
-                                  href={
-                                    URLS.URLS.editModule +
-                                    this.state.urlparams +
-                                    "&moduleId=" +
-                                    item.moduleId
-                                  }
-                                >
-                                  {URLS.PREFIX.moduleID + item.moduleId}
-                                </a>
-                              </TableCell>
-                              <TableCell align="left">{item.name}</TableCell>
-                              <TableCell align="left">
-                                {item.description}
-                              </TableCell>
-                            </TableRow>
-                          ))
-                        : null}
-                    </TableBody>
-                  </Table>
+                  {this.state.modules.length > 0 ? (
+                    <Fragment>
+                      <Table
+                        stickyHeader
+                        size="small"
+                        className=""
+                        aria-label="Country List table"
+                      >
+                        <TableHead className="table-header-background">
+                          <TableRow>
+                            <TableCell className="table-header-font">#</TableCell>
+                            <TableCell className="table-header-font" align="left">
+                              Module Name
+                            </TableCell>
+                            <TableCell className="table-header-font" align="left">
+                              Module Description
+                            </TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody className="tableBody">
+
+                          {this.state.modules
+                            ? this.state.modules.map((item, i) => (
+                              <TableRow
+                                id={"row_" + i}
+                                className={this.state.initialCss}
+                                hover
+                                key={i}
+                                onClick={(event) =>
+                                  handleRowClick(event, item, "row_" + i)
+                                }
+                              >
+                                <TableCell align="left">
+                                  <a
+                                    className="LINK tableLink"
+                                    href={
+                                      URLS.URLS.editModule +
+                                      this.state.urlparams +
+                                      "&moduleId=" +
+                                      item.moduleId
+                                    }
+                                  >
+                                    {URLS.PREFIX.moduleID + item.moduleId}
+                                  </a>
+                                </TableCell>
+                                <TableCell align="left">{item.name}</TableCell>
+                                <TableCell align="left">
+                                  {item.description}
+                                </TableCell>
+                              </TableRow>
+                            ))
+                            : null}
+                        </TableBody>
+                      </Table>
+                    </Fragment>
+                  ) : (<Tableskeleton />)}
+
                 </Grid>
               </Grid>
             </Grid>
