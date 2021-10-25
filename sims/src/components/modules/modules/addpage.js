@@ -16,7 +16,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
 
 
-import TextboxInput from "../../compo/tablerowcelltextboxinput";
+import TextboxInput from "../../compo/tablerowcelltextboxinput"; 
 
 
 import { COOKIE, getCookie } from "../../../services/cookie";

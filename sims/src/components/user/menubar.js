@@ -214,8 +214,7 @@ export default function ScrollableTabsButtonAuto() {
                 <Tab
                   disableRipple={true}
                   className="menubar-tab-app-bar"
-                  onClick={(e) => handleTabClick(e, i)}
-                  //    icon={<ExpandMoreIcon className="menubar-tab-icon-position" small/>}
+                  onClick={(e) => handleTabClick(e, i)}                  
                   label={item.name}
                   {...a11yProps(i)}
                   wrapped
@@ -233,6 +232,7 @@ export default function ScrollableTabsButtonAuto() {
               value={value}
               index={i}
               style={{ backgroundColor: "#eceff1" }}
+              
             >
               <Grid container spacing={0}>
                 {item.pages
