@@ -2,8 +2,7 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,19 +12,15 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+
+
 import UpdateIcon from "@material-ui/icons/Update";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
 
+import * as CF from "../../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -59,12 +54,15 @@ class editstate extends React.Component {
       creationDate: null,
       gstcode: null,
       name: null,
+      stateData: [],
+      oldName: "",
       StateId: null,
       countryData: [],
       CountryID: null,
       ErrorPrompt: false,
       SuccessPrompt: false,
       disableUpdateBtn: true,
+      duplicate:"",
       Validations: {
         name: { errorState: false, errorMsg: "" },
         gstcode: { errorState: false, errorMsg: "" },
@@ -74,6 +72,7 @@ class editstate extends React.Component {
   }
 
   componentDidMount() {
+    this.getStateList();
     this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -99,6 +98,27 @@ class editstate extends React.Component {
     );
   }
 
+  getStateList() {
+    let rows = [];
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetStatesUrl = APIURLS.APIURL.GetStates;
+
+    axios
+      .post(GetStatesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        rows = data;
+        this.setState({ stateData: rows, ProgressLoader: true });
+      })
+      .catch((error) => {});
+  }
+
   getState() {
     let state = this.state.state;
     state.StateId = parseInt(this.state.StateId);
@@ -120,6 +140,7 @@ class editstate extends React.Component {
         let data = response.data;
 
         this.setState({
+          oldName: data.name,
           state: data,
           code: data.code,
           country: data.country,
@@ -172,24 +193,38 @@ class editstate extends React.Component {
       if (
         this.state.name === "" ||
         this.state.name == null ||
-        this.state.name.length > 50
+        this.state.name.length > 50||this.state.duplicate===true
       ) {
         this.setState({ disableUpdateBtn: true });
-      } else {
-        this.setState({ disableUpdateBtn: false });
-      }
+      } 
     };
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
+        let duplicateExist = CF.chkDuplicateButExcludeName(
+          this.state.stateData,
+          "name",
+          this.state.oldName,
+          e.target.value
+        );
+        this.state.duplicate=duplicateExist;
         let state = this.state.state;
         state.Name = e.target.value;
-        // this.setState({ name: e.target.value, state: state });
+        
         if (
           e.target.value === "" ||
           e.target.value == null ||
-          e.target.value.length > 50
+          e.target.value.length > 50||duplicateExist===true
         ) {
+          if(duplicateExist===true){
+            let v=this.state.Validations
+            v.name={errorState:true,errorMsg:"State already exist"}
+            this.setState({
+              Validations:v,
+              name:e.target.value,
+              disableUpdateBtn: true,
+            })
+          }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.name = {
@@ -199,6 +234,7 @@ class editstate extends React.Component {
             this.setState({
               Validations: v,
               disableUpdateBtn: true,
+              name:e.target.value,
             });
           }
           if (e.target.value === "" || e.target.value == null) {
@@ -210,6 +246,7 @@ class editstate extends React.Component {
             this.setState({
               Validations: v,
               disableUpdateBtn: true,
+              name:e.target.value,
             });
           }
         } else {
@@ -222,18 +259,19 @@ class editstate extends React.Component {
             state: state,
           });
         }
-        // checkName();
+         checkName();
       }
       if (id === "Code") {
         let state = this.state.state;
         state.Code = e.target.value;
-        // this.setState({ code: e.target.value, state: state });
+       
         if (e.target.value.length > 5) {
           let v = this.state.Validations;
           v.code = { errorState: true, errorMsg: "Only 5 numbers are allowed" };
           this.setState({
             Validations: v,
             disableUpdateBtn: true,
+            code: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -251,7 +289,7 @@ class editstate extends React.Component {
       if (id === "GSTCode") {
         let state = this.state.state;
         state.Gstcode = e.target.value;
-        // this.setState({ gstcode: e.target.value, state: state });
+    
         if (e.target.value.length > 2) {
           let v = this.state.Validations;
           v.gstcode = {
@@ -261,6 +299,7 @@ class editstate extends React.Component {
           this.setState({
             Validations: v,
             disableCreateBtn: true,
+            gstcode: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -328,9 +367,7 @@ class editstate extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     return (
       <Fragment>
@@ -380,6 +417,7 @@ class editstate extends React.Component {
                     className="action-btns"
                     startIcon={<UpdateIcon />}
                     onClick={handleUpdate}
+                    disabled={this.state.disableUpdateBtn}
                   >
                     Update
                   </Button>

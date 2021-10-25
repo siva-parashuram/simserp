@@ -7,13 +7,11 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
-import Header from "../../user/userheaderconstants";
-import LinearProgress from "@material-ui/core/LinearProgress";
+
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -25,8 +23,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import TablePagination from "@mui/material/TablePagination";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 import Branchlistbycompany from "./branchlistbycompany";
@@ -252,9 +249,7 @@ class companyMaster extends React.Component {
   }
 
   render() {
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     const handleRowClick = (e, item, id) => {
       console.log("handleRowClick > e > ", e);

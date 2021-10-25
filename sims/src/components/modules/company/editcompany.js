@@ -5,12 +5,10 @@ import * as APIURLS from "../../../routes/apiconstant";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as CF from "../../../services/functions/customfunctions";
 
- 
 import Grid from "@material-ui/core/Grid";
 
 import Typography from "@material-ui/core/Typography";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
+
 
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -23,19 +21,14 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 
 import TableRow from "@material-ui/core/TableRow";
-import Divider from "@mui/material/Divider";
+
 import ButtonGroup from "@mui/material/ButtonGroup";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import TextField from "@material-ui/core/TextField";
-import DeleteIcon from "@material-ui/icons/Delete";
+
+
 import UpdateIcon from "@material-ui/icons/Update";
 import Button from "@material-ui/core/Button";
 // import CheckIcon from '@material-ui/icons/Check';
 import axios from "axios";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
 
 import { withStyles } from "@material-ui/styles";
 
@@ -49,7 +42,7 @@ class editcompany extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      companyData:[],
+      companyData: [],
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: false,
@@ -70,7 +63,8 @@ class editcompany extends React.Component {
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: false,
-      oldName:"",
+      duplicate: "",
+      oldName: "",
       Validations: {
         companyName: { errorState: false, errorMsg: "" },
         address: { errorState: false, errorMsg: "" },
@@ -116,7 +110,7 @@ class editcompany extends React.Component {
     );
   }
 
-  getCompanyList() {     
+  getCompanyList() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -134,16 +128,15 @@ class editcompany extends React.Component {
             alert("Un-Authorized Access Found!");
             window.close();
           } else {
-            let data = response.data;            
+            let data = response.data;
 
-            this.setState({companyData: data,ProgressLoader: true});
+            this.setState({ companyData: data, ProgressLoader: true });
           }
         } else {
           this.setState({ ErrorPrompt: true, ProgressLoader: true });
         }
       })
       .catch((error) => {
-        
         this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
   }
@@ -224,36 +217,51 @@ class editcompany extends React.Component {
   }
 
   render() {
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
-
     const CheckTrue = () => {
       if (
         this.state.CompanyName === "" ||
         this.state.CompanyName === null ||
-        this.state.CompanyName.length > 50
+        this.state.CompanyName.length > 50 ||
+        this.state.duplicate === true
       ) {
-        this.setState({ updateBtnDisabled: true });
-      } else {
-        this.setState({ updateBtnDisabled: false });
+        if( this.state.Address === "" ||
+        this.state.Address === null ||
+        this.state.Address.length > 50){
+          this.setState({updateBtnDisabled:true})
+        }else {
+          this.setState({updateBtnDisabled:true})
+        }
       }
+      else if(this.state.Address === "" ||
+      this.state.Address === null ||
+      this.state.Address.length > 50){
+        this.setState({updateBtnDisabled:true})
+      }
+      
+
+      
     };
 
     const updateFormValue = (id, e) => {
       let company = this.state.company;
 
       if (id === "companyName") {
-        let duplicateExist= CF.chkDuplicateButExcludeName(this.state.companyData,"companyName",this.state.oldName,e.target.value);
+        let duplicateExist = CF.chkDuplicateButExcludeName(
+          this.state.companyData,
+          "companyName",
+          this.state.oldName,
+          e.target.value
+        );
+        this.state.duplicate = duplicateExist;
         company.CompanyName = e.target.value;
 
         if (
           e.target.value === "" ||
           e.target.value == null ||
-          e.target.value.length > 50||
-          duplicateExist===true
+          e.target.value.length > 50 ||
+          duplicateExist === true
         ) {
-          if(duplicateExist===true){
+          if (duplicateExist === true) {
             let v = this.state.Validations;
             v.companyName = {
               errorState: true,
@@ -262,7 +270,7 @@ class editcompany extends React.Component {
             this.setState({
               Validations: v,
               CompanyName: e.target.value,
-              updateBtnDisabled: true,              
+              updateBtnDisabled: true,
             });
           }
 
@@ -290,8 +298,6 @@ class editcompany extends React.Component {
               updateBtnDisabled: true,
             });
           }
-
-
         } else {
           let v = this.state.Validations;
           v.companyName = { errorState: false, errorMsg: "" };
@@ -322,6 +328,7 @@ class editcompany extends React.Component {
             this.setState({
               Validations: v,
               updateBtnDisabled: true,
+              Address: e.target.value,
             });
           } else {
             let v = this.state.Validations;
@@ -332,6 +339,7 @@ class editcompany extends React.Component {
             this.setState({
               Validations: v,
               updateBtnDisabled: true,
+              Address: e.target.value,
             });
           }
         } else {
@@ -358,6 +366,7 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true,
             updateBtnDisabled: true,
+            Address2: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -385,6 +394,7 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true ,
             updateBtnDisabled: true,
+            Address3: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -412,6 +422,7 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true,
             updateBtnDisabled: true,
+            City: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -439,6 +450,7 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true
             updateBtnDisabled: true,
+            PostCode: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -466,6 +478,7 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true
             updateBtnDisabled: true,
+            PhoneNo: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -493,6 +506,7 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true,
             updateBtnDisabled: true,
+            Website: e.target.value,
           });
         } else {
           let v = this.state.Validations;
