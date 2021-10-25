@@ -24,7 +24,7 @@ import Destination from "./destination";
 import UpdateIcon from "@material-ui/icons/Update";
 import "../../user/dasboard.css";
 
-
+import * as CF from "../../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -50,10 +50,11 @@ class editdestination extends React.Component {
       destinationName: null,
       postcode: null,
       oldName:"",
+      duplicate:"",
 
       countryData: [],
       stateData: [],
-      DisabledCreatebtn: true,
+      DisabledUpdatebtn: true,
       Validations: {
         destinationName: { errorState: false, errorMssg: "" },
         postcode: { errorState: false, errorMssg: "" },
@@ -206,13 +207,36 @@ class editdestination extends React.Component {
       }
     };
 
+    const checkName=()=>{
+      if(this.state.destinationName===""||this.state.destinationName===null||this.state.destinationName.length>50||this.state.duplicate===true){
+        this.setState({DisabledUpdatebtn:true})
+      }
+    }
+
     const updateFormValue = (id, e) => {
       if (id === "Name") {
+        let duplicateExist = CF.chkDuplicateButExcludeName(
+          this.state.destinations,
+          "destinationName",
+          this.state.oldName,
+          e.target.value
+        );
+        this.setState({duplicate:duplicateExist})
+
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50
+          e.target.value.length > 50||duplicateExist===true
         ) {
+          if(duplicateExist===true){
+            let v=this.state.Validations
+            v.destinationName={errorState:true,errorMssg:"Destination already exists"}
+            this.setState({
+              Validations:v,
+              destinationName:e.target.value,
+              DisabledUpdatebtn: true,
+            })
+          }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.destinationName = {
@@ -221,7 +245,8 @@ class editdestination extends React.Component {
             };
             this.setState({
               Validations: v,
-              DisabledCreatebtn: true,
+              DisabledUpdatebtn: true,
+              destinationName: e.target.value,
             });
           }
           if (e.target.value === "" || e.target.value === null) {
@@ -232,7 +257,8 @@ class editdestination extends React.Component {
             };
             this.setState({
               Validations: v,
-              DisabledCreatebtn: true,
+              DisabledUpdatebtn: true,
+              destinationName: e.target.value,
             });
           }
         } else {
@@ -240,7 +266,7 @@ class editdestination extends React.Component {
           v.destinationName = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-            DisabledCreatebtn: false,
+            DisabledUpdatebtn: false,
             destinationName: e.target.value,
           });
         }
@@ -328,10 +354,7 @@ class editdestination extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
-
+    
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -377,7 +400,7 @@ class editdestination extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<UpdateIcon />}
-                    disabled={this.state.DisabledCreatebtn}
+                    disabled={this.state.DisabledUpdatebtn}
                     onClick={updateDestination}
                   >
                     Update
