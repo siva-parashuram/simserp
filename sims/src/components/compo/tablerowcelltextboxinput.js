@@ -33,6 +33,7 @@ class tablerowcelltextboxinput extends React.Component {
                     InputProps={{
                         className: "textFieldCss",
                       }} 
+                    maxlength={this.props.maxlength}
                     />
                 </TableCell>
             </TableRow>
