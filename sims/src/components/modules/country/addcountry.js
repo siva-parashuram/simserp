@@ -23,6 +23,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import * as CF from "../../../services/functions/customfunctions";
 
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
@@ -61,15 +62,17 @@ class addcountry extends React.Component {
       ThreeDitgitCode: "",
       TwoDitgitCode: "",
       zones: [],
+      countryData: [],
       selectedZone: null,
       ErrorPrompt: false,
       SuccessPrompt: false,
+      duplicate:false,
     };
   }
 
   componentDidMount() {
     this.getZones();
-
+    this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -84,6 +87,31 @@ class addcountry extends React.Component {
     this.setState({
       urlparams: urlparams,
     });
+  }
+  getCountryList() {
+    let rows = [];
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetCountryUrl = APIURLS.APIURL.GetCountries;
+
+    axios
+      .post(GetCountryUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        rows = data;
+        this.setState(
+          {
+            countryData: rows,
+            ProgressLoader: true,
+          }
+        );
+      })
+      .catch((error) => {});
   }
 
   initializeZone() {
@@ -133,7 +161,7 @@ class addcountry extends React.Component {
       if (
         this.state.Name === "" ||
         this.state.Name === null ||
-        this.state.Name.length > 50
+        this.state.Name.length > 50||this.state.duplicate===true
       ) {
         this.setState({ DisableCreatebtn: true });
       } else {
@@ -143,14 +171,31 @@ class addcountry extends React.Component {
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.countryData,
+          "name",
+          e.target.value
+        );
         let country = this.state.country;
         country.Name = e.target.value;
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50
+          e.target.value.length > 50||duplicateExist===true
         ) {
           let v = this.state.Validations;
+          if(duplicateExist===true){
+            v.Name = {
+              errorState: true,
+              errorMssg: "Country Master Exists",
+            };
+            this.setState({
+              Validations: v,
+              DisableCreatebtn: true,
+              Name: e.target.value,
+              duplicate:true
+            });
+          }
           if (e.target.value.length > 50) {
             v.Name = {
               errorState: true,
@@ -166,9 +211,10 @@ class addcountry extends React.Component {
             this.setState({
               Validations: v,
               DisableCreatebtn: true,
+              Name: e.target.value,
+
             });
           }
-         
         } else {
           let v = this.state.Validations;
           v.Name = {
@@ -287,9 +333,7 @@ class addcountry extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     return (
       <Fragment>
@@ -339,7 +383,7 @@ class addcountry extends React.Component {
                     className="action-btns"
                     startIcon={<AddIcon />}
                     onClick={handleCreate}
-                    disabled ={this.state.DisableCreatebtn}
+                    disabled={this.state.DisableCreatebtn}
                   >
                     ADD
                   </Button>

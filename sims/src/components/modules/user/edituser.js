@@ -42,9 +42,9 @@ class edituser extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
-     
-      users:[],
-      oldEMAILID:"",
+      duplicateExist: false,
+      users: [],
+      oldEMAILID: "",
       user: {
         UserID: 0,
         LoginID: null,
@@ -115,7 +115,7 @@ class edituser extends React.Component {
         console.log("getUsersList >  response.data > ", response.data);
         let data = response.data;
         let rows = data;
-        this.setState({users: data,ProgressLoader: true,});
+        this.setState({ users: data, ProgressLoader: true });
       })
       .catch((error) => {});
   }
@@ -151,7 +151,7 @@ class edituser extends React.Component {
         user.IsAdmin = data.isAdmin;
 
         this.setState({
-          oldEMAILID:data.emailId,
+          oldEMAILID: data.emailId,
           user: user,
           country: data,
           LoginID: data.loginId,
@@ -181,13 +181,25 @@ class edituser extends React.Component {
       }
     };
     const CheckFirstName = () => {
-      if (
-        this.state.FirstName === "" ||
-        this.state.FirstName === null ||
-        this.state.FirstName.length > 20
-      ) {
-        this.setState({ DisableUpdatebtn: true });
-      } 
+    //  if(this.state.duplicateExist===true||this.state.EmailID.length>50){
+    //    if(this.state.FirstName.length>20){
+    //      this.setState({DisableUpdatebtn:true})
+    //    }else{
+    //     this.setState({DisableUpdatebtn:true})
+    //    }
+    //  }else if(this.state.FirstName.length>20){
+    //   this.setState({DisableUpdatebtn:true})
+    // }
+    if(this.state.FirstName.length>20) {
+      if(this.state.duplicateExist===true||this.state.EmailID.length>50){
+        this.setState({DisableUpdatebtn:true})
+      }
+    }else if(this.state.duplicateExist===true||this.state.EmailID.length>50){
+      this.setState({DisableUpdatebtn:true})
+    }else{
+      this.setState({DisableUpdatebtn:false})
+    }
+    
     };
 
     const updateFormValue = (id, e) => {
@@ -225,7 +237,7 @@ class edituser extends React.Component {
             FirstName: e.target.value,
             user: user,
           });
-        }
+        }CheckFirstName();
       }
       if (id === "LastName") {
         let user = this.state.user;
@@ -253,12 +265,15 @@ class edituser extends React.Component {
       }
       if (id === "EmailID") {
         let duplicateExist = CF.chkDuplicateButExcludeName(
-          this.state.users,"emailId",this.state.oldEMAILID,e.target.value
+          this.state.users,
+          "emailId",
+          this.state.oldEMAILID,
+          e.target.value
         );
         let user = this.state.user;
         user.EmailID = e.target.value;
-        if (e.target.value.length > 50 || duplicateExist===true) {
-          if(duplicateExist===true){
+        if (e.target.value.length > 50 || duplicateExist === true) {
+          if (duplicateExist === true) {
             let v = this.state.Validations;
             v.EmailID = {
               errorState: true,
@@ -268,7 +283,7 @@ class edituser extends React.Component {
               Validations: v,
               EmailID: e.target.value,
               DisableUpdatebtn: true,
-             
+              duplicateExist: true,
             });
           }
           if (e.target.value.length > 50) {
@@ -283,9 +298,7 @@ class edituser extends React.Component {
               DisableUpdatebtn: true,
             });
           }
-          
-          
-        }  else {
+        } else {
           let v = this.state.Validations;
           v.EmailID = { errorState: false, errorMssg: "" };
           this.setState({
@@ -348,9 +361,13 @@ class edituser extends React.Component {
         }
       }
       CheckFirstName();
+      // this.state.duplicateExist === true
+      //   ? this.setState({ DisableUpdatebtn: true })
+      //   : this.setState({ DisableUpdatebtn: false });
     };
 
     const handleUpdate = () => {
+      CheckFirstName();
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -392,8 +409,6 @@ class edituser extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-    
 
     return (
       <Fragment>
@@ -443,7 +458,7 @@ class edituser extends React.Component {
                     className="action-btns"
                     startIcon={<UpdateIcon />}
                     onClick={handleUpdate}
-                    disabled={this.state. DisableUpdatebtn}
+                    disabled={this.state.DisableUpdatebtn}
                   >
                     Update
                   </Button>
@@ -562,7 +577,7 @@ class edituser extends React.Component {
                           error={this.state.Validations.Password.errorState}
                           helperText={this.state.Validations.Password.errorMssg}
                         />
-                       
+
                         <TableRow>
                           <TableCell align="left" className="no-border-table">
                             is Admin?

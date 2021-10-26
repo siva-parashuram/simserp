@@ -3,14 +3,12 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
-import Nav from "../../user/nav";
-import Menubar from "../../user/menubar";
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -21,8 +19,9 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
-import TextField from "@material-ui/core/TextField";
+
 import Switch from "@mui/material/Switch";
+import * as CF from "../../../services/functions/customfunctions";
 
 import axios from "axios";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
@@ -41,12 +40,14 @@ class addwarehouse extends React.Component {
       ProgressLoader: false,
       GeneralDetailsExpanded: true,
       OtherDetailsExpanded: false,
+      DisableAddbtn: true,
       SuccessPrompt: false,
       ErrorPrompt: false,
-
+      duplicate: false,
       initialCss: "",
       branchId: 0,
       branches: [],
+      warehouses: [],
       warehouse: {
         WareHouseId: 0,
         BranchId: 0,
@@ -96,6 +97,7 @@ class addwarehouse extends React.Component {
   }
 
   componentDidMount() {
+    this.getWarehouses();
     this.getBranches();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -114,6 +116,32 @@ class addwarehouse extends React.Component {
       urlparams: urlparams,
       branchId: branchId,
     });
+  }
+
+  getWarehouses() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetWareHousesUrl = APIURLS.APIURL.GetWareHouses;
+
+    axios
+      .post(GetWareHousesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200) {
+          let rows = data;
+          this.setState({
+            warehouses: data,
+            ProgressLoader: true,
+          });
+        } else {
+          this.setState({ warehouses: [], ProgressLoader: true });
+        }
+      })
+      .catch((error) => {});
   }
 
   getBranches() {
@@ -151,6 +179,15 @@ class addwarehouse extends React.Component {
       }
     };
 
+    // const checkCode = () => {
+    //   if (this.state.Code.length > 10 || this.state.duplicate === true) {
+    //     this.setState({ DisableAddbtn: true });
+    //   }else{
+    //     this.setState({ DisableAddbtn: false });
+
+    //   }
+    // };
+
     const updateFormValue = (id, e) => {
       let warehouse = this.state.warehouse;
       if (id === "isActive") {
@@ -163,16 +200,38 @@ class addwarehouse extends React.Component {
       // }
 
       if (id === "Code") {
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.warehouses,
+          "code",
+          e.target.value
+        );
+
         warehouse.Code = e.target.value;
-        if (e.target.value.length > 10) {
-          let v = this.state.Validations;
-          v.Code = {
-            errorState: true,
-            errorMssg: "Maximum 10 characters allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
+        if (e.target.value.length > 10 || duplicateExist === true) {
+          if (duplicateExist === true) {
+            let v = this.state.Validations;
+            v.Code = {
+              errorState: true,
+              errorMssg: "Code Exists",
+            };
+            this.setState({
+              Validations: v,
+              duplicate: true,
+              DisableAddbtn: true,
+              Code: e.target.value,
+            });
+          }
+          if (e.target.value.length > 10) {
+            let v = this.state.Validations;
+            v.Code = {
+              errorState: true,
+              errorMssg: "Maximum 10 characters allowed",
+            };
+            this.setState({
+              Validations: v,
+              DisableAddbtn: true,
+            });
+          }
         } else {
           let v = this.state.Validations;
           v.Code = { errorState: false, errorMssg: "" };
@@ -180,8 +239,10 @@ class addwarehouse extends React.Component {
             Validations: v,
             warehouse: warehouse,
             Code: e.target.value,
+            DisableAddbtn: false,
           });
         }
+        //checkCode();
       }
       if (id === "Description") {
         warehouse.Description = e.target.value;
@@ -203,6 +264,7 @@ class addwarehouse extends React.Component {
             Description: e.target.value,
           });
         }
+        //checkCode();
       }
       if (id === "contactPerson") {
         warehouse.ContactPerson = e.target.value;
@@ -224,6 +286,7 @@ class addwarehouse extends React.Component {
             ContactPerson: e.target.value,
           });
         }
+        //checkCode();
       }
       if (id === "phoneNo") {
         warehouse.PhoneNo = e.target.value;
@@ -245,6 +308,7 @@ class addwarehouse extends React.Component {
             PhoneNo: e.target.value,
           });
         }
+       // checkCode();
       }
       if (id === "EmailID") {
         warehouse.EmailId = e.target.value;
@@ -266,6 +330,7 @@ class addwarehouse extends React.Component {
             EmailId: e.target.value,
           });
         }
+       // checkCode();
       }
       if (id === "Address") {
         warehouse.Address = e.target.value;
@@ -287,6 +352,7 @@ class addwarehouse extends React.Component {
             Address: e.target.value,
           });
         }
+        //checkCode();
       }
       if (id === "Address2") {
         warehouse.Address2 = e.target.value;
@@ -308,6 +374,7 @@ class addwarehouse extends React.Component {
             Address2: e.target.value,
           });
         }
+       // checkCode();
       }
       if (id === "Address3") {
         warehouse.Address3 = e.target.value;
@@ -329,6 +396,7 @@ class addwarehouse extends React.Component {
             Address3: e.target.value,
           });
         }
+        //checkCode();
       }
       if (id === "isEDI") {
         warehouse.IsEdi = e.target.checked;
@@ -354,6 +422,7 @@ class addwarehouse extends React.Component {
             Ediurl: e.target.value,
           });
         }
+        //checkCode();
       }
       if (id === "ediloginid") {
         warehouse.EdiloginId = e.target.value;
@@ -375,6 +444,7 @@ class addwarehouse extends React.Component {
             EdiloginId: e.target.value,
           });
         }
+       // checkCode();
       }
       if (id === "edipassword") {
         warehouse.Edipassword = e.target.value;
@@ -397,9 +467,11 @@ class addwarehouse extends React.Component {
           });
         }
       }
+     // checkCode();
     };
 
     const handleCreate = () => {
+      //checkCode();
       this.setState({ ProgressLoader: false });
 
       let ValidUser = APIURLS.ValidUser;
@@ -490,6 +562,7 @@ class addwarehouse extends React.Component {
                     className="action-btns"
                     startIcon={<AddIcon />}
                     onClick={(e) => handleCreate()}
+                    disabled={this.state.DisableAddbtn}
                   >
                     ADD
                   </Button>
