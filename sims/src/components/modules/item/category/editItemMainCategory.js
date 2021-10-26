@@ -40,7 +40,9 @@ class editItemMainCategory extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
+      SuperCategoryDataList: [],
       IsActive: false,
+      mainCatId:0,
       Code: "",
       Description: "",
       HSNCode: "",
@@ -52,10 +54,12 @@ class editItemMainCategory extends React.Component {
   }
 
   componentDidMount() {
+    this.getSuperCategoryDataList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
+    let mainCatId = url.searchParams.get("editmainCatId");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -65,7 +69,82 @@ class editItemMainCategory extends React.Component {
       branchName;
     this.setState({
       urlparams: urlparams,
+      mainCatId:mainCatId
+    },()=>{
+      this.getMainCategory();
     });
+  }
+  getSuperCategoryDataList() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemSuperCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.processSuperCategoryData(data);
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  processSuperCategoryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].code + " - " + data[i].hsncode,
+        value: data[i].superCatId
+      };
+      newData.push(d);
+    }
+    this.setState({ SuperCategoryDataList: newData });
+  }
+
+  getMainCategory() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Data={
+      validUser:ValidUser,
+      ItemMainCategory: {
+        mainCatId:this.state.mainCatId,
+      }
+    };
+
+    let Url = APIURLS.APIURL.GetItemMainCategory;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, Data, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+
+        this.setState({
+          ItemMainCategory: data,
+          mainCatId:data.mainCatId,
+          Code: data.code,
+          Description: data.description,
+          HSNCode: data.hsncode,
+          SuperCatID: data.superCatId,
+          IsTrading: data.isTrading,
+          IsNonStockV: data.isNonStockValuation,
+          IsPriceRange: data.isPriceRange,
+          IsActive:  data.isActive,
+          DisableUpdatebtn: false,
+          ProgressLoader: true
+        });
+      })
+      .catch((error) => { });
   }
 
   render() {
@@ -76,7 +155,78 @@ class editItemMainCategory extends React.Component {
           : this.setState({ GeneralDetailsExpanded: true });
       }
     };
-    const updateFormValue = (id, e) => {};
+    const updateFormValue = (param, e) => {
+      switch (param) {
+        case "Code":
+          if (e.target.value === "") {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+          } else {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+          }
+          break;
+          case "SuperCatID":
+            this.setState({ SuperCatID: e.target.value });
+            break;
+        case "Description":
+          this.setState({ Description: e.target.value });
+          break;
+        case "HSNCode":
+          this.setState({ HSNCode: e.target.value });
+          break;        
+        case "IsActive":
+          this.setState({ IsActive: e.target.checked });
+          break;
+        case "IsTrading":
+          this.setState({ IsTrading: e.target.checked });
+          break;
+        case "IsNonStockV":
+          this.setState({ IsNonStockV: e.target.checked });
+          break;
+        case "IsPriceRange":
+          this.setState({ IsPriceRange: e.target.checked });
+          break;
+        default:
+          break;
+      }
+    };
+
+    const update = () => {
+      this.setState({ ProgressLoader: false });
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.UpdateItemMainCategory;
+      let ReqData = {
+        validUser: ValidUser,
+        ItemMainCategory: {
+          IsActive:  this.state.IsActive,
+          mainCatId:this.state.mainCatId,
+          Code: this.state.Code,
+          Description: this.state.Description,
+          HSNCode: this.state.HSNCode,
+          SuperCatID: this.state.SuperCatID,
+          IsTrading: this.state.IsTrading,
+          IsNonStockValuation: this.state.IsNonStockV,
+          IsPriceRange: this.state.IsPriceRange,
+        }
+      };
+      axios
+        .post(Url, ReqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+          } else {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
+    }
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -140,7 +290,7 @@ class editItemMainCategory extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<UpdateIcon />}
-                    // onClick={handleCreate}
+                    onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >
                     Update
@@ -184,20 +334,14 @@ class editItemMainCategory extends React.Component {
                       aria-label=" Item-category List table"
                     >
                       <TableBody className="tableBody">
-                        <DropdownInput
-                          id="MainCatID"
-                          label="MainCatID"
-                          onChange={(e) => updateFormValue("MainCatID", e)}
-                          options={[]}
-                          value={0}
-                        />
+                        
 
                         <DropdownInput
                           id="SuperCatID"
                           label="SuperCatID"
                           onChange={(e) => updateFormValue("SuperCatID", e)}
-                          options={[]}
-                          value={0}
+                          options={this.state.SuperCategoryDataList}
+                          value={this.state.SuperCatID}
                         />
                         <TextboxInput
                           id="Code"
