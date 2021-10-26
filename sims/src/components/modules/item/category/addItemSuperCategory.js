@@ -42,14 +42,14 @@ class addItemSuperCategory extends React.Component {
       GeneralDetailsExpanded: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      DisableCreatebtn: true,
+      DisableCreatebtn: false,
+      ItemTypeMaster: APIURLS.ItemType,
       IsActive: false,
+      ItemType:0,
       Code: "",
       Description: "",
       HSNCode: "",
-      SuperCatID:0
-
-      
+      SuperCatID:0     
       
     };
   }
@@ -80,7 +80,72 @@ class addItemSuperCategory extends React.Component {
       }
     };
 
-    const updateFormValue = (id, e) => {};
+    const updateFormValue = (param, e) => {
+      switch (param) {
+        case "Code":
+          if (e.target.value === "") {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+          } else {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+          }
+          break;
+        case "Name":
+          this.setState({ Name: e.target.value });
+          break;
+        case "Description":
+          this.setState({ Description: e.target.value });
+          break;
+        case "HSNCode":
+          this.setState({ HSNCode: e.target.value });
+          break;
+        case "IsActive":
+          this.setState({ IsActive: e.target.checked });
+          break;
+        case "ItemType":
+          this.setState({ ItemType: e.target.value });
+          break;
+        default:
+          break;
+      }
+    };
+
+
+
+    const createNew = () => {
+      this.setState({ ProgressLoader: false });
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.CreateItemSuperCategory;
+      let ReqData = {
+        validUser: ValidUser,
+        ItemSuperCategory: {
+          SuperCatID: 0,
+          ItemType:this.state.ItemType,
+          Code: this.state.Code,
+          Description: this.state.Description,
+          HSNCode: this.state.HSNCode,
+          IsActive: this.state.IsActive
+        }
+      };
+      axios
+        .post(Url, ReqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+          } else {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
+    }
+
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -144,7 +209,7 @@ class addItemSuperCategory extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    // onClick={handleCreate}
+                    onClick={createNew}
                     disabled={this.state.DisableCreatebtn}
                   >
                     ADD
@@ -188,23 +253,23 @@ class addItemSuperCategory extends React.Component {
                       aria-label=" Item-category List table"
                     >
                       <TableBody className="tableBody">
-                        <DropdownInput
-                          id="SuperCatID"
-                          label="SuperCatID"
-                          onChange={(e) => updateFormValue("SuperCatID", e)}
-                          options={[]}
-                          value={0}
-                        />
+
+                      <DropdownInput
+                              id="ItemType"
+                              label="Item Type"
+                              onChange={(e) => updateFormValue("ItemType", e)}
+                              options={this.state.ItemTypeMaster}
+                              value={this.state.ItemType}
+                              
+                            />
+                       
                         <TextboxInput
                           id="Code"
                           label="Code"
                           variant="outlined"
                           size="small"
                           onChange={(e) => updateFormValue("Code", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 20,
-                          }}
+                           
                           value={this.state.Code}
                         />
                         <TextboxInput
@@ -213,10 +278,7 @@ class addItemSuperCategory extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => updateFormValue("Description", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
+                          
                           value={this.state.Description}
                         />
                         <TextboxInput
@@ -225,10 +287,7 @@ class addItemSuperCategory extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => updateFormValue("HSNCode", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 10,
-                          }}
+                          
                           value={this.state.HSNCode}
                         />
                         <SwitchInput

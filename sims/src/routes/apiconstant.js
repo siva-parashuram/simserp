@@ -71,6 +71,18 @@ export const APIURL = {
     UpdateItem:domain+"api/ItemMaster/UpdateItem",
     GetAllItems:domain+"api/ItemMaster/GetAllItems",
     GetItem:domain+"api/ItemMaster/GetItem",
+    CreateItemDepartment:domain+"api/ItemMaster/CreateItemDepartment",
+    GetItemDepartments:domain+"api/ItemMaster/GetItemDepartments",
+    GetItemDepartment:domain+"api/ItemMaster/GetItemDepartment",
+    UpdateItemDepartment:domain+"api/ItemMaster/UpdateItemDepartment",
+    CreateItemSuperCategory:domain+"api/ItemMaster/CreateItemSuperCategory",
+    GetItemSuperCategories:domain+"api/ItemMaster/GetItemSuperCategories",
+    GetItemSuperCategory:domain+"api/ItemMaster/GetItemSuperCategory",
+    UpdateItemSuperCategory:domain+"api/ItemMaster/UpdateItemSuperCategory",
+    CreateItemMainCategory:domain+"api/ItemMaster/CreateItemMainCategory",
+    GetItemMainCategories:domain+"api/ItemMaster/GetItemMainCategories",
+    GetItemMainCategory:domain+"api/ItemMaster/GetItemMainCategory",
+    UpdateItemMainCategory:domain+"api/ItemMaster/UpdateItemMainCategory"
   };
 
   export const CTimeOut = 10; 

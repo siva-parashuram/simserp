@@ -45,7 +45,10 @@ class editItemSuperCategory extends React.Component {
       Code: "",
       Description: "",
       HSNCode: "",
-      SuperCatID:0
+      SuperCatID:0,
+      ItemSuperCategory:{},
+      ItemTypeMaster: APIURLS.ItemType,
+      ItemType:0,
       
     };
   }
@@ -55,6 +58,7 @@ class editItemSuperCategory extends React.Component {
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
+    let SuperCatID =  url.searchParams.get("editsuperCatId");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -64,7 +68,43 @@ class editItemSuperCategory extends React.Component {
       branchName;
     this.setState({
       urlparams: urlparams,
-    });
+      SuperCatID:SuperCatID
+    },()=>this.getSuperCategory());
+  }
+
+  getSuperCategory() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Data={
+      validUser:ValidUser,
+      ItemSuperCategory: {
+        SuperCatID: this.state.SuperCatID
+      }
+    };
+
+    let Url = APIURLS.APIURL.GetItemSuperCategory;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, Data, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+
+        this.setState({
+          ItemSuperCategory: data,
+          Code: data.code,         
+          Description: data.description,
+          HSNCode: data.hsncode,
+          ItemType:data.itemType,
+          IsActive: data.isActive,
+          DisableUpdatebtn: false,
+          ProgressLoader: true
+        });
+      })
+      .catch((error) => { });
   }
 
   render() {
@@ -75,7 +115,70 @@ class editItemSuperCategory extends React.Component {
           : this.setState({ GeneralDetailsExpanded: true });
       }
     };
-    const updateFormValue = (id, e) => {};
+    const updateFormValue = (param, e) => {
+      switch (param) {
+        case "Code":
+          if (e.target.value === "") {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+          } else {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+          }
+          break;
+        case "Name":
+          this.setState({ Name: e.target.value });
+          break;
+        case "Description":
+          this.setState({ Description: e.target.value });
+          break;
+        case "HSNCode":
+          this.setState({ HSNCode: e.target.value });
+          break;
+        case "IsActive":
+          this.setState({ IsActive: e.target.checked });
+          break;
+        case "ItemType":
+          this.setState({ ItemType: e.target.value });
+          break;
+        default:
+          break;
+      }
+    };
+
+    
+    const update = () => {
+      this.setState({ ProgressLoader: false });
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.UpdateItemSuperCategory;
+      let ReqData = {
+        validUser: ValidUser,
+        ItemSuperCategory: {
+          SuperCatID: this.state.SuperCatID,
+          ItemType:this.state.ItemType,
+          Code: this.state.Code,
+          Description: this.state.Description,
+          HSNCode: this.state.HSNCode,
+          IsActive: this.state.IsActive
+        }
+      };
+      axios
+        .post(Url, ReqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+          } else {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
+    }
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -140,7 +243,7 @@ class editItemSuperCategory extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<UpdateIcon />}
-                    // onClick={handleCreate}
+                    onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >
                     Update
@@ -184,12 +287,12 @@ class editItemSuperCategory extends React.Component {
                       aria-label=" Item-category List table"
                     >
                       <TableBody className="tableBody">
-                      <DropdownInput
-                          id="SuperCatID"
-                          label="SuperCatID"
-                          onChange={(e) => updateFormValue("SuperCatID", e)}
-                          options={[]}
-                          value={0}
+                        <DropdownInput
+                          id="ItemType"
+                          label="Item Type"
+                          onChange={(e) => updateFormValue("ItemType", e)}
+                          options={this.state.ItemTypeMaster}
+                          value={this.state.ItemType}
                         />
                         <TextboxInput
                           id="Code"

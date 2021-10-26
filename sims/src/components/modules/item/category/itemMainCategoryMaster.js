@@ -32,7 +32,11 @@ class itemMainCategoryMaster extends React.Component {
     super(props);
     this.state = {
       urlparams: "",
+      initialCss: "",
       ProgressLoader: true,
+      MainCategoryData: [],
+      mainCatId: 0,
+      editurl: "",
     };
   }
 
@@ -50,11 +54,67 @@ class itemMainCategoryMaster extends React.Component {
       branchName;
     this.setState({
       urlparams: urlparams,
-    });
+    }, () => this.getMainCategoryData());
+  }
+
+
+  getMainCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemMainCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ MainCategoryData: data }, () => { this.InitialhandleRowClick(null, data[0], "row_0"); });
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  InitialhandleRowClick(e, item, id) {
+    let editUrl =
+      URLS.URLS.editItemMainCategory +
+      this.state.urlparams +
+      "&editmainCatId=" +
+      item.mainCatId;
+    this.setState({ mainCatId: item.mainCatId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+    this.InitialremoveIsSelectedRowClasses();
+    document.getElementById(id).classList.add("selectedRow");
+  }
+  InitialremoveIsSelectedRowClasses() {
+    for (let i = 0; i < this.state.MainCategoryData.length; i++) {
+      document.getElementById("row_" + i).className = "";
+    }
   }
 
   render() {
-    
+
+    const handleRowClick = (e, item, id) => {
+      let editUrl =
+        URLS.URLS.editItemMainCategory +
+        this.state.urlparams +
+        "&editmainCatId=" +
+        item.mainCatId;
+      this.setState({ mainCatId: item.mainCatId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+      removeIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+    };
+
+    const removeIsSelectedRowClasses = () => {
+      for (let i = 0; i < this.state.MainCategoryData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    };
+
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -110,9 +170,7 @@ class itemMainCategoryMaster extends React.Component {
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) =>
-                      openPage(
-                        URLS.URLS.editItemMainCategory + this.state.urlparams
-                      )
+                      openPage(this.state.editurl)
                     }
                   >
                     Edit
@@ -138,15 +196,52 @@ class itemMainCategoryMaster extends React.Component {
                       <TableRow>
                         <TableCell className="table-header-font">#</TableCell>
                         <TableCell className="table-header-font" align="left">
-                          Name
+                          Code
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          hsncode
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          description
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Status
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody className="tableBody">
-                      <TableRow>
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left"></TableCell>
-                      </TableRow>
+                      {this.state.MainCategoryData.map((item, i) => (
+                        <TableRow
+                          id={"row_" + i}
+                          className={this.state.initialCss}
+                          hover
+                          key={i}
+                          onClick={(event) =>
+                            handleRowClick(event, item, "row_" + i)
+                          }
+                        >
+                          <TableCell align="left">{i + 1}</TableCell>
+                          <TableCell align="left">
+                            <a className="LINK tableLink" href={URLS.URLS.editItemMainCategory +
+                              this.state.urlparams +
+                              "&editmainCatId=" +
+                              item.mainCatId}>
+                              {item.code}
+                            </a>
+
+                          </TableCell>
+                          <TableCell align="left">{item.hsncode}</TableCell>
+                          <TableCell align="left">{item.description}</TableCell>
+                          <TableCell align="left">
+                            {item.isActive === true ? (
+                              <span style={{ color: "green" }}>Active</span>
+                            ) : (
+                              <span style={{ color: "red" }}>In-Active</span>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+
                     </TableBody>
                   </Table>
                 </Grid>
