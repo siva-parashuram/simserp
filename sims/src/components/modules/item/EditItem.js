@@ -38,6 +38,7 @@ class editItem extends React.Component {
       SuccessPrompt: false,
       ProgressLoader: true,
       urlparams: "",
+      itemDepartmentMasterData:[],
       ItemTypeMaster: APIURLS.ItemType,
       ItemType: 0,
       ItemNo: "ITM0001",
@@ -125,8 +126,47 @@ class editItem extends React.Component {
       },
       () => {
         this.getItems();
+        this. getitemDepartmentMasterData();
       }
     );
+  }
+
+  getitemDepartmentMasterData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemDepartments;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ ProgressLoader: true });
+        this.processDepartmentList(data);
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  processDepartmentList(data){
+    console.log("processDepartmentList > data > ", data);
+    let newData=[];
+    for(let i=0;i<data.length;i++){
+      if(data[i].isActive===true){
+        let d={
+          name:data[i].code + " - "+data[i].name,
+          value:data[i].itemDeptId
+        };
+        newData.push(d);
+      }     
+    }
+    console.log("processDepartmentList > newData > ",newData);
+    this.setState({itemDepartmentMasterData:newData});
   }
 
   getItems() {
@@ -459,6 +499,21 @@ class editItem extends React.Component {
                           aria-label="Item List table"
                         >
                           <TableBody className="tableBody">
+
+                          <DropdownInput
+                              id="CatID"
+                              label="ItemCat"
+                              onChange={(e) => updateFormValue("CatID", e)}
+                              options={this.state.ItemCat}
+                            />
+
+                            <DropdownInput
+                              id="ItemDeptID"
+                              label="ItemDept"
+                              onChange={(e) => updateFormValue("ItemDeptID", e)}
+                              options={this.state.itemDepartmentMasterData}
+                            />
+
                             <DropdownInput
                               id="ItemType"
                               label="Item Type"
@@ -567,18 +622,7 @@ class editItem extends React.Component {
                               value={this.state.PackingDesc2}
                             />
 
-                            <DropdownInput
-                              id="ItemDeptID"
-                              label="ItemDept"
-                              onChange={(e) => updateFormValue("ItemDeptID", e)}
-                              options={this.state.ItemDept}
-                            />
-                            <DropdownInput
-                              id="CatID"
-                              label="ItemCat"
-                              onChange={(e) => updateFormValue("CatID", e)}
-                              options={this.state.ItemCat}
-                            />
+                           
                           </TableBody>
                         </Table>
                       </Grid>

@@ -3,12 +3,11 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+
 import UpdateIcon from "@material-ui/icons/Update";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -19,11 +18,10 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
-import TextField from "@material-ui/core/TextField";
+import * as CF from "../../../services/functions/customfunctions";
+
 import Switch from "@mui/material/Switch";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 import axios from "axios";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
@@ -44,9 +42,13 @@ class editwarehouse extends React.Component {
       OtherDetailsExpanded: false,
       SuccessPrompt: false,
       ErrorPrompt: false,
+      DisableUpdatebtn:false,
       initialCss: "",
       branchId: 0,
       branches: [],
+      duplicate:false,
+      warehouses:[],
+      oldCode:0,
       editwareHouseId: 0,
       warehouse: {
         WareHouseId: 0,
@@ -97,6 +99,7 @@ class editwarehouse extends React.Component {
   }
 
   componentDidMount() {
+    this. getWarehouses();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -122,6 +125,32 @@ class editwarehouse extends React.Component {
         this.getWarehouseByID(editwareHouseId);
       }
     );
+  }
+
+  getWarehouses() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetWareHousesUrl = APIURLS.APIURL.GetWareHouses;
+
+    axios
+      .post(GetWareHousesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200) {
+          let rows = data;
+          this.setState({
+            warehouses: data,
+            ProgressLoader: true,
+          });
+        } else {
+          this.setState({ warehouses: [], ProgressLoader: true });
+        }
+      })
+      .catch((error) => {});
   }
 
   getWarehouseByID(wareHouseId) {
@@ -158,7 +187,7 @@ class editwarehouse extends React.Component {
           PhoneNo: response.data.phoneNo,
           IsActive: response.data.isActive,
         };
-        this.setState({ warehouse: warehouse, ProgressLoader: true });
+        this.setState({oldCode:response.data.code, warehouse: warehouse, ProgressLoader: true });
       })
       .catch((error) => {});
   }
@@ -185,16 +214,38 @@ class editwarehouse extends React.Component {
       }
 
       if (id === "Code") {
+        let duplicateExist = CF.chkDuplicateButExcludeName(
+          this.state.warehouses,
+          "code",
+          this.state.oldCode,
+          e.target.value
+        );
         warehouse.Code = e.target.value;
-        if (e.target.value.length > 10) {
-          let v = this.state.Validations;
-          v.Code = {
-            errorState: true,
-            errorMssg: "Maximum 10 characters allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
+        if (e.target.value.length > 10||duplicateExist===true) {
+          if (duplicateExist === true) {
+            let v = this.state.Validations;
+            v.Code = {
+              errorState: true,
+              errorMssg: "Code Exists",
+            };
+            this.setState({
+              Validations: v,
+              duplicate: true,
+              DisableUpdatebtn: true,
+              Code: e.target.value,
+            });
+          }
+          if (e.target.value.length > 10) {
+            let v = this.state.Validations;
+            v.Code = {
+              errorState: true,
+              errorMssg: "Maximum 10 characters allowed",
+            };
+            this.setState({
+              Validations: v,
+              DisableUpdatebtn: true,
+            });
+          }
         } else {
           let v = this.state.Validations;
           v.Code = { errorState: false, errorMssg: "" };
@@ -202,6 +253,7 @@ class editwarehouse extends React.Component {
             Validations: v,
             warehouse: warehouse,
             Code: e.target.value,
+            DisableUpdatebtn: false,
           });
         }
       }
@@ -463,10 +515,6 @@ class editwarehouse extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
-
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -515,6 +563,7 @@ class editwarehouse extends React.Component {
                     className="action-btns"
                     startIcon={<UpdateIcon />}
                     onClick={(e) => handleUpdate()}
+                    disabled={this.state.DisableUpdatebtn}
                   >
                     Update
                   </Button>

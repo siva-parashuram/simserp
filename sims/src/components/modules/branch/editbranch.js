@@ -5,14 +5,11 @@ import moment from "moment";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -29,7 +26,7 @@ import Tablerowcelldropdowninput from "../../compo/tablerowcelldropdowninput";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 import UpdateIcon from "@material-ui/icons/Update";
-
+import * as CF from "../../../services/functions/customfunctions";
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -52,6 +49,9 @@ class editbranch extends React.Component {
       companyData: [],
       countryData: [],
       stateData: [],
+      branchData:[],
+      oldName:"",
+      duplicate:false,
       branch: {
         address: null,
         address2: null,
@@ -219,6 +219,7 @@ class editbranch extends React.Component {
   }
 
   componentDidMount() {
+    this.getBranches();
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
@@ -253,6 +254,28 @@ class editbranch extends React.Component {
       this.setState({ isLoggedIn: false });
     }
   }
+
+  getBranches() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+
+    axios
+      .post(GetBrachesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        this.setState({ branchData: data, ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ branchData: [], ProgressLoader: true });
+      });
+  }
+
   getCompanyList() {
     let rows = [];
 
@@ -346,6 +369,7 @@ class editbranch extends React.Component {
 
   setStateParams(data) {
     this.setState({
+      oldName:data.name,
       branch: data,
       address: data.address,
       address2: data.address2,
@@ -487,11 +511,10 @@ class editbranch extends React.Component {
       if (
         this.state.name === "" ||
         this.state.name === null ||
-        this.state.name.length > 50
+        this.state.name.length > 50 ||
+        this.state.duplicate === true
       ) {
         this.setState({ disabledUpdatebtn: true });
-      } else {
-        this.setState({ disabledUpdatebtn: false });
       }
     };
 
@@ -520,6 +543,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
+            shortName: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -541,13 +565,33 @@ class editbranch extends React.Component {
       }
 
       if (id === "Name") {
+        let duplicateExist = CF.chkDuplicateButExcludeName(
+          this.state.branchData,
+          "name",
+          this.state.oldName,
+          e.target.value
+        );
+        this.setState({duplicate:duplicateExist})
+
         let branch = this.state.branch;
         branch.name = e.target.value;
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50
+          e.target.value.length > 50||duplicateExist===true
         ) {
+          if (duplicateExist === true) {
+            let v = this.state.Validations;
+            v.name = {
+              errorState: true,
+              errorMsg: "Branch Name Exists",
+            };
+            this.setState({
+              Validations: v,
+              disabledUpdatebtn: true,
+              name: e.target.value,
+            });
+          }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.name = {
@@ -568,6 +612,7 @@ class editbranch extends React.Component {
             this.setState({
               Validations: v,
               disabledUpdatebtn: true,
+              name: e.target.value,
             });
           }
         } else {
@@ -580,7 +625,7 @@ class editbranch extends React.Component {
 
             disabledUpdatebtn: false,
           });
-        }
+        }ValidateName();
       }
       if (id === "phoneNo") {
         let branch = this.state.branch;
@@ -1188,9 +1233,7 @@ class editbranch extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     return (
       <Fragment>
@@ -1240,6 +1283,7 @@ class editbranch extends React.Component {
                     className="action-btns"
                     startIcon={<UpdateIcon />}
                     onClick={handleupdate}
+                    disabled={this.state.disabledUpdatebtn}
                   >
                     Update
                   </Button>

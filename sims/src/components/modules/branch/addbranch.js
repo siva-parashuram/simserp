@@ -5,7 +5,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
-import MuiAlert from "@material-ui/lab/Alert";
+
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -25,7 +25,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TableContainer from "@material-ui/core/TableContainer";
 
 import TextField from "@material-ui/core/TextField";
-
 
 import TableRow from "@material-ui/core/TableRow";
 
@@ -49,8 +48,8 @@ class addbranch extends React.Component {
       companyData: [],
       countryData: [],
       stateData: [],
-      branchData:[],
-      duplicate:false,
+      branchData: [],
+      duplicate: false,
       branch: {
         address: null,
         address2: null,
@@ -162,7 +161,6 @@ class addbranch extends React.Component {
       });
   }
 
-
   getCompanyList() {
     let rows = [];
 
@@ -245,11 +243,10 @@ class addbranch extends React.Component {
       if (
         this.state.name === "" ||
         this.state.name === null ||
-        this.state.name.length > 50||this.state.duplicate===true
+        this.state.name.length > 50 ||
+        this.state.duplicate === true
       ) {
         this.setState({ disabledCreatebtn: true });
-      } else {
-        this.setState({ disabledCreatebtn: false });
       }
     };
 
@@ -266,6 +263,7 @@ class addbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledCreatebtn: true,
+            shortName: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -287,16 +285,21 @@ class addbranch extends React.Component {
       }
 
       if (id === "Name") {
-        let duplicateExist= CF.chkDuplicateName(this.state.branchData,"name",e.target.value);
-        this.setState({duplicate:duplicateExist})
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.branchData,
+          "name",
+          e.target.value
+        );
+        this.setState({ duplicate: duplicateExist });
         let branch = this.state.branch;
         branch.name = e.target.value;
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50||duplicateExist===true
+          e.target.value.length > 50 ||
+          duplicateExist === true
         ) {
-          if(duplicateExist===true){
+          if (duplicateExist === true) {
             let v = this.state.Validations;
             v.name = {
               errorState: true,
@@ -308,7 +311,7 @@ class addbranch extends React.Component {
               name: e.target.value,
             });
           }
-          
+
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.name = {
@@ -342,6 +345,7 @@ class addbranch extends React.Component {
             branch: branch,
           });
         }
+        ValidateName();
       }
 
       if (id === "phoneNo") {
@@ -536,6 +540,7 @@ class addbranch extends React.Component {
     };
 
     const handleCreate = () => {
+      ValidateName();
       this.setState({ ProgressLoader: false });
       let branch = this.state.branch;
       let ValidUser = APIURLS.ValidUser;
@@ -579,9 +584,7 @@ class addbranch extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     return (
       <Fragment>
@@ -631,6 +634,7 @@ class addbranch extends React.Component {
                     className="action-btns"
                     startIcon={<AddIcon />}
                     onClick={handleCreate}
+                    disabled  ={this.state.disabledCreatebtn}
                   >
                     ADD
                   </Button>

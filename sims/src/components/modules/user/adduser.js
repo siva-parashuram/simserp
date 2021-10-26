@@ -15,7 +15,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
- 
+
 import Switch from "@mui/material/Switch";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
@@ -33,14 +33,15 @@ class adduser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      duplicateExist:false,
-      users:[],
+      duplicateExist: false,
+      users: [],
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisabledCreatebtn: true,
+
       user: {
         UserID: 0,
         LoginID: null,
@@ -103,7 +104,7 @@ class adduser extends React.Component {
         console.log("getUsersList >  response.data > ", response.data);
         let data = response.data;
         let rows = data;
-        this.setState({users: data,ProgressLoader: true,});
+        this.setState({ users: data, ProgressLoader: true });
       })
       .catch((error) => {});
   }
@@ -122,29 +123,40 @@ class adduser extends React.Component {
       }
     };
 
-    const CheckFirstName = () => {
-      if (
-        this.state.FirstName === "" ||
-        this.state.FirstName === null ||
-        this.state.FirstName.length > 20
-      ) {
-        this.setState({ DisabledCreatebtn: true });
-      } else {
-        this.setState({ DisabledCreatebtn: false });
-      }
-    };
+    // const CheckFirstName = () => {
+    //    {
+    //     if (
+    //       this.state.EmailID.length > 50 ||
+    //       this.state.duplicateExist === true
+    //     ) {
+    //       this.setState({ DisabledCreatebtn: true });
+    //     } else {
+    //       this.setState({ DisabledCreatebtn: true });
+    //     }
+    //   }else{
+    //     this.setState({ DisabledCreatebtn: false });
+    //   }
+    // };
     // const checkEmail=()=>{
-      
+
     //     if(this.state.FirstName===""||this.state.FirstName===null||this.state.FirstName.length>20){
     //       if(this.state.EmailID.length>50||this.state.duplicateExist===true){
     //         this.setState({ DisabledCreatebtn: true,})
     //       }
-          
+
     //     }else{
     //       this.setState({ DisabledCreatebtn: true,})
-        
+
     //   }
     // }
+
+    const CheckFirstName = () =>{
+      if(this.state.FirstName===""||this.state.FirstName===null||this.state.FirstName.length>20){
+        this.setState({DisabledCreatebtn:true})
+      }else{
+        this.setState({DisabledCreatebtn:false})
+      }
+    }
 
     const updateFormValue = (id, e) => {
       if (id === "isActive") {
@@ -194,6 +206,7 @@ class adduser extends React.Component {
             user: user,
           });
         }
+        
       }
       if (id === "LastName") {
         let user = this.state.user;
@@ -219,13 +232,31 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
+        
       }
       if (id === "EmailID") {
-        let duplicateExist= CF.chkDuplicateName(this.state.users,"emailId",e.target.value);
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.users,
+          "emailId",
+          e.target.value
+        );
         let user = this.state.user;
         user.EmailID = e.target.value;
-        if (e.target.value.length > 50 || duplicateExist===true) {
+        if (e.target.value.length > 50 || duplicateExist === true) {
+          if (duplicateExist === true) {
+            let v = this.state.Validations;
+            v.EmailID = {
+              errorState: true,
+              errorMssg: "Email with same name already exist!",
+            };
+            this.setState({
+              Validations: v,
+              EmailID: e.target.value,
+              DisabledCreatebtn: true,
+              duplicateExist: true,
+            });
+          }
+         
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.EmailID = {
@@ -238,31 +269,19 @@ class adduser extends React.Component {
               DisabledCreatebtn: true,
             });
           }
-          if(duplicateExist===true){
-            let v = this.state.Validations;
-            v.EmailID = {
-              errorState: true,
-              errorMssg: "Email with same name already exist!",
-            };
-            this.setState({
-              Validations: v,
-              EmailID: e.target.value,
-              DisabledCreatebtn: true,
-              duplicateExist:true
-            });
-          }
-          
+         
         } else {
           let v = this.state.Validations;
           v.EmailID = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-            duplicateExist:false,
+            DisabledCreatebtn: false,
+            duplicateExist: false,
             EmailID: e.target.value,
             user: user,
           });
         }
-        CheckFirstName();
+        
       }
       if (id === "LoginID") {
         let user = this.state.user;
@@ -287,7 +306,7 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
+        
       }
 
       if (id === "Password") {
@@ -313,17 +332,16 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
-      }
       
-     this.state.duplicateExist===true?this.setState({DisabledCreatebtn: true}):this.setState({DisabledCreatebtn: false});
+      }
 
-     
-
+      this.state.duplicateExist === true
+        ? this.setState({ DisabledCreatebtn: true })
+        : this.setState({ DisabledCreatebtn: false });
     };
 
     const handleCreate = () => {
-      CheckFirstName();
+      
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -365,8 +383,6 @@ class adduser extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-    
 
     return (
       <Fragment>
