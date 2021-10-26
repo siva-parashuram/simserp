@@ -86,6 +86,10 @@ export default function ScrollableTabsButtonAuto() {
     }
   };
 
+  const handleTabClickNull = () => {
+    setValue(null);
+  };
+
   const getUrlParams = () => {
     var url = new URL(window.location.href);
     var branchId = url.searchParams.get("branchId");
@@ -214,7 +218,10 @@ export default function ScrollableTabsButtonAuto() {
                 <Tab
                   disableRipple={true}
                   className="menubar-tab-app-bar"
-                  onClick={(e) => handleTabClick(e, i)}                  
+                  onClick={(e) => handleTabClick(e, i)}        
+                  // onMouseOver={(e) => handleTabClick(e, i)} 
+                  // onMouseEnter ={(e) => handleTabClick(e, i)}      
+                      
                   label={item.name}
                   {...a11yProps(i)}
                   wrapped
@@ -242,6 +249,7 @@ export default function ScrollableTabsButtonAuto() {
                           key={"side-menu-LIL" + pages.pageId}
                           className="menubar-link"
                           to={pages.pageLink + urlparams}
+                          // onClick={(e) => handleTabClickNull()} 
                         >
                           {pages.pageName}
                         </Link>

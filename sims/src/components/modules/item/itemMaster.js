@@ -74,20 +74,21 @@ class itemMaster extends React.Component {
         let data = response.data;
         console.log("data > ", data);
         this.setState({itemData:data},()=>{this.InitialhandleRowClick(null, data[0], "row_0");});
+        this.setState({ ProgressLoader: true });
       })
       .catch((error) => { });
 
-    this.setState({ ProgressLoader: true });
+    
 
   }
 
   InitialhandleRowClick(e, item, id) {
     let editUrl =
-      URLS.URLS.editModule +
-      this.state.urlparams +
-      "&moduleId=" +
-      item.moduleId;
-    this.setState({ moduleId: item.moduleId, editurl: editUrl,selectedItem:item });
+    URLS.URLS.editItem +
+    this.state.urlparams +
+    "&edititemId=" +
+    item.itemId;
+    this.setState({ moduleId: item.moduleId, editurl: editUrl,selectedItem:item,editBtnDisable:false });
     this.InitialremoveIsSelectedRowClasses(); 
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -101,10 +102,10 @@ class itemMaster extends React.Component {
 
     const handleRowClick = (e, item, id) => {
       let editUrl =
-        URLS.URLS.editModule +
-        this.state.urlparams +
-        "&moduleId=" +
-        item.moduleId;
+      URLS.URLS.editItem +
+      this.state.urlparams +
+      "&edititemId=" +
+      item.itemId;
       this.setState({ moduleId: item.moduleId, editurl: editUrl,editBtnDisable:false,selectedItem:item });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
@@ -168,7 +169,7 @@ class itemMaster extends React.Component {
                   <Button className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) =>
-                      openPage(URLS.URLS.editItem + this.state.urlparams)
+                      openPage(this.state.editurl)
                     }
                     disabled={this.state.editBtnDisable}
                   >
@@ -217,7 +218,10 @@ class itemMaster extends React.Component {
                           }
                         >
                           <TableCell align="left">
-                            <a className="LINK tableLink" href="">
+                            <a className="LINK tableLink" href={ URLS.URLS.editItem +
+                                this.state.urlparams +
+                                "&edititemId=" +
+                                item.itemId}>
                               {item.itemNo}
                             </a>
                           </TableCell>
