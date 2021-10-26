@@ -33,6 +33,10 @@ class editItem extends React.Component {
     super(props);
     this.state = {
       GeneralDetailsExpanded: true,
+      PlanningDetailsExpanded: false,
+      WarehouseDetailsExpanded:false,
+      InvoicingDetailsExpanded: false,
+      ReplenishmentDetailsExpanded: false,
       SuccessPrompt: false,
       ProgressLoader: true,
       urlparams: "",
@@ -56,7 +60,8 @@ class editItem extends React.Component {
       CertificateNo: "",
       IsDiscontine: false,
       Reason: "",
-
+      ItemId:0,
+      Item:{}
     };
   }
 
@@ -66,6 +71,7 @@ class editItem extends React.Component {
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
+    let ItemId= url.searchParams.get("edititemId");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -76,8 +82,37 @@ class editItem extends React.Component {
 
     this.setState({
       urlparams: urlparams,
-
+      ItemId:ItemId
+    },()=>{
+      this.getItems();
     });
+  }
+
+  getItems() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Data={
+      validUser:ValidUser,
+      Item:{
+        ItemId:parseInt(this.state.ItemId)
+      }
+    };
+
+    let Url = APIURLS.APIURL.GetItem;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, Data, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({Item:data, ProgressLoader: true });
+      })
+      .catch((error) => { });
+   
+
   }
 
   render() {
@@ -89,6 +124,30 @@ class editItem extends React.Component {
           ? this.setState({ GeneralDetailsExpanded: false })
           : this.setState({ GeneralDetailsExpanded: true });
       }
+      if (val === "PlanningDetailsExpanded") {
+        this.state.PlanningDetailsExpanded === true
+          ? this.setState({ PlanningDetailsExpanded: false })
+          : this.setState({ PlanningDetailsExpanded: true });
+      }
+      if (val === "WarehouseDetailsExpanded") {
+        this.state.WarehouseDetailsExpanded === true
+          ? this.setState({ WarehouseDetailsExpanded: false })
+          : this.setState({ WarehouseDetailsExpanded: true });
+      }
+      if (val === "InvoicingDetailsExpanded") {
+        this.state.InvoicingDetailsExpanded === true
+          ? this.setState({ InvoicingDetailsExpanded: false })
+          : this.setState({ InvoicingDetailsExpanded: true });
+      }
+      if (val === "ReplenishmentDetailsExpanded") {
+        this.state.ReplenishmentDetailsExpanded === true
+          ? this.setState({ ReplenishmentDetailsExpanded: false })
+          : this.setState({ ReplenishmentDetailsExpanded: true });
+      }
+
+     
+      
+
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -328,7 +387,12 @@ console.log("data > ",Data);
         <div className="New-link-bottom"></div>
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid item xs={8}>
+          <Grid item
+           xs={12}
+           sm={12}
+           md={8}
+           lg={8}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12} md={12} lg={12} >
                 <Accordion
@@ -370,7 +434,7 @@ console.log("data > ",Data);
                               label="Item Type"
                               onChange={(e) => updateFormValue("ItemType", e)}
                               options={APIURLS.ItemType}
-                              value={this.state.ItemType}
+                              value={this.state.Item.itemType?this.state.Item.itemType:0}
                             />
 
                             <TextboxInput
@@ -401,7 +465,7 @@ console.log("data > ",Data);
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.Code}
+                              value={this.state.Item.code}
 
                             />
                             <TextboxInput
@@ -416,7 +480,7 @@ console.log("data > ",Data);
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.Alias}
+                              value={this.state.Item.alias}
 
                             />
                             <TextboxInput
@@ -431,7 +495,7 @@ console.log("data > ",Data);
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.Description1}
+                              value={this.state.Item.description1}
 
                             />
                             <TextboxInput
@@ -446,7 +510,7 @@ console.log("data > ",Data);
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.Description2}
+                              value={this.state.Item.description2}
 
                             />
 
@@ -613,15 +677,130 @@ console.log("data > ",Data);
                         </Table>
                       </Grid>
                     </Grid>
-
-
-
-
-
                   </AccordionDetails>
                 </Accordion>
+                <Accordion
+                  key="Item-Planing-Details"
+                  expanded={this.state.PlanningDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) =>
+                      handleAccordionClick("PlanningDetailsExpanded", e)
+                    } />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) =>
+                      handleAccordionClick("PlanningDetailsExpanded", e)
+                    }
+                  >
+                    <Typography
+                      key=""
+                      className="accordion-Header-Title"
+                    >Planning Details</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                          
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion
+                  key="Item-Planing-Details"
+                  expanded={this.state.InvoicingDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) =>
+                      handleAccordionClick("InvoicingDetailsExpanded", e)
+                    } />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) =>
+                      handleAccordionClick("InvoicingDetailsExpanded", e)
+                    }
+                  >
+                    <Typography
+                      key=""
+                      className="accordion-Header-Title"
+                    >Invoicing</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                          
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion
+                  key="Item-Planing-Details"
+                  expanded={this.state.ReplenishmentDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) =>
+                      handleAccordionClick("ReplenishmentDetailsExpanded", e)
+                    } />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) =>
+                      handleAccordionClick("ReplenishmentDetailsExpanded", e)
+                    }
+                  >
+                    <Typography
+                      key=""
+                      className="accordion-Header-Title"
+                    >Replenishment</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                          
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  key="Item-Planing-Details"
+                  expanded={this.state.WarehouseDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) =>
+                      handleAccordionClick("WarehouseDetailsExpanded", e)
+                    } />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) =>
+                      handleAccordionClick("WarehouseDetailsExpanded", e)
+                    }
+                  >
+                    <Typography
+                      key=""
+                      className="accordion-Header-Title"
+                    >Warehouse</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                          
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+
+
               </Grid>
             </Grid>
+            <div style={{height:50}}></div>
           </Grid>
           <Grid item xs={4}></Grid>
         </Grid>

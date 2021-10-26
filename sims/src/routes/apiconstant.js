@@ -70,6 +70,7 @@ export const APIURL = {
     CreateItem:domain+"api/ItemMaster/CreateItem",
     UpdateItem:domain+"api/ItemMaster/UpdateItem",
     GetAllItems:domain+"api/ItemMaster/GetAllItems",
+    GetItem:domain+"api/ItemMaster/GetItem",
   };
 
   export const CTimeOut = 10; 
