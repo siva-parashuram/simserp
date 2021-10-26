@@ -90,7 +90,7 @@ class itemCategoryMaster extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  typoTitle="Item Catagory Master"
+                  typoTitle="Item Category Master"
                   level={1}
                 />
               </div>
