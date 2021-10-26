@@ -133,6 +133,18 @@ class adduser extends React.Component {
         this.setState({ DisabledCreatebtn: false });
       }
     };
+    // const checkEmail=()=>{
+      
+    //     if(this.state.FirstName===""||this.state.FirstName===null||this.state.FirstName.length>20){
+    //       if(this.state.EmailID.length>50||this.state.duplicateExist===true){
+    //         this.setState({ DisabledCreatebtn: true,})
+    //       }
+          
+    //     }else{
+    //       this.setState({ DisabledCreatebtn: true,})
+        
+    //   }
+    // }
 
     const updateFormValue = (id, e) => {
       if (id === "isActive") {
@@ -170,6 +182,7 @@ class adduser extends React.Component {
           this.setState({
             Validations: v,
             DisabledCreatebtn: true,
+            FirstName: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -193,13 +206,15 @@ class adduser extends React.Component {
           };
           this.setState({
             Validations: v,
+            LastName: e.target.value,
+            DisabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.LastName = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-
+            DisabledCreatebtn: false,
             LastName: e.target.value,
             user: user,
           });
@@ -480,7 +495,7 @@ class adduser extends React.Component {
                           label="Email ID"
                           variant="outlined"
                           size="small"
-                          onChange={(e) => updateFormValue("EmailID", e)}
+                          onChange={(e) => ("EmailID", e)}
                           InputProps={{
                             className: "textFieldCss",
                             maxlength: 50,
