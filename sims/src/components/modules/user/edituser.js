@@ -42,9 +42,9 @@ class edituser extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
-      duplicateExist:false,
+     
       users:[],
-      oldID:"",
+      oldEMAILID:"",
       user: {
         UserID: 0,
         LoginID: null,
@@ -151,7 +151,7 @@ class edituser extends React.Component {
         user.IsAdmin = data.isAdmin;
 
         this.setState({
-          oldID:data.emailId,
+          oldEMAILID:data.emailId,
           user: user,
           country: data,
           LoginID: data.loginId,
@@ -187,9 +187,7 @@ class edituser extends React.Component {
         this.state.FirstName.length > 20
       ) {
         this.setState({ DisableUpdatebtn: true });
-      } else {
-        this.setState({ DisableUpdatebtn: false });
-      }
+      } 
     };
 
     const updateFormValue = (id, e) => {
@@ -255,7 +253,7 @@ class edituser extends React.Component {
       }
       if (id === "EmailID") {
         let duplicateExist = CF.chkDuplicateButExcludeName(
-          this.state.users,"emailId",this.state.oldID,e.target.value
+          this.state.users,"emailId",this.state.oldEMAILID,e.target.value
         );
         let user = this.state.user;
         user.EmailID = e.target.value;
@@ -264,13 +262,13 @@ class edituser extends React.Component {
             let v = this.state.Validations;
             v.EmailID = {
               errorState: true,
-              errorMssg: "Email  already exist!",
+              errorMssg: "Email  Already exist!",
             };
             this.setState({
               Validations: v,
               EmailID: e.target.value,
               DisableUpdatebtn: true,
-              duplicateExist:true
+             
             });
           }
           if (e.target.value.length > 50) {
@@ -292,7 +290,7 @@ class edituser extends React.Component {
           v.EmailID = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-
+            DisableUpdatebtn: false,
             EmailID: e.target.value,
             user: user,
           });
@@ -395,9 +393,7 @@ class edituser extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     return (
       <Fragment>
@@ -447,7 +443,7 @@ class edituser extends React.Component {
                     className="action-btns"
                     startIcon={<UpdateIcon />}
                     onClick={handleUpdate}
-                    disabled={this.state.DisableUpdatebtn}
+                    disabled={this.state. DisableUpdatebtn}
                   >
                     Update
                   </Button>
