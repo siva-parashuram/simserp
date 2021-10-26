@@ -75,6 +75,10 @@ export const APIURL = {
     GetItemDepartments:domain+"api/ItemMaster/GetItemDepartments",
     GetItemDepartment:domain+"api/ItemMaster/GetItemDepartment",
     UpdateItemDepartment:domain+"api/ItemMaster/UpdateItemDepartment",
+    CreateItemSuperCategory:domain+"api/ItemMaster/CreateItemSuperCategory",
+    GetItemSuperCategories:domain+"api/ItemMaster/GetItemSuperCategories",
+    GetItemSuperCategory:domain+"api/ItemMaster/GetItemSuperCategory",
+    UpdateItemSuperCategory:domain+"api/ItemMaster/UpdateItemSuperCategory",
   };
 
   export const CTimeOut = 10; 

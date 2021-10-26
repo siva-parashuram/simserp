@@ -20,7 +20,7 @@ class tablerowcelldropdown extends React.Component {
                 className="dropdown-css"
                 id={this.props.id}
                 label={this.props.label}
-                
+                defaultValue={isNaN(this.props.value) ? this.props.value : parseInt(this.props.value)}
                 value={isNaN(this.props.value) ? this.props.value : parseInt(this.props.value)}
                 onChange={this.props.onChange} 
                 disabled={this.props.disabled}

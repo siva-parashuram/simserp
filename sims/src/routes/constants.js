@@ -52,7 +52,7 @@ export const URLS = {
   addItemMainCategory:"/addItemMainCategory",
   editItemMainCategory:"/editItemMainCategory",
   itemSuperCategoryMaster:"/itemSuperCategoryMaster",
-  addItemSuperCategory:"/ addItemSuperCategory",
+  addItemSuperCategory:"/addItemSuperCategory",
   editItemSuperCategory:"/editItemSuperCategory",
   itemDepartmentMaster:"/itemDepartmentMaster",
   addItemDepartment:"/addItemDepartment",
