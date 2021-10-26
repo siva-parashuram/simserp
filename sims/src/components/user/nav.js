@@ -18,6 +18,8 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Badge from '@mui/material/Badge';
 import { Button } from "@material-ui/core";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 import { styled } from '@mui/material/styles';
@@ -66,6 +68,13 @@ export default function ButtonAppBar() {
   const [branchBtnId, setbranchBtnId] = React.useState("");
   const [token, settoken] = React.useState("");
   const [notificationCount, setnotificationCount] = React.useState(1);
+ 
+
+  
+  const handleClick = (event) => {
+    setnotificationCount(0);
+  };
+   
 
   useEffect(() => {
     if (getCookie(COOKIE.USERID) != null) {
@@ -126,17 +135,15 @@ export default function ButtonAppBar() {
               {branchName}
             </Typography>
 
-            {/* <Link className="nav-exit-link">
-             <Avatar  sx={{ bgcolor:'', width:24, height:24 }}>{userInitial}</Avatar>
-            </Link>
-            <Link className="nav-exit-link">
-              <NotificationsIcon />
-            </Link> */}
+           
 
             <Avatar className='nav-avatar' sx={{ bgcolor: 'rgb(19, 163, 38)', fontSize: 18, color: 'white', width: 24, height: 24, marginRight: 2 }}>{userInitial}</Avatar>
-            <IconButton>
+            <IconButton
+             onClick={handleClick}
+            >
               <StyledBadge
                 badgeContent={notificationCount}
+
               >
                 <NotificationsIcon style={{ color: "white" }} />
               </StyledBadge>
@@ -147,6 +154,9 @@ export default function ButtonAppBar() {
           </Toolbar>
         </AppBar>
         <Logincheck />
+
+       
+
       </div>
     </Fragment>
   );

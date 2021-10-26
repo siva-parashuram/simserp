@@ -30,10 +30,15 @@ class itemDepartmentMaster extends React.Component {
     this.state = {
       urlparams: "",
       ProgressLoader: true,
+      itemDepartmentMasterData: [],
+      editurl: "",
+      itemDeptId: 0,
+      selectedItem: {},
     };
   }
 
   componentDidMount() {
+    this.getitemDepartmentMasterData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -50,7 +55,65 @@ class itemDepartmentMaster extends React.Component {
     });
   }
 
+
+  getitemDepartmentMasterData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemDepartments;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ itemDepartmentMasterData: data }, () => { this.InitialhandleRowClick(null, data[0], "row_0"); });
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+  InitialhandleRowClick(e, item, id) {
+    let editUrl =
+      URLS.URLS.editItemDepartment +
+      this.state.urlparams +
+      "&edititemDeptId=" +
+      item.itemDeptId;
+    this.setState({ itemDeptId: item.itemDeptId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+    this.InitialremoveIsSelectedRowClasses();
+    document.getElementById(id).classList.add("selectedRow");
+  }
+  InitialremoveIsSelectedRowClasses() {
+    for (let i = 0; i < this.state.itemDepartmentMasterData.length; i++) {
+      document.getElementById("row_" + i).className = "";
+    }
+  }
+
+
+
   render() {
+
+    const handleRowClick = (e, item, id) => {
+      let editUrl =
+        URLS.URLS.editItemDepartment +
+        this.state.urlparams +
+        "&edititemDeptId=" +
+        item.itemDeptId;
+      this.setState({ itemDeptId: item.itemDeptId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+      removeIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+    };
+
+    const removeIsSelectedRowClasses = () => {
+      for (let i = 0; i < this.state.itemDepartmentMasterData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    };
+
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
@@ -105,9 +168,7 @@ class itemDepartmentMaster extends React.Component {
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) =>
-                      openPage(
-                        URLS.URLS.editItemDepartment + this.state.urlparams
-                      )
+                      openPage(this.state.editurl)
                     }
                   >
                     Edit
@@ -133,15 +194,48 @@ class itemDepartmentMaster extends React.Component {
                       <TableRow>
                         <TableCell className="table-header-font">#</TableCell>
                         <TableCell className="table-header-font" align="left">
+                          Code
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
                           Name
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Status
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody className="tableBody">
-                      <TableRow>
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left"></TableCell>
-                      </TableRow>
+                      {this.state.itemDepartmentMasterData.map((item, i) => (
+                        <TableRow
+                        id={"row_" + i}
+                        className={this.state.initialCss}
+                        hover
+                        key={i}
+                        onClick={(event) =>
+                          handleRowClick(event, item, "row_" + i)
+                        }
+                        >
+                          <TableCell align="left">{i + 1}</TableCell>
+                          <TableCell align="left">
+                            <a className="LINK tableLink" href={URLS.URLS.editItemDepartment +
+                              this.state.urlparams +
+                              "&edititemDeptId=" +
+                              item.itemDeptId}>
+                              {item.code}
+                            </a>
+
+                          </TableCell>
+                          <TableCell align="left">{item.name}</TableCell>
+                          <TableCell align="left">
+                            {item.isActive === true ? (
+                              <span style={{ color: "green" }}>Active</span>
+                            ) : (
+                              <span style={{ color: "red" }}>In-Active</span>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+
                     </TableBody>
                   </Table>
                 </Grid>

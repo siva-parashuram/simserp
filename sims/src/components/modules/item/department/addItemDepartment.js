@@ -39,14 +39,14 @@ class addItemDepartment extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
-      Name:"",
       Code:"",
+      Name:"",
       IsActive:false
     };
   }
 
   componentDidMount() {
-    
+
 
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -65,15 +65,73 @@ class addItemDepartment extends React.Component {
   }
 
   render() {
+
     const handleAccordionClick = (val, e) => {
-        if (val === "GeneralDetailsExpanded") {
-          this.state.GeneralDetailsExpanded === true
-            ? this.setState({ GeneralDetailsExpanded: false })
-            : this.setState({ GeneralDetailsExpanded: true });
+      if (val === "GeneralDetailsExpanded") {
+        this.state.GeneralDetailsExpanded === true
+          ? this.setState({ GeneralDetailsExpanded: false })
+          : this.setState({ GeneralDetailsExpanded: true });
+      }
+    };
+
+
+    const createNew = () => {
+      this.setState({ ProgressLoader: false });
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.CreateItemDepartment;
+      let ReqData = {
+        validUser: ValidUser,
+        ItemDepartment: {
+          ItemDeptID: 0,
+          Code: this.state.Code,
+          Name: this.state.Name,
+          IsActive: this.state.IsActive
         }
       };
+      axios
+        .post(Url, ReqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+          } else {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
+    }
+  
 
-      const updateFormValue = (id, e) => {};
+
+    const updateFormValue = (param, e) => {
+      switch (param) {
+        case "Code":
+          if (e.target.value === "") {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+           } else {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+          }
+          break;
+        case "Name":
+          this.setState({ Name: e.target.value });
+          break;
+        case "IsActive":
+          this.setState({ IsActive: e.target.checked });
+          break;
+        default:
+          break;
+      }
+    };
+
+
+
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -88,7 +146,7 @@ class addItemDepartment extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    
+
 
     return (
       <Fragment>
@@ -137,7 +195,7 @@ class addItemDepartment extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    //onClick={handleCreate}
+                    onClick={createNew}
                     disabled={this.state.DisableUpdatebtn}
                   >
                     ADD
@@ -181,7 +239,7 @@ class addItemDepartment extends React.Component {
                       aria-label=" Item-catagory List table"
                     >
                       <TableBody className="tableBody">
-                      <TextboxInput
+                        <TextboxInput
                           id="Code"
                           label="Code"
                           variant="outlined"

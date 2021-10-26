@@ -77,9 +77,6 @@ class itemMaster extends React.Component {
         this.setState({ ProgressLoader: true });
       })
       .catch((error) => { });
-
-    
-
   }
 
   InitialhandleRowClick(e, item, id) {

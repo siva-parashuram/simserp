@@ -40,19 +40,21 @@ class editItemDepartment extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
+      itemDeptId:0,
       Code:"",
       Name:"",
-      IsActive:false
+      IsActive:false,
+      ItemDepartment:{}
     };
   }
 
   componentDidMount() {
    
-
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
+    let itemDeptId = url.searchParams.get("edititemDeptId");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -62,7 +64,42 @@ class editItemDepartment extends React.Component {
       branchName;
     this.setState({
       urlparams: urlparams,
-    });
+      itemDeptId:itemDeptId,
+      itemDeptId:parseInt(itemDeptId)
+    },()=>{this.getItemDepartment();});
+  }
+
+  getItemDepartment() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Data={
+      validUser:ValidUser,
+      ItemDepartment:{
+        itemDeptId:parseInt(this.state.itemDeptId)
+      }
+    };
+
+    let Url = APIURLS.APIURL.GetItemDepartment;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, Data, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+
+        this.setState({
+          ItemDepartment: data,
+          Code: data.code,
+          Name: data.name,
+          IsActive: data.isActive,
+          DisableUpdatebtn: false,
+          ProgressLoader: true
+        });
+      })
+      .catch((error) => { });
   }
 
   render() {
@@ -74,7 +111,58 @@ class editItemDepartment extends React.Component {
       }
     };
 
-    const updateFormValue = (id, e) => {};
+    const updateFormValue = (param, e) => {
+      switch (param) {
+        case "Code":
+          if (e.target.value === "" || e.target.value.length >4) {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+           } else {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+          }
+          break;
+        case "Name":
+          this.setState({ Name: e.target.value });
+          break;
+        case "IsActive":
+          this.setState({ IsActive: e.target.checked });
+          break;
+        default:
+          break;
+      }
+    };
+
+    const update = () => {
+      this.setState({ ProgressLoader: false });
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.UpdateItemDepartment;
+      let ReqData = {
+        validUser: ValidUser,
+        ItemDepartment: {
+          ItemDeptID: parseInt(this.state.itemDeptId),
+          Code: this.state.Code,
+          Name: this.state.Name,
+          IsActive: this.state.IsActive
+        }
+      };
+      axios
+        .post(Url, ReqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+          } else {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
+    }
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -138,7 +226,7 @@ class editItemDepartment extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<UpdateIcon />}s
-                   // onClick={handleCreate}
+                    onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >
                     Update

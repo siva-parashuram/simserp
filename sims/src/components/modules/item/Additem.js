@@ -8,7 +8,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import { Divider, TableCell, TableRow } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";  
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
@@ -46,7 +46,7 @@ class addItem extends React.Component {
       ProgressLoader: true,
       urlparams: "",
       ItemTypeMaster: APIURLS.ItemType,
-      ItemType:0,
+      ItemType: 0,
       ItemNo: "ITM0001",
       Code: "",
       Alias: "",
@@ -65,12 +65,13 @@ class addItem extends React.Component {
       CertificateNo: "",
       IsDiscontine: false,
       Reason: "",
+      itemDepartmentMasterData: []
 
     };
   }
 
   componentDidMount() {
-
+    this.getitemDepartmentMasterData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -87,6 +88,44 @@ class addItem extends React.Component {
       urlparams: urlparams,
 
     });
+  }
+
+  getitemDepartmentMasterData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemDepartments;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ ProgressLoader: true });
+        this.processDepartmentList(data);
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  processDepartmentList(data){
+    console.log("processDepartmentList > data > ", data);
+    let newData=[];
+    for(let i=0;i<data.length;i++){
+      if(data[i].isActive===true){
+        let d={
+          name:data[i].code + " - "+data[i].name,
+          value:data[i].itemDeptId
+        };
+        newData.push(d);
+      }     
+    }
+    console.log("processDepartmentList > newData > ",newData);
+    this.setState({itemDepartmentMasterData:newData});
   }
 
   render() {
@@ -132,7 +171,7 @@ class addItem extends React.Component {
           break;
         case "Description2":
           this.setState({ Description2: e.target.value });
-          break;        
+          break;
         case "PackingDesc1":
           this.setState({ PackingDesc1: e.target.value });
           break;
@@ -160,14 +199,14 @@ class addItem extends React.Component {
         case "IsSaleEvenQuantity":
           this.setState({ IsSaleEvenQuantity: e.target.checked });
           break;
-        
+
         case "CertificateNo":
           this.setState({ CertificateNo: e.target.value });
-          break;       
+          break;
         case "Reason":
           this.setState({ Reason: e.target.value });
           break;
-        case "IsDiscontine":          
+        case "IsDiscontine":
           this.setState({ IsDiscontine: e.target.checked });
           if (e.target.checked === true) {
             document.getElementById("Reason").focus()
@@ -175,7 +214,7 @@ class addItem extends React.Component {
           break;
         case "IsCertified":
           this.setState({ IsCertified: e.target.checked });
-          if (e.target.checked === true) {            
+          if (e.target.checked === true) {
             document.getElementById("CertificateNo").focus()
           }
           break;
@@ -184,72 +223,72 @@ class addItem extends React.Component {
       }
     }
 
-    const processCreateItem=()=>{
+    const processCreateItem = () => {
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
-      let Item={
-        ItemId : 0,
-        ItemNo : this.state.ItemNo,
-        ItemType : parseInt(this.state.ItemType),
-        Code : this.state.Code,
-        Alias : this.state.Alias,
-        Description1 : this.state.Description1,
-        Description2 : this.state.Description2,
-        PackingDesc1 : this.state.PackingDesc1,
-        PackingDesc2 : this.state.PackingDesc2,
-        ItemDeptId : this.state.ItemDeptID,
-        CatId : this.state.CatID,
-        IsActive : this.state.IsActive,
-        IsTrading : this.state.IsTrading,
-        IsNonStockValuation : this.state.IsNonStockValuation,
-        IsCustomized : this.state.IsCustomized,
-        IsCertified : this.state.IsCertified,
-        CertificateNo : this.state.CertificateNo,
-        IsSaleEvenQuantity : this.state.IsSaleEvenQuantity,
-        Location : "",
-        BarcodeNo : "",
-        CartonHeight : 0,
-        CartonLength : 0,
-        CartonWidth : 0,
-        NetWeight : 0,
-        GrossWeight : 0,
-        WarningLevel : 0,
-        MinStockLevel : 0,
-        Amsf : 0,
-        Msf : 0,
-        Bsf : 0,
-        Moq : 0,
-        ShipperQuantiry : 0,
-        CbmperShipper : 0,
-        IsDiscontine : this.state.IsDiscontine,
-        Reason : this.state.Reason,
-        UserId : parseInt(getCookie(COOKIE.USERID)),
-        ModifyDate : "",
-        TolerancePercentage : 0,
-        IsQuality : false,
-        SpecId : 0,
-        AllowNegativeStock : false,
-        PostingGroup : 0,
-        CostingMethod : 0,
-        StandardCost : 0,
-        IndirectCostPercentage : 0,
-        ProfitPercentage : 0,
-        GstgroupId :0,
-        Hsncode : "",
-        BaseUom : 0,
-        SalesUom : 0,
-        PurchaseUom : 0,
-        PackingUom : 0,
-        Replenishment : 0,
-        LeadTime : 0,
-        IsLot : false,
-        ManufacturingPolicy : 0,
-        RoutingId : 0,
-        Bomid : 0,
+      let Item = {
+        ItemId: 0,
+        ItemNo: this.state.ItemNo,
+        ItemType: parseInt(this.state.ItemType),
+        Code: this.state.Code,
+        Alias: this.state.Alias,
+        Description1: this.state.Description1,
+        Description2: this.state.Description2,
+        PackingDesc1: this.state.PackingDesc1,
+        PackingDesc2: this.state.PackingDesc2,
+        ItemDeptId: this.state.ItemDeptID,
+        CatId: this.state.CatID,
+        IsActive: this.state.IsActive,
+        IsTrading: this.state.IsTrading,
+        IsNonStockValuation: this.state.IsNonStockValuation,
+        IsCustomized: this.state.IsCustomized,
+        IsCertified: this.state.IsCertified,
+        CertificateNo: this.state.CertificateNo,
+        IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
+        Location: "",
+        BarcodeNo: "",
+        CartonHeight: 0,
+        CartonLength: 0,
+        CartonWidth: 0,
+        NetWeight: 0,
+        GrossWeight: 0,
+        WarningLevel: 0,
+        MinStockLevel: 0,
+        Amsf: 0,
+        Msf: 0,
+        Bsf: 0,
+        Moq: 0,
+        ShipperQuantiry: 0,
+        CbmperShipper: 0,
+        IsDiscontine: this.state.IsDiscontine,
+        Reason: this.state.Reason,
+        UserId: parseInt(getCookie(COOKIE.USERID)),
+        ModifyDate: "",
+        TolerancePercentage: 0,
+        IsQuality: false,
+        SpecId: 0,
+        AllowNegativeStock: false,
+        PostingGroup: 0,
+        CostingMethod: 0,
+        StandardCost: 0,
+        IndirectCostPercentage: 0,
+        ProfitPercentage: 0,
+        GstgroupId: 0,
+        Hsncode: "",
+        BaseUom: 0,
+        SalesUom: 0,
+        PurchaseUom: 0,
+        PackingUom: 0,
+        Replenishment: 0,
+        LeadTime: 0,
+        IsLot: false,
+        ManufacturingPolicy: 0,
+        RoutingId: 0,
+        Bomid: 0,
       };
-      
+
       const headers = {
         "Content-Type": "application/json",
       };
@@ -259,9 +298,9 @@ class addItem extends React.Component {
         Item: Item
       };
 
-      console.log("ReqData > ",ReqData);
+      console.log("ReqData > ", ReqData);
 
- 
+
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
@@ -272,8 +311,8 @@ class addItem extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {});
-          
+        .catch((error) => { });
+
     }
 
 
@@ -317,10 +356,10 @@ class addItem extends React.Component {
                   variant="text"
                   aria-label="Action Menu Button group"
                 >
-                  <Button 
-                  className="action-btns" 
-                  startIcon={<AddIcon />}
-                  onClick={(e)=>processCreateItem()}
+                  <Button
+                    className="action-btns"
+                    startIcon={<AddIcon />}
+                    onClick={(e) => processCreateItem()}
                   >
                     Add
                   </Button>
@@ -370,14 +409,27 @@ class addItem extends React.Component {
                           className="accordion-table"
                           aria-label="Item List table"
                         >
-                           
+
                           <TableBody className="tableBody">
+                            <DropdownInput
+                              id="CatID"
+                              label="ItemCat"
+                              onChange={(e) => updateFormValue("CatID", e)}
+                              options={this.state.ItemCat}
+                            />
+                            <DropdownInput
+                              id="ItemDeptID"
+                              label="ItemDept"
+                              onChange={(e) => updateFormValue("ItemDeptID", e)}
+                              options={this.state.itemDepartmentMasterData}
+                            />
                             <DropdownInput
                               id="ItemType"
                               label="Item Type"
                               onChange={(e) => updateFormValue("ItemType", e)}
                               options={APIURLS.ItemType}
                               value={this.state.ItemType}
+                              disabled={true}
                             />
 
                             <TextboxInput
@@ -488,18 +540,7 @@ class addItem extends React.Component {
 
                             />
 
-                            <DropdownInput
-                              id="ItemDeptID"
-                              label="ItemDept"
-                              onChange={(e) => updateFormValue("ItemDeptID", e)}
-                              options={this.state.ItemDept}
-                            />
-                            <DropdownInput
-                              id="CatID"
-                              label="ItemCat"
-                              onChange={(e) => updateFormValue("CatID", e)}
-                              options={this.state.ItemCat}
-                            />
+
 
 
                           </TableBody>
@@ -512,7 +553,7 @@ class addItem extends React.Component {
                           className="accordion-table"
                           aria-label="Item List table"
                         >
-                          <TableBody className="tableBody">     
+                          <TableBody className="tableBody">
                             <SwitchInput
                               key="IsTrading"
                               id="IsTrading"
@@ -521,8 +562,8 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("IsTrading", e)
                               }
-                            />   
-                           
+                            />
+
 
                             <SwitchInput
                               key="IsActive"
@@ -561,7 +602,7 @@ class addItem extends React.Component {
                               }
                             />
 
-                            
+
 
 
                             <SwitchInput
@@ -587,7 +628,7 @@ class addItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                               
+
                               disabled={!this.state.IsCertified}
                             />
 
@@ -612,7 +653,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Reason", e)
                               }
-                                                          
+
                               disabled={!this.state.IsDiscontine}
                             />
 

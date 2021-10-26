@@ -111,8 +111,6 @@ class editItem extends React.Component {
         this.setState({Item:data, ProgressLoader: true });
       })
       .catch((error) => { });
-   
-
   }
 
   render() {
