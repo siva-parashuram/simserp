@@ -181,13 +181,25 @@ class edituser extends React.Component {
       }
     };
     const CheckFirstName = () => {
-      if (
-        this.state.FirstName === "" ||
-        this.state.FirstName === null ||
-        this.state.FirstName.length > 20
-      ) {
-        this.setState({ DisableUpdatebtn: true });
+    //  if(this.state.duplicateExist===true||this.state.EmailID.length>50){
+    //    if(this.state.FirstName.length>20){
+    //      this.setState({DisableUpdatebtn:true})
+    //    }else{
+    //     this.setState({DisableUpdatebtn:true})
+    //    }
+    //  }else if(this.state.FirstName.length>20){
+    //   this.setState({DisableUpdatebtn:true})
+    // }
+    if(this.state.FirstName.length>20) {
+      if(this.state.duplicateExist===true||this.state.EmailID.length>50){
+        this.setState({DisableUpdatebtn:true})
       }
+    }else if(this.state.duplicateExist===true||this.state.EmailID.length>50){
+      this.setState({DisableUpdatebtn:true})
+    }else{
+      this.setState({DisableUpdatebtn:false})
+    }
+    
     };
 
     const updateFormValue = (id, e) => {
@@ -225,7 +237,7 @@ class edituser extends React.Component {
             FirstName: e.target.value,
             user: user,
           });
-        }
+        }CheckFirstName();
       }
       if (id === "LastName") {
         let user = this.state.user;
@@ -349,12 +361,13 @@ class edituser extends React.Component {
         }
       }
       CheckFirstName();
-      this.state.duplicateExist === true
-        ? this.setState({ DisableUpdatebtn: true })
-        : this.setState({ DisableUpdatebtn: false });
+      // this.state.duplicateExist === true
+      //   ? this.setState({ DisableUpdatebtn: true })
+      //   : this.setState({ DisableUpdatebtn: false });
     };
 
     const handleUpdate = () => {
+      CheckFirstName();
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));

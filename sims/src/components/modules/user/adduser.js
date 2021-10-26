@@ -123,40 +123,19 @@ class adduser extends React.Component {
       }
     };
 
-    // const CheckFirstName = () => {
-    //    {
-    //     if (
-    //       this.state.EmailID.length > 50 ||
-    //       this.state.duplicateExist === true
-    //     ) {
-    //       this.setState({ DisabledCreatebtn: true });
-    //     } else {
-    //       this.setState({ DisabledCreatebtn: true });
-    //     }
-    //   }else{
-    //     this.setState({ DisabledCreatebtn: false });
-    //   }
-    // };
-    // const checkEmail=()=>{
+    
 
-    //     if(this.state.FirstName===""||this.state.FirstName===null||this.state.FirstName.length>20){
-    //       if(this.state.EmailID.length>50||this.state.duplicateExist===true){
-    //         this.setState({ DisabledCreatebtn: true,})
-    //       }
-
-    //     }else{
-    //       this.setState({ DisabledCreatebtn: true,})
-
-    //   }
-    // }
-
-    const CheckFirstName = () =>{
-      if(this.state.FirstName===""||this.state.FirstName===null||this.state.FirstName.length>20){
-        this.setState({DisabledCreatebtn:true})
-      }else{
-        this.setState({DisabledCreatebtn:false})
+    const CheckFirstName = () => {
+      if (
+        this.state.FirstName === "" ||
+        this.state.FirstName === null ||
+        this.state.FirstName.length > 20
+      ) {
+        this.setState({ DisabledCreatebtn: true });
+      } else {
+        this.setState({ DisabledCreatebtn: false });
       }
-    }
+    };
 
     const updateFormValue = (id, e) => {
       if (id === "isActive") {
@@ -206,7 +185,6 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        
       }
       if (id === "LastName") {
         let user = this.state.user;
@@ -232,7 +210,7 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        
+        CheckFirstName();
       }
       if (id === "EmailID") {
         let duplicateExist = CF.chkDuplicateName(
@@ -256,7 +234,7 @@ class adduser extends React.Component {
               duplicateExist: true,
             });
           }
-         
+
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.EmailID = {
@@ -269,7 +247,6 @@ class adduser extends React.Component {
               DisabledCreatebtn: true,
             });
           }
-         
         } else {
           let v = this.state.Validations;
           v.EmailID = { errorState: false, errorMssg: "" };
@@ -281,7 +258,7 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        
+        CheckFirstName();
       }
       if (id === "LoginID") {
         let user = this.state.user;
@@ -306,7 +283,7 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        
+        CheckFirstName();
       }
 
       if (id === "Password") {
@@ -332,7 +309,7 @@ class adduser extends React.Component {
             user: user,
           });
         }
-      
+        CheckFirstName();
       }
 
       this.state.duplicateExist === true
@@ -341,7 +318,6 @@ class adduser extends React.Component {
     };
 
     const handleCreate = () => {
-      
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));

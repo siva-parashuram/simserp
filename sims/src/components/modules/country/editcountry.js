@@ -24,6 +24,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import UpdateIcon from "@material-ui/icons/Update";
 import "../../user/dasboard.css";
 import Header from "../../user/userheaderconstants";
+import * as CF from "../../../services/functions/customfunctions";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -64,10 +65,14 @@ class editcountry extends React.Component {
       selectedZone: null,
       ErrorPrompt: false,
       SuccessPrompt: false,
+      countryData:[],
+      duplicate:false,
+      oldName:""
     };
   }
 
   componentDidMount() {
+    this.getCountryList()
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -95,6 +100,32 @@ class editcountry extends React.Component {
     );
   }
 
+  getCountryList() {
+    let rows = [];
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetCountryUrl = APIURLS.APIURL.GetCountries;
+
+    axios
+      .post(GetCountryUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        rows = data;
+        this.setState(
+          {
+            countryData: rows,
+            ProgressLoader: true,
+          }
+        );
+      })
+      .catch((error) => {});
+  }
+
   getCountry() {
     let country = this.state.country;
     let ValidUser = APIURLS.ValidUser;
@@ -115,6 +146,7 @@ class editcountry extends React.Component {
         let data = response.data;
 
         this.setState({
+          oldName:data.name,
           country: data,
           selectedZone: data.zoneId,
           Name: data.name,
@@ -158,11 +190,12 @@ class editcountry extends React.Component {
           : this.setState({ AddressDetailsExpanded: true });
       }
     };
+    
     const CheckName = () => {
       if (
         this.state.Name === "" ||
         this.state.Name === null ||
-        this.state.Name.length > 50
+        this.state.Name.length > 50||this.state.duplicate===true
       ) {
         this.setState({ DisableUpdatebtn: true });
       } else {
@@ -172,14 +205,32 @@ class editcountry extends React.Component {
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
+        let duplicateExist = CF.chkDuplicateButExcludeName(
+          this.state.countryData,
+          "name",
+          this.state.oldName,
+          e.target.value
+        );
         let country = this.state.country;
         country.Name = e.target.value;
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50
+          e.target.value.length > 50||duplicateExist===true
         ) {
           let v = this.state.Validations;
+          if(duplicateExist===true){
+            v.Name = {
+              errorState: true,
+              errorMssg: "Country Master Exists",        
+            };
+            this.setState({
+              Validations: v,
+              DisableUpdatebtn: true,
+              Name: e.target.value,
+              duplicate:true
+            });
+          }
           if (e.target.value.length > 50) {
             v.Name = {
               errorState: true,
@@ -192,6 +243,8 @@ class editcountry extends React.Component {
           this.setState({
             Validations: v,
             DisableUpdatebtn: true,
+            Name: e.target.value,
+
           });
         } else {
           let v = this.state.Validations;
