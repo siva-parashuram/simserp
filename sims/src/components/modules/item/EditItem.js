@@ -17,8 +17,6 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import AddIcon from "@material-ui/icons/Add";
 
- 
-
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -34,14 +32,14 @@ class editItem extends React.Component {
     this.state = {
       GeneralDetailsExpanded: true,
       PlanningDetailsExpanded: false,
-      WarehouseDetailsExpanded:false,
+      WarehouseDetailsExpanded: false,
       InvoicingDetailsExpanded: false,
       ReplenishmentDetailsExpanded: false,
       SuccessPrompt: false,
       ProgressLoader: true,
       urlparams: "",
       ItemTypeMaster: APIURLS.ItemType,
-      ItemType:0,
+      ItemType: 0,
       ItemNo: "ITM0001",
       Code: "",
       Alias: "",
@@ -59,19 +57,59 @@ class editItem extends React.Component {
       IsCertified: false,
       CertificateNo: "",
       IsDiscontine: false,
+      IsQuality: false,
+      AllowNegativeStock: false,
+      CartonHeight:0,
+      CartonLength:0,
+      CartonWidth:0,
+      NetWeight:0,
+      GrossWeight:0,
+      WarningLevel:0,
+      AMSF:0,
+      MSF:0,
+      BSF:0,
+      MOQ:0,
+      ShipperQuantiry:0,
+      CBMPerShipper:0,
+      MinStockLevel:0,
+      IsQuality:false,
+      SpecID:0,
+      AllowNegativeStock:false,
+      PostingGroup:0,
+      CostingMethod:0,
+      StandardCost:0,
+      IndirectCostPercentage:0,
+      ProfitPercentage:0,
+      GSTGroupID:0,
+      TolerancePercentage:0,
+      HSNCode:"",
+      BaseUOM:0,
+      SalesUOM:0,
+      PurchaseUOM:0,
+      PackingUOM:0,
+      Replenishment:0,
+      LeadTime:0,
+      ManufacturingPolicy:0,
+      RoutingID:0,
+      BOMID:0,
+      Location:"",
+      BarcodeNo:"",
+      IsLot:false,
+      
+
+
       Reason: "",
-      ItemId:0,
-      Item:{}
+      ItemId: 0,
+      Item: {},
     };
   }
 
   componentDidMount() {
-
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
-    let ItemId= url.searchParams.get("edititemId");
+    let ItemId = url.searchParams.get("edititemId");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -80,23 +118,26 @@ class editItem extends React.Component {
       "&branchName=" +
       branchName;
 
-    this.setState({
-      urlparams: urlparams,
-      ItemId:ItemId
-    },()=>{
-      this.getItems();
-    });
+    this.setState(
+      {
+        urlparams: urlparams,
+        ItemId: ItemId,
+      },
+      () => {
+        this.getItems();
+      }
+    );
   }
 
   getItems() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
-    let Data={
-      validUser:ValidUser,
-      Item:{
-        ItemId:parseInt(this.state.ItemId)
-      }
+    let Data = {
+      validUser: ValidUser,
+      Item: {
+        ItemId: parseInt(this.state.ItemId),
+      },
     };
 
     let Url = APIURLS.APIURL.GetItem;
@@ -108,16 +149,12 @@ class editItem extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
-        this.setState({Item:data, ProgressLoader: true });
+        this.setState({ Item: data, ProgressLoader: true });
       })
-      .catch((error) => { });
-   
-
+      .catch((error) => {});
   }
 
   render() {
-    
-
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true
@@ -144,10 +181,6 @@ class editItem extends React.Component {
           ? this.setState({ ReplenishmentDetailsExpanded: false })
           : this.setState({ ReplenishmentDetailsExpanded: true });
       }
-
-     
-      
-
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -165,7 +198,6 @@ class editItem extends React.Component {
     };
 
     const updateFormValue = (param, e) => {
-
       switch (param) {
         case "ItemType":
           this.setState({ ItemType: e.target.value });
@@ -181,7 +213,7 @@ class editItem extends React.Component {
           break;
         case "Description2":
           this.setState({ Description2: e.target.value });
-          break;        
+          break;
         case "PackingDesc1":
           this.setState({ PackingDesc1: e.target.value });
           break;
@@ -209,110 +241,110 @@ class editItem extends React.Component {
         case "IsSaleEvenQuantity":
           this.setState({ IsSaleEvenQuantity: e.target.checked });
           break;
-        
+
         case "CertificateNo":
           this.setState({ CertificateNo: e.target.value });
-          break;       
+          break;
         case "Reason":
           this.setState({ Reason: e.target.value });
           break;
-        case "IsDiscontine":          
+        case "IsDiscontine":
           this.setState({ IsDiscontine: e.target.checked });
           if (e.target.checked === true) {
-            document.getElementById("Reason").focus()
+            document.getElementById("Reason").focus();
           }
           break;
         case "IsCertified":
           this.setState({ IsCertified: e.target.checked });
-          if (e.target.checked === true) {            
-            document.getElementById("CertificateNo").focus()
+          if (e.target.checked === true) {
+            document.getElementById("CertificateNo").focus();
           }
           break;
         default:
           break;
       }
-    }
+    };
 
-    const processUpdateItem=()=>{
+    const processUpdateItem = () => {
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
-      
+
       const headers = {
         "Content-Type": "application/json",
       };
       let Url = APIURLS.APIURL.UpdateItem;
       let Data = {
-        "validUser": {
-          "UserID": 1,
-          "Token": "EsNvnXGUkc7fQflQ"
+        validUser: {
+          UserID: 1,
+          Token: "EsNvnXGUkc7fQflQ",
         },
-        "Item": {
-          ItemId : this.state.ItemId,
-          ItemNo : this.state.ItemNo,
-          ItemType : parseInt(this.state.ItemType),
-          Code : this.state.Code,
-          Alias : this.state.Alias,
-          Description1 : this.state.Description1,
-          Description2 : this.state.Description2,
-          PackingDesc1 : this.state.PackingDesc1,
-          PackingDesc2 : this.state.PackingDesc2,
-          ItemDeptId : this.state.ItemDeptId,
-          CatId : this.state.CatId,
-          IsActive : this.state.IsActive,
-          IsTrading : this.state.IsTrading,
-          IsNonStockValuation : this.state.IsNonStockValuation,
-          IsCustomized : this.state.IsCustomized,
-          IsCertified : this.state.IsCertified,
-          CertificateNo : this.state.CertificateNo,
-          IsSaleEvenQuantity : this.state.IsSaleEvenQuantity,
-          Location : "",
-          BarcodeNo : "",
-          CartonHeight : 0,
-          CartonLength : 0,
-          CartonWidth : 0,
-          NetWeight : 0,
-          GrossWeight : 0,
-          WarningLevel : 0,
-          MinStockLevel : 0,
-          Amsf : 0,
-          Msf : 0,
-          Bsf : 0,
-          Moq : 0,
-          ShipperQuantiry : 0,
-          CbmperShipper : 0,
-          IsDiscontine : this.state.IsDiscontine,
-          Reason : this.state.Reason,
-          UserId : parseInt(getCookie(COOKIE.USERID)),
-          ModifyDate : "",
-          TolerancePercentage : 0,
-          IsQuality : false,
-          SpecId : 0,
-          AllowNegativeStock : false,
-          PostingGroup : 0,
-          CostingMethod : 0,
-          StandardCost : 0,
-          IndirectCostPercentage : 0,
-          ProfitPercentage : 0,
-          GstgroupId :0,
-          Hsncode : "",
-          BaseUom : 0,
-          SalesUom : 0,
-          PurchaseUom : 0,
-          PackingUom : 0,
-          Replenishment : 0,
-          LeadTime : 0,
-          IsLot : false,
-          ManufacturingPolicy : 0,
-          RoutingId : 0,
-          Bomid : 0,
-        }
+        Item: {
+          ItemId: this.state.ItemId,
+          ItemNo: this.state.ItemNo,
+          ItemType: parseInt(this.state.ItemType),
+          Code: this.state.Code,
+          Alias: this.state.Alias,
+          Description1: this.state.Description1,
+          Description2: this.state.Description2,
+          PackingDesc1: this.state.PackingDesc1,
+          PackingDesc2: this.state.PackingDesc2,
+          ItemDeptId: this.state.ItemDeptId,
+          CatId: this.state.CatId,
+          IsActive: this.state.IsActive,
+          IsTrading: this.state.IsTrading,
+          IsNonStockValuation: this.state.IsNonStockValuation,
+          IsCustomized: this.state.IsCustomized,
+          IsCertified: this.state.IsCertified,
+          CertificateNo: this.state.CertificateNo,
+          IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
+          Location: "",
+          BarcodeNo: "",
+          CartonHeight: 0,
+          CartonLength: 0,
+          CartonWidth: 0,
+          NetWeight: 0,
+          GrossWeight: 0,
+          WarningLevel: 0,
+          MinStockLevel: 0,
+          Amsf: 0,
+          Msf: 0,
+          Bsf: 0,
+          Moq: 0,
+          ShipperQuantiry: 0,
+          CbmperShipper: 0,
+          IsDiscontine: this.state.IsDiscontine,
+          Reason: this.state.Reason,
+          UserId: parseInt(getCookie(COOKIE.USERID)),
+          ModifyDate: "",
+          TolerancePercentage: 0,
+          IsQuality: false,
+          SpecId: 0,
+          AllowNegativeStock: false,
+          PostingGroup: 0,
+          CostingMethod: 0,
+          StandardCost: 0,
+          IndirectCostPercentage: 0,
+          ProfitPercentage: 0,
+          GstgroupId: 0,
+          Hsncode: "",
+          BaseUom: 0,
+          SalesUom: 0,
+          PurchaseUom: 0,
+          PackingUom: 0,
+          Replenishment: 0,
+          LeadTime: 0,
+          IsLot: false,
+          ManufacturingPolicy: 0,
+          RoutingId: 0,
+          Bomid: 0,
+        },
       };
 
-console.log("data > ",Data);
+      console.log("data > ", Data);
 
- /*
+      /*
       axios
         .post(Url, Data, { headers })
         .then((response) => {
@@ -325,17 +357,19 @@ console.log("data > ",Data);
         })
         .catch((error) => {});
         */
-          
-    }
-
+    };
 
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
-        <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeErrorPrompt} />
-        <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
-
-
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
 
         <div className="breadcrumb-height">
           <Grid container spacing={1}>
@@ -369,10 +403,10 @@ console.log("data > ",Data);
                   variant="text"
                   aria-label="Action Menu Button group"
                 >
-                  <Button 
-                  className="action-btns" 
-                  startIcon={<AddIcon />}
-                  onClick={(e)=>processUpdateItem()}
+                  <Button
+                    className="action-btns"
+                    startIcon={<AddIcon />}
+                    onClick={(e) => processUpdateItem()}
                   >
                     Update
                   </Button>
@@ -387,23 +421,22 @@ console.log("data > ",Data);
         <div className="New-link-bottom"></div>
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid item
-           xs={12}
-           sm={12}
-           md={8}
-           lg={8}
-          >
+          <Grid item xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={12} lg={12} >
+              <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Accordion
                   key="Item-General-Details"
                   expanded={this.state.GeneralDetailsExpanded}
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
-                    expandIcon={<ExpandMoreIcon onClick={(e) =>
-                      handleAccordionClick("GeneralDetailsExpanded", e)
-                    } />}
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("GeneralDetailsExpanded", e)
+                        }
+                      />
+                    }
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     style={{ minHeight: "40px", maxHeight: "40px" }}
@@ -411,14 +444,12 @@ console.log("data > ",Data);
                       handleAccordionClick("GeneralDetailsExpanded", e)
                     }
                   >
-                    <Typography
-                      key=""
-                      className="accordion-Header-Title"
-                    >General Details</Typography>
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
                   </AccordionSummary>
 
                   <AccordionDetails key="" className="AccordionDetails-css">
-
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
                         <Table
@@ -427,14 +458,17 @@ console.log("data > ",Data);
                           className="accordion-table"
                           aria-label="Item List table"
                         >
-                           
                           <TableBody className="tableBody">
                             <DropdownInput
                               id="ItemType"
                               label="Item Type"
                               onChange={(e) => updateFormValue("ItemType", e)}
                               options={APIURLS.ItemType}
-                              value={this.state.Item.itemType?this.state.Item.itemType:0}
+                              value={
+                                this.state.Item.itemType
+                                  ? this.state.Item.itemType
+                                  : 0
+                              }
                             />
 
                             <TextboxInput
@@ -442,9 +476,7 @@ console.log("data > ",Data);
                               label="ItemNo"
                               variant="outlined"
                               size="small"
-                              onChange={(e) =>
-                                updateFormValue("ItemNo", e)
-                              }
+                              onChange={(e) => updateFormValue("ItemNo", e)}
                               InputProps={{
                                 className: "textFieldCss",
                                 maxlength: 50,
@@ -458,30 +490,24 @@ console.log("data > ",Data);
                               label="Code"
                               variant="outlined"
                               size="small"
-                              onChange={(e) =>
-                                updateFormValue("Code", e)
-                              }
+                              onChange={(e) => updateFormValue("Code", e)}
                               InputProps={{
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
                               value={this.state.Item.code}
-
                             />
                             <TextboxInput
                               id="Alias"
                               label="Alias"
                               variant="outlined"
                               size="small"
-                              onChange={(e) =>
-                                updateFormValue("Alias", e)
-                              }
+                              onChange={(e) => updateFormValue("Alias", e)}
                               InputProps={{
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
                               value={this.state.Item.alias}
-
                             />
                             <TextboxInput
                               id="Description1"
@@ -496,7 +522,6 @@ console.log("data > ",Data);
                                 maxlength: 50,
                               }}
                               value={this.state.Item.description1}
-
                             />
                             <TextboxInput
                               id="Description2"
@@ -511,7 +536,6 @@ console.log("data > ",Data);
                                 maxlength: 50,
                               }}
                               value={this.state.Item.description2}
-
                             />
 
                             <TextboxInput
@@ -527,7 +551,6 @@ console.log("data > ",Data);
                                 maxlength: 50,
                               }}
                               value={this.state.PackingDesc1}
-
                             />
                             <TextboxInput
                               id="PackingDesc2"
@@ -542,7 +565,6 @@ console.log("data > ",Data);
                                 maxlength: 50,
                               }}
                               value={this.state.PackingDesc2}
-
                             />
 
                             <DropdownInput
@@ -557,8 +579,6 @@ console.log("data > ",Data);
                               onChange={(e) => updateFormValue("CatID", e)}
                               options={this.state.ItemCat}
                             />
-
-
                           </TableBody>
                         </Table>
                       </Grid>
@@ -569,26 +589,21 @@ console.log("data > ",Data);
                           className="accordion-table"
                           aria-label="Item List table"
                         >
-                          <TableBody className="tableBody">     
+                          <TableBody className="tableBody">
                             <SwitchInput
                               key="IsTrading"
                               id="IsTrading"
                               label="IsTrading"
                               param={this.state.IsTrading}
-                              onChange={(e) =>
-                                updateFormValue("IsTrading", e)
-                              }
-                            />   
-                           
+                              onChange={(e) => updateFormValue("IsTrading", e)}
+                            />
 
                             <SwitchInput
                               key="IsActive"
                               id="IsActive"
                               label="IsActive"
                               param={this.state.IsActive}
-                              onChange={(e) =>
-                                updateFormValue("IsActive", e)
-                              }
+                              onChange={(e) => updateFormValue("IsActive", e)}
                             />
                             <SwitchInput
                               key="IsNonStockValuation"
@@ -618,9 +633,6 @@ console.log("data > ",Data);
                               }
                             />
 
-                            
-
-
                             <SwitchInput
                               key="IsCertified"
                               id="IsCertified"
@@ -630,7 +642,6 @@ console.log("data > ",Data);
                                 updateFormValue("IsCertified", e)
                               }
                             />
-
 
                             <TextboxInput
                               id="CertificateNo"
@@ -644,11 +655,8 @@ console.log("data > ",Data);
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                               
                               disabled={!this.state.IsCertified}
                             />
-
-
 
                             <SwitchInput
                               key="IsDiscontine"
@@ -660,19 +668,14 @@ console.log("data > ",Data);
                               }
                             />
 
-
                             <TextboxInput
                               id="Reason"
                               label="Reason"
                               variant="outlined"
                               size="small"
-                              onChange={(e) =>
-                                updateFormValue("Reason", e)
-                              }
-                                                          
+                              onChange={(e) => updateFormValue("Reason", e)}
                               disabled={!this.state.IsDiscontine}
                             />
-
                           </TableBody>
                         </Table>
                       </Grid>
@@ -685,9 +688,13 @@ console.log("data > ",Data);
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
-                    expandIcon={<ExpandMoreIcon onClick={(e) =>
-                      handleAccordionClick("PlanningDetailsExpanded", e)
-                    } />}
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("PlanningDetailsExpanded", e)
+                        }
+                      />
+                    }
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     style={{ minHeight: "40px", maxHeight: "40px" }}
@@ -695,15 +702,305 @@ console.log("data > ",Data);
                       handleAccordionClick("PlanningDetailsExpanded", e)
                     }
                   >
-                    <Typography
-                      key=""
-                      className="accordion-Header-Title"
-                    >Planning Details</Typography>
+                    <Typography key="" className="accordion-Header-Title">
+                      Planning Details
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
-                          
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="Item List table"
+                        >
+                          <TableBody className="tableBody">
+                            <TextboxInput
+                              type="number"
+                              id="CartonHeight"
+                              label="Carton Height"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("CartonHeight", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                              
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="CartonLength"
+                              label="Carton Length"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("CartonLength", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                              
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="CartonWidth"
+                              label="Carton Width"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("CartonWidth", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="NetWeight"
+                              label="Net Weight"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("NetWeight", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="GrossWeight"
+                              label="Gross Weight"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("GrossWeight", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="WarningLevel"
+                              label="Warning Level"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("WarningLevel", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="MinStockLevel"
+                              label="MinStock Level"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("MinStockLevel", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="AMSF"
+                              label="AMSF"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("AMSF", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="MSF"
+                              label="MSF"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("MSF", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="BSF"
+                              label="BSF"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("BSF", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="MOQ"
+                              label="MOQ"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("MOQ", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                          </TableBody>
+                        </Table>
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="Item List table"
+                        >
+                          <TableBody className="tableBody">
+                            <TextboxInput
+                              type="number"
+                              id="ShipperQuantity"
+                              label="Shipper Quantity"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("ShipperQuantity", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="CBMPerShipper"
+                              label="CBMPer Shipper"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("CBMPerShipper", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <SwitchInput
+                              key="IsQuality"
+                              id="IsQuality"
+                              label="IsQuality"
+                              param={this.state.IsQuality}
+                              onChange={(e) => updateFormValue("IsQuality", e)}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="SpecID"
+                              label="SpecID"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("SpecID", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <SwitchInput
+                              key="AllowNegativeStock"
+                              id="AllowNegativeStock"
+                              label="AllowNegativeStock"
+                              param={this.state.AllowNegativeStock}
+                              onChange={(e) =>
+                                updateFormValue("AllowNegativeStock", e)
+                              }
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="PostingGroup"
+                              label="Posting Group"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("PostingGroup", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="CostingMethod"
+                              label="Costing Method"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("CostingMethod", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="StandardCost"
+                              label="Standard Cost"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("StandardCost", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="IndirectCostPercentage"
+                              label="Indirect Cost Percentage"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("IndirectCostPercentage", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="ProfitPercentage"
+                              label="Profit Percentage"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("ProfitPercentage", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                          </TableBody>
+                        </Table>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -714,9 +1011,13 @@ console.log("data > ",Data);
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
-                    expandIcon={<ExpandMoreIcon onClick={(e) =>
-                      handleAccordionClick("InvoicingDetailsExpanded", e)
-                    } />}
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("InvoicingDetailsExpanded", e)
+                        }
+                      />
+                    }
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     style={{ minHeight: "40px", maxHeight: "40px" }}
@@ -724,15 +1025,124 @@ console.log("data > ",Data);
                       handleAccordionClick("InvoicingDetailsExpanded", e)
                     }
                   >
-                    <Typography
-                      key=""
-                      className="accordion-Header-Title"
-                    >Invoicing</Typography>
+                    <Typography key="" className="accordion-Header-Title">
+                      Invoicing
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
-                          
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="Item List table"
+                        >
+                          <TableBody className="tableBody">
+                            <TextboxInput
+                             type="number"
+                              id="TolerancePercentage"
+                              label="Tolerance Percentage"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("TolerancePercentage", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+
+                            <TextboxInput
+                             type="number"
+                              id="GSTGroupID"
+                              label="GST GroupID"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("GSTGroupID", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                              id="HSNCode"
+                              label="HSN Code"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("HSNCode", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <TextboxInput
+                             type="number"
+                              id="BaseUOM"
+                              label="Base UOM "
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("BaseUOM", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                              
+                            />
+                          </TableBody>
+                        </Table>
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                      <Table
+                        stickyHeader
+                        size="small"
+                        className="accordion-table"
+                        aria-label="Item List table"
+                      >
+                        <TableBody className="tableBody">
+                          <TextboxInput
+                           type="number"
+                            id="SalesUOM"
+                            label="Sales UOM"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("SalesUOM", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 50,
+                            }}
+                            
+                          />
+                          <TextboxInput
+                           type="number"
+                            id="PurchaseUOM"
+                            label="Purchase UOM"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("PurchaseUOM", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 50,
+                            }}
+                           
+                          />
+                           <TextboxInput
+                            type="number"
+                            id="PackingUOM"
+                            label="Packing UOM"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("PackingUOM", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 50,
+                            }}
+                           
+                          />
+
+                        </TableBody>
+                      </Table>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -743,9 +1153,16 @@ console.log("data > ",Data);
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
-                    expandIcon={<ExpandMoreIcon onClick={(e) =>
-                      handleAccordionClick("ReplenishmentDetailsExpanded", e)
-                    } />}
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick(
+                            "ReplenishmentDetailsExpanded",
+                            e
+                          )
+                        }
+                      />
+                    }
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     style={{ minHeight: "40px", maxHeight: "40px" }}
@@ -753,15 +1170,100 @@ console.log("data > ",Data);
                       handleAccordionClick("ReplenishmentDetailsExpanded", e)
                     }
                   >
-                    <Typography
-                      key=""
-                      className="accordion-Header-Title"
-                    >Replenishment</Typography>
+                    <Typography key="" className="accordion-Header-Title">
+                      Replenishment
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
-                          
+                      <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="Item List table"
+                        >
+                          <TableBody className="tableBody">
+                            <TextboxInput
+                            type="number"
+                              id="Replenishment"
+                              label="Replenishment"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("Replenishment", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+
+                            <TextboxInput
+                              type="number"
+                             id="LeadTime"
+                              label="Lead Time"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("LeadTime", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                           
+                            <TextboxInput
+                             type="number"
+                              id="ManufacturingPolicy"
+                              label="Manufacturing Policy "
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("ManufacturingPolicy", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                              
+                            />
+                            </TableBody>
+                        </Table>
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="Item List table"
+                        >
+                          <TableBody className="tableBody">
+                            <TextboxInput
+                             type="number"
+                              id="RoutingID"
+                              label="RoutingID "
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("RoutingID", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                             
+                            />
+                            <TextboxInput
+                             type="number"
+                              id="BOMID"
+                              label="BOMID "
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("BOMID", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                              
+                            />
+                          </TableBody>
+                        </Table>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -773,9 +1275,13 @@ console.log("data > ",Data);
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
-                    expandIcon={<ExpandMoreIcon onClick={(e) =>
-                      handleAccordionClick("WarehouseDetailsExpanded", e)
-                    } />}
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("WarehouseDetailsExpanded", e)
+                        }
+                      />
+                    }
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     style={{ minHeight: "40px", maxHeight: "40px" }}
@@ -783,24 +1289,61 @@ console.log("data > ",Data);
                       handleAccordionClick("WarehouseDetailsExpanded", e)
                     }
                   >
-                    <Typography
-                      key=""
-                      className="accordion-Header-Title"
-                    >Warehouse</Typography>
+                    <Typography key="" className="accordion-Header-Title">
+                      Warehouse
+                    </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
-                          
+                      <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="Item List table"
+                        >
+                          <TableBody className="tableBody">
+                            <TextboxInput
+                              id="Location"
+                              label="Location"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("Location", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+
+                            <TextboxInput
+                              id="BarcodeNo"
+                              label="Barcode No"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("BarcodeNo", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                            />
+                            <SwitchInput
+                              key="IsLot"
+                              id="IsLot"
+                              label="IsLot"
+                              param={this.state.IsLot}
+                              onChange={(e) => updateFormValue("IsLot", e)}
+                            />
+                          </TableBody>
+                        </Table>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
                 </Accordion>
-
-
               </Grid>
             </Grid>
-            <div style={{height:50}}></div>
+            <div style={{ height: 50 }}></div>
           </Grid>
           <Grid item xs={4}></Grid>
         </Grid>
@@ -809,3 +1352,4 @@ console.log("data > ",Data);
   }
 }
 export default editItem;
+ 
