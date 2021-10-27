@@ -17,6 +17,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import * as CF from "../../../services/functions/customfunctions";
+import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -725,7 +726,28 @@ class addbranch extends React.Component {
                                     </select>
                                   </TableCell>
                                 </TableRow>
-                                <TableRow>
+                                
+                                <Tablerowcelltextboxinput
+                                  id="Name"
+                                  label="Branch Name"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("Name", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50,
+                                  }}
+                                  value={this.state.name}
+                                  error={
+                                    this.state.Validations.name.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.name.errorMsg
+                                  }
+                                />
+                                {/* <TableRow>
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -757,8 +779,28 @@ class addbranch extends React.Component {
                                       }
                                     />
                                   </TableCell>
-                                </TableRow>
-                                <TableRow>
+                                </TableRow> */}
+                                <Tablerowcelltextboxinput
+                                  id="shortName"
+                                  label="Short Name"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("shortName", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50,
+                                  }}
+                                  value={this.state.shortName}
+                                  error={
+                                    this.state.Validations.name.errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.name.errorMsg
+                                  }
+                                />
+                                {/* <TableRow>
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -792,7 +834,7 @@ class addbranch extends React.Component {
                                       }
                                     />
                                   </TableCell>
-                                </TableRow>
+                                </TableRow> */}
                                 <TableRow>
                                   <TableCell
                                     align="left"
@@ -887,13 +929,11 @@ class addbranch extends React.Component {
                                 <DropdownInput
                                   id="stateSelect"
                                   label="State"
-                                  onChange={(e) =>
-                                    updateFormValue("State", e)
-                                  }
+                                  onChange={(e) => updateFormValue("State", e)}
                                   options={this.state.stateData}
                                   value={this.state.stateId}
                                 />
-                                
+
                                 {/* <TableRow>
                                   <TableCell
                                     align="left"
