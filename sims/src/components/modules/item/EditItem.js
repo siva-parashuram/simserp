@@ -656,7 +656,7 @@ class editItem extends React.Component {
                               label="ItemCat"
                               onChange={(e) => updateFormValue("CatID", e)}
                               options={this.state.ItemCategoryData}
-                              value={this.state.CatID}
+                              value={this.state.CatId}
                             />
 
                             <DropdownInput
@@ -664,6 +664,7 @@ class editItem extends React.Component {
                               label="ItemDept"
                               onChange={(e) => updateFormValue("ItemDeptID", e)}
                               options={this.state.itemDepartmentMasterData}
+                              value={this.state.ItemDeptId}
                             />
 
                             <DropdownInput
@@ -916,6 +917,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonHeight", e)
                               }
+                              value={this.state.CartonHeight}
                             
 
                             />
@@ -932,6 +934,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.CartonLength}
 
                             />
                             <TextboxInput
@@ -947,6 +950,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.CartonWidth}
                             />
                             <TextboxInput
                               type="number"
@@ -959,6 +963,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.NetWeight}
                             />
                             <TextboxInput
                               type="number"
@@ -973,6 +978,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.GrossWeight}
                             />
                             <TextboxInput
                               type="number"
@@ -987,6 +993,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.WarningLevel}
                             />
                             <TextboxInput
                               type="number"
@@ -1001,6 +1008,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.MinStockLevel}
                             />
                             <TextboxInput
                               type="number"
@@ -1013,6 +1021,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.Amsf}
                             />
                             <TextboxInput
                               type="number"
@@ -1025,6 +1034,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.Msf}
                             />
                             <TextboxInput
                               type="number"
@@ -1037,6 +1047,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.Bsf}
                             />
                             <TextboxInput
                               type="number"
@@ -1049,6 +1060,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                               value={this.state.Moq}
                             />
                           </TableBody>
                         </Table>
@@ -1074,6 +1086,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.ShipperQuantiry}
                             />
                             <TextboxInput
                               type="number"
@@ -1088,6 +1101,8 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.CbmperShipper}
+
                             />
                             <SwitchInput
                               key="IsQuality"
@@ -1107,6 +1122,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.SpecId}
                             />
                             <SwitchInput
                               key="AllowNegativeStock"
@@ -1130,6 +1146,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.PostingGroup}
                             />
                             <TextboxInput
                               type="number"
@@ -1144,6 +1161,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.CostingMethod}
                             />
                             <TextboxInput
                               type="number"
@@ -1158,6 +1176,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.StandardCost}
                             />
                             <TextboxInput
                               type="number"
@@ -1172,6 +1191,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.IndirectCostPercentage}
                             />
                             <TextboxInput
                               type="number"
@@ -1186,6 +1206,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.ProfitPercentage}
                             />
                           </TableBody>
                         </Table>
@@ -1240,6 +1261,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.TolerancePercentage}
                             />
 
                             <TextboxInput
@@ -1253,6 +1275,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.GstgroupId}
                             />
                             <TextboxInput
                               id="HSNCode"
@@ -1264,6 +1287,8 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.Hsncode}
+
                             />
                             <TextboxInput
                               type="number"
@@ -1276,6 +1301,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.BaseUom}
 
                             />
                           </TableBody>
@@ -1300,6 +1326,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.SalesUom}
 
                             />
                             <TextboxInput
@@ -1313,6 +1340,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.PurchaseUom}
 
                             />
                             <TextboxInput
@@ -1326,6 +1354,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.PackingUom}
 
                             />
 
@@ -1385,6 +1414,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.Replenishment}
                             />
 
                             <TextboxInput
@@ -1398,6 +1428,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.LeadTime}
                             />
 
                             <TextboxInput
@@ -1411,6 +1442,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.ManufacturingPolicy}
 
                             />
                           </TableBody>
@@ -1435,6 +1467,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.RoutingId}
 
                             />
                             <TextboxInput
@@ -1448,6 +1481,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.Bomid}
 
                             />
                           </TableBody>
@@ -1503,6 +1537,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.Location}
                             />
 
                             <TextboxInput
@@ -1515,6 +1550,8 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
+                              value={this.state.BarcodeNo}
+
                             />
                             <SwitchInput
                               key="IsLot"
