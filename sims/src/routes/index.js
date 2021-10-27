@@ -83,7 +83,7 @@ let routes = ({ location, ...rest }) => {
       
 
       {window.location.pathname === "/" ? null : <Header />}
-
+       
       
 
       <Switch>

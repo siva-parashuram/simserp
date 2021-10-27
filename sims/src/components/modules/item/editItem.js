@@ -81,7 +81,7 @@ class editItem extends React.Component {
       IsQuality: false,
       SpecId: 0,
       AllowNegativeStock: false,
-      PostingGroup: 0,
+      ItemPostingGroupID: 0,
       CostingMethod: 0,
       StandardCost: 0,
       IndirectCostPercentage: 0,
@@ -268,7 +268,7 @@ class editItem extends React.Component {
           IsQuality: data.isQuality,
           SpecId: data.specId,
           AllowNegativeStock: data.allowNegativeStock,
-          PostingGroup: data.postingGroup,
+          ItemPostingGroupID: data.itemPostingGroupID,
           CostingMethod: data.costingMethod,
           StandardCost: data.standardCost,
           IndirectCostPercentage: data.indirectCostPercentage,
@@ -513,7 +513,7 @@ class editItem extends React.Component {
           IsQuality: this.state.IsQuality,
           SpecId: this.state.SpecId,
           AllowNegativeStock: this.state.AllowNegativeStock,
-          PostingGroup: this.state.PostingGroup,
+          ItemPostingGroupID: this.state.ItemPostingGroupID,
           CostingMethod: this.state.CostingMethod,
           StandardCost: this.state.StandardCost,
           IndirectCostPercentage: this.state.IndirectCostPercentage,
@@ -1146,7 +1146,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.PostingGroup}
+                              value={this.state.ItemPostingGroupID}
                             />
                             <TextboxInput
                               type="number"
