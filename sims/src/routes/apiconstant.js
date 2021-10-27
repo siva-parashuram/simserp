@@ -87,6 +87,7 @@ export const APIURL = {
     GetItemCategories:domain+"api/ItemMaster/GetItemCategories",
     GetItemCategory:domain+"api/ItemMaster/GetItemCategory",
     UpdateItemCategory:domain+"api/ItemMaster/UpdateItemCategory",
+    GetItemTypeByCatID:domain+"api/ItemMaster/GetItemTypeByCatID",
   };
 
   export const CTimeOut = 10; 

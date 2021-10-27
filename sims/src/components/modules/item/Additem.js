@@ -55,7 +55,7 @@ class addItem extends React.Component {
       PackingDesc1: "",
       PackingDesc2: "",
       ItemDeptID: 0,
-      CatID: 1,
+      CatID: "-",
       IsTrading: false,
       IsActive: false,
       IsNonStockValuation: false,
@@ -65,13 +65,14 @@ class addItem extends React.Component {
       CertificateNo: "",
       IsDiscontine: false,
       Reason: "",
-      itemDepartmentMasterData: []
-
+      itemDepartmentMasterData: [],
+      ItemCategoryData:[],
     };
   }
 
   componentDidMount() {
     this.getitemDepartmentMasterData();
+    this.getItemCategoryData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -88,6 +89,42 @@ class addItem extends React.Component {
       urlparams: urlparams,
 
     });
+  }
+
+  getItemCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+       // this.setState({ ItemCategoryData: data,ProgressLoader: true });
+        this.processItemCategoryData(data);
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  processItemCategoryData(data){
+    let newData=[];
+    for(let i=0;i<data.length;i++){
+      if(data[i].isActive===true){
+        let d={
+          name:data[i].code+" - "+data[i].hsncode,
+          value:data[i].catId
+        };
+        newData.push(d);
+      }
+    }
+    this.setState({ ItemCategoryData: newData,ProgressLoader: true });
   }
 
   getitemDepartmentMasterData() {
@@ -129,10 +166,7 @@ class addItem extends React.Component {
   }
 
   render() {
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
-
+    
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true
@@ -183,6 +217,7 @@ class addItem extends React.Component {
           break;
         case "CatID":
           this.setState({ CatID: e.target.value });
+          fetchItemType(e.target.value);
           break;
         case "IsTrading":
           this.setState({ IsTrading: e.target.checked });
@@ -221,6 +256,32 @@ class addItem extends React.Component {
         default:
           break;
       }
+    }
+
+    const fetchItemType = (value) => {
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+      let Url = APIURLS.APIURL.GetItemTypeByCatID;
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Datareq={
+        ValidUser:ValidUser,
+        CatID: parseInt(value) 
+      };
+      axios
+        .post(Url, Datareq, { headers })
+        .then((response) => {
+          let data = response.data;
+          console.log("data > ", data);
+          this.setState({ItemType:data, ProgressLoader: true });
+          
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true });
+        });
     }
 
     const processCreateItem = () => {
@@ -415,13 +476,15 @@ class addItem extends React.Component {
                               id="CatID"
                               label="ItemCat"
                               onChange={(e) => updateFormValue("CatID", e)}
-                              options={this.state.ItemCat}
+                              options={this.state.ItemCategoryData}
+                              value={this.state.CatID}
                             />
                             <DropdownInput
                               id="ItemDeptID"
                               label="ItemDept"
                               onChange={(e) => updateFormValue("ItemDeptID", e)}
                               options={this.state.itemDepartmentMasterData}
+                              value={this.state.ItemDeptID}
                             />
                             <DropdownInput
                               id="ItemType"

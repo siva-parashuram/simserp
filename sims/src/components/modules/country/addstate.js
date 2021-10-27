@@ -121,6 +121,7 @@ class addstate extends React.Component {
       .then((response) => {
         let data = response.data;
         rows = data;
+        console.log("country list > ",data)
         this.setState({ countryData: rows });
         this.getStateList();
       })
