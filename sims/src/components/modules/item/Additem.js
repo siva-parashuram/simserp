@@ -38,7 +38,7 @@ import DropdownInput from "../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
 
 class addItem extends React.Component {
-  constructor(props) {
+  constructor(props) { 
     super(props);
     this.state = {
       GeneralDetailsExpanded: true,
