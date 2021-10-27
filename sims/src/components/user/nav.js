@@ -21,30 +21,15 @@ import { Button } from "@material-ui/core";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-
 import { styled } from '@mui/material/styles';
-
-
-
-const useStyles = makeStyles((theme) => ({
-  // root: {
-  //   flexGrow: 1,
-  // },
+const useStyles = makeStyles((theme) => ({ 
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1,
-
-    // textAlign:"center"
-  },
-
-  // Logo: {
-  //   maxWidth: 80,
-  //   float:"left"
-  // },
+    flexGrow: 1,    
+  }, 
 }));
-
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
     right: -3,
@@ -68,13 +53,13 @@ export default function ButtonAppBar() {
   const [branchBtnId, setbranchBtnId] = React.useState("");
   const [token, settoken] = React.useState("");
   const [notificationCount, setnotificationCount] = React.useState(1);
- 
 
-  
+
+
   const handleClick = (event) => {
     setnotificationCount(0);
   };
-   
+
 
   useEffect(() => {
     if (getCookie(COOKIE.USERID) != null) {
@@ -127,36 +112,23 @@ export default function ButtonAppBar() {
         <CssBaseline />
         <AppBar className="navDiv" position="static">
           <Toolbar>
-            {/* <Box>
-            <img src={logo} className={classes.Logo} />
-            </Box> */}
-
             <Typography variant="h6" className={classes.title}>
               {branchName}
             </Typography>
-
-           
-
             <Avatar className='nav-avatar' sx={{ bgcolor: 'rgb(19, 163, 38)', fontSize: 18, color: 'white', width: 24, height: 24, marginRight: 2 }}>{userInitial}</Avatar>
             <IconButton
-             onClick={handleClick}
+              onClick={handleClick}
             >
               <StyledBadge
                 badgeContent={notificationCount}
-
               >
                 <NotificationsIcon style={{ color: "white" }} />
               </StyledBadge>
             </IconButton>
             <IconButton><PowerSettingsNewSharpIcon style={{ color: "white" }} onClick={closeWindow} /></IconButton>
-
-             
           </Toolbar>
         </AppBar>
         <Logincheck />
-
-       
-
       </div>
     </Fragment>
   );
