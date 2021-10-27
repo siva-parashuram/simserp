@@ -21,9 +21,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
-
-
 import MuiAlert from '@material-ui/lab/Alert';
+import LogoutIcon from '@mui/icons-material/Logout';
+import Tooltip from '@mui/material/Tooltip';
  
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import Typography from '@mui/material/Typography';
@@ -204,8 +204,8 @@ class login extends React.Component {
               if (response.data.head.userID === 0) {
                 this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true,disableLoginBtn:false });
                 document.getElementById("password").value = null;
-
               } else {
+                
                 let data = response.data;
                 setAllCookiesAndParams(data);
               }
@@ -324,14 +324,24 @@ class login extends React.Component {
                     <CardHeader
                       style={{ textAlign: 'left', color: '#01579b' }}
                       avatar={
-                        <Avatar aria-label="recipe" style={{ backgroundColor: '#0072bc' }} >
+                        <Avatar 
+                        aria-label="recipe" 
+                        style={{ backgroundColor: '#0072bc' }}
+                         >
                           {this.state.userInitial}
                         </Avatar>
                       }
                       action={
-                        <IconButton key="action-btn" aria-label="settings" aria-controls="logout-menu" aria-haspopup="true" onClick={menuClick}>
-                          <MoreVertIcon />
+                        <Tooltip title="Log Out" placement="right">
+                           <IconButton key="action-btn" 
+                           aria-label="settings" 
+                           aria-controls="logout-menu" 
+                           aria-haspopup="true" 
+                           onClick={logoutUser}
+                           >
+                          <LogoutIcon />
                         </IconButton>
+                        </Tooltip>
                       }
                       title={"Hi " + this.state.name}
                       subheader="Welcome to SIMS"
