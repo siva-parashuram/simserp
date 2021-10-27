@@ -23,9 +23,9 @@ import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
-import Header from "../../../user/userheaderconstants";
 
- 
+
+
 import Loader from "../../../compo/loader";
 
 import Breadcrumb from "../../../compo/breadcrumb";
@@ -35,13 +35,18 @@ class itemCategoryMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        urlparams: "",
-        ProgressLoader:true
+      urlparams: "",
+      initialCss: "",
+      ProgressLoader: true,
+      ItemCategoryData: [],
+      editurl: "",
+      CatID: 0,
+      selectedItem: {}
     };
   }
 
   componentDidMount() {
-    
+    this.getItemCategoryData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -58,10 +63,63 @@ class itemCategoryMaster extends React.Component {
     });
   }
 
-  render() {
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
+  getItemCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ ItemCategoryData: data }, () => { this.InitialhandleRowClick(null, data[0], "row_0"); });
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  InitialhandleRowClick(e, item, id) {
+    let editUrl =
+      URLS.URLS.editItemCategory +
+      this.state.urlparams +
+      "&editCatID=" +
+      item.catId;
+    this.setState({ CatID: item.catId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+    this.InitialremoveIsSelectedRowClasses();
+    document.getElementById(id).classList.add("selectedRow");
+  }
+  InitialremoveIsSelectedRowClasses() {
+    for (let i = 0; i < this.state.ItemCategoryData.length; i++) {
+      document.getElementById("row_" + i).className = "";
     }
+  }
+
+  render() {
+
+    const handleRowClick = (e, item, id) => {
+      let editUrl =
+        URLS.URLS.editItemCategory +
+        this.state.urlparams +
+        "&editCatID=" +
+        item.catId;
+      this.setState({ CatID: item.catId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+      removeIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+    };
+
+    const removeIsSelectedRowClasses = () => {
+      for (let i = 0; i < this.state.ItemCategoryData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    };
+
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -90,7 +148,7 @@ class itemCategoryMaster extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  typoTitle="Item Catagory Master"
+                  typoTitle="Item Category Master"
                   level={1}
                 />
               </div>
@@ -105,14 +163,14 @@ class itemCategoryMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                   onClick={(e) => openPage(URLS.URLS.addItemCategory + this.state.urlparams)}
+                    onClick={(e) => openPage(URLS.URLS.addItemCategory + this.state.urlparams)}
                   >
                     New
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage(URLS.URLS.editItemCategory + this.state.urlparams)}
+                    onClick={(e) => openPage(this.state.editurl)}
                   >
                     Edit
                   </Button>
@@ -137,23 +195,59 @@ class itemCategoryMaster extends React.Component {
                       <TableRow>
                         <TableCell className="table-header-font">#</TableCell>
                         <TableCell className="table-header-font" align="left">
-                          Item Catagory Name
+                          Code
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Hsncode
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          description
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Status
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody className="tableBody">
-                      <TableRow>
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left"></TableCell>
-                      </TableRow>
+                      {this.state.ItemCategoryData.map((item, i) => (
+                        <TableRow
+                          id={"row_" + i}
+                          className={this.state.initialCss}
+                          hover
+                          key={i}
+                          onClick={(event) =>
+                            handleRowClick(event, item, "row_" + i)
+                          }
+                        >
+                          <TableCell align="left">{i + 1}</TableCell>
+                          <TableCell align="left">
+                            <a className="LINK tableLink" href={URLS.URLS.editItemCategory +
+                              this.state.urlparams +
+                              "&editCatID=" +
+                              item.catId}>
+                              {item.code}
+                            </a>
+
+                          </TableCell>
+                          <TableCell align="left">{item.hsncode}</TableCell>
+                          <TableCell align="left">{item.description}</TableCell>
+                          <TableCell align="left">
+                            {item.isActive === true ? (
+                              <span style={{ color: "green" }}>Active</span>
+                            ) : (
+                              <span style={{ color: "red" }}>In-Active</span>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
                     </TableBody>
                   </Table>
                 </Grid>
               </Grid>
             </Grid>
             <Grid xs={12} sm={12} md={4} lg={4}>
-              
-           
+
+
             </Grid>
           </Grid>
         </div>
