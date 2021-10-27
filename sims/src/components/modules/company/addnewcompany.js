@@ -4,9 +4,9 @@ import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as CF from "../../../services/functions/customfunctions";
- 
 
 import Grid from "@material-ui/core/Grid";
+import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -14,8 +14,6 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Typography from "@material-ui/core/Typography";
- 
-
 
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
@@ -30,7 +28,6 @@ import TableRow from "@material-ui/core/TableRow";
 import AddIcon from "@material-ui/icons/Add";
 
 import axios from "axios";
- 
 
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
@@ -43,7 +40,7 @@ class addnewcompany extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      companyData:[],
+      companyData: [],
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
@@ -62,7 +59,7 @@ class addnewcompany extends React.Component {
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: true,
-      duplicate:false,
+      duplicate: false,
       Validations: {
         companyName: { errorState: false, errorMsg: "" },
         address: { errorState: false, errorMsg: "" },
@@ -98,7 +95,7 @@ class addnewcompany extends React.Component {
     });
   }
 
-  getCompanyList() {     
+  getCompanyList() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -116,21 +113,18 @@ class addnewcompany extends React.Component {
             alert("Un-Authorized Access Found!");
             window.close();
           } else {
-            let data = response.data;            
+            let data = response.data;
 
-            this.setState({companyData: data,ProgressLoader: true});
+            this.setState({ companyData: data, ProgressLoader: true });
           }
         } else {
           this.setState({ ErrorPrompt: true, ProgressLoader: true });
         }
       })
       .catch((error) => {
-        
         this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
   }
-
-
 
   getCountryList() {
     let rows = [];
@@ -148,14 +142,24 @@ class addnewcompany extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({ countryData: rows });
+        this.processCountryData(data);
       })
       .catch((error) => {});
   }
 
-  render() {
-    
+  processCountryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].name,
+        value: data[i].countryId,
+      };
+      newData.push(d);
+    }
+    this.setState({ countryData: newData, ProgressLoader: true });
+  }
 
+  render() {
     const Checktrue = () => {
       if (
         this.state.companyName === "" ||
@@ -163,38 +167,39 @@ class addnewcompany extends React.Component {
         this.state.companyName.length > 50 ||
         this.state.duplicate === true
       ) {
-        if( this.state.address === "" ||
-        this.state.address === null ||
-        this.state.address.length > 50){
-          this.setState({createBtnDisabled:true})
-        }else {
-          this.setState({createBtnDisabled:true})
+        if (
+          this.state.address === "" ||
+          this.state.address === null ||
+          this.state.address.length > 50
+        ) {
+          this.setState({ createBtnDisabled: true });
+        } else {
+          this.setState({ createBtnDisabled: true });
         }
+      } else if (
+        this.state.address === "" ||
+        this.state.address === null ||
+        this.state.address.length > 50
+      ) {
+        this.setState({ createBtnDisabled: true });
       }
-      else if(this.state.address === "" ||
-      this.state.address === null ||
-      this.state.address.length > 50){
-        this.setState({createBtnDisabled:true})
-      }
-      
-
-      
     };
-
-
-    
 
     const updateFormValue = (id, e) => {
       if (id === "companyName") {
-        let duplicateExist= CF.chkDuplicateName(this.state.companyData,"companyName",e.target.value);
-        
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.companyData,
+          "companyName",
+          e.target.value
+        );
+
         if (
           e.target.value === "" ||
           e.target.value == null ||
           e.target.value.length > 50 ||
-          duplicateExist===true
+          duplicateExist === true
         ) {
-          if(duplicateExist===true){
+          if (duplicateExist === true) {
             let v = this.state.Validations;
             v.companyName = {
               errorState: true,
@@ -203,9 +208,9 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               companyName: e.target.value,
-              
+
               createBtnDisabled: true,
-              duplicate:true
+              duplicate: true,
             });
           }
           if (e.target.value.length > 50) {
@@ -217,7 +222,7 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               companyName: e.target.value,
-              
+
               createBtnDisabled: true,
             });
           }
@@ -230,7 +235,7 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               companyName: e.target.value,
-              
+
               createBtnDisabled: true,
             });
           }
@@ -243,7 +248,7 @@ class addnewcompany extends React.Component {
             createBtnDisabled: false,
           });
         }
-       // Checktrue();
+        // Checktrue();
       }
       if (id === "Address") {
         if (
@@ -260,7 +265,7 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               address: e.target.value,
-              
+
               createBtnDisabled: true,
             });
           }
@@ -273,7 +278,7 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               address: e.target.value,
-              
+
               createBtnDisabled: true,
             });
           }
@@ -320,7 +325,11 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 50 Characters are Allowed!",
           };
-          this.setState({ Validations: v,  address3: e.target.value,createBtnDisabled: true });
+          this.setState({
+            Validations: v,
+            address3: e.target.value,
+            createBtnDisabled: true,
+          });
         } else {
           let v = this.state.Validations;
           v.address3 = { errorState: false, errorMsg: "" };
@@ -340,7 +349,11 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 50 Characters are Allowed!",
           };
-          this.setState({ Validations: v, city: e.target.value, createBtnDisabled: true });
+          this.setState({
+            Validations: v,
+            city: e.target.value,
+            createBtnDisabled: true,
+          });
         } else {
           let v = this.state.Validations;
           v.city = { errorState: false, errorMsg: "" };
@@ -360,7 +373,11 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 10 Characters are Allowed!",
           };
-          this.setState({ Validations: v, postcode: e.target.value, createBtnDisabled: true });
+          this.setState({
+            Validations: v,
+            postcode: e.target.value,
+            createBtnDisabled: true,
+          });
         } else {
           let v = this.state.Validations;
           v.postcode = { errorState: false, errorMsg: "" };
@@ -380,7 +397,11 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 20 digits are Allowed!",
           };
-          this.setState({ Validations: v,phoneno: e.target.value, createBtnDisabled: true });
+          this.setState({
+            Validations: v,
+            phoneno: e.target.value,
+            createBtnDisabled: true,
+          });
         } else {
           let v = this.state.Validations;
           v.phoneno = { errorState: false, errorMsg: "" };
@@ -400,7 +421,11 @@ class addnewcompany extends React.Component {
             errorState: true,
             errorMsg: "Only 50 Characters are Allowed!",
           };
-          this.setState({ Validations: v,website: e.target.value, createBtnDisabled: true });
+          this.setState({
+            Validations: v,
+            website: e.target.value,
+            createBtnDisabled: true,
+          });
         } else {
           let v = this.state.Validations;
           v.website = { errorState: false, errorMsg: "" };
@@ -412,9 +437,10 @@ class addnewcompany extends React.Component {
         }
         Checktrue();
       }
+      if (id === "Country") {
+        this.setState({ country: e.target.value });
+      }
     };
-
-   
 
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -491,8 +517,6 @@ class addnewcompany extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-  
 
     return (
       <Fragment>
@@ -677,26 +701,15 @@ class addnewcompany extends React.Component {
                         aria-label="company List table"
                       >
                         <TableBody className="tableBody">
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              Country
-                            </TableCell>
-                            <TableCell align="left" className="no-border-table">
-                              <select
-                                className="dropdown-css"
-                                id="countrySelect"
-                                label="Country"
-                                fullWidth
-                              >
-                                <option value="-">None</option>
-                                {this.state.countryData.map((item, i) => (
-                                  <option value={item.countryId}>
-                                    {item.name}
-                                  </option>
-                                ))}
-                              </select>
-                            </TableCell>
-                          </TableRow>
+                          <DropdownInput
+                            id="countrySelect"
+                            label="Country"
+                            onChange={(e) => updateFormValue("Country", e)}
+                            options={this.state.countryData}
+                            value={this.state.country}
+                          />
+
+                          
                           <TableRow>
                             <TableCell align="left" className="no-border-table">
                               State

@@ -12,7 +12,8 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
- 
+import DropdownInput from "../../compo/Tablerowcelldropdown";
+
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
  
@@ -101,7 +102,8 @@ class addstate extends React.Component {
         let data = response.data;
         console.log("getStateList > ",data);
         rows = data;
-        this.setState({ stateData: rows, ProgressLoader: true });
+        this.setState({stateData:data, ProgressLoader: true });
+       
       })
       .catch((error) => {});
   }
@@ -122,10 +124,25 @@ class addstate extends React.Component {
         let data = response.data;
         rows = data;
         console.log("country list > ",data)
-        this.setState({ countryData: rows });
+        
         this.getStateList();
+        this.processCountryData(data);
       })
       .catch((error) => {});
+  }
+
+  processCountryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+     
+        let d = {
+          name: data[i].name ,
+          value: data[i].countryId,
+        };
+        newData.push(d);
+      
+    }
+    this.setState({ countryData: newData, ProgressLoader: true });
   }
 
   render() {
@@ -461,28 +478,15 @@ class addstate extends React.Component {
                           error={this.state.Validations.gstcode.errorState}
                           helperText={this.state.Validations.gstcode.errorMsg}
                         />
+                        <DropdownInput
+                          id="CountryID"
+                          label="Country"
+                          onChange={(e) => updateFormValue("CountryID", e)}
+                          options={this.state.countryData}
+                          value={this.state.countryId}
+                        />
 
-                        <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Country
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <select
-                              className="dropdown-css"
-                              id="CountryID"
-                              label="Country"
-                              fullWidth
-                              value={parseInt(this.state.CountryID)}
-                              onChange={(e) => updateFormValue("CountryID", e)}
-                            >
-                              {this.state.countryData.map((item, i) => (
-                                <option value={item.countryId}>
-                                  {item.name}
-                                </option>
-                              ))}
-                            </select>
-                          </TableCell>
-                        </TableRow>
+                        
                       </TableBody>
                     </Table>
                   </TableContainer>

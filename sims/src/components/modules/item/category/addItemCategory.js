@@ -91,7 +91,7 @@ class addItemCategory extends React.Component {
         console.log("data > ", data);
         this.setState({ ProgressLoader: true });
         this.processMainCategoryData(data);
-
+  
       })
       .catch((error) => {
         this.setState({ ProgressLoader: true });

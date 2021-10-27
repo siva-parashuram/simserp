@@ -12,9 +12,9 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Button from "@material-ui/core/Button";
-
 
 import UpdateIcon from "@material-ui/icons/Update";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -62,7 +62,7 @@ class editstate extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       disableUpdateBtn: true,
-      duplicate:false,
+      duplicate: false,
       Validations: {
         name: { errorState: false, errorMsg: "" },
         gstcode: { errorState: false, errorMsg: "" },
@@ -170,9 +170,22 @@ class editstate extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({ countryData: rows });
+        this.getStateList();
+        this.processCountryData(data);
       })
       .catch((error) => {});
+  }
+
+  processCountryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].name,
+        value: data[i].countryId,
+      };
+      newData.push(d);
+    }
+    this.setState({ countryData: newData, ProgressLoader: true });
   }
 
   render() {
@@ -193,10 +206,11 @@ class editstate extends React.Component {
       if (
         this.state.name === "" ||
         this.state.name == null ||
-        this.state.name.length > 50||this.state.duplicate===true
+        this.state.name.length > 50 ||
+        this.state.duplicate === true
       ) {
         this.setState({ disableUpdateBtn: true });
-      } 
+      }
     };
 
     const updateFormValue = (id, e) => {
@@ -207,23 +221,24 @@ class editstate extends React.Component {
           this.state.oldName,
           e.target.value
         );
-        this.setState({duplicate:duplicateExist})
+        this.setState({ duplicate: duplicateExist });
         let state = this.state.state;
         state.Name = e.target.value;
-        
+
         if (
           e.target.value === "" ||
           e.target.value == null ||
-          e.target.value.length > 50||duplicateExist===true
+          e.target.value.length > 50 ||
+          duplicateExist === true
         ) {
-          if(duplicateExist===true){
-            let v=this.state.Validations
-            v.name={errorState:true,errorMsg:"State already exist"}
+          if (duplicateExist === true) {
+            let v = this.state.Validations;
+            v.name = { errorState: true, errorMsg: "State already exist" };
             this.setState({
-              Validations:v,
-              name:e.target.value,
+              Validations: v,
+              name: e.target.value,
               disableUpdateBtn: true,
-            })
+            });
           }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
@@ -234,7 +249,7 @@ class editstate extends React.Component {
             this.setState({
               Validations: v,
               disableUpdateBtn: true,
-              name:e.target.value,
+              name: e.target.value,
             });
           }
           if (e.target.value === "" || e.target.value == null) {
@@ -246,7 +261,7 @@ class editstate extends React.Component {
             this.setState({
               Validations: v,
               disableUpdateBtn: true,
-              name:e.target.value,
+              name: e.target.value,
             });
           }
         } else {
@@ -259,12 +274,12 @@ class editstate extends React.Component {
             state: state,
           });
         }
-         checkName();
+        checkName();
       }
       if (id === "Code") {
         let state = this.state.state;
         state.Code = e.target.value;
-       
+
         if (e.target.value.length > 5) {
           let v = this.state.Validations;
           v.code = { errorState: true, errorMsg: "Only 5 numbers are allowed" };
@@ -289,7 +304,7 @@ class editstate extends React.Component {
       if (id === "GSTCode") {
         let state = this.state.state;
         state.Gstcode = e.target.value;
-    
+
         if (e.target.value.length > 2) {
           let v = this.state.Validations;
           v.gstcode = {
@@ -366,8 +381,6 @@ class editstate extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-    
 
     return (
       <Fragment>
@@ -502,27 +515,15 @@ class editstate extends React.Component {
                           helperText={this.state.Validations.gstcode.errorMsg}
                         />
 
-                        <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Country
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <select
-                              className="dropdown-css"
-                              id="CountryID"
-                              label="Country"
-                              fullWidth
-                              value={parseInt(this.state.countryId)}
-                              onChange={(e) => updateFormValue("CountryID", e)}
-                            >
-                              {this.state.countryData.map((item, i) => (
-                                <option value={item.countryId}>
-                                  {item.name}
-                                </option>
-                              ))}
-                            </select>
-                          </TableCell>
-                        </TableRow>
+                        <DropdownInput
+                          id="CountryID"
+                          label="Country"
+                          onChange={(e) => updateFormValue("CountryID", e)}
+                          options={this.state.countryData}
+                          value={this.state.countryId}
+                        />
+
+                        
                       </TableBody>
                     </Table>
                   </TableContainer>

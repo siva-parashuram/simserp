@@ -17,8 +17,9 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+
 import ButtonGroup from "@mui/material/ButtonGroup";
+import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Destination from "./destination";
 
@@ -92,11 +93,22 @@ class adddestination extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-
+        this.processCountryData(data);
         rows = data;
-        this.setState({ countryData: rows });
       })
       .catch((error) => {});
+  }
+
+  processCountryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].name,
+        value: data[i].countryId,
+      };
+      newData.push(d);
+    }
+    this.setState({ countryData: newData, ProgressLoader: true });
   }
 
   getStateList() {
@@ -165,16 +177,20 @@ class adddestination extends React.Component {
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50||duplicateExist===true
+          e.target.value.length > 50 ||
+          duplicateExist === true
         ) {
-          if(duplicateExist===true){
-            let v=this.state.Validations
-            v.destinationName={errorState:true,errorMssg:"Destination already exists"}
+          if (duplicateExist === true) {
+            let v = this.state.Validations;
+            v.destinationName = {
+              errorState: true,
+              errorMssg: "Destination already exists",
+            };
             this.setState({
-              Validations:v,
-              destinationName:e.target.value,
+              Validations: v,
+              destinationName: e.target.value,
               DisabledCreatebtn: true,
-            })
+            });
           }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
@@ -426,39 +442,17 @@ class adddestination extends React.Component {
                                   this.state.Validations.postcode.errorMssg
                                 }
                               />
+                              <DropdownInput
+                                id="CountryID"
+                                label="Country"
+                                onChange={(e) =>
+                                  updateFormValue("CountryID", e)
+                                }
+                                options={this.state.countryData}
+                                value={this.state.countryId}
+                              />
 
-                              <TableRow>
-                                <TableCell
-                                  align="left"
-                                  className="no-border-table"
-                                >
-                                  Country
-                                </TableCell>
-                                <TableCell
-                                  align="left"
-                                  className="no-border-table"
-                                >
-                                  <Select
-                                    style={{ height: 40, marginTop: 14 }}
-                                    id="CountryID"
-                                    label="Country"
-                                    fullWidth
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                    }}
-                                    value={parseInt(this.state.countryId)}
-                                    onChange={(e) =>
-                                      updateFormValue("CountryID", e)
-                                    }
-                                  >
-                                    {this.state.countryData.map((item, i) => (
-                                      <MenuItem value={item.countryId}>
-                                        {item.name}
-                                      </MenuItem>
-                                    ))}
-                                  </Select>
-                                </TableCell>
-                              </TableRow>
+                              
                               <TableRow>
                                 <TableCell
                                   align="left"
@@ -483,11 +477,11 @@ class adddestination extends React.Component {
                                       updateFormValue("stateID", e)
                                     }
                                   >
-                                    {this.state.stateData.map((item, i) => (
-                                      <MenuItem value={item.stateId}>
-                                        {item.name}
-                                      </MenuItem>
-                                    ))}
+                                     {this.state.stateData.map((item, i) => (
+                                        <option value={parseInt(item.stateId)}>
+                                          {item.name}
+                                        </option>
+                                      ))}
                                   </Select>
                                 </TableCell>
                               </TableRow>

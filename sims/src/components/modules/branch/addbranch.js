@@ -5,10 +5,10 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
-
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
@@ -220,9 +220,21 @@ class addbranch extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({ countryData: rows });
+        this.processCountryData(data);
       })
       .catch((error) => {});
+  }
+
+  processCountryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].name,
+        value: data[i].countryId,
+      };
+      newData.push(d);
+    }
+    this.setState({ countryData: newData, ProgressLoader: true });
   }
 
   render() {
@@ -584,8 +596,6 @@ class addbranch extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    
-
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -634,7 +644,7 @@ class addbranch extends React.Component {
                     className="action-btns"
                     startIcon={<AddIcon />}
                     onClick={handleCreate}
-                    disabled  ={this.state.disabledCreatebtn}
+                    disabled={this.state.disabledCreatebtn}
                   >
                     ADD
                   </Button>
@@ -865,40 +875,26 @@ class addbranch extends React.Component {
                               aria-label="company List table"
                             >
                               <TableBody className="tableBody">
-                                <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Country
-                                  </TableCell>
-
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <select
-                                      className="dropdown-css"
-                                      id="countrySelect"
-                                      label="Country"
-                                      fullWidth
-                                      value={parseInt(this.state.countryId)}
-                                      onChange={(e) =>
-                                        updateFormValue("Country", e)
-                                      }
-                                    >
-                                      <option value="-">None</option>
-                                      {this.state.countryData.map((item, i) => (
-                                        <option
-                                          value={parseInt(item.countryId)}
-                                        >
-                                          {item.name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
+                                <DropdownInput
+                                  id="CountryID"
+                                  label="Country"
+                                  onChange={(e) =>
+                                    updateFormValue("CountryID", e)
+                                  }
+                                  options={this.state.countryData}
+                                  value={this.state.countryId}
+                                />
+                                <DropdownInput
+                                  id="stateSelect"
+                                  label="State"
+                                  onChange={(e) =>
+                                    updateFormValue("State", e)
+                                  }
+                                  options={this.state.stateData}
+                                  value={this.state.stateId}
+                                />
+                                
+                                {/* <TableRow>
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -928,7 +924,7 @@ class addbranch extends React.Component {
                                       ))}
                                     </select>
                                   </TableCell>
-                                </TableRow>
+                                </TableRow> */}
                                 <TableRow>
                                   <TableCell
                                     align="left"
