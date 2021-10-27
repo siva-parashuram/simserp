@@ -38,74 +38,73 @@ class editItem extends React.Component {
       SuccessPrompt: false,
       ProgressLoader: true,
       urlparams: "",
-      itemDepartmentMasterData:[],
+      itemDepartmentMasterData: [],
       ItemTypeMaster: APIURLS.ItemType,
+      ItemId: 0,
+      ItemNo: 0,
       ItemType: 0,
-      ItemNo: "ITM0001",
       Code: "",
       Alias: "",
       Description1: "",
       Description2: "",
       PackingDesc1: "",
       PackingDesc2: "",
-      ItemDeptID: 0,
-      CatID: 0,
-      IsTrading: false,
+      ItemDeptId: 0,
+      CatId: 0,
       IsActive: false,
+      IsTrading: false,
       IsNonStockValuation: false,
       IsCustomized: false,
-      IsSaleEvenQuantity: false,
       IsCertified: false,
       CertificateNo: "",
+      IsSaleEvenQuantity: false,
+      Location: "",
+      BarcodeNo: "",
+      CartonHeight: 0,
+      CartonLength: 0,
+      CartonWidth: 0,
+      NetWeight: 0,
+      GrossWeight: 0,
+      WarningLevel: 0,
+      MinStockLevel: 0,
+      Amsf: 0,
+      Msf: 0,
+      Bsf: 0,
+      Moq: 0,
+      ShipperQuantiry: 0,
+      CbmperShipper: 0,
       IsDiscontine: false,
-      IsQuality: false,
-      AllowNegativeStock: false,
-      CartonHeight:0,
-      CartonLength:0,
-      CartonWidth:0,
-      NetWeight:0,
-      GrossWeight:0,
-      WarningLevel:0,
-      AMSF:0,
-      MSF:0,
-      BSF:0,
-      MOQ:0,
-      ShipperQuantiry:0,
-      CBMPerShipper:0,
-      MinStockLevel:0,
-      IsQuality:false,
-      SpecID:0,
-      AllowNegativeStock:false,
-      PostingGroup:0,
-      CostingMethod:0,
-      StandardCost:0,
-      IndirectCostPercentage:0,
-      ProfitPercentage:0,
-      GSTGroupID:0,
-      TolerancePercentage:0,
-      HSNCode:"",
-      BaseUOM:0,
-      SalesUOM:0,
-      PurchaseUOM:0,
-      PackingUOM:0,
-      Replenishment:0,
-      LeadTime:0,
-      ManufacturingPolicy:0,
-      RoutingID:0,
-      BOMID:0,
-      Location:"",
-      BarcodeNo:"",
-      IsLot:false,
-      
-
-
       Reason: "",
-      ItemId: 0,
+      UserId: 0,
+      ModifyDate: "",
+      TolerancePercentage: 0,
+      IsQuality: false,
+      SpecId: 0,
+      AllowNegativeStock: false,
+      PostingGroup: 0,
+      CostingMethod: 0,
+      StandardCost: 0,
+      IndirectCostPercentage: 0,
+      ProfitPercentage: 0,
+      GstgroupId: 0,
+      Hsncode: "",
+      BaseUom: 0,
+      SalesUom: 0,
+      PurchaseUom: 0,
+      PackingUom: 0,
+      Replenishment: 0,
+      LeadTime: 0,
+      IsLot: false,
+      ManufacturingPolicy: "",
+      RoutingId: 0,
+      Bomid: 0,
       Item: {},
+      ItemCategoryData: [],
     };
   }
 
   componentDidMount() {
+    this.getItemCategoryData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -125,10 +124,46 @@ class editItem extends React.Component {
         ItemId: ItemId,
       },
       () => {
-        this.getItems();
-        this. getitemDepartmentMasterData();
+        this.getItem();
+        this.getitemDepartmentMasterData();
       }
     );
+  }
+
+  getItemCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        // this.setState({ ItemCategoryData: data,ProgressLoader: true });
+        this.processItemCategoryData(data);
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  processItemCategoryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].isActive === true) {
+        let d = {
+          name: data[i].code + " - " + data[i].hsncode,
+          value: data[i].catId
+        };
+        newData.push(d);
+      }
+    }
+    this.setState({ ItemCategoryData: newData, ProgressLoader: true });
   }
 
   getitemDepartmentMasterData() {
@@ -153,23 +188,23 @@ class editItem extends React.Component {
       });
   }
 
-  processDepartmentList(data){
+  processDepartmentList(data) {
     console.log("processDepartmentList > data > ", data);
-    let newData=[];
-    for(let i=0;i<data.length;i++){
-      if(data[i].isActive===true){
-        let d={
-          name:data[i].code + " - "+data[i].name,
-          value:data[i].itemDeptId
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].isActive === true) {
+        let d = {
+          name: data[i].code + " - " + data[i].name,
+          value: data[i].itemDeptId
         };
         newData.push(d);
-      }     
+      }
     }
-    console.log("processDepartmentList > newData > ",newData);
-    this.setState({itemDepartmentMasterData:newData});
+    console.log("processDepartmentList > newData > ", newData);
+    this.setState({ itemDepartmentMasterData: newData });
   }
 
-  getItems() {
+  getItem() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -188,10 +223,99 @@ class editItem extends React.Component {
       .post(Url, Data, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("data > ", data);
-        this.setState({ Item: data, ProgressLoader: true });
+        console.log("getItem > Response data > ", data);
+        this.fetchItemType(data.catId);
+        this.setState({
+          Item: data,
+          ItemId: data.itemId,
+          ItemNo: data.itemNo,
+          ItemType: parseInt(data.itemType),
+          Code: data.code,
+          Alias: data.alias,
+          Description1: data.description1,
+          Description2: data.description2,
+          PackingDesc1: data.packingDesc1,
+          PackingDesc2: data.packingDesc2,
+          ItemDeptId: data.itemDeptID,
+          CatId: data.catId,
+          IsActive: data.isActive,
+          IsTrading: data.isTrading,
+          IsNonStockValuation: data.isNonStockValuation,
+          IsCustomized: data.isCustomized,
+          IsCertified: data.isCertified,
+          CertificateNo: data.certificateNo,
+          IsSaleEvenQuantity: data.isSaleEvenQuantity,
+          Location: data.location,
+          BarcodeNo: data.barcodeNo,
+          CartonHeight: data.cartonHeight,
+          CartonLength: data.cartonLength,
+          CartonWidth: data.cartonWidth,
+          NetWeight: data.netWeight,
+          GrossWeight: data.grossWeight,
+          WarningLevel: data.warningLevel,
+          MinStockLevel: data.minStockLevel,
+          Amsf: data.amsf,
+          Msf: data.msf,
+          Bsf: data.bsf,
+          Moq: data.moq,
+          ShipperQuantiry: data.shipperQuantiry,
+          CbmperShipper: data.cbmperShipper,
+          IsDiscontine: data.isDiscontine,
+          Reason: data.Reason,
+          UserId: parseInt(getCookie(COOKIE.USERID)),
+          ModifyDate: data.modifyDate,
+          TolerancePercentage: data.tolerancePercentage,
+          IsQuality: data.isQuality,
+          SpecId: data.specId,
+          AllowNegativeStock: data.allowNegativeStock,
+          PostingGroup: data.postingGroup,
+          CostingMethod: data.costingMethod,
+          StandardCost: data.standardCost,
+          IndirectCostPercentage: data.indirectCostPercentage,
+          ProfitPercentage: data.profitPercentage,
+          GstgroupId: data.gstgroupId,
+          Hsncode: data.hsncode,
+          BaseUom: data.baseUom,
+          SalesUom: data.salesUom,
+          PurchaseUom: data.purchaseUom,
+          PackingUom: data.packingUom,
+          Replenishment: data.replenishment,
+          LeadTime: data.leadTime,
+          IsLot: data.isLot,
+          ManufacturingPolicy: data.manufacturingPolicy,
+          RoutingId: data.routingId,
+          Bomid: data.bomid,
+          ProgressLoader: true
+        });
       })
-      .catch((error) => {});
+      .catch((error) => { });
+  }
+
+  fetchItemType(value) {
+    console.log("fetchItemType > value > ", value);
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemTypeByCatID;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Datareq = {
+      ValidUser: ValidUser,
+      CatID: parseInt(value)
+    };
+    axios
+      .post(Url, Datareq, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ ItemType: data, ProgressLoader: true });
+
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
   }
 
   render() {
@@ -265,6 +389,7 @@ class editItem extends React.Component {
           break;
         case "CatID":
           this.setState({ CatID: e.target.value });
+          fetchItemType(e.target.value);
           break;
         case "IsTrading":
           this.setState({ IsTrading: e.target.checked });
@@ -305,6 +430,32 @@ class editItem extends React.Component {
       }
     };
 
+    const fetchItemType = (value) => {
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+      let Url = APIURLS.APIURL.GetItemTypeByCatID;
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Datareq = {
+        ValidUser: ValidUser,
+        CatID: parseInt(value)
+      };
+      axios
+        .post(Url, Datareq, { headers })
+        .then((response) => {
+          let data = response.data;
+          console.log("data > ", data);
+          this.setState({ ItemType: data, ProgressLoader: true });
+
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true });
+        });
+    }
+
     const processUpdateItem = () => {
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
@@ -339,46 +490,46 @@ class editItem extends React.Component {
           IsCertified: this.state.IsCertified,
           CertificateNo: this.state.CertificateNo,
           IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
-          Location: "",
-          BarcodeNo: "",
-          CartonHeight: 0,
-          CartonLength: 0,
-          CartonWidth: 0,
-          NetWeight: 0,
-          GrossWeight: 0,
-          WarningLevel: 0,
-          MinStockLevel: 0,
-          Amsf: 0,
-          Msf: 0,
-          Bsf: 0,
-          Moq: 0,
-          ShipperQuantiry: 0,
-          CbmperShipper: 0,
+          Location: this.state.Location,
+          BarcodeNo: this.state.BarcodeNo,
+          CartonHeight: this.state.CartonHeight,
+          CartonLength: this.state.CartonLength,
+          CartonWidth: this.state.CartonWidth,
+          NetWeight:this.state.NetWeight,
+          GrossWeight: this.state.GrossWeight,
+          WarningLevel:this.state.WarningLevel,
+          MinStockLevel: this.state.MinStockLevel,
+          Amsf: this.state.Amsf,
+          Msf: this.state.Msf,
+          Bsf: this.state.Bsf,
+          Moq: this.state.Moq,
+          ShipperQuantiry: this.state.ShipperQuantiry,
+          CbmperShipper: this.state.CbmperShipper,
           IsDiscontine: this.state.IsDiscontine,
           Reason: this.state.Reason,
           UserId: parseInt(getCookie(COOKIE.USERID)),
-          ModifyDate: "",
-          TolerancePercentage: 0,
-          IsQuality: false,
-          SpecId: 0,
-          AllowNegativeStock: false,
-          PostingGroup: 0,
-          CostingMethod: 0,
-          StandardCost: 0,
-          IndirectCostPercentage: 0,
-          ProfitPercentage: 0,
-          GstgroupId: 0,
-          Hsncode: "",
-          BaseUom: 0,
-          SalesUom: 0,
-          PurchaseUom: 0,
-          PackingUom: 0,
-          Replenishment: 0,
-          LeadTime: 0,
-          IsLot: false,
-          ManufacturingPolicy: 0,
-          RoutingId: 0,
-          Bomid: 0,
+          ModifyDate: this.state.ModifyDate,
+          TolerancePercentage: this.state.TolerancePercentage,
+          IsQuality: this.state.IsQuality,
+          SpecId: this.state.SpecId,
+          AllowNegativeStock: this.state.AllowNegativeStock,
+          PostingGroup: this.state.PostingGroup,
+          CostingMethod: this.state.CostingMethod,
+          StandardCost: this.state.StandardCost,
+          IndirectCostPercentage: this.state.IndirectCostPercentage,
+          ProfitPercentage: this.state.ProfitPercentage,
+          GstgroupId: this.state.GstgroupId,
+          Hsncode: this.state.Hsncode,
+          BaseUom: this.state.BaseUom,
+          SalesUom:this.state.SalesUom,
+          PurchaseUom: this.state.PurchaseUom,
+          PackingUom:this.state.PackingUom,
+          Replenishment: this.state.Replenishment,
+          LeadTime:this.state.LeadTime,
+          IsLot: this.state.IsLot,
+          ManufacturingPolicy: this.state.ManufacturingPolicy,
+          RoutingId: this.state.RoutingId,
+          Bomid: this.state.Bomid,
         },
       };
 
@@ -500,11 +651,12 @@ class editItem extends React.Component {
                         >
                           <TableBody className="tableBody">
 
-                          <DropdownInput
+                            <DropdownInput
                               id="CatID"
                               label="ItemCat"
                               onChange={(e) => updateFormValue("CatID", e)}
-                              options={this.state.ItemCat}
+                              options={this.state.ItemCategoryData}
+                              value={this.state.CatID}
                             />
 
                             <DropdownInput
@@ -519,11 +671,8 @@ class editItem extends React.Component {
                               label="Item Type"
                               onChange={(e) => updateFormValue("ItemType", e)}
                               options={APIURLS.ItemType}
-                              value={
-                                this.state.Item.itemType
-                                  ? this.state.Item.itemType
-                                  : 0
-                              }
+                              value={this.state.ItemType}
+                              disabled={true}
                             />
 
                             <TextboxInput
@@ -550,7 +699,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.Item.code}
+                              value={this.state.Code}
                             />
                             <TextboxInput
                               id="Alias"
@@ -562,7 +711,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.Item.alias}
+                              value={this.state.Alias}
                             />
                             <TextboxInput
                               id="Description1"
@@ -576,7 +725,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.Item.description1}
+                              value={this.state.Description1}
                             />
                             <TextboxInput
                               id="Description2"
@@ -590,7 +739,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              value={this.state.Item.description2}
+                              value={this.state.Description2}
                             />
 
                             <TextboxInput
@@ -622,7 +771,7 @@ class editItem extends React.Component {
                               value={this.state.PackingDesc2}
                             />
 
-                           
+
                           </TableBody>
                         </Table>
                       </Grid>
@@ -695,10 +844,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CertificateNo", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              value={this.state.CertificateNo} 
                               disabled={!this.state.IsCertified}
                             />
 
@@ -718,6 +864,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Reason", e)}
+                              value={this.state.Reason} 
                               disabled={!this.state.IsDiscontine}
                             />
                           </TableBody>
@@ -769,11 +916,8 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonHeight", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
-                              
+                            
+
                             />
                             <TextboxInput
                               type="number"
@@ -788,7 +932,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              
+
                             />
                             <TextboxInput
                               type="number"
@@ -1084,7 +1228,7 @@ class editItem extends React.Component {
                         >
                           <TableBody className="tableBody">
                             <TextboxInput
-                             type="number"
+                              type="number"
                               id="TolerancePercentage"
                               label="Tolerance Percentage"
                               variant="outlined"
@@ -1099,7 +1243,7 @@ class editItem extends React.Component {
                             />
 
                             <TextboxInput
-                             type="number"
+                              type="number"
                               id="GSTGroupID"
                               label="GST GroupID"
                               variant="outlined"
@@ -1122,7 +1266,7 @@ class editItem extends React.Component {
                               }}
                             />
                             <TextboxInput
-                             type="number"
+                              type="number"
                               id="BaseUOM"
                               label="Base UOM "
                               variant="outlined"
@@ -1132,61 +1276,61 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              
+
                             />
                           </TableBody>
                         </Table>
                       </Grid>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
-                      <Table
-                        stickyHeader
-                        size="small"
-                        className="accordion-table"
-                        aria-label="Item List table"
-                      >
-                        <TableBody className="tableBody">
-                          <TextboxInput
-                           type="number"
-                            id="SalesUOM"
-                            label="Sales UOM"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("SalesUOM", e)}
-                            InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 50,
-                            }}
-                            
-                          />
-                          <TextboxInput
-                           type="number"
-                            id="PurchaseUOM"
-                            label="Purchase UOM"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("PurchaseUOM", e)}
-                            InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 50,
-                            }}
-                           
-                          />
-                           <TextboxInput
-                            type="number"
-                            id="PackingUOM"
-                            label="Packing UOM"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("PackingUOM", e)}
-                            InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 50,
-                            }}
-                           
-                          />
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="Item List table"
+                        >
+                          <TableBody className="tableBody">
+                            <TextboxInput
+                              type="number"
+                              id="SalesUOM"
+                              label="Sales UOM"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("SalesUOM", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
 
-                        </TableBody>
-                      </Table>
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="PurchaseUOM"
+                              label="Purchase UOM"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("PurchaseUOM", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+
+                            />
+                            <TextboxInput
+                              type="number"
+                              id="PackingUOM"
+                              label="Packing UOM"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("PackingUOM", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+
+                            />
+
+                          </TableBody>
+                        </Table>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -1221,7 +1365,7 @@ class editItem extends React.Component {
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
-                      <Table
+                        <Table
                           stickyHeader
                           size="small"
                           className="accordion-table"
@@ -1229,7 +1373,7 @@ class editItem extends React.Component {
                         >
                           <TableBody className="tableBody">
                             <TextboxInput
-                            type="number"
+                              type="number"
                               id="Replenishment"
                               label="Replenishment"
                               variant="outlined"
@@ -1245,7 +1389,7 @@ class editItem extends React.Component {
 
                             <TextboxInput
                               type="number"
-                             id="LeadTime"
+                              id="LeadTime"
                               label="Lead Time"
                               variant="outlined"
                               size="small"
@@ -1255,9 +1399,9 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                             />
-                           
+
                             <TextboxInput
-                             type="number"
+                              type="number"
                               id="ManufacturingPolicy"
                               label="Manufacturing Policy "
                               variant="outlined"
@@ -1267,9 +1411,9 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              
+
                             />
-                            </TableBody>
+                          </TableBody>
                         </Table>
                       </Grid>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -1281,7 +1425,7 @@ class editItem extends React.Component {
                         >
                           <TableBody className="tableBody">
                             <TextboxInput
-                             type="number"
+                              type="number"
                               id="RoutingID"
                               label="RoutingID "
                               variant="outlined"
@@ -1291,10 +1435,10 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                             
+
                             />
                             <TextboxInput
-                             type="number"
+                              type="number"
                               id="BOMID"
                               label="BOMID "
                               variant="outlined"
@@ -1304,7 +1448,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                              
+
                             />
                           </TableBody>
                         </Table>
@@ -1340,7 +1484,7 @@ class editItem extends React.Component {
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={6} lg={6}>
-                      <Table
+                        <Table
                           stickyHeader
                           size="small"
                           className="accordion-table"
@@ -1396,4 +1540,3 @@ class editItem extends React.Component {
   }
 }
 export default editItem;
- 
