@@ -24,7 +24,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TableContainer from "@material-ui/core/TableContainer";
-
+import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 
 
 import TableRow from "@material-ui/core/TableRow";
@@ -50,6 +50,7 @@ class addbranch extends React.Component {
       countryData: [],
       stateData: [],
       branchData: [],
+      EffectiveDate: null,
       duplicate: false,
       branch: {
         address: null,
@@ -67,6 +68,7 @@ class addbranch extends React.Component {
         name: null,
         noSeries: [],
         phoneNo: null,
+        EffectiveDate: null,
         postcode: null,
         shortName: null,
         state: null,
@@ -550,6 +552,13 @@ class addbranch extends React.Component {
         }
         ValidateName();
       }
+      if (id === "EffectiveDate") {
+        // moment().format("YYYY-MM-DD")
+        let branch = this.state.branch;
+        branch.EffectiveDate = e.target.value;
+
+        this.setState({ branch: branch, EffectiveDate: e.target.value });
+      }
     };
 
     const handleCreate = () => {
@@ -807,6 +816,22 @@ class addbranch extends React.Component {
                                   helperText={
                                     this.state.Validations.website.errorMsg
                                   }
+                                />
+                                <Tablerowcelldateinput
+                                  id="EffectiveDate"
+                                  label="Effective Date"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("EffectiveDate", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50,
+                                  }}
+                                  value={this.state.EffectiveDate}
+                                  error={null}
+                                  helperText={null}
                                 />
                                 
                                 
