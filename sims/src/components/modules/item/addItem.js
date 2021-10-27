@@ -317,7 +317,7 @@ class addItem extends React.Component {
         IsQuality: false,
         SpecId: 0,
         AllowNegativeStock: false,
-        PostingGroup: 0,
+        ItemPostingGroupID: 0,
         CostingMethod: 0,
         StandardCost: 0,
         IndirectCostPercentage: 0,
