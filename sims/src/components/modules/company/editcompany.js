@@ -6,6 +6,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as CF from "../../../services/functions/customfunctions";
 
 import Grid from "@material-ui/core/Grid";
+import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Typography from "@material-ui/core/Typography";
 
@@ -157,9 +158,21 @@ class editcompany extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({ countryData: rows });
+        this.processCountryData(data);
       })
       .catch((error) => {});
+  }
+
+  processCountryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].name,
+        value: data[i].countryId,
+      };
+      newData.push(d);
+    }
+    this.setState({ countryData: newData, ProgressLoader: true });
   }
 
   getCompanyDetails(CompanyID) {
@@ -822,37 +835,14 @@ class editcompany extends React.Component {
                           aria-label="company List table"
                         >
                           <TableBody className="tableBody">
-                            <TableRow>
-                              <TableCell
-                                align="left"
-                                className="no-border-table"
-                              >
-                                Country
-                              </TableCell>
-
-                              <TableCell
-                                align="left"
-                                className="no-border-table"
-                              >
-                                <select
-                                  className="dropdown-css"
-                                  id="countrySelect"
-                                  label="Country"
-                                  fullWidth
-                                  value={parseInt(this.state.selectedCountry)}
-                                  onChange={(e) =>
-                                    updateFormValue("Country", e)
-                                  }
-                                >
-                                  <option value="-">None</option>
-                                  {this.state.countryData.map((item, i) => (
-                                    <option value={item.countryId}>
-                                      {item.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </TableCell>
-                            </TableRow>
+                          <DropdownInput
+                          id="countrySelect"
+                          label="Country"
+                          onChange={(e) => updateFormValue("Country", e)}
+                          options={this.state.countryData}
+                          value={this.state.CountryID}
+                        />
+                           
                             <TableRow>
                               <TableCell
                                 align="left"
