@@ -2,35 +2,31 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Button from "@material-ui/core/Button";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
 
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+
+import * as CF from "../../../services/functions/customfunctions";
+
+
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
 
-import moment from "moment";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
@@ -51,6 +47,7 @@ class addcurrency extends React.Component {
       initialCss: "",
       SuccessPrompt: false,
       ErrorPrompt: false,
+      DisableCreatebtn:false,
       Currency: {
         CurrId: 0,
         Code: null,
@@ -61,6 +58,7 @@ class addcurrency extends React.Component {
         Rounding: 0,
        
       },
+      currency:[],
       Code: null,
       Description: null,
       Symbol: null,
@@ -73,6 +71,7 @@ class addcurrency extends React.Component {
   }
 
   componentDidMount() {
+    this.getList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -89,6 +88,29 @@ class addcurrency extends React.Component {
     });
   }
 
+  getList() {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetCurrencies;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        this.setState({
+          currency: data,
+          ProgressLoader: true,
+        });
+      })
+      .catch((error) => {});
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -101,23 +123,41 @@ class addcurrency extends React.Component {
     const updateFormValue = (id, e) => {
       let Currency = this.state.Currency;
       if (id === "Code") {
+        let duplicateExist= CF.chkDuplicateName(this.state.currency,"code",e.target.value);
         Currency.Code = e.target.value;
-        if (e.target.value.length > 10) {
-          let v = this.state.Validations;
+        if (e.target.value.length > 10||duplicateExist===true) {
+          if(duplicateExist===true){
+            let v = this.state.Validations;
           v.Code = {
             errorState: true,
-            errorMssg: "MAximum 10 characters allowed",
+            errorMssg: "Code Exists",
           };
           this.setState({
             Validations: v,
+            DisableCreatebtn:true,
+            Code: e.target.value,
           });
-        } else {
+          }
+          if(e.target.value.length > 10){
+            let v = this.state.Validations;
+            v.Code = {
+              errorState: true,
+              errorMssg: "MAximum 10 characters allowed",
+            };
+            this.setState({
+              Validations: v,
+              DisableCreatebtn:true,
+            });
+          }}
+          
+           else {
           let v = this.state.Validations;
           v.Code = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
             Currency: Currency,
             Code: e.target.value,
+            DisableCreatebtn:false
           });
         }
       }
@@ -208,9 +248,7 @@ class addcurrency extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+   
 
     return (
       <Fragment>
@@ -260,6 +298,7 @@ class addcurrency extends React.Component {
                     className="action-btns"
                     startIcon={<AddIcon />}
                     onClick={(e) => handleCreate(e)}
+                    disabled={this.state.DisableCreatebtn}
                   >
                     ADD
                   </Button>

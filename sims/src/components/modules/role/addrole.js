@@ -14,17 +14,16 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Button from "@material-ui/core/Button";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
-import TableRow from "@material-ui/core/TableRow";
+import * as CF from "../../../services/functions/customfunctions";
+
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
+
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
@@ -37,6 +36,7 @@ class addrole extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      roles:[],
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
@@ -57,6 +57,7 @@ class addrole extends React.Component {
   }
 
   componentDidMount() {
+    this. getRoles();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -74,6 +75,33 @@ class addrole extends React.Component {
     });
   }
 
+  getRoles() {
+    this.setState({ ProgressLoader: false });
+
+    let rows = [];
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetRolesUrl = APIURLS.APIURL.GetRoles;
+
+    axios
+      .post(GetRolesUrl, ValidUser, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          let data = response.data;
+          rows = data;
+          this.setState({ roles: rows, ProgressLoader: true });
+        } else {
+        }
+      })
+      .catch((error) => {
+        this.setState({ roles: [], ProgressLoader: true });
+      });
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -85,10 +113,23 @@ class addrole extends React.Component {
 
     const updateFormValue = (id, e) => {
       if (id == "name") {
-        if (e.target.value === "" || e.target.value.length > 50) {
+        let duplicateExist= CF.chkDuplicateName(this.state.roles,"name",e.target.value);
+        if (e.target.value === "" || e.target.value.length > 50||duplicateExist===true) {
           let Role = this.state.Role;
           Role.Name = e.target.value;
-          if (e.target.value.length > 50) {
+          if(duplicateExist===true){
+            let v = this.state.Validations;
+            v.Name = {
+              errorState: true,
+              errorMssg: "Role Master Exists ",
+            };
+            this.setState({
+              Validations: v,
+              CreateBtnDisable: true,
+              Name: e.target.value,
+            });
+          }
+{}          if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.Name = {
               errorState: true,
@@ -105,6 +146,7 @@ class addrole extends React.Component {
             this.setState({
               Validations: v,
               CreateBtnDisable: true,
+              Name: e.target.value,
             });
           }
         } else {
@@ -171,9 +213,7 @@ class addrole extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     return (
       <Fragment>

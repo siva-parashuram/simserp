@@ -33,7 +33,7 @@ class adduser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      duplicateExist: false,
+      duplicate: false,
       users: [],
       urlparams: "",
       ProgressLoader: true,
@@ -123,19 +123,22 @@ class adduser extends React.Component {
       }
     };
 
+    // const CheckFirstName = () => {
+    //   if (this.state.FirstName === "" || this.state.FirstName.length > 20) {
+    //     if (this.state.EmailID.length > 50 || this.state.duplicate === true) {
+    //       this.setState({ DisabledCreatebtn: true });
+    //     }else{
+    //       this.setState({ DisabledCreatebtn: true });
+    //     }
+    //   } else if (
+    //     this.state.EmailID.length > 50 ||
+    //     this.state.duplicate === true
+    //   ) {
+    //     this.setState({ DisabledCreatebtn: true });
+    //   } else {
+    //   }
+    // };
     
-
-    const CheckFirstName = () => {
-      if (
-        this.state.FirstName === "" ||
-        this.state.FirstName === null ||
-        this.state.FirstName.length > 20
-      ) {
-        this.setState({ DisabledCreatebtn: true });
-      } else {
-        this.setState({ DisabledCreatebtn: false });
-      }
-    };
 
     const updateFormValue = (id, e) => {
       if (id === "isActive") {
@@ -210,7 +213,6 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
       }
       if (id === "EmailID") {
         let duplicateExist = CF.chkDuplicateName(
@@ -231,7 +233,7 @@ class adduser extends React.Component {
               Validations: v,
               EmailID: e.target.value,
               DisabledCreatebtn: true,
-              duplicateExist: true,
+              duplicate: true,
             });
           }
 
@@ -258,7 +260,6 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
       }
       if (id === "LoginID") {
         let user = this.state.user;
@@ -283,7 +284,6 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
       }
 
       if (id === "Password") {
@@ -309,7 +309,6 @@ class adduser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
       }
 
       this.state.duplicateExist === true
@@ -318,6 +317,7 @@ class adduser extends React.Component {
     };
 
     const handleCreate = () => {
+      
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -487,7 +487,7 @@ class adduser extends React.Component {
                           label="Email ID"
                           variant="outlined"
                           size="small"
-                          onChange={(e) => ("EmailID", e)}
+                          onChange={(e) => updateFormValue("EmailID", e)}
                           InputProps={{
                             className: "textFieldCss",
                             maxlength: 50,
