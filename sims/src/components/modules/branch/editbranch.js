@@ -1711,24 +1711,24 @@ class editbranch extends React.Component {
                                   </TableCell>
                                 </TableRow> */}
                                 <Tablerowcelltextboxinput
-                                  id="Postcode"
-                                  label="Postcode"
+                                  id="Address"
+                                  label="Address Line 1"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
-                                    updateFormValue("Postcode", e)
+                                    updateFormValue("Address", e)
                                   }
                                   InputProps={{
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.postcode}
+                                  value={this.state.address}
                                   error={
-                                    this.state.Validations.postcode
-                                          .errorState
+                                    this.state.Validations.address
+                                    .errorState
                                   }
                                   helperText={
-                                    this.state.Validations.postcode.errorMsg
+                                    this.state.Validations.address.errorMsg
                                   }
                                 />
                                 {/* <TableRow>
@@ -1765,7 +1765,28 @@ class editbranch extends React.Component {
                                     />
                                   </TableCell>
                                 </TableRow> */}
-                                <TableRow>
+                                <Tablerowcelltextboxinput
+                                  id="Address2"
+                                  label="Address Line 2"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("Address", e)
+                                  }
+                                  InputProps={{
+                                    className: "textFieldCss",
+                                    maxlength: 50,
+                                  }}
+                                  value={this.state.address}
+                                  error={
+                                    this.state.Validations.address
+                                    .errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.address.errorMsg
+                                  }
+                                />
+                                {/* <TableRow>
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -1798,7 +1819,7 @@ class editbranch extends React.Component {
                                       }
                                     />
                                   </TableCell>
-                                </TableRow>
+                                </TableRow> */}
                                 <TableRow>
                                   <TableCell
                                     align="left"

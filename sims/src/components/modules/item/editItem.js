@@ -15,8 +15,8 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import AddIcon from "@material-ui/icons/Add";   
-    
+import AddIcon from "@material-ui/icons/Add";
+
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -158,7 +158,7 @@ class editItem extends React.Component {
       if (data[i].isActive === true) {
         let d = {
           name: data[i].code + " - " + data[i].hsncode,
-          value: data[i].catId
+          value: data[i].catId,
         };
         newData.push(d);
       }
@@ -195,7 +195,7 @@ class editItem extends React.Component {
       if (data[i].isActive === true) {
         let d = {
           name: data[i].code + " - " + data[i].name,
-          value: data[i].itemDeptId
+          value: data[i].itemDeptId,
         };
         newData.push(d);
       }
@@ -285,10 +285,10 @@ class editItem extends React.Component {
           ManufacturingPolicy: data.manufacturingPolicy,
           RoutingId: data.routingId,
           Bomid: data.bomid,
-          ProgressLoader: true
+          ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   fetchItemType(value) {
@@ -303,7 +303,7 @@ class editItem extends React.Component {
     };
     let Datareq = {
       ValidUser: ValidUser,
-      CatID: parseInt(value)
+      CatID: parseInt(value),
     };
     axios
       .post(Url, Datareq, { headers })
@@ -311,7 +311,6 @@ class editItem extends React.Component {
         let data = response.data;
         console.log("data > ", data);
         this.setState({ ItemType: data, ProgressLoader: true });
-
       })
       .catch((error) => {
         this.setState({ ProgressLoader: true });
@@ -425,6 +424,124 @@ class editItem extends React.Component {
             document.getElementById("CertificateNo").focus();
           }
           break;
+        //------------------
+        case "CartonHeight":
+          this.setState({ CartonHeight: e.target.value });
+          break;
+
+        case "CartonLength":
+          this.setState({ CartonLength: e.target.value });
+          break;
+
+        case "CartonWidth":
+          this.setState({ CartonWidth: e.target.value });
+          break;
+        case "NetWeight":
+          this.setState({ NetWeight: e.target.value });
+          break;
+        case "GrossWeight":
+          this.setState({ GrossWeight: e.target.value });
+          break;
+        case "WarningLevel":
+          this.setState({ WarningLevel: e.target.value });
+          break;
+        case "MinStockLevel":
+          this.setState({ MinStockLevel: e.target.value });
+          break;
+        case "AMSF":
+          this.setState({ Amsf: e.target.value });
+          break;
+        case "MSF":
+          this.setState({ Msf: e.target.value });
+          break;
+        case "BSF":
+          this.setState({ Bsf: e.target.value });
+          break;
+        case "MOQ":
+          this.setState({ Moq: e.target.value });
+          break;
+        case "ShipperQuantity":
+          this.setState({ ShipperQuantiry: e.target.value });
+          break;
+        case "CBMPerShipper":
+          this.setState({ CbmperShipper: e.target.value });
+          break;
+        case "IsQuality":
+          this.setState({ IsQuality: e.target.checked });
+          break;
+        case "SpecID":
+          this.setState({ SpecId: e.target.value });
+          break;
+        case "AllowNegativeStock":
+          this.setState({ AllowNegativeStock: e.target.checked });
+          break;
+        case "PostingGroup":
+          this.setState({ ItemPostingGroupID: e.target.value });
+          break;
+        case "CostingMethod":
+          this.setState({ CostingMethod: e.target.value });
+          break;
+        case "StandardCost":
+          this.setState({ StandardCost: e.target.value });
+          break;
+        case "IndirectCostPercentage":
+          this.setState({ IndirectCostPercentage: e.target.value });
+          break;
+
+        case "ProfitPercentage":
+          this.setState({ ProfitPercentage: e.target.value });
+          break;
+
+        case "TolerancePercentage":
+          this.setState({ TolerancePercentage: e.target.value });
+          break;
+
+        case "GSTGroupID":
+          this.setState({ GstgroupId: e.target.value });
+          break;
+        case "HSNCode":
+          this.setState({ Hsncode: e.target.value });
+          break;
+
+        case "BaseUOM":
+          this.setState({ BaseUom: e.target.value });
+          break;
+        case "SalesUOM":
+          this.setState({ SalesUom: e.target.value });
+          break;
+        case "PurchaseUOM":
+          this.setState({ PurchaseUom: e.target.value });
+          break;
+        case "PackingUOM":
+          this.setState({ PackingUom: e.target.value });
+          break;
+        case "Replenishment":
+          this.setState({ Replenishment: e.target.value });
+          break;
+        case "LeadTime":
+          this.setState({ LeadTime: e.target.value });
+          break;
+        case "ManufacturingPolicy":
+          this.setState({ ManufacturingPolicy: e.target.value });
+          break;
+        case "RoutingID":
+          this.setState({ RoutingId: e.target.value });
+          break;
+        case "BOMID":
+          this.setState({ Bomid: e.target.value });
+          break;
+        case "Location":
+          this.setState({ Location: e.target.value });
+          break;
+        case "BarcodeNo":
+          this.setState({ BarcodeNo: e.target.value });
+          break;
+
+        case "IsLot":
+          this.setState({ IsLot: e.target.checked });
+          break;
+
+        //---------------------
         default:
           break;
       }
@@ -441,7 +558,7 @@ class editItem extends React.Component {
       };
       let Datareq = {
         ValidUser: ValidUser,
-        CatID: parseInt(value)
+        CatID: parseInt(value),
       };
       axios
         .post(Url, Datareq, { headers })
@@ -449,12 +566,11 @@ class editItem extends React.Component {
           let data = response.data;
           console.log("data > ", data);
           this.setState({ ItemType: data, ProgressLoader: true });
-
         })
         .catch((error) => {
           this.setState({ ProgressLoader: true });
         });
-    }
+    };
 
     const processUpdateItem = () => {
       this.setState({ ProgressLoader: false });
@@ -495,9 +611,9 @@ class editItem extends React.Component {
           CartonHeight: this.state.CartonHeight,
           CartonLength: this.state.CartonLength,
           CartonWidth: this.state.CartonWidth,
-          NetWeight:this.state.NetWeight,
+          NetWeight: this.state.NetWeight,
           GrossWeight: this.state.GrossWeight,
-          WarningLevel:this.state.WarningLevel,
+          WarningLevel: this.state.WarningLevel,
           MinStockLevel: this.state.MinStockLevel,
           Amsf: this.state.Amsf,
           Msf: this.state.Msf,
@@ -521,11 +637,11 @@ class editItem extends React.Component {
           GstgroupId: this.state.GstgroupId,
           Hsncode: this.state.Hsncode,
           BaseUom: this.state.BaseUom,
-          SalesUom:this.state.SalesUom,
+          SalesUom: this.state.SalesUom,
           PurchaseUom: this.state.PurchaseUom,
-          PackingUom:this.state.PackingUom,
+          PackingUom: this.state.PackingUom,
           Replenishment: this.state.Replenishment,
-          LeadTime:this.state.LeadTime,
+          LeadTime: this.state.LeadTime,
           IsLot: this.state.IsLot,
           ManufacturingPolicy: this.state.ManufacturingPolicy,
           RoutingId: this.state.RoutingId,
@@ -650,7 +766,6 @@ class editItem extends React.Component {
                           aria-label="Item List table"
                         >
                           <TableBody className="tableBody">
-
                             <DropdownInput
                               id="CatID"
                               label="ItemCat"
@@ -771,8 +886,6 @@ class editItem extends React.Component {
                               }}
                               value={this.state.PackingDesc2}
                             />
-
-
                           </TableBody>
                         </Table>
                       </Grid>
@@ -845,7 +958,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CertificateNo", e)
                               }
-                              value={this.state.CertificateNo} 
+                              value={this.state.CertificateNo}
                               disabled={!this.state.IsCertified}
                             />
 
@@ -865,7 +978,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Reason", e)}
-                              value={this.state.Reason} 
+                              value={this.state.Reason}
                               disabled={!this.state.IsDiscontine}
                             />
                           </TableBody>
@@ -918,8 +1031,6 @@ class editItem extends React.Component {
                                 updateFormValue("CartonHeight", e)
                               }
                               value={this.state.CartonHeight}
-                            
-
                             />
                             <TextboxInput
                               type="number"
@@ -935,7 +1046,6 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.CartonLength}
-
                             />
                             <TextboxInput
                               type="number"
@@ -1060,7 +1170,7 @@ class editItem extends React.Component {
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
-                               value={this.state.Moq}
+                              value={this.state.Moq}
                             />
                           </TableBody>
                         </Table>
@@ -1102,7 +1212,6 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.CbmperShipper}
-
                             />
                             <SwitchInput
                               key="IsQuality"
@@ -1278,6 +1387,7 @@ class editItem extends React.Component {
                               value={this.state.GstgroupId}
                             />
                             <TextboxInput
+                              type="number"
                               id="HSNCode"
                               label="HSN Code"
                               variant="outlined"
@@ -1288,7 +1398,6 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.Hsncode}
-
                             />
                             <TextboxInput
                               type="number"
@@ -1302,7 +1411,6 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.BaseUom}
-
                             />
                           </TableBody>
                         </Table>
@@ -1327,7 +1435,6 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.SalesUom}
-
                             />
                             <TextboxInput
                               type="number"
@@ -1335,13 +1442,14 @@ class editItem extends React.Component {
                               label="Purchase UOM"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("PurchaseUOM", e)}
+                              onChange={(e) =>
+                                updateFormValue("PurchaseUOM", e)
+                              }
                               InputProps={{
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
                               value={this.state.PurchaseUom}
-
                             />
                             <TextboxInput
                               type="number"
@@ -1355,9 +1463,7 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.PackingUom}
-
                             />
-
                           </TableBody>
                         </Table>
                       </Grid>
@@ -1437,13 +1543,14 @@ class editItem extends React.Component {
                               label="Manufacturing Policy "
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("ManufacturingPolicy", e)}
+                              onChange={(e) =>
+                                updateFormValue("ManufacturingPolicy", e)
+                              }
                               InputProps={{
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
                               value={this.state.ManufacturingPolicy}
-
                             />
                           </TableBody>
                         </Table>
@@ -1468,7 +1575,6 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.RoutingId}
-
                             />
                             <TextboxInput
                               type="number"
@@ -1482,7 +1588,6 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.Bomid}
-
                             />
                           </TableBody>
                         </Table>
@@ -1530,9 +1635,7 @@ class editItem extends React.Component {
                               label="Location"
                               variant="outlined"
                               size="small"
-                              onChange={(e) =>
-                                updateFormValue("Location", e)
-                              }
+                              onChange={(e) => updateFormValue("Location", e)}
                               InputProps={{
                                 className: "textFieldCss",
                                 maxlength: 50,
@@ -1551,7 +1654,6 @@ class editItem extends React.Component {
                                 maxlength: 50,
                               }}
                               value={this.state.BarcodeNo}
-
                             />
                             <SwitchInput
                               key="IsLot"
