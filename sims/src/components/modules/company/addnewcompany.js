@@ -690,7 +690,7 @@ class addnewcompany extends React.Component {
                               >
                                 <option value="-">None</option>
                                 {this.state.countryData.map((item, i) => (
-                                  <option value={item.countryId}>
+                                  <option value={item.countryId}>  
                                     {item.name}
                                   </option>
                                 ))}

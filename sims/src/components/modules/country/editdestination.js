@@ -19,7 +19,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
-import MuiAlert from "@material-ui/lab/Alert";
+
 import Destination from "./destination";
 import UpdateIcon from "@material-ui/icons/Update";
 import "../../user/dasboard.css";
@@ -522,10 +522,10 @@ class editdestination extends React.Component {
                                       }
                                     >
                                       {this.state.countryData.map((item, i) => (
-                                        <MenuItem value={item.countryId}>
-                                          {item.name}
-                                        </MenuItem>
-                                      ))}
+                                  <option value={item.countryId}>  
+                                    {item.name}
+                                  </option>
+                                ))}
                                     </Select>
                                   </TableCell>
                                 </TableRow>

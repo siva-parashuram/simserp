@@ -165,16 +165,20 @@ class adddestination extends React.Component {
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50||duplicateExist===true
+          e.target.value.length > 50 ||
+          duplicateExist === true
         ) {
-          if(duplicateExist===true){
-            let v=this.state.Validations
-            v.destinationName={errorState:true,errorMssg:"Destination already exists"}
+          if (duplicateExist === true) {
+            let v = this.state.Validations;
+            v.destinationName = {
+              errorState: true,
+              errorMssg: "Destination already exists",
+            };
             this.setState({
-              Validations:v,
-              destinationName:e.target.value,
+              Validations: v,
+              destinationName: e.target.value,
               DisabledCreatebtn: true,
-            })
+            });
           }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
@@ -451,6 +455,8 @@ class adddestination extends React.Component {
                                       updateFormValue("CountryID", e)
                                     }
                                   >
+                                   
+
                                     {this.state.countryData.map((item, i) => (
                                       <MenuItem value={item.countryId}>
                                         {item.name}
@@ -483,11 +489,11 @@ class adddestination extends React.Component {
                                       updateFormValue("stateID", e)
                                     }
                                   >
-                                    {this.state.stateData.map((item, i) => (
-                                      <MenuItem value={item.stateId}>
-                                        {item.name}
-                                      </MenuItem>
-                                    ))}
+                                   {this.state.countryData.map((item, i) => (
+                                  <option value={item.countryId}>  
+                                    {item.name}
+                                  </option>
+                                ))}
                                   </Select>
                                 </TableCell>
                               </TableRow>
