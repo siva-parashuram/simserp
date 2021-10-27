@@ -82,7 +82,11 @@ export const APIURL = {
     CreateItemMainCategory:domain+"api/ItemMaster/CreateItemMainCategory",
     GetItemMainCategories:domain+"api/ItemMaster/GetItemMainCategories",
     GetItemMainCategory:domain+"api/ItemMaster/GetItemMainCategory",
-    UpdateItemMainCategory:domain+"api/ItemMaster/UpdateItemMainCategory"
+    UpdateItemMainCategory:domain+"api/ItemMaster/UpdateItemMainCategory",
+    CreateItemCategory:domain+"api/ItemMaster/CreateItemCategory",
+    GetItemCategories:domain+"api/ItemMaster/GetItemCategories",
+    GetItemCategory:domain+"api/ItemMaster/GetItemCategory",
+    UpdateItemCategory:domain+"api/ItemMaster/UpdateItemCategory",
   };
 
   export const CTimeOut = 10; 

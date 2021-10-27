@@ -2,30 +2,22 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+ 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+ 
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+ 
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+ 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import UpdateIcon from "@material-ui/icons/Update";
-import "../../../user/dasboard.css";
-import Header from "../../../user/userheaderconstants";
+import "../../../user/dasboard.css"; 
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -50,18 +42,24 @@ class editItemCategory extends React.Component {
       Code: "",
       Description: "",
       HSNCode: "",
-      CatID:0,
+      CatID: 0,
       IsTrading: false,
-      IsNonStockV: false,
+      IsNonStockValuation: false,
       IsPriceRange: false,
+      MainCategoryData: [],
+      MainCatID: 0,
+      IsCustomized:false,
+      
     };
   }
 
   componentDidMount() {
+    this.getMainCategoryData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
+    let CatID = url.searchParams.get("editCatID");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -71,7 +69,86 @@ class editItemCategory extends React.Component {
       branchName;
     this.setState({
       urlparams: urlparams,
+      CatID:CatID
+    },()=>{
+this.getItemCategory();
     });
+  }
+
+  
+  getMainCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemMainCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ ProgressLoader: true });
+        this.processMainCategoryData(data);
+
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  processMainCategoryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].isActive === true) {
+        let d = {
+          name: data[i].code + " - " + data[i].hsncode,
+          value: data[i].mainCatId,
+        };
+        newData.push(d);
+      }
+    }
+    this.setState({ MainCategoryData: newData, ProgressLoader: true });
+  }
+
+  getItemCategory() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Data={
+      validUser:ValidUser,
+      ItemCategory: {
+        CatID:this.state.CatID,
+      }
+    };
+
+    let Url = APIURLS.APIURL.GetItemCategory;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, Data, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({
+          ItemCategory:data,
+          IsActive:  data.isActive,
+          MainCatID:data.mainCatId,
+          Code: data.code,
+          Description: data.description,
+          HSNCode: data.hsncode,          
+          IsTrading: data.isTrading,
+          IsNonStockValuation: data.isNonStockValuation,
+          IsPriceRange: data.isPriceRange,
+          IsCustomized:data.isCustomized,
+          DisableUpdatebtn: false,
+          ProgressLoader: true
+        });
+      })
+      .catch((error) => { });
   }
 
   render() {
@@ -82,7 +159,86 @@ class editItemCategory extends React.Component {
           : this.setState({ GeneralDetailsExpanded: true });
       }
     };
-    const updateFormValue = (id, e) => {};
+    const updateFormValue = (param, e) => {
+      switch (param) {
+        case "Code":
+          if (e.target.value === "") {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+          } else {
+            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+          }
+          break;
+        case "MainCatID":
+          this.setState({ MainCatID: e.target.value });
+          break
+        case "Description":
+          this.setState({ Description: e.target.value });
+          break;
+        case "HSNCode":
+          this.setState({ HSNCode: e.target.value });
+          break;
+        case "IsActive":
+          this.setState({ IsActive: e.target.checked });
+          break;
+        case "ItemType":
+          this.setState({ ItemType: e.target.value });
+          break;
+        case "IsTrading":
+          this.setState({ IsTrading: e.target.checked });
+          break;
+        case "IsNonStockValuation":
+          this.setState({ IsNonStockValuation: e.target.checked });
+          break;
+        case "IsPriceRange":
+          this.setState({ IsPriceRange: e.target.checked });
+          break;
+        case "IsCustomized":
+          this.setState({ IsCustomized: e.target.checked });
+          break;
+        default:
+          break;
+      }
+    };
+
+    
+    const update = () => {
+      this.setState({ ProgressLoader: false });
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.UpdateItemCategory;
+      let ReqData = {
+        validUser: ValidUser,
+        ItemCategory: {
+          CatID:this.state.CatID,
+          IsActive:  this.state.IsActive,
+          mainCatId:this.state.MainCatID,
+          Code: this.state.Code,
+          Description: this.state.Description,
+          HSNCode: this.state.HSNCode,          
+          IsTrading: this.state.IsTrading,
+          IsNonStockValuation: this.state.IsNonStockValuation,
+          IsPriceRange: this.state.IsPriceRange,
+          IsCustomized:this.state.IsCustomized
+        }
+      };
+      axios
+        .post(Url, ReqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+          } else {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
+    }
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -98,9 +254,7 @@ class editItemCategory extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     return (
       <Fragment>
@@ -132,7 +286,7 @@ class editItemCategory extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  //   masterHref={}
+                  masterHref={URLS.URLS.itemCategoryMaster + this.state.urlparams}
                   masterLinkTitle="Item Category Master"
                   typoTitle="edit Item Category"
                   level={2}
@@ -149,7 +303,7 @@ class editItemCategory extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<UpdateIcon />}
-                    // onClick={handleCreate}
+                    onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >
                     Update
@@ -194,18 +348,11 @@ class editItemCategory extends React.Component {
                     >
                       <TableBody className="tableBody">
                       <DropdownInput
-                        id="CatID"
-                        label="CatID"
-                        onChange={(e) => updateFormValue("CatID", e)}
-                        options={[]}
-                        value={0}
-                      />
-                        <DropdownInput
                           id="MainCatID"
                           label="MainCatID"
                           onChange={(e) => updateFormValue("MainCatID", e)}
-                          options={[]}
-                          value={0}
+                          options={this.state.MainCategoryData}
+                          value={this.state.MainCatID}
                         />
                         <TextboxInput
                           id="Code"
@@ -255,8 +402,8 @@ class editItemCategory extends React.Component {
                           key="IsNonStockV"
                           id="IsNonStockV"
                           label="IsNonStockV"
-                          param={this.state.IsNonStockV}
-                          onChange={(e) => updateFormValue("IsNonStockV", e)}
+                          param={this.state.IsNonStockValuation}
+                          onChange={(e) => updateFormValue("IsNonStockValuation", e)}
                         />
                         <SwitchInput
                           key="IsPriceRange"
