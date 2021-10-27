@@ -25,7 +25,7 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TableContainer from "@material-ui/core/TableContainer";
 
-import TextField from "@material-ui/core/TextField";
+
 
 import TableRow from "@material-ui/core/TableRow";
 
@@ -743,39 +743,7 @@ class addbranch extends React.Component {
                                     this.state.Validations.name.errorMsg
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Branch Name
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="Name"
-                                      variant="outlined"
-                                      size="small"
-                                      maxlength={10}
-                                      onChange={(e) =>
-                                        updateFormValue("Name", e)
-                                      }
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                      }}
-                                      value={this.state.name}
-                                      error={
-                                        this.state.Validations.name.errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.name.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                                 <Tablerowcelltextboxinput
                                   id="shortName"
                                   label="Short Name"
@@ -796,41 +764,7 @@ class addbranch extends React.Component {
                                     this.state.Validations.shortName.errorMsg
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Short Name
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="shortName"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("shortName", e)
-                                      }
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50,
-                                      }}
-                                      value={this.state.shortName}
-                                      error={
-                                        this.state.Validations.shortName
-                                          .errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.shortName
-                                          .errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                                 <Tablerowcelltextboxinput
                                   type="number"
                                   id="phoneNo"
@@ -853,41 +787,7 @@ class addbranch extends React.Component {
                                   }
                                 />
 
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Phone No
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      type="number"
-                                      id="phoneNo"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("phoneNo", e)
-                                      }
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 20,
-                                      }}
-                                      value={this.state.phoneNo}
-                                      error={
-                                        this.state.Validations.phoneNo
-                                          .errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.phoneNo.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                                 <Tablerowcelltextboxinput
                                   id="website"
                                   label="Website"
@@ -908,40 +808,7 @@ class addbranch extends React.Component {
                                     this.state.Validations.website.errorMsg
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Website
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="website"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("website", e)
-                                      }
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 20,
-                                      }}
-                                      value={this.state.website}
-                                      error={
-                                        this.state.Validations.website
-                                          .errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.website.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                                 
                               </TableBody>
                             </Table>
@@ -973,37 +840,7 @@ class addbranch extends React.Component {
                                   value={this.state.stateId}
                                 />
 
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    State
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <select
-                                      style={{ height: 40, marginTop: 14 }}
-                                      className="dropdown-css"
-                                      id="stateSelect"
-                                      label="State"
-                                      fullWidth
-                                      value={parseInt(this.state.stateId)}
-                                      onChange={(e) =>
-                                        updateFormValue("State", e)
-                                      }
-                                    >
-                                      <option value="-">None</option>
-                                      {this.state.stateData.map((item, i) => (
-                                        <option value={parseInt(item.stateId)}>
-                                          {item.name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                </TableRow> */}
+                               
                                 <Tablerowcelltextboxinput
                                   id="City"
                                   label="City"
@@ -1024,40 +861,7 @@ class addbranch extends React.Component {
                                     this.state.Validations.city.errorMsg
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    City
-                                  </TableCell>
-
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="City"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("City", e)
-                                      }
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50,
-                                      }}
-                                      value={this.state.city}
-                                      error={
-                                        this.state.Validations.city.errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.city.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                                 <Tablerowcelltextboxinput
                                   id="Postcode"
                                   label="Postcode"
@@ -1079,40 +883,7 @@ class addbranch extends React.Component {
                                     this.state.Validations.postcode.errorMsg
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Postcode
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="Postcode"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("Postcode", e)
-                                      }
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 10,
-                                      }}
-                                      value={this.state.postcode}
-                                      error={
-                                        this.state.Validations.postcode
-                                          .errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.postcode.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                                 <Tablerowcelltextboxinput
                                   id="Address"
                                   label="Address Line 1"
@@ -1135,41 +906,7 @@ class addbranch extends React.Component {
 
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Address Line 1
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="Address"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("Address", e)
-                                      }
-                                      value={this.state.address}
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50,
-                                      }}
-                                      value={this.state.address}
-                                      error={
-                                        this.state.Validations.address
-                                          .errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.address.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                                 <Tablerowcelltextboxinput
                                   id="Address2"
                                   label=" Address Line 2"
@@ -1192,41 +929,7 @@ class addbranch extends React.Component {
 
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Address Line 2
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="Address2"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("Address2", e)
-                                      }
-                                      fullWidth
-                                      value={this.state.address2}
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50,
-                                      }}
-                                      value={this.state.address2}
-                                      error={
-                                        this.state.Validations.address2
-                                          .errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.address2.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                                  <Tablerowcelltextboxinput
                                   id="Address3"
                                   label="  Address Line 3"
@@ -1249,41 +952,7 @@ class addbranch extends React.Component {
 
                                   }
                                 />
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Address Line 3
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="Address3"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("Address3", e)
-                                      }
-                                      fullWidth
-                                      value={this.state.address3}
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50,
-                                      }}
-                                      value={this.state.address3}
-                                      error={
-                                        this.state.Validations.address3
-                                          .errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.address3.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                                
                               </TableBody>
                             </Table>
                           </TableContainer>
