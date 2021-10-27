@@ -129,9 +129,7 @@ class addItem extends React.Component {
   }
 
   render() {
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {

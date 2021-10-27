@@ -62,6 +62,7 @@ class addnewcompany extends React.Component {
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: true,
+      duplicate:false,
       Validations: {
         companyName: { errorState: false, errorMsg: "" },
         address: { errorState: false, errorMsg: "" },
@@ -159,14 +160,27 @@ class addnewcompany extends React.Component {
       if (
         this.state.companyName === "" ||
         this.state.companyName === null ||
-        this.state.companyName.length > 50
+        this.state.companyName.length > 50 ||
+        this.state.duplicate === true
       ) {
-        this.setState({ createBtnDisabled: true });
-      } else {
-        this.setState({ createBtnDisabled: false });
+        if( this.state.address === "" ||
+        this.state.address === null ||
+        this.state.address.length > 50){
+          this.setState({createBtnDisabled:true})
+        }else {
+          this.setState({createBtnDisabled:true})
+        }
       }
-      return;
+      else if(this.state.address === "" ||
+      this.state.address === null ||
+      this.state.address.length > 50){
+        this.setState({createBtnDisabled:true})
+      }
+      
+
+      
     };
+
 
     
 
@@ -189,8 +203,9 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               companyName: e.target.value,
-              updateBtnDisabled: true,
+              
               createBtnDisabled: true,
+              duplicate:true
             });
           }
           if (e.target.value.length > 50) {
@@ -202,7 +217,7 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               companyName: e.target.value,
-              updateBtnDisabled: true,
+              
               createBtnDisabled: true,
             });
           }
@@ -215,7 +230,7 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               companyName: e.target.value,
-              updateBtnDisabled: true,
+              
               createBtnDisabled: true,
             });
           }
@@ -245,7 +260,7 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               address: e.target.value,
-              updateBtnDisabled: true,
+              
               createBtnDisabled: true,
             });
           }
@@ -258,7 +273,7 @@ class addnewcompany extends React.Component {
             this.setState({
               Validations: v,
               address: e.target.value,
-              updateBtnDisabled: true,
+              
               createBtnDisabled: true,
             });
           }
