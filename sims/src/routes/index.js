@@ -41,14 +41,11 @@ import editNumbering from "../components/modules/numberings/editnumbering";
 import currencyMaster from "../components/modules/currency/currencymaster";
 import addCurrency from "../components/modules/currency/addcurrency";
 import itemMaster from "../components/modules/item/itemMaster";
- import editItem from "../components/modules/item/editItem";
+import addItem from "../components/modules/item/addItem";
+import editItem from "../components/modules/item/editItem"; 
 import itemCategoryMaster from "../components/modules/item/category/itemCategoryMaster";
 import addItemCategory from "../components/modules/item/category/addItemCategory";
-import editItemCategory from "../components/modules/item/category/editItemCategory";
- 
-import addItem from "../components/modules/item/addItem";     
- 
- 
+import editItemCategory from "../components/modules/item/category/editItemCategory"; 
 import itemMainCategoryMaster from "../components/modules/item/category/itemMainCategoryMaster";
 import addItemMainCategory from "../components/modules/item/category/addItemMainCategory";
 import editItemMainCategory from "../components/modules/item/category/editItemMainCategory";
