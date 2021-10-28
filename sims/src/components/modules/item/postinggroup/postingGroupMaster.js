@@ -22,13 +22,12 @@ import Loader from "../../../compo/loader";
 
 import Breadcrumb from "../../../compo/breadcrumb";
 
-
 class postingGroupMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       urlparams: "",
-     
+
       ProgressLoader: true,
 
       editurl: "",
@@ -123,7 +122,14 @@ class postingGroupMaster extends React.Component {
                     className=""
                     aria-label="Item-catagory List table"
                   >
-                    <TableHead className="table-header-background"></TableHead>
+                    <TableHead className="table-header-background">
+                      <TableRow>
+                        <TableCell className="table-header-font">#</TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Name
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
                     <TableBody className="tableBody"></TableBody>
                   </Table>
                 </Grid>

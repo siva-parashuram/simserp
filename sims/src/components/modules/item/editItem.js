@@ -289,7 +289,7 @@ class editItem extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   fetchItemType(value) {
@@ -387,7 +387,7 @@ class editItem extends React.Component {
         case "ItemDeptId":
           setStateParam({}, param, e.target.value);
           break;
-        case "CatID":
+        case "CatId":
           setStateParam({}, param, e.target.value);
           fetchItemType(e.target.value);
           break;
@@ -604,10 +604,10 @@ class editItem extends React.Component {
           setStateParam({}, param, e.target.checked);
           break;
         case "ItemPostingGroupID":
-          this.setState({ ItemPostingGroupID: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "CostingMethod":
-          this.setState({ CostingMethod: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "StandardCost":
           setStateParam(
@@ -844,11 +844,11 @@ class editItem extends React.Component {
       let Data = {
         validUser: ValidUser,
         Item: {
-          ItemId:CF.toInt(this.state.ItemId) ,
-          ItemNo:CF.toString(this.state.ItemNo) ,
-          ItemType:CF.toInt(this.state.ItemType),
-          Code:CF.toString(this.state.Code),
-          Alias:CF.toString(this.state.Alias),
+          ItemId: CF.toInt(this.state.ItemId),
+          ItemNo: CF.toString(this.state.ItemNo),
+          ItemType: CF.toInt(this.state.ItemType),
+          Code: CF.toString(this.state.Code),
+          Alias: CF.toString(this.state.Alias),
           Description1: CF.toString(this.state.Description1),
           Description2: CF.toString(this.state.Description2),
           PackingDesc1: CF.toString(this.state.PackingDesc1),
@@ -865,11 +865,11 @@ class editItem extends React.Component {
           Location: CF.toString(this.state.Location),
           BarcodeNo: CF.toString(this.state.BarcodeNo),
           CartonHeight: CF.toFloat(this.state.CartonHeight),
-          CartonLength:CF.toFloat(this.state.CartonLength) ,
+          CartonLength: CF.toFloat(this.state.CartonLength),
           CartonWidth: CF.toFloat(this.state.CartonWidth),
-          NetWeight:CF.toFloat(this.state.NetWeight) ,
-          GrossWeight:CF.toFloat(this.state.GrossWeight) ,
-          WarningLevel:CF.toFloat(this.state.WarningLevel) ,
+          NetWeight: CF.toFloat(this.state.NetWeight),
+          GrossWeight: CF.toFloat(this.state.GrossWeight),
+          WarningLevel: CF.toFloat(this.state.WarningLevel),
           MinStockLevel: CF.toFloat(this.state.MinStockLevel),
           Amsf: CF.toFloat(this.state.Amsf),
           Msf: CF.toFloat(this.state.Msf),
@@ -892,16 +892,16 @@ class editItem extends React.Component {
           ProfitPercentage: CF.toFloat(this.state.ProfitPercentage),
           GstgroupId: CF.toInt(this.state.GstgroupId),
           Hsncode: this.state.Hsncode,
-          BaseUom:CF.toInt(this.state.BaseUom) ,
-          SalesUom:CF.toInt(this.state.SalesUom) ,
-          PurchaseUom:CF.toInt(this.state.PurchaseUom) ,
+          BaseUom: CF.toInt(this.state.BaseUom),
+          SalesUom: CF.toInt(this.state.SalesUom),
+          PurchaseUom: CF.toInt(this.state.PurchaseUom),
           PackingUom: CF.toInt(this.state.PackingUom),
-          Replenishment:CF.toInt(this.state.Replenishment) ,
-          LeadTime: CF.toFloat(this.state.LeadTime) ,
+          Replenishment: CF.toInt(this.state.Replenishment),
+          LeadTime: CF.toFloat(this.state.LeadTime),
           IsLot: this.state.IsLot,
           ManufacturingPolicy: CF.toInt(this.state.ManufacturingPolicy),
-          RoutingId:CF.toInt(this.state.RoutingId) ,
-          Bomid:CF.toInt(this.state.Bomid) ,
+          RoutingId: CF.toInt(this.state.RoutingId),
+          Bomid: CF.toInt(this.state.Bomid),
         },
       };
 
@@ -1025,7 +1025,7 @@ class editItem extends React.Component {
                             <DropdownInput
                               id="CatID"
                               label="ItemCat"
-                              onChange={(e) => updateFormValue("CatID", e)}
+                              onChange={(e) => updateFormValue("CatId", e)}
                               options={this.state.ItemCategoryData}
                               value={this.state.CatId}
                             />
