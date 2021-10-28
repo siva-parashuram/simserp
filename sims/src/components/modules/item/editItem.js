@@ -426,6 +426,7 @@ class editItem extends React.Component {
           }
           break;
         //------------------
+        
         case "CartonHeight":
           let validations = {
             validate: true,
@@ -435,6 +436,7 @@ class editItem extends React.Component {
           setStateParam(validations, param, e.target.value);
           break;
         case "CartonLength":
+          
           
           this.setState({ CartonLength: e.target.value });
           break;
