@@ -22,13 +22,12 @@ import Loader from "../../../compo/loader";
 
 import Breadcrumb from "../../../compo/breadcrumb";
 
-
 class postingGroupMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       urlparams: "",
-     
+
       ProgressLoader: true,
 
       editurl: "",
@@ -96,7 +95,9 @@ class postingGroupMaster extends React.Component {
                     className="action-btns"
                     startIcon={<AddIcon />}
                     onClick={(e) =>
-                      openPage(URLS.URLS.addpostingGroupMaster + this.state.urlparams)
+                      openPage(
+                        URLS.URLS.addpostingGroupMaster + this.state.urlparams
+                      )
                     }
                   >
                     New
@@ -104,7 +105,11 @@ class postingGroupMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage(URLS.URLS.editpostingGroupMaster + this.state.urlparams)}
+                    onClick={(e) =>
+                      openPage(
+                        URLS.URLS.editpostingGroupMaster + this.state.urlparams
+                      )
+                    }
                   >
                     Edit
                   </Button>
@@ -125,7 +130,14 @@ class postingGroupMaster extends React.Component {
                     className=""
                     aria-label="Item-catagory List table"
                   >
-                    <TableHead className="table-header-background"></TableHead>
+                    <TableHead className="table-header-background">
+                      <TableRow>
+                        <TableCell className="table-header-font">#</TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Name
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
                     <TableBody className="tableBody"></TableBody>
                   </Table>
                 </Grid>
