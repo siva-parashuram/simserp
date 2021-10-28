@@ -56,6 +56,10 @@ import itemDepartmentMaster from "../components/modules/item/department/itemDepa
 import addItemDepartment from "../components/modules/item/department/addItemDepartment";
 import editItemDepartment from "../components/modules/item/department/editItemDepartment";
 
+import postingGroupMaster from "../components/modules/item/postinggroup/postingGroupMaster";
+import addpostingGroupMaster from "../components/modules/item/postinggroup/addpostingGroupMaster";
+import editpostingGroupMaster from "../components/modules/item/postinggroup/editpostingGroupMaster";
+
 import coa from "../components/modules/accounts/reports/coa";
 
 import pageNotFound from "../../src/pagenotfound";
@@ -158,11 +162,14 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.itemDepartmentMaster} component={itemDepartmentMaster} />
         <Route path={URLS.URLS.addItemDepartment} component={addItemDepartment} />
         <Route path={URLS.URLS.editItemDepartment} component={editItemDepartment} />
+        <Route path={URLS.URLS.postingGroupMaster} component={postingGroupMaster} />
+        <Route path={URLS.URLS.addpostingGroupMaster} component={addpostingGroupMaster} />
+        <Route path={URLS.URLS.editpostingGroupMaster} component={editpostingGroupMaster} />
 
 
         {/* Chart of Account */}
         <Route path={URLS.URLS.coa} component={coa} />
-
+        
 
 
         <Route path={URLS.URLS.testformat} component={testformat} />

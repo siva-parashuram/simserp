@@ -364,57 +364,58 @@ class editItem extends React.Component {
     const updateFormValue = (param, e) => {
       switch (param) {
         case "ItemType":
-          this.setState({ ItemType: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "Code":
-          this.setState({ Code: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "Alias":
-          this.setState({ Alias: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "Description1":
-          this.setState({ Description1: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "Description2":
-          this.setState({ Description2: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "PackingDesc1":
-          this.setState({ PackingDesc1: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "PackingDesc2":
-          this.setState({ PackingDesc2: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "ItemDeptID":
-          this.setState({ ItemDeptID: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "CatID":
-          this.setState({ CatID: e.target.value });
+          setStateParam({}, param, e.target.value);
           fetchItemType(e.target.value);
           break;
         case "IsTrading":
-          this.setState({ IsTrading: e.target.checked });
+          setStateParam({}, param, e.target.checked);
+
           break;
         case "IsActive":
-          this.setState({ IsActive: e.target.checked });
+          setStateParam({}, param, e.target.checked);
           break;
         case "IsNonStockValuation":
-          this.setState({ IsNonStockValuation: e.target.checked });
+          setStateParam({}, param, e.target.checked);
           break;
         case "IsCustomized":
-          this.setState({ IsCustomized: e.target.checked });
+          setStateParam({}, param, e.target.checked);
           break;
         case "IsSaleEvenQuantity":
-          this.setState({ IsSaleEvenQuantity: e.target.checked });
+          setStateParam({}, param, e.target.checked);
           break;
 
         case "CertificateNo":
-          this.setState({ CertificateNo: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "Reason":
-          this.setState({ Reason: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "IsDiscontine":
-          this.setState({ IsDiscontine: e.target.checked });
+          setStateParam({}, param, e.target.checked);
           if (e.target.checked === true) {
             document.getElementById("Reason").focus();
           }
@@ -449,7 +450,6 @@ class editItem extends React.Component {
             e.target.value
           );
 
-          // this.setState({ CartonLength: e.target.value });
           break;
 
         case "CartonWidth":
@@ -585,15 +585,7 @@ class editItem extends React.Component {
 
           break;
         case "IsQuality":
-          setStateParam(
-            {
-              validate: true,
-              isNumber: CF.chkIfNumber(e.target.value),
-              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
-            },
-            param,
-            e.target.value
-          );
+          setStateParam({}, param, e.target.checked);
 
           break;
         case "SpecId":
@@ -609,7 +601,7 @@ class editItem extends React.Component {
 
           break;
         case "AllowNegativeStock":
-          this.setState({ AllowNegativeStock: e.target.checked });
+          setStateParam({}, param, e.target.checked);
           break;
         case "ItemPostingGroupID":
           this.setState({ ItemPostingGroupID: e.target.value });
@@ -681,7 +673,7 @@ class editItem extends React.Component {
 
           break;
         case "Hsncode":
-          this.setState({ Hsncode: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
 
         case "BaseUom":
@@ -733,7 +725,7 @@ class editItem extends React.Component {
 
           break;
         case "Replenishment":
-          this.setState({ Replenishment: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "LeadTime":
           setStateParam(
@@ -748,7 +740,7 @@ class editItem extends React.Component {
 
           break;
         case "ManufacturingPolicy":
-          this.setState({ ManufacturingPolicy: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "RoutingId":
           setStateParam(
@@ -775,14 +767,14 @@ class editItem extends React.Component {
 
           break;
         case "Location":
-          this.setState({ Location: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
         case "BarcodeNo":
-          this.setState({ BarcodeNo: e.target.value });
+          setStateParam({}, param, e.target.value);
           break;
 
         case "IsLot":
-          this.setState({ IsLot: e.target.checked });
+          setStateParam({}, param, e.target.value);
           break;
 
         //---------------------
@@ -1064,7 +1056,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("ItemNo", e)}
-                              
                               value={this.state.ItemNo}
                               disabled={true}
                             />
@@ -1075,7 +1066,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Code", e)}
-                              
                               value={this.state.Code}
                             />
                             <TextboxInput
@@ -1084,7 +1074,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Alias", e)}
-                             
                               value={this.state.Alias}
                             />
                             <TextboxInput
@@ -1095,7 +1084,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Description1", e)
                               }
-                              
                               value={this.state.Description1}
                             />
                             <TextboxInput
@@ -1106,7 +1094,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Description2", e)
                               }
-                              
                               value={this.state.Description2}
                             />
 
@@ -1118,7 +1105,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("PackingDesc1", e)
                               }
-                              
                               value={this.state.PackingDesc1}
                             />
                             <TextboxInput
@@ -1129,7 +1115,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("PackingDesc2", e)
                               }
-                              
                               value={this.state.PackingDesc2}
                             />
                           </TableBody>
@@ -1204,7 +1189,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CertificateNo", e)
                               }
-                              
                               value={this.state.CertificateNo}
                               disabled={!this.state.IsCertified}
                             />
@@ -1227,7 +1211,6 @@ class editItem extends React.Component {
                               onChange={(e) => updateFormValue("Reason", e)}
                               value={this.state.Reason}
                               disabled={!this.state.IsDiscontine}
-                              
                             />
                           </TableBody>
                         </Table>
@@ -1277,7 +1260,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonHeight", e)
                               }
-                              
                               value={this.state.CartonHeight}
                             />
                             <TextboxInput
@@ -1289,7 +1271,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonLength", e)
                               }
-                              
                               value={this.state.CartonLength}
                             />
                             <TextboxInput
@@ -1301,7 +1282,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonWidth", e)
                               }
-                              
                               value={this.state.CartonWidth}
                             />
                             <TextboxInput
@@ -1311,7 +1291,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("NetWeight", e)}
-                              
                               value={this.state.NetWeight}
                             />
                             <TextboxInput
@@ -1323,7 +1302,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("GrossWeight", e)
                               }
-                              
                               value={this.state.GrossWeight}
                             />
                             <TextboxInput
@@ -1335,7 +1313,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("WarningLevel", e)
                               }
-                              
                               value={this.state.WarningLevel}
                             />
                             <TextboxInput
@@ -1347,7 +1324,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("MinStockLevel", e)
                               }
-                              
                               value={this.state.MinStockLevel}
                             />
                             <TextboxInput
@@ -1357,7 +1333,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Amsf", e)}
-                              
                               value={this.state.Amsf}
                             />
                             <TextboxInput
@@ -1367,7 +1342,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Msf", e)}
-                              
                               value={this.state.Msf}
                             />
                             <TextboxInput
@@ -1377,7 +1351,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Bsf", e)}
-                              
                               value={this.state.Bsf}
                             />
                             <TextboxInput
@@ -1387,7 +1360,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Moq", e)}
-                              
                               value={this.state.Moq}
                             />
                           </TableBody>
@@ -1410,7 +1382,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("ShipperQuantiry", e)
                               }
-                              
                               value={this.state.ShipperQuantiry}
                             />
                             <TextboxInput
@@ -1422,7 +1393,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CbmperShipper", e)
                               }
-                              
                               value={this.state.CbmperShipper}
                             />
                             <SwitchInput
@@ -1439,7 +1409,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("SpecId", e)}
-                              
                               value={this.state.SpecId}
                             />
                             <SwitchInput
@@ -1481,7 +1450,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("StandardCost", e)
                               }
-                              
                               value={this.state.StandardCost}
                             />
                             <TextboxInput
@@ -1493,7 +1461,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("IndirectCostPercentage", e)
                               }
-                             
                               value={this.state.IndirectCostPercentage}
                             />
                             <TextboxInput
@@ -1505,7 +1472,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("ProfitPercentage", e)
                               }
-                              
                               value={this.state.ProfitPercentage}
                             />
                           </TableBody>
@@ -1557,7 +1523,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("TolerancePercentage", e)
                               }
-                              
                               value={this.state.TolerancePercentage}
                             />
 
@@ -1568,7 +1533,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("GstgroupId", e)}
-                              
                               value={this.state.GstgroupId}
                             />
                             <TextboxInput
@@ -1577,7 +1541,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Hsncode", e)}
-                              
                               value={this.state.Hsncode}
                             />
                             <TextboxInput
@@ -1587,7 +1550,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("BaseUom", e)}
-                              
                               value={this.state.BaseUom}
                             />
                           </TableBody>
@@ -1608,7 +1570,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("SalesUom", e)}
-                              
                               value={this.state.SalesUom}
                             />
                             <TextboxInput
@@ -1620,7 +1581,6 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("PurchaseUom", e)
                               }
-                              
                               value={this.state.PurchaseUom}
                             />
                             <TextboxInput
@@ -1630,7 +1590,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("PackingUom", e)}
-                              
                               value={this.state.PackingUom}
                             />
                           </TableBody>
@@ -1693,7 +1652,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("LeadTime", e)}
-                              
                               value={this.state.LeadTime}
                             />
 
@@ -1717,14 +1675,13 @@ class editItem extends React.Component {
                           aria-label="Item List table"
                         >
                           <TableBody className="tableBody">
-                            <TextboxInput                            
+                            <TextboxInput
                               type="number"
                               id="RoutingID"
                               label="RoutingID "
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("RoutingId", e)}
-                              
                               value={this.state.RoutingId}
                             />
                             <TextboxInput
@@ -1734,7 +1691,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Bomid", e)}
-                              
                               value={this.state.Bomid}
                             />
                           </TableBody>
@@ -1784,7 +1740,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Location", e)}
-                              
                               value={this.state.Location}
                             />
 
@@ -1794,7 +1749,6 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("BarcodeNo", e)}
-                              
                               value={this.state.BarcodeNo}
                             />
                             <SwitchInput

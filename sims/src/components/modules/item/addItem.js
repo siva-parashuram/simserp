@@ -489,10 +489,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("ItemNo", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.ItemNo}
                               disabled={true}
                             />
@@ -505,10 +502,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Code", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.Code}
 
                             />
@@ -520,10 +514,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Alias", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                             
                               value={this.state.Alias}
 
                             />
@@ -535,10 +526,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Description1", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.Description1}
 
                             />
@@ -550,10 +538,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Description2", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                             
                               value={this.state.Description2}
 
                             />
@@ -566,10 +551,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("PackingDesc1", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.PackingDesc1}
 
                             />
@@ -581,10 +563,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("PackingDesc2", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.PackingDesc2}
 
                             />
@@ -673,10 +652,7 @@ class addItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CertificateNo", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
 
                               disabled={!this.state.IsCertified}
                             />
