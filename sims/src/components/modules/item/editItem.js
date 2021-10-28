@@ -380,7 +380,7 @@ class editItem extends React.Component {
           break;
         case "PackingDesc1":
           this.setState({ PackingDesc1: e.target.value });
-          break;     
+          break;
         case "PackingDesc2":
           this.setState({ PackingDesc2: e.target.value });
           break;
@@ -426,15 +426,16 @@ class editItem extends React.Component {
           }
           break;
         //------------------
-        case "CartonHeight":                    
-          let validations={
-           validate:true,
-           isNumber:CF.chkIfNumber(e.target.value),
-           isEmpty:CF.chkIfBlankOrEmpty(e.target.value)
-          };          
-          setStateParam(validations,param,e.target.value);         
+        case "CartonHeight":
+          let validations = {
+            validate: true,
+            isNumber: CF.chkIfNumber(e.target.value),
+            isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+          };
+          setStateParam(validations, param, e.target.value);
           break;
         case "CartonLength":
+          
           this.setState({ CartonLength: e.target.value });
           break;
 
@@ -552,13 +553,17 @@ class editItem extends React.Component {
       }
     };
 
-    const setStateParam=(validations,key,value)=>{
-      if(validations.validate){
-        !validations.isEmpty?validations.isNumber?this.setState({[key]:value}):this.setState({[key]:0}):this.setState({[key]:0});        
-      }else{
-        this.setState({[key]:value});        
-      }       
-    }
+    const setStateParam = (validations, key, value) => {
+      if (validations.validate) {
+        !validations.isEmpty
+          ? validations.isNumber
+            ? this.setState({ [key]: value })
+            : this.setState({ [key]: 0 })
+          : this.setState({ [key]: 0 });
+      } else {
+        this.setState({ [key]: value });
+      }
+    };
 
     const fetchItemType = (value) => {
       let ValidUser = APIURLS.ValidUser;
@@ -970,7 +975,8 @@ class editItem extends React.Component {
                               size="small"
                               onChange={(e) =>
                                 updateFormValue("CertificateNo", e)
-                              }InputProps={{
+                              }
+                              InputProps={{
                                 className: "textFieldCss",
                                 maxlength: 50,
                               }}
@@ -1042,7 +1048,6 @@ class editItem extends React.Component {
                         >
                           <TableBody className="tableBody">
                             <TextboxInput
-                               
                               id="CartonHeight"
                               label="Carton Height"
                               variant="outlined"
