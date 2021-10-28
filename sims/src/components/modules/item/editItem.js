@@ -83,7 +83,7 @@ class editItem extends React.Component {
       SpecId: 0,
       AllowNegativeStock: false,
       ItemPostingGroupID: 0,
-      CostingMethod: 0,
+      CostingMethod: "-",
       StandardCost: 0,
       IndirectCostPercentage: 0,
       ProfitPercentage: 0,
@@ -101,6 +101,7 @@ class editItem extends React.Component {
       Bomid: 0,
       Item: {},
       ItemCategoryData: [],
+      
     };
   }
 
@@ -427,13 +428,12 @@ class editItem extends React.Component {
           break;
         //------------------
         
-        case "CartonHeight":
-          let validations = {
+        case "CartonHeight":          
+          setStateParam({
             validate: true,
             isNumber: CF.chkIfNumber(e.target.value),
             isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
-          };
-          setStateParam(validations, param, e.target.value);
+          }, param, e.target.value);
           break;
         case "CartonLength":
           
@@ -1294,7 +1294,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CostingMethod", e)
                               }
-                              //options={}
+                              options={APIURLS.CostingMethod}
                               value={this.state.CostingMethod}
                             />
 

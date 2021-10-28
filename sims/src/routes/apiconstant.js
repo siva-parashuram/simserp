@@ -93,7 +93,7 @@ export const APIURL = {
   export const CTimeOut = 10; 
   export const DFormat = "MM/DD/YYYY";
 
-  export let ItemType=[
+  export const ItemType=[
     {
       name:"Finish Good",
       value:0
@@ -104,6 +104,51 @@ export const APIURL = {
       name:"Work In Progres",
       value:2
     }
+  ];
+
+  export const CostingMethod=[
+    {
+      name:"FIFO",
+      value:0
+    },
+    {
+      name:"LIFO",
+      value:1
+    },
+    {
+      name:"Average",
+      value:2
+    },
+    {
+      name:"Standard",
+      value:3
+    }
+  ];
+
+  export const Replenishment=[
+    {
+      name:"Production Order",
+      value:0
+    },
+    {
+      name:"Purchase",
+      value:1
+    },
+    {
+      name:"Assembly",
+      value:2
+    },
+  ];
+
+  export const ManufacturingPolicy=[
+    {
+      name:"Make-to-Stock",
+      value:0
+    },
+    {
+      name:"Make-to-Order",
+      value:1
+    },
   ];
 
  
