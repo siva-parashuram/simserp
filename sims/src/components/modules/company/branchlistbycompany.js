@@ -42,11 +42,7 @@ class branchlistbycompany extends React.Component {
            
                 {this.props.data ? (
                     <div style={{marginLeft:10}}>
-                        <Grid container spacing={0}>                            
-                            <Grid xs={12} sm={12} md={11} xl={11}>
-                                <h4>Branches</h4>
-                            </Grid>
-                        </Grid>
+                         
                         <Grid  container spacing={0}>
                             <Grid xs={12} sm={12} md={11} xl={11}>
                                 <Table stickyHeader size="small" className="" aria-label="company List table">

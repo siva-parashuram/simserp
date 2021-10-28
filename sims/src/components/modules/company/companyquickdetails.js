@@ -97,7 +97,7 @@ class companyquickdetails extends React.Component {
         return (
             <Fragment>
                 <Dualtabcomponent
-                    tab1name="Details"
+                    tab1name="Branches"
                     tab2name="Attachments"
                     tab1Html={tab1Html}
                     tab2Html={tab2Html}
