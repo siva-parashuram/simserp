@@ -419,6 +419,7 @@ cursor: pointer;
   border-radius: 0px !important;
   font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important;
 font-weight: 400;
+
    
 }
 
@@ -454,8 +455,10 @@ font-weight: 400;
 }
 
 .no-border-table{
-  border-style: none !important;
+  border-style:none !important;
+  
 }
+
 
 .accordion-table{
   overflow: hidden !important;

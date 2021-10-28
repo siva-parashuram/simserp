@@ -24,7 +24,7 @@ class tablerowcelltextboxinput extends React.Component {
                     variant={this.props.variant}
                     size={this.props.size}
                     onChange={this.props.onChange}
-                    fullWidth
+                    
                     defaultValue={this.props.value}
                     value={this.props.value}                    
                     error={this.props.error}

@@ -379,7 +379,7 @@ class editItem extends React.Component {
           break;
         case "PackingDesc1":
           this.setState({ PackingDesc1: e.target.value });
-          break;
+          break;     
         case "PackingDesc2":
           this.setState({ PackingDesc2: e.target.value });
           break;
@@ -957,7 +957,10 @@ class editItem extends React.Component {
                               size="small"
                               onChange={(e) =>
                                 updateFormValue("CertificateNo", e)
-                              }
+                              }InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
                               value={this.state.CertificateNo}
                               disabled={!this.state.IsCertified}
                             />
@@ -980,6 +983,10 @@ class editItem extends React.Component {
                               onChange={(e) => updateFormValue("Reason", e)}
                               value={this.state.Reason}
                               disabled={!this.state.IsDiscontine}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
                             />
                           </TableBody>
                         </Table>
@@ -1030,6 +1037,10 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonHeight", e)
                               }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
                               value={this.state.CartonHeight}
                             />
                             <TextboxInput
@@ -1246,18 +1257,21 @@ class editItem extends React.Component {
                             <DropdownInput
                               id="PostingGroup"
                               label="Posting Group"
-                              onChange={(e) => updateFormValue("PostingGroup", e)}
+                              onChange={(e) =>
+                                updateFormValue("PostingGroup", e)
+                              }
                               // options={}
                               value={this.state.ItemPostingGroupID}
                             />
-                           
+
                             <DropdownInput
                               id="CostingMethod"
                               label="Costing Method"
-                              onChange={(e) => updateFormValue("CostingMethod", e)}
+                              onChange={(e) =>
+                                updateFormValue("CostingMethod", e)
+                              }
                               //options={}
                               value={this.state.CostingMethod}
-                              
                             />
 
                             <TextboxInput
@@ -1375,7 +1389,6 @@ class editItem extends React.Component {
                               value={this.state.GstgroupId}
                             />
                             <TextboxInput
-                              
                               id="HSNCode"
                               label="HSN Code"
                               variant="outlined"
@@ -1495,14 +1508,14 @@ class editItem extends React.Component {
                           aria-label="Item List table"
                         >
                           <TableBody className="tableBody">
-                            
                             <DropdownInput
                               id="Replenishment"
                               label="Replenishment"
-                              onChange={(e) => updateFormValue("Replenishment", e)}
+                              onChange={(e) =>
+                                updateFormValue("Replenishment", e)
+                              }
                               //options={}
                               value={this.state.Replenishment}
-                              
                             />
 
                             <TextboxInput
@@ -1519,14 +1532,14 @@ class editItem extends React.Component {
                               value={this.state.LeadTime}
                             />
 
-                            
-                             <DropdownInput
+                            <DropdownInput
                               id="ManufacturingPolicy"
                               label="Manufacturing Policy"
-                              onChange={(e) => updateFormValue("ManufacturingPolicy", e)}
+                              onChange={(e) =>
+                                updateFormValue("ManufacturingPolicy", e)
+                              }
                               //options={}
                               value={this.state.ManufacturingPolicy}
-                              
                             />
                           </TableBody>
                         </Table>
