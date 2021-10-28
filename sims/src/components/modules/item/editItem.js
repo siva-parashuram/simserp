@@ -420,7 +420,7 @@ class editItem extends React.Component {
           }
           break;
         case "IsCertified":
-          this.setState({ IsCertified: e.target.checked });
+          setStateParam({},param,e.target.checked);
           if (e.target.checked === true) {
             document.getElementById("CertificateNo").focus();
           }
@@ -553,11 +553,19 @@ class editItem extends React.Component {
     };
 
     const setStateParam=(validations,key,value)=>{
-      if(validations.validate){
-        !validations.isEmpty?validations.isNumber?this.setState({[key]:value}):this.setState({[key]:0}):this.setState({[key]:0});        
-      }else{
-        this.setState({[key]:value});        
-      }       
+      console.log("validations > ",validations);      
+      console.log("key > ",key);      
+      console.log("value > ",value);      
+      if(Object.keys(validations).length === 0 && validations.constructor === Object){
+        console.log("validations is Empty "); 
+        this.setState({[key]:value}); 
+      }else{        
+        if(validations.validate){
+          !validations.isEmpty?validations.isNumber?this.setState({[key]:value}):this.setState({[key]:0}):this.setState({[key]:0});        
+        }else{
+          this.setState({[key]:value});        
+        }  
+      }            
     }
 
     const fetchItemType = (value) => {
