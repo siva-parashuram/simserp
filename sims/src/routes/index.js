@@ -57,8 +57,7 @@ import addItemDepartment from "../components/modules/item/department/addItemDepa
 import editItemDepartment from "../components/modules/item/department/editItemDepartment";
 
 import postingGroupMaster from "../components/modules/item/postinggroup/postingGroupMaster";
-import addpostingGroupMaster from "../components/modules/item/postinggroup/addpostingGroupMaster";
-import editpostingGroupMaster from "../components/modules/item/postinggroup/editpostingGroupMaster";
+ 
 
 import coa from "../components/modules/accounts/reports/coa";
 
@@ -163,8 +162,7 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.addItemDepartment} component={addItemDepartment} />
         <Route path={URLS.URLS.editItemDepartment} component={editItemDepartment} />
         <Route path={URLS.URLS.postingGroupMaster} component={postingGroupMaster} />
-        <Route path={URLS.URLS.addpostingGroupMaster} component={addpostingGroupMaster} />
-        <Route path={URLS.URLS.editpostingGroupMaster} component={editpostingGroupMaster} />
+         
 
 
         {/* Chart of Account */}

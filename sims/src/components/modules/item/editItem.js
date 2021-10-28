@@ -1424,7 +1424,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("ItemPostingGroupID", e)
                               }
-                              // options={}
+                              options={APIURLS.ItemPostingGroup}
                               value={this.state.ItemPostingGroupID}
                             />
 

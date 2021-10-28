@@ -80,7 +80,7 @@ class postingGroupMaster extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  typoTitle="Posting Group Master"
+                  typoTitle="Posting Group Setup"
                   level={1}
                 />
               </div>
@@ -95,16 +95,14 @@ class postingGroupMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addpostingGroupMaster + this.state.urlparams)
-                    }
+                     
                   >
                     New
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) => openPage(URLS.URLS.editpostingGroupMaster + this.state.urlparams)}
+                   
                   >
                     Edit
                   </Button>

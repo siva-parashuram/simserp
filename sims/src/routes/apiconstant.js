@@ -151,6 +151,22 @@ export const APIURL = {
     },
   ];
 
+  //-------To be chnaged and linked with DB
+  export const ItemPostingGroup=[
+    {
+      name:"Paper",
+      value:1
+    },
+    {
+      name:"Ink",
+      value:2
+    },
+    {
+      name:"FG",
+      value:2
+    },
+  ];
+
  
 
   export const TrasactionType={
