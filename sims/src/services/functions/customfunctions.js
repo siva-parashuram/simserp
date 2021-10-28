@@ -93,3 +93,12 @@ export const chkIfBlankOrEmpty = (value) => {
   value.trim() === "" ? isEmpty = true : isEmpty = false;
   return isEmpty;
 }
+export const toString=(value)=>{
+  return value?value.trim().toString():value;
+}
+export const toInt=(value)=>{
+  return parseInt(value);
+}
+export const toFloat=(value)=>{
+  return parseFloat(value);
+}
