@@ -82,3 +82,14 @@ export const chkDuplicateButExcludeName = (inputArray, parameter,oldValue, value
   }
   return duplicateExist;
 };
+
+export const chkIfNumber=(value)=>{
+  let isNumber=false;
+  isNumber=!isNaN(+value);  
+  return isNumber;
+}
+export const chkIfBlankOrEmpty = (value) => {
+  let isEmpty = false;
+  value.trim() === "" ? isEmpty = true : isEmpty = false;
+  return isEmpty;
+}

@@ -3,6 +3,7 @@ import axios from "axios";
 import "../../user/dasboard.css";
 import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
+import * as CF from "../../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import { Divider, TableCell, TableRow } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
@@ -425,10 +426,14 @@ class editItem extends React.Component {
           }
           break;
         //------------------
-        case "CartonHeight":
-          this.setState({ CartonHeight: e.target.value });
+        case "CartonHeight":                    
+          let validations={
+           validate:true,
+           isNumber:CF.chkIfNumber(e.target.value),
+           isEmpty:CF.chkIfBlankOrEmpty(e.target.value)
+          };          
+          setStateParam(validations,param,e.target.value);         
           break;
-
         case "CartonLength":
           this.setState({ CartonLength: e.target.value });
           break;
@@ -546,6 +551,14 @@ class editItem extends React.Component {
           break;
       }
     };
+
+    const setStateParam=(validations,key,value)=>{
+      if(validations.validate){
+        !validations.isEmpty?validations.isNumber?this.setState({[key]:value}):this.setState({[key]:0}):this.setState({[key]:0});        
+      }else{
+        this.setState({[key]:value});        
+      }       
+    }
 
     const fetchItemType = (value) => {
       let ValidUser = APIURLS.ValidUser;
@@ -1029,7 +1042,7 @@ class editItem extends React.Component {
                         >
                           <TableBody className="tableBody">
                             <TextboxInput
-                              type="number"
+                               
                               id="CartonHeight"
                               label="Carton Height"
                               variant="outlined"
