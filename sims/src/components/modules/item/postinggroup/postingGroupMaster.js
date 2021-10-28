@@ -26,7 +26,6 @@ import Accordioncomponent from "../../../compo/accordioncomponent";
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 
-
 class postingGroupMaster extends React.Component {
   constructor(props) {
     super(props);
@@ -37,6 +36,9 @@ class postingGroupMaster extends React.Component {
       accordion1: false,
       accordion2: false,
       accordion3: false,
+      ItemPostingGroupID: 0,
+      Code: "",
+      Description: "",
     };
   }
 
@@ -63,8 +65,7 @@ class postingGroupMaster extends React.Component {
       window.location = url;
     };
 
-
-    const table = (
+    const tableItemPostingGroup = (
       <Table
         stickyHeader
         size="small"
@@ -83,7 +84,7 @@ class postingGroupMaster extends React.Component {
       </Table>
     );
 
-    const newForm = (
+    const formItemPostingGroup = (
       <Grid container spacing={0}>
         <Grid item xs={12} sm={12} md={11} lg={11}>
           <TableContainer>
@@ -95,29 +96,31 @@ class postingGroupMaster extends React.Component {
             >
               <TableBody className="tableBody">
                 <TextboxInput
-                  id="pageName"
-                  label="Page Name"
+                  id="ItemPostingGroupID"
+                  label="Item Posting Group ID"
                   variant="outlined"
                   size="small"
+                  value={this.state.ItemPostingGroupID}
                 />
                 <TextboxInput
-                  id="pageLink"
-                  label="Page Link"
+                  id="Code"
+                  label="Code"
                   variant="outlined"
                   size="small"
+                  value={this.state.Code}
                 />
                 <TextboxInput
-                  id="description"
+                  id="Description"
                   label="Description"
                   variant="outlined"
                   size="small"
+                  value={this.state.Description}
                 />
               </TableBody>
             </Table>
           </TableContainer>
         </Grid>
       </Grid>
-
     );
 
     const section1 = (
@@ -126,14 +129,25 @@ class postingGroupMaster extends React.Component {
           <Dualtabcomponent
             tab1name="List"
             tab2name="New"
-            tab1Html={table}
-            tab2Html={newForm}
+            tab1Html={tableItemPostingGroup}
+            tab2Html={formItemPostingGroup}
           />
         </Grid>
       </Grid>
-
     );
 
+    const section2 = (
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={11} lg={11}>
+            <Dualtabcomponent
+              tab1name="List"
+              tab2name="New"
+              tab1Html={tableItemPostingGroup}
+              tab2Html={formItemPostingGroup}
+            />
+          </Grid>
+        </Grid>
+      );
 
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -187,18 +201,10 @@ class postingGroupMaster extends React.Component {
                   variant="text"
                   aria-label="Action Menu Button group"
                 >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-
-                  >
+                  <Button className="action-btns" startIcon={<AddIcon />}>
                     New
                   </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<EditIcon />}
-
-                  >
+                  <Button className="action-btns" startIcon={<EditIcon />}>
                     Edit
                   </Button>
                 </ButtonGroup>
@@ -212,64 +218,63 @@ class postingGroupMaster extends React.Component {
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
-
                   <Accordioncomponent
                     accordionKey="a-1"
                     expanded={this.state.accordion1}
-                    onClick={(e) =>
-                      handleAccordionClick("accordion1", e)
-                    }
+                    onClick={(e) => handleAccordionClick("accordion1", e)}
                     id="accordion1"
-                    typographyKey="a-t-1"
-                    typography="Dummy Accordion Title"
-                    accordiondetailsKey="a-d-1"
+                    typographyKey="Item-Posting-Group"
+                    typography="Item Posting Group"
+                    accordiondetailsKey="accordion1"
                     html={section1}
                   />
-
+                </Grid>
+                <Grid xs={12} sm={12} md={11} lg={11}>
+                  <Accordioncomponent
+                    accordionKey="a-1"
+                    expanded={this.state.accordion2}
+                    onClick={(e) => handleAccordionClick("accordion2", e)}
+                    id="accordion2"
+                    typographyKey="General-Posting-Group"
+                    typography="General Posting Group"
+                    accordiondetailsKey="accordion2"
+                    html={section2}
+                  />
                 </Grid>
               </Grid>
             </Grid>
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
-
-                  <Accordioncomponent
+                  {/* <Accordioncomponent
                     accordionKey="a-2"
                     expanded={this.state.accordion2}
-                    onClick={(e) =>
-                      handleAccordionClick("accordion2", e)
-                    }
+                    onClick={(e) => handleAccordionClick("accordion2", e)}
                     id="accordion2"
                     typographyKey="a-t-2"
                     typography="Dummy Accordion Title 2"
                     accordiondetailsKey="a-d-2"
                     html={section1}
-                  />
-
+                  /> */}
                 </Grid>
               </Grid>
             </Grid>
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
-
                   <Accordioncomponent
                     accordionKey="a-3"
                     expanded={this.state.accordion3}
-                    onClick={(e) =>
-                      handleAccordionClick("accordion3", e)
-                    }
+                    onClick={(e) => handleAccordionClick("accordion3", e)}
                     id="accordion3"
                     typographyKey="a-t-3"
                     typography="Dummy Accordion Title 3"
                     accordiondetailsKey="a-d-3"
                     html={section1}
                   />
-
                 </Grid>
               </Grid>
             </Grid>
-             
           </Grid>
         </div>
       </Fragment>
