@@ -101,7 +101,6 @@ class editItem extends React.Component {
       Bomid: 0,
       Item: {},
       ItemCategoryData: [],
-      
     };
   }
 
@@ -421,122 +420,359 @@ class editItem extends React.Component {
           }
           break;
         case "IsCertified":
-          setStateParam({},param,e.target.checked);
+          setStateParam({}, param, e.target.checked);
           if (e.target.checked === true) {
             document.getElementById("CertificateNo").focus();
           }
           break;
         //------------------
-        
-        case "CartonHeight":          
-          setStateParam({
-            validate: true,
-            isNumber: CF.chkIfNumber(e.target.value),
-            isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
-          }, param, e.target.value);
+
+        case "CartonHeight":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
           break;
         case "CartonLength":
-          
-          
-          this.setState({ CartonLength: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
+          // this.setState({ CartonLength: e.target.value });
           break;
 
         case "CartonWidth":
-          this.setState({ CartonWidth: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "NetWeight":
-          this.setState({ NetWeight: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "GrossWeight":
-          this.setState({ GrossWeight: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "WarningLevel":
-          this.setState({ WarningLevel: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "MinStockLevel":
-          this.setState({ MinStockLevel: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "AMSF":
-          this.setState({ Amsf: e.target.value });
+        case "Amsf":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "MSF":
-          this.setState({ Msf: e.target.value });
+        case "Msf":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "BSF":
-          this.setState({ Bsf: e.target.value });
+        case "Bsf":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "MOQ":
-          this.setState({ Moq: e.target.value });
+        case "Moq":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "ShipperQuantity":
-          this.setState({ ShipperQuantiry: e.target.value });
+        case "ShipperQuantiry":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "CBMPerShipper":
-          this.setState({ CbmperShipper: e.target.value });
+        case "CbmperShipper":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "IsQuality":
-          this.setState({ IsQuality: e.target.checked });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "SpecID":
-          this.setState({ SpecId: e.target.value });
+        case "SpecId":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "AllowNegativeStock":
           this.setState({ AllowNegativeStock: e.target.checked });
           break;
-        case "PostingGroup":
+        case "ItemPostingGroupID":
           this.setState({ ItemPostingGroupID: e.target.value });
           break;
         case "CostingMethod":
           this.setState({ CostingMethod: e.target.value });
           break;
         case "StandardCost":
-          this.setState({ StandardCost: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "IndirectCostPercentage":
-          this.setState({ IndirectCostPercentage: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
 
         case "ProfitPercentage":
-          this.setState({ ProfitPercentage: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
 
         case "TolerancePercentage":
-          this.setState({ TolerancePercentage: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
 
-        case "GSTGroupID":
-          this.setState({ GstgroupId: e.target.value });
+        case "GstgroupId":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "HSNCode":
+        case "Hsncode":
           this.setState({ Hsncode: e.target.value });
           break;
 
-        case "BaseUOM":
-          this.setState({ BaseUom: e.target.value });
+        case "BaseUom":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "SalesUOM":
-          this.setState({ SalesUom: e.target.value });
+        case "SalesUom":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "PurchaseUOM":
-          this.setState({ PurchaseUom: e.target.value });
+        case "PurchaseUom":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "PackingUOM":
-          this.setState({ PackingUom: e.target.value });
+        case "PackingUom":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "Replenishment":
           this.setState({ Replenishment: e.target.value });
           break;
         case "LeadTime":
-          this.setState({ LeadTime: e.target.value });
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "ManufacturingPolicy":
           this.setState({ ManufacturingPolicy: e.target.value });
           break;
-        case "RoutingID":
-          this.setState({ RoutingId: e.target.value });
+        case "RoutingId":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
-        case "BOMID":
-          this.setState({ Bomid: e.target.value });
+        case "Bomid":
+          setStateParam(
+            {
+              validate: true,
+              isNumber: CF.chkIfNumber(e.target.value),
+              isEmpty: CF.chkIfBlankOrEmpty(e.target.value),
+            },
+            param,
+            e.target.value
+          );
+
           break;
         case "Location":
           this.setState({ Location: e.target.value });
@@ -555,21 +791,28 @@ class editItem extends React.Component {
       }
     };
 
-    const setStateParam=(validations,key,value)=>{
-      console.log("validations > ",validations);      
-      console.log("key > ",key);      
-      console.log("value > ",value);      
-      if(Object.keys(validations).length === 0 && validations.constructor === Object){
-        console.log("validations is Empty "); 
-        this.setState({[key]:value}); 
-      }else{        
-        if(validations.validate){
-          !validations.isEmpty?validations.isNumber?this.setState({[key]:value}):this.setState({[key]:0}):this.setState({[key]:0});        
-        }else{
-          this.setState({[key]:value});        
-        }  
-      }            
-    }
+    const setStateParam = (validations, key, value) => {
+      console.log("validations > ", validations);
+      console.log("key > ", key);
+      console.log("value > ", value);
+      if (
+        Object.keys(validations).length === 0 &&
+        validations.constructor === Object
+      ) {
+        console.log("validations is Empty ");
+        this.setState({ [key]: value });
+      } else {
+        if (validations.validate) {
+          !validations.isEmpty
+            ? validations.isNumber
+              ? this.setState({ [key]: value })
+              : this.setState({ [key]: 0 })
+            : this.setState({ [key]: 0 });
+        } else {
+          this.setState({ [key]: value });
+        }
+      }
+    };
 
     const fetchItemType = (value) => {
       let ValidUser = APIURLS.ValidUser;
@@ -821,10 +1064,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("ItemNo", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.ItemNo}
                               disabled={true}
                             />
@@ -835,10 +1075,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Code", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.Code}
                             />
                             <TextboxInput
@@ -847,10 +1084,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Alias", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                             
                               value={this.state.Alias}
                             />
                             <TextboxInput
@@ -861,10 +1095,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Description1", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.Description1}
                             />
                             <TextboxInput
@@ -875,10 +1106,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Description2", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.Description2}
                             />
 
@@ -890,10 +1118,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("PackingDesc1", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.PackingDesc1}
                             />
                             <TextboxInput
@@ -904,10 +1129,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("PackingDesc2", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.PackingDesc2}
                             />
                           </TableBody>
@@ -982,10 +1204,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CertificateNo", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.CertificateNo}
                               disabled={!this.state.IsCertified}
                             />
@@ -1008,10 +1227,7 @@ class editItem extends React.Component {
                               onChange={(e) => updateFormValue("Reason", e)}
                               value={this.state.Reason}
                               disabled={!this.state.IsDiscontine}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                             />
                           </TableBody>
                         </Table>
@@ -1061,10 +1277,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonHeight", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.CartonHeight}
                             />
                             <TextboxInput
@@ -1076,10 +1289,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonLength", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.CartonLength}
                             />
                             <TextboxInput
@@ -1091,10 +1301,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("CartonWidth", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.CartonWidth}
                             />
                             <TextboxInput
@@ -1104,10 +1311,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("NetWeight", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.NetWeight}
                             />
                             <TextboxInput
@@ -1119,10 +1323,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("GrossWeight", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.GrossWeight}
                             />
                             <TextboxInput
@@ -1134,10 +1335,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("WarningLevel", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.WarningLevel}
                             />
                             <TextboxInput
@@ -1149,10 +1347,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("MinStockLevel", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.MinStockLevel}
                             />
                             <TextboxInput
@@ -1161,11 +1356,8 @@ class editItem extends React.Component {
                               label="AMSF"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("AMSF", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("Amsf", e)}
+                              
                               value={this.state.Amsf}
                             />
                             <TextboxInput
@@ -1174,11 +1366,8 @@ class editItem extends React.Component {
                               label="MSF"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("MSF", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("Msf", e)}
+                              
                               value={this.state.Msf}
                             />
                             <TextboxInput
@@ -1187,11 +1376,8 @@ class editItem extends React.Component {
                               label="BSF"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("BSF", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("Bsf", e)}
+                              
                               value={this.state.Bsf}
                             />
                             <TextboxInput
@@ -1200,11 +1386,8 @@ class editItem extends React.Component {
                               label="MOQ"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("MOQ", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("Moq", e)}
+                              
                               value={this.state.Moq}
                             />
                           </TableBody>
@@ -1225,12 +1408,9 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) =>
-                                updateFormValue("ShipperQuantity", e)
+                                updateFormValue("ShipperQuantiry", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.ShipperQuantiry}
                             />
                             <TextboxInput
@@ -1240,12 +1420,9 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) =>
-                                updateFormValue("CBMPerShipper", e)
+                                updateFormValue("CbmperShipper", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.CbmperShipper}
                             />
                             <SwitchInput
@@ -1261,11 +1438,8 @@ class editItem extends React.Component {
                               label="SpecID"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("SpecID", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("SpecId", e)}
+                              
                               value={this.state.SpecId}
                             />
                             <SwitchInput
@@ -1282,7 +1456,7 @@ class editItem extends React.Component {
                               id="PostingGroup"
                               label="Posting Group"
                               onChange={(e) =>
-                                updateFormValue("PostingGroup", e)
+                                updateFormValue("ItemPostingGroupID", e)
                               }
                               // options={}
                               value={this.state.ItemPostingGroupID}
@@ -1307,10 +1481,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("StandardCost", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.StandardCost}
                             />
                             <TextboxInput
@@ -1322,10 +1493,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("IndirectCostPercentage", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                             
                               value={this.state.IndirectCostPercentage}
                             />
                             <TextboxInput
@@ -1337,10 +1505,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("ProfitPercentage", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.ProfitPercentage}
                             />
                           </TableBody>
@@ -1392,10 +1557,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("TolerancePercentage", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.TolerancePercentage}
                             />
 
@@ -1405,11 +1567,8 @@ class editItem extends React.Component {
                               label="GST GroupID"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("GSTGroupID", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("GstgroupId", e)}
+                              
                               value={this.state.GstgroupId}
                             />
                             <TextboxInput
@@ -1417,11 +1576,8 @@ class editItem extends React.Component {
                               label="HSN Code"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("HSNCode", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("Hsncode", e)}
+                              
                               value={this.state.Hsncode}
                             />
                             <TextboxInput
@@ -1430,11 +1586,8 @@ class editItem extends React.Component {
                               label="Base UOM "
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("BaseUOM", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("BaseUom", e)}
+                              
                               value={this.state.BaseUom}
                             />
                           </TableBody>
@@ -1454,11 +1607,8 @@ class editItem extends React.Component {
                               label="Sales UOM"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("SalesUOM", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("SalesUom", e)}
+                              
                               value={this.state.SalesUom}
                             />
                             <TextboxInput
@@ -1468,12 +1618,9 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) =>
-                                updateFormValue("PurchaseUOM", e)
+                                updateFormValue("PurchaseUom", e)
                               }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.PurchaseUom}
                             />
                             <TextboxInput
@@ -1482,11 +1629,8 @@ class editItem extends React.Component {
                               label="Packing UOM"
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("PackingUOM", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("PackingUom", e)}
+                              
                               value={this.state.PackingUom}
                             />
                           </TableBody>
@@ -1549,10 +1693,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("LeadTime", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.LeadTime}
                             />
 
@@ -1582,11 +1723,8 @@ class editItem extends React.Component {
                               label="RoutingID "
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("RoutingID", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("RoutingId", e)}
+                              
                               value={this.state.RoutingId}
                             />
                             <TextboxInput
@@ -1595,11 +1733,8 @@ class editItem extends React.Component {
                               label="BOMID "
                               variant="outlined"
                               size="small"
-                              onChange={(e) => updateFormValue("BOMID", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("Bomid", e)}
+                              
                               value={this.state.Bomid}
                             />
                           </TableBody>
@@ -1649,10 +1784,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("Location", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.Location}
                             />
 
@@ -1662,10 +1794,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("BarcodeNo", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.BarcodeNo}
                             />
                             <SwitchInput
