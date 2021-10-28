@@ -32,9 +32,9 @@ import CompanyQuickDetails from "./companyquickdetails";
 
 import Csvexport from "../../compo/csvexport";
 import Loader from "../../compo/loader";
-
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
+
 
 let columns = [];
 

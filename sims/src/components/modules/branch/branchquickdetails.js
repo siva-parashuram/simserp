@@ -18,6 +18,8 @@ import branchlogo from "../../../logo.png";
 import { formGroupClasses } from '@mui/material';
 import Attachmentmaster from '../../ftp/attachment/attachmentmaster';
 
+import Dualtabcomponent from '../../compo/dualtabcomponent';
+
 class branchquickdetails extends React.Component {
     constructor(props) {
         super(props);
@@ -26,7 +28,7 @@ class branchquickdetails extends React.Component {
             showAttachments: false,
             detailsUnderlineBtnCss: "btn-bottom-border-color",  //btn-bottom-border-color
             attachmentUnderlineBtnCss: "",
-            filelist:this.props.filelist,
+            filelist: this.props.filelist,
         };
     }
     render() {
@@ -40,25 +42,43 @@ class branchquickdetails extends React.Component {
         }
 
         const openPage = (url) => {
-           
+
             this.setState({ ProgressLoader: false });
             window.location = url;
         }
 
-        return (
+
+        const tab1Html = (
             <Fragment>
                 <Grid container spacing={0}>
-                    <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
-                        <ButtonGroup variant="text" aria-label="text button group">
-                            <Button
-                                startIcon={<InfoIcon />}
-                                className={this.state.detailsUnderlineBtnCss}
-                                onClick={(e) => customTabButton(e, "details")}>Details</Button>
-                            <Button
-                                startIcon={<AttachFileIcon />}
-                                className={this.state.attachmentUnderlineBtnCss}
-                                onClick={(e) => customTabButton(e, "attachments")}>Attachments</Button>
-                        </ButtonGroup>
+                    <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
+                        <TableContainer>
+                            <Table stickyHeader size="small" className="accordion-table" aria-label="table">
+                                <TableBody className="tableBody">
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Effective Date</TableCell>
+                                        <TableCell align="right" className="no-border-table"> {this.props.branchItem.effectiveDate ? moment(this.props.branchItem.effectiveDate).format("MM/DD/YYYY") : "-"}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Name</TableCell>
+                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.name}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Address</TableCell>
+                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.address} {this.props.branchItem.address2} {this.props.branchItem.address3}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Phone No</TableCell>
+                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.phoneNo}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Website</TableCell>
+                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.website}</TableCell>
+                                    </TableRow>
+
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Grid>
                 </Grid>
                 <Grid container spacing={0}>
@@ -66,113 +86,81 @@ class branchquickdetails extends React.Component {
                         <div style={{ height: 20 }}></div>
                     </Grid>
                 </Grid>
-                <Grid container spacing={0}>
-                    {this.state.showDetails === true ? (
-                        <Fragment>
-                            <Grid container spacing={0}>
-                                <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                                   
-                                    <TableContainer>
-                                        <Table stickyHeader size="small" className="accordion-table" aria-label="table">
-                                            <TableBody className="tableBody">
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Effective Date</TableCell>
-                                                    <TableCell align="right" className="no-border-table"> {this.props.branchItem.effectiveDate ? moment(this.props.branchItem.effectiveDate).format("MM/DD/YYYY") : "-"}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Name</TableCell>
-                                                    <TableCell align="right" className="no-border-table">{this.props.branchItem.name}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Address</TableCell>
-                                                    <TableCell align="right" className="no-border-table">{this.props.branchItem.address} {this.props.branchItem.address2} {this.props.branchItem.address3}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Phone No</TableCell>
-                                                    <TableCell align="right" className="no-border-table">{this.props.branchItem.phoneNo}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Website</TableCell>
-                                                    <TableCell align="right" className="no-border-table">{this.props.branchItem.website}</TableCell>
-                                                </TableRow>
-
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Grid>
+                <Grid container spacing={0} style={{ marginLeft: 15 }}>
+                    <Grid item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                        <Grid container spacing={1} >
+                            <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                        <CardContent>
+                                            <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                Total Customers
+                                            </Typography>
+                                            <Typography >
+                                                870
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </div>
                             </Grid>
-                            <Grid container spacing={0}>
-                                <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
-                                    <div style={{ height: 20 }}></div>
-                                </Grid>
+                            <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                        <CardContent>
+                                            <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                Total Sales &nbsp;&nbsp;&nbsp;
+                                            </Typography>
+                                            <Typography>
+                                                5,735
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </div>
                             </Grid>
-                            <Grid container spacing={0} style={{ marginLeft: 15 }}>
-                                <Grid item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
-                                    <Grid container spacing={1} >
-                                        <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                            <div key="paymentPendingLink" to="#" className="card-link">
-                                                <Card className="dash-activity-card2" raised={false}>
-                                                    <CardContent>
-                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                            Total Customers
-                                                        </Typography>
-                                                        <Typography >
-                                                            870
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                            <div key="paymentPendingLink" to="#" className="card-link">
-                                                <Card className="dash-activity-card2" raised={false}>
-                                                    <CardContent>
-                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                            Total Sales &nbsp;&nbsp;&nbsp;
-                                                        </Typography>
-                                                        <Typography>
-                                                            5,735
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                            <div key="paymentPendingLink" to="#" className="card-link">
-                                                <Card className="dash-activity-card2" raised={false}>
-                                                    <CardContent>
-                                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                            PO Raised &nbsp;&nbsp;&nbsp;
-                                                        </Typography>
-                                                        <Typography>
-                                                            1,766
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-
+                            <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                        <CardContent>
+                                            <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                PO Raised &nbsp;&nbsp;&nbsp;
+                                            </Typography>
+                                            <Typography>
+                                                1,766
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </div>
                             </Grid>
-                        </Fragment>
-
-                    ) : null}
-                    {this.state.showAttachments === true ? (
-                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                             <Attachmentmaster 
-                             companyId={this.props.branchItem.companyId} 
-                             branchId={this.props.branchItem.branchId}
-                             filelist={this.props.filelist}
-                             rowClicked={this.props.rowClicked}
-                             category="branch"
-                             type="info"                            
-                             upload={true}
-                             />
                         </Grid>
-                    ) : null}
-
+                    </Grid>
                 </Grid>
+            </Fragment>
+        );
+
+        const tab2Html = (
+            <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
+                <Attachmentmaster
+                    companyId={this.props.branchItem.companyId}
+                    branchId={this.props.branchItem.branchId}
+                    filelist={this.props.filelist}
+                    rowClicked={this.props.rowClicked}
+                    category="branch"
+                    type="info"
+                    upload={true}
+                />
+            </Grid>
+        );
+
+
+
+        return (
+            <Fragment>
+                <Dualtabcomponent
+                    tab1name="Details"
+                    tab2name="Attachments"
+                    tab1Html={tab1Html}
+                    tab2Html={tab2Html}
+                />
             </Fragment>
         )
     }
