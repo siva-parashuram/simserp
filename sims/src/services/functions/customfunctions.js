@@ -91,6 +91,5 @@ export const chkIfNumber=(value)=>{
 export const chkIfBlankOrEmpty = (value) => {
   let isEmpty = false;
   value.trim() === "" ? isEmpty = true : isEmpty = false;
-  console.log("chkIfBlankOrEmpty > isEmpty > ",isEmpty);
   return isEmpty;
 }

@@ -554,8 +554,7 @@ class editItem extends React.Component {
 
     const setStateParam=(validations,key,value)=>{
       if(validations.validate){
-        validations.isNumber?this.setState({[key]:value}):this.setState({[key]:0});
-        !validations.isEmpty && validations.isNumber?this.setState({[key]:value}):this.setState({[key]:0});
+        !validations.isEmpty?validations.isNumber?this.setState({[key]:value}):this.setState({[key]:0}):this.setState({[key]:0});        
       }else{
         this.setState({[key]:value});        
       }       
