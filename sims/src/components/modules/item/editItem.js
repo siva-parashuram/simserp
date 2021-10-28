@@ -1538,7 +1538,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("Replenishment", e)
                               }
-                              //options={}
+                              options={APIURLS.Replenishment}
                               value={this.state.Replenishment}
                             />
 
@@ -1549,10 +1549,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("LeadTime", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              
                               value={this.state.LeadTime}
                             />
 
@@ -1562,7 +1559,7 @@ class editItem extends React.Component {
                               onChange={(e) =>
                                 updateFormValue("ManufacturingPolicy", e)
                               }
-                              //options={}
+                              options={APIURLS.ManufacturingPolicy}
                               value={this.state.ManufacturingPolicy}
                             />
                           </TableBody>
@@ -1576,7 +1573,7 @@ class editItem extends React.Component {
                           aria-label="Item List table"
                         >
                           <TableBody className="tableBody">
-                            <TextboxInput
+                            <TextboxInput                            
                               type="number"
                               id="RoutingID"
                               label="RoutingID "
