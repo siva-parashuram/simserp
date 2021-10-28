@@ -1242,36 +1242,24 @@ class editItem extends React.Component {
                                 updateFormValue("AllowNegativeStock", e)
                               }
                             />
-                            <TextboxInput
-                              type="number"
+
+                            <DropdownInput
                               id="PostingGroup"
                               label="Posting Group"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("PostingGroup", e)
-                              }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("PostingGroup", e)}
+                              // options={}
                               value={this.state.ItemPostingGroupID}
                             />
-                            <TextboxInput
-                              type="number"
+                           
+                            <DropdownInput
                               id="CostingMethod"
                               label="Costing Method"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("CostingMethod", e)
-                              }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("CostingMethod", e)}
+                              //options={}
                               value={this.state.CostingMethod}
+                              
                             />
+
                             <TextboxInput
                               type="number"
                               id="StandardCost"
@@ -1387,7 +1375,7 @@ class editItem extends React.Component {
                               value={this.state.GstgroupId}
                             />
                             <TextboxInput
-                              type="number"
+                              
                               id="HSNCode"
                               label="HSN Code"
                               variant="outlined"
@@ -1507,20 +1495,14 @@ class editItem extends React.Component {
                           aria-label="Item List table"
                         >
                           <TableBody className="tableBody">
-                            <TextboxInput
-                              type="number"
+                            
+                            <DropdownInput
                               id="Replenishment"
                               label="Replenishment"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("Replenishment", e)
-                              }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              onChange={(e) => updateFormValue("Replenishment", e)}
+                              //options={}
                               value={this.state.Replenishment}
+                              
                             />
 
                             <TextboxInput
@@ -1537,20 +1519,14 @@ class editItem extends React.Component {
                               value={this.state.LeadTime}
                             />
 
-                            <TextboxInput
-                              type="number"
+                            
+                             <DropdownInput
                               id="ManufacturingPolicy"
-                              label="Manufacturing Policy "
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("ManufacturingPolicy", e)
-                              }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
+                              label="Manufacturing Policy"
+                              onChange={(e) => updateFormValue("ManufacturingPolicy", e)}
+                              //options={}
                               value={this.state.ManufacturingPolicy}
+                              
                             />
                           </TableBody>
                         </Table>
