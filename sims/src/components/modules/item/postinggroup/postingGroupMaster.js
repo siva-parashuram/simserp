@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
+import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -19,18 +20,23 @@ import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
 
 import Loader from "../../../compo/loader";
-
 import Breadcrumb from "../../../compo/breadcrumb";
+import Dualtabcomponent from "../../../compo/dualtabcomponent";
+import Accordioncomponent from "../../../compo/accordioncomponent";
+
+import TextboxInput from "../../../compo/tablerowcelltextboxinput";
+
 
 class postingGroupMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       urlparams: "",
-
       ProgressLoader: true,
-
       editurl: "",
+      accordion1: false,
+      accordion2: false,
+      accordion3: false,
     };
   }
 
@@ -55,6 +61,96 @@ class postingGroupMaster extends React.Component {
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
+    };
+
+
+    const table = (
+      <Table
+        stickyHeader
+        size="small"
+        className=""
+        aria-label="Item-catagory List table"
+      >
+        <TableHead className="table-header-background">
+          <TableRow>
+            <TableCell className="table-header-font">#</TableCell>
+            <TableCell className="table-header-font" align="left">
+              Name
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody className="tableBody"></TableBody>
+      </Table>
+    );
+
+    const newForm = (
+      <Grid container spacing={0}>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <TableContainer>
+            <Table
+              stickyHeader
+              size="small"
+              className="accordion-table"
+              aria-label="company List table"
+            >
+              <TableBody className="tableBody">
+                <TextboxInput
+                  id="pageName"
+                  label="Page Name"
+                  variant="outlined"
+                  size="small"
+                />
+                <TextboxInput
+                  id="pageLink"
+                  label="Page Link"
+                  variant="outlined"
+                  size="small"
+                />
+                <TextboxInput
+                  id="description"
+                  label="Description"
+                  variant="outlined"
+                  size="small"
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Grid>
+
+    );
+
+    const section1 = (
+      <Grid container spacing={0}>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <Dualtabcomponent
+            tab1name="List"
+            tab2name="New"
+            tab1Html={table}
+            tab2Html={newForm}
+          />
+        </Grid>
+      </Grid>
+
+    );
+
+
+    const handleAccordionClick = (val, e) => {
+      if (val === "accordion1") {
+        this.state.accordion1 === true
+          ? this.setState({ accordion1: false })
+          : this.setState({ accordion1: true });
+      }
+      if (val === "accordion2") {
+        this.state.accordion2 === true
+          ? this.setState({ accordion2: false })
+          : this.setState({ accordion2: true });
+      }
+      if (val === "accordion3") {
+        this.state.accordion3 === true
+          ? this.setState({ accordion3: false })
+          : this.setState({ accordion3: true });
+      }
     };
 
     return (
@@ -94,14 +190,14 @@ class postingGroupMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                     
+
                   >
                     New
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                   
+
                   >
                     Edit
                   </Button>
@@ -113,29 +209,67 @@ class postingGroupMaster extends React.Component {
 
           <div className="New-link-bottom"></div>
           <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={8} lg={8}>
+            <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={10} lg={10}>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className=""
-                    aria-label="Item-catagory List table"
-                  >
-                    <TableHead className="table-header-background">
-                      <TableRow>
-                        <TableCell className="table-header-font">#</TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Name
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody className="tableBody"></TableBody>
-                  </Table>
+                <Grid xs={12} sm={12} md={11} lg={11}>
+
+                  <Accordioncomponent
+                    accordionKey="a-1"
+                    expanded={this.state.accordion1}
+                    onClick={(e) =>
+                      handleAccordionClick("accordion1", e)
+                    }
+                    id="accordion1"
+                    typographyKey="a-t-1"
+                    typography="Dummy Accordion Title"
+                    accordiondetailsKey="a-d-1"
+                    html={section1}
+                  />
+
                 </Grid>
               </Grid>
             </Grid>
-            <Grid xs={12} sm={12} md={4} lg={4}></Grid>
+            <Grid xs={12} sm={12} md={4} lg={4}>
+              <Grid container spacing={0}>
+                <Grid xs={12} sm={12} md={11} lg={11}>
+
+                  <Accordioncomponent
+                    accordionKey="a-2"
+                    expanded={this.state.accordion2}
+                    onClick={(e) =>
+                      handleAccordionClick("accordion2", e)
+                    }
+                    id="accordion2"
+                    typographyKey="a-t-2"
+                    typography="Dummy Accordion Title 2"
+                    accordiondetailsKey="a-d-2"
+                    html={section1}
+                  />
+
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid xs={12} sm={12} md={4} lg={4}>
+              <Grid container spacing={0}>
+                <Grid xs={12} sm={12} md={11} lg={11}>
+
+                  <Accordioncomponent
+                    accordionKey="a-3"
+                    expanded={this.state.accordion3}
+                    onClick={(e) =>
+                      handleAccordionClick("accordion3", e)
+                    }
+                    id="accordion3"
+                    typographyKey="a-t-3"
+                    typography="Dummy Accordion Title 3"
+                    accordiondetailsKey="a-d-3"
+                    html={section1}
+                  />
+
+                </Grid>
+              </Grid>
+            </Grid>
+             
           </Grid>
         </div>
       </Fragment>
