@@ -384,7 +384,7 @@ class editItem extends React.Component {
         case "PackingDesc2":
           setStateParam({}, param, e.target.value);
           break;
-        case "ItemDeptID":
+        case "ItemDeptId":
           setStateParam({}, param, e.target.value);
           break;
         case "CatID":
@@ -1033,7 +1033,7 @@ class editItem extends React.Component {
                             <DropdownInput
                               id="ItemDeptID"
                               label="ItemDept"
-                              onChange={(e) => updateFormValue("ItemDeptID", e)}
+                              onChange={(e) => updateFormValue("ItemDeptId", e)}
                               options={this.state.itemDepartmentMasterData}
                               value={this.state.ItemDeptId}
                             />
