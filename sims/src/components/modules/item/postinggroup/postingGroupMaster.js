@@ -232,7 +232,6 @@ class postingGroupMaster extends React.Component {
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
-
                   <Accordioncomponent
                     accordionKey="a-2"
                     expanded={this.state.accordion2}
@@ -252,7 +251,6 @@ class postingGroupMaster extends React.Component {
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
-
                   <Accordioncomponent
                     accordionKey="a-3"
                     expanded={this.state.accordion3}
