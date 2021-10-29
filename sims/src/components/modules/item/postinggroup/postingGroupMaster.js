@@ -41,6 +41,10 @@ class postingGroupMaster extends React.Component {
       accordion1: false,
       accordion2: false,
       accordion3: false,
+      accordion4: false,
+      accordion5: false,
+      accordion6: false,
+      accordion7: false,
       ItemPostingGroupList: [],
       ItemPostingGroup: {
         ItemPostingGroupID: 0,
@@ -414,12 +418,7 @@ class postingGroupMaster extends React.Component {
               aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-                <DropdownInput
-                  id="GeneralPostingGroupID"
-                  label="General Posting GroupID"
-                  // onChange={(e) => updateFormValue("PayableAccount", e)}
-                  // options={}
-                />
+                
                 <TextboxInput
                   id="codeGeneralPostingGroup"
                   label="Code"
@@ -525,12 +524,7 @@ class postingGroupMaster extends React.Component {
               aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-                <DropdownInput
-                  id="SupplierPostingGroupID"
-                  label="Supplier Posting GroupID"
-                  // onChange={(e) => updateFormValue("PayableAccount", e)}
-                  // options={}
-                />
+               
                 <TextboxInput
                   id="codeSupplierPostingGroup"
                   label="Code"
@@ -630,12 +624,7 @@ class postingGroupMaster extends React.Component {
               aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-                <DropdownInput
-                  id="CustomerPostingGroupID"
-                  label="Customer Posting GroupID"
-                  // onChange={(e) => updateFormValue("PayableAccount", e)}
-                  // options={}
-                />
+               
                 <TextboxInput
                   id="codeCustomerPostingGroup"
                   label="Code"
