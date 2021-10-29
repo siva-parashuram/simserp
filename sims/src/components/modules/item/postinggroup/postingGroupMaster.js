@@ -13,6 +13,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
+import TablePagination from "@mui/material/TablePagination";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -33,6 +34,10 @@ class postingGroupMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      IPGpagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       urlparams: "",
       ProgressLoader: true,
       ErrorPrompt: false,
@@ -46,11 +51,12 @@ class postingGroupMaster extends React.Component {
       accordion6: false,
       accordion7: false,
       ItemPostingGroupList: [],
+      selectedItemPostingGroupList:[],
       ItemPostingGroup: {
         ItemPostingGroupID: 0,
         Code: "",
-        Description: "",
-      },
+        Description: ""
+      }
     };
   }
 
@@ -184,10 +190,97 @@ class postingGroupMaster extends React.Component {
         });
     };
 
-    const updateList = (parent, key, item, e) => {};
+    const updateItemPostingGroup = (e) => {
+      if(this.state.selectedItemPostingGroupList.length>0){
+        this.setState({ ProgressLoader: false });
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.UpdateItemPostingGroup;
+      let reqData = {
+        validUser: ValidUser,
+        ItemPostingGroup: this.state.selectedItemPostingGroupList
+      };
+      console.log("updateItemPostingGroup > reqData > ",reqData);
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status===201) {
+            this.setState({ 
+              selectedItemPostingGroupList:[],
+              ProgressLoader: true, 
+              SuccessPrompt: true
+             });
+             this.getAllItemPostingGroup();
+          } else {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
+      }
+      
+    }
+
+    const removeOldIfExist = (parent, item, stateArray) => {
+      let newArray = [];
+      if (parent === "ItemPostingGroupList") {
+        
+        for (let i = 0; i < stateArray.length; i++) {
+          if (stateArray[i].ItemPostingGroupID === item.ItemPostingGroupID) { } else {
+            newArray.push(stateArray[i]);
+          }
+        }
+      }
+      return newArray;
+    }
+
+    const updateList = (parent, key, item, e) => {     
+
+      if (parent === "ItemPostingGroupList") {
+        let selectedItemPostingGroupList = this.state.selectedItemPostingGroupList;
+        if (selectedItemPostingGroupList.length > 0) {
+          selectedItemPostingGroupList = removeOldIfExist("ItemPostingGroupList", item, selectedItemPostingGroupList);
+          item[key] = e.target.value;
+          selectedItemPostingGroupList.push(item);
+        } else {
+          item[key] = e.target.value;
+          selectedItemPostingGroupList.push(item);
+        }
+       this.setState({selectedItemPostingGroupList:selectedItemPostingGroupList});
+      }
+    }
+
+    
+
+    const handleIPGPageChange = (event, newPage) => {      
+      let IPGpagination = this.state.IPGpagination;
+      IPGpagination.page = newPage;
+      this.setState({ IPGpagination: IPGpagination });
+    };
+    const getIPGPageData = (data) => {
+      let rows = data;
+      let page = parseInt(this.state.IPGpagination.page);
+      let rowsPerPage = parseInt(this.state.IPGpagination.rowsPerPage);
+      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    };
 
     const tableItemPostingGroup = (
       <Fragment>
+        <Grid container spacing={0} style={{marginTop:20}}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Button style={{ marginLeft: 5 }}
+            onClick={(e) => updateItemPostingGroup(e)}
+          >
+            Update
+          </Button>
+          </Grid>
+        </Grid>
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Table
@@ -209,43 +302,40 @@ class postingGroupMaster extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody className="tableBody">
-                {this.state.ItemPostingGroupList.map((item, i) => (
+                {this.state.ItemPostingGroupList.length>0?getIPGPageData(this.state.ItemPostingGroupList).map((item, i) => (
                   <TableRow>
                     <TableCell>{i + 1}</TableCell>
                     <TableCell align="left">
                       <input
                         className="table-text-field"
-                        id={"itemPostingGroup_code_" + item.itemPostingGroupID}
+                        id={"itemPostingGroup_code_" + item.ItemPostingGroupID}
                         size="small"
-                        defaultValue={item.code}
-                        onKeyUp={(e) =>
-                          updateList("ItemPostingGroupList", "code", item, e)
-                        }
+                        defaultValue={item.Code}
+                       onKeyUp={(e) => updateList("ItemPostingGroupList","Code" ,item, e)}
                       />
                     </TableCell>
                     <TableCell align="left">
                       <input
                         className="table-text-field"
-                        id={
-                          "itemPostingGroup_description_" +
-                          item.itemPostingGroupID
-                        }
+                        id={"itemPostingGroup_description_" + item.ItemPostingGroupID}
                         size="small"
-                        defaultValue={item.description}
-                        onKeyUp={(e) =>
-                          updateList(
-                            "ItemPostingGroupList",
-                            "description",
-                            item,
-                            e
-                          )
-                        }
+                        defaultValue={item.Description}
+                        onKeyUp={(e) => updateList("ItemPostingGroupList","Description" ,item, e)}
                       />
                     </TableCell>
                   </TableRow>
-                ))}
+                )):null}
+
               </TableBody>
             </Table>
+            <TablePagination
+              rowsPerPageOptions={[this.state.IPGpagination.rowsPerPage]}
+              component="div"
+              count={this.state.ItemPostingGroupList.length}
+              rowsPerPage={this.state.IPGpagination.rowsPerPage}
+              page={this.state.IPGpagination.page}
+              onPageChange={handleIPGPageChange}
+            />
           </Grid>
         </Grid>
       </Fragment>
