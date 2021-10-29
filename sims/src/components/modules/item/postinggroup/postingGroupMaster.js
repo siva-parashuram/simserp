@@ -23,6 +23,7 @@ import Loader from "../../../compo/loader";
 import Breadcrumb from "../../../compo/breadcrumb";
 import Dualtabcomponent from "../../../compo/dualtabcomponent";
 import Accordioncomponent from "../../../compo/accordioncomponent";
+import Sectiontitle from "../../../compo/sectiontitle";
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 
@@ -284,10 +285,11 @@ class postingGroupMaster extends React.Component {
           </Grid>
           <div className="breadcrumb-bottom"></div>
 
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={4} lg={4}>
-              <Grid container spacing={0}>
+          <div style={{ marginLeft: 50,marginRight:50 }}>
+            <Sectiontitle
+              title="Item"
+            />
+             <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
                   <Accordioncomponent
                     accordionKey="a-1"
@@ -313,6 +315,22 @@ class postingGroupMaster extends React.Component {
                   />
                 </Grid>
               </Grid>
+              <Sectiontitle
+              title="Supplier"
+            />
+
+
+            <Sectiontitle
+              title="Customer"
+            />
+
+          </div>
+
+          
+
+          <Grid className="table-adjust" container spacing={0}>
+            <Grid xs={12} sm={12} md={4} lg={4}>
+              
             </Grid>
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
