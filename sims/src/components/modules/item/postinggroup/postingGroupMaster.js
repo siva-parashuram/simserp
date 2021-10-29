@@ -14,6 +14,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import TablePagination from "@mui/material/TablePagination";
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -156,40 +157,49 @@ class postingGroupMaster extends React.Component {
 
 
     const createItemPostingGroup = (e) => {
-      this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let Url = APIURLS.APIURL.CreateItemPostingGroup;
-      let reqData = {
-        validUser: ValidUser,
-        ItemPostingGroup: this.state.ItemPostingGroup
-      };
-      console.log("createItemPostingGroup > reqData > ", reqData);
-      axios
-        .post(Url, reqData, { headers })
-        .then((response) => {
-          if (response.status === 200 || response.status === 201) {
-            let ItemPostingGroup = {
-              ItemPostingGroupID: 0,
-              Code: "",
-              Description: ""
-            };
-            let data = response.data;
-            console.log("data > ", data);
-            this.setState({ ProgressLoader: true, SuccessPrompt: true, ItemPostingGroup: ItemPostingGroup });
-            this.getAllItemPostingGroup();
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
+      let ItemPostingGroup = this.state.ItemPostingGroup;
+      let Code = ItemPostingGroup.Code.trim();
+      let Description = ItemPostingGroup.Description.trim();
+      console.log("createItemPostingGroup > Code > ", Code);
+      console.log("createItemPostingGroup > Description > ", Description);
+      if (Code === "" || Description === "") {
+        alert("Empty data found");
+      } else {
+        this.setState({ ProgressLoader: false });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.CreateItemPostingGroup;
+        let reqData = {
+          validUser: ValidUser,
+          ItemPostingGroup: this.state.ItemPostingGroup
+        };
+        console.log("createItemPostingGroup > reqData > ", reqData);
+        axios
+          .post(Url, reqData, { headers })
+          .then((response) => {
+            if (response.status === 200 || response.status === 201) {
+              let ItemPostingGroup = {
+                ItemPostingGroupID: 0,
+                Code: "",
+                Description: ""
+              };
+              let data = response.data;
+              console.log("data > ", data);
+              this.setState({ ProgressLoader: true, SuccessPrompt: true, ItemPostingGroup: ItemPostingGroup });
+              this.getAllItemPostingGroup();
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+            }
 
-        })
-        .catch((error) => {
-          this.setState({ ProgressLoader: true, ErrorPrompt: true });
-        });
+          })
+          .catch((error) => {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          });
+      }
     }
 
     const updateItemPostingGroup = (e) => {
@@ -281,6 +291,8 @@ class postingGroupMaster extends React.Component {
           >
             Update
           </Button>
+         
+          
           </Grid>
         </Grid>
         <Grid container spacing={0}>
