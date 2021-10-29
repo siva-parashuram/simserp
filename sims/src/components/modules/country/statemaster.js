@@ -122,7 +122,8 @@ class statemaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      getDestinationsByState(item);
+     // getDestinationsByState(item);
+     this.setState({ destinations: item.destinations });
       let editUrl =
         URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
 
