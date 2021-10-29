@@ -102,7 +102,7 @@ class countryMaster extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-
+        console.log("data>", data);
         rows = data;
         this.setState(
           {
@@ -134,7 +134,7 @@ class countryMaster extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-
+       
         rows = data;
         this.setState({ states: rows, ProgressLoader: true });
       })
@@ -147,7 +147,7 @@ class countryMaster extends React.Component {
       this.state.urlparams +
       "&countryID=" +
       item.countryId;
-    this.setState({ editurl: editUrl });
+    this.setState({ editurl: editUrl,destinations: item.destinations });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -162,13 +162,13 @@ class countryMaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      getDestinationsByState(item);
+      // getDestinationsByState(item);
       let editUrl =
         URLS.URLS.editCountry +
         this.state.urlparams +
         "&countryID=" +
         item.countryId;
-      this.setState({ editurl: editUrl });
+      this.setState({ editurl: editUrl,destinations: item.destinations });
       getStatesByCountry(item);
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
