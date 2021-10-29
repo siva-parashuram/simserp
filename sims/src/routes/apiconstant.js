@@ -88,6 +88,8 @@ export const APIURL = {
     GetItemCategory:domain+"api/ItemMaster/GetItemCategory",
     UpdateItemCategory:domain+"api/ItemMaster/UpdateItemCategory",
     GetItemTypeByCatID:domain+"api/ItemMaster/GetItemTypeByCatID",
+    CreateItemPostingGroup:domain+"api/Posting/CreateItemPostingGroup",
+    GetAllItemPostingGroup:domain+"api/Posting/GetAllItemPostingGroup"
   };
 
   export const CTimeOut = 10; 

@@ -38,7 +38,9 @@ class accordioncomponent extends React.Component {
                             className="accordion-Header-Title"
                         >{this.props.typography}</Typography>
                     </AccordionSummary>
-                    <AccordionDetails key={this.props.accordiondetailsKey} className="AccordionDetails-css">                        
+                    <AccordionDetails
+                    style={this.props.style}
+                    key={this.props.accordiondetailsKey} className="AccordionDetails-css">                        
                         {this.props.html}
                     </AccordionDetails>
                 </Accordion>
