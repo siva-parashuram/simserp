@@ -6,24 +6,26 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography"; 
+import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Logincheck from "./logincheck";
 import PowerSettingsNewSharpIcon from "@mui/icons-material/PowerSettingsNewSharp";
-import Avatar from "@mui/material/Avatar"; 
+import Avatar from "@mui/material/Avatar";
 import Badge from '@mui/material/Badge';
- 
- 
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import Popover from '@mui/material/Popover';
+
+import Chatapp from "../modules/chat/chatapp";
 
 import { styled } from '@mui/material/styles';
-const useStyles = makeStyles((theme) => ({ 
+const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1,    
-  }, 
+    flexGrow: 1,
+  },
 }));
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -32,6 +34,17 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     padding: '0 4px',
     color: '#fff',
     backgroundColor: '#f44336',
+
+  },
+}));
+
+const StyledMessageBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -3,
+    top: 1,
+    padding: '0 4px',
+    color: '#fff',
+    backgroundColor: '#009688',
 
   },
 }));
@@ -48,7 +61,11 @@ export default function ButtonAppBar() {
   const [branchBtnId, setbranchBtnId] = React.useState("");
   const [token, settoken] = React.useState("");
   const [notificationCount, setnotificationCount] = React.useState(1);
+  const [messageNotificationCount, setmessageNotificationCount] = React.useState(1);
+  const [MessageanchorEl, setMessageAnchorEl] = React.useState(null);
 
+  const openMessage = Boolean(MessageanchorEl);
+  const id = openMessage ? 'simple-popover' : undefined;
 
 
   const handleClick = (event) => {
@@ -97,6 +114,17 @@ export default function ButtonAppBar() {
     }
   }, []);
 
+
+
+  const handleMessageClick = (event) => {
+    setMessageAnchorEl(event.currentTarget);
+  };
+
+  const handleMessageClose = () => {
+    setMessageAnchorEl(null);
+  };
+
+
   const closeWindow = (e) => {
     window.close();
   };
@@ -107,10 +135,23 @@ export default function ButtonAppBar() {
         <CssBaseline />
         <AppBar className="navDiv" position="static">
           <Toolbar>
+
             <Typography variant="h6" className={classes.title}>
               {branchName}
             </Typography>
-            <Avatar className='nav-avatar' sx={{ bgcolor: 'rgb(19, 163, 38)', fontSize: 18, color: 'white', width: 24, height: 24, marginRight: 2 }}>{userInitial}</Avatar>
+
+            <IconButton
+
+            >
+              <StyledMessageBadge
+                badgeContent={messageNotificationCount}
+                aria-describedby={id} onClick={handleMessageClick}
+              >
+                <ChatBubbleOutlineIcon />
+              </StyledMessageBadge>
+
+            </IconButton>
+
             <IconButton
               onClick={handleClick}
             >
@@ -120,10 +161,30 @@ export default function ButtonAppBar() {
                 <NotificationsIcon style={{ color: "white" }} />
               </StyledBadge>
             </IconButton>
+
             <IconButton><PowerSettingsNewSharpIcon style={{ color: "white" }} onClick={closeWindow} /></IconButton>
+            <Avatar className='nav-avatar' sx={{ bgcolor: 'rgb(19, 163, 38)', fontSize: 18, color: 'white', width: 24, height: 24, marginLeft: 2 }}>{userInitial}</Avatar>
+
           </Toolbar>
         </AppBar>
         <Logincheck />
+
+        <Popover
+          id={id}
+          open={openMessage}
+          anchorEl={MessageanchorEl}
+          onClose={handleMessageClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <Chatapp />
+        </Popover>
+
+
+
+
       </div>
     </Fragment>
   );

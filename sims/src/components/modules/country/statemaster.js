@@ -73,7 +73,7 @@ class statemaster extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-
+         console.log("data > ",data);
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true }, () => {
           if (rows.length > 0) {

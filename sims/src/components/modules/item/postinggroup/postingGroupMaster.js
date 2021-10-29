@@ -99,10 +99,7 @@ class postingGroupMaster extends React.Component {
   };
 
   render() {
-    const openPage = (url) => {
-      this.setState({ ProgressLoader: false });
-      window.location = url;
-    };
+   
 
     const updateFormValue = (parent, key, e) => {
       let stateParent = {};
