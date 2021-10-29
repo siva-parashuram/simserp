@@ -1,0 +1,25 @@
+import React, { Fragment } from 'react';
+import '../user/dasboard.css';
+
+
+class inputcustom extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {}
+    }
+    componentDidMount() { }
+    render() {
+        return (
+            <input
+                className="table-text-field"
+                id={this.props.id}
+                size="small"
+                defaultValue={this.props.defaultValue}
+                onKeyUp={this.props.onKeyUp}
+            />
+        )
+    }
+
+}
+export default inputcustom;
+

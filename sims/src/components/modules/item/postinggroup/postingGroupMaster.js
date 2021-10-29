@@ -27,6 +27,7 @@ import Breadcrumb from "../../../compo/breadcrumb";
 import Dualtabcomponent from "../../../compo/dualtabcomponent";
 import Accordioncomponent from "../../../compo/accordioncomponent";
 import Sectiontitle from "../../../compo/sectiontitle";
+import Inputcustom from "../../../compo/inputcustom";
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 
@@ -203,7 +204,7 @@ class postingGroupMaster extends React.Component {
       let Url = APIURLS.APIURL.UpdateItemPostingGroup;
       let reqData = {
         validUser: ValidUser,
-        ItemPostingGroup: this.state.selectedItemPostingGroupList
+        ItemPostingGroupList: this.state.selectedItemPostingGroupList
       };
       console.log("updateItemPostingGroup > reqData > ",reqData);
       axios
@@ -307,24 +308,20 @@ class postingGroupMaster extends React.Component {
                   <TableRow>
                     <TableCell>{i + 1}</TableCell>
                     <TableCell align="left">
-                      <input
-                        className="table-text-field"
+                      <Inputcustom
                         id={"itemPostingGroup_code_" + item.ItemPostingGroupID}
-                        size="small"
                         defaultValue={item.Code}
-                       onKeyUp={(e) => updateList("ItemPostingGroupList","Code" ,item, e)}
+                        onKeyUp={(e) => updateList("ItemPostingGroupList", "Code", item, e)}
                       />
+
 
                     </TableCell>
                     <TableCell align="left">
-                      <input
-                        className="table-text-field"
+                      <Inputcustom
                         id={"itemPostingGroup_description_" + item.ItemPostingGroupID}
-                        size="small"
                         defaultValue={item.Description}
-                        onKeyUp={(e) => updateList("ItemPostingGroupList","Description" ,item, e)}
+                        onKeyUp={(e) => updateList("ItemPostingGroupList", "Description", item, e)}
                       />
-
                     </TableCell>
                   </TableRow>
                 )):null}
