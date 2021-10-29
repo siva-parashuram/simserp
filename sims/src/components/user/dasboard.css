@@ -713,7 +713,7 @@ cursor: pointer;
 
  .chat-app-box{
    height: 350px !important;
-   
+   overflow-x: hidden !important;
    overflow-y: scroll;
  }
 
