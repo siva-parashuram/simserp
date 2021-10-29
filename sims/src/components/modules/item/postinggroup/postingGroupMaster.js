@@ -49,11 +49,8 @@ class postingGroupMaster extends React.Component {
       ItemPostingGroup: {
         ItemPostingGroupID: 0,
         Code: "",
-        Description: ""
-      }
-
-
-
+        Description: "",
+      },
     };
   }
 
@@ -75,8 +72,6 @@ class postingGroupMaster extends React.Component {
     });
   }
 
-
-
   getAllItemPostingGroup = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -92,8 +87,8 @@ class postingGroupMaster extends React.Component {
         console.log("data > ", data);
         this.setState({ ItemPostingGroupList: data });
       })
-      .catch((error) => { });
-  }
+      .catch((error) => {});
+  };
 
   render() {
     const openPage = (url) => {
@@ -124,8 +119,7 @@ class postingGroupMaster extends React.Component {
         default:
           break;
       }
-      
-    }
+    };
 
     const setStateParam = (validations, key, value) => {
       console.log("validations > ", validations);
@@ -150,7 +144,6 @@ class postingGroupMaster extends React.Component {
       }
     };
 
-
     const createItemPostingGroup = (e) => {
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
@@ -162,7 +155,7 @@ class postingGroupMaster extends React.Component {
       let Url = APIURLS.APIURL.CreateItemPostingGroup;
       let reqData = {
         validUser: ValidUser,
-        ItemPostingGroup: this.state.ItemPostingGroup
+        ItemPostingGroup: this.state.ItemPostingGroup,
       };
       console.log("createItemPostingGroup > reqData > ", reqData);
       axios
@@ -172,23 +165,26 @@ class postingGroupMaster extends React.Component {
             let ItemPostingGroup = {
               ItemPostingGroupID: 0,
               Code: "",
-              Description: ""
+              Description: "",
             };
             let data = response.data;
             console.log("data > ", data);
-            this.setState({ ProgressLoader: true, SuccessPrompt: true, ItemPostingGroup: ItemPostingGroup });
+            this.setState({
+              ProgressLoader: true,
+              SuccessPrompt: true,
+              ItemPostingGroup: ItemPostingGroup,
+            });
             this.getAllItemPostingGroup();
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
-
         })
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-    }
+    };
 
-    const updateList=(parent,key,item, e)=>{}
+    const updateList = (parent, key, item, e) => {};
 
     const tableItemPostingGroup = (
       <Fragment>
@@ -222,23 +218,32 @@ class postingGroupMaster extends React.Component {
                         id={"itemPostingGroup_code_" + item.itemPostingGroupID}
                         size="small"
                         defaultValue={item.code}
-                       onKeyUp={(e) => updateList("ItemPostingGroupList","code" ,item, e)}
+                        onKeyUp={(e) =>
+                          updateList("ItemPostingGroupList", "code", item, e)
+                        }
                       />
-
                     </TableCell>
                     <TableCell align="left">
                       <input
                         className="table-text-field"
-                        id={"itemPostingGroup_description_" + item.itemPostingGroupID}
+                        id={
+                          "itemPostingGroup_description_" +
+                          item.itemPostingGroupID
+                        }
                         size="small"
                         defaultValue={item.description}
-                        onKeyUp={(e) => updateList("ItemPostingGroupList","description" ,item, e)}
+                        onKeyUp={(e) =>
+                          updateList(
+                            "ItemPostingGroupList",
+                            "description",
+                            item,
+                            e
+                          )
+                        }
                       />
-
                     </TableCell>
                   </TableRow>
                 ))}
-
               </TableBody>
             </Table>
           </Grid>
@@ -357,7 +362,8 @@ class postingGroupMaster extends React.Component {
     const formItemPostingGroup = (
       <Grid container spacing={0} style={{ marginTop: 20 }}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }}
+          <Button
+            style={{ marginLeft: 5 }}
             onClick={(e) => createItemPostingGroup(e)}
           >
             Create
@@ -373,8 +379,6 @@ class postingGroupMaster extends React.Component {
               aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-               
-
                 <TextboxInput
                   id="codeItemPostingGroup"
                   label="Code"
@@ -405,7 +409,7 @@ class postingGroupMaster extends React.Component {
     const formGeneralPostingGroup = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
             Create
           </Button>
         </Grid>
@@ -418,7 +422,6 @@ class postingGroupMaster extends React.Component {
               aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-                
                 <TextboxInput
                   id="codeGeneralPostingGroup"
                   label="Code"
@@ -440,7 +443,7 @@ class postingGroupMaster extends React.Component {
     const formGeneralPostingGroupSetup = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
             Create
           </Button>
         </Grid>
@@ -524,7 +527,6 @@ class postingGroupMaster extends React.Component {
               aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-               
                 <TextboxInput
                   id="codeSupplierPostingGroup"
                   label="Code"
@@ -608,7 +610,7 @@ class postingGroupMaster extends React.Component {
         </Grid>
       </Grid>
     );
-    const  formCustomerPostingGroup= (
+    const formCustomerPostingGroup = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
           <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
@@ -624,7 +626,6 @@ class postingGroupMaster extends React.Component {
               aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-               
                 <TextboxInput
                   id="codeCustomerPostingGroup"
                   label="Code"
@@ -644,7 +645,7 @@ class postingGroupMaster extends React.Component {
                   // onChange={(e) => updateFormValue("PayableAccount", e)}
                   // options={}
                 />
-                 <DropdownInput
+                <DropdownInput
                   id="ReceivableAccountCustomerPostingGroup"
                   label="Receivable Account"
                   // onChange={(e) => updateFormValue("ReceivableAccount", e)}
@@ -662,7 +663,7 @@ class postingGroupMaster extends React.Component {
         </Grid>
       </Grid>
     );
-    const  formCustomerBranchMapping= (
+    const formCustomerBranchMapping = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
           <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
@@ -684,7 +685,7 @@ class postingGroupMaster extends React.Component {
                   // onChange={(e) => updateFormValue("PayableAccount", e)}
                   // options={}
                 />
-               <DropdownInput
+                <DropdownInput
                   id="BranchID"
                   label="BranchID"
                   // onChange={(e) => updateFormValue("PayableAccount", e)}
@@ -696,7 +697,7 @@ class postingGroupMaster extends React.Component {
                   // onChange={(e) => updateFormValue("PayableAccount", e)}
                   // options={}
                 />
-                 <DropdownInput
+                <DropdownInput
                   id="CustomerPostingGroupID"
                   label="Customer Posting GroupID"
                   // onChange={(e) => updateFormValue("PayableAccount", e)}
@@ -711,7 +712,6 @@ class postingGroupMaster extends React.Component {
 
     const section1 = (
       <Fragment>
-
         <Grid container spacing={0} style={{ marginTop: 20, marginBottom: 20 }}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Dualtabcomponent
@@ -722,7 +722,6 @@ class postingGroupMaster extends React.Component {
             />
           </Grid>
         </Grid>
-
       </Fragment>
     );
 
@@ -911,7 +910,7 @@ class postingGroupMaster extends React.Component {
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={11} lg={11}>
                 <Accordioncomponent
-                  style={{ backgroundColor: '#fafafa' }}
+                  style={{ backgroundColor: "#fafafa" }}
                   accordionKey="a-1"
                   expanded={this.state.accordion1}
                   onClick={(e) => handleAccordionClick("accordion1", e)}
@@ -1002,19 +1001,15 @@ class postingGroupMaster extends React.Component {
                 />
               </Grid>
             </Grid>
-
           </div>
 
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={4} lg={4}></Grid>
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}>
-                 
-                </Grid>
+                <Grid xs={12} sm={12} md={11} lg={11}></Grid>
               </Grid>
             </Grid>
-           
           </Grid>
         </div>
       </Fragment>
