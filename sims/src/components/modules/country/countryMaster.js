@@ -49,9 +49,8 @@ class countryMaster extends React.Component {
   }
 
   componentDidMount() {
-    this.getStateList();
     this.getCountryList();
-    this.getAllDestinations();
+
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");

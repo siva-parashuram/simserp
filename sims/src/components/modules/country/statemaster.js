@@ -84,26 +84,26 @@ class statemaster extends React.Component {
       .catch((error) => {});
   }
 
-  getAllDestinations = () => {
-    this.setState({ ProgressLoader: false });
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
+  // getAllDestinations = () => {
+  //   this.setState({ ProgressLoader: false });
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetDestinationsUrl = APIURLS.APIURL.GetDestinations;
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let GetDestinationsUrl = APIURLS.APIURL.GetDestinations;
 
-    axios
-      .post(GetDestinationsUrl, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
+  //   axios
+  //     .post(GetDestinationsUrl, ValidUser, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
 
-        this.setState({ destinations: data, ProgressLoader: true });
-      })
-      .catch((error) => {});
-  };
+  //       this.setState({ destinations: data, ProgressLoader: true });
+  //     })
+  //     .catch((error) => {});
+  // };
 
   InitialhandleRowClick(e, item, id) {
     let editUrl =
