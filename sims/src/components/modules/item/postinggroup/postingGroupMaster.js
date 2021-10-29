@@ -120,9 +120,7 @@ class postingGroupMaster extends React.Component {
         default:
           break;
       }
-      if (parent === "ItemPostingGroup") {
-
-      }
+      
     }
 
     const setStateParam = (validations, key, value) => {
