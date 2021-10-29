@@ -5,8 +5,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -20,7 +19,6 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
 
 import "../../../user/dasboard.css";
-
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -40,16 +38,15 @@ class editItemDepartment extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
-      itemDeptId:0,
-      Code:"",
-      Name:"",
-      IsActive:false,
-      ItemDepartment:{}
+      itemDeptId: 0,
+      Code: "",
+      Name: "",
+      IsActive: false,
+      ItemDepartment: {},
     };
   }
 
   componentDidMount() {
-   
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -62,22 +59,27 @@ class editItemDepartment extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    this.setState({
-      urlparams: urlparams,
-      itemDeptId:itemDeptId,
-      itemDeptId:parseInt(itemDeptId)
-    },()=>{this.getItemDepartment();});
+    this.setState(
+      {
+        urlparams: urlparams,
+        itemDeptId: itemDeptId,
+        itemDeptId: parseInt(itemDeptId),
+      },
+      () => {
+        this.getItemDepartment();
+      }
+    );
   }
 
   getItemDepartment() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
-    let Data={
-      validUser:ValidUser,
-      ItemDepartment:{
-        itemDeptId:parseInt(this.state.itemDeptId)
-      }
+    let Data = {
+      validUser: ValidUser,
+      ItemDepartment: {
+        itemDeptId: parseInt(this.state.itemDeptId),
+      },
     };
 
     let Url = APIURLS.APIURL.GetItemDepartment;
@@ -96,10 +98,10 @@ class editItemDepartment extends React.Component {
           Name: data.name,
           IsActive: data.isActive,
           DisableUpdatebtn: false,
-          ProgressLoader: true
+          ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   render() {
@@ -114,9 +116,9 @@ class editItemDepartment extends React.Component {
     const updateFormValue = (param, e) => {
       switch (param) {
         case "Code":
-          if (e.target.value === "" || e.target.value.length >4) {
+          if (e.target.value === "" || e.target.value.length > 4) {
             this.setState({ Code: e.target.value, DisableUpdatebtn: true });
-           } else {
+          } else {
             this.setState({ Code: e.target.value, DisableUpdatebtn: false });
           }
           break;
@@ -146,14 +148,19 @@ class editItemDepartment extends React.Component {
           ItemDeptID: parseInt(this.state.itemDeptId),
           Code: this.state.Code,
           Name: this.state.Name,
-          IsActive: this.state.IsActive
-        }
+          IsActive: this.state.IsActive,
+        },
       };
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
           let data = response.data;
-          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+          if (
+            response.status === 200 ||
+            response.status === 201 ||
+            response.status === true ||
+            response.status === "true"
+          ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -162,7 +169,7 @@ class editItemDepartment extends React.Component {
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-    }
+    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -178,7 +185,6 @@ class editItemDepartment extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-  
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -209,7 +215,9 @@ class editItemDepartment extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                     masterHref={URLS.URLS.itemDepartmentMaster + this.state.urlparams}
+                  masterHref={
+                    URLS.URLS.itemDepartmentMaster + this.state.urlparams
+                  }
                   masterLinkTitle="Item Department Master"
                   typoTitle="Edit..."
                   level={2}
@@ -225,7 +233,8 @@ class editItemDepartment extends React.Component {
                 >
                   <Button
                     className="action-btns"
-                    startIcon={<UpdateIcon />}s
+                    startIcon={<UpdateIcon />}
+                    s
                     onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >

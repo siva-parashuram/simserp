@@ -3,21 +3,15 @@ import axios from "axios";
 import React, { Fragment } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import Grid from "@material-ui/core/Grid";
-import ButtonGroup from '@mui/material/ButtonGroup';
+
 import Button from "@material-ui/core/Button";
-import InfoIcon from '@mui/icons-material/Info';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import AddIcon from "@material-ui/icons/Add";
-import TextField from "@material-ui/core/TextField";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+
 import TableContainer from "@material-ui/core/TableContainer";
 
-
 import TextboxInput from "../../compo/tablerowcelltextboxinput";
-
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -25,7 +19,7 @@ import * as URLS from "../../../routes/constants";
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
-import Dualtabcomponent from '../../compo/dualtabcomponent';
+import Dualtabcomponent from "../../compo/dualtabcomponent";
 
 let columns = [
   {
@@ -284,7 +278,7 @@ class addpage extends React.Component {
     this.props.data.rows = rows;
   }
 
-  processResetData(data) { }
+  processResetData(data) {}
 
   InitialhandleRowClick(e, item, id) {
     let editUrl =
@@ -318,7 +312,7 @@ class addpage extends React.Component {
       }
     };
 
-    const onSelectionModelChange = (e) => { };
+    const onSelectionModelChange = (e) => {};
 
     const onEditRowsModelChange = (e) => {
       var keys = Object.keys(e);
@@ -415,7 +409,11 @@ class addpage extends React.Component {
               errorMsg: "Maximum 20 characters Allowed!",
             };
           }
-          this.setState({ createBtnDisable: true, Validations: Validations, pageName: e.target.value });
+          this.setState({
+            createBtnDisable: true,
+            Validations: Validations,
+            pageName: e.target.value,
+          });
         } else {
           let Validations = this.state.Validations;
           Validations.pageName = { errorState: false, errorMsg: "" };
@@ -449,7 +447,6 @@ class addpage extends React.Component {
         }
       }
       if (id === "description") {
-
         let Validations = this.state.Validations;
 
         if (e.target.value.length > 50) {
@@ -457,7 +454,10 @@ class addpage extends React.Component {
             errorState: true,
             errorMsg: "Maximum 50 characters Allowed!",
           };
-          this.setState({ Validations: Validations, description: e.target.value, });
+          this.setState({
+            Validations: Validations,
+            description: e.target.value,
+          });
         } else {
           let Validations = this.state.Validations;
           Validations.description = { errorState: false, errorMsg: "" };
@@ -610,16 +610,32 @@ class addpage extends React.Component {
 
     const customTabButton = (e, params) => {
       if (params === "details") {
-        this.setState({ showDetails: true, addNewPageSection: false, detailsUnderlineBtnCss: "btn-bottom-border-color", attachmentUnderlineBtnCss: "" });
+        this.setState({
+          showDetails: true,
+          addNewPageSection: false,
+          detailsUnderlineBtnCss: "btn-bottom-border-color",
+          attachmentUnderlineBtnCss: "",
+        });
       }
       if (params === "addNewPage") {
-        this.setState({ showDetails: false, addNewPageSection: true, attachmentUnderlineBtnCss: "btn-bottom-border-color", detailsUnderlineBtnCss: "" });
+        this.setState({
+          showDetails: false,
+          addNewPageSection: true,
+          attachmentUnderlineBtnCss: "btn-bottom-border-color",
+          detailsUnderlineBtnCss: "",
+        });
       }
-    }
+    };
 
     const tab1Html = (
       <Fragment>
-        <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: '#fff' }}>
+        <Grid
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          style={{ backgroundColor: "#fff" }}
+        >
           <Grid container spacing={3}>
             <Grid xs={12} sm={12} md={8} lg={8}>
               <Button
@@ -664,7 +680,13 @@ class addpage extends React.Component {
 
     const tab2Html = (
       <Fragment>
-        <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: '#fff' }}>
+        <Grid
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          style={{ backgroundColor: "#fff" }}
+        >
           <div style={{ height: 20 }}></div>
           <div style={{ marginLeft: 10 }}>
             <Grid container spacing={3}>
@@ -691,58 +713,42 @@ class addpage extends React.Component {
               aria-label="company List table"
             >
               <TableBody className="tableBody">
-
                 <TextboxInput
                   id="pageName"
                   label="Page Name"
                   variant="outlined"
                   size="small"
-                  onChange={(e) =>
-                    updateFormValue("pageName", e)
-                  }
+                  onChange={(e) => updateFormValue("pageName", e)}
                   fullWidth
                   error={this.state.Validations.pageName.errorState}
-                  helperText={
-                    this.state.Validations.pageName.errorMsg
-                  }
+                  helperText={this.state.Validations.pageName.errorMsg}
                 />
                 <TextboxInput
                   id="pageLink"
                   label="Page Link"
                   variant="outlined"
                   size="small"
-                  onChange={(e) =>
-                    updateFormValue("pageLink", e)
-                  }
+                  onChange={(e) => updateFormValue("pageLink", e)}
                   fullWidth
                   value={this.state.pageLink}
                   error={this.state.Validations.pageLink.errorState}
-                  helperText={
-                    this.state.Validations.pageLink.errorMsg
-                  }
+                  helperText={this.state.Validations.pageLink.errorMsg}
                 />
                 <TextboxInput
                   id="description"
                   label="Description"
                   variant="outlined"
                   size="small"
-                  onChange={(e) =>
-                    updateFormValue("description", e)
-                  }
+                  onChange={(e) => updateFormValue("description", e)}
                   fullWidth
                   value={this.state.description}
-                  error={
-                    this.state.Validations.description.errorState
-                  }
-                  helperText={
-                    this.state.Validations.description.errorMsg
-                  }
+                  error={this.state.Validations.description.errorState}
+                  helperText={this.state.Validations.description.errorMsg}
                   maxlength={20}
                 />
               </TableBody>
             </Table>
           </TableContainer>
-
         </Grid>
       </Fragment>
     );
@@ -768,8 +774,6 @@ class addpage extends React.Component {
               tab1Html={tab1Html}
               tab2Html={tab2Html}
             />
-
-
           </div>
         ) : null}
       </Fragment>

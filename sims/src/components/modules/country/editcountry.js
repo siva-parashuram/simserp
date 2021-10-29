@@ -2,8 +2,6 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,17 +11,14 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+
 import Button from "@material-ui/core/Button";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
+
 import MuiAlert from "@material-ui/lab/Alert";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import UpdateIcon from "@material-ui/icons/Update";
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
+
 import * as CF from "../../../services/functions/customfunctions";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
@@ -65,14 +60,14 @@ class editcountry extends React.Component {
       selectedZone: null,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      countryData:[],
-      duplicate:false,
-      oldName:""
+      countryData: [],
+      duplicate: false,
+      oldName: "",
     };
   }
 
   componentDidMount() {
-    this.getCountryList()
+    this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -116,12 +111,10 @@ class editcountry extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState(
-          {
-            countryData: rows,
-            ProgressLoader: true,
-          }
-        );
+        this.setState({
+          countryData: rows,
+          ProgressLoader: true,
+        });
       })
       .catch((error) => {});
   }
@@ -146,7 +139,7 @@ class editcountry extends React.Component {
         let data = response.data;
 
         this.setState({
-          oldName:data.name,
+          oldName: data.name,
           country: data,
           selectedZone: data.zoneId,
           Name: data.name,
@@ -190,12 +183,13 @@ class editcountry extends React.Component {
           : this.setState({ AddressDetailsExpanded: true });
       }
     };
-    
+
     const CheckName = () => {
       if (
         this.state.Name === "" ||
         this.state.Name === null ||
-        this.state.Name.length > 50||this.state.duplicate===true
+        this.state.Name.length > 50 ||
+        this.state.duplicate === true
       ) {
         this.setState({ DisableUpdatebtn: true });
       } else {
@@ -216,19 +210,20 @@ class editcountry extends React.Component {
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50||duplicateExist===true
+          e.target.value.length > 50 ||
+          duplicateExist === true
         ) {
           let v = this.state.Validations;
-          if(duplicateExist===true){
+          if (duplicateExist === true) {
             v.Name = {
               errorState: true,
-              errorMssg: "Country Master Exists",        
+              errorMssg: "Country Master Exists",
             };
             this.setState({
               Validations: v,
               DisableUpdatebtn: true,
               Name: e.target.value,
-              duplicate:true
+              duplicate: true,
             });
           }
           if (e.target.value.length > 50) {
@@ -244,7 +239,6 @@ class editcountry extends React.Component {
             Validations: v,
             DisableUpdatebtn: true,
             Name: e.target.value,
-
           });
         } else {
           let v = this.state.Validations;

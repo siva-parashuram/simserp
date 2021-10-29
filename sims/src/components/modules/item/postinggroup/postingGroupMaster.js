@@ -14,7 +14,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import TablePagination from "@mui/material/TablePagination";
-import AutorenewIcon from '@mui/icons-material/Autorenew';
+import AutorenewIcon from "@mui/icons-material/Autorenew";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -53,12 +53,12 @@ class postingGroupMaster extends React.Component {
       accordion6: false,
       accordion7: false,
       ItemPostingGroupList: [],
-      selectedItemPostingGroupList:[],
+      selectedItemPostingGroupList: [],
       ItemPostingGroup: {
         ItemPostingGroupID: 0,
         Code: "",
-        Description: ""
-      }
+        Description: "",
+      },
     };
   }
 
@@ -171,7 +171,7 @@ class postingGroupMaster extends React.Component {
         let Url = APIURLS.APIURL.CreateItemPostingGroup;
         let reqData = {
           validUser: ValidUser,
-          ItemPostingGroup: this.state.ItemPostingGroup
+          ItemPostingGroup: this.state.ItemPostingGroup,
         };
         console.log("createItemPostingGroup > reqData > ", reqData);
         axios
@@ -181,92 +181,98 @@ class postingGroupMaster extends React.Component {
               let ItemPostingGroup = {
                 ItemPostingGroupID: 0,
                 Code: "",
-                Description: ""
+                Description: "",
               };
               let data = response.data;
               console.log("data > ", data);
-              this.setState({ ProgressLoader: true, SuccessPrompt: true, ItemPostingGroup: ItemPostingGroup });
+              this.setState({
+                ProgressLoader: true,
+                SuccessPrompt: true,
+                ItemPostingGroup: ItemPostingGroup,
+              });
               this.getAllItemPostingGroup();
             } else {
               this.setState({ ProgressLoader: true, ErrorPrompt: true });
             }
-
           })
           .catch((error) => {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           });
       }
-    }
+    };
 
     const updateItemPostingGroup = (e) => {
-      if(this.state.selectedItemPostingGroupList.length>0){
+      if (this.state.selectedItemPostingGroupList.length > 0) {
         this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let Url = APIURLS.APIURL.UpdateItemPostingGroup;
-      let reqData = {
-        validUser: ValidUser,
-        ItemPostingGroupList: this.state.selectedItemPostingGroupList
-      };
-      console.log("updateItemPostingGroup > reqData > ",reqData);
-      axios
-        .post(Url, reqData, { headers })
-        .then((response) => {
-          let data = response.data;
-          if (response.status === 200 || response.status===201) {
-            this.setState({ 
-              selectedItemPostingGroupList:[],
-              ProgressLoader: true, 
-              SuccessPrompt: true
-             });
-             this.getAllItemPostingGroup();
-          } else {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.UpdateItemPostingGroup;
+        let reqData = {
+          validUser: ValidUser,
+          ItemPostingGroupList: this.state.selectedItemPostingGroupList,
+        };
+        console.log("updateItemPostingGroup > reqData > ", reqData);
+        axios
+          .post(Url, reqData, { headers })
+          .then((response) => {
+            let data = response.data;
+            if (response.status === 200 || response.status === 201) {
+              this.setState({
+                selectedItemPostingGroupList: [],
+                ProgressLoader: true,
+                SuccessPrompt: true,
+              });
+              this.getAllItemPostingGroup();
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+            }
+          })
+          .catch((error) => {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => {
-          this.setState({ ProgressLoader: true, ErrorPrompt: true });
-        });
+          });
       }
-      
-    }
+    };
 
     const removeOldIfExist = (parent, item, stateArray) => {
       let newArray = [];
       if (parent === "ItemPostingGroupList") {
-        
         for (let i = 0; i < stateArray.length; i++) {
-          if (stateArray[i].ItemPostingGroupID === item.ItemPostingGroupID) { } else {
+          if (stateArray[i].ItemPostingGroupID === item.ItemPostingGroupID) {
+          } else {
             newArray.push(stateArray[i]);
           }
         }
       }
       return newArray;
-    }
+    };
 
-    const updateList = (parent, key, item, e) => {     
-
+    const updateList = (parent, key, item, e) => {
       if (parent === "ItemPostingGroupList") {
-        let selectedItemPostingGroupList = this.state.selectedItemPostingGroupList;
+        let selectedItemPostingGroupList =
+          this.state.selectedItemPostingGroupList;
         if (selectedItemPostingGroupList.length > 0) {
-          selectedItemPostingGroupList = removeOldIfExist("ItemPostingGroupList", item, selectedItemPostingGroupList);
+          selectedItemPostingGroupList = removeOldIfExist(
+            "ItemPostingGroupList",
+            item,
+            selectedItemPostingGroupList
+          );
           item[key] = e.target.value;
           selectedItemPostingGroupList.push(item);
         } else {
           item[key] = e.target.value;
           selectedItemPostingGroupList.push(item);
         }
-       this.setState({selectedItemPostingGroupList:selectedItemPostingGroupList});
+        this.setState({
+          selectedItemPostingGroupList: selectedItemPostingGroupList,
+        });
       }
-    }
+    };
 
-    
-
-    const handleIPGPageChange = (event, newPage) => {      
+    const handleIPGPageChange = (event, newPage) => {
       let IPGpagination = this.state.IPGpagination;
       IPGpagination.page = newPage;
       this.setState({ IPGpagination: IPGpagination });
@@ -280,15 +286,14 @@ class postingGroupMaster extends React.Component {
 
     const tableItemPostingGroup = (
       <Fragment>
-        <Grid container spacing={0} style={{marginTop:20}}>
+        <Grid container spacing={0} style={{ marginTop: 20 }}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Button style={{ marginLeft: 5 }}
-            onClick={(e) => updateItemPostingGroup(e)}
-          >
-            Update
-          </Button>
-         
-          
+            <Button
+              style={{ marginLeft: 5 }}
+              onClick={(e) => updateItemPostingGroup(e)}
+            >
+              Update
+            </Button>
           </Grid>
         </Grid>
         <Grid container spacing={0}>
@@ -312,28 +317,49 @@ class postingGroupMaster extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody className="tableBody">
-                {this.state.ItemPostingGroupList.length>0?getIPGPageData(this.state.ItemPostingGroupList).map((item, i) => (
-                  <TableRow>
-                    <TableCell>{i + 1}</TableCell>
-                    <TableCell align="left">
-                      <Inputcustom
-                        id={"itemPostingGroup_code_" + item.ItemPostingGroupID}
-                        defaultValue={item.Code}
-                        onKeyUp={(e) => updateList("ItemPostingGroupList", "Code", item, e)}
-                      />
-
-
-                    </TableCell>
-                    <TableCell align="left">
-                      <Inputcustom
-                        id={"itemPostingGroup_description_" + item.ItemPostingGroupID}
-                        defaultValue={item.Description}
-                        onKeyUp={(e) => updateList("ItemPostingGroupList", "Description", item, e)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                )):null}
-
+                {this.state.ItemPostingGroupList.length > 0
+                  ? getIPGPageData(this.state.ItemPostingGroupList).map(
+                      (item, i) => (
+                        <TableRow>
+                          <TableCell>{i + 1}</TableCell>
+                          <TableCell align="left">
+                            <Inputcustom
+                              id={
+                                "itemPostingGroup_code_" +
+                                item.ItemPostingGroupID
+                              }
+                              defaultValue={item.Code}
+                              onKeyUp={(e) =>
+                                updateList(
+                                  "ItemPostingGroupList",
+                                  "Code",
+                                  item,
+                                  e
+                                )
+                              }
+                            />
+                          </TableCell>
+                          <TableCell align="left">
+                            <Inputcustom
+                              id={
+                                "itemPostingGroup_description_" +
+                                item.ItemPostingGroupID
+                              }
+                              defaultValue={item.Description}
+                              onKeyUp={(e) =>
+                                updateList(
+                                  "ItemPostingGroupList",
+                                  "Description",
+                                  item,
+                                  e
+                                )
+                              }
+                            />
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )
+                  : null}
               </TableBody>
             </Table>
             <TablePagination
@@ -982,22 +1008,6 @@ class postingGroupMaster extends React.Component {
                   typoTitle="Posting Group Setup"
                   level={1}
                 />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button className="action-btns" startIcon={<AddIcon />}>
-                    New
-                  </Button>
-                  <Button className="action-btns" startIcon={<EditIcon />}>
-                    Edit
-                  </Button>
-                </ButtonGroup>
               </div>
             </Grid>
           </Grid>

@@ -3,17 +3,14 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
 
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
@@ -23,7 +20,6 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import "../../../user/dasboard.css";
-
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -45,12 +41,11 @@ class addItemSuperCategory extends React.Component {
       DisableCreatebtn: false,
       ItemTypeMaster: APIURLS.ItemType,
       IsActive: false,
-      ItemType:0,
+      ItemType: 0,
       Code: "",
       Description: "",
       HSNCode: "",
-      SuperCatID:0     
-      
+      SuperCatID: 0,
     };
   }
 
@@ -109,8 +104,6 @@ class addItemSuperCategory extends React.Component {
       }
     };
 
-
-
     const createNew = () => {
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
@@ -124,18 +117,23 @@ class addItemSuperCategory extends React.Component {
         validUser: ValidUser,
         ItemSuperCategory: {
           SuperCatID: 0,
-          ItemType:this.state.ItemType,
+          ItemType: this.state.ItemType,
           Code: this.state.Code,
           Description: this.state.Description,
           HSNCode: this.state.HSNCode,
-          IsActive: this.state.IsActive
-        }
+          IsActive: this.state.IsActive,
+        },
       };
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
           let data = response.data;
-          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+          if (
+            response.status === 200 ||
+            response.status === 201 ||
+            response.status === true ||
+            response.status === "true"
+          ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -144,8 +142,7 @@ class addItemSuperCategory extends React.Component {
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-    }
-
+    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -191,8 +188,9 @@ class addItemSuperCategory extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  masterHref={URLS.URLS.itemSuperCategoryMaster + this.state.urlparams}
-
+                  masterHref={
+                    URLS.URLS.itemSuperCategoryMaster + this.state.urlparams
+                  }
                   masterLinkTitle="Item Super-Category Master"
                   typoTitle="Add..."
                   level={2}
@@ -253,23 +251,20 @@ class addItemSuperCategory extends React.Component {
                       aria-label=" Item-category List table"
                     >
                       <TableBody className="tableBody">
+                        <DropdownInput
+                          id="ItemType"
+                          label="Item Type"
+                          onChange={(e) => updateFormValue("ItemType", e)}
+                          options={this.state.ItemTypeMaster}
+                          value={this.state.ItemType}
+                        />
 
-                      <DropdownInput
-                              id="ItemType"
-                              label="Item Type"
-                              onChange={(e) => updateFormValue("ItemType", e)}
-                              options={this.state.ItemTypeMaster}
-                              value={this.state.ItemType}
-                              
-                            />
-                       
                         <TextboxInput
                           id="Code"
                           label="Code"
                           variant="outlined"
                           size="small"
                           onChange={(e) => updateFormValue("Code", e)}
-                           
                           value={this.state.Code}
                         />
                         <TextboxInput
@@ -278,7 +273,6 @@ class addItemSuperCategory extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => updateFormValue("Description", e)}
-                          
                           value={this.state.Description}
                         />
                         <TextboxInput
@@ -287,7 +281,6 @@ class addItemSuperCategory extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => updateFormValue("HSNCode", e)}
-                          
                           value={this.state.HSNCode}
                         />
                         <SwitchInput
@@ -297,7 +290,6 @@ class addItemSuperCategory extends React.Component {
                           param={this.state.IsActive}
                           onChange={(e) => updateFormValue("IsActive", e)}
                         />
-                        
                       </TableBody>
                     </Table>
                   </TableContainer>

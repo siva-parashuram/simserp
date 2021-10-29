@@ -5,8 +5,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -14,7 +13,6 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Button from "@material-ui/core/Button";
-
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -45,11 +43,10 @@ class editItemSuperCategory extends React.Component {
       Code: "",
       Description: "",
       HSNCode: "",
-      SuperCatID:0,
-      ItemSuperCategory:{},
+      SuperCatID: 0,
+      ItemSuperCategory: {},
       ItemTypeMaster: APIURLS.ItemType,
-      ItemType:0,
-      
+      ItemType: 0,
     };
   }
 
@@ -58,7 +55,7 @@ class editItemSuperCategory extends React.Component {
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
-    let SuperCatID =  url.searchParams.get("editsuperCatId");
+    let SuperCatID = url.searchParams.get("editsuperCatId");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -66,21 +63,24 @@ class editItemSuperCategory extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    this.setState({
-      urlparams: urlparams,
-      SuperCatID:SuperCatID
-    },()=>this.getSuperCategory());
+    this.setState(
+      {
+        urlparams: urlparams,
+        SuperCatID: SuperCatID,
+      },
+      () => this.getSuperCategory()
+    );
   }
 
   getSuperCategory() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
-    let Data={
-      validUser:ValidUser,
+    let Data = {
+      validUser: ValidUser,
       ItemSuperCategory: {
-        SuperCatID: this.state.SuperCatID
-      }
+        SuperCatID: this.state.SuperCatID,
+      },
     };
 
     let Url = APIURLS.APIURL.GetItemSuperCategory;
@@ -95,16 +95,16 @@ class editItemSuperCategory extends React.Component {
 
         this.setState({
           ItemSuperCategory: data,
-          Code: data.code,         
+          Code: data.code,
           Description: data.description,
           HSNCode: data.hsncode,
-          ItemType:data.itemType,
+          ItemType: data.itemType,
           IsActive: data.isActive,
           DisableUpdatebtn: false,
-          ProgressLoader: true
+          ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   render() {
@@ -144,7 +144,6 @@ class editItemSuperCategory extends React.Component {
       }
     };
 
-    
     const update = () => {
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
@@ -158,18 +157,23 @@ class editItemSuperCategory extends React.Component {
         validUser: ValidUser,
         ItemSuperCategory: {
           SuperCatID: this.state.SuperCatID,
-          ItemType:this.state.ItemType,
+          ItemType: this.state.ItemType,
           Code: this.state.Code,
           Description: this.state.Description,
           HSNCode: this.state.HSNCode,
-          IsActive: this.state.IsActive
-        }
+          IsActive: this.state.IsActive,
+        },
       };
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
           let data = response.data;
-          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+          if (
+            response.status === 200 ||
+            response.status === 201 ||
+            response.status === true ||
+            response.status === "true"
+          ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -178,7 +182,7 @@ class editItemSuperCategory extends React.Component {
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-    }
+    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -193,8 +197,6 @@ class editItemSuperCategory extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-    
 
     return (
       <Fragment>
@@ -226,7 +228,9 @@ class editItemSuperCategory extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                    masterHref={URLS.URLS.itemSuperCategoryMaster + this.state.urlparams}
+                  masterHref={
+                    URLS.URLS.itemSuperCategoryMaster + this.state.urlparams
+                  }
                   masterLinkTitle="Item Super-Category Master"
                   typoTitle="Edit..."
                   level={2}
@@ -338,7 +342,6 @@ class editItemSuperCategory extends React.Component {
                           param={this.state.IsActive}
                           onChange={(e) => updateFormValue("IsActive", e)}
                         />
-                        
                       </TableBody>
                     </Table>
                   </TableContainer>

@@ -7,7 +7,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import Divider from "@material-ui/core/Divider";
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -55,7 +55,6 @@ class itemDepartmentMaster extends React.Component {
     });
   }
 
-
   getitemDepartmentMasterData() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -70,7 +69,9 @@ class itemDepartmentMaster extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
-        this.setState({ itemDepartmentMasterData: data }, () => { this.InitialhandleRowClick(null, data[0], "row_0"); });
+        this.setState({ itemDepartmentMasterData: data }, () => {
+          this.InitialhandleRowClick(null, data[0], "row_0");
+        });
         this.setState({ ProgressLoader: true });
       })
       .catch((error) => {
@@ -83,7 +84,12 @@ class itemDepartmentMaster extends React.Component {
       this.state.urlparams +
       "&edititemDeptId=" +
       item.itemDeptId;
-    this.setState({ itemDeptId: item.itemDeptId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+    this.setState({
+      itemDeptId: item.itemDeptId,
+      editurl: editUrl,
+      selectedItem: item,
+      editBtnDisable: false,
+    });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -93,17 +99,19 @@ class itemDepartmentMaster extends React.Component {
     }
   }
 
-
-
   render() {
-
     const handleRowClick = (e, item, id) => {
       let editUrl =
         URLS.URLS.editItemDepartment +
         this.state.urlparams +
         "&edititemDeptId=" +
         item.itemDeptId;
-      this.setState({ itemDeptId: item.itemDeptId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+      this.setState({
+        itemDeptId: item.itemDeptId,
+        editurl: editUrl,
+        selectedItem: item,
+        editBtnDisable: false,
+      });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     };
@@ -167,9 +175,7 @@ class itemDepartmentMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
-                    onClick={(e) =>
-                      openPage(this.state.editurl)
-                    }
+                    onClick={(e) => openPage(this.state.editurl)}
                   >
                     Edit
                   </Button>
@@ -207,23 +213,27 @@ class itemDepartmentMaster extends React.Component {
                     <TableBody className="tableBody">
                       {this.state.itemDepartmentMasterData.map((item, i) => (
                         <TableRow
-                        id={"row_" + i}
-                        className={this.state.initialCss}
-                        hover
-                        key={i}
-                        onClick={(event) =>
-                          handleRowClick(event, item, "row_" + i)
-                        }
+                          id={"row_" + i}
+                          className={this.state.initialCss}
+                          hover
+                          key={i}
+                          onClick={(event) =>
+                            handleRowClick(event, item, "row_" + i)
+                          }
                         >
                           <TableCell align="left">{i + 1}</TableCell>
                           <TableCell align="left">
-                            <a className="LINK tableLink" href={URLS.URLS.editItemDepartment +
-                              this.state.urlparams +
-                              "&edititemDeptId=" +
-                              item.itemDeptId}>
+                            <a
+                              className="LINK tableLink"
+                              href={
+                                URLS.URLS.editItemDepartment +
+                                this.state.urlparams +
+                                "&edititemDeptId=" +
+                                item.itemDeptId
+                              }
+                            >
                               {item.code}
                             </a>
-
                           </TableCell>
                           <TableCell align="left">{item.name}</TableCell>
                           <TableCell align="left">
@@ -235,7 +245,6 @@ class itemDepartmentMaster extends React.Component {
                           </TableCell>
                         </TableRow>
                       ))}
-
                     </TableBody>
                   </Table>
                 </Grid>

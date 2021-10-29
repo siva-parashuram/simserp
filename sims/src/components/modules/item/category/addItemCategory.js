@@ -2,12 +2,10 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -51,8 +49,8 @@ class addItemCategory extends React.Component {
       IsPriceRange: false,
       MainCategoryData: [],
       MainCatID: 0,
-      IsCustomized:false,
-      IsCustomized:false
+      IsCustomized: false,
+      IsCustomized: false,
     };
   }
 
@@ -74,7 +72,6 @@ class addItemCategory extends React.Component {
     });
   }
 
-
   getMainCategoryData() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -91,7 +88,6 @@ class addItemCategory extends React.Component {
         console.log("data > ", data);
         this.setState({ ProgressLoader: true });
         this.processMainCategoryData(data);
-  
       })
       .catch((error) => {
         this.setState({ ProgressLoader: true });
@@ -132,7 +128,7 @@ class addItemCategory extends React.Component {
           break;
         case "MainCatID":
           this.setState({ MainCatID: e.target.value });
-          break
+          break;
         case "Description":
           this.setState({ Description: e.target.value });
           break;
@@ -162,8 +158,6 @@ class addItemCategory extends React.Component {
       }
     };
 
-
-
     const createNew = () => {
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
@@ -176,23 +170,28 @@ class addItemCategory extends React.Component {
       let ReqData = {
         validUser: ValidUser,
         ItemCategory: {
-          CatID:0,
-          IsActive:  this.state.IsActive,
-          mainCatId:this.state.MainCatID,
+          CatID: 0,
+          IsActive: this.state.IsActive,
+          mainCatId: this.state.MainCatID,
           Code: this.state.Code,
           Description: this.state.Description,
-          HSNCode: this.state.HSNCode,          
+          HSNCode: this.state.HSNCode,
           IsTrading: this.state.IsTrading,
           IsNonStockValuation: this.state.IsNonStockValuation,
           IsPriceRange: this.state.IsPriceRange,
-          IsCustomized:this.state.IsCustomized
-        }
+          IsCustomized: this.state.IsCustomized,
+        },
       };
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
           let data = response.data;
-          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+          if (
+            response.status === 200 ||
+            response.status === 201 ||
+            response.status === true ||
+            response.status === "true"
+          ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -201,7 +200,7 @@ class addItemCategory extends React.Component {
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-    }
+    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -247,7 +246,9 @@ class addItemCategory extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  masterHref={URLS.URLS.itemCategoryMaster + this.state.urlparams}
+                  masterHref={
+                    URLS.URLS.itemCategoryMaster + this.state.urlparams
+                  }
                   masterLinkTitle="Item Category Master"
                   typoTitle="Add Item Category"
                   level={2}
@@ -307,9 +308,7 @@ class addItemCategory extends React.Component {
                       className="accordion-table"
                       aria-label=" Item-category List table"
                     >
-
                       <TableBody className="tableBody">
-
                         <DropdownInput
                           id="MainCatID"
                           label="MainCatID"
@@ -372,7 +371,9 @@ class addItemCategory extends React.Component {
                           id="IsNonStockV"
                           label="IsNonStockV"
                           param={this.state.IsNonStockValuation}
-                          onChange={(e) => updateFormValue("IsNonStockValuation", e)}
+                          onChange={(e) =>
+                            updateFormValue("IsNonStockValuation", e)
+                          }
                         />
                         <SwitchInput
                           key="IsPriceRange"

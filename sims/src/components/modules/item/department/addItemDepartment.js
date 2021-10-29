@@ -5,8 +5,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -19,7 +18,6 @@ import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import "../../../user/dasboard.css";
-
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -39,15 +37,13 @@ class addItemDepartment extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
-      Code:"",
-      Name:"",
-      IsActive:false
+      Code: "",
+      Name: "",
+      IsActive: false,
     };
   }
 
   componentDidMount() {
-
-
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -65,7 +61,6 @@ class addItemDepartment extends React.Component {
   }
 
   render() {
-
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
         this.state.GeneralDetailsExpanded === true
@@ -73,7 +68,6 @@ class addItemDepartment extends React.Component {
           : this.setState({ GeneralDetailsExpanded: true });
       }
     };
-
 
     const createNew = () => {
       this.setState({ ProgressLoader: false });
@@ -90,14 +84,19 @@ class addItemDepartment extends React.Component {
           ItemDeptID: 0,
           Code: this.state.Code,
           Name: this.state.Name,
-          IsActive: this.state.IsActive
-        }
+          IsActive: this.state.IsActive,
+        },
       };
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
           let data = response.data;
-          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+          if (
+            response.status === 200 ||
+            response.status === 201 ||
+            response.status === true ||
+            response.status === "true"
+          ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -106,16 +105,14 @@ class addItemDepartment extends React.Component {
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-    }
-  
-
+    };
 
     const updateFormValue = (param, e) => {
       switch (param) {
         case "Code":
           if (e.target.value === "") {
             this.setState({ Code: e.target.value, DisableUpdatebtn: true });
-           } else {
+          } else {
             this.setState({ Code: e.target.value, DisableUpdatebtn: false });
           }
           break;
@@ -130,8 +127,6 @@ class addItemDepartment extends React.Component {
       }
     };
 
-
-
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -145,8 +140,6 @@ class addItemDepartment extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-
 
     return (
       <Fragment>
@@ -178,7 +171,9 @@ class addItemDepartment extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  masterHref={URLS.URLS.itemDepartmentMaster + this.state.urlparams}
+                  masterHref={
+                    URLS.URLS.itemDepartmentMaster + this.state.urlparams
+                  }
                   masterLinkTitle="Item Department Master"
                   typoTitle="Add..."
                   level={2}

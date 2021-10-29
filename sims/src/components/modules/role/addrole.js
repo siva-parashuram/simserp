@@ -1,5 +1,4 @@
 import "../../user/dasboard.css";
-import Header from "../../user/userheaderconstants";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -9,8 +8,6 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Button from "@material-ui/core/Button";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
@@ -22,7 +19,6 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
 
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
@@ -36,7 +32,7 @@ class addrole extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      roles:[],
+      roles: [],
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
@@ -57,7 +53,7 @@ class addrole extends React.Component {
   }
 
   componentDidMount() {
-    this. getRoles();
+    this.getRoles();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -113,11 +109,19 @@ class addrole extends React.Component {
 
     const updateFormValue = (id, e) => {
       if (id == "name") {
-        let duplicateExist= CF.chkDuplicateName(this.state.roles,"name",e.target.value);
-        if (e.target.value === "" || e.target.value.length > 50||duplicateExist===true) {
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.roles,
+          "name",
+          e.target.value
+        );
+        if (
+          e.target.value === "" ||
+          e.target.value.length > 50 ||
+          duplicateExist === true
+        ) {
           let Role = this.state.Role;
           Role.Name = e.target.value;
-          if(duplicateExist===true){
+          if (duplicateExist === true) {
             let v = this.state.Validations;
             v.Name = {
               errorState: true,
@@ -129,7 +133,9 @@ class addrole extends React.Component {
               Name: e.target.value,
             });
           }
-{}          if (e.target.value.length > 50) {
+          {
+          }
+          if (e.target.value.length > 50) {
             let v = this.state.Validations;
             v.Name = {
               errorState: true,
@@ -212,8 +218,6 @@ class addrole extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-    
 
     return (
       <Fragment>

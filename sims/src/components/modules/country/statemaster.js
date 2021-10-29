@@ -12,7 +12,7 @@ import TableRow from "@material-ui/core/TableRow";
 
 import ButtonGroup from "@mui/material/ButtonGroup";
 
-import MuiAlert from "@material-ui/lab/Alert";
+
 
 import EditIcon from "@mui/icons-material/Edit";
 import "../../user/dasboard.css";
@@ -42,7 +42,7 @@ class statemaster extends React.Component {
   componentDidMount() {
     // this.setState({ ProgressLoader: false });
     this.getStateList();
-    this.getAllDestinations();
+    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -174,9 +174,7 @@ class statemaster extends React.Component {
         .catch((error) => {});
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });

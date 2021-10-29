@@ -1,30 +1,22 @@
 import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import Divider from "@material-ui/core/Divider";
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-import TablePagination from "@mui/material/TablePagination";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
-
-
 
 import Loader from "../../../compo/loader";
 
@@ -41,7 +33,7 @@ class itemCategoryMaster extends React.Component {
       ItemCategoryData: [],
       editurl: "",
       CatID: 0,
-      selectedItem: {}
+      selectedItem: {},
     };
   }
 
@@ -77,7 +69,9 @@ class itemCategoryMaster extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
-        this.setState({ ItemCategoryData: data }, () => { this.InitialhandleRowClick(null, data[0], "row_0"); });
+        this.setState({ ItemCategoryData: data }, () => {
+          this.InitialhandleRowClick(null, data[0], "row_0");
+        });
         this.setState({ ProgressLoader: true });
       })
       .catch((error) => {
@@ -91,7 +85,12 @@ class itemCategoryMaster extends React.Component {
       this.state.urlparams +
       "&editCatID=" +
       item.catId;
-    this.setState({ CatID: item.catId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+    this.setState({
+      CatID: item.catId,
+      editurl: editUrl,
+      selectedItem: item,
+      editBtnDisable: false,
+    });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -102,14 +101,18 @@ class itemCategoryMaster extends React.Component {
   }
 
   render() {
-
     const handleRowClick = (e, item, id) => {
       let editUrl =
         URLS.URLS.editItemCategory +
         this.state.urlparams +
         "&editCatID=" +
         item.catId;
-      this.setState({ CatID: item.catId, editurl: editUrl, selectedItem: item, editBtnDisable: false });
+      this.setState({
+        CatID: item.catId,
+        editurl: editUrl,
+        selectedItem: item,
+        editBtnDisable: false,
+      });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     };
@@ -119,7 +122,6 @@ class itemCategoryMaster extends React.Component {
         document.getElementById("row_" + i).className = "";
       }
     };
-
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -163,7 +165,9 @@ class itemCategoryMaster extends React.Component {
                   <Button
                     className="action-btns"
                     startIcon={<AddIcon />}
-                    onClick={(e) => openPage(URLS.URLS.addItemCategory + this.state.urlparams)}
+                    onClick={(e) =>
+                      openPage(URLS.URLS.addItemCategory + this.state.urlparams)
+                    }
                   >
                     New
                   </Button>
@@ -221,13 +225,17 @@ class itemCategoryMaster extends React.Component {
                         >
                           <TableCell align="left">{i + 1}</TableCell>
                           <TableCell align="left">
-                            <a className="LINK tableLink" href={URLS.URLS.editItemCategory +
-                              this.state.urlparams +
-                              "&editCatID=" +
-                              item.catId}>
+                            <a
+                              className="LINK tableLink"
+                              href={
+                                URLS.URLS.editItemCategory +
+                                this.state.urlparams +
+                                "&editCatID=" +
+                                item.catId
+                              }
+                            >
                               {item.code}
                             </a>
-
                           </TableCell>
                           <TableCell align="left">{item.hsncode}</TableCell>
                           <TableCell align="left">{item.description}</TableCell>
@@ -245,10 +253,7 @@ class itemCategoryMaster extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid xs={12} sm={12} md={4} lg={4}>
-
-
-            </Grid>
+            <Grid xs={12} sm={12} md={4} lg={4}></Grid>
           </Grid>
         </div>
       </Fragment>

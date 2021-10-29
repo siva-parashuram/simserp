@@ -14,8 +14,8 @@ class sectiontitle extends React.Component {
             <Fragment>
                 <Grid container spacing={0}>
                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <div>
-                            <div className="dash-row-header dash-header">
+                        <div >
+                            <div style={{marginTop:"40px"}} className="dash-row-header dash-header">
                                 <h1 className="dash-row-header-title">{this.props.title}</h1>
                             </div>
                         </div>

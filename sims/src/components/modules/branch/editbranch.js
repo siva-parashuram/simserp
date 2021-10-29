@@ -1,6 +1,6 @@
 import "../../user/dasboard.css";
 import React, { Fragment } from "react";
-import Header from "../../user/userheaderconstants";
+
 import moment from "moment";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -20,7 +20,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TableContainer from "@material-ui/core/TableContainer";
-import TextField from "@material-ui/core/TextField";
+
 import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Tablerowcelldropdowninput from "../../compo/tablerowcelldropdowninput";
@@ -1435,7 +1435,7 @@ class editbranch extends React.Component {
                                     this.state.Validations.phoneNo.errorMsg
                                   }
                                 />
-                                
+
                                 <Tablerowcelltextboxinput
                                   id="website"
                                   label="Website"
@@ -1450,14 +1450,12 @@ class editbranch extends React.Component {
                                   }}
                                   value={this.state.website}
                                   error={
-                                    this.state.Validations.website
-                                          .errorState
+                                    this.state.Validations.website.errorState
                                   }
                                   helperText={
                                     this.state.Validations.website.errorMsg
                                   }
                                 />
-                                
 
                                 <Tablerowcelldateinput
                                   id="EffectiveDate"
@@ -1504,28 +1502,24 @@ class editbranch extends React.Component {
                                   options={this.state.stateData}
                                   value={this.state.stateId}
                                 />
-                             
+
                                 <Tablerowcelltextboxinput
                                   id="City"
                                   label="City"
                                   variant="outlined"
                                   size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("City", e)
-                                  }
+                                  onChange={(e) => updateFormValue("City", e)}
                                   InputProps={{
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
                                   value={this.state.city}
-                                  error={
-                                    this.state.Validations.city.errorState
-                                  }
+                                  error={this.state.Validations.city.errorState}
                                   helperText={
                                     this.state.Validations.city.errorMsg
                                   }
                                 />
-                       
+
                                 <Tablerowcelltextboxinput
                                   id="Postcode"
                                   label="Postcode"
@@ -1540,14 +1534,13 @@ class editbranch extends React.Component {
                                   }}
                                   value={this.state.postcode}
                                   error={
-                                    this.state.Validations.postcode
-                                          .errorState
+                                    this.state.Validations.postcode.errorState
                                   }
                                   helperText={
                                     this.state.Validations.postcode.errorMsg
                                   }
                                 />
-                                
+
                                 <Tablerowcelltextboxinput
                                   id="Address"
                                   label="Address Line 1"
@@ -1562,14 +1555,13 @@ class editbranch extends React.Component {
                                   }}
                                   value={this.state.address}
                                   error={
-                                    this.state.Validations.address
-                                    .errorState
+                                    this.state.Validations.address.errorState
                                   }
                                   helperText={
                                     this.state.Validations.address.errorMsg
                                   }
                                 />
-                             
+
                                 <Tablerowcelltextboxinput
                                   id="Address2"
                                   label="Address Line 2"
@@ -1584,8 +1576,7 @@ class editbranch extends React.Component {
                                   }}
                                   value={this.state.address2}
                                   error={
-                                    this.state.Validations.address2
-                                          .errorState
+                                    this.state.Validations.address2.errorState
                                   }
                                   helperText={
                                     this.state.Validations.address2.errorMsg
@@ -1639,8 +1630,7 @@ class editbranch extends React.Component {
                                   }}
                                   value={this.state.address3}
                                   error={
-                                    this.state.Validations.address3
-                                    .errorState
+                                    this.state.Validations.address3.errorState
                                   }
                                   helperText={
                                     this.state.Validations.address3.errorMsg
