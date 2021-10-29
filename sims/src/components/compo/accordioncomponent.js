@@ -23,6 +23,7 @@ class accordioncomponent extends React.Component {
                 <Accordion
                     key={this.props.accordionKey}
                     expanded={this.props.expanded}
+                    className="accordionD"
                 >
                     <AccordionSummary
                         className="accordion-Header-Design"

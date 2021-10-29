@@ -349,10 +349,21 @@ cursor: pointer;
   background-color: #e0f2f1 !important;
 }
 
+.accordionD{
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
 .accordion-Header-Design{  
   border-color:#009688 ;
   border-bottom-color: #000;
   border-bottom-width: 2px;  
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
   min-height: 30px !important;
   max-height: 30px !important;
   /* minHeight: 30,maxHeight: 30 */
@@ -362,6 +373,10 @@ cursor: pointer;
   border-top-style: solid !important;
   border-top-width: 1px !important;
   border-top-color: #eeeeee !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
 }
 
 .accordion-Header-Design .MuiAccordionSummary-root .Mui-expanded{
