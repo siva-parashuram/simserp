@@ -37,19 +37,22 @@ class postingGroupMaster extends React.Component {
       accordion1: false,
       accordion2: false,
       accordion3: false,
+      accordion4: false,
+      accordion5: false,
       ItemPostingGroupID: 0,
       codeItemPostingGroup: "",
       descriptionItemPostingGroup: "",
       GeneralPostingGroupID: 0,
       codeGeneralPostingGroup: "",
       descriptionGeneralPostingGroup: "",
-      SalesAccount:0,
-      SalesCNAccount:0,
-      SalesDNAccount:0,
-      PurchaseAccount:0,
-      PurchaseCNAccount:0,
-      PurchaseDNAccount:0
-
+      SalesAccount: 0,
+      SalesCNAccount: 0,
+      SalesDNAccount: 0,
+      PurchaseAccount: 0,
+      PurchaseCNAccount: 0,
+      PurchaseDNAccount: 0,
+      SuplID: 0,
+      BranchID: 0,
     };
   }
 
@@ -81,7 +84,7 @@ class postingGroupMaster extends React.Component {
         stickyHeader
         size="small"
         className=""
-        aria-label="Item-catagory List table"
+        aria-label="PostingGroup List table"
       >
         <TableHead className="table-header-background">
           <TableRow>
@@ -99,7 +102,7 @@ class postingGroupMaster extends React.Component {
         stickyHeader
         size="small"
         className=""
-        aria-label="Item-catagory List table"
+        aria-label="PostingGroup List table"
       >
         <TableHead className="table-header-background">
           <TableRow>
@@ -117,7 +120,43 @@ class postingGroupMaster extends React.Component {
         stickyHeader
         size="small"
         className=""
-        aria-label="Item-catagory List table"
+        aria-label="PostingGroup List table"
+      >
+        <TableHead className="table-header-background">
+          <TableRow>
+            <TableCell className="table-header-font">#</TableCell>
+            <TableCell className="table-header-font" align="left">
+              Name
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody className="tableBody"></TableBody>
+      </Table>
+    );
+    const tableSupplierPostingGroup = (
+      <Table
+        stickyHeader
+        size="small"
+        className=""
+        aria-label="PostingGroup List table"
+      >
+        <TableHead className="table-header-background">
+          <TableRow>
+            <TableCell className="table-header-font">#</TableCell>
+            <TableCell className="table-header-font" align="left">
+              Name
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody className="tableBody"></TableBody>
+      </Table>
+    );
+    const tableSupplierBranchMapping = (
+      <Table
+        stickyHeader
+        size="small"
+        className=""
+        aria-label="PostingGroup List table"
       >
         <TableHead className="table-header-background">
           <TableRow>
@@ -145,29 +184,29 @@ class postingGroupMaster extends React.Component {
               stickyHeader
               size="small"
               className="accordion-table"
-              aria-label="company List table"
+              aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-                <TextboxInput
+                <DropdownInput
                   id="ItemPostingGroupID"
-                  label="Item Posting Group ID"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.ItemPostingGroupID}
+                  label="Item Posting GroupID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
+
                 <TextboxInput
                   id="codeItemPostingGroup"
                   label="Code"
                   variant="outlined"
                   size="small"
-                  value={this.state.codeItemPostingGroup}
+                  
                 />
                 <TextboxInput
                   id="descriptionItemPostingGroup"
                   label="Description"
                   variant="outlined"
                   size="small"
-                  value={this.state.descriptionItemPostingGroup}
+                  
                 />
               </TableBody>
             </Table>
@@ -189,29 +228,26 @@ class postingGroupMaster extends React.Component {
               stickyHeader
               size="small"
               className="accordion-table"
-              aria-label="company List table"
+              aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-                <TextboxInput
+                <DropdownInput
                   id="GeneralPostingGroupID"
-                  label="General Posting Group ID"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.GeneralPostingGroupID}
+                  label="General Posting GroupID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <TextboxInput
                   id="codeGeneralPostingGroup"
                   label="Code"
                   variant="outlined"
                   size="small"
-                  value={this.state.codeGeneralPostingGroup}
                 />
                 <TextboxInput
                   id="descriptionGeneralPostingGroup"
                   label="Description"
                   variant="outlined"
                   size="small"
-                  value={this.state.descriptionGeneralPostingGroup}
                 />
               </TableBody>
             </Table>
@@ -232,64 +268,156 @@ class postingGroupMaster extends React.Component {
               stickyHeader
               size="small"
               className="accordion-table"
-              aria-label="company List table"
+              aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-                <TextboxInput
+                <DropdownInput
                   id="GeneralPostingGroupID"
-                  label="General Posting Group ID"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.GeneralPostingGroupID}
+                  label="General Posting GroupID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
-                <TextboxInput
+                <DropdownInput
                   id="ItemPostingGroupID"
-                  label="Item Posting Group ID"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.ItemPostingGroupID}
+                  label="Item Posting GroupID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
+
                 <DropdownInput
                   id="SalesAccount"
                   label="Sales Account"
                   // onChange={(e) => updateFormValue("SalesAccount", e)}
                   // options={}
-                  value={this.state.SalesAccount}
                 />
                 <DropdownInput
                   id="SalesCNAccount"
                   label="SalesCNAccount"
                   // onChange={(e) => updateFormValue("SalesCNAccount", e)}
                   // options={}
-                  value={this.state.SalesCNAccount}
                 />
                 <DropdownInput
                   id="SalesDNAccount"
                   label="SalesDNAccount"
                   // onChange={(e) => updateFormValue("SalesDNAccount", e)}
                   // options={}
-                  value={this.state.SalesDNAccount}
                 />
                 <DropdownInput
                   id="PurchaseAccount"
                   label="Purchase Account"
                   // onChange={(e) => updateFormValue("PurchaseAccount", e)}
                   // options={}
-                  value={this.state.PurchaseAccount}
                 />
                 <DropdownInput
                   id="PurchaseCNAccount"
                   label="PurchaseCNAccount"
                   // onChange={(e) => updateFormValue("PurchaseCNAccount", e)}
                   // options={}
-                  value={this.state.PurchaseCNAccount}
                 />
                 <DropdownInput
                   id="PurchaseDNAccount"
                   label="PurchaseDNAccount"
                   // onChange={(e) => updateFormValue("PurchaseDNAccount", e)}
                   // options={}
-                  value={this.state.PurchaseDNAccount}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Grid>
+    );
+    const formSupplierPostingGroup = (
+      <Grid container spacing={0}>
+        <Grid xs={12} sm={12} md={8} lg={8}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            Create
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <TableContainer>
+            <Table
+              stickyHeader
+              size="small"
+              className="accordion-table"
+              aria-label="PostingGroup List table"
+            >
+              <TableBody className="tableBody">
+                <DropdownInput
+                  id="SupplierPostingGroupID"
+                  label="Supplier Posting GroupID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
+                />
+                <TextboxInput
+                  id="codeSupplierPostingGroup"
+                  label="Code"
+                  variant="outlined"
+                  size="small"
+                />
+                <TextboxInput
+                  id="descriptionSupplierPostingGroup"
+                  label="Description"
+                  variant="outlined"
+                  size="small"
+                />
+                <DropdownInput
+                  id="PayableAccount"
+                  label="Payable Account"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
+                />
+                <DropdownInput
+                  id="ReceivableAccount"
+                  label="Receivable Account"
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  // options={}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Grid>
+    );
+
+    const formSupplierBranchMapping = (
+      <Grid container spacing={0}>
+        <Grid xs={12} sm={12} md={8} lg={8}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            Create
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <TableContainer>
+            <Table
+              stickyHeader
+              size="small"
+              className="accordion-table"
+              aria-label="PostingGroup List table"
+            >
+              <TableBody className="tableBody">
+                <DropdownInput
+                  id="SuplID"
+                  label="SuplID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
+                />
+                <DropdownInput
+                  id="BranchID"
+                  label="BranchID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
+                />
+                <DropdownInput
+                  id="GeneralPostingGroupID"
+                  label="General Posting GroupID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
+                />
+                <DropdownInput
+                  id="SupplierPostingGroupID"
+                  label="Supplier Posting GroupID"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
               </TableBody>
             </Table>
@@ -336,6 +464,30 @@ class postingGroupMaster extends React.Component {
         </Grid>
       </Grid>
     );
+    const section4 = (
+      <Grid container spacing={0}>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <Dualtabcomponent
+            tab1name="List"
+            tab2name="New"
+            tab1Html={tableSupplierPostingGroup}
+            tab2Html={formSupplierPostingGroup}
+          />
+        </Grid>
+      </Grid>
+    );
+    const section5 = (
+      <Grid container spacing={0}>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <Dualtabcomponent
+            tab1name="List"
+            tab2name="New"
+            tab1Html={tableSupplierBranchMapping}
+            tab2Html={formSupplierBranchMapping}
+          />
+        </Grid>
+      </Grid>
+    );
 
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -352,6 +504,16 @@ class postingGroupMaster extends React.Component {
         this.state.accordion3 === true
           ? this.setState({ accordion3: false })
           : this.setState({ accordion3: true });
+      }
+      if (val === "accordion4") {
+        this.state.accordion4 === true
+          ? this.setState({ accordion4: false })
+          : this.setState({ accordion4: true });
+      }
+      if (val === "accordion5") {
+        this.state.accordion5 === true
+          ? this.setState({ accordion5: false })
+          : this.setState({ accordion5: true });
       }
     };
 
@@ -442,6 +604,33 @@ class postingGroupMaster extends React.Component {
               </Grid>
             </Grid>
             <Sectiontitle title="Supplier" />
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Accordioncomponent
+                  accordionKey="a-4"
+                  expanded={this.state.accordion4}
+                  onClick={(e) => handleAccordionClick("accordion4", e)}
+                  id="accordion4"
+                  typographyKey="Supplier-Posting-Group"
+                  typography="Supplier-Posting-Group"
+                  accordiondetailsKey="accordion4"
+                  html={section4}
+                />
+              </Grid>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Accordioncomponent
+                  accordionKey="a-5"
+                  expanded={this.state.accordion5}
+                  onClick={(e) => handleAccordionClick("accordion5", e)}
+                  id="accordion5"
+                  typographyKey="SupplierBranchMapping"
+                  typography="Supplier Branch Mapping
+                  "
+                  accordiondetailsKey="accordion5"
+                  html={section5}
+                />
+              </Grid>
+            </Grid>
 
             <Sectiontitle title="Customer" />
           </div>
@@ -464,7 +653,7 @@ class postingGroupMaster extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid xs={12} sm={12} md={4} lg={4}>
+            {/* <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
                   <Accordioncomponent
@@ -479,7 +668,7 @@ class postingGroupMaster extends React.Component {
                   />
                 </Grid>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Grid>
         </div>
       </Fragment>
