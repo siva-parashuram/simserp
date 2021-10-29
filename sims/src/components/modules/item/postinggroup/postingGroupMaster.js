@@ -371,12 +371,7 @@ class postingGroupMaster extends React.Component {
               aria-label="PostingGroup List table"
             >
               <TableBody className="tableBody">
-                <DropdownInput
-                  id="ItemPostingGroupID"
-                  label="Item Posting GroupID"
-                  // onChange={(e) => updateFormValue("PayableAccount", e)}
-                  // options={}
-                />
+               
 
                 <TextboxInput
                   id="codeItemPostingGroup"
