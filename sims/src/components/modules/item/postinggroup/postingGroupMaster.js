@@ -14,6 +14,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import TablePagination from "@mui/material/TablePagination";
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -27,6 +28,7 @@ import Breadcrumb from "../../../compo/breadcrumb";
 import Dualtabcomponent from "../../../compo/dualtabcomponent";
 import Accordioncomponent from "../../../compo/accordioncomponent";
 import Sectiontitle from "../../../compo/sectiontitle";
+import Inputcustom from "../../../compo/inputcustom";
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 
@@ -151,44 +153,50 @@ class postingGroupMaster extends React.Component {
     };
 
     const createItemPostingGroup = (e) => {
-      this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let Url = APIURLS.APIURL.CreateItemPostingGroup;
-      let reqData = {
-        validUser: ValidUser,
-        ItemPostingGroup: this.state.ItemPostingGroup,
-      };
-      console.log("createItemPostingGroup > reqData > ", reqData);
-      axios
-        .post(Url, reqData, { headers })
-        .then((response) => {
-          if (response.status === 200 || response.status === 201) {
-            let ItemPostingGroup = {
-              ItemPostingGroupID: 0,
-              Code: "",
-              Description: "",
-            };
-            let data = response.data;
-            console.log("data > ", data);
-            this.setState({
-              ProgressLoader: true,
-              SuccessPrompt: true,
-              ItemPostingGroup: ItemPostingGroup,
-            });
-            this.getAllItemPostingGroup();
-          } else {
+      let ItemPostingGroup = this.state.ItemPostingGroup;
+      let Code = ItemPostingGroup.Code.trim();
+      let Description = ItemPostingGroup.Description.trim();
+      console.log("createItemPostingGroup > Code > ", Code);
+      console.log("createItemPostingGroup > Description > ", Description);
+      if (Code === "" || Description === "") {
+        alert("Empty data found");
+      } else {
+        this.setState({ ProgressLoader: false });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.CreateItemPostingGroup;
+        let reqData = {
+          validUser: ValidUser,
+          ItemPostingGroup: this.state.ItemPostingGroup
+        };
+        console.log("createItemPostingGroup > reqData > ", reqData);
+        axios
+          .post(Url, reqData, { headers })
+          .then((response) => {
+            if (response.status === 200 || response.status === 201) {
+              let ItemPostingGroup = {
+                ItemPostingGroupID: 0,
+                Code: "",
+                Description: ""
+              };
+              let data = response.data;
+              console.log("data > ", data);
+              this.setState({ ProgressLoader: true, SuccessPrompt: true, ItemPostingGroup: ItemPostingGroup });
+              this.getAllItemPostingGroup();
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+            }
+
+          })
+          .catch((error) => {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => {
-          this.setState({ ProgressLoader: true, ErrorPrompt: true });
-        });
-    };
+          });
+      }
+    }
 
     const updateItemPostingGroup = (e) => {
       if(this.state.selectedItemPostingGroupList.length>0){
@@ -202,7 +210,7 @@ class postingGroupMaster extends React.Component {
       let Url = APIURLS.APIURL.UpdateItemPostingGroup;
       let reqData = {
         validUser: ValidUser,
-        ItemPostingGroup: this.state.selectedItemPostingGroupList
+        ItemPostingGroupList: this.state.selectedItemPostingGroupList
       };
       console.log("updateItemPostingGroup > reqData > ",reqData);
       axios
@@ -279,6 +287,8 @@ class postingGroupMaster extends React.Component {
           >
             Update
           </Button>
+         
+          
           </Grid>
         </Grid>
         <Grid container spacing={0}>
@@ -306,21 +316,19 @@ class postingGroupMaster extends React.Component {
                   <TableRow>
                     <TableCell>{i + 1}</TableCell>
                     <TableCell align="left">
-                      <input
-                        className="table-text-field"
+                      <Inputcustom
                         id={"itemPostingGroup_code_" + item.ItemPostingGroupID}
-                        size="small"
                         defaultValue={item.Code}
-                       onKeyUp={(e) => updateList("ItemPostingGroupList","Code" ,item, e)}
+                        onKeyUp={(e) => updateList("ItemPostingGroupList", "Code", item, e)}
                       />
+
+
                     </TableCell>
                     <TableCell align="left">
-                      <input
-                        className="table-text-field"
+                      <Inputcustom
                         id={"itemPostingGroup_description_" + item.ItemPostingGroupID}
-                        size="small"
                         defaultValue={item.Description}
-                        onKeyUp={(e) => updateList("ItemPostingGroupList","Description" ,item, e)}
+                        onKeyUp={(e) => updateList("ItemPostingGroupList", "Description", item, e)}
                       />
                     </TableCell>
                   </TableRow>
