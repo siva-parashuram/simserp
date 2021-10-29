@@ -37,8 +37,11 @@ class postingGroupMaster extends React.Component {
       accordion2: false,
       accordion3: false,
       ItemPostingGroupID: 0,
-      Code: "",
-      Description: "",
+      codeItemPostingGroup: "",
+      descriptionItemPostingGroup: "",
+      GeneralPostingGroupID: 0,
+      codeGeneralPostingGroup: "",
+      descriptionGeneralPostingGroup: "",
     };
   }
 
@@ -83,9 +86,33 @@ class postingGroupMaster extends React.Component {
         <TableBody className="tableBody"></TableBody>
       </Table>
     );
+    const tableGeneralPostingGroup = (
+      <Table
+        stickyHeader
+        size="small"
+        className=""
+        aria-label="Item-catagory List table"
+      >
+        <TableHead className="table-header-background">
+          <TableRow>
+            <TableCell className="table-header-font">#</TableCell>
+            <TableCell className="table-header-font" align="left">
+              Name
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody className="tableBody"></TableBody>
+      </Table>
+    );
 
     const formItemPostingGroup = (
       <Grid container spacing={0}>
+        <Grid xs={12} sm={12} md={8} lg={8}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            Create
+          </Button>
+        </Grid>
+
         <Grid item xs={12} sm={12} md={11} lg={11}>
           <TableContainer>
             <Table
@@ -103,18 +130,62 @@ class postingGroupMaster extends React.Component {
                   value={this.state.ItemPostingGroupID}
                 />
                 <TextboxInput
-                  id="Code"
+                  id="codeItemPostingGroup"
                   label="Code"
                   variant="outlined"
                   size="small"
-                  value={this.state.Code}
+                  value={this.state.codeItemPostingGroup}
                 />
                 <TextboxInput
-                  id="Description"
+                  id="descriptionItemPostingGroup"
                   label="Description"
                   variant="outlined"
                   size="small"
-                  value={this.state.Description}
+                  value={this.state.descriptionItemPostingGroup}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Grid>
+    );
+
+    const formGeneralPostingGroup = (
+      <Grid container spacing={0}>
+        <Grid xs={12} sm={12} md={8} lg={8}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            Create
+          </Button>
+        </Grid>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <TableContainer>
+            <Table
+              stickyHeader
+              size="small"
+              className="accordion-table"
+              aria-label="company List table"
+            >
+              <TableBody className="tableBody">
+                <TextboxInput
+                  id="GeneralPostingGroupID"
+                  label="General Posting Group ID"
+                  variant="outlined"
+                  size="small"
+                  value={this.state.GeneralPostingGroupID}
+                />
+                <TextboxInput
+                  id="codeGeneralPostingGroup"
+                  label="Code"
+                  variant="outlined"
+                  size="small"
+                  value={this.state.codeGeneralPostingGroup}
+                />
+                <TextboxInput
+                  id="descriptionGeneralPostingGroup"
+                  label="Description"
+                  variant="outlined"
+                  size="small"
+                  value={this.state.descriptionGeneralPostingGroup}
                 />
               </TableBody>
             </Table>
@@ -137,17 +208,17 @@ class postingGroupMaster extends React.Component {
     );
 
     const section2 = (
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={11} lg={11}>
-            <Dualtabcomponent
-              tab1name="List"
-              tab2name="New"
-              tab1Html={tableItemPostingGroup}
-              tab2Html={formItemPostingGroup}
-            />
-          </Grid>
+      <Grid container spacing={0}>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <Dualtabcomponent
+            tab1name="List"
+            tab2name="New"
+            tab1Html={tableGeneralPostingGroup}
+            tab2Html={formGeneralPostingGroup}
+          />
         </Grid>
-      );
+      </Grid>
+    );
 
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -231,7 +302,7 @@ class postingGroupMaster extends React.Component {
                 </Grid>
                 <Grid xs={12} sm={12} md={11} lg={11}>
                   <Accordioncomponent
-                    accordionKey="a-1"
+                    accordionKey="a-2"
                     expanded={this.state.accordion2}
                     onClick={(e) => handleAccordionClick("accordion2", e)}
                     id="accordion2"
@@ -246,7 +317,7 @@ class postingGroupMaster extends React.Component {
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Accordioncomponent
+                  {/* <Accordioncomponent
                     accordionKey="a-2"
                     expanded={this.state.accordion2}
                     onClick={(e) => handleAccordionClick("accordion2", e)}
