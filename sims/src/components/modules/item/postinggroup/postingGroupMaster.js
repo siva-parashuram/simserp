@@ -8,7 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-
+import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -43,6 +43,13 @@ class postingGroupMaster extends React.Component {
       GeneralPostingGroupID: 0,
       codeGeneralPostingGroup: "",
       descriptionGeneralPostingGroup: "",
+      SalesAccount:0,
+      SalesCNAccount:0,
+      SalesDNAccount:0,
+      PurchaseAccount:0,
+      PurchaseCNAccount:0,
+      PurchaseDNAccount:0
+
     };
   }
 
@@ -242,7 +249,48 @@ class postingGroupMaster extends React.Component {
                   size="small"
                   value={this.state.ItemPostingGroupID}
                 />
-               
+                <DropdownInput
+                  id="SalesAccount"
+                  label="Sales Account"
+                  // onChange={(e) => updateFormValue("SalesAccount", e)}
+                  // options={}
+                  value={this.state.SalesAccount}
+                />
+                <DropdownInput
+                  id="SalesCNAccount"
+                  label="SalesCNAccount"
+                  // onChange={(e) => updateFormValue("SalesCNAccount", e)}
+                  // options={}
+                  value={this.state.SalesCNAccount}
+                />
+                <DropdownInput
+                  id="SalesDNAccount"
+                  label="SalesDNAccount"
+                  // onChange={(e) => updateFormValue("SalesDNAccount", e)}
+                  // options={}
+                  value={this.state.SalesDNAccount}
+                />
+                <DropdownInput
+                  id="PurchaseAccount"
+                  label="Purchase Account"
+                  // onChange={(e) => updateFormValue("PurchaseAccount", e)}
+                  // options={}
+                  value={this.state.PurchaseAccount}
+                />
+                <DropdownInput
+                  id="PurchaseCNAccount"
+                  label="PurchaseCNAccount"
+                  // onChange={(e) => updateFormValue("PurchaseCNAccount", e)}
+                  // options={}
+                  value={this.state.PurchaseCNAccount}
+                />
+                <DropdownInput
+                  id="PurchaseDNAccount"
+                  label="PurchaseDNAccount"
+                  // onChange={(e) => updateFormValue("PurchaseDNAccount", e)}
+                  // options={}
+                  value={this.state.PurchaseDNAccount}
+                />
               </TableBody>
             </Table>
           </TableContainer>
@@ -275,7 +323,7 @@ class postingGroupMaster extends React.Component {
         </Grid>
       </Grid>
     );
-    
+
     const section3 = (
       <Grid container spacing={0}>
         <Grid item xs={12} sm={12} md={11} lg={11}>
@@ -353,65 +401,53 @@ class postingGroupMaster extends React.Component {
           </Grid>
           <div className="breadcrumb-bottom"></div>
 
-          <div style={{ marginLeft: 50,marginRight:50 }}>
-            <Sectiontitle
-              title="Item"
-            />
-             <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Accordioncomponent
-                    accordionKey="a-1"
-                    expanded={this.state.accordion1}
-                    onClick={(e) => handleAccordionClick("accordion1", e)}
-                    id="accordion1"
-                    typographyKey="Item-Posting-Group"
-                    typography="Item Posting Group"
-                    accordiondetailsKey="accordion1"
-                    html={section1}
-                  />
-                </Grid>
-                <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Accordioncomponent
-                    accordionKey="a-2"
-                    expanded={this.state.accordion2}
-                    onClick={(e) => handleAccordionClick("accordion2", e)}
-                    id="accordion2"
-                    typographyKey="General-Posting-Group"
-                    typography="General Posting Group"
-                    accordiondetailsKey="accordion2"
-                    html={section2}
-                  />
-                </Grid>
-                <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Accordioncomponent
-                    accordionKey="a-3"
-                    expanded={this.state.accordion3}
-                    onClick={(e) => handleAccordionClick("accordion3", e)}
-                    id="accordion3"
-                    typographyKey="General-Posting-Group-Setup"
-                    typography="General Posting Group Setup"
-                    accordiondetailsKey="accordion3"
-                    html={section3}
-                  />
-                </Grid>
+          <div style={{ marginLeft: 50, marginRight: 50 }}>
+            <Sectiontitle title="Item" />
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Accordioncomponent
+                  accordionKey="a-1"
+                  expanded={this.state.accordion1}
+                  onClick={(e) => handleAccordionClick("accordion1", e)}
+                  id="accordion1"
+                  typographyKey="Item-Posting-Group"
+                  typography="Item Posting Group"
+                  accordiondetailsKey="accordion1"
+                  html={section1}
+                />
               </Grid>
-              <Sectiontitle
-              title="Supplier"
-            />
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Accordioncomponent
+                  accordionKey="a-2"
+                  expanded={this.state.accordion2}
+                  onClick={(e) => handleAccordionClick("accordion2", e)}
+                  id="accordion2"
+                  typographyKey="General-Posting-Group"
+                  typography="General Posting Group"
+                  accordiondetailsKey="accordion2"
+                  html={section2}
+                />
+              </Grid>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Accordioncomponent
+                  accordionKey="a-3"
+                  expanded={this.state.accordion3}
+                  onClick={(e) => handleAccordionClick("accordion3", e)}
+                  id="accordion3"
+                  typographyKey="General-Posting-Group-Setup"
+                  typography="General Posting Group Setup"
+                  accordiondetailsKey="accordion3"
+                  html={section3}
+                />
+              </Grid>
+            </Grid>
+            <Sectiontitle title="Supplier" />
 
-
-            <Sectiontitle
-              title="Customer"
-            />
-
+            <Sectiontitle title="Customer" />
           </div>
 
-          
-
           <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={4} lg={4}>
-              
-            </Grid>
+            <Grid xs={12} sm={12} md={4} lg={4}></Grid>
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
                 <Grid xs={12} sm={12} md={11} lg={11}>
