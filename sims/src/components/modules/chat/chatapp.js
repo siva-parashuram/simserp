@@ -20,6 +20,7 @@ import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
  
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Badge from '@mui/material/Badge';
 
 
 
@@ -46,41 +47,49 @@ class chatapp extends React.Component {
                 name: "Samih Kuttan",
                 lastMessage: "Hey how are you",
                 time: "10/30/2021 11:00AM",
+                newIncoming:false
             },
             {
                 name: "Raj",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
+                newIncoming:true
             },
             {
                 name: "Varun",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
+                newIncoming:true
             },
             {
                 name: "Chang",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
+                newIncoming:true
             },
             {
                 name: "Lin Yii",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
+                newIncoming:false
             },
             {
                 name: "Richard",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
+                newIncoming:false
             },
             {
                 name: "Richard",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
+                newIncoming:false
             },
             {
                 name: "Richard",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
+                newIncoming:false
             }
 
         ];
@@ -143,8 +152,9 @@ class chatapp extends React.Component {
         }));
 
         const chatAppBar = (
+           
             <Box sx={{width: '100%', flexGrow: 1 }}>
-                <AppBar position="static" style={{backgroundColor:'#004d40'}}>
+                <AppBar className="chatAppBar" position="static" style={{backgroundColor:'#004d40'}}>
                     <Toolbar>    
                         {this.state.startChat===true?(
                             <IconButton
@@ -170,16 +180,18 @@ class chatapp extends React.Component {
                     </Toolbar>
                 </AppBar>
             </Box>
+            
         );
 
         const userList = (
             <Fragment>                             
-                <List
+                <List                
                     dense={true}
                     sx={{ width: '100%', height: 450, width: 300, maxWidth: 360, bgcolor: 'background.paper' }}>
                     {this.state.data.map((item, i) => (
                         <Fragment>
                             <ListItem
+                            className="onhoverPointer"
                                 secondaryAction={
                                     <IconButton
                                      edge="end" 
@@ -189,18 +201,55 @@ class chatapp extends React.Component {
                                         <ChatIcon />
                                     </IconButton>
                                 }
+                                onClick={(e)=>startChat(item)}
                             >
                                 <ListItemAvatar>
-                                    <Avatar>
-                                        {item.name.toString().charAt(0)}
-                                    </Avatar>
+                                   {item.newIncoming===true?(
+                                    <Badge color="secondary" overlap="circular" badgeContent=" " variant="dot">
+                                        <Avatar
+                                            onClick={(e) => startChat(item)}
+                                        >
+                                            {item.name.toString().charAt(0)}
+                                        </Avatar>
+                                    </Badge>
+                                   ):(
+                                    <Avatar
+                                    onClick={(e) => startChat(item)}
+                                >
+                                    {item.name.toString().charAt(0)}
+                                </Avatar>
+                                   )}
+
+                                    
+                                   
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary={item.name}
+                                    primary={
+                                        <Fragment>
+                                            {item.newIncoming === true ? (
+                                                <span><b>{item.name}</b></span>
+                                            ) : (
+                                                <span>{item.name}</span>
+                                            )}
+
+                                        </Fragment>
+                                    }
                                     secondary={
                                         <Fragment>
-                                            <span>{item.lastMessage}</span>
-                                            <span><br />{item.time}</span>
+                                            {item.newIncoming === true ? (
+                                                <Fragment>
+                                                    <b>
+                                                        <span>{item.lastMessage}</span>
+                                                        <span><br />{item.time}</span>
+                                                    </b>
+                                                </Fragment>
+                                            ) : (
+                                                <Fragment>
+                                                    <span>{item.lastMessage}</span>
+                                                    <span><br />{item.time}</span>
+                                                </Fragment>
+                                            )}
+                                           
                                         </Fragment>
                                     }
                                 />
@@ -239,11 +288,7 @@ class chatapp extends React.Component {
 
         return (
             <Fragment>
-                 <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={12} lg={12}>
-                            {chatAppBar}
-                        </Grid>
-                    </Grid>
+                 {chatAppBar}
                 {this.state.showChatList===true?(
                     <Fragment>                   
                     <Grid container spacing={0}>

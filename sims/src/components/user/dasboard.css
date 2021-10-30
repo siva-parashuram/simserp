@@ -710,6 +710,9 @@ cursor: pointer;
 }
 
  /*******************************************************************/
+.onhoverPointer{
+  cursor: pointer !important;
+}
 
  .chat-app-box{
    height: 350px !important;
@@ -717,6 +720,17 @@ cursor: pointer;
    overflow-x: hidden !important;
    
  }
+
+ .chatAppBar .MuiToolbar-regular {
+  min-height: 40px !important;
+}
+
+.chatAppBarDiv { 
+  position:fixed;
+  top:50px;
+  width:100%;
+      
+}
 
 /**************************************************************************************************************************/
 
