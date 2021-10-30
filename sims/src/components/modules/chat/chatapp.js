@@ -49,48 +49,56 @@ class chatapp extends React.Component {
     getChatUsers = () => {
         let cu = [
             {
+                userid:1,
                 name: "Samih Kuttan",
                 lastMessage: "Hey how are you",
                 time: "10/30/2021 11:00AM",
                 newIncoming:false
             },
             {
+                userid:2,
                 name: "Raj",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
                 newIncoming:true
             },
             {
+                userid:3,
                 name: "Varun",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
                 newIncoming:true
             },
             {
+                userid:4,
                 name: "Chang",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
                 newIncoming:true
             },
             {
+                userid:5,
                 name: "Lin Yii",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
                 newIncoming:false
             },
             {
+                userid:6,
                 name: "Richard",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
                 newIncoming:false
             },
             {
+                userid:7,
                 name: "Richard",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
                 newIncoming:false
             },
             {
+                userid:8,
                 name: "Richard",
                 lastMessage: "Hi",
                 time: "10/19/2021 09:30AM",
@@ -127,7 +135,66 @@ class chatapp extends React.Component {
                 message: "Let you know once its done.",
                 date:"10/30/2021",
                 time: "11:05AM",
-            }
+            },
+            {
+                type:"outgoing",
+                message: "I am preparing. ",
+                date:"10/30/2021",
+                time: "11:05AM",
+            }, 
+            {
+                type:"incoming",
+                message: "Hi",
+                date:"10/30/2021",
+                time: "11:00AM",
+            },
+            {
+                type:"incoming",
+                message: "Is invoice generated?",
+                date:"10/30/2021",
+                time: "11:00AM",
+            },
+            {
+                type:"outgoing",
+                message: "Let you know once its done.",
+                date:"10/30/2021",
+                time: "11:05AM",
+            },
+            {
+                type:"outgoing",
+                message: "I am preparing. ",
+                date:"10/30/2021",
+                time: "11:05AM",
+            }, 
+            {
+                type:"outgoing",
+                message: "Let you know once its done.",
+                date:"10/30/2021",
+                time: "11:05AM",
+            },
+            {
+                type:"outgoing",
+                message: "I am preparing. ",
+                date:"10/30/2021",
+                time: "11:05AM",
+            }, 
+            {
+                type:"outgoing",
+                message: "Let you know once its done.",
+                date:"10/30/2021",
+                time: "11:05AM",
+            }, {
+                type:"incoming",
+                message: "Hi",
+                date:"10/30/2021",
+                time: "11:00AM",
+            },
+            {
+                type:"incoming",
+                message: "Is invoice generated?",
+                date:"10/30/2021",
+                time: "11:00AM",
+            },
        
 
         ];
@@ -279,12 +346,18 @@ class chatapp extends React.Component {
                             <div style={{ marginLeft: 10, marginRight: 10}}>
                                 {item.type === "incoming" ? (
                                     <div style={{ textAlign: 'left', marginBottom: 2 }}>
-                                        <Chip label={item.message} />
+                                        <div style={{marginBottom:-2,marginLeft:5}}>
+                                            <span style={{fontSize:10,color:'#b0bec5'}}>{item.time}</span>
+                                        </div>
+                                        <Chip style={{minWidth:90,textAlign:'left',backgroundColor:'#26a69a',color:'#000000'}} label={item.message} />
                                     </div>
                                 ) : null}
                                 {item.type === "outgoing" ? (
                                     <div style={{ textAlign: 'right', marginBottom: 2 }}>
-                                        <Chip label={item.message} variant="outlined" />
+                                         <div style={{marginBottom:-2,marginRight:5}}>
+                                             <span style={{fontSize:10,color:'#b0bec5'}}>{item.time}</span>
+                                         </div>
+                                        <Chip style={{minWidth:90,textAlign:'left',backgroundColor:'#e0f2f1',borderStyle:'none'}} label={item.message} variant="outlined" />
                                     </div>
                                 ) : null}
                             </div>
