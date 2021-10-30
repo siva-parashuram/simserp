@@ -25,21 +25,29 @@ import Badge from '@mui/material/Badge';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import SendIcon from '@mui/icons-material/Send';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
+import Picker from 'emoji-picker-react';
 
 
 
 const appTitle="Colleagues Online";
+ 
 
 class chatapp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id:undefined,
+            EmojianchorEl:false,
+            openEmojiBlock:false,
             data: [],
             chats:[],
             chatboxtitle:appTitle,
             showChatList:true,
             startChat:false,
             inputMessage:"",
+            emojiObject:"",
         }
     }
     componentDidMount() {
@@ -339,8 +347,8 @@ class chatapp extends React.Component {
             <Fragment>
                 <List
                     dense={true}
-                    sx={{ width: '100%', height: 450, width: 300, maxWidth: 360, bgcolor: 'background.paper' }}>
-                    <div style={{height:400,overflowY:'scroll' }}>
+                    sx={{ width: '100%', height: 330, width: 300, maxWidth: 360, bgcolor: 'background.paper' }}>
+                    <div style={{height:300,overflowY:'scroll' }}>
                     {this.state.chats.map((item, i) => (
                         <Fragment>
                             <div style={{ marginLeft: 10, marginRight: 10}}>
@@ -349,7 +357,9 @@ class chatapp extends React.Component {
                                         <div style={{marginBottom:-2,marginLeft:5}}>
                                             <span style={{fontSize:10,color:'#b0bec5'}}>{item.time}</span>
                                         </div>
-                                        <Chip style={{minWidth:90,textAlign:'left',backgroundColor:'#26a69a',color:'#000000'}} label={item.message} />
+                                        <Chip 
+                                        style={{minWidth:90,textAlign:'left',backgroundColor:'#26a69a',color:'#000000'}} 
+                                        label={item.message} />
                                     </div>
                                 ) : null}
                                 {item.type === "outgoing" ? (
@@ -370,21 +380,35 @@ class chatapp extends React.Component {
 
         const inputMessageSection = (
             <Fragment>
-               
+
                 <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={1} lg={1}>
-                      <div style={{textAlign:'center',marginTop:7,marginLeft:2}}>
-                           <SentimentSatisfiedIcon  className="onhoverPointer" sx={{ fontSize: 25,color:'#004d40' }} />
-                           </div>
+                        <div style={{ textAlign: 'center', marginTop: 7, marginLeft: 2 }}>
+                            {this.state.EmojianchorEl === true ? (
+                                <KeyboardArrowDownIcon
+                                    className="onhoverPointer"
+                                    sx={{ fontSize: 25, color: '#004d40' }}
+                                    onClick={(e) => handleEmojiBtnClick()}
+                                />
+                            ) : (
+                                <SentimentSatisfiedIcon
+                                    className="onhoverPointer"
+                                    sx={{ fontSize: 25, color: '#004d40' }}
+                                    onClick={(e) => handleEmojiBtnClick()}
+                                />
+                            )}
+                           
+                        </div>
                     </Grid>
                     <Grid xs={12} sm={12} md={9} lg={9}>
                         <div style={{ marginLeft: 5 }}>
-                            <TextareaAutosize                                
+                            <TextareaAutosize
                                 aria-label="Input Message Box"
                                 placeholder="Type..."
                                 defaultValue={this.state.inputMessage}
                                 style={{ width: 200, height: 40 }}
                                 className="inputMessageBox"
+                                onChange={(e)=>setTypedMessage(e)}
                             />
                         </div>
                     </Grid>
@@ -398,6 +422,36 @@ class chatapp extends React.Component {
         );
 
 
+        const emojiSection=(
+            <Fragment>
+                <div style={{height:200,overflowY:'scroll', backgroundColor:'#eceff1'}}>
+                   <Picker onEmojiClick={(e)=>onEmojiClick(e)}  />
+                </div>
+            </Fragment>
+        );
+
+        const onEmojiClick=(event, emojiObject)=>{
+            this.setState({emojiObject:""}); 
+            console.log("onEmojiClick > event >",event);
+            console.log("onEmojiClick > event.target >",event.target);
+            console.log("onEmojiClick > event.unified >",event.unified);
+            
+            console.log("onEmojiClick > emojiObject >",emojiObject);
+            this.setState({emojiObject:event.target}); 
+
+        };
+
+        const setMessageType=()=>{
+            // inputMessage
+            let newMessage="";
+            newMessage=this.state.inputMessage+this.state.emojiObject;
+            this.setState({inputMessage:newMessage}); 
+        }
+
+        const setTypedMessage=(e)=>{
+            this.setState({inputMessage:e.target.value}); 
+        }
+
         const startChat=(item)=>{
             this.getChats(item);
             this.setState({chatboxtitle:item.name,startChat:true,showChatList:false});
@@ -406,6 +460,22 @@ class chatapp extends React.Component {
         const showChatList=()=>{
             this.setState({chats:[],chatboxtitle:appTitle,startChat:false,showChatList:true});
         }
+
+        const handleEmojiBtnClick = (event) => {
+           console.log("handleEmojiBtnClick > ",this.state);
+            if(this.state.EmojianchorEl===true){
+                this.setState({id:undefined,EmojianchorEl:false});
+               
+            }
+            if(this.state.EmojianchorEl===false){
+                this.setState({id:'simple-popover',EmojianchorEl:true});
+            }
+            console.log("handleEmojiBtnClick > ",this.state);
+          };
+        
+          const handleEmojiBlockClose = () => {
+             this.setState({EmojianchorEl:null,id:undefined});
+          };
 
 
         return (
@@ -424,9 +494,16 @@ class chatapp extends React.Component {
                 {this.state.startChat===true?(
                     <Fragment>
                         {displayChats}
+                        {this.state.EmojianchorEl===true?(
+                            <Fragment>
+                                {emojiSection}
+                            </Fragment>
+                        ):null}
                         {inputMessageSection}
                     </Fragment>
                 ):null}
+
+                
                 
                 
             </Fragment>
