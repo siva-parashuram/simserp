@@ -990,6 +990,7 @@ class editItem extends React.Component {
                 <Accordion
                   key="Item-General-Details"
                   expanded={this.state.GeneralDetailsExpanded}
+                  
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
@@ -1218,6 +1219,7 @@ class editItem extends React.Component {
                 <Accordion
                   key="Item-Planing-Details"
                   expanded={this.state.PlanningDetailsExpanded}
+                 
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
