@@ -728,9 +728,32 @@ cursor: pointer;
 .chatAppBarDiv { 
   position:fixed;
   top:50px;
-  width:100%;
-      
+  width:100%;      
 }
+
+.inputMessageBox{
+  width: 100% !important;
+  height:40px !important;
+  /* border-style: none !important; */
+  border-radius: 50px !important;
+  resize:none !important;
+  padding-left: 10px !important; 
+  padding-right: 10px !important; 
+  padding-top: 10px !important; 
+  padding-bottom: 20px !important; 
+}
+.inputMessageBox:focus{ 
+   
+  outline: 0 !important;     
+}
+ 
+
+.inputMessageBox::-webkit-input-placeholder { 
+  vertical-align: middle !important; 
+   
+}
+
+
 
 /**************************************************************************************************************************/
 

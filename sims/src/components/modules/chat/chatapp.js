@@ -17,10 +17,14 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import MenuIcon from '@mui/icons-material/Menu';
+ 
+import Chip from '@mui/material/Chip';
  
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Badge from '@mui/material/Badge';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
+import SendIcon from '@mui/icons-material/Send';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 
 
 
@@ -34,7 +38,8 @@ class chatapp extends React.Component {
             chats:[],
             chatboxtitle:appTitle,
             showChatList:true,
-            startChat:false
+            startChat:false,
+            inputMessage:"",
         }
     }
     componentDidMount() {
@@ -187,7 +192,8 @@ class chatapp extends React.Component {
             <Fragment>                             
                 <List                
                     dense={true}
-                    sx={{ width: '100%', height: 450, width: 300, maxWidth: 360, bgcolor: 'background.paper' }}>
+                    sx={{ width: '100%', height: 450, width: 300, maxWidth: 360, bgcolor: 'background.paper',overflowY:'hidden' }}>
+                    <div style={{height:450,overflowY:'scroll' }}>
                     {this.state.data.map((item, i) => (
                         <Fragment>
                             <ListItem
@@ -257,6 +263,7 @@ class chatapp extends React.Component {
                             <Divider variant="inset" component="li" />
                         </Fragment>
                     ))}
+                    </div>
                 </List>
             </Fragment>
         );
@@ -266,12 +273,54 @@ class chatapp extends React.Component {
                 <List
                     dense={true}
                     sx={{ width: '100%', height: 450, width: 300, maxWidth: 360, bgcolor: 'background.paper' }}>
+                    <div style={{height:400,overflowY:'scroll' }}>
                     {this.state.chats.map((item, i) => (
                         <Fragment>
-                             <h6>{item.message}</h6>
+                            <div style={{ marginLeft: 10, marginRight: 10}}>
+                                {item.type === "incoming" ? (
+                                    <div style={{ textAlign: 'left', marginBottom: 2 }}>
+                                        <Chip label={item.message} />
+                                    </div>
+                                ) : null}
+                                {item.type === "outgoing" ? (
+                                    <div style={{ textAlign: 'right', marginBottom: 2 }}>
+                                        <Chip label={item.message} variant="outlined" />
+                                    </div>
+                                ) : null}
+                            </div>
                         </Fragment>
                     ))}
+                    </div>
                 </List>
+            </Fragment>
+        );
+
+        const inputMessageSection = (
+            <Fragment>
+               
+                <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={1} lg={1}>
+                      <div style={{textAlign:'center',marginTop:7,marginLeft:2}}>
+                           <SentimentSatisfiedIcon  className="onhoverPointer" sx={{ fontSize: 25,color:'#004d40' }} />
+                           </div>
+                    </Grid>
+                    <Grid xs={12} sm={12} md={9} lg={9}>
+                        <div style={{ marginLeft: 5 }}>
+                            <TextareaAutosize                                
+                                aria-label="Input Message Box"
+                                placeholder="Type..."
+                                defaultValue={this.state.inputMessage}
+                                style={{ width: 200, height: 40 }}
+                                className="inputMessageBox"
+                            />
+                        </div>
+                    </Grid>
+                    <Grid xs={12} sm={12} md={2} lg={2}>
+                        <IconButton aria-label="delete">
+                            <SendIcon fontSize="inherit" />
+                        </IconButton>
+                    </Grid>
+                </Grid>
             </Fragment>
         );
 
@@ -302,6 +351,7 @@ class chatapp extends React.Component {
                 {this.state.startChat===true?(
                     <Fragment>
                         {displayChats}
+                        {inputMessageSection}
                     </Fragment>
                 ):null}
                 
