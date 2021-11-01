@@ -58,9 +58,9 @@ export const URLS = {
   addItemDepartment:"/addItemDepartment",
   editItemDepartment:"/editItemDepartment",
   postingGroupMaster:"/postingGroupMaster",
-  
-  
   coa:"/coa",
+  addCoa:"/addCoa",
+  editCoa:"/editCoa"
 };
 
 

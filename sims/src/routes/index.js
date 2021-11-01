@@ -55,24 +55,15 @@ import editItemSuperCategory from "../components/modules/item/category/editItemS
 import itemDepartmentMaster from "../components/modules/item/department/itemDepartmentMaster";
 import addItemDepartment from "../components/modules/item/department/addItemDepartment";
 import editItemDepartment from "../components/modules/item/department/editItemDepartment";
-
 import postingGroupMaster from "../components/modules/item/postinggroup/postingGroupMaster";
- 
+import coaMaster from "../components/modules/coa/coaMaster"; 
+import coaactivity from "../components/modules/coa/coaactivity";
 
-import coa from "../components/modules/accounts/reports/coa";
 
 import pageNotFound from "../../src/pagenotfound";
-
-
 import testformat from "../components/modules/accounts/reports/testformat";
-
-
-
 import Ftptest from "../components/ftp/ftptest";
-
-
 import Header from "../components/user/userheaderconstants";
-
 import ErrorBoundary from "./ErrorBoundary";
  
 
@@ -166,8 +157,9 @@ let routes = ({ location, ...rest }) => {
 
 
         {/* Chart of Account */}
-        <Route path={URLS.URLS.coa} component={coa} />
-        
+        <Route path={URLS.URLS.coa} component={coaMaster} />
+        <Route path={URLS.URLS.addCoa} component={coaactivity} />
+        <Route path={URLS.URLS.editCoa} component={coaactivity} />
 
 
         <Route path={URLS.URLS.testformat} component={testformat} />

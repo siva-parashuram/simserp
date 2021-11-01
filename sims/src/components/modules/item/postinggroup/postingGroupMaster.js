@@ -370,6 +370,10 @@ class postingGroupMaster extends React.Component {
       }
     };
 
+    const updateGeneralPostingGroupSetup=(e)=>{
+
+    }
+
     const removeOldIfExist = (parent, item, stateArray) => {
       let newArray = [];
       if (parent === "ItemPostingGroupList") {
@@ -639,22 +643,40 @@ class postingGroupMaster extends React.Component {
       </Fragment>
     );
     const tableGeneralPostingGroupSetup = (
-      <Table
-        stickyHeader
-        size="small"
-        className=""
-        aria-label="PostingGroup List table"
-      >
-        <TableHead className="table-header-background">
-          <TableRow>
-            <TableCell className="table-header-font">#</TableCell>
-            <TableCell className="table-header-font" align="left">
-              Name
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody className="tableBody"></TableBody>
-      </Table>
+      <Fragment>
+        <Grid container spacing={0} style={{ marginTop: 20 }}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Button
+              style={{ marginLeft: 5 }}
+              onClick={(e) => updateGeneralPostingGroupSetup(e)}
+            >
+              Update
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container spacing={0} style={{ marginTop: 20 }}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Table
+              stickyHeader
+              size="small"
+              className=""
+              aria-label="PostingGroup List table"
+            >
+              <TableHead className="table-header-background">
+                <TableRow>
+                  <TableCell className="table-header-font">#</TableCell>
+                  <TableCell className="table-header-font" align="left">
+                    Name
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody className="tableBody"></TableBody>
+            </Table>
+          </Grid>
+        </Grid>
+
+      </Fragment>
+      
     );
     const tableSupplierPostingGroup = (
       <Table
