@@ -346,7 +346,7 @@ class postingGroupMaster extends React.Component {
         let Url = APIURLS.APIURL.UpdateGeneralPostingGroup;
         let reqData = {
           validUser: ValidUser,
-          GeneralPostingGroup: this.state.selectedGeneralPostingGroupList,
+          GeneralPostingGroupList: this.state.selectedGeneralPostingGroupList,
         };
         console.log("updateItemPostingGroup > reqData > ", reqData);
         axios
