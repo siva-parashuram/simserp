@@ -37,11 +37,11 @@ class coaactivity extends React.Component {
             urlparams: "",
             type: "",
             typoTitle: "",
-            branchData: [],
+            COAList:[],
             ACSubCategory: [],
-            ChartOfAccount: {
+            ChartOfAccount: {  
                 CAcID: 0,
-                BranchID: "-",
+                // BranchID: "-",
                 ACNo: "",
                 Name: "",
                 ACType: "-",
@@ -68,8 +68,9 @@ class coaactivity extends React.Component {
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
-        let compName = url.searchParams.get("compName");
+        let compName = url.searchParams.get("compName");        
         let type = url.searchParams.get("type");
+        let CAcID = type==="edit"?url.searchParams.get("editCAcID"):0;
         let typoTitle = "";
         type === "add" ? typoTitle = "Add" : typoTitle = "Edit";
         urlparams =
@@ -80,21 +81,54 @@ class coaactivity extends React.Component {
             "&branchName=" +
             branchName;
 
+        let ChartOfAccount=this.state.ChartOfAccount; 
+        if(type==="edit"){
+            ChartOfAccount.CAcID=CF.toInt(CAcID); 
+            this.GetChartOfAccount(CF.toInt(CAcID));
+        }  
+         
         this.setState({
+            ChartOfAccount:ChartOfAccount,
+            CAcID: type==="edit"?CF.toInt(CAcID):0,
             urlparams: urlparams,
             type: type,
             typoTitle: typoTitle,
             ProgressLoader: type === "add" ? true : false
         });
+
+       
+        
+
     }
 
     componentDidMount() {
-        this.urlprocess();
-        this.getBranches();
+        this.urlprocess();      
+        this.getCOAList();
         this.getACSubCategory(this.state.ChartOfAccount.ACCategory);
     }
 
-    getBranches = () => {
+    getCOAList=()=>{
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+        let Url = APIURLS.APIURL.GetChartOfAccounts;
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        axios
+            .post(Url, ValidUser, { headers })
+            .then((response) => {
+                let data = response.data;
+                console.log("data > ", data);
+                 this.setState({COAList:data});
+                this.setState({ ProgressLoader: true });
+            })
+            .catch((error) => { });
+
+    }
+
+    GetChartOfAccount=(CAcID)=>{
         this.setState({ProgressLoader: false });
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -102,37 +136,51 @@ class coaactivity extends React.Component {
         const headers = {
             "Content-Type": "application/json",
         };
-        let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+        let url = APIURLS.APIURL.GetChartOfAccount;
+        let reqData={
+            ValidUser:ValidUser,
+            ChartOfAccount:{
+                "CAcID": CAcID
+            }
+        };
         axios
-            .post(GetBrachesUrl, ValidUser, { headers })
-            .then((response) => {
-                let pData = [];
-                for (let i = 0; i < response.data.length; i++) {
-                    let d = {
-                        name: response.data[i]['name'],
-                        value: response.data[i]['branchId']
-                    };
-                    pData.push(d);
-                }
-                this.setState({ branchData: pData, ProgressLoader: true });
-            })
-            .catch((error) => {
-                this.setState({ branchData: [], ProgressLoader: true });
-            });
+        .post(url, reqData, { headers })
+        .then((response) => {           
+             this.setState({ChartOfAccount:response.data,ProgressLoader: true});
+        })
+        .catch((error) => {
+            this.setState({ProgressLoader: true });
+        });
     }
+
+   
 
     getACSubCategory = (ACCategory) => {
         console.log("getACSubCategory > ACCategory > ", ACCategory);
         ACCategory = parseInt(ACCategory);
-        let responseData = [];
+        let ACSubCategory = [];
+        let COAList=this.state.COAList;
+        let ACType=CF.toInt(this.state.ChartOfAccount.ACType);
+
+        if(ACType>0){
+          for(let i=0;COAList.length;i++){
+              if(COAList[i]==="" && COAList[i]===""){
+                let d={
+                    name:"",
+                    value:0
+                };
+                ACSubCategory.push(d);
+              }
+          }
+        }
+
+     /*
         if (responseData.length > 0) {
             this.setState({ ACSubCategory: [] });
         } else {
             this.setSelfDefault(ACCategory);
         }
-
-
-
+        */
     }
 
     setSelfDefault(val) {
@@ -183,6 +231,39 @@ class coaactivity extends React.Component {
 
         }
 
+        const updateCoa = (e) => {
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            const headers = {
+                "Content-Type": "application/json",
+            };
+            let Url = APIURLS.APIURL.UpdateChartOfAccount;
+
+            let reqData = {
+                ValidUser: ValidUser,
+                ChartOfAccount: this.state.ChartOfAccount
+            };
+            console.log("createCoa > reqData >", reqData);
+            
+            axios
+                .post(Url, reqData, { headers })
+                .then((response) => {
+                    let data = response.data;
+                    if (response.status === 200 || response.status === 201) {
+                        this.setState({ ErrorPrompt: false, SuccessPrompt: true });
+                        
+                    } else {
+                        this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+                    }
+
+                })
+                .catch((error) => {
+                    this.setState({ ErrorPrompt: true });
+                });
+
+        }
+
 
         const setParams = (object) => {
             this.setState({ ChartOfAccount: object });
@@ -191,10 +272,7 @@ class coaactivity extends React.Component {
         const updateFormValue = (param, e) => {
             let COA = this.state.ChartOfAccount;
             switch (param) {
-                case "BranchID":
-                    COA.BranchID = CF.toInt(e.target.value);
-                    setParams(COA);
-                    break;
+                
                 case "ACNo":
                     COA.ACNo = e.target.value;
                     setParams(COA);
@@ -263,14 +341,8 @@ class coaactivity extends React.Component {
                                             aria-label="Coa Activity table"
                                         >
                                             <TableBody className="tableBody">
-                                                {console.log("this.state.branchData > ", this.state.branchData)}
-                                                <DropdownInput
-                                                    id="BranchID"
-                                                    label="Branch"
-                                                    onChange={(e) => updateFormValue("BranchID", e)}
-                                                    value={this.state.ChartOfAccount.BranchID}
-                                                    options={this.state.branchData}
-                                                />
+                                                
+                                                
                                                 <TextboxInput
                                                     id="ACNo"
                                                     label="ACNo"
@@ -468,8 +540,7 @@ class coaactivity extends React.Component {
                                     {this.state.type === "edit" ? (
                                         <Button
                                             className="action-btns"
-
-
+                                            onClick={(e) => updateCoa(e)}
                                         >
                                             Update
                                         </Button>
@@ -493,6 +564,9 @@ class coaactivity extends React.Component {
                             accordiondetailsKey="accordion1"
                             html={form1}
                         />
+
+ 
+
                     </Grid>
                     <Grid item xs={12} sm={12} md={4} lg={4}>
 

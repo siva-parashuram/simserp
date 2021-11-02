@@ -1,4 +1,12 @@
 
+.hide-row-arrow-display{
+  display: none !important;
+}
+.show-row-arrow-display{
+  display: block !important;
+}
+
+
 .fixedElement { 
   position:fixed;
   top:0;

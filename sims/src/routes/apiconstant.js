@@ -96,6 +96,8 @@ export const APIURL = {
   UpdateGeneralPostingGroup: domain + "api/Posting/UpdateGeneralPostingGroup",
   CreateChartOfAccount:domain+"api/ChartOfAccount/CreateChartOfAccount",
   GetChartOfAccounts:domain+"api/ChartOfAccount/GetChartOfAccounts",
+  GetChartOfAccount:domain+"api/ChartOfAccount/GetChartOfAccount",
+  UpdateChartOfAccount:domain+"api/ChartOfAccount/UpdateChartOfAccount",
 };
 
 export const CTimeOut = 10;

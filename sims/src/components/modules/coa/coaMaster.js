@@ -16,6 +16,7 @@ import Button from "@material-ui/core/Button";
 import Grid from '@material-ui/core/Grid';
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
@@ -30,7 +31,9 @@ class coaMaster extends React.Component {
             initialCss: "",
             urlparams: "",
             editurl: "",
-            COAList: []
+            COAList: [],
+            CAcID:0,
+            selectedItem:{}
         };
     }
 
@@ -64,14 +67,61 @@ class coaMaster extends React.Component {
             .then((response) => {
                 let data = response.data;
                 console.log("data > ", data);
-                 this.setState({COAList:data});
+                 this.setState({COAList:data},()=>{
+                   if(data.length>0){
+                    this.handleRowClick(null, data[0], "row_0","row_arrow_0");
+                   }   
+                 });
                 this.setState({ ProgressLoader: true });
             })
             .catch((error) => { });
 
     }
 
+    handleRowClick = (e, item, id) => {
+        try{
+            let editUrl =
+            URLS.URLS.editCoa +
+            this.state.urlparams +
+            "&editCAcID=" +
+            item.CAcID;
+        editUrl = editUrl + "&type=edit";
+        this.setState({ CAcID: item.CAcID, editurl: editUrl, editBtnDisable: false, selectedItem: item });
+        this.removeIsSelectedRowClasses();
+        
+        document.getElementById(id).classList.add("selectedRow");
+      
+        }catch(e){}
+        
+    };
+
+  
+    removeIsSelectedRowClasses = () => {
+        try{
+            for (let i = 0; i < this.state.COAList.length; i++) {
+                document.getElementById("row_" + i).className = "";
+                       
+            }
+        }catch(e){}
+        
+    };
+
+
+
     render() {
+       
+       const getAccoutTypeValue=(ACType)=>{
+           let actype=APIURLS.ACType;
+           let name="";
+           for(let i=0;i<actype.length;i++){
+               if(actype[i].value===ACType){
+                name=actype[i].name;
+                break;
+               }
+           }
+           return name;
+       }
+
         const openPage = (url) => {
             this.setState({ ProgressLoader: false });
             window.location = url;
@@ -122,7 +172,7 @@ class coaMaster extends React.Component {
                                     <Button className="action-btns"
                                         startIcon={<EditIcon />}
                                         onClick={(e) =>
-                                            openPage(URLS.URLS.editCoa + this.state.urlparams + "&type=edit")
+                                            openPage(this.state.editurl)
                                         }
                                     // disabled={this.state.editBtnDisable}
                                     >
@@ -141,17 +191,32 @@ class coaMaster extends React.Component {
                                 <Table stickyHeader size="small" className="" aria-label="table">
                                     <TableHead className="table-header-background">
                                         <TableRow>
-                                            <TableCell className="table-header-font">#</TableCell>
-                                            <TableCell className="table-header-font" align="left">AcNo</TableCell>
+                                            
+                                            <TableCell className="table-header-font" align="left">No</TableCell>
                                             <TableCell className="table-header-font" align="left">Name</TableCell>
+                                            <TableCell className="table-header-font" align="left">Income/Balance</TableCell>
+                                            <TableCell className="table-header-font" align="left">Account Type</TableCell>
+                                            <TableCell className="table-header-font" align="left">Account Sub Category</TableCell>
+                                            <TableCell className="table-header-font" align="left">Totaling</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody className="tableBody">
                                         {this.state.COAList.map((item, i) => (
-                                            <TableRow>                                                 
-                                                <TableCell align="left">{i+1} </TableCell>
-                                                <TableCell align="left">{item.ACNo}  </TableCell>
+                                            <TableRow
+                                                id={"row_" + i}
+                                                className={this.state.initialCss}
+                                                hover
+                                                key={i}
+                                                onClick={(event) =>
+                                                    this.handleRowClick(event, item, "row_" + i)
+                                                }
+                                            >                                                 
+                                               <TableCell align="left">{item.ACNo}  </TableCell>
                                                 <TableCell align="left">{item.Name} </TableCell>
+                                                <TableCell align="left">-</TableCell>
+                                                <TableCell align="left">{getAccoutTypeValue(item.ACType)}</TableCell>
+                                                <TableCell align="left">-</TableCell>
+                                                <TableCell align="left">{item.Totaling}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
