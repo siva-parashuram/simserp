@@ -102,6 +102,10 @@ export const APIURL = {
 
 export const CTimeOut = 10;
 export const DFormat = "MM/DD/YYYY";
+export let pagination= {
+  page: 0,
+  rowsPerPage: 10,
+};
 
 export const ACType = [
   { name: "Posting", value: 0 },

@@ -102,3 +102,5 @@ export const toInt=(value)=>{
 export const toFloat=(value)=>{
   return parseFloat(value);
 }
+
+ 

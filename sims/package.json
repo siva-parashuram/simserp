@@ -25,6 +25,8 @@
     "emoji-picker-react": "^3.4.8",
     "file-saver": "^2.0.5",
     "getmac": "^5.20.0",
+    "jspdf": "^2.4.0",
+    "jspdf-autotable": "^3.5.23",
     "macaddress": "^0.5.2",
     "moment": "^2.29.1",
     "react": "^17.0.2",
