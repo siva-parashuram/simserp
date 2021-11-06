@@ -111,6 +111,27 @@ input[type=number] {
   border-right-style: none !important;
 }
 
+.menusection-action-btns{
+  color: #505C6D !important;
+  border-right-style: none !important;
+}
+
+.menusection-action-btns:hover{
+  color: rgb(0, 126, 135) !important;
+  text-decoration: underline !important;
+}
+
+.menusection-div1{
+  height:40px !important;
+  border-right-style: solid !important;
+  border-right-width: 1px !important;
+  text-align: right !important;
+  letter-spacing: 2px;
+  color: #000 !important;
+  font-size: 20px !important;  
+  border-right-color:#505C6D !important;
+}
+
 
 .btn-bottom-border-color{
   color: rgb(0, 126, 135) !important;
@@ -149,7 +170,11 @@ input[type=number] {
 }
 .menubar-link:hover{
   text-decoration: underline !important;
- 
+  cursor: pointer !important;
+}
+
+.MuiTabs-scrollButtons.Mui-disabled {
+  opacity: 0.3;
 }
 
 .menubar-tab-icon-position{  
@@ -162,6 +187,8 @@ input[type=number] {
   letter-spacing: 2 !important;
   color: rgb(80, 92, 109) !important;
   min-height: 10px !important;
+  /* margin-left: -40px !important;
+  margin-right: -5px !important; */
 }
 
 .menubar-tab-height{
