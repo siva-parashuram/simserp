@@ -221,7 +221,7 @@ class addnewcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-              companyName: e.target.value,
+              
 
               createBtnDisabled: true,
             });
@@ -264,7 +264,7 @@ class addnewcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-              address: e.target.value,
+             
 
               createBtnDisabled: true,
             });
@@ -303,7 +303,6 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            address2: e.target.value,
             createBtnDisabled: true,
           });
         } else {
@@ -327,7 +326,6 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            address3: e.target.value,
             createBtnDisabled: true,
           });
         } else {
@@ -351,7 +349,6 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            city: e.target.value,
             createBtnDisabled: true,
           });
         } else {
@@ -375,7 +372,7 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            postcode: e.target.value,
+            postcode: e.target.value,    
             createBtnDisabled: true,
           });
         } else {
@@ -399,7 +396,6 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            phoneno: e.target.value,
             createBtnDisabled: true,
           });
         } else {
@@ -423,7 +419,6 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            website: e.target.value,
             createBtnDisabled: true,
           });
         } else {

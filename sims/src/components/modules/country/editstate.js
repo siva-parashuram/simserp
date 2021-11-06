@@ -248,7 +248,6 @@ class editstate extends React.Component {
             this.setState({
               Validations: v,
               disableUpdateBtn: true,
-              name: e.target.value,
             });
           }
           if (e.target.value === "" || e.target.value == null) {
@@ -285,7 +284,6 @@ class editstate extends React.Component {
           this.setState({
             Validations: v,
             disableUpdateBtn: true,
-            code: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -313,7 +311,6 @@ class editstate extends React.Component {
           this.setState({
             Validations: v,
             disableCreateBtn: true,
-            gstcode: e.target.value,
           });
         } else {
           let v = this.state.Validations;

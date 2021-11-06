@@ -295,7 +295,6 @@ class editcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-              CompanyName: e.target.value,
               updateBtnDisabled: true,
             });
           }
@@ -341,7 +340,6 @@ class editcompany extends React.Component {
             this.setState({
               Validations: v,
               updateBtnDisabled: true,
-              Address: e.target.value,
             });
           } else {
             let v = this.state.Validations;
@@ -379,7 +377,6 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true,
             updateBtnDisabled: true,
-            Address2: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -407,7 +404,6 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true ,
             updateBtnDisabled: true,
-            Address3: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -435,7 +431,6 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true,
             updateBtnDisabled: true,
-            City: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -463,7 +458,6 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true
             updateBtnDisabled: true,
-            PostCode: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -491,7 +485,6 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true
             updateBtnDisabled: true,
-            PhoneNo: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -519,7 +512,6 @@ class editcompany extends React.Component {
             Validations: v,
             //createBtnDisabled: true,
             updateBtnDisabled: true,
-            Website: e.target.value,
           });
         } else {
           let v = this.state.Validations;

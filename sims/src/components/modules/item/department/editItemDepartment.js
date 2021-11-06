@@ -43,6 +43,11 @@ class editItemDepartment extends React.Component {
       Name: "",
       IsActive: false,
       ItemDepartment: {},
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Name: { errorState: false, errorMssg: "" },
+        
+      },
     };
   }
 
@@ -116,14 +121,50 @@ class editItemDepartment extends React.Component {
     const updateFormValue = (param, e) => {
       switch (param) {
         case "Code":
+          let v1 = this.state.Validations;
           if (e.target.value === "" || e.target.value.length > 4) {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+            if (e.target.value === "") {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Blank inputs not allowed",
+              };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value,
+                DisableUpdatebtn: true,
+              });
+            }
+            if (e.target.value.length >4) {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Maximum 4 characters allowed",
+              };
+              this.setState({ Validations: v1, DisableUpdatebtn: true });
+            }
           } else {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+            v1.Code = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v1,
+              Code: e.target.value,
+              DisableUpdatebtn: false,
+            });
           }
           break;
         case "Name":
-          this.setState({ Name: e.target.value });
+          let v2 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v2.Name = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters allowed",
+            };
+            this.setState({ Validations: v2 });
+          } else {
+            v2.Name = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v2,
+              Name: e.target.value 
+            });
+          }
           break;
         case "IsActive":
           this.setState({ IsActive: e.target.checked });
@@ -290,6 +331,8 @@ class editItemDepartment extends React.Component {
                             maxlength: 20,
                           }}
                           value={this.state.Code}
+                          error={this.state.Validations.Code.errorState}
+                          helperText={this.state.Validations.Code.errorMssg}
                         />
                         <TextboxInput
                           id="Name"
@@ -302,6 +345,8 @@ class editItemDepartment extends React.Component {
                             maxlength: 50,
                           }}
                           value={this.state.Name}
+                          error={this.state.Validations.Name.errorState}
+                          helperText={this.state.Validations.Name.errorMssg}
                         />
                         <SwitchInput
                           key="IsActive"

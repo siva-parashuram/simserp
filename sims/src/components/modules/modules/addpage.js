@@ -402,18 +402,23 @@ class addpage extends React.Component {
               errorState: true,
               errorMsg: "Pagename cannot be blank",
             };
+            this.setState({
+              createBtnDisable: true,
+              Validations: Validations,
+              pageName: e.target.value,
+            });
           }
           if (e.target.value.length > 20) {
             Validations.pageName = {
               errorState: true,
               errorMsg: "Maximum 20 characters Allowed!",
             };
+            this.setState({
+              createBtnDisable: true,
+              Validations: Validations,
+            });
           }
-          this.setState({
-            createBtnDisable: true,
-            Validations: Validations,
-            pageName: e.target.value,
-          });
+          
         } else {
           let Validations = this.state.Validations;
           Validations.pageName = { errorState: false, errorMsg: "" };
@@ -432,14 +437,16 @@ class addpage extends React.Component {
               errorState: true,
               errorMsg: "Blank inputs not allowed!",
             };
+            this.setState({ pageLink: e.target.value, Validations: Validations });
           }
           if (e.target.value.length > 100) {
             Validations.pageLink = {
               errorState: true,
               errorMsg: "Maximum 100 characters Allowed!",
             };
+            this.setState({ Validations: Validations });
           }
-          this.setState({ pageLink: e.target.value, Validations: Validations });
+         
         } else {
           let Validations = this.state.Validations;
           Validations.pageLink = { errorState: false, errorMsg: "" };
@@ -456,7 +463,7 @@ class addpage extends React.Component {
           };
           this.setState({
             Validations: Validations,
-            description: e.target.value,
+            
           });
         } else {
           let Validations = this.state.Validations;

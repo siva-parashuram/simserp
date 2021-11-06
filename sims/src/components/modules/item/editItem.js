@@ -101,6 +101,17 @@ class editItem extends React.Component {
       Bomid: 0,
       Item: {},
       ItemCategoryData: [],
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Alias: { errorState: false, errorMssg: "" },
+        Description1: { errorState: false, errorMssg: "" },
+        Description2: { errorState: false, errorMssg: "" },
+        PackingDesc1: { errorState: false, errorMssg: "" },
+        PackingDesc2: { errorState: false, errorMssg: "" },
+        CertificateNo: { errorState: false, errorMssg: "" },
+        Reason: { errorState: false, errorMssg: "" },
+        Hsncode: { errorState: false, errorMssg: "" },
+      },
     };
   }
 
@@ -365,24 +376,88 @@ class editItem extends React.Component {
       switch (param) {
         case "ItemType":
           setStateParam({}, param, e.target.value);
+
           break;
         case "Code":
-          setStateParam({}, param, e.target.value);
+          let v1 = this.state.Validations;
+          if (e.target.value.length > 20) {
+            v1.Code = { errorState: true, errorMssg: "Maximum 20 characters" };
+            this.setState({ Validations: v1 });
+          } else {
+            v1.Code = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v1 });
+            setStateParam({}, param, e.target.value);
+          }
+
           break;
         case "Alias":
-          setStateParam({}, param, e.target.value);
+          let v2 = this.state.Validations;
+          if (e.target.value.length > 20) {
+            v2.Alias = { errorState: true, errorMssg: "Maximum 20 characters" };
+            this.setState({ Validations: v2 });
+          } else {
+            v2.Alias = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v2 });
+            setStateParam({}, param, e.target.value);
+          }
+
           break;
         case "Description1":
-          setStateParam({}, param, e.target.value);
+          let v3 = this.state.Validations;
+          if (e.target.value.length > 250) {
+            v3.Description1 = {
+              errorState: true,
+              errorMssg: "Maximum 250 characters",
+            };
+            this.setState({ Validations: v3 });
+          } else {
+            v3.Description1 = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v3 });
+            setStateParam({}, param, e.target.value);
+          }
+
           break;
         case "Description2":
-          setStateParam({}, param, e.target.value);
+          let v4 = this.state.Validations;
+          if (e.target.value.length > 250) {
+            v4.Description2 = {
+              errorState: true,
+              errorMssg: "Maximum 250 characters",
+            };
+            this.setState({ Validations: v4 });
+          } else {
+            v4.Description2 = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v4 });
+            setStateParam({}, param, e.target.value);
+          }
           break;
         case "PackingDesc1":
-          setStateParam({}, param, e.target.value);
+          let v5 = this.state.Validations;
+          if (e.target.value.length > 250) {
+            v5.PackingDesc1 = {
+              errorState: true,
+              errorMssg: "Maximum 250 characters",
+            };
+            this.setState({ Validations: v5 });
+          } else {
+            v5.PackingDesc1 = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v5 });
+            setStateParam({}, param, e.target.value);
+          }
           break;
         case "PackingDesc2":
-          setStateParam({}, param, e.target.value);
+          let v6 = this.state.Validations;
+          if (e.target.value.length > 250) {
+            v6.PackingDesc2 = {
+              errorState: true,
+              errorMssg: "Maximum 250 characters",
+            };
+            this.setState({ Validations: v6 });
+          } else {
+            v6.PackingDesc2 = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v6 });
+            setStateParam({}, param, e.target.value);
+          }
           break;
         case "ItemDeptId":
           setStateParam({}, param, e.target.value);
@@ -409,10 +484,32 @@ class editItem extends React.Component {
           break;
 
         case "CertificateNo":
-          setStateParam({}, param, e.target.value);
+          let v7 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v7.CertificateNo = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters",
+            };
+            this.setState({ Validations: v7 });
+          } else {
+            v7.CertificateNo = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v7 });
+            setStateParam({}, param, e.target.value);
+          }
           break;
         case "Reason":
-          setStateParam({}, param, e.target.value);
+          let v8 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v8.Reason = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters",
+            };
+            this.setState({ Validations: v8 });
+          } else {
+            v8.Reason = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v8 });
+            setStateParam({}, param, e.target.value);
+          }
           break;
         case "IsDiscontine":
           setStateParam({}, param, e.target.checked);
@@ -673,7 +770,18 @@ class editItem extends React.Component {
 
           break;
         case "Hsncode":
-          setStateParam({}, param, e.target.value);
+          let v9 = this.state.Validations;
+          if (e.target.value.length > 20) {
+            v9.Hsncode = {
+              errorState: true,
+              errorMssg: "Maximum 20 characters",
+            };
+            this.setState({ Validations: v9 });
+          } else {
+            v9.Hsncode = { errorState: false, errorMssg: "" };
+            this.setState({ Validations: v9 });
+            setStateParam({}, param, e.target.value);
+          }
           break;
 
         case "BaseUom":
@@ -990,7 +1098,6 @@ class editItem extends React.Component {
                 <Accordion
                   key="Item-General-Details"
                   expanded={this.state.GeneralDetailsExpanded}
-                  
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
@@ -1065,6 +1172,8 @@ class editItem extends React.Component {
                               size="small"
                               onChange={(e) => updateFormValue("Code", e)}
                               value={this.state.Code}
+                              error={this.state.Validations.Code.errorState}
+                              helperText={this.state.Validations.Code.errorMssg}
                             />
                             <TextboxInput
                               id="Alias"
@@ -1073,6 +1182,10 @@ class editItem extends React.Component {
                               size="small"
                               onChange={(e) => updateFormValue("Alias", e)}
                               value={this.state.Alias}
+                              error={this.state.Validations.Alias.errorState}
+                              helperText={
+                                this.state.Validations.Alias.errorMssg
+                              }
                             />
                             <TextboxInput
                               id="Description1"
@@ -1083,6 +1196,12 @@ class editItem extends React.Component {
                                 updateFormValue("Description1", e)
                               }
                               value={this.state.Description1}
+                              error={
+                                this.state.Validations.Description1.errorState
+                              }
+                              helperText={
+                                this.state.Validations.Description1.errorMssg
+                              }
                             />
                             <TextboxInput
                               id="Description2"
@@ -1093,6 +1212,12 @@ class editItem extends React.Component {
                                 updateFormValue("Description2", e)
                               }
                               value={this.state.Description2}
+                              error={
+                                this.state.Validations.Description2.errorState
+                              }
+                              helperText={
+                                this.state.Validations.Description2.errorMssg
+                              }
                             />
 
                             <TextboxInput
@@ -1104,6 +1229,12 @@ class editItem extends React.Component {
                                 updateFormValue("PackingDesc1", e)
                               }
                               value={this.state.PackingDesc1}
+                              error={
+                                this.state.Validations.PackingDesc1.errorState
+                              }
+                              helperText={
+                                this.state.Validations.PackingDesc1.errorMssg
+                              }
                             />
                             <TextboxInput
                               id="PackingDesc2"
@@ -1114,6 +1245,12 @@ class editItem extends React.Component {
                                 updateFormValue("PackingDesc2", e)
                               }
                               value={this.state.PackingDesc2}
+                              error={
+                                this.state.Validations.PackingDesc2.errorState
+                              }
+                              helperText={
+                                this.state.Validations.PackingDesc2.errorMssg
+                              }
                             />
                           </TableBody>
                         </Table>
@@ -1189,6 +1326,12 @@ class editItem extends React.Component {
                               }
                               value={this.state.CertificateNo}
                               disabled={!this.state.IsCertified}
+                              error={
+                                this.state.Validations.CertificateNo.errorState
+                              }
+                              helperText={
+                                this.state.Validations.CertificateNo.errorMssg
+                              }
                             />
 
                             <SwitchInput
@@ -1209,6 +1352,10 @@ class editItem extends React.Component {
                               onChange={(e) => updateFormValue("Reason", e)}
                               value={this.state.Reason}
                               disabled={!this.state.IsDiscontine}
+                              error={this.state.Validations.Reason.errorState}
+                              helperText={
+                                this.state.Validations.Reason.errorMssg
+                              }
                             />
                           </TableBody>
                         </Table>
@@ -1219,7 +1366,6 @@ class editItem extends React.Component {
                 <Accordion
                   key="Item-Planing-Details"
                   expanded={this.state.PlanningDetailsExpanded}
-                 
                 >
                   <AccordionSummary
                     className="accordion-Header-Design"
@@ -1541,6 +1687,12 @@ class editItem extends React.Component {
                               size="small"
                               onChange={(e) => updateFormValue("Hsncode", e)}
                               value={this.state.Hsncode}
+                              error={
+                                this.state.Validations.Hsncode.errorState
+                              }
+                              helperText={
+                                this.state.Validations.Hsncode.errorMssg
+                              }
                             />
                             <TextboxInput
                               type="number"

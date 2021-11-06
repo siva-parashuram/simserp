@@ -150,18 +150,23 @@ if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) 
               errorState: true,
               errorMsg: "Blank inputs not allowed!",
             };
+            this.setState({
+              CreateBtnDisable: true,
+              Validations: Validations,
+              Name: e.target.value,
+            });
           }
           if (e.target.value.length > 20) {
             Validations.Name = {
               errorState: true,
               errorMsg: "Maximum 20 characters Allowed!",
             };
+            this.setState({
+              CreateBtnDisable: true,
+              Validations: Validations,
+            });
           }
-          this.setState({
-            CreateBtnDisable: true,
-            Validations: Validations,
-            Name: e.target.value,
-          });
+          
         } else {
           let Module = this.state.Module;
           Module.Name = e.target.value;

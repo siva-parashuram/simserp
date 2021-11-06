@@ -293,7 +293,6 @@ class edituser extends React.Component {
             };
             this.setState({
               Validations: v,
-              EmailID: e.target.value,
               DisableUpdatebtn: true,
             });
           }

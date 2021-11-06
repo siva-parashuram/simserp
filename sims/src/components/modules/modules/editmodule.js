@@ -207,7 +207,6 @@ class editmodule extends React.Component {
               errorMsg: "Blank inputs not allowed!",
             };
             this.setState({
-              Module: Module,
               Name: e.target.value,
 
               updateBtnDisable: true,
@@ -221,9 +220,6 @@ class editmodule extends React.Component {
             };
           }
           this.setState({
-            Module: Module,
-            Name: e.target.value,
-
             updateBtnDisable: true,
             Validations: Validations,
           });
@@ -252,7 +248,6 @@ class editmodule extends React.Component {
               errorMsg: "Blank inputs not allowed!",
             };
             this.setState({
-              Module: Module,
               Description: e.target.value,
 
               updateBtnDisable: true,
@@ -266,8 +261,6 @@ class editmodule extends React.Component {
             };
           }
           this.setState({
-            Module: Module,
-
             updateBtnDisable: true,
             Validations: Validations,
           });
@@ -293,8 +286,9 @@ class editmodule extends React.Component {
             Validations.IconName = {
               errorState: true,
               errorMsg: "Blank inputs not allowed!",
-            };this.setState({
-              Module: Module,
+            };
+            this.setState({
+              
               IconName: e.target.value,
               updateBtnDisable: true,
               Validations: Validations,
@@ -306,18 +300,17 @@ class editmodule extends React.Component {
               errorMsg: "Maximum 50 characters Allowed!",
             };
             this.setState({
-              Module: Module,
-  
+             
+
               updateBtnDisable: true,
               Validations: Validations,
             });
           }
-          
         } else {
           let Module = this.state.Module;
           Module.IconName = e.target.value;
           let Validations = this.state.Validations;
-          Validations.IconName={errorState:false,errorMsg:""}
+          Validations.IconName = { errorState: false, errorMsg: "" };
           this.setState({
             Module: Module,
             IconName: e.target.value,

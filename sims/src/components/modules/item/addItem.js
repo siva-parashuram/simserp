@@ -51,8 +51,9 @@ class addItem extends React.Component {
       CertificateNo: "",
       IsDiscontine: false,
       Reason: "",
-      itemDepartmentMasterData: [],
+      itemDepartmentMasterData:[],
       ItemCategoryData:[],
+      
     };
   }
 
