@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 
-
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -42,7 +41,7 @@ class editItemMainCategory extends React.Component {
       DisableUpdatebtn: true,
       SuperCategoryDataList: [],
       IsActive: false,
-      mainCatId:0,
+      mainCatId: 0,
       Code: "",
       Description: "",
       HSNCode: "",
@@ -50,6 +49,11 @@ class editItemMainCategory extends React.Component {
       IsTrading: false,
       IsNonStockV: false,
       IsPriceRange: false,
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Description: { errorState: false, errorMssg: "" },
+        HSNCode: { errorState: false, errorMssg: "" },
+      },
     };
   }
 
@@ -67,12 +71,15 @@ class editItemMainCategory extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    this.setState({
-      urlparams: urlparams,
-      mainCatId:mainCatId
-    },()=>{
-      this.getMainCategory();
-    });
+    this.setState(
+      {
+        urlparams: urlparams,
+        mainCatId: mainCatId,
+      },
+      () => {
+        this.getMainCategory();
+      }
+    );
   }
   getSuperCategoryDataList() {
     let ValidUser = APIURLS.ValidUser;
@@ -101,7 +108,7 @@ class editItemMainCategory extends React.Component {
     for (let i = 0; i < data.length; i++) {
       let d = {
         name: data[i].code + " - " + data[i].hsncode,
-        value: data[i].superCatId
+        value: data[i].superCatId,
       };
       newData.push(d);
     }
@@ -112,11 +119,11 @@ class editItemMainCategory extends React.Component {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
-    let Data={
-      validUser:ValidUser,
+    let Data = {
+      validUser: ValidUser,
       ItemMainCategory: {
-        mainCatId:this.state.mainCatId,
-      }
+        mainCatId: this.state.mainCatId,
+      },
     };
 
     let Url = APIURLS.APIURL.GetItemMainCategory;
@@ -131,7 +138,7 @@ class editItemMainCategory extends React.Component {
 
         this.setState({
           ItemMainCategory: data,
-          mainCatId:data.mainCatId,
+          mainCatId: data.mainCatId,
           Code: data.code,
           Description: data.description,
           HSNCode: data.hsncode,
@@ -139,12 +146,12 @@ class editItemMainCategory extends React.Component {
           IsTrading: data.isTrading,
           IsNonStockV: data.isNonStockValuation,
           IsPriceRange: data.isPriceRange,
-          IsActive:  data.isActive,
+          IsActive: data.isActive,
           DisableUpdatebtn: false,
-          ProgressLoader: true
+          ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   render() {
@@ -158,21 +165,70 @@ class editItemMainCategory extends React.Component {
     const updateFormValue = (param, e) => {
       switch (param) {
         case "Code":
-          if (e.target.value === "") {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+          let v1 = this.state.Validations;
+          if (e.target.value === "" || e.target.value.length > 20) {
+            if (e.target.value === "") {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Blank inputs not allowed",
+              };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value,
+                DisableUpdatebtn: true,
+              });
+            }
+            if (e.target.value.length > 20) {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Maximum 20 characters allowed",
+              };
+              this.setState({ Validations: v1, DisableUpdatebtn: true });
+            }
           } else {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+            v1.Code = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v1,
+              Code: e.target.value,
+              DisableUpdatebtn: false,
+            });
           }
           break;
-          case "SuperCatID":
-            this.setState({ SuperCatID: e.target.value });
-            break;
+        case "SuperCatID":
+          this.setState({ SuperCatID: e.target.value });
+          break;
         case "Description":
-          this.setState({ Description: e.target.value });
+          let v2 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v2.Description = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters allowed",
+            };
+            this.setState({ Validations: v2 });
+          } else {
+            v2.Description = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v2,
+              Description: e.target.value,
+            });
+          }
           break;
         case "HSNCode":
-          this.setState({ HSNCode: e.target.value });
-          break;        
+          let v3 = this.state.Validations;
+          if (e.target.value.length > 10) {
+            v3.HSNCode = {
+              errorState: true,
+              errorMssg: "Maximum 10 characters allowed",
+            };
+            this.setState({ Validations: v3 });
+          } else {
+            v3.HSNCode = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v3,
+              HSNCode: e.target.value,
+            });
+          }
+          break;
         case "IsActive":
           this.setState({ IsActive: e.target.checked });
           break;
@@ -202,8 +258,8 @@ class editItemMainCategory extends React.Component {
       let ReqData = {
         validUser: ValidUser,
         ItemMainCategory: {
-          IsActive:  this.state.IsActive,
-          mainCatId:this.state.mainCatId,
+          IsActive: this.state.IsActive,
+          mainCatId: this.state.mainCatId,
           Code: this.state.Code,
           Description: this.state.Description,
           HSNCode: this.state.HSNCode,
@@ -211,13 +267,18 @@ class editItemMainCategory extends React.Component {
           IsTrading: this.state.IsTrading,
           IsNonStockValuation: this.state.IsNonStockV,
           IsPriceRange: this.state.IsPriceRange,
-        }
+        },
       };
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
           let data = response.data;
-          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+          if (
+            response.status === 200 ||
+            response.status === 201 ||
+            response.status === true ||
+            response.status === "true"
+          ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -226,7 +287,7 @@ class editItemMainCategory extends React.Component {
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-    }
+    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -272,8 +333,9 @@ class editItemMainCategory extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  masterHref={URLS.URLS.itemMainCategoryMaster + this.state.urlparams}
-
+                  masterHref={
+                    URLS.URLS.itemMainCategoryMaster + this.state.urlparams
+                  }
                   masterLinkTitle="Item Main-Category Master"
                   typoTitle="Edit..."
                   level={2}
@@ -334,8 +396,6 @@ class editItemMainCategory extends React.Component {
                       aria-label=" Item-category List table"
                     >
                       <TableBody className="tableBody">
-                        
-
                         <DropdownInput
                           id="SuperCatID"
                           label="SuperCatID"
@@ -354,6 +414,8 @@ class editItemMainCategory extends React.Component {
                             maxlength: 20,
                           }}
                           value={this.state.Code}
+                          error={this.state.Validations.Code.errorState}
+                          helperText={this.state.Validations.Code.errorMssg}
                         />
                         <TextboxInput
                           id="Description"
@@ -366,6 +428,8 @@ class editItemMainCategory extends React.Component {
                             maxlength: 50,
                           }}
                           value={this.state.Description}
+                          error={this.state.Validations.Description.errorState}
+                          helperText={this.state.Validations.Description.errorMssg}
                         />
 
                         <TextboxInput
@@ -379,6 +443,8 @@ class editItemMainCategory extends React.Component {
                             maxlength: 10,
                           }}
                           value={this.state.HSNCode}
+                          error={this.state.Validations.HSNCode.errorState}
+                          helperText={this.state.Validations.HSNCode.errorMssg}
                         />
                         <SwitchInput
                           key="IsActive"
@@ -408,7 +474,6 @@ class editItemMainCategory extends React.Component {
                           param={this.state.IsPriceRange}
                           onChange={(e) => updateFormValue("IsPriceRange", e)}
                         />
-                        
                       </TableBody>
                     </Table>
                   </TableContainer>

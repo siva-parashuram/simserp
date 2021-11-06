@@ -38,7 +38,7 @@ class addItemCategory extends React.Component {
       GeneralDetailsExpanded: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      DisableCreatebtn: false,
+      DisableCreatebtn: true,
       IsActive: false,
       Code: "",
       Description: "",
@@ -51,6 +51,11 @@ class addItemCategory extends React.Component {
       MainCatID: 0,
       IsCustomized: false,
       IsCustomized: false,
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Description: { errorState: false, errorMssg: "" },
+        HSNCode: { errorState: false, errorMssg: "" },
+      },
     };
   }
 
@@ -120,20 +125,71 @@ class addItemCategory extends React.Component {
     const updateFormValue = (param, e) => {
       switch (param) {
         case "Code":
-          if (e.target.value === "") {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+          let v1 = this.state.Validations;
+          if (e.target.value === "" || e.target.value.length > 20) {
+            if (e.target.value === "") {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Blank inputs not allowed",
+              };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value,
+                DisableCreatebtn: true,
+              });
+            }
+            if (e.target.value.length > 20) {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Maximum 20 characters allowed",
+              };
+              this.setState({ Validations: v1, DisableCreatebtn: true });
+            }
           } else {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+            v1.Code = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v1,
+              Code: e.target.value,
+              DisableCreatebtn: false,
+            });
           }
           break;
         case "MainCatID":
           this.setState({ MainCatID: e.target.value });
           break;
         case "Description":
-          this.setState({ Description: e.target.value });
+          let v2 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v2.Description = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters allowed",
+            };
+            this.setState({ Validations: v2 });
+          } else {
+            v2.Description = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v2,
+              Description: e.target.value,
+            });
+          }
+
           break;
         case "HSNCode":
-          this.setState({ HSNCode: e.target.value });
+          let v3 = this.state.Validations;
+          if (e.target.value.length > 10) {
+            v3.HSNCode = {
+              errorState: true,
+              errorMssg: "Maximum 10 characters allowed",
+            };
+            this.setState({ Validations: v3 });
+          } else {
+            v3.HSNCode = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v3,
+              HSNCode: e.target.value,
+            });
+          }
+
           break;
         case "IsActive":
           this.setState({ IsActive: e.target.checked });
@@ -327,6 +383,8 @@ class addItemCategory extends React.Component {
                             maxlength: 20,
                           }}
                           value={this.state.Code}
+                          error={this.state.Validations.Code.errorState}
+                          helperText={this.state.Validations.Code.errorMssg}
                         />
                         <TextboxInput
                           id="Description"
@@ -339,6 +397,10 @@ class addItemCategory extends React.Component {
                             maxlength: 50,
                           }}
                           value={this.state.Description}
+                          error={this.state.Validations.Description.errorState}
+                          helperText={
+                            this.state.Validations.Description.errorMssg
+                          }
                         />
                         <TextboxInput
                           id="HSNCode"
@@ -351,6 +413,8 @@ class addItemCategory extends React.Component {
                             maxlength: 10,
                           }}
                           value={this.state.HSNCode}
+                          error={this.state.Validations.HSNCode.errorState}
+                          helperText={this.state.Validations.HSNCode.errorMssg}
                         />
                         <SwitchInput
                           key="IsActive"

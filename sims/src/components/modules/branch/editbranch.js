@@ -546,18 +546,23 @@ class editbranch extends React.Component {
               errorState: true,
               errorMsg: "Only 10 Characters are Allowed!",
             };
+            this.setState({
+              Validations: v,
+              disabledUpdatebtn: true,
+            });
           }
           if (e.target.value === "" || e.target.value === null) {
             v.shortName = {
               errorState: true,
               errorMsg: "Shortname cannot be blank",
             };
+            this.setState({
+              Validations: v,
+              disabledUpdatebtn: true,
+              shortName: e.target.value,
+            });
           }
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: true,
-            shortName: e.target.value,
-          });
+          
         } else {
           let v = this.state.Validations;
           v.shortName = { errorState: false, errorMsg: "" };

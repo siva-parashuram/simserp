@@ -203,7 +203,6 @@ class addstate extends React.Component {
             };
             this.setState({
               Validations: v,
-              name: e.target.value,
               disableCreateBtn: true,
             });
           }
@@ -239,7 +238,6 @@ class addstate extends React.Component {
           v.code = { errorState: true, errorMsg: "Only 5 numbers are allowed" };
           this.setState({
             Validations: v,
-            code: e.target.value,
             disableCreateBtn: true,
           });
         } else {
@@ -267,7 +265,6 @@ class addstate extends React.Component {
           };
           this.setState({
             Validations: v,
-            gstcode: e.target.value,
             disableCreateBtn: true,
           });
         } else {

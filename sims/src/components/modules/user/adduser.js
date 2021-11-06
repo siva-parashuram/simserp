@@ -164,18 +164,23 @@ class adduser extends React.Component {
               errorState: true,
               errorMssg: "only 20 characters are allowed",
             };
+            this.setState({
+              Validations: v,
+              DisabledCreatebtn: true,
+            });
           }
           if (e.target.value === "" || e.target.value === null) {
             v.FirstName = {
               errorState: true,
               errorMssg: "FirstName cannot be blank!",
             };
+            this.setState({
+              Validations: v,
+              DisabledCreatebtn: true,
+              FirstName: e.target.value,
+            });
           }
-          this.setState({
-            Validations: v,
-            DisabledCreatebtn: true,
-            FirstName: e.target.value,
-          });
+          
         } else {
           let v = this.state.Validations;
           v.FirstName = { errorState: false, errorMssg: "" };
@@ -198,7 +203,6 @@ class adduser extends React.Component {
           };
           this.setState({
             Validations: v,
-            LastName: e.target.value,
             DisabledCreatebtn: true,
           });
         } else {
@@ -243,7 +247,6 @@ class adduser extends React.Component {
             };
             this.setState({
               Validations: v,
-              EmailID: e.target.value,
               DisabledCreatebtn: true,
             });
           }
@@ -309,7 +312,7 @@ class adduser extends React.Component {
         }
       }
 
-      this.state.duplicateExist === true
+      this.state.duplicate === true
         ? this.setState({ DisabledCreatebtn: true })
         : this.setState({ DisabledCreatebtn: false });
     };

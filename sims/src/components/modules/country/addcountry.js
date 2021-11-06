@@ -178,7 +178,7 @@ class addcountry extends React.Component {
           e.target.value.length > 50||duplicateExist===true
         ) {
           let v = this.state.Validations;
-          if(duplicateExist===true){
+          if(duplicateExist===true){  
             v.Name = {
               errorState: true,
               errorMssg: "Country Master Exists",

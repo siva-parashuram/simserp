@@ -266,7 +266,7 @@ class editdestination extends React.Component {
             this.setState({
               Validations: v,
               DisabledUpdatebtn: true,
-              destinationName: e.target.value,
+              
             });
           }
           if (e.target.value === "" || e.target.value === null) {
@@ -527,8 +527,18 @@ class editdestination extends React.Component {
                                   options={this.state.countryData}
                                   value={this.state.countryId}
                                 />
-                                
-                                <TableRow>
+
+                                <DropdownInput
+                                  id="stateID"
+                                  label="State"
+                                  onChange={(e) =>
+                                    updateFormValue("stateID", e)
+                                  }
+                                  options={this.state.stateData}
+                                  value={this.state.stateId}
+                                />
+
+                                {/* <TableRow>
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -559,7 +569,7 @@ class editdestination extends React.Component {
                                       ))}
                                     </Select>
                                   </TableCell>
-                                </TableRow>
+                                </TableRow> */}
                               </TableBody>
                             </Table>
                           </Grid>

@@ -38,7 +38,7 @@ class addItemSuperCategory extends React.Component {
       GeneralDetailsExpanded: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      DisableCreatebtn: false,
+      DisableCreatebtn: true,
       ItemTypeMaster: APIURLS.ItemType,
       IsActive: false,
       ItemType: 0,
@@ -46,6 +46,11 @@ class addItemSuperCategory extends React.Component {
       Description: "",
       HSNCode: "",
       SuperCatID: 0,
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Description: { errorState: false, errorMssg: "" },
+        HSNCode: { errorState: false, errorMssg: "" },
+      },
     };
   }
 
@@ -78,20 +83,69 @@ class addItemSuperCategory extends React.Component {
     const updateFormValue = (param, e) => {
       switch (param) {
         case "Code":
-          if (e.target.value === "") {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+          let v1 = this.state.Validations;
+          if (e.target.value === "" || e.target.value.length > 10) {
+            if (e.target.value === "") {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Blank inputs not allowed",
+              };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value,
+                DisableCreatebtn: true,
+              });
+            }
+            if (e.target.value.length > 10) {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Maximum 10 characters allowed",
+              };
+              this.setState({ Validations: v1, DisableCreatebtn: true });
+            }
           } else {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+            v1.Code = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v1,
+              Code: e.target.value,
+              DisableCreatebtn: false,
+            });
           }
           break;
         case "Name":
           this.setState({ Name: e.target.value });
           break;
         case "Description":
-          this.setState({ Description: e.target.value });
+          let v2 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v2.Description = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters allowed",
+            };
+            this.setState({ Validations: v2 });
+          } else {
+            v2.Description = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v2,
+              Description: e.target.value,
+            });
+          }
           break;
         case "HSNCode":
-          this.setState({ HSNCode: e.target.value });
+          let v3 = this.state.Validations;
+          if (e.target.value.length > 10) {
+            v3.HSNCode = {
+              errorState: true,
+              errorMssg: "Maximum 10 characters allowed",
+            };
+            this.setState({ Validations: v3 });
+          } else {
+            v3.HSNCode = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v3,
+              HSNCode: e.target.value,
+            });
+          }
           break;
         case "IsActive":
           this.setState({ IsActive: e.target.checked });
@@ -266,6 +320,8 @@ class addItemSuperCategory extends React.Component {
                           size="small"
                           onChange={(e) => updateFormValue("Code", e)}
                           value={this.state.Code}
+                          error={this.state.Validations.Code.errorState}
+                          helperText={this.state.Validations.Code.errorMssg}
                         />
                         <TextboxInput
                           id="Description"
@@ -274,6 +330,10 @@ class addItemSuperCategory extends React.Component {
                           size="small"
                           onChange={(e) => updateFormValue("Description", e)}
                           value={this.state.Description}
+                          error={this.state.Validations.Description.errorState}
+                          helperText={
+                            this.state.Validations.Description.errorMssg
+                          }
                         />
                         <TextboxInput
                           id="HSNCode"
@@ -282,6 +342,8 @@ class addItemSuperCategory extends React.Component {
                           size="small"
                           onChange={(e) => updateFormValue("HSNCode", e)}
                           value={this.state.HSNCode}
+                          error={this.state.Validations.HSNCode.errorState}
+                          helperText={this.state.Validations.HSNCode.errorMssg}
                         />
                         <SwitchInput
                           key="IsActive"

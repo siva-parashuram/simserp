@@ -9,7 +9,7 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
-import ButtonGroup from "@mui/material/ButtonGroup";
+
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
@@ -70,6 +70,16 @@ class postingGroupMaster extends React.Component {
         Code: "",
         Description: "",
       },
+      Validations: {
+        ItemPostingGroup: {
+          Code: { errorState: false, errorMssg: "" },
+          Description: { errorState: false, errorMssg: "" },
+        },
+        GeneralPostingGroup: {
+          Code: { errorState: false, errorMssg: "" },
+          Description: { errorState: false, errorMssg: "" },
+        },
+      },
     };
   }
 
@@ -107,7 +117,7 @@ class postingGroupMaster extends React.Component {
         console.log("data > ", data);
         this.setState({ ItemPostingGroupList: data });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   getAllGeneralPostingGroup = () => {
@@ -125,12 +135,10 @@ class postingGroupMaster extends React.Component {
         console.log("data > ", data);
         this.setState({ GeneralPostingGroupList: data });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   render() {
-
-
     const updateFormValue = (parent, key, e) => {
       let stateParent = {};
       switch (parent) {
@@ -138,13 +146,41 @@ class postingGroupMaster extends React.Component {
           switch (key) {
             case "Code":
               stateParent = this.state.ItemPostingGroup;
-              stateParent[key] = e.target.value;
-              setStateParam({}, parent, stateParent);
+
+              let v1 = this.state.Validations;
+              if (e.target.value.length > 20) {
+                v1.ItemPostingGroup.Code = {
+                  errorState: true,
+                  errorMssg: "Maximum 20 characters allowed",
+                };
+                this.setState({ Validations: v1 });
+              } else {
+                v1.ItemPostingGroup.Code = { errorState: false, errorMssg: "" };
+                this.setState({ Validations: v1 });
+                stateParent[key] = e.target.value;
+                setStateParam({}, parent, stateParent);
+              }
+
               break;
             case "Description":
               stateParent = this.state.ItemPostingGroup;
-              stateParent[key] = e.target.value;
-              setStateParam({}, parent, stateParent);
+              let v2 = this.state.Validations;
+              if (e.target.value.length > 50) {
+                v2.ItemPostingGroup.Description = {
+                  errorState: true,
+                  errorMssg: "Maximum 50 characters allowed",
+                };
+                this.setState({ Validations: v2 });
+              } else {
+                v2.ItemPostingGroup.Description = {
+                  errorState: false,
+                  errorMssg: "",
+                };
+                this.setState({ Validations: v2 });
+                stateParent[key] = e.target.value;
+                setStateParam({}, parent, stateParent);
+              }
+
               break;
             default:
               break;
@@ -154,13 +190,45 @@ class postingGroupMaster extends React.Component {
           switch (key) {
             case "Code":
               stateParent = this.state.GeneralPostingGroup;
-              stateParent[key] = e.target.value;
-              setStateParam({}, parent, stateParent);
+              let v1 = this.state.Validations;
+              if (e.target.value.length > 20) {
+                v1.GeneralPostingGroup.Code = {
+                  errorState: true,
+                  errorMssg: "Maximum 20 characters allowed",
+                };
+                this.setState({ Validations: v1 });
+              } else {
+                v1.GeneralPostingGroup.Code = {
+                  errorState: false,
+                  errorMssg: "",
+                };
+                this.setState({ Validations: v1 });
+                stateParent[key] = e.target.value;
+                setStateParam({}, parent, stateParent);
+              }
+
               break;
             case "Description":
               stateParent = this.state.GeneralPostingGroup;
-              stateParent[key] = e.target.value;
-              setStateParam({}, parent, stateParent);
+              let v2 = this.state.Validations;
+              if (e.target.value.length > 50) {
+                v2.GeneralPostingGroup.Description = {
+                  errorState: true,
+                  errorMssg: "Maximum 50 characters allowed",
+                };
+                this.setState({ Validations: v2 });
+              } else {
+                v2.GeneralPostingGroup.Description = {
+                  errorState: false,
+                  
+                  errorMssg: "",
+                };
+                this.setState({ Validations: v2 });
+                stateParent[key] = e.target.value;
+                setStateParam({}, parent, stateParent);
+              }
+              
+              
               break;
             default:
               break;
@@ -196,7 +264,6 @@ class postingGroupMaster extends React.Component {
     };
 
     const createItemPostingGroup = (e) => {
-
       let ItemPostingGroup = this.state.ItemPostingGroup;
       let Code = ItemPostingGroup.Code.trim();
       let Description = ItemPostingGroup.Description.trim();
@@ -245,9 +312,7 @@ class postingGroupMaster extends React.Component {
       }
     };
 
-
     const createGeneralPostingGroup = (e) => {
-
       let GeneralPostingGroup = this.state.GeneralPostingGroup;
       let Code = GeneralPostingGroup.Code.trim();
       let Description = GeneralPostingGroup.Description.trim();
@@ -295,8 +360,6 @@ class postingGroupMaster extends React.Component {
           });
       }
     };
-
-
 
     const updateItemPostingGroup = (e) => {
       if (this.state.selectedItemPostingGroupList.length > 0) {
@@ -370,9 +433,7 @@ class postingGroupMaster extends React.Component {
       }
     };
 
-    const updateGeneralPostingGroupSetup=(e)=>{
-
-    }
+    const updateGeneralPostingGroupSetup = (e) => {};
 
     const removeOldIfExist = (parent, item, stateArray) => {
       let newArray = [];
@@ -386,7 +447,9 @@ class postingGroupMaster extends React.Component {
       }
       if (parent === "GeneralPostingGroupList") {
         for (let i = 0; i < stateArray.length; i++) {
-          if (stateArray[i].GeneralPostingGroupID === item.GeneralPostingGroupID) {
+          if (
+            stateArray[i].GeneralPostingGroupID === item.GeneralPostingGroupID
+          ) {
           } else {
             newArray.push(stateArray[i]);
           }
@@ -400,7 +463,7 @@ class postingGroupMaster extends React.Component {
         case "ItemPostingGroupList":
           let selectedItemPostingGroupList =
             this.state.selectedItemPostingGroupList;
-          if (selectedItemPostingGroupList.length > 0) {
+          if (selectedItemPostingGroupList.length>0) {
             selectedItemPostingGroupList = removeOldIfExist(
               "ItemPostingGroupList",
               item,
@@ -438,7 +501,6 @@ class postingGroupMaster extends React.Component {
         default:
           break;
       }
-  
     };
 
     const handleIPGPageChange = (event, newPage) => {
@@ -458,9 +520,6 @@ class postingGroupMaster extends React.Component {
       let rowsPerPage = parseInt(this.state.IPGpagination.rowsPerPage);
       return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     };
-
-
-
 
     const tableItemPostingGroup = (
       <Fragment>
@@ -497,46 +556,46 @@ class postingGroupMaster extends React.Component {
               <TableBody className="tableBody">
                 {this.state.ItemPostingGroupList.length > 0
                   ? getIPGPageData(this.state.ItemPostingGroupList).map(
-                    (item, i) => (
-                      <TableRow>
-                        <TableCell>{i + 1}</TableCell>
-                        <TableCell align="left">
-                          <Inputcustom
-                            id={
-                              "itemPostingGroup_code_" +
-                              item.ItemPostingGroupID
-                            }
-                            defaultValue={item.Code}
-                            onKeyUp={(e) =>
-                              updateList(
-                                "ItemPostingGroupList",
-                                "Code",
-                                item,
-                                e
-                              )
-                            }
-                          />
-                        </TableCell>
-                        <TableCell align="left">
-                          <Inputcustom
-                            id={
-                              "itemPostingGroup_description_" +
-                              item.ItemPostingGroupID
-                            }
-                            defaultValue={item.Description}
-                            onKeyUp={(e) =>
-                              updateList(
-                                "ItemPostingGroupList",
-                                "Description",
-                                item,
-                                e
-                              )
-                            }
-                          />
-                        </TableCell>
-                      </TableRow>
+                      (item, i) => (
+                        <TableRow>
+                          <TableCell>{i + 1}</TableCell>
+                          <TableCell align="left">
+                            <Inputcustom
+                              id={
+                                "itemPostingGroup_code_" +
+                                item.ItemPostingGroupID
+                              }
+                              defaultValue={item.Code}
+                              onKeyUp={(e) =>
+                                updateList(
+                                  "ItemPostingGroupList",
+                                  "Code",
+                                  item,
+                                  e
+                                )
+                              }
+                            />
+                          </TableCell>
+                          <TableCell align="left">
+                            <Inputcustom
+                              id={
+                                "itemPostingGroup_description_" +
+                                item.ItemPostingGroupID
+                              }
+                              defaultValue={item.Description}
+                              onKeyUp={(e) =>
+                                updateList(
+                                  "ItemPostingGroupList",
+                                  "Description",
+                                  item,
+                                  e
+                                )
+                              }
+                            />
+                          </TableCell>
+                        </TableRow>
+                      )
                     )
-                  )
                   : null}
               </TableBody>
             </Table>
@@ -566,80 +625,79 @@ class postingGroupMaster extends React.Component {
         </Grid>
         <Grid container spacing={0} style={{ marginTop: 20 }}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Table
-          stickyHeader
-          size="small"
-          className=""
-          aria-label="PostingGroup List table"
-        >
-          <TableHead className="table-header-background">
-            <TableRow>
-              <TableCell className="table-header-font">#</TableCell>
-              <TableCell className="table-header-font" align="left">
-                Code
-              </TableCell>
-              <TableCell className="table-header-font" align="left">
-                Description
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody className="tableBody">
-            {this.state.GeneralPostingGroupList.length > 0
-              ? getIPGPageData(this.state.GeneralPostingGroupList).map(
-                (item, i) => (
-                  <TableRow>
-                    <TableCell>{i + 1}</TableCell>
-                    <TableCell align="left">
-                      <Inputcustom
-                        id={
-                          "GeneralPostingGroup_code_" +
-                          item.GeneralPostingGroupID
-                        }
-                        defaultValue={item.Code}
-                        onKeyUp={(e) =>
-                          updateList(
-                            "GeneralPostingGroupList",
-                            "Code",
-                            item,
-                            e
-                          )
-                        }
-                      />
-                    </TableCell>
-                    <TableCell align="left">
-                      <Inputcustom
-                        id={
-                          "GeneralPostingGroup_description_" +
-                          item.GeneralPostingGroupID
-                        }
-                        defaultValue={item.Description}
-                        onKeyUp={(e) =>
-                          updateList(
-                            "GeneralPostingGroupList",
-                            "Description",
-                            item,
-                            e
-                          )
-                        }
-                      />
-                    </TableCell>
-                  </TableRow>
-                )
-              )
-              : null}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[this.state.GPGpagination.rowsPerPage]}
-          component="div"
-          count={this.state.GeneralPostingGroupList.length}
-          rowsPerPage={this.state.GPGpagination.rowsPerPage}
-          page={this.state.GPGpagination.page}
-          onPageChange={handleGPGPageChange}
-        />
+            <Table
+              stickyHeader
+              size="small"
+              className=""
+              aria-label="PostingGroup List table"
+            >
+              <TableHead className="table-header-background">
+                <TableRow>
+                  <TableCell className="table-header-font">#</TableCell>
+                  <TableCell className="table-header-font" align="left">
+                    Code
+                  </TableCell>
+                  <TableCell className="table-header-font" align="left">
+                    Description
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody className="tableBody">
+                {this.state.GeneralPostingGroupList.length > 0
+                  ? getIPGPageData(this.state.GeneralPostingGroupList).map(
+                      (item, i) => (
+                        <TableRow>
+                          <TableCell>{i + 1}</TableCell>
+                          <TableCell align="left">
+                            <Inputcustom
+                              id={
+                                "GeneralPostingGroup_code_" +
+                                item.GeneralPostingGroupID
+                              }
+                              defaultValue={item.Code}
+                              onKeyUp={(e) =>
+                                updateList(
+                                  "GeneralPostingGroupList",
+                                  "Code",
+                                  item,
+                                  e
+                                )
+                              }
+                            />
+                          </TableCell>
+                          <TableCell align="left">
+                            <Inputcustom
+                              id={
+                                "GeneralPostingGroup_description_" +
+                                item.GeneralPostingGroupID
+                              }
+                              defaultValue={item.Description}
+                              onKeyUp={(e) =>
+                                updateList(
+                                  "GeneralPostingGroupList",
+                                  "Description",
+                                  item,
+                                  e
+                                )
+                              }
+                            />
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )
+                  : null}
+              </TableBody>
+            </Table>
+            <TablePagination
+              rowsPerPageOptions={[this.state.GPGpagination.rowsPerPage]}
+              component="div"
+              count={this.state.GeneralPostingGroupList.length}
+              rowsPerPage={this.state.GPGpagination.rowsPerPage}
+              page={this.state.GPGpagination.page}
+              onPageChange={handleGPGPageChange}
+            />
           </Grid>
         </Grid>
-        
       </Fragment>
     );
     const tableGeneralPostingGroupSetup = (
@@ -674,9 +732,7 @@ class postingGroupMaster extends React.Component {
             </Table>
           </Grid>
         </Grid>
-
       </Fragment>
-      
     );
     const tableSupplierPostingGroup = (
       <Table
@@ -780,6 +836,12 @@ class postingGroupMaster extends React.Component {
                   onChange={(e) =>
                     updateFormValue("ItemPostingGroup", "Code", e)
                   }
+                  error={
+                    this.state.Validations.ItemPostingGroup.Code.errorState
+                  }
+                  helperText={
+                    this.state.Validations.ItemPostingGroup.Code.errorMssg
+                  }
                 />
                 <TextboxInput
                   id="descriptionItemPostingGroup"
@@ -789,6 +851,14 @@ class postingGroupMaster extends React.Component {
                   value={this.state.ItemPostingGroup.Description}
                   onChange={(e) =>
                     updateFormValue("ItemPostingGroup", "Description", e)
+                  }
+                  error={
+                    this.state.Validations.ItemPostingGroup.Description
+                      .errorState
+                  }
+                  helperText={
+                    this.state.Validations.ItemPostingGroup.Description
+                      .errorMssg
                   }
                 />
               </TableBody>
@@ -801,7 +871,8 @@ class postingGroupMaster extends React.Component {
     const formGeneralPostingGroup = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }}
+          <Button
+            style={{ marginLeft: 5 }}
             onClick={(e) => createGeneralPostingGroup(e)}
           >
             Create
@@ -825,6 +896,14 @@ class postingGroupMaster extends React.Component {
                   onChange={(e) =>
                     updateFormValue("GeneralPostingGroup", "Code", e)
                   }
+                  error={
+                    this.state.Validations.GeneralPostingGroup.Code
+                      .errorState
+                  }
+                  helperText={
+                    this.state.Validations.GeneralPostingGroup.Code
+                      .errorMssg
+                  }
                 />
                 <TextboxInput
                   id="descriptionGeneralPostingGroup"
@@ -834,6 +913,14 @@ class postingGroupMaster extends React.Component {
                   value={this.state.GeneralPostingGroup.Description}
                   onChange={(e) =>
                     updateFormValue("GeneralPostingGroup", "Description", e)
+                  }
+                  error={
+                    this.state.Validations.GeneralPostingGroup.Description
+                      .errorState
+                  }
+                  helperText={
+                    this.state.Validations.GeneralPostingGroup.Description
+                      .errorMssg
                   }
                 />
               </TableBody>
@@ -845,7 +932,7 @@ class postingGroupMaster extends React.Component {
     const formGeneralPostingGroupSetup = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
             Create
           </Button>
         </Grid>
@@ -861,51 +948,51 @@ class postingGroupMaster extends React.Component {
                 <DropdownInput
                   id="GeneralPostingGroupID"
                   label="General Posting GroupID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="ItemPostingGroupID"
                   label="Item Posting GroupID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
 
                 <DropdownInput
                   id="SalesAccount"
                   label="Sales Account"
-                // onChange={(e) => updateFormValue("SalesAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("SalesAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="SalesCNAccount"
                   label="SalesCNAccount"
-                // onChange={(e) => updateFormValue("SalesCNAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("SalesCNAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="SalesDNAccount"
                   label="SalesDNAccount"
-                // onChange={(e) => updateFormValue("SalesDNAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("SalesDNAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="PurchaseAccount"
                   label="Purchase Account"
-                // onChange={(e) => updateFormValue("PurchaseAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PurchaseAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="PurchaseCNAccount"
                   label="PurchaseCNAccount"
-                // onChange={(e) => updateFormValue("PurchaseCNAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PurchaseCNAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="PurchaseDNAccount"
                   label="PurchaseDNAccount"
-                // onChange={(e) => updateFormValue("PurchaseDNAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PurchaseDNAccount", e)}
+                  // options={}
                 />
               </TableBody>
             </Table>
@@ -916,7 +1003,7 @@ class postingGroupMaster extends React.Component {
     const formSupplierPostingGroup = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
             Create
           </Button>
         </Grid>
@@ -944,20 +1031,20 @@ class postingGroupMaster extends React.Component {
                 <DropdownInput
                   id="PayableAccount"
                   label="Payable Account"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="ReceivableAccount"
                   label="Receivable Account"
-                // onChange={(e) => updateFormValue("ReceivableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="RoundingAmount"
                   label="Rounding Amount"
-                // onChange={(e) => updateFormValue("ReceivableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  // options={}
                 />
               </TableBody>
             </Table>
@@ -969,7 +1056,7 @@ class postingGroupMaster extends React.Component {
     const formSupplierBranchMapping = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
             Create
           </Button>
         </Grid>
@@ -985,26 +1072,26 @@ class postingGroupMaster extends React.Component {
                 <DropdownInput
                   id="SuplID"
                   label="SuplID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="BranchID"
                   label="BranchID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="GeneralPostingGroupID"
                   label="General Posting GroupID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="SupplierPostingGroupID"
                   label="Supplier Posting GroupID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
               </TableBody>
             </Table>
@@ -1015,7 +1102,7 @@ class postingGroupMaster extends React.Component {
     const formCustomerPostingGroup = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
             Create
           </Button>
         </Grid>
@@ -1044,20 +1131,20 @@ class postingGroupMaster extends React.Component {
                   id="PayableAccountCustomerPostingGroup"
                   id="PayableAccount"
                   label="Payable Account"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="ReceivableAccountCustomerPostingGroup"
                   label="Receivable Account"
-                // onChange={(e) => updateFormValue("ReceivableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="RoundingAmountCustomerPostingGroup"
                   label="Rounding Amount"
-                // onChange={(e) => updateFormValue("ReceivableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  // options={}
                 />
               </TableBody>
             </Table>
@@ -1068,7 +1155,7 @@ class postingGroupMaster extends React.Component {
     const formCustomerBranchMapping = (
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+          <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
             Create
           </Button>
         </Grid>
@@ -1084,26 +1171,26 @@ class postingGroupMaster extends React.Component {
                 <DropdownInput
                   id="CustID"
                   label="CustID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="BranchID"
                   label="BranchID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="GeneralPostingGroupID"
                   label="General Posting GroupID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
                 <DropdownInput
                   id="CustomerPostingGroupID"
                   label="Customer Posting GroupID"
-                // onChange={(e) => updateFormValue("PayableAccount", e)}
-                // options={}
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  // options={}
                 />
               </TableBody>
             </Table>

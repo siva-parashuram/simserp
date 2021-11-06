@@ -201,7 +201,6 @@ class adddestination extends React.Component {
             this.setState({
               Validations: v,
               DisabledCreatebtn: true,
-              destinationName: e.target.value,
             });
           }
           if (e.target.value === "" || e.target.value === null) {
@@ -235,7 +234,6 @@ class adddestination extends React.Component {
           };
           this.setState({
             Validations: v,
-            postcode: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -452,8 +450,17 @@ class adddestination extends React.Component {
                                 value={this.state.countryId}
                               />
 
-                              
-                              <TableRow>
+                              <DropdownInput
+                                id="stateID"
+                                label="State"
+                                onChange={(e) =>
+                                  updateFormValue("stateID", e)
+                                }
+                                options={this.state.stateData}
+                                value={this.state.stateId}
+                              />
+
+                              {/* <TableRow>
                                 <TableCell
                                   align="left"
                                   className="no-border-table"
@@ -477,14 +484,14 @@ class adddestination extends React.Component {
                                       updateFormValue("stateID", e)
                                     }
                                   >
-                                     {this.state.stateData.map((item, i) => (
-                                        <option value={parseInt(item.stateId)}>
-                                          {item.name}
-                                        </option>
-                                      ))}
+                                    {this.state.stateData.map((item, i) => (
+                                      <option value={parseInt(item.stateId)}>
+                                        {item.name}
+                                      </option>
+                                    ))}
                                   </Select>
                                 </TableCell>
-                              </TableRow>
+                              </TableRow> */}
                             </TableBody>
                           </Table>
                         </Grid>

@@ -36,10 +36,15 @@ class addItemDepartment extends React.Component {
       GeneralDetailsExpanded: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      DisableUpdatebtn: true,
+      DisableCreatebtn: true,
       Code: "",
       Name: "",
       IsActive: false,
+      Validations: {
+        Code: { errorState: false, errorMssg: "" },
+        Name: { errorState: false, errorMssg: "" },
+        
+      },
     };
   }
 
@@ -110,14 +115,51 @@ class addItemDepartment extends React.Component {
     const updateFormValue = (param, e) => {
       switch (param) {
         case "Code":
-          if (e.target.value === "") {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: true });
+          let v1 = this.state.Validations;
+          if (e.target.value === "" || e.target.value.length > 4) {
+            if (e.target.value === "") {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Blank inputs not allowed",
+              };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value,
+                DisableCreatebtn: true,
+              });
+            }
+            if (e.target.value.length >4) {
+              v1.Code = {
+                errorState: true,
+                errorMssg: "Maximum 4 characters allowed",
+              };
+              this.setState({ Validations: v1, DisableCreatebtn: true });
+            }
           } else {
-            this.setState({ Code: e.target.value, DisableUpdatebtn: false });
+            v1.Code = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v1,
+              Code: e.target.value,
+              DisableCreatebtn: false,
+            });
           }
           break;
         case "Name":
-          this.setState({ Name: e.target.value });
+          let v2 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v2.Name = {
+              errorState: true,
+              errorMssg: "Maximum 50 characters allowed",
+            };
+            this.setState({ Validations: v2 });
+          } else {
+            v2.Name = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v2,
+              Name: e.target.value 
+            });
+          }
+          
           break;
         case "IsActive":
           this.setState({ IsActive: e.target.checked });
@@ -191,7 +233,7 @@ class addItemDepartment extends React.Component {
                     className="action-btns"
                     startIcon={<AddIcon />}
                     onClick={createNew}
-                    disabled={this.state.DisableUpdatebtn}
+                    disabled={this.state.DisableCreatebtn}
                   >
                     ADD
                   </Button>
@@ -245,6 +287,8 @@ class addItemDepartment extends React.Component {
                             maxlength: 20,
                           }}
                           value={this.state.Code}
+                          error={this.state.Validations.Code.errorState}
+                          helperText={this.state.Validations.Code.errorMssg}
                         />
                         <TextboxInput
                           id="Name"
@@ -257,6 +301,8 @@ class addItemDepartment extends React.Component {
                             maxlength: 50,
                           }}
                           value={this.state.Name}
+                          error={this.state.Validations.Name.errorState}
+                          helperText={this.state.Validations.Name.errorMssg}
                         />
                         <SwitchInput
                           key="IsActive"
