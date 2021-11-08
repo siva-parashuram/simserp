@@ -41,23 +41,25 @@ import editNumbering from "../components/modules/numberings/editnumbering";
 import currencyMaster from "../components/modules/currency/currencymaster";
 import addCurrency from "../components/modules/currency/addcurrency";
 import itemMaster from "../components/modules/item/itemMaster";
-import addItem from "../components/modules/item/addItem";  
-import editItem from "../components/modules/item/editItem"; 
+import addItem from "../components/modules/item/addItem";
+import editItem from "../components/modules/item/editItem";
 import itemCategoryMaster from "../components/modules/item/category/itemCategoryMaster";
 import addItemCategory from "../components/modules/item/category/addItemCategory";
-import editItemCategory from "../components/modules/item/category/editItemCategory"; 
+import editItemCategory from "../components/modules/item/category/editItemCategory";
 import itemMainCategoryMaster from "../components/modules/item/category/itemMainCategoryMaster";
 import addItemMainCategory from "../components/modules/item/category/addItemMainCategory";
 import editItemMainCategory from "../components/modules/item/category/editItemMainCategory";
 import itemSuperCategoryMaster from "../components/modules/item/category/itemSuperCategoryMaster";
-import addItemSuperCategory from "../components/modules/item/category/addItemSuperCategory"; 
+import addItemSuperCategory from "../components/modules/item/category/addItemSuperCategory";
 import editItemSuperCategory from "../components/modules/item/category/editItemSuperCategory";
 import itemDepartmentMaster from "../components/modules/item/department/itemDepartmentMaster";
 import addItemDepartment from "../components/modules/item/department/addItemDepartment";
 import editItemDepartment from "../components/modules/item/department/editItemDepartment";
 import postingGroupMaster from "../components/modules/item/postinggroup/postingGroupMaster";
-import coaMaster from "../components/modules/coa/coaMaster"; 
+import coaMaster from "../components/modules/coa/coaMaster";
 import coaactivity from "../components/modules/coa/coaactivity";
+import customerMaster from "../components/modules/customer/customerMaster";
+import customeractivity from "../components/modules/customer/customeractivity";
 
 
 import pageNotFound from "../../src/pagenotfound";
@@ -65,20 +67,20 @@ import testformat from "../components/modules/accounts/reports/testformat";
 import Ftptest from "../components/ftp/ftptest";
 import Header from "../components/user/userheaderconstants";
 import ErrorBoundary from "./ErrorBoundary";
- 
+
 
 
 let routes = ({ location, ...rest }) => {
   return (
-    
+
     <Router>
-   
-  
-      
+
+
+
 
       {window.location.pathname === "/" ? null : <Header />}
-       
-      
+
+
 
       <Switch>
         <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
@@ -153,13 +155,20 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.addItemDepartment} component={addItemDepartment} />
         <Route path={URLS.URLS.editItemDepartment} component={editItemDepartment} />
         <Route path={URLS.URLS.postingGroupMaster} component={postingGroupMaster} />
-         
+
 
 
         {/* Chart of Account */}
         <Route path={URLS.URLS.coa} component={coaMaster} />
         <Route path={URLS.URLS.addCoa} component={coaactivity} />
         <Route path={URLS.URLS.editCoa} component={coaactivity} />
+
+
+        {/* Customers */}
+        <Route path={URLS.URLS.customerMaster} component={customerMaster} />
+        <Route path={URLS.URLS.addCustomer} component={customeractivity} />
+        <Route path={URLS.URLS.editCustomer} component={customeractivity} />
+        
 
 
         <Route path={URLS.URLS.testformat} component={testformat} />
@@ -169,7 +178,7 @@ let routes = ({ location, ...rest }) => {
         <Route component={pageNotFound} />
       </Switch>
     </Router>
-     
+
   );
 };
 export default routes;

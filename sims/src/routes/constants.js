@@ -60,7 +60,10 @@ export const URLS = {
   postingGroupMaster:"/postingGroupMaster",
   coa:"/coa",
   addCoa:"/addCoa",
-  editCoa:"/editCoa"
+  editCoa:"/editCoa",
+  customerMaster:"/customerMaster",
+  addCustomer:"/addCustomer",
+  editCustomer:"/editCustomer",
 };
 
 
