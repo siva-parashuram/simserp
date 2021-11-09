@@ -18,7 +18,8 @@ class tablerowcelltextboxinput extends React.Component {
             <TableRow>   
                 <TableCell align="left" className="no-border-table">{this.props.label}</TableCell>
                 <TableCell align="left" className="no-border-table">
-                <TextField    
+                <TextField 
+                 
                     style={this.props.style}               
                     type={this.props.type}
                     id={this.props.id}
