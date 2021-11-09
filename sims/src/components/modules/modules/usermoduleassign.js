@@ -74,7 +74,9 @@ class usermoduleassign extends React.Component {
 
         axios.post(GetRolesUrl, ValidUser, { headers })
             .then(response => {
-               
+               console.log("---------------------------------------");
+               console.log("getRoles > response.data > ",response.data);
+               console.log("---------------------------------------");
                 if (response.status === 200) {
                     let data = response.data;
                     rows = data;
@@ -96,9 +98,11 @@ class usermoduleassign extends React.Component {
             this.setState({ userId: userId });
         }
 
-        const dropdownChange = (e) => {            
+        const dropdownChange = (e) => {  
+            this.setState({UserAllotedRoleByBranch:e});          
             getPageListByRoleId(e);
         }
+      
 
         const getPageListByRoleId = (roleId) => {
             this.setState({  ProgressLoader: false,roleId:roleId });

@@ -3,10 +3,11 @@ import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
+// import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import Tabs, { tabsClasses } from '@mui/material/Tabs';
 
 import { Link } from "react-router-dom";
 
@@ -192,30 +193,41 @@ export default function ScrollableTabsButtonAuto() {
       }
     }
 
+    moduleHeader.sort(function (a, b) {
+      if (a.name < b.name) { return -1; }
+      if (a.name > b.name) { return 1; }
+      return 0;
+    })
     setmoduleHeader(moduleHeader);
     setmoduleList(moduleHeader);
   };
 
   return moduleList.length > 0 ? (
     <div className={classes.root}>
-      <Grid container spacing={1}>
+      <Grid container spacing={0}>
         <Grid item xs={12} sm={12} md={12} lg={12}>
           <div>
             <Tabs
+             
               value={value}
               onChange={handleChange}
               indicatorColor="primary"
               textColor="primary"
               variant="scrollable"
-              scrollButtons={true}
-              aria-label="Menu Bar Navigation"
-              allowScrollButtonsMobile={true}
+              scrollButtons
+              sx={{
+                [`& .${tabsClasses.scrollButtons}`]: {
+                  '&.Mui-disabled': { opacity: 0.3 },
+                },
+              }}
+              allowScrollButtonsMobile              
+              aria-label="Menu Bar Navigation"              
               className="menubar-tab-height"
             >
-              {moduleList.length>0?(
-                <Fragment>
+              <Fragment>
                   {moduleList.map((item, i) => (
                 <Tab
+                  
                   disableRipple={true}
                   className="menubar-tab-app-bar"
                   onClick={(e) => handleTabClick(e, i)}        
@@ -224,13 +236,10 @@ export default function ScrollableTabsButtonAuto() {
                       
                   label={item.name}
                   {...a11yProps(i)}
-                  wrapped
+                  wrapped={true}
                 />
               ))}
                 </Fragment>
-              ):(
-                <Tableskeleton/>
-              )}
               
             </Tabs>
           </div>

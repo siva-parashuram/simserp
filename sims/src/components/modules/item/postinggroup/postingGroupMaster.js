@@ -57,6 +57,7 @@ class postingGroupMaster extends React.Component {
       accordion5: false,
       accordion6: false,
       accordion7: false,
+      COAList:[],
       ItemPostingGroupList: [],
       selectedItemPostingGroupList: [],
       GeneralPostingGroupList: [],
@@ -85,6 +86,7 @@ class postingGroupMaster extends React.Component {
   }
 
   componentDidMount() {
+    this.getCOAList();
     this.getAllItemPostingGroup();
     this.getAllGeneralPostingGroup();
     var url = new URL(window.location.href);
@@ -101,6 +103,36 @@ class postingGroupMaster extends React.Component {
     this.setState({
       urlparams: urlparams,
     });
+  }
+
+  getCOAList = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Url = APIURLS.APIURL.GetChartOfAccounts;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        let newD=[];
+        for(let i=0;i<data.length;i++){
+          if(data[i].ACType===0){
+            let o={
+              name:data[i].Name,
+              value:data[i].CAcID
+            };
+            newD.push(o);
+          }
+        }
+
+        this.setState({ COAList: newD });
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => { });
   }
 
   getAllItemPostingGroup = () => {
@@ -502,6 +534,30 @@ class postingGroupMaster extends React.Component {
       }
     };
 
+    const processDropdownList = (type, array) => {
+      let returnArray = [];
+      if (type === "GeneralPostingGroupID") {
+        for (let i = 0; i < array.length; i++) {
+          let o = {
+            name: array[i].Code,
+            value: array[i].GeneralPostingGroupID,
+          };
+          returnArray.push(o);
+        }
+      }
+      if (type === "ItemPostingGroupID") {
+        for (let i = 0; i < array.length; i++) {
+          let o = {
+            name: array[i].Code,
+            value: array[i].ItemPostingGroupID,
+          };
+          returnArray.push(o);
+        }
+      }
+      console.log("processDropdownList > returnArray > ", returnArray);
+      return returnArray;
+    }
+
     const handleIPGPageChange = (event, newPage) => {
       let IPGpagination = this.state.IPGpagination;
       IPGpagination.page = newPage;
@@ -519,6 +575,8 @@ class postingGroupMaster extends React.Component {
       let rowsPerPage = parseInt(this.state.IPGpagination.rowsPerPage);
       return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     };
+
+
 
     const tableItemPostingGroup = (
       <Fragment>
@@ -935,87 +993,68 @@ class postingGroupMaster extends React.Component {
             </Button>
           </Grid>
         </Grid>
-        <Grid container spacing={2}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
-                        id="GeneralPostingGroupID"
-                        label="General Posting GroupID"
-                        // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="ItemPostingGroupID"
-                        label="Item Posting GroupID"
-                        // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
-                      />
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <TableContainer>
+            <Table
+              stickyHeader
+              size="small"
+              className="accordion-table"
+              aria-label="PostingGroup List table"
+            >
+              <TableBody className="tableBody">
+                {console.log("processDropdownList > GeneralPostingGroupSetup > ",processDropdownList("GeneralPostingGroupSetup",this.state.GeneralPostingGroupList))}
+                <DropdownInput
+                  id="GeneralPostingGroupID"
+                  label="General Posting GroupID"
+                  onChange={(e) => updateFormValue("GeneralPostingGroupSetup","GeneralPostingGroupID", e)}
+                  options={processDropdownList("GeneralPostingGroupID",this.state.GeneralPostingGroupList)}
+                />
+                <DropdownInput
+                  id="ItemPostingGroupID"
+                  label="Item Posting GroupID"
+                  onChange={(e) => updateFormValue("GeneralPostingGroupSetup","ItemPostingGroupID", e)}
+                  options={processDropdownList("ItemPostingGroupID",this.state.ItemPostingGroupList)}
+                />
 
-                      <DropdownInput
-                        id="SalesAccount"
-                        label="Sales Account"
-                        // onChange={(e) => updateFormValue("SalesAccount", e)}
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="SalesCNAccount"
-                        label="SalesCNAccount"
-                        // onChange={(e) => updateFormValue("SalesCNAccount", e)}
-                        // options={}
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              {/* <Grid item xs={12} sm={12} md={1} lg={1}></Grid> */}
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
-                        id="SalesDNAccount"
-                        label="SalesDNAccount"
-                        // onChange={(e) => updateFormValue("SalesDNAccount", e)}
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="PurchaseAccount"
-                        label="Purchase Account"
-                        // onChange={(e) => updateFormValue("PurchaseAccount", e)}
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="PurchaseCNAccount"
-                        label="PurchaseCNAccount"
-                        // onChange={(e) => updateFormValue("PurchaseCNAccount", e)}
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="PurchaseDNAccount"
-                        label="PurchaseDNAccount"
-                        // onChange={(e) => updateFormValue("PurchaseDNAccount", e)}
-                        // options={}
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-            </Grid>
-          </Grid>
+                <DropdownInput
+                  id="SalesAccount"
+                  label="Sales Account"
+                  // onChange={(e) => updateFormValue("SalesAccount", e)}
+                  options={this.state.COAList}
+                />
+                <DropdownInput
+                  id="SalesCNAccount"
+                  label="SalesCNAccount"
+                  // onChange={(e) => updateFormValue("SalesCNAccount", e)}
+                  options={this.state.COAList}
+                />
+                <DropdownInput
+                  id="SalesDNAccount"
+                  label="SalesDNAccount"
+                  // onChange={(e) => updateFormValue("SalesDNAccount", e)}
+                  options={this.state.COAList}
+                />
+                <DropdownInput
+                  id="PurchaseAccount"
+                  label="Purchase Account"
+                  // onChange={(e) => updateFormValue("PurchaseAccount", e)}
+                  options={this.state.COAList}
+                />
+                <DropdownInput
+                  id="PurchaseCNAccount"
+                  label="PurchaseCNAccount"
+                  // onChange={(e) => updateFormValue("PurchaseCNAccount", e)}
+                  options={this.state.COAList}
+                />
+                <DropdownInput
+                  id="PurchaseDNAccount"
+                  label="PurchaseDNAccount"
+                  // onChange={(e) => updateFormValue("PurchaseDNAccount", e)}
+                  options={this.state.COAList}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     );
@@ -1028,71 +1067,48 @@ class postingGroupMaster extends React.Component {
             </Button>
           </Grid>
         </Grid>
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <TextboxInput
-                        id="codeSupplierPostingGroup"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="descriptionSupplierPostingGroup"
-                        label="Description"
-                        variant="outlined"
-                        size="small"
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              {/* <Grid item xs={12} sm={12} md={1} lg={1}></Grid>  */}
-              
-              <Grid xs={12} sm={12} md={7} lg={7}>
-                
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
-                        id="PayableAccount"
-                        label="Payable Account"
-                        // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="ReceivableAccount"
-                        label="Receivable Account"
-                        // onChange={(e) => updateFormValue("ReceivableAccount", e)}
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="RoundingAmount"
-                        label="Rounding Amount"
-                        // onChange={(e) => updateFormValue("ReceivableAccount", e)}
-                        // options={}
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              
-            </Grid>
-          </Grid>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <TableContainer>
+            <Table
+              stickyHeader
+              size="small"
+              className="accordion-table"
+              aria-label="PostingGroup List table"
+            >
+              <TableBody className="tableBody">
+                <TextboxInput
+                  id="codeSupplierPostingGroup"
+                  label="Code"
+                  variant="outlined"
+                  size="small"
+                />
+                <TextboxInput
+                  id="descriptionSupplierPostingGroup"
+                  label="Description"
+                  variant="outlined"
+                  size="small"
+                />
+                <DropdownInput
+                  id="PayableAccount"
+                  label="Payable Account"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  options={this.state.COAList}
+                />
+                <DropdownInput
+                  id="ReceivableAccount"
+                  label="Receivable Account"
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  options={this.state.COAList}
+                />
+                <DropdownInput
+                  id="RoundingAmount"
+                  label="Rounding Amount"
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  options={this.state.COAList}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     );
@@ -1174,73 +1190,49 @@ class postingGroupMaster extends React.Component {
             </Button>
           </Grid>
         </Grid>
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <TextboxInput
-                        id="codeCustomerPostingGroup"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="descriptionCustomerPostingGroup"
-                        label="Description"
-                        variant="outlined"
-                        size="small"
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              {/* <Grid item xs={12} sm={12} md={1} lg={1}>
-                {" "}
-              </Grid> */}
-              <Grid item xs={12} sm={12} md={7} lg={7}>
-                <div>
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="PostingGroup List table"
-                    >
-                      <TableBody className="tableBody">
-                        <DropdownInput
-                          id="PayableAccountCustomerPostingGroup"
-                          id="PayableAccount"
-                          label="Payable Account"
-                          // onChange={(e) => updateFormValue("PayableAccount", e)}
-                          // options={}
-                        />
-                        <DropdownInput
-                          id="ReceivableAccountCustomerPostingGroup"
-                          label="Receivable Account"
-                          // onChange={(e) => updateFormValue("ReceivableAccount", e)}
-                          // options={}
-                        />
-                        <DropdownInput
-                          id="RoundingAmountCustomerPostingGroup"
-                          label="Rounding Amount"
-                          // onChange={(e) => updateFormValue("ReceivableAccount", e)}
-                          // options={}
-                        />
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <TableContainer>
+            <Table
+              stickyHeader
+              size="small"
+              className="accordion-table"
+              aria-label="PostingGroup List table"
+            >
+              <TableBody className="tableBody">
+                <TextboxInput
+                  id="codeCustomerPostingGroup"
+                  label="Code"
+                  variant="outlined"
+                  size="small"
+                />
+                <TextboxInput
+                  id="descriptionCustomerPostingGroup"
+                  label="Description"
+                  variant="outlined"
+                  size="small"
+                />
+                <DropdownInput
+                  id="PayableAccountCustomerPostingGroup"
+                  id="PayableAccount"
+                  label="Payable Account"
+                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  options={this.state.COAList}
+                />
+                <DropdownInput
+                  id="ReceivableAccountCustomerPostingGroup"
+                  label="Receivable Account"
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  // options={}
+                />
+                <DropdownInput
+                  id="RoundingAmountCustomerPostingGroup"
+                  label="Rounding Amount"
+                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  options={this.state.COAList}
+                />
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     );

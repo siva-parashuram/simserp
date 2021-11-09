@@ -11,7 +11,7 @@ import Insights from "../dashboard/index/insights";
 import Activities from "../dashboard/index/activities";
 import QuickActionSection from "../dashboard/index/quickactionsection";
 
-
+import Menusection from "./menusection";
 
 class userheaderconstatnts extends React.Component {
   constructor(props) {
@@ -32,7 +32,9 @@ class userheaderconstatnts extends React.Component {
           <Nav />          
         </div>
         <div style={{marginTop:56}}></div>
-        <Menubar />
+        {/* <Menubar /> */}
+         <Menusection/>
+
       </Fragment>
     );
   }
