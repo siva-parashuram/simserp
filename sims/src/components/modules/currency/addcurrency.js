@@ -28,6 +28,7 @@ import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
 
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
+import DropdownInput from "../../compo/Tablerowcelldropdown";
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -48,6 +49,7 @@ class addcurrency extends React.Component {
       SuccessPrompt: false,
       ErrorPrompt: false,
       DisableCreatebtn:false,
+      COAList:[],
       Currency: {
         CurrId: 0,
         Code: null,
@@ -71,6 +73,7 @@ class addcurrency extends React.Component {
   }
 
   componentDidMount() {
+    this.getCOAList();
     this.getList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -86,6 +89,36 @@ class addcurrency extends React.Component {
     this.setState({
       urlparams: urlparams,
     });
+  }
+
+  getCOAList = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Url = APIURLS.APIURL.GetChartOfAccounts;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        let newD=[];
+        for(let i=0;i<data.length;i++){
+          if(data[i].ACType===0){
+            let o={
+              name:data[i].Name,
+              value:data[i].CAcID
+            };
+            newD.push(o);
+          }
+        }
+
+        this.setState({ COAList: newD });
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => { });
   }
 
   getList() {
@@ -122,6 +155,8 @@ class addcurrency extends React.Component {
 
     const updateFormValue = (id, e) => {
       let Currency = this.state.Currency;
+
+
       if (id === "Code") {
         let duplicateExist= CF.chkDuplicateName(this.state.currency,"code",e.target.value);
         Currency.Code = e.target.value;
@@ -203,6 +238,16 @@ class addcurrency extends React.Component {
           });
         }
       }
+
+      if(id==="RealizedGainId"){
+        Currency.RealizedGainId = e.target.value;
+        this.setState({Currency:Currency});
+      }
+      if(id==="RealizedLossId"){
+        Currency.RealizedLossId = e.target.value;
+        this.setState({Currency:Currency});
+      }
+
     };
 
     const handleCreate = (e) => {
@@ -384,6 +429,23 @@ class addcurrency extends React.Component {
                           error={this.state.Validations.Symbol.errorState}
                           helperText={this.state.Validations.Symbol.errorMssg}
                         />
+
+                        <DropdownInput
+                          id="RealizedGainId"
+                          label="Realized Gain"
+                          onChange={(e) => updateFormValue("RealizedGainId", e)}
+                          value={this.state.Currency.RealizedGainId}
+                          options={this.state.COAList}
+                        />
+
+                        <DropdownInput
+                          id="RealizedLossId"
+                          label="Realized Loss "
+                          onChange={(e) => updateFormValue("RealizedLossId", e)}
+                          value={this.state.Currency.RealizedLossId}
+                          options={this.state.COAList}
+                        />
+
                       </TableBody>
                     </Table>
                   </TableContainer>

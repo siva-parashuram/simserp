@@ -98,6 +98,7 @@ export const APIURL = {
   GetChartOfAccounts:domain+"api/ChartOfAccount/GetChartOfAccounts",
   GetChartOfAccount:domain+"api/ChartOfAccount/GetChartOfAccount",
   UpdateChartOfAccount:domain+"api/ChartOfAccount/UpdateChartOfAccount",
+  CreateCustomer:domain+"api/Customer/CreateCustomer",
 };
 
 export const CTimeOut = 10;
@@ -106,6 +107,23 @@ export let pagination= {
   page: 0,
   rowsPerPage: 10,
 };
+
+export const CreditRating=[
+  {name:"A",value:0},
+{name:"B",value:1},
+{name:"C",value:2},
+{name:"D",value:3}
+];
+
+export const GSTCutomerType = [
+  { name: "N/A", value: 0 },
+  { name: "Registered", value: 1 },
+  { name: "Unregistered", value: 2 },
+  { name: "Export", value: 3 },
+  { name: "Deemed Export", value: 4 },
+  { name: "Exempted", value: 5 },
+  { name: "SEZ", value: 6 }
+];
 
 export const ACType = [
   { name: "Posting", value: 0 },
