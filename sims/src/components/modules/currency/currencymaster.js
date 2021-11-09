@@ -198,11 +198,11 @@ class currencymaster extends React.Component {
                             handleRowClick(event, item, "row_" + i)
                           }
                         >
-                          <TableCell align="left"></TableCell>
-                          <TableCell align="left"></TableCell>
-                          <TableCell align="left"></TableCell>
-                          <TableCell align="left"></TableCell>
-                          <TableCell align="left"></TableCell>
+                          <TableCell align="left">{i+1}</TableCell>
+                          <TableCell align="left">{item.code}</TableCell>
+                          <TableCell align="left">{item.description}</TableCell>
+                          <TableCell align="left">{item.rounding}</TableCell>
+                          <TableCell align="left">{item.symbol}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

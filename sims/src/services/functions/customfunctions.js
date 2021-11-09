@@ -57,15 +57,17 @@ export const removeDuplicates = (inputArray, parameter) => {
 
 export const chkDuplicateName = (inputArray, parameter, value) => {
   let duplicateExist = false;
-  for (let i = 0; i < inputArray.length; i++) {
-    let v = inputArray[i][parameter];
-    v = v.toLowerCase();
-    console.log("chkDuplicateName > v > ",v);
-    console.log("chkDuplicateName > value > ",value.toLowerCase());
-    if (v === value.toLowerCase()) {
-      duplicateExist = true;
+  try{
+    for (let i = 0; i < inputArray.length; i++) {
+      let v = inputArray[i][parameter];
+      v = v.toLowerCase();
+      console.log("chkDuplicateName > v > ",v);
+      console.log("chkDuplicateName > value > ",value.toLowerCase());
+      if (v === value.toLowerCase()) {
+        duplicateExist = true;
+      }
     }
-  }
+  }catch(err){}
   return duplicateExist;
 };
 

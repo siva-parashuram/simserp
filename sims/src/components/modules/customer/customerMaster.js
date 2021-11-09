@@ -51,27 +51,42 @@ class customerMaster extends React.Component {
     }
 
     getCustomerList = () => {
-        this.setState({ ProgressLoader: true });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL;
+        axios
+            .post(Url, ValidUser, { headers })
+            .then((response) => {
+                let data = response.data;
+                this.setState({ customerData: data, ProgressLoader: true });
+            })
+            .catch((error) => {
+                this.setState({ customerData: [], ProgressLoader: true });
+            });
     }
 
     render() {
 
         const handleRowClick = (e, item, id) => {
             let editUrl =
-            URLS.URLS.editItem +
-            this.state.urlparams +
-            "&edititemId=" +
-            item.itemId;
-            this.setState({ moduleId: item.moduleId, editurl: editUrl,editBtnDisable:false,selectedItem:item });
+                URLS.URLS.editItem +
+                this.state.urlparams +
+                "&edititemId=" +
+                item.itemId;
+            this.setState({ moduleId: item.moduleId, editurl: editUrl, editBtnDisable: false, selectedItem: item });
             removeIsSelectedRowClasses();
             document.getElementById(id).classList.add("selectedRow");
-          };
-      
-          const removeIsSelectedRowClasses = () => {
+        };
+
+        const removeIsSelectedRowClasses = () => {
             for (let i = 0; i < this.state.customerData.length; i++) {
-              document.getElementById("row_" + i).className = "";
+                document.getElementById("row_" + i).className = "";
             }
-          };
+        };
 
 
         const openPage = (url) => {
@@ -120,7 +135,7 @@ class customerMaster extends React.Component {
                                         className="action-btns"
                                         startIcon={<AddIcon />}
                                         onClick={(e) =>
-                                            openPage(URLS.URLS.addCustomer + this.state.urlparams+ "&type=add")
+                                            openPage(URLS.URLS.addCustomer + this.state.urlparams + "&type=add")
                                         }
                                     >
                                         NEW
