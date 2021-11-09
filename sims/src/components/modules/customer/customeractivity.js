@@ -49,8 +49,10 @@ class customeractivity extends React.Component {
             CreditRating: APIURLS.CreditRating,
             GSTCutomerType: APIURLS.GSTCutomerType,
             GeneralPostingGroupList:[],
+            CustomerPostingGroupList:[],
             currencyList:[],
             countryData:[],
+            stateData:[],
             CustID: CF.toInt(getCookie(COOKIE.USERID)),
             Customer: {
                 CustID: 0,
@@ -101,7 +103,7 @@ class customeractivity extends React.Component {
                 ContactPerson: "",
                 EmailID: "",
                 UserID: CF.toInt(getCookie(COOKIE.USERID)),
-                ModifyDate: null,
+               
                 BranchID: 0,
             }
         }
@@ -111,8 +113,10 @@ class customeractivity extends React.Component {
 
     componentDidMount() {
         this.getAllGeneralPostingGroup();
+        this.getAllCustomerPostingGroup();
         this.getCurrencyList();
         this.getCountryList();
+        this.getStateList();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -147,6 +151,59 @@ class customeractivity extends React.Component {
 
         this.setState({ urlparams: urlparams });
     }
+
+    getAllCustomerPostingGroup = () => {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.GetAllCustomerPostingGroup;
+        axios
+          .post(Url, ValidUser, { headers })
+          .then((response) => {
+            let data = response.data;
+            console.log("data > ", data);
+            let newD = [];
+            for (let i = 0; i < data.length; i++) {
+                let o = {
+                    name: data[i].Code + "-" + data[i].Description,
+                    value: data[i].CustomerPostingGroupID
+                };
+                newD.push(o);
+            }
+            this.setState({ CustomerPostingGroupList: newD });
+          })
+          .catch((error) => { });
+      };
+
+      getStateList=()=> {
+        let rows = [];
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let GetStatesUrl = APIURLS.APIURL.GetStates;
+    
+        axios
+          .post(GetStatesUrl, ValidUser, { headers })
+          .then((response) => {
+            let data = response.data;
+            let newData = [];
+            for (let i = 0; i < data.length; i++) {
+                let d = {
+                  name: data[i].name,
+                  value: data[i].stateId,
+                };
+                newData.push(d);
+              }
+            this.setState({ stateData: newData, ProgressLoader: true });
+          })
+          .catch((error) => {});
+      }
 
     getCountryList=()=> {
         let rows = [];
@@ -493,8 +550,8 @@ class customeractivity extends React.Component {
             axios
                 .post(Url, reqData, { headers })
                 .then((response) => {
-                    let data = response.data;
-                    if (response.status === 200 || response.status === 201) {
+                    let data = response.data;                   
+                    if (response.status === 200 || response.status === 201 ) {
                         this.setState({ ErrorPrompt: false, SuccessPrompt: true });
                     } else {
                         this.setState({ ErrorPrompt: true, SuccessPrompt: false });
@@ -591,7 +648,7 @@ class customeractivity extends React.Component {
                                                     label="State"
                                                     onChange={(e) => updateFormValue("StateID", e)}
                                                     value={this.state.Customer.StateID}
-                                                    options={[]}
+                                                    options={this.state.stateData}
                                                 />
 
                                                 <TextboxInput
@@ -820,7 +877,7 @@ class customeractivity extends React.Component {
                                                     label="CustomerPostingGroupID"
                                                     onChange={(e) => updateFormValue("CustomerPostingGroupID", e)}
                                                     value={this.state.Customer.CustomerPostingGroupID}
-                                                    options={[]}
+                                                    options={this.state.CustomerPostingGroupList}
                                                 />
 
 
