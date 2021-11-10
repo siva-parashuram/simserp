@@ -35,18 +35,18 @@ import Inputcustom from "../../../compo/inputcustom";
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
 
-class customerCategory extends React.Component {
+class paymentTerms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
-      CustomerCategory: {
-        CustomerCategoryID: 0,
+      PaymentTerms: {
+        PaymentTermID:0,
         Code: "",
         Description: "",
-        IsActive: false,
+        DueDays:"",
       },
     };
   }
@@ -54,7 +54,7 @@ class customerCategory extends React.Component {
   componentDidMount() {}
 
   render() {
-    const listCustomerCategory = (
+    const listPaymentTerms = (
       <Table
         stickyHeader
         size="small"
@@ -73,7 +73,7 @@ class customerCategory extends React.Component {
       </Table>
     );
 
-    const createCustomerCategory = (
+    const createPaymentTerm = (
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
@@ -85,7 +85,7 @@ class customerCategory extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
+              <Grid item xs={12} sm={12} md={8} lg={8}>
                 <TableContainer>
                   <Table
                     stickyHeader
@@ -106,12 +106,11 @@ class customerCategory extends React.Component {
                         variant="outlined"
                         size="small"
                       />
-                      <SwitchInput
-                        key="IsActive"
-                        id="IsActive"
-                        label="IsActive"
-                        param={this.state.CustomerCategory.IsActive}
-                        // onChange={(e) => updateFormValue("IsActive", e)}
+                      <TextboxInput
+                        id="DueDays"
+                        label="Due Days"
+                        variant="outlined"
+                        size="small"
                       />
                     </TableBody>
                   </Table>
@@ -153,12 +152,12 @@ class customerCategory extends React.Component {
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={10} lg={10}>
             <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={10} lg={10}>
+              <Grid item xs={12} sm={12} md={8} lg={8}>
                 <Dualtabcomponent
                   tab1name="List"
                   tab2name="New"
-                  tab1Html={listCustomerCategory}
-                  tab2Html={createCustomerCategory}
+                  tab1Html={listPaymentTerms}
+                  tab2Html={createPaymentTerm}
                 />
               </Grid>
             </Grid>
@@ -168,4 +167,4 @@ class customerCategory extends React.Component {
     );
   }
 }
-export default customerCategory;
+export default paymentTerms;
