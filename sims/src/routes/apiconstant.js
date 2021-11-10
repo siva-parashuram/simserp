@@ -106,6 +106,16 @@ export const APIURL = {
   UpdateCustomer:domain+"api/Customer/UpdateCustomer",
 };
 
+
+export const buttonTitle=[
+  {add:"Add"},
+  {edit:"Edit"},
+  {update:"Update"},
+]
+
+
+
+
 export const CTimeOut = 10;
 export const DFormat = "MM/DD/YYYY";
 export let pagination= {

@@ -35,18 +35,21 @@ import Inputcustom from "../../../compo/inputcustom";
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
 
-class customerCategory extends React.Component {
+class contact extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
-      CustomerCategory: {
-        CustomerCategoryID: 0,
-        Code: "",
-        Description: "",
-        IsActive: false,
+      CustomerContact: {
+        ContactID: 0,
+        CustID: 0,
+        ContactType: 0,
+        Name: "",
+        PhoneNo: "",
+        EmailID: "",
+        IsBlock: false,
       },
     };
   }
@@ -54,12 +57,12 @@ class customerCategory extends React.Component {
   componentDidMount() {}
 
   render() {
-    const listCustomerCategory = (
+    const listCustomerContact = (
       <Table
         stickyHeader
         size="small"
         className=""
-        aria-label="CustomerCategory List table"
+        aria-label="CustomerContact List table"
       >
         <TableHead className="table-header-background">
           <TableRow>
@@ -73,7 +76,7 @@ class customerCategory extends React.Component {
       </Table>
     );
 
-    const createCustomerCategory = (
+    const createCustomerContact = (
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
@@ -91,27 +94,39 @@ class customerCategory extends React.Component {
                     stickyHeader
                     size="small"
                     className="accordion-table"
-                    aria-label="CustomerCategory List table"
+                    aria-label="CustomerContact List table"
                   >
                     <TableBody className="tableBody">
+                      <DropdownInput
+                        id="ContactType"
+                        label="ContactType"
+                        // onChange={ }
+                        // options={}
+                      />
                       <TextboxInput
-                        id="Code"
-                        label="Code"
+                        id="Name"
+                        label="Name"
                         variant="outlined"
                         size="small"
                       />
                       <TextboxInput
-                        id="Description"
-                        label="Description"
+                        id="PhoneNo"
+                        label="PhoneNo"
+                        variant="outlined"
+                        size="small"
+                      />
+                      <TextboxInput
+                        id="EmailID"
+                        label="EmailID"
                         variant="outlined"
                         size="small"
                       />
                       <SwitchInput
-                        key="IsActive"
-                        id="IsActive"
-                        label="IsActive"
-                        param={this.state.CustomerCategory.IsActive}
-                        // onChange={(e) => updateFormValue("IsActive", e)}
+                        key="IsBlock"
+                        id="IsBlock"
+                        label="IsBlock"
+                        param={this.state.CustomerContact.IsBlock}
+                        // onChange={(e) => updateFormValue("IsBlock", e)}
                       />
                     </TableBody>
                   </Table>
@@ -157,8 +172,8 @@ class customerCategory extends React.Component {
                 <Dualtabcomponent
                   tab1name="List"
                   tab2name="New"
-                  tab1Html={listCustomerCategory}
-                  tab2Html={createCustomerCategory}
+                  tab1Html={listCustomerContact}
+                  tab2Html={createCustomerContact}
                 />
               </Grid>
             </Grid>
@@ -168,4 +183,4 @@ class customerCategory extends React.Component {
     );
   }
 }
-export default customerCategory;
+export default contact;

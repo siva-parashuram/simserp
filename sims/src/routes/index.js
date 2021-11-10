@@ -60,8 +60,6 @@ import coaMaster from "../components/modules/coa/coaMaster";
 import coaactivity from "../components/modules/coa/coaactivity";
 import customerMaster from "../components/modules/customer/customerMaster";
 import customeractivity from "../components/modules/customer/customeractivity";
-
-
 import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
 import Ftptest from "../components/ftp/ftptest";
@@ -167,6 +165,7 @@ let routes = ({ location, ...rest }) => {
         {/* Customers */}
         <Route path={URLS.URLS.customerMaster} component={customerMaster} />
         <Route path={URLS.URLS.addCustomer} component={customeractivity} />
+        <Route path={URLS.URLS.editCustomer} component={customeractivity} />
         <Route path={URLS.URLS.editCustomer} component={customeractivity} />
         
         
