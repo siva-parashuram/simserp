@@ -693,6 +693,7 @@ class customeractivity extends React.Component {
                                                     onChange={(e) => updateFormValue("CountryID", e)}
                                                     value={this.state.Customer.CountryID}
                                                     options={this.state.countryData}
+                                                    isMandatory={true}
                                                 />
                                                 <DropdownInput
                                                     id="StateID"

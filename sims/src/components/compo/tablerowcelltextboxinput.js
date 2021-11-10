@@ -18,7 +18,7 @@ class tablerowcelltextboxinput extends React.Component {
             <TableRow>   
                 <TableCell align="left" className="no-border-table">
                     {this.props.label}  
-                    {this.props.isMandatory?( <span style={{color:'red'}}>*</span> ):null}
+                    {this.props.isMandatory?( <span style={{color:'red'}}> *</span> ):null}
                     
                     </TableCell>
                 <TableCell align="left" className="no-border-table">
