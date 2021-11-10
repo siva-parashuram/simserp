@@ -18,6 +18,14 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IconButton from '@mui/material/IconButton';
+
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import ErrorSnackBar from "../../compo/errorSnackbar";
@@ -28,10 +36,23 @@ import DropdownInput from "../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
 
 
+import Addresses from './component/addresses';
+import Contact from './component/contact';
+import CustomerCategory from './component/customerCategory';
+import PaymentTerms from './component/paymentTerms';
+
+
+
 class customeractivity extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            Dialog: {
+                DialogTitle: "",
+                DialogStatus: false,
+                DialogContent: null,
+            },
+
             accordion1: true,
             accordion2: false,
             accordion3: false,
@@ -48,11 +69,11 @@ class customeractivity extends React.Component {
             type: "",
             CreditRating: APIURLS.CreditRating,
             GSTCutomerType: APIURLS.GSTCutomerType,
-            GeneralPostingGroupList:[],
-            CustomerPostingGroupList:[],
-            currencyList:[],
-            countryData:[],
-            stateData:[],
+            GeneralPostingGroupList: [],
+            CustomerPostingGroupList: [],
+            currencyList: [],
+            countryData: [],
+            stateData: [],
             CustID: CF.toInt(getCookie(COOKIE.USERID)),
             Customer: {
                 CustID: 0,
@@ -103,7 +124,7 @@ class customeractivity extends React.Component {
                 ContactPerson: "",
                 EmailID: "",
                 UserID: CF.toInt(getCookie(COOKIE.USERID)),
-               
+
                 BranchID: 0,
             }
         }
@@ -149,121 +170,122 @@ class customeractivity extends React.Component {
             ProgressLoader: type === "add" ? true : false,
         });
 
-         console.log("On load state > ",this.state);
+        console.log("On load state > ", this.state);
     }
 
     getAllCustomerPostingGroup = () => {
+
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         };
         let Url = APIURLS.APIURL.GetAllCustomerPostingGroup;
         axios
-          .post(Url, ValidUser, { headers })
-          .then((response) => {
-            let data = response.data;
-            console.log("data > ", data);
-            let newD = [];
-            for (let i = 0; i < data.length; i++) {
-                let o = {
-                    name: data[i].Code + "-" + data[i].Description,
-                    value: data[i].CustomerPostingGroupID
-                };
-                newD.push(o);
-            }
-            this.setState({ CustomerPostingGroupList: newD });
-          })
-          .catch((error) => { });
-      };
+            .post(Url, ValidUser, { headers })
+            .then((response) => {
+                let data = response.data;
+                console.log("data > ", data);
+                let newD = [];
+                for (let i = 0; i < data.length; i++) {
+                    let o = {
+                        name: data[i].Code + "-" + data[i].Description,
+                        value: data[i].CustomerPostingGroupID
+                    };
+                    newD.push(o);
+                }
+                this.setState({ CustomerPostingGroupList: newD });
+            })
+            .catch((error) => { });
+    };
 
-      getStateList=()=> {
+    getStateList = () => {
         let rows = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         };
         let GetStatesUrl = APIURLS.APIURL.GetStates;
-    
-        axios
-          .post(GetStatesUrl, ValidUser, { headers })
-          .then((response) => {
-            let data = response.data;
-            let newData = [];
-            for (let i = 0; i < data.length; i++) {
-                let d = {
-                  name: data[i].name,
-                  value: data[i].stateId,
-                };
-                newData.push(d);
-              }
-            this.setState({ stateData: newData, ProgressLoader: true });
-          })
-          .catch((error) => {});
-      }
 
-    getCountryList=()=> {
+        axios
+            .post(GetStatesUrl, ValidUser, { headers })
+            .then((response) => {
+                let data = response.data;
+                let newData = [];
+                for (let i = 0; i < data.length; i++) {
+                    let d = {
+                        name: data[i].name,
+                        value: data[i].stateId,
+                    };
+                    newData.push(d);
+                }
+                this.setState({ stateData: newData, ProgressLoader: true });
+            })
+            .catch((error) => { });
+    }
+
+    getCountryList = () => {
         let rows = [];
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         };
         let GetCountryUrl = APIURLS.APIURL.GetCountries;
-    
-        axios
-          .post(GetCountryUrl, ValidUser, { headers })
-          .then((response) => {
-            let data = response.data;
-            let newData = [];
-            for (let i = 0; i < data.length; i++) {
-              let d = {
-                name: data[i].name,
-                value: data[i].countryId,
-              };
-              newData.push(d);
-            }
-            this.setState({ countryData: newData, ProgressLoader: true });
-             
-          })
-          .catch((error) => {});
-      }
 
-    getCurrencyList=()=> {
+        axios
+            .post(GetCountryUrl, ValidUser, { headers })
+            .then((response) => {
+                let data = response.data;
+                let newData = [];
+                for (let i = 0; i < data.length; i++) {
+                    let d = {
+                        name: data[i].name,
+                        value: data[i].countryId,
+                    };
+                    newData.push(d);
+                }
+                this.setState({ countryData: newData, ProgressLoader: true });
+
+            })
+            .catch((error) => { });
+    }
+
+    getCurrencyList = () => {
         this.setState({ ProgressLoader: false });
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
-          "Content-Type": "application/json",
+            "Content-Type": "application/json",
         };
         let Url = APIURLS.APIURL.GetCurrencies;
-    
-        axios
-          .post(Url, ValidUser, { headers })
-          .then((response) => {
-            let data = response.data;
 
-            let newD = [];
-            for (let i = 0; i < data.length; i++) {
-                let o = {
-                    name: data[i].code,
-                    value: data[i].currId
-                };
-                newD.push(o);
-            }
-    
-            this.setState({
-              currencyList: newD,
-              ProgressLoader: true,
-            });
-          })
-          .catch((error) => {});
-      }
+        axios
+            .post(Url, ValidUser, { headers })
+            .then((response) => {
+                let data = response.data;
+
+                let newD = [];
+                for (let i = 0; i < data.length; i++) {
+                    let o = {
+                        name: data[i].code,
+                        value: data[i].currId
+                    };
+                    newD.push(o);
+                }
+
+                this.setState({
+                    currencyList: newD,
+                    ProgressLoader: true,
+                });
+            })
+            .catch((error) => { });
+    }
 
     getAllGeneralPostingGroup = () => {
         let ValidUser = APIURLS.ValidUser;
@@ -293,6 +315,7 @@ class customeractivity extends React.Component {
 
 
     getCustomerDetails = (Customer) => {
+        this.setState({ ProgressLoader: false });
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -308,15 +331,15 @@ class customeractivity extends React.Component {
         axios
             .post(Url, reqData, { headers })
             .then((response) => {
-                let data = response.data;                   
-                if (response.status === 200 || response.status === 201 ) {
-                    this.setState({Customer:data, ErrorPrompt: false, SuccessPrompt: true });
+                let data = response.data;
+                if (response.status === 200 || response.status === 201) {
+                    this.setState({ Customer: data, ProgressLoader: true });
                 } else {
-                    this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+                    this.setState({ ErrorPrompt: true, SuccessPrompt: false, ProgressLoader: true });
                 }
             })
             .catch((error) => {
-                this.setState({ ErrorPrompt: true });
+                this.setState({ ErrorPrompt: true, ProgressLoader: true });
             });
     }
 
@@ -574,8 +597,8 @@ class customeractivity extends React.Component {
             axios
                 .post(Url, reqData, { headers })
                 .then((response) => {
-                    let data = response.data;                   
-                    if (response.status === 200 || response.status === 201 ) {
+                    let data = response.data;
+                    if (response.status === 200 || response.status === 201) {
                         this.setState({ ErrorPrompt: false, SuccessPrompt: true });
                     } else {
                         this.setState({ ErrorPrompt: true, SuccessPrompt: false });
@@ -602,8 +625,8 @@ class customeractivity extends React.Component {
             axios
                 .post(Url, reqData, { headers })
                 .then((response) => {
-                    let data = response.data;                   
-                    if (response.status === 200 || response.status === 201 ) {
+                    let data = response.data;
+                    if (response.status === 200 || response.status === 201) {
                         this.setState({ ErrorPrompt: false, SuccessPrompt: true });
                     } else {
                         this.setState({ ErrorPrompt: true, SuccessPrompt: false });
@@ -803,9 +826,9 @@ class customeractivity extends React.Component {
                                                     label="IsGroupCompany"
                                                     param={this.state.Customer.IsGroupCompany}
                                                     onChange={(e) => updateFormValue("IsGroupCompany", e)}
-                                                    
+
                                                 />
-                                                
+
                                                 <SwitchInput
                                                     key="IsBlock"
                                                     id="IsBlock"
@@ -865,7 +888,7 @@ class customeractivity extends React.Component {
                                                     label="IsGrowthBonanza"
                                                     param={this.state.Customer.IsGrowthBonanza}
                                                     onChange={(e) => updateFormValue("IsGrowthBonanza", e)}
-                                                    
+
                                                 />
                                                 <SwitchInput
                                                     key="IsSlabDiscount"
@@ -1105,6 +1128,99 @@ class customeractivity extends React.Component {
 
 
 
+        const dialog = (
+            <Fragment>
+                <Dialog
+                    fullWidth={true}
+                    maxWidth="lg"
+                    open={this.state.Dialog.DialogStatus}
+                    onClose={(e) => handleClose()}
+                    aria-labelledby="dialog-title"
+                    aria-describedby="dialog-description"
+                    className="dialog-prompt-activity"
+                >
+                    <DialogTitle id="dialog-title">
+                        <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={1} lg={1}>
+                                <IconButton aria-label="delete" style={{ textAlign: 'left', marginTop: 8 }}>
+                                    <ArrowBackIcon onClick={(e) => handleClose()} />
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={2} lg={2}>
+                                <div style={{ marginTop: 10, marginLeft: -50 }}>  {this.state.Dialog.DialogTitle}  </div>
+                            </Grid>
+                        </Grid>
+                    </DialogTitle>
+                    <DialogContent>
+
+                        <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                                {this.state.Dialog.DialogContent}
+                            </Grid>
+                        </Grid>
+                        <div style={{ height: 50 }}>&nbsp;</div>
+                    </DialogContent>
+                </Dialog>
+            </Fragment>
+        );
+
+        const Address = (
+            <Addresses />
+        );
+
+        const contact=(
+            <Contact/>
+        );
+
+        const customerCategory=(
+            <CustomerCategory/>
+        );
+
+        const paymentTerms=(
+            <PaymentTerms/>
+        );
+
+
+        
+
+
+
+        const openDialog = (param) => {
+            let Dialog = this.state.Dialog;
+            Dialog.DialogStatus = true;
+            Dialog.DialogTitle = param;
+
+            switch (param) {
+                case "Address":
+                    Dialog.DialogContent = Address;
+                    this.setState({ Dialog: Dialog });
+                    break;
+                case "Contact":
+                    Dialog.DialogContent = contact;
+                    this.setState({ Dialog: Dialog });
+                    break;
+                case "CustomerCategory":
+                    Dialog.DialogContent = customerCategory;
+                    this.setState({ Dialog: Dialog });
+                    break;
+                case "PaymentTerms":
+                    Dialog.DialogContent = paymentTerms;
+                    this.setState({ Dialog: Dialog });
+                    break;
+                default:
+                    break;
+            }
+
+
+            this.setState({ Dialog: Dialog });
+        }
+
+        const handleClose = () => {
+            let Dialog = this.state.Dialog;
+            Dialog.DialogStatus = false;
+            this.setState({ Dialog: Dialog });
+        };
+
 
         return (
             <Fragment>
@@ -1154,30 +1270,40 @@ class customeractivity extends React.Component {
                                         </Button>
                                     ) : null}
                                     {this.state.type === "edit" ? (
-                                        <Fragment>
+                                        <div>
                                             <Button
                                                 className="action-btns"
-                                                 onClick={(e) => updateCustomer(e)}
+                                                onClick={(e) => updateCustomer(e)}
                                                 disabled={this.state.DisableUpdatebtn}
                                             >
                                                 {APIURLS.buttonTitle.update}
                                             </Button>
                                             <Button
-                                                className="action-btns"                                                 
+                                                className="action-btns"
+                                                onClick={(e) => openDialog('Address')}
                                             >
                                                 Address
                                             </Button>
                                             <Button
                                                 className="action-btns"
+                                                onClick={(e) => openDialog('Contact')}
+                                                
                                             >
                                                 Contact
                                             </Button>
                                             <Button
                                                 className="action-btns"
+                                                onClick={(e) => openDialog('CustomerCategory')}
                                             >
-                                                Branch Mapping
+                                                Category
                                             </Button>
-                                        </Fragment>
+                                            <Button
+                                                className="action-btns"
+                                                onClick={(e) => openDialog('PaymentTerms')}
+                                            >
+                                                Payment Terms
+                                            </Button>
+                                        </div>
                                     ) : null}
 
                                 </ButtonGroup>
@@ -1231,6 +1357,9 @@ class customeractivity extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
+
+
+                {dialog}
 
             </Fragment>
         )

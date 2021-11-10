@@ -72,42 +72,52 @@ class addresses extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     const listCustomerAddresses = (
-      <Table
-        stickyHeader
-        size="small"
-        className=""
-        aria-label="CustomerCategory List table"
-      >
-        <TableHead className="table-header-background">
-          <TableRow>
-            <TableCell className="table-header-font">#</TableCell>
-            <TableCell className="table-header-font" align="left">
-              Name
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody className="tableBody"></TableBody>
-      </Table>
+      <Fragment>
+        <div style={{ height: 300, overflowY: 'scroll', width: '100%' }}>
+          <Table
+            stickyHeader
+            size="small"
+            className=""
+            aria-label="CustomerCategory List table"
+          >
+            <TableHead className="table-header-background">
+              <TableRow>
+                <TableCell className="table-header-font">#</TableCell>
+                <TableCell className="table-header-font" align="left">
+                  Name
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody className="tableBody">
+
+            </TableBody>
+          </Table>
+        </div>
+      </Fragment>
     );
 
     const createCustomerAddress = (
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick ={(e) => {}}>
-            {APIURLS.buttonTitle.add}
-
+        <Grid xs={12} sm={12} md={2} lg={2}>
+            <Button className="action-btns" style={{ marginLeft: 10 }} onClick={(e) => { }}>
+              {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
+        <Grid xs={12} sm={12} md={10} lg={10}>
+           &nbsp;
+          </Grid>
+          
         </Grid>
+        <div style={{ height: 10 }}>&nbsp;</div>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
+          <Grid xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
                 <TableContainer>
                   <Table
                     stickyHeader
@@ -119,9 +129,8 @@ class addresses extends React.Component {
                       <DropdownInput
                         id="AddressType"
                         label="AddressType"
-                        // onChange={ }
-                        // options={}
-                        isMandatory={true}
+                      // onChange={ }
+                      // options={}
                       />
                       <TextboxInput
                         id="Code"
@@ -169,15 +178,14 @@ class addresses extends React.Component {
                       <DropdownInput
                         id="CountryID"
                         label="Country"
-                        // onChange={ }
-                        // options={}
-                        isMandatory={true}
+                      // onChange={ }
+                      // options={}
                       />
                       <DropdownInput
                         id="StateID"
                         label="State"
-                        // onChange={ }
-                        // options={}
+                      // onChange={ }
+                      // options={}
                       />
                       <TextboxInput
                         id="ContactPerson"
@@ -195,7 +203,7 @@ class addresses extends React.Component {
                   </Table>
                 </TableContainer>
               </Grid>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
                 <TableContainer>
                   <Table
                     stickyHeader
@@ -239,19 +247,19 @@ class addresses extends React.Component {
                         id="IsBlock"
                         label="IsBlock"
                         param={this.state.CustomerAddress.IsBlock}
-                        // onChange={(e) => updateFormValue("IsBlock", e)}
+                      // onChange={(e) => updateFormValue("IsBlock", e)}
                       />
                       <DropdownInput
                         id="IncoID"
                         label="IncoID"
-                        // onChange={ }
-                        // options={}
+                      // onChange={ }
+                      // options={}
                       />
                       <DropdownInput
                         id="ShipmentModeID"
                         label="ShipmentModeID"
-                        // onChange={ }
-                        // options={}
+                      // onChange={ }
+                      // options={}
                       />
                       <TextboxInput
                         id="PostOfDischarge"
@@ -309,17 +317,13 @@ class addresses extends React.Component {
         />
 
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={10} lg={10}>
-            <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={10} lg={10}>
-                <Dualtabcomponent
-                  tab1name="List"
-                  tab2name="New"
-                  tab1Html={listCustomerAddresses}
-                  tab2Html={createCustomerAddress}
-                />
-              </Grid>
-            </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Dualtabcomponent
+              tab1name="List"
+              tab2name="New"
+              tab1Html={listCustomerAddresses}
+              tab2Html={createCustomerAddress}
+            />
           </Grid>
         </Grid>
       </Fragment>
