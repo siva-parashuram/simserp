@@ -661,7 +661,7 @@ class postingGroupMaster extends React.Component {
               style={{ marginLeft: 5 }}
               onClick={(e) => updateItemPostingGroup(e)}
             >
-              Update
+              {APIURLS.buttonTitle.update}
             </Button>
           </Grid>
         </Grid>
@@ -751,7 +751,7 @@ class postingGroupMaster extends React.Component {
               style={{ marginLeft: 5 }}
               onClick={(e) => updateGeneralPostingGroup(e)}
             >
-              Update
+              {APIURLS.buttonTitle.update}
             </Button>
           </Grid>
         </Grid>
@@ -840,7 +840,7 @@ class postingGroupMaster extends React.Component {
               style={{ marginLeft: 5 }}
               onClick={(e) => updateGeneralPostingGroupSetup(e)}
             >
-              Update
+              {APIURLS.buttonTitle.update}
             </Button>
           </Grid>
         </Grid>
@@ -995,7 +995,7 @@ class postingGroupMaster extends React.Component {
             style={{ marginLeft: 5 }}
             onClick={(e) => createItemPostingGroup(e)}
           >
-            Create
+            {APIURLS.buttonTitle.add}
           </Button>
         </Grid>
 
@@ -1056,7 +1056,7 @@ class postingGroupMaster extends React.Component {
             style={{ marginLeft: 5 }}
             onClick={(e) => createGeneralPostingGroup(e)}
           >
-            Create
+            {APIURLS.buttonTitle.add}
           </Button>
         </Grid>
         <Grid item xs={12} sm={12} md={7} lg={7}>
@@ -1113,7 +1113,7 @@ class postingGroupMaster extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-              Create
+            {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
         </Grid>
@@ -1187,7 +1187,7 @@ class postingGroupMaster extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-              Create
+            {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
         </Grid>
@@ -1242,7 +1242,7 @@ class postingGroupMaster extends React.Component {
         <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
           <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
-            Create
+          {APIURLS.buttonTitle.add}
           </Button>
         </Grid>
         </Grid>
@@ -1310,7 +1310,7 @@ class postingGroupMaster extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-              Create
+            {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
         </Grid>
@@ -1375,7 +1375,7 @@ class postingGroupMaster extends React.Component {
         <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
           <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
-            Create
+          {APIURLS.buttonTitle.add}
           </Button>
         </Grid>
         </Grid>

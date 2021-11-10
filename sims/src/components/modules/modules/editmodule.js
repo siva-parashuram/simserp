@@ -412,7 +412,7 @@ class editmodule extends React.Component {
                     onClick={handleUpdate}
                     disabled={this.state.updateBtnDisable}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

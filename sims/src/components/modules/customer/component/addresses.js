@@ -121,12 +121,14 @@ class addresses extends React.Component {
                         label="AddressType"
                         // onChange={ }
                         // options={}
+                        isMandatory={true}
                       />
                       <TextboxInput
                         id="Code"
                         label="Code"
                         variant="outlined"
                         size="small"
+                        isMandatory={true}
                       />
                       <TextboxInput
                         id="Name"
@@ -169,6 +171,7 @@ class addresses extends React.Component {
                         label="Country"
                         // onChange={ }
                         // options={}
+                        isMandatory={true}
                       />
                       <DropdownInput
                         id="StateID"

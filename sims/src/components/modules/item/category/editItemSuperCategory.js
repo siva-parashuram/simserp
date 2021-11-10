@@ -124,7 +124,7 @@ class editItemSuperCategory extends React.Component {
       switch (param) {
         case "Code":
           let v1 = this.state.Validations;
-          if (e.target.value === "" || e.target.value.length >10) {
+          if (e.target.value === "" || e.target.value.length > 10) {
             if (e.target.value === "") {
               v1.Code = {
                 errorState: true,
@@ -169,7 +169,8 @@ class editItemSuperCategory extends React.Component {
               Validations: v2,
               Description: e.target.value,
             });
-          }          break;
+          }
+          break;
         case "HSNCode":
           let v3 = this.state.Validations;
           if (e.target.value.length > 10) {
@@ -184,7 +185,8 @@ class editItemSuperCategory extends React.Component {
               Validations: v3,
               HSNCode: e.target.value,
             });
-          }          break;
+          }
+          break;
         case "IsActive":
           this.setState({ IsActive: e.target.checked });
           break;
@@ -302,7 +304,7 @@ class editItemSuperCategory extends React.Component {
                     onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>
@@ -376,7 +378,9 @@ class editItemSuperCategory extends React.Component {
                           }}
                           value={this.state.Description}
                           error={this.state.Validations.Description.errorState}
-                          helperText={this.state.Validations.Description.errorMssg}
+                          helperText={
+                            this.state.Validations.Description.errorMssg
+                          }
                         />
 
                         <TextboxInput

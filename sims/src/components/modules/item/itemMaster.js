@@ -161,7 +161,7 @@ class itemMaster extends React.Component {
                       openPage(URLS.URLS.addItem + this.state.urlparams)
                     }
                   >
-                    NEW
+                    {APIURLS.buttonTitle.add}
                   </Button>
                   <Button className="action-btns"
                     startIcon={<EditIcon />}
@@ -170,7 +170,7 @@ class itemMaster extends React.Component {
                     }
                     disabled={this.state.editBtnDisable}
                   >
-                    Edit
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                 </ButtonGroup>
               </div>

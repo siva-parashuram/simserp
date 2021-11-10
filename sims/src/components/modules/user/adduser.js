@@ -411,7 +411,7 @@ class adduser extends React.Component {
                     onClick={handleCreate}
                     disabled={this.state.DisabledCreatebtn}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

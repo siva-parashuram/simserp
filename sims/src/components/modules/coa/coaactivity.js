@@ -476,6 +476,7 @@ class coaactivity extends React.Component {
                           value={this.state.ChartOfAccount.ACNo}
                           error={this.state.Validations.ACNo.errorState}
                           helperText={this.state.Validations.ACNo.errorMssg}
+                          isMandatory={true}
                         />
                         <TextboxInput
                           id="Name"
@@ -486,6 +487,7 @@ class coaactivity extends React.Component {
                           value={this.state.ChartOfAccount.Name}
                           error={this.state.Validations.Name.errorState}
                           helperText={this.state.Validations.Name.errorMssg}
+                          isMandatory={true}
                         />
 
                         <TextboxInput
@@ -527,6 +529,7 @@ class coaactivity extends React.Component {
                           onChange={(e) => updateFormValue("ACType", e)}
                           value={this.state.ChartOfAccount.ACType}
                           options={APIURLS.ACType}
+                          isMandatory={true}
                         />
                         <DropdownInput
                           id="IncomeBalance"
@@ -534,6 +537,7 @@ class coaactivity extends React.Component {
                           onChange={(e) => updateFormValue("IncomeBalance", e)}
                           value={this.state.ChartOfAccount.IncomeBalance}
                           options={APIURLS.IncomeBalance}
+                          isMandatory={true}
                         />
                         <DropdownInput
                           id="ACCategory"
@@ -541,6 +545,7 @@ class coaactivity extends React.Component {
                           onChange={(e) => updateFormValue("ACCategory", e)}
                           value={this.state.ChartOfAccount.ACCategory}
                           options={APIURLS.ACCategory}
+                          isMandatory={true}
                         />
                         <DropdownInput
                           id="ACSubCategory"

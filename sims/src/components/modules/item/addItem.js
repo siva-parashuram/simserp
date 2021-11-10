@@ -974,7 +974,7 @@ class addItem extends React.Component {
                     startIcon={<AddIcon />}
                     onClick={(e) => processCreateItem()}
                   >
-                    Add
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

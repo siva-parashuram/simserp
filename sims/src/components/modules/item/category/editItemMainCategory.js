@@ -355,7 +355,7 @@ class editItemMainCategory extends React.Component {
                     onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>
@@ -429,7 +429,9 @@ class editItemMainCategory extends React.Component {
                           }}
                           value={this.state.Description}
                           error={this.state.Validations.Description.errorState}
-                          helperText={this.state.Validations.Description.errorMssg}
+                          helperText={
+                            this.state.Validations.Description.errorMssg
+                          }
                         />
 
                         <TextboxInput

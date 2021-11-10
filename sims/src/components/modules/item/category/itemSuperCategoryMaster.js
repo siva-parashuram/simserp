@@ -164,14 +164,14 @@ class itemSuperCategoryMaster extends React.Component {
                     startIcon={<AddIcon />}
                     onClick={(e) => openPage(URLS.URLS.addItemSuperCategory + this.state.urlparams)}
                   >
-                    New
+                    {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editurl)}
                   >
-                    Edit
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                 </ButtonGroup>
               </div>

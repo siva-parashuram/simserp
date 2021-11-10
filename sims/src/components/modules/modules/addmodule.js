@@ -354,7 +354,7 @@ if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) 
                     onClick={handleCreate}
                     disabled={this.state.CreateBtnDisable}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>
