@@ -17,10 +17,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 
-
 import * as CF from "../../../services/functions/customfunctions";
-
-
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -48,8 +45,8 @@ class addcurrency extends React.Component {
       initialCss: "",
       SuccessPrompt: false,
       ErrorPrompt: false,
-      DisableCreatebtn:false,
-      COAList:[],
+      DisableCreatebtn: false,
+      COAList: [],
       Currency: {
         CurrId: 0,
         Code: null,
@@ -58,9 +55,8 @@ class addcurrency extends React.Component {
         RealizedGainId: 0,
         RealizedLossId: 0,
         Rounding: 0,
-       
       },
-      currency:[],
+      currency: [],
       Code: null,
       Description: null,
       Symbol: null,
@@ -104,12 +100,12 @@ class addcurrency extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
-        let newD=[];
-        for(let i=0;i<data.length;i++){
-          if(data[i].ACType===0){
-            let o={
-              name:data[i].Name,
-              value:data[i].CAcID
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].ACType === 0) {
+            let o = {
+              name: data[i].Name,
+              value: data[i].CAcID,
             };
             newD.push(o);
           }
@@ -118,8 +114,8 @@ class addcurrency extends React.Component {
         this.setState({ COAList: newD });
         this.setState({ ProgressLoader: true });
       })
-      .catch((error) => { });
-  }
+      .catch((error) => {});
+  };
 
   getList() {
     this.setState({ ProgressLoader: false });
@@ -156,24 +152,27 @@ class addcurrency extends React.Component {
     const updateFormValue = (id, e) => {
       let Currency = this.state.Currency;
 
-
       if (id === "Code") {
-        let duplicateExist= CF.chkDuplicateName(this.state.currency,"code",e.target.value);
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.currency,
+          "code",
+          e.target.value
+        );
         Currency.Code = e.target.value;
-        if (e.target.value.length > 10||duplicateExist===true) {
-          if(duplicateExist===true){
+        if (e.target.value.length > 10 || duplicateExist === true) {
+          if (duplicateExist === true) {
             let v = this.state.Validations;
-          v.Code = {
-            errorState: true,
-            errorMssg: "Code Exists",
-          };
-          this.setState({
-            Validations: v,
-            DisableCreatebtn:true,
-            Code: e.target.value,
-          });
+            v.Code = {
+              errorState: true,
+              errorMssg: "Code Exists",
+            };
+            this.setState({
+              Validations: v,
+              DisableCreatebtn: true,
+              Code: e.target.value,
+            });
           }
-          if(e.target.value.length > 10){
+          if (e.target.value.length > 10) {
             let v = this.state.Validations;
             v.Code = {
               errorState: true,
@@ -181,18 +180,17 @@ class addcurrency extends React.Component {
             };
             this.setState({
               Validations: v,
-              DisableCreatebtn:true,
+              DisableCreatebtn: true,
             });
-          }}
-          
-           else {
+          }
+        } else {
           let v = this.state.Validations;
           v.Code = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
             Currency: Currency,
             Code: e.target.value,
-            DisableCreatebtn:false
+            DisableCreatebtn: false,
           });
         }
       }
@@ -239,15 +237,14 @@ class addcurrency extends React.Component {
         }
       }
 
-      if(id==="RealizedGainId"){
+      if (id === "RealizedGainId") {
         Currency.RealizedGainId = e.target.value;
-        this.setState({Currency:Currency});
+        this.setState({ Currency: Currency });
       }
-      if(id==="RealizedLossId"){
+      if (id === "RealizedLossId") {
         Currency.RealizedLossId = e.target.value;
-        this.setState({Currency:Currency});
+        this.setState({ Currency: Currency });
       }
-
     };
 
     const handleCreate = (e) => {
@@ -292,8 +289,6 @@ class addcurrency extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-   
 
     return (
       <Fragment>
@@ -345,7 +340,7 @@ class addcurrency extends React.Component {
                     onClick={(e) => handleCreate(e)}
                     disabled={this.state.DisableCreatebtn}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>
@@ -445,7 +440,6 @@ class addcurrency extends React.Component {
                           value={this.state.Currency.RealizedLossId}
                           options={this.state.COAList}
                         />
-
                       </TableBody>
                     </Table>
                   </TableContainer>

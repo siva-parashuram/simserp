@@ -104,11 +104,13 @@ export const APIURL = {
 };
 
 
-export const buttonTitle=[
-  {add:"Add"},
-  {edit:"Edit"},
-  {update:"Update"},
-]
+export const buttonTitle={
+  add:"Add",
+  edit:"Edit",
+  update:"Update"
+};
+
+
 
 
 

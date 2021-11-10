@@ -12,8 +12,6 @@ import TableRow from "@material-ui/core/TableRow";
 
 import ButtonGroup from "@mui/material/ButtonGroup";
 
-
-
 import EditIcon from "@mui/icons-material/Edit";
 import "../../user/dasboard.css";
 
@@ -42,7 +40,7 @@ class statemaster extends React.Component {
   componentDidMount() {
     // this.setState({ ProgressLoader: false });
     this.getStateList();
-    
+
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -73,7 +71,7 @@ class statemaster extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-         console.log("data > ",data);
+        console.log("data > ", data);
         rows = data;
         this.setState({ stateData: rows, ProgressLoader: true }, () => {
           if (rows.length > 0) {
@@ -122,8 +120,8 @@ class statemaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-     // getDestinationsByState(item);
-     this.setState({ destinations: item.destinations });
+      // getDestinationsByState(item);
+      this.setState({ destinations: item.destinations });
       let editUrl =
         URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
 
@@ -175,8 +173,6 @@ class statemaster extends React.Component {
         .catch((error) => {});
     };
 
-    
-
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
@@ -223,14 +219,14 @@ class statemaster extends React.Component {
                       openPage(URLS.URLS.addState + this.state.urlparams)
                     }
                   >
-                    New
+                    {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editurl)}
                   >
-                    Edit
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                 </ButtonGroup>
               </div>

@@ -429,14 +429,14 @@ class companyMaster extends React.Component {
                       openPage(URLS.URLS.addNewCompany + this.state.urlparams)
                     }
                   >
-                   {APIURLS.buttonTitle[0].add}
+                   {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editUrl)}
                   >
-                     {APIURLS.buttonTitle[1].edit}
+                     {APIURLS.buttonTitle.edit}
                   </Button>
 
                   <Button

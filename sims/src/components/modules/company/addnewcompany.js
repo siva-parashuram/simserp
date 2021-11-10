@@ -563,7 +563,7 @@ class addnewcompany extends React.Component {
                     disabled={this.state.createBtnDisabled}
                     onClick={handleCreateCompanyClick}
                   >
-                     {APIURLS.buttonTitle[0].add}
+                     {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

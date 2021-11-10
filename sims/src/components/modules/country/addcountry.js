@@ -60,7 +60,7 @@ class addcountry extends React.Component {
       selectedZone: null,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      duplicate:false,
+      duplicate: false,
     };
   }
 
@@ -98,12 +98,10 @@ class addcountry extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState(
-          {
-            countryData: rows,
-            ProgressLoader: true,
-          }
-        );
+        this.setState({
+          countryData: rows,
+          ProgressLoader: true,
+        });
       })
       .catch((error) => {});
   }
@@ -155,7 +153,8 @@ class addcountry extends React.Component {
       if (
         this.state.Name === "" ||
         this.state.Name === null ||
-        this.state.Name.length > 50||this.state.duplicate===true
+        this.state.Name.length > 50 ||
+        this.state.duplicate === true
       ) {
         this.setState({ DisableCreatebtn: true });
       } else {
@@ -175,10 +174,11 @@ class addcountry extends React.Component {
         if (
           e.target.value === "" ||
           e.target.value === null ||
-          e.target.value.length > 50||duplicateExist===true
+          e.target.value.length > 50 ||
+          duplicateExist === true
         ) {
           let v = this.state.Validations;
-          if(duplicateExist===true){  
+          if (duplicateExist === true) {
             v.Name = {
               errorState: true,
               errorMssg: "Country Master Exists",
@@ -187,7 +187,7 @@ class addcountry extends React.Component {
               Validations: v,
               DisableCreatebtn: true,
               Name: e.target.value,
-              duplicate:true
+              duplicate: true,
             });
           }
           if (e.target.value.length > 50) {
@@ -206,7 +206,6 @@ class addcountry extends React.Component {
               Validations: v,
               DisableCreatebtn: true,
               Name: e.target.value,
-
             });
           }
         } else {
@@ -327,8 +326,6 @@ class addcountry extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    
-
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -379,7 +376,7 @@ class addcountry extends React.Component {
                     onClick={handleCreate}
                     disabled={this.state.DisableCreatebtn}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

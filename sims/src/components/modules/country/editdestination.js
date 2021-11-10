@@ -266,7 +266,6 @@ class editdestination extends React.Component {
             this.setState({
               Validations: v,
               DisabledUpdatebtn: true,
-              
             });
           }
           if (e.target.value === "" || e.target.value === null) {
@@ -424,7 +423,7 @@ class editdestination extends React.Component {
                     disabled={this.state.DisabledUpdatebtn}
                     onClick={updateDestination}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

@@ -247,14 +247,14 @@ class branchMaster extends React.Component {
                       openPage(URLS.URLS.addBranch + this.state.urlparams)
                     }
                   >
-                    New
+                    {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editUrl)}
                   >
-                    Edit
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                 </ButtonGroup>
               </div>

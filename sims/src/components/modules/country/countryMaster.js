@@ -134,7 +134,7 @@ class countryMaster extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-       
+
         rows = data;
         this.setState({ states: rows, ProgressLoader: true });
       })
@@ -147,7 +147,7 @@ class countryMaster extends React.Component {
       this.state.urlparams +
       "&countryID=" +
       item.countryId;
-    this.setState({ editurl: editUrl,destinations: item.destinations });
+    this.setState({ editurl: editUrl, destinations: item.destinations });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -168,7 +168,7 @@ class countryMaster extends React.Component {
         this.state.urlparams +
         "&countryID=" +
         item.countryId;
-      this.setState({ editurl: editUrl,destinations: item.destinations });
+      this.setState({ editurl: editUrl, destinations: item.destinations });
       getStatesByCountry(item);
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
@@ -315,14 +315,14 @@ class countryMaster extends React.Component {
                       openPage(URLS.URLS.addCountry + this.state.urlparams)
                     }
                   >
-                    New
+                    {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editurl)}
                   >
-                    Edit
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                 </ButtonGroup>
               </div>

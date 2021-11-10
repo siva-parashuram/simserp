@@ -656,7 +656,7 @@ class addbranch extends React.Component {
                     onClick={handleCreate}
                     disabled={this.state.disabledCreatebtn}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

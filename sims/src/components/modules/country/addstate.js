@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
- 
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 
@@ -15,10 +15,10 @@ import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
- 
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
- 
+
 import * as CF from "../../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -36,7 +36,7 @@ class addstate extends React.Component {
       urlparams: "",
       ProgressLoader: false,
       GeneralDetailsExpanded: true,
-      stateData:[],
+      stateData: [],
       state: {
         StateId: 0,
         CountryId: 0,
@@ -99,10 +99,9 @@ class addstate extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("getStateList > ",data);
+        console.log("getStateList > ", data);
         rows = data;
-        this.setState({stateData:data, ProgressLoader: true });
-       
+        this.setState({ stateData: data, ProgressLoader: true });
       })
       .catch((error) => {});
   }
@@ -122,8 +121,8 @@ class addstate extends React.Component {
       .then((response) => {
         let data = response.data;
         rows = data;
-        console.log("country list > ",data)
-        
+        console.log("country list > ", data);
+
         this.getStateList();
         this.processCountryData(data);
       })
@@ -133,13 +132,11 @@ class addstate extends React.Component {
   processCountryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
-     
-        let d = {
-          name: data[i].name ,
-          value: data[i].countryId,
-        };
-        newData.push(d);
-      
+      let d = {
+        name: data[i].name,
+        value: data[i].countryId,
+      };
+      newData.push(d);
     }
     this.setState({ countryData: newData, ProgressLoader: true });
   }
@@ -172,7 +169,11 @@ class addstate extends React.Component {
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
-        let duplicateExist= CF.chkDuplicateName(this.state.stateData,"name",e.target.value);
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.stateData,
+          "name",
+          e.target.value
+        );
         let state = this.state.state;
         state.Name = e.target.value;
 
@@ -180,10 +181,9 @@ class addstate extends React.Component {
           e.target.value === "" ||
           e.target.value == null ||
           e.target.value.length > 50 ||
-          duplicateExist===true
+          duplicateExist === true
         ) {
-
-          if(duplicateExist===true){
+          if (duplicateExist === true) {
             let v = this.state.Validations;
             v.name = {
               errorState: true,
@@ -336,8 +336,6 @@ class addstate extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-   
-
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -388,7 +386,7 @@ class addstate extends React.Component {
                     disabled={this.state.disableCreateBtn}
                     onClick={handleCreate}
                   >
-                    Add
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>
@@ -404,7 +402,7 @@ class addstate extends React.Component {
                 expanded={this.state.GeneralDetailsExpanded}
               >
                 <AccordionSummary
-                key="AS-1"
+                  key="AS-1"
                   className="accordion-Header-Design"
                   expandIcon={
                     <ExpandMoreIcon
@@ -481,8 +479,6 @@ class addstate extends React.Component {
                           options={this.state.countryData}
                           value={this.state.countryId}
                         />
-
-                        
                       </TableBody>
                     </Table>
                   </TableContainer>

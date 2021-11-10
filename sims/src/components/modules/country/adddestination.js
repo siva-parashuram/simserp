@@ -356,7 +356,7 @@ class adddestination extends React.Component {
                     disabled={this.state.DisabledCreatebtn}
                     onClick={addDestination}
                   >
-                    Add
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>
@@ -453,9 +453,7 @@ class adddestination extends React.Component {
                               <DropdownInput
                                 id="stateID"
                                 label="State"
-                                onChange={(e) =>
-                                  updateFormValue("stateID", e)
-                                }
+                                onChange={(e) => updateFormValue("stateID", e)}
                                 options={this.state.stateData}
                                 value={this.state.stateId}
                               />

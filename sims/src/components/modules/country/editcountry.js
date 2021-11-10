@@ -411,7 +411,7 @@ class editcountry extends React.Component {
                     onClick={handleUpdate}
                     disabled={this.state.DisableUpdatebtn}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

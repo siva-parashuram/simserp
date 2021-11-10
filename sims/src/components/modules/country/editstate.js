@@ -428,7 +428,7 @@ class editstate extends React.Component {
                     onClick={handleUpdate}
                     disabled={this.state.disableUpdateBtn}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>
@@ -518,8 +518,6 @@ class editstate extends React.Component {
                           options={this.state.countryData}
                           value={this.state.countryId}
                         />
-
-                        
                       </TableBody>
                     </Table>
                   </TableContainer>

@@ -652,7 +652,7 @@ class coaactivity extends React.Component {
                       onClick={(e) => createCoa(e)}
                       disabled={this.state.DisableCreatebtn}
                     >
-                      Create
+                      {APIURLS.buttonTitle.add}
                     </Button>
                   ) : null}
                   {this.state.type === "edit" ? (
@@ -661,7 +661,7 @@ class coaactivity extends React.Component {
                       onClick={(e) => updateCoa(e)}
                       disabled={this.state.DisableUpdatebtn}
                     >
-                      Update
+                      {APIURLS.buttonTitle.update}
                     </Button>
                   ) : null}
                 </ButtonGroup>

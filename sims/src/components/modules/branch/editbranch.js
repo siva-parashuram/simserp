@@ -1303,7 +1303,7 @@ class editbranch extends React.Component {
                     onClick={handleupdate}
                     disabled={this.state.disabledUpdatebtn}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

@@ -143,14 +143,14 @@ class currencymaster extends React.Component {
                       openPage(URLS.URLS.addCurrency + this.state.urlparams)
                     }
                   >
-                    New
+                    {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
                     //onClick={(e) => openPage(this.state.editUrl)}
                   >
-                    Edit
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                 </ButtonGroup>
               </div>
@@ -198,7 +198,7 @@ class currencymaster extends React.Component {
                             handleRowClick(event, item, "row_" + i)
                           }
                         >
-                          <TableCell align="left">{i+1}</TableCell>
+                          <TableCell align="left">{i + 1}</TableCell>
                           <TableCell align="left">{item.code}</TableCell>
                           <TableCell align="left">{item.description}</TableCell>
                           <TableCell align="left">{item.rounding}</TableCell>

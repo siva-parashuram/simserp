@@ -689,7 +689,7 @@ class editcompany extends React.Component {
                       onClick={(e) => updateCompanyDetails()}
                       disabled={this.state.updateBtnDisabled}
                     >
-                       {APIURLS.buttonTitle[2].update}
+                       {APIURLS.buttonTitle.update}
                     </Button>
                   </ButtonGroup>
                 </div>
