@@ -37,6 +37,7 @@ class editItem extends React.Component {
       InvoicingDetailsExpanded: false,
       ReplenishmentDetailsExpanded: false,
       SuccessPrompt: false,
+      ErrorPrompt:false,
       ProgressLoader: true,
       urlparams: "",
       itemDepartmentMasterData: [],
@@ -882,7 +883,7 @@ class editItem extends React.Component {
           break;
 
         case "IsLot":
-          setStateParam({}, param, e.target.value);
+          setStateParam({}, param, e.target.checked);
           break;
 
         //---------------------

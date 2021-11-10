@@ -169,6 +169,7 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.addCustomer} component={customeractivity} />
         <Route path={URLS.URLS.editCustomer} component={customeractivity} />
         
+        
 
 
         <Route path={URLS.URLS.testformat} component={testformat} />
