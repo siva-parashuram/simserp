@@ -1,4 +1,16 @@
 
+.inside-table-cell-bold{
+  font-weight: bold !important;
+  color:#90a4ae !important
+}
+
+.sidenav-fixedheight-scroll{
+  height: 450px !important;
+  width: 100% !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+}
+
 .hide-row-arrow-display{
   display: none !important;
 }

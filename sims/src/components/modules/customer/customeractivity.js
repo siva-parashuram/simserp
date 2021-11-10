@@ -64,7 +64,7 @@ class customeractivity extends React.Component {
                 City: "",
                 PostCode: "",
                 CountryID: 0,
-                StateID: 0,
+                StateID: 12,
                 Website: "",
                 PhoneNo: "",
                 FaxNo: "",
@@ -149,7 +149,7 @@ class customeractivity extends React.Component {
             ProgressLoader: type === "add" ? true : false,
         });
 
-        this.setState({ urlparams: urlparams });
+         console.log("On load state > ",this.state);
     }
 
     getAllCustomerPostingGroup = () => {
@@ -293,7 +293,31 @@ class customeractivity extends React.Component {
 
 
     getCustomerDetails = (Customer) => {
-
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.GetCustomer;
+        let reqData = {
+            ValidUser: ValidUser,
+            Customer: Customer,
+        };
+        console.log("getCustomerDetails > getCustomerDetails >", reqData);
+        axios
+            .post(Url, reqData, { headers })
+            .then((response) => {
+                let data = response.data;                   
+                if (response.status === 200 || response.status === 201 ) {
+                    this.setState({Customer:data, ErrorPrompt: false, SuccessPrompt: true });
+                } else {
+                    this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+                }
+            })
+            .catch((error) => {
+                this.setState({ ErrorPrompt: true });
+            });
     }
 
 
@@ -560,8 +584,34 @@ class customeractivity extends React.Component {
                 .catch((error) => {
                     this.setState({ ErrorPrompt: true });
                 });
+        }
 
-
+        const updateCustomer = (e) => {
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            const headers = {
+                "Content-Type": "application/json",
+            };
+            let Url = APIURLS.APIURL.UpdateCustomer;
+            let reqData = {
+                ValidUser: ValidUser,
+                Customer: this.state.Customer,
+            };
+            console.log("updateCustomer > reqData >", reqData);
+            axios
+                .post(Url, reqData, { headers })
+                .then((response) => {
+                    let data = response.data;                   
+                    if (response.status === 200 || response.status === 201 ) {
+                        this.setState({ ErrorPrompt: false, SuccessPrompt: true });
+                    } else {
+                        this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+                    }
+                })
+                .catch((error) => {
+                    this.setState({ ErrorPrompt: true });
+                });
         }
 
 
@@ -587,6 +637,7 @@ class customeractivity extends React.Component {
                                                     size="small"
                                                     onChange={(e) => updateFormValue("Code", e)}
                                                     value={this.state.Customer.Code}
+                                                    isMandatory={true}
                                                 />
                                                 <TextboxInput
                                                     id="Name"
@@ -642,6 +693,7 @@ class customeractivity extends React.Component {
                                                     onChange={(e) => updateFormValue("CountryID", e)}
                                                     value={this.state.Customer.CountryID}
                                                     options={this.state.countryData}
+                                                    isMandatory={true}
                                                 />
                                                 <DropdownInput
                                                     id="StateID"
@@ -1096,13 +1148,30 @@ class customeractivity extends React.Component {
                                         </Button>
                                     ) : null}
                                     {this.state.type === "edit" ? (
-                                        <Button
-                                            className="action-btns"
-                                            // onClick={(e) => updateCoa(e)}
-                                            disabled={this.state.DisableUpdatebtn}
-                                        >
-                                            Update
-                                        </Button>
+                                        <Fragment>
+                                            <Button
+                                                className="action-btns"
+                                                 onClick={(e) => updateCustomer(e)}
+                                                disabled={this.state.DisableUpdatebtn}
+                                            >
+                                                Update
+                                            </Button>
+                                            <Button
+                                                className="action-btns"                                                 
+                                            >
+                                                Address
+                                            </Button>
+                                            <Button
+                                                className="action-btns"
+                                            >
+                                                Contact
+                                            </Button>
+                                            <Button
+                                                className="action-btns"
+                                            >
+                                                Branch Mapping
+                                            </Button>
+                                        </Fragment>
                                     ) : null}
 
                                 </ButtonGroup>
