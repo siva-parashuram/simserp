@@ -650,7 +650,7 @@ class addpage extends React.Component {
                 disabled={this.state.updateBtnDisable}
                 onClick={handleUpdate}
               >
-                Update
+                {APIURLS.buttonTitle.update}
               </Button>
             </Grid>
           </Grid>
@@ -705,7 +705,7 @@ class addpage extends React.Component {
                   }}
                   disabled={this.state.createBtnDisable}
                 >
-                  Create
+                  {APIURLS.buttonTitle.add}
                 </Button>
               </Grid>
             </Grid>

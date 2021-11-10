@@ -387,7 +387,7 @@ class customerMaster extends React.Component {
                                             openPage(URLS.URLS.addCustomer + this.state.urlparams + "&type=add")
                                         }
                                     >
-                                        NEW
+                                        {APIURLS.buttonTitle.add}
                                     </Button>
                                     <Button className="action-btns"
                                         startIcon={<EditIcon />}
@@ -396,7 +396,7 @@ class customerMaster extends React.Component {
                                         }
                                         disabled={this.state.editBtnDisable}
                                     >
-                                        Edit
+                                        {APIURLS.buttonTitle.edit}
                                     </Button>
                                 </ButtonGroup>
                             </div>

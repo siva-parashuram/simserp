@@ -360,7 +360,7 @@ this.getItemCategory();
                     onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

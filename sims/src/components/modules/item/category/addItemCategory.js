@@ -324,7 +324,7 @@ class addItemCategory extends React.Component {
                     onClick={createNew}
                     disabled={this.state.DisableCreatebtn}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

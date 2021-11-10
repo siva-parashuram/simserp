@@ -1437,7 +1437,7 @@ class customeractivity extends React.Component {
                                             onClick={(e) => AddNew(e)}
                                             disabled={this.state.DisableCreatebtn}
                                         >
-                                            Create
+                                            {APIURLS.buttonTitle.add}
                                         </Button>
                                     ) : null}
                                     {this.state.type === "edit" ? (
@@ -1447,7 +1447,7 @@ class customeractivity extends React.Component {
                                                 onClick={(e) => updateCustomer(e)}
                                                 disabled={this.state.DisableUpdatebtn}
                                             >
-                                                Update
+                                                {APIURLS.buttonTitle.update}
                                             </Button>
                                             <Button
                                                 className="action-btns"

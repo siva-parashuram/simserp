@@ -1080,7 +1080,7 @@ class editItem extends React.Component {
                     startIcon={<AddIcon />}
                     onClick={(e) => processUpdateItem()}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

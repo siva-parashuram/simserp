@@ -279,7 +279,7 @@ class editItemDepartment extends React.Component {
                     onClick={update}
                     disabled={this.state.DisableUpdatebtn}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

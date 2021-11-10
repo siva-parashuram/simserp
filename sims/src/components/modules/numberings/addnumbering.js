@@ -353,7 +353,7 @@ class addnumbering extends React.Component {
                     startIcon={<AddIcon />}
                     onClick={(e) => handleCreate(e)}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

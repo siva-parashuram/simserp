@@ -164,7 +164,7 @@ class itemMainCategoryMaster extends React.Component {
                       )
                     }
                   >
-                    New
+                    {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
@@ -173,7 +173,7 @@ class itemMainCategoryMaster extends React.Component {
                       openPage(this.state.editurl)
                     }
                   >
-                    Edit
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                 </ButtonGroup>
               </div>

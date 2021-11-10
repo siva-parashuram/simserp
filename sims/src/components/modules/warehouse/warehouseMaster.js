@@ -170,14 +170,14 @@ class warehouseMaster extends React.Component {
                       openPage(URLS.URLS.addWarehouse + this.state.urlparams)
                     }
                   >
-                    New
+                    {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
                     startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editurl)}
                   >
-                    Edit
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                 </ButtonGroup>
               </div>

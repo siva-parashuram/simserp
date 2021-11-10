@@ -565,7 +565,7 @@ class editwarehouse extends React.Component {
                     onClick={(e) => handleUpdate()}
                     disabled={this.state.DisableUpdatebtn}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

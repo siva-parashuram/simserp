@@ -564,7 +564,7 @@ class addwarehouse extends React.Component {
                     onClick={(e) => handleCreate()}
                     disabled={this.state.DisableAddbtn}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

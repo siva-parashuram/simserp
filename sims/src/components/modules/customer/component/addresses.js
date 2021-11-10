@@ -137,6 +137,7 @@ class addresses extends React.Component {
                         label="Code"
                         variant="outlined"
                         size="small"
+                        isMandatory={true}
                       />
                       <TextboxInput
                         id="Name"

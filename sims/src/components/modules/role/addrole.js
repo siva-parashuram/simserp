@@ -269,7 +269,7 @@ class addrole extends React.Component {
                     onClick={(e) => handleCreate(e)}
                     disabled={this.state.CreateBtnDisable}
                   >
-                    ADD
+                    {APIURLS.buttonTitle.add}
                   </Button>
                 </ButtonGroup>
               </div>

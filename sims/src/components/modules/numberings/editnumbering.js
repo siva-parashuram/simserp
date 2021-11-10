@@ -418,7 +418,7 @@ class editnumbering extends React.Component {
                     startIcon={<UpdateIcon />}
                     onClick={(e) => handleUpdate(e)}
                   >
-                    Update
+                    {APIURLS.buttonTitle.update}
                   </Button>
                 </ButtonGroup>
               </div>

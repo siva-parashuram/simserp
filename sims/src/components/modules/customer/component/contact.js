@@ -103,6 +103,7 @@ class contact extends React.Component {
                         label="ContactType"
                         // onChange={ }
                         // options={}
+                        isMandatory={true}
                       />
                       <TextboxInput
                         id="Name"
