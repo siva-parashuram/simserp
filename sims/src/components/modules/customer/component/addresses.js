@@ -72,7 +72,7 @@ class addresses extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     const listCustomerAddresses = (
@@ -98,16 +98,15 @@ class addresses extends React.Component {
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick ={(e) => {}}>
-            {APIURLS.buttonTitle.add}
-
+            <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+              {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
         </Grid>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
+          <Grid xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
                 <TableContainer>
                   <Table
                     stickyHeader
@@ -119,8 +118,8 @@ class addresses extends React.Component {
                       <DropdownInput
                         id="AddressType"
                         label="AddressType"
-                        // onChange={ }
-                        // options={}
+                      // onChange={ }
+                      // options={}
                       />
                       <TextboxInput
                         id="Code"
@@ -167,14 +166,14 @@ class addresses extends React.Component {
                       <DropdownInput
                         id="CountryID"
                         label="Country"
-                        // onChange={ }
-                        // options={}
+                      // onChange={ }
+                      // options={}
                       />
                       <DropdownInput
                         id="StateID"
                         label="State"
-                        // onChange={ }
-                        // options={}
+                      // onChange={ }
+                      // options={}
                       />
                       <TextboxInput
                         id="ContactPerson"
@@ -192,7 +191,7 @@ class addresses extends React.Component {
                   </Table>
                 </TableContainer>
               </Grid>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
                 <TableContainer>
                   <Table
                     stickyHeader
@@ -236,19 +235,19 @@ class addresses extends React.Component {
                         id="IsBlock"
                         label="IsBlock"
                         param={this.state.CustomerAddress.IsBlock}
-                        // onChange={(e) => updateFormValue("IsBlock", e)}
+                      // onChange={(e) => updateFormValue("IsBlock", e)}
                       />
                       <DropdownInput
                         id="IncoID"
                         label="IncoID"
-                        // onChange={ }
-                        // options={}
+                      // onChange={ }
+                      // options={}
                       />
                       <DropdownInput
                         id="ShipmentModeID"
                         label="ShipmentModeID"
-                        // onChange={ }
-                        // options={}
+                      // onChange={ }
+                      // options={}
                       />
                       <TextboxInput
                         id="PostOfDischarge"
@@ -306,17 +305,13 @@ class addresses extends React.Component {
         />
 
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={10} lg={10}>
-            <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={10} lg={10}>
-                <Dualtabcomponent
-                  tab1name="List"
-                  tab2name="New"
-                  tab1Html={listCustomerAddresses}
-                  tab2Html={createCustomerAddress}
-                />
-              </Grid>
-            </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Dualtabcomponent
+              tab1name="List"
+              tab2name="New"
+              tab1Html={listCustomerAddresses}
+              tab2Html={createCustomerAddress}
+            />
           </Grid>
         </Grid>
       </Fragment>

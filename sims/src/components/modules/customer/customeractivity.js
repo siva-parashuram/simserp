@@ -18,6 +18,14 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IconButton from '@mui/material/IconButton';
+
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import ErrorSnackBar from "../../compo/errorSnackbar";
@@ -28,10 +36,19 @@ import DropdownInput from "../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
 
 
+import Addresses from './component/addresses';
+
+
 class customeractivity extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            Dialog:{
+                DialogTitle:"",
+                DialogStatus:false,
+                DialogContent:null,
+            },   
+            
             accordion1: true,
             accordion2: false,
             accordion3: false,
@@ -153,6 +170,7 @@ class customeractivity extends React.Component {
     }
 
     getAllCustomerPostingGroup = () => {
+        
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -293,6 +311,7 @@ class customeractivity extends React.Component {
 
 
     getCustomerDetails = (Customer) => {
+        this.setState({ProgressLoader: false});
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -310,13 +329,13 @@ class customeractivity extends React.Component {
             .then((response) => {
                 let data = response.data;                   
                 if (response.status === 200 || response.status === 201 ) {
-                    this.setState({Customer:data, ErrorPrompt: false, SuccessPrompt: true });
+                    this.setState({Customer:data,ProgressLoader: true });
                 } else {
-                    this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+                    this.setState({ ErrorPrompt: true, SuccessPrompt: false,ProgressLoader: true });
                 }
             })
             .catch((error) => {
-                this.setState({ ErrorPrompt: true });
+                this.setState({ ErrorPrompt: true,ProgressLoader: true });
             });
     }
 
@@ -1102,8 +1121,71 @@ class customeractivity extends React.Component {
             </Fragment>
         );
 
+        
 
 
+        const dialog = (
+            <Fragment>
+                <Dialog
+                    fullWidth={true}
+                    maxWidth="lg"
+                    open={this.state.Dialog.DialogStatus}
+                    onClose={(e)=>handleClose()}
+                    aria-labelledby="dialog-title"
+                    aria-describedby="dialog-description"
+                >
+                    <DialogTitle id="dialog-title">
+                    <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={1} lg={1}>
+                            <IconButton aria-label="delete"  style={{ textAlign: 'left', marginTop: 8 }}>
+                                <ArrowBackIcon onClick={(e) => handleClose()} /> 
+                            </IconButton>                          
+                        </Grid>    
+                        <Grid item xs={12} sm={12} md={2} lg={2}>
+                        <div style={{marginTop:10,marginLeft:-50}}>  {this.state.Dialog.DialogTitle}  </div>
+                        </Grid>                        
+                    </Grid>                      
+                    </DialogTitle>
+                    <DialogContent>
+                    
+                        <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                            {this.state.Dialog.DialogContent}
+                            </Grid>
+                        </Grid>    
+                        <div style={{height:50}}>&nbsp;</div>                  
+                    </DialogContent>                   
+                </Dialog>
+            </Fragment>
+        );
+
+        const address=(
+            <Addresses/>
+        );
+
+        const openDialog = (param) => {
+            let Dialog=this.state.Dialog;
+            Dialog.DialogStatus=true;
+            Dialog.DialogTitle=param;
+           
+            switch (param) {
+                case "Address":
+                    Dialog.DialogContent=address;
+                    this.setState({Dialog:Dialog});
+                    break;
+                default:
+                    break;
+            }
+
+
+            this.setState({ Dialog: Dialog });
+        }
+
+        const handleClose = () => {
+            let Dialog=this.state.Dialog;
+            Dialog.DialogStatus=false;
+            this.setState({ Dialog: Dialog });
+        };
 
 
         return (
@@ -1154,7 +1236,7 @@ class customeractivity extends React.Component {
                                         </Button>
                                     ) : null}
                                     {this.state.type === "edit" ? (
-                                        <Fragment>
+                                        <div>
                                             <Button
                                                 className="action-btns"
                                                  onClick={(e) => updateCustomer(e)}
@@ -1163,7 +1245,8 @@ class customeractivity extends React.Component {
                                                 Update
                                             </Button>
                                             <Button
-                                                className="action-btns"                                                 
+                                                className="action-btns"    
+                                                onClick={(e)=>openDialog('Address')}                                             
                                             >
                                                 Address
                                             </Button>
@@ -1177,7 +1260,7 @@ class customeractivity extends React.Component {
                                             >
                                                 Branch Mapping
                                             </Button>
-                                        </Fragment>
+                                        </div>
                                     ) : null}
 
                                 </ButtonGroup>
@@ -1231,6 +1314,9 @@ class customeractivity extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
+
+
+                {dialog}
 
             </Fragment>
         )
