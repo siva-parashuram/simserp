@@ -101,6 +101,9 @@ export const APIURL = {
   GetChartOfAccount:domain+"api/ChartOfAccount/GetChartOfAccount",
   UpdateChartOfAccount:domain+"api/ChartOfAccount/UpdateChartOfAccount",
   CreateCustomer:domain+"api/Customer/CreateCustomer",
+  GetAllCustomer:domain+"api/Customer/GetAllCustomer",
+  GetCustomer:domain+ "api/Customer/GetCustomer",
+  UpdateCustomer:domain+"api/Customer/UpdateCustomer",
 };
 
 export const CTimeOut = 10;
@@ -109,6 +112,12 @@ export let pagination= {
   page: 0,
   rowsPerPage: 10,
 };
+
+export const AddressType=[
+  {name:"Billing",value:0},
+  {name:"Shipping",value:1},
+  {name:"Notify",value:2},
+];
 
 export const CreditRating=[
   {name:"A",value:0},
