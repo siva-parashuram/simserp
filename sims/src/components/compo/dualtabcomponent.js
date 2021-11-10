@@ -44,7 +44,7 @@ class dualtabcomponent extends React.Component {
                         </ButtonGroup>
                     </Grid>
                 </Grid>
-                <div style={{height:30}}>&nbsp;</div>   
+                <div style={{height:10}}>&nbsp;</div>   
                 <Grid container spacing={0}>
                     {this.state.showTab1 === true ? (
                         <Fragment>

@@ -76,33 +76,44 @@ class addresses extends React.Component {
 
   render() {
     const listCustomerAddresses = (
-      <Table
-        stickyHeader
-        size="small"
-        className=""
-        aria-label="CustomerCategory List table"
-      >
-        <TableHead className="table-header-background">
-          <TableRow>
-            <TableCell className="table-header-font">#</TableCell>
-            <TableCell className="table-header-font" align="left">
-              Name
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody className="tableBody"></TableBody>
-      </Table>
+      <Fragment>
+        <div style={{ height: 300, overflowY: 'scroll', width: '100%' }}>
+          <Table
+            stickyHeader
+            size="small"
+            className=""
+            aria-label="CustomerCategory List table"
+          >
+            <TableHead className="table-header-background">
+              <TableRow>
+                <TableCell className="table-header-font">#</TableCell>
+                <TableCell className="table-header-font" align="left">
+                  Name
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody className="tableBody">
+
+            </TableBody>
+          </Table>
+        </div>
+      </Fragment>
     );
 
     const createCustomerAddress = (
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
+        <Grid xs={12} sm={12} md={2} lg={2}>
+            <Button className="action-btns" style={{ marginLeft: 10 }} onClick={(e) => { }}>
               {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
+        <Grid xs={12} sm={12} md={10} lg={10}>
+           &nbsp;
+          </Grid>
+          
         </Grid>
+        <div style={{ height: 10 }}>&nbsp;</div>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={2}>
