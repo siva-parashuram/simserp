@@ -86,7 +86,7 @@ class customerCategory extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
+              <Grid item xs={12} sm={12} md={9} lg={9}>
                 <TableContainer>
                   <Table
                     stickyHeader

@@ -560,6 +560,7 @@ class coaactivity extends React.Component {
                           onChange={(e) => updateFormValue("DebitCredit", e)}
                           value={this.state.ChartOfAccount.DebitCredit}
                           options={APIURLS.DebitCredit}
+                          isMandatory={true}
                         />
                         <SwitchInput
                           key="IsBlock"

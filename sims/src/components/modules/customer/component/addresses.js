@@ -72,12 +72,12 @@ class addresses extends React.Component {
     };
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   render() {
     const listCustomerAddresses = (
       <Fragment>
-        <div style={{ height: 300, overflowY: 'scroll', width: '100%' }}>
+        <div style={{ height: 300, overflowY: "scroll", width: "100%" }}>
           <Table
             stickyHeader
             size="small"
@@ -92,9 +92,7 @@ class addresses extends React.Component {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody className="tableBody">
-
-            </TableBody>
+            <TableBody className="tableBody"></TableBody>
           </Table>
         </div>
       </Fragment>
@@ -103,21 +101,24 @@ class addresses extends React.Component {
     const createCustomerAddress = (
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
-        <Grid xs={12} sm={12} md={2} lg={2}>
-            <Button className="action-btns" style={{ marginLeft: 10 }} onClick={(e) => { }}>
+          <Grid xs={12} sm={12} md={2} lg={2}>
+            <Button
+              className="action-btns"
+              style={{ marginLeft: 10 }}
+              onClick={(e) => {}}
+            >
               {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
-        <Grid xs={12} sm={12} md={10} lg={10}>
-           &nbsp;
+          <Grid xs={12} sm={12} md={10} lg={10}>
+            &nbsp;
           </Grid>
-          
         </Grid>
         <div style={{ height: 10 }}>&nbsp;</div>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
+              <Grid item xs={12} sm={12} md={3} lg={3}>
                 <TableContainer>
                   <Table
                     stickyHeader
@@ -129,8 +130,8 @@ class addresses extends React.Component {
                       <DropdownInput
                         id="AddressType"
                         label="AddressType"
-                      // onChange={ }
-                      // options={}
+                        // onChange={ }
+                        // options={}
                       />
                       <TextboxInput
                         id="Code"
@@ -175,17 +176,30 @@ class addresses extends React.Component {
                         variant="outlined"
                         size="small"
                       />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
+              <Grid item xs={12} sm={12} md={3} lg={3}>
+                <TableContainer>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label="customerAddress List table"
+                  >
+                    <TableBody className="tableBody">
                       <DropdownInput
                         id="CountryID"
                         label="Country"
-                      // onChange={ }
-                      // options={}
+                        // onChange={ }
+                        // options={}
                       />
                       <DropdownInput
                         id="StateID"
                         label="State"
-                      // onChange={ }
-                      // options={}
+                        // onChange={ }
+                        // options={}
                       />
                       <TextboxInput
                         id="ContactPerson"
@@ -199,19 +213,7 @@ class addresses extends React.Component {
                         variant="outlined"
                         size="small"
                       />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="customerAddress List table"
-                  >
-                    <TableBody className="tableBody">
+
                       <TextboxInput
                         id="EmailID"
                         label="Email ID"
@@ -236,6 +238,19 @@ class addresses extends React.Component {
                         variant="outlined"
                         size="small"
                       />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <TableContainer>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label="customerAddress List table"
+                  >
+                    <TableBody className="tableBody">
                       <TextboxInput
                         id="TSSNo"
                         label="TSSNo"
@@ -247,19 +262,19 @@ class addresses extends React.Component {
                         id="IsBlock"
                         label="IsBlock"
                         param={this.state.CustomerAddress.IsBlock}
-                      // onChange={(e) => updateFormValue("IsBlock", e)}
+                        // onChange={(e) => updateFormValue("IsBlock", e)}
                       />
                       <DropdownInput
                         id="IncoID"
                         label="IncoID"
-                      // onChange={ }
-                      // options={}
+                        // onChange={ }
+                        // options={}
                       />
                       <DropdownInput
                         id="ShipmentModeID"
                         label="ShipmentModeID"
-                      // onChange={ }
-                      // options={}
+                        // onChange={ }
+                        // options={}
                       />
                       <TextboxInput
                         id="PostOfDischarge"
