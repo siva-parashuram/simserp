@@ -91,7 +91,7 @@ class customerCategory extends React.Component {
                     stickyHeader
                     size="small"
                     className="accordion-table"
-                    aria-label="PostingGroup List table"
+                    aria-label="CustomerCategory List table"
                   >
                     <TableBody className="tableBody">
                       <TextboxInput

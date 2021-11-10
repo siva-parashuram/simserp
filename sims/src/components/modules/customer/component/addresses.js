@@ -3,7 +3,7 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,7 +13,7 @@ import SwitchInput from "../../../compo/tablerowcellswitchinput";
 
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import EditIcon from "@mui/icons-material/Edit";
+
 import TablePagination from "@mui/material/TablePagination";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 
@@ -98,7 +98,7 @@ class addresses extends React.Component {
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            <Button style={{ marginLeft: 5 }} onClick ={(e) => {}}>
               Create
             </Button>
           </Grid>
@@ -197,7 +197,7 @@ class addresses extends React.Component {
                     stickyHeader
                     size="small"
                     className="accordion-table"
-                    aria-label="PostingGroup List table"
+                    aria-label="customerAddress List table"
                   >
                     <TableBody className="tableBody">
                       <TextboxInput
@@ -235,7 +235,7 @@ class addresses extends React.Component {
                         id="IsBlock"
                         label="IsBlock"
                         param={this.state.CustomerAddress.IsBlock}
-                        // onChange={(e) => updateFormValue("IsActive", e)}
+                        // onChange={(e) => updateFormValue("IsBlock", e)}
                       />
                       <DropdownInput
                         id="IncoID"

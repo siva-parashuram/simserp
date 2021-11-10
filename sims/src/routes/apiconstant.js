@@ -103,12 +103,25 @@ export const APIURL = {
   CreateCustomer:domain+"api/Customer/CreateCustomer",
 };
 
+
+export const buttonTitle=[
+  {add:"Add"},
+  {edit:"Edit"},
+  {update:"Update"},
+]
+
+
+
+
 export const CTimeOut = 10;
 export const DFormat = "MM/DD/YYYY";
 export let pagination= {
   page: 0,
   rowsPerPage: 10,
 };
+
+
+
 
 export const CreditRating=[
   {name:"A",value:0},

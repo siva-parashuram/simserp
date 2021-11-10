@@ -35,18 +35,21 @@ import Inputcustom from "../../../compo/inputcustom";
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
 
-class paymentTerms extends React.Component {
+class contact extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
-      PaymentTerms: {
-        PaymentTermID:0,
-        Code: "",
-        Description: "",
-        DueDays:"",
+      CustomerContact: {
+        ContactID: 0,
+        CustID: 0,
+        ContactType: 0,
+        Name: "",
+        PhoneNo: "",
+        EmailID: "",
+        IsBlock: false,
       },
     };
   }
@@ -54,12 +57,12 @@ class paymentTerms extends React.Component {
   componentDidMount() {}
 
   render() {
-    const listPaymentTerms = (
+    const listCustomerContact = (
       <Table
         stickyHeader
         size="small"
         className=""
-        aria-label="paymentTerms List table"
+        aria-label="CustomerContact List table"
       >
         <TableHead className="table-header-background">
           <TableRow>
@@ -73,7 +76,7 @@ class paymentTerms extends React.Component {
       </Table>
     );
 
-    const createPaymentTerm = (
+    const createCustomerContact = (
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
@@ -85,32 +88,45 @@ class paymentTerms extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={8} lg={8}>
+              <Grid item xs={12} sm={12} md={5} lg={5}>
                 <TableContainer>
                   <Table
                     stickyHeader
                     size="small"
                     className="accordion-table"
-                    aria-label="paymentTerms List table"
+                    aria-label="CustomerContact List table"
                   >
                     <TableBody className="tableBody">
+                      <DropdownInput
+                        id="ContactType"
+                        label="ContactType"
+                        // onChange={ }
+                        // options={}
+                      />
                       <TextboxInput
-                        id="Code"
-                        label="Code"
+                        id="Name"
+                        label="Name"
                         variant="outlined"
                         size="small"
                       />
                       <TextboxInput
-                        id="Description"
-                        label="Description"
+                        id="PhoneNo"
+                        label="PhoneNo"
                         variant="outlined"
                         size="small"
                       />
                       <TextboxInput
-                        id="DueDays"
-                        label="Due Days"
+                        id="EmailID"
+                        label="EmailID"
                         variant="outlined"
                         size="small"
+                      />
+                      <SwitchInput
+                        key="IsBlock"
+                        id="IsBlock"
+                        label="IsBlock"
+                        param={this.state.CustomerContact.IsBlock}
+                        // onChange={(e) => updateFormValue("IsBlock", e)}
                       />
                     </TableBody>
                   </Table>
@@ -152,12 +168,12 @@ class paymentTerms extends React.Component {
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={10} lg={10}>
             <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={8} lg={8}>
+              <Grid item xs={12} sm={12} md={10} lg={10}>
                 <Dualtabcomponent
                   tab1name="List"
                   tab2name="New"
-                  tab1Html={listPaymentTerms}
-                  tab2Html={createPaymentTerm}
+                  tab1Html={listCustomerContact}
+                  tab2Html={createCustomerContact}
                 />
               </Grid>
             </Grid>
@@ -167,4 +183,4 @@ class paymentTerms extends React.Component {
     );
   }
 }
-export default paymentTerms;
+export default contact;
