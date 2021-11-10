@@ -646,6 +646,7 @@ class customeractivity extends React.Component {
                                                     size="small"
                                                     onChange={(e) => updateFormValue("Name", e)}
                                                     value={this.state.Customer.Name}
+                                                    isMandatory={true}
                                                 />
                                                 <TextboxInput
                                                     id="Address"
@@ -802,6 +803,7 @@ class customeractivity extends React.Component {
                                                     label="IsGroupCompany"
                                                     param={this.state.Customer.IsGroupCompany}
                                                     onChange={(e) => updateFormValue("IsGroupCompany", e)}
+                                                    
                                                 />
                                                 
                                                 <SwitchInput
@@ -855,6 +857,7 @@ class customeractivity extends React.Component {
                                                     onChange={(e) => updateFormValue("CurrID", e)}
                                                     value={this.state.Customer.CurrID}
                                                     options={this.state.currencyList}
+                                                    isMandatory={true}
                                                 />
                                                 <SwitchInput
                                                     key="IsGrowthBonanza"
@@ -862,6 +865,7 @@ class customeractivity extends React.Component {
                                                     label="IsGrowthBonanza"
                                                     param={this.state.Customer.IsGrowthBonanza}
                                                     onChange={(e) => updateFormValue("IsGrowthBonanza", e)}
+                                                    
                                                 />
                                                 <SwitchInput
                                                     key="IsSlabDiscount"
@@ -923,6 +927,7 @@ class customeractivity extends React.Component {
                                                     onChange={(e) => updateFormValue("GeneralPostingGroupID", e)}
                                                     value={this.state.Customer.GeneralPostingGroupID}
                                                     options={this.state.GeneralPostingGroupList}
+                                                    isMandatory={true}
                                                 />
                                                 <DropdownInput
                                                     id="CustomerPostingGroupID"
@@ -930,6 +935,7 @@ class customeractivity extends React.Component {
                                                     onChange={(e) => updateFormValue("CustomerPostingGroupID", e)}
                                                     value={this.state.Customer.CustomerPostingGroupID}
                                                     options={this.state.CustomerPostingGroupList}
+                                                    isMandatory={true}
                                                 />
 
 
