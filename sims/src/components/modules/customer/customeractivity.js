@@ -1139,7 +1139,8 @@ class customeractivity extends React.Component {
                     fullWidth={true}
                     maxWidth="lg"
                     open={this.state.Dialog.DialogStatus}
-                    onClose={(e) => handleClose()}
+                    // onClose={(e) => handleClose()}
+                   
                     aria-labelledby="dialog-title"
                     aria-describedby="dialog-description"
                     className="dialog-prompt-activity"
