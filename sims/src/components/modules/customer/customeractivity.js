@@ -19,12 +19,16 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
+ 
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
+ 
 import DialogTitle from '@mui/material/DialogTitle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { Divider } from '@material-ui/core';
 
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
@@ -34,6 +38,7 @@ import Accordioncomponent from "../../compo/accordioncomponent";
 import TextboxInput from "../../compo/tablerowcelltextboxinput";
 import DropdownInput from "../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
+import Dualtabcomponent from '../../compo/dualtabcomponent';
 
 
 import Addresses from './component/addresses';
@@ -1134,7 +1139,8 @@ class customeractivity extends React.Component {
                     fullWidth={true}
                     maxWidth="lg"
                     open={this.state.Dialog.DialogStatus}
-                    onClose={(e) => handleClose()}
+                    // onClose={(e) => handleClose()}
+                   
                     aria-labelledby="dialog-title"
                     aria-describedby="dialog-description"
                     className="dialog-prompt-activity"
@@ -1161,6 +1167,172 @@ class customeractivity extends React.Component {
                         <div style={{ height: 50 }}>&nbsp;</div>
                     </DialogContent>
                 </Dialog>
+            </Fragment>
+        );
+
+        const tab1Html = (
+            <Fragment>
+                <div className="sidenav-fixedheight-scroll">
+                <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
+                     <div style={{marginTop:5,marginLeft:15}}>
+                        <h4 style={{color:'#000000'}}>Customer Sales history</h4>
+                    </div>
+                    <TableContainer>
+                            <Table stickyHeader size="small" className="accordion-table" aria-label="table">
+                                <TableBody className="tableBody">
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Customer No</TableCell>
+                                        <TableCell align="right" className="no-border-table">123456</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        
+                    </Grid>
+                </Grid>
+                <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                        <div style={{ height: 20 }}></div>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={0} style={{ marginLeft: 10,marginRight:10 }}>
+                    <Grid item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                        <Grid container spacing={1} >
+                            <Grid item xs={12} sm={12} md={4} lg={4}  >
+                                <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                        <CardContent>
+                                            <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                Ongoing Sales
+                                            </Typography>
+                                            <Typography>
+                                                000
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={4} lg={4}  >
+                                <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                        <CardContent>
+                                            <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                Total Sales &nbsp;&nbsp;&nbsp;
+                                            </Typography>
+                                            <Typography>
+                                                0,000
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={4} lg={4}  >
+                                <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                        <CardContent>
+                                            <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                PO Raised &nbsp;&nbsp;&nbsp;
+                                            </Typography>
+                                            <Typography>
+                                                0,000
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            </Grid>
+                             
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                        <div style={{ height: 40 }}></div>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                    <div style={{ marginLeft:30,marginRight:20 }}>
+                    <Divider/>
+                    </div> 
+                    </Grid>
+                </Grid>
+                <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                        <div style={{ height: 20 }}></div>
+                    </Grid>
+                </Grid>
+                
+                <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={10} lg={10} style={{ backgroundColor: '#fff' }} >
+                     <div style={{marginTop:5,marginLeft:15}}>
+                        <h4 style={{color:'#000000'}}>Statistics</h4>
+                    </div>
+                    <TableContainer>
+                            <Table stickyHeader size="small" className="accordion-table" aria-label="table">
+                                <TableBody className="tableBody">
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Balance</TableCell>
+                                        <TableCell align="right" className="no-border-table">000</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table"><span className="inside-table-cell-bold">Sales</span></TableCell>
+                                        <TableCell align="right" className="no-border-table"></TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Balance</TableCell>
+                                        <TableCell align="right" className="no-border-table">000</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Balance</TableCell>
+                                        <TableCell align="right" className="no-border-table">000</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Balance</TableCell>
+                                        <TableCell align="right" className="no-border-table">000</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table"><span className="inside-table-cell-bold">Payments</span></TableCell>
+                                        <TableCell align="right" className="no-border-table"></TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Balance</TableCell>
+                                        <TableCell align="right" className="no-border-table">000</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Balance</TableCell>
+                                        <TableCell align="right" className="no-border-table">000</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell align="left" className="no-border-table">Balance</TableCell>
+                                        <TableCell align="right" className="no-border-table">000</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        
+                    </Grid>
+                </Grid>
+                </div>
+               
+                
+               
+            </Fragment>
+        );
+
+        const sideDataNavigation = (
+            <Fragment>
+                  <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: '#fff' }}>
+                    <Dualtabcomponent
+                    tab1name="Details"
+                    tab2name="Attachments"
+                    tab1Html={tab1Html}
+                    tab2Html={null}
+                />
+                    </Grid>
+                </Grid>
+                
             </Fragment>
         );
 
@@ -1351,7 +1523,7 @@ class customeractivity extends React.Component {
                         <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={11} lg={11}>
                                 <div style={{ marginLeft: 10 }}>
-                                    Hi
+                                {sideDataNavigation}
                                 </div>
                             </Grid>
                         </Grid>
