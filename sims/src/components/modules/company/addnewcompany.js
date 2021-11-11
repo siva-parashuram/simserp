@@ -578,9 +578,9 @@ class addnewcompany extends React.Component {
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={8}>
             {/* <div style={{ minHeight: '100%', height: 500, overflowY: 'scroll', overflowX: 'hidden' }}> */}
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Accordion
+            <Grid  container spacing={2}>
+              <Grid  item xs={12}>
+                <Accordion 
                   key="company-General-Details"
                   expanded={this.state.GeneralDetailsExpanded}
                 >

@@ -1205,6 +1205,7 @@ class postingGroupMaster extends React.Component {
                   label="Code"
                   variant="outlined"
                   size="small"
+                  isMandatory={true}
                 />
                 <TextboxInput
                   id="descriptionSupplierPostingGroup"
@@ -1263,12 +1264,14 @@ class postingGroupMaster extends React.Component {
                     label="SuplID"
                     // onChange={(e) => updateFormValue("PayableAccount", e)}
                     // options={}
+                    isMandatory={true}
                   />
                   <DropdownInput
                     id="BranchID"
                     label="BranchID"
                     // onChange={(e) => updateFormValue("PayableAccount", e)}
                     // options={}
+                    isMandatory={true}
                   />
                 </TableBody>
               </Table>
@@ -1332,6 +1335,7 @@ class postingGroupMaster extends React.Component {
                   onChange={(e) =>
                     updateFormValue("CustomerPostingGroup", "Code", e)
                   }
+                  isMandatory={true}
                 />
                 <TextboxInput
                   id="Description"
@@ -1396,12 +1400,14 @@ class postingGroupMaster extends React.Component {
                     label="CustID"
                     // onChange={(e) => updateFormValue("PayableAccount", e)}
                     // options={}
+                    isMandatory={true}
                   />
                   <DropdownInput
                     id="BranchID"
                     label="BranchID"
                     // onChange={(e) => updateFormValue("PayableAccount", e)}
                     // options={}
+                    isMandatory={true}
                   />
                 </TableBody>
               </Table>

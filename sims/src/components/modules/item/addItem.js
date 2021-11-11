@@ -1031,6 +1031,7 @@ class addItem extends React.Component {
                               onChange={(e) => updateFormValue("CatId", e)}
                               options={this.state.ItemCategoryData}
                               value={this.state.CatId}
+                              isMandatory={true}
                             />
                             <DropdownInput
                               id="ItemDeptID"
@@ -1038,6 +1039,7 @@ class addItem extends React.Component {
                               onChange={(e) => updateFormValue("ItemDeptId", e)}
                               options={this.state.itemDepartmentMasterData}
                               value={this.state.ItemDeptId}
+                              isMandatory={true}
                             />
                             <DropdownInput
                               id="ItemType"
@@ -1056,6 +1058,7 @@ class addItem extends React.Component {
                               onChange={(e) => updateFormValue("ItemNo", e)}
                               value={this.state.ItemNo}
                               disabled={true}
+                              isMandatory={true}
                             />
 
                             <TextboxInput
@@ -1067,6 +1070,7 @@ class addItem extends React.Component {
                               value={this.state.Code}
                               error={this.state.Validations.Code.errorState}
                               helperText={this.state.Validations.Code.errorMssg}
+                              isMandatory={true}
                             />
                             <TextboxInput
                               id="Alias"
@@ -1095,6 +1099,7 @@ class addItem extends React.Component {
                               helperText={
                                 this.state.Validations.Description1.errorMssg
                               }
+                              isMandatory={true}
                             />
                             <TextboxInput
                               id="Description2"

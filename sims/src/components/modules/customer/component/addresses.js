@@ -10,9 +10,11 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 
 import TablePagination from "@mui/material/TablePagination";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
@@ -22,7 +24,9 @@ import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
 import * as CF from "../../../../services/functions/customfunctions";
-
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
 import Loader from "../../../compo/loader";
@@ -42,6 +46,7 @@ class addresses extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
+      GeneralDetailsExpanded: true,
       CustomerAddress: {
         AddressID: 0,
         CustID: 0,
@@ -101,7 +106,7 @@ class addresses extends React.Component {
     const createCustomerAddress = (
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
-          <Grid xs={12} sm={12} md={2} lg={2}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Button
               className="action-btns"
               style={{ marginLeft: 10 }}
@@ -109,200 +114,241 @@ class addresses extends React.Component {
             >
               {APIURLS.buttonTitle.add}
             </Button>
-          </Grid>
-          <Grid xs={12} sm={12} md={10} lg={10}>
+         </Grid>
+          {/* <Grid xs={12} sm={12} md={10} lg={10}>
             &nbsp;
-          </Grid>
+          </Grid>  */}
         </Grid>
         <div style={{ height: 10 }}>&nbsp;</div>
+
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={3} lg={3}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="customerAddress List table"
+              <Grid item xs={12}>
+                <Accordion
+                  key="customerAddress-General-Details"
+                  expanded={this.state.GeneralDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("GeneralDetailsExpanded", e)
+                        }
+                      />
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
                   >
-                    <TableBody className="tableBody">
-                      <DropdownInput
-                        id="AddressType"
-                        label="AddressType"
-                        // onChange={ }
-                        // options={}
-                      />
-                      <TextboxInput
-                        id="Code"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                        isMandatory={true}
-                      />
-                      <TextboxInput
-                        id="Name"
-                        label="Name"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="Address"
-                        label="Address"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="Address2"
-                        label="Address2"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="Address3"
-                        label="Address3"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="City"
-                        label="City"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="PostCode"
-                        label="PostCode"
-                        variant="outlined"
-                        size="small"
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              <Grid item xs={12} sm={12} md={3} lg={3}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="customerAddress List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
-                        id="CountryID"
-                        label="Country"
-                        // onChange={ }
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="StateID"
-                        label="State"
-                        // onChange={ }
-                        // options={}
-                      />
-                      <TextboxInput
-                        id="ContactPerson"
-                        label="Contact Person"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="Address3"
-                        label="Address3"
-                        variant="outlined"
-                        size="small"
-                      />
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
 
-                      <TextboxInput
-                        id="EmailID"
-                        label="Email ID"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="VATNo"
-                        label="VATNo"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="GSTNo"
-                        label="GSTNo"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="EORINo"
-                        label="EORINo"
-                        variant="outlined"
-                        size="small"
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-              <Grid item xs={12} sm={12} md={4} lg={4}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="customerAddress List table"
-                  >
-                    <TableBody className="tableBody">
-                      <TextboxInput
-                        id="TSSNo"
-                        label="TSSNo"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <SwitchInput
-                        key="IsBlock"
-                        id="IsBlock"
-                        label="IsBlock"
-                        param={this.state.CustomerAddress.IsBlock}
-                        // onChange={(e) => updateFormValue("IsBlock", e)}
-                      />
-                      <DropdownInput
-                        id="IncoID"
-                        label="IncoID"
-                        // onChange={ }
-                        // options={}
-                      />
-                      <DropdownInput
-                        id="ShipmentModeID"
-                        label="ShipmentModeID"
-                        // onChange={ }
-                        // options={}
-                      />
-                      <TextboxInput
-                        id="PostOfDischarge"
-                        label="Post Of Discharge"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="FinalDestination"
-                        label="Final Destination"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="SpecialInstruction"
-                        label="Special Instruction"
-                        variant="outlined"
-                        size="small"
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={4} lg={4}>
+                      <TableContainer>
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="customerAddress List table"
+                        >
+                          <TableBody className="tableBody">
+                            <DropdownInput
+                              id="AddressType"
+                              label="AddressType"
+                              // onChange={ }
+                              // options={}
+                              isMandatory={true}
+                            />
+                            <TextboxInput
+                              id="Code"
+                              label="Code"
+                              variant="outlined"
+                              size="small"
+                              isMandatory={true}
+                            />
+                            <TextboxInput
+                              id="Name"
+                              label="Name"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="Address"
+                              label="Address"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="Address2"
+                              label="Address2"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="Address3"
+                              label="Address3"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="City"
+                              label="City"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="PostCode"
+                              label="PostCode"
+                              variant="outlined"
+                              size="small"
+                            />
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={3} lg={3}>
+                      <TableContainer>
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="customerAddress List table"
+                        >
+                          <TableBody className="tableBody">
+                            <DropdownInput
+                              id="CountryID"
+                              label="Country"
+                              // onChange={ }
+                              // options={}
+                              isMandatory={true}
+                            />
+                            <DropdownInput
+                              id="StateID"
+                              label="State"
+                              // onChange={ }
+                              // options={}
+                            />
+                            <TextboxInput
+                              id="ContactPerson"
+                              label="Contact Person"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="Address3"
+                              label="Address3"
+                              variant="outlined"
+                              size="small"
+                            />
+
+                            <TextboxInput
+                              id="EmailID"
+                              label="Email ID"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="VATNo"
+                              label="VATNo"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="GSTNo"
+                              label="GSTNo"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="EORINo"
+                              label="EORINo"
+                              variant="outlined"
+                              size="small"
+                            />
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={4} lg={4}>
+                      <TableContainer>
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="customerAddress List table"
+                        >
+                          <TableBody className="tableBody">
+                            <TextboxInput
+                              id="TSSNo"
+                              label="TSSNo"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <SwitchInput
+                              key="IsBlock"
+                              id="IsBlock"
+                              label="IsBlock"
+                              param={this.state.CustomerAddress.IsBlock}
+                              // onChange={(e) => updateFormValue("IsBlock", e)}
+                            />
+                            <DropdownInput
+                              id="IncoID"
+                              label="IncoID"
+                              // onChange={ }
+                              // options={}
+                            />
+                            <DropdownInput
+                              id="ShipmentModeID"
+                              label="ShipmentModeID"
+                              // onChange={ }
+                              // options={}
+                            />
+                            <TextboxInput
+                              id="PostOfDischarge"
+                              label="Post Of Discharge"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="FinalDestination"
+                              label="Final Destination"
+                              variant="outlined"
+                              size="small"
+                            />
+                            <TextboxInput
+                              id="SpecialInstruction"
+                              label="Special Instruction"
+                              variant="outlined"
+                              size="small"
+                            />
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Grid>
+                    </Grid>
+
+                  </AccordionDetails>
+                </Accordion>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
     );
+
+    const handleAccordionClick = (val, e) => {
+      if (val === "GeneralDetailsExpanded") {
+        this.state.GeneralDetailsExpanded === true
+          ? this.setState({ GeneralDetailsExpanded: false })
+          : this.setState({ GeneralDetailsExpanded: true });
+      }
+    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {

@@ -16,13 +16,17 @@ import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import TablePagination from "@mui/material/TablePagination";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Typography from "@material-ui/core/Typography";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
 import * as CF from "../../../../services/functions/customfunctions";
-
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
 import Loader from "../../../compo/loader";
@@ -42,6 +46,7 @@ class customerCategory extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
+      GeneralDetailsExpanded: true,
       CustomerCategory: {
         CustomerCategoryID: 0,
         Code: "",
@@ -78,51 +83,88 @@ class customerCategory extends React.Component {
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-            {APIURLS.buttonTitle.add}
-
+              {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
         </Grid>
+        <div style={{ height: 10 }}>&nbsp;</div>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={9} lg={9}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="CustomerCategory List table"
+          <Grid xs={12} sm={12} md={10} lg={10}>
+            <Grid container spacing={0}>
+              <Grid item xs={12}>
+                <Accordion
+                  key="customerAddress-General-Details"
+                  expanded={this.state.GeneralDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("GeneralDetailsExpanded", e)
+                        }
+                      />
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
                   >
-                    <TableBody className="tableBody">
-                      <TextboxInput
-                        id="Code"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <TextboxInput
-                        id="Description"
-                        label="Description"
-                        variant="outlined"
-                        size="small"
-                      />
-                      <SwitchInput
-                        key="IsActive"
-                        id="IsActive"
-                        label="IsActive"
-                        param={this.state.CustomerCategory.IsActive}
-                        // onChange={(e) => updateFormValue("IsActive", e)}
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
+
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="CustomerCategory List table"
+                          >
+                            <TableBody className="tableBody">
+                              <TextboxInput
+                                id="Code"
+                                label="Code"
+                                variant="outlined"
+                                size="small"
+                              />
+                              <TextboxInput
+                                id="Description"
+                                label="Description"
+                                variant="outlined"
+                                size="small"
+                              />
+                              <SwitchInput
+                                key="IsActive"
+                                id="IsActive"
+                                label="IsActive"
+                                param={this.state.CustomerCategory.IsActive}
+                                // onChange={(e) => updateFormValue("IsActive", e)}
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
     );
+
+    const handleAccordionClick = (val, e) => {
+      if (val === "GeneralDetailsExpanded") {
+        this.state.GeneralDetailsExpanded === true
+          ? this.setState({ GeneralDetailsExpanded: false })
+          : this.setState({ GeneralDetailsExpanded: true });
+      }
+    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
