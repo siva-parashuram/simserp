@@ -123,7 +123,7 @@ class addresses extends React.Component {
           <Grid xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Accordion 
+                <Accordion elevation={6}
                   key="customerAddress-General-Details"
                   expanded={this.state.GeneralDetailsExpanded}
                 >
