@@ -46,11 +46,12 @@ class contact extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
-      GeneralDetailsExpanded: true ,
-      CustomerContact: {
-        ContactID: 0,
-        CustID: 0,
-        ContactType: 0,
+      GeneralDetailsExpanded: true,
+      customerData: [],
+      CustomerContact: {  
+        ContactID: "",
+        CustID: this.props.CustID,
+        ContactType: -1,
         Name: "",
         PhoneNo: "",
         EmailID: "",
@@ -59,17 +60,73 @@ class contact extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { 
+    // this.getCustomers(); 
+    this.getCustomerContact();
+  }
+
+  getCustomers = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllCustomer;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Name,
+            value: data[i].CustID
+          };
+          newD.push(o);
+        }
+        this.setState({ customerData: newD, ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ customerData: [], ProgressLoader: true });
+      });
+  }
+
+  getCustomerContact = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetCustomerContact;
+    let reqData = {
+      ValidUser: ValidUser,
+      CustomerContact: this.state.CustomerContact,
+  };
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        let data = response.data;
+        this.setState({ customerData: data, ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ customerData: [], ProgressLoader: true });
+      });
+  }
+
+
+
 
   render() {
 
     const updateFormValue = (param, e) => {
       let CustomerContact = this.state.CustomerContact;
       switch (param) {
-        case "CustID":
-          CustomerContact[param] = e.target.value;
-          setParams(CustomerContact);
-          break;
+        // case "CustID":
+        //   CustomerContact[param] = e.target.value;
+        //   setParams(CustomerContact);
+        //   break;
         case "ContactType":
           CustomerContact[param] = e.target.value;
           setParams(CustomerContact);
@@ -96,8 +153,48 @@ class contact extends React.Component {
       }
     }
     const setParams = (object) => {
-      this.setState({ Customer: object });
-  };
+      this.setState({ CustomerContact: object });
+    };
+
+
+    const AddNew = (e) => {
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+          "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.CreateCustomerContact;
+      let reqData = {
+          ValidUser: ValidUser,
+          CustomerContact: this.state.CustomerContact,
+      };
+      
+      axios
+          .post(Url, reqData, { headers })
+          .then((response) => {
+              let data = response.data;
+              if (response.status === 200 || response.status === 201) {
+                let  CustomerContact={
+                  ContactID: 0,
+                  CustID: 0,
+                  ContactType: 0,
+                  Name: "",
+                  PhoneNo: "",
+                  EmailID: "",
+                  IsBlock: false,
+                };
+                  this.setState({CustomerContact:CustomerContact, ErrorPrompt: false, SuccessPrompt: true });
+                  this.getCustomerContact();
+              } else {
+                  this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+              }
+          })
+          .catch((error) => {
+              this.setState({ ErrorPrompt: true });
+          });
+  }
+
 
     const listCustomerContact = (
       <Table
@@ -122,7 +219,7 @@ class contact extends React.Component {
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button  className="action-btns" style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            <Button className="action-btns" style={{ marginLeft: 5 }} onClick={(e) => AddNew(e)}>
               {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
@@ -130,7 +227,7 @@ class contact extends React.Component {
             &nbsp;
           </Grid>
         </Grid>
-       
+
 
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={12} lg={12}>
@@ -154,7 +251,7 @@ class contact extends React.Component {
                     style={{ minHeight: "40px", maxHeight: "40px" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General Details 
                     </Typography>
                   </AccordionSummary>
 
@@ -169,54 +266,54 @@ class contact extends React.Component {
                             aria-label="CustomerContact List table"
                           >
                             <TableBody className="tableBody">
-                            <DropdownInput
-                        id="CustID"
-                        label="Customer"
-                         onChange={(e) => updateFormValue("CustID", e)}
-                        options={APIURLS.ContactType}
-                        isMandatory={true}
-                        value={this.state.CustomerContact.CustID}
-                      />
-                      <DropdownInput
-                        id="ContactType"
-                        label="ContactType"
-                         onChange={(e) => updateFormValue("ContactType", e)}
-                        options={APIURLS.ContactType}
-                        isMandatory={true}
-                        value={this.state.CustomerContact.ContactType}
-                      />
-                      <TextboxInput
-                        id="Name"
-                        label="Name"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Name", e)}
-                        value={this.state.CustomerContact.Name}
-                      />
-                      <TextboxInput
-                        id="PhoneNo"
-                        label="PhoneNo"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("PhoneNo", e)}
-                        value={this.state.CustomerContact.PhoneNo}
-                      />
-                      <TextboxInput
-                        id="EmailID"
-                        label="EmailID"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("EmailID", e)}
-                        value={this.state.CustomerContact.EmailID}
-                      />
-                      <SwitchInput
-                        key="IsBlock"
-                        id="IsBlock"
-                        label="IsBlock"
-                        param={this.state.CustomerContact.IsBlock}
-                        onChange={(e) => updateFormValue("IsBlock", e)}
-                        value={this.state.CustomerContact.IsBlock}
-                      />
+                              {/* <DropdownInput
+                                id="CustID"
+                                label="Customer"
+                                onChange={(e) => updateFormValue("CustID", e)}
+                                options={this.state.customerData}
+                                isMandatory={true}
+                                value={this.state.CustomerContact.CustID}
+                              /> */}
+                              <DropdownInput
+                                id="ContactType"
+                                label="ContactType"
+                                onChange={(e) => updateFormValue("ContactType", e)}
+                                options={APIURLS.ContactType}
+                                isMandatory={true}
+                                value={this.state.CustomerContact.ContactType}
+                              />
+                              <TextboxInput
+                                id="Name"
+                                label="Name"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Name", e)}
+                                value={this.state.CustomerContact.Name}
+                              />
+                              <TextboxInput
+                                id="PhoneNo"
+                                label="PhoneNo"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("PhoneNo", e)}
+                                value={this.state.CustomerContact.PhoneNo}
+                              />
+                              <TextboxInput
+                                id="EmailID"
+                                label="EmailID"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("EmailID", e)}
+                                value={this.state.CustomerContact.EmailID}
+                              />
+                              <SwitchInput
+                                key="IsBlock"
+                                id="IsBlock"
+                                label="IsBlock"
+                                param={this.state.CustomerContact.IsBlock}
+                                onChange={(e) => updateFormValue("IsBlock", e)}
+                                value={this.state.CustomerContact.IsBlock}
+                              />
                             </TableBody>
                           </Table>
                         </TableContainer>

@@ -80,7 +80,7 @@ class customeractivity extends React.Component {
             currencyList: [],
             countryData: [],
             stateData: [],
-            CustID: CF.toInt(getCookie(COOKIE.USERID)),
+            CustID: 0,
             Customer: {
                 CustID: 0,
                 Code: "",
@@ -647,14 +647,14 @@ class customeractivity extends React.Component {
                 });
         }
 
-        const htmlcustominput1 = (
+        const htmlcustomPaymentTermID = (
             <Fragment>
                 <Grid container spacing={0}>
                     <Grid item xs={12} sm={12} md={10} lg={10}>
                         <select
                             className="dropdown-css"
                             id="SalesPersonID"
-                            onChange={(e) => updateFormValue("SalesPersonID", e)}
+                            onChange={(e) => updateFormValue("PaymentTermID", e)}
                             value={this.state.Customer.SalesPersonID}
                         >
                             <option value="-" disabled>Select</option>
@@ -663,7 +663,7 @@ class customeractivity extends React.Component {
                     <Grid item xs={12} sm={12} md={2} lg={2}>
                         <button 
                         className="dropdowninputbtn"
-                        onClick={(e) => openDialog('Contact')}
+                        onClick={(e) => openDialog('PaymentTerms')}
                         >...</button>
                     </Grid>
                 </Grid>
@@ -777,11 +777,7 @@ class customeractivity extends React.Component {
                                                     value={this.state.Customer.EmailID}
                                                 />
 
-                                                <TablecustomInput
-                                                  id="SalesPersonID"
-                                                  label="Sales Person"
-                                                  html={htmlcustominput1}
-                                                />
+                                                
 
                                                 <DropdownInput
                                                     id="SalesPersonID"
@@ -1012,6 +1008,12 @@ class customeractivity extends React.Component {
                                                     value={this.state.Customer.CustomerPostingGroupID}
                                                     options={this.state.CustomerPostingGroupList}
                                                     isMandatory={true}
+                                                />
+
+                                                <TablecustomInput
+                                                    id="PaymentTermID"
+                                                    label="Payment Term"
+                                                    html={htmlcustomPaymentTermID}
                                                 />
 
 
@@ -1389,7 +1391,7 @@ class customeractivity extends React.Component {
         );
 
         const contact=(
-            <Contact/>
+            <Contact CustID={this.state.CustID}  />
         );
 
         const customerCategory=(
