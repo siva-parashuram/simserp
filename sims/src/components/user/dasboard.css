@@ -1,3 +1,10 @@
+body{
+  font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important;
+  color: #9e9e9e !important;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
 .dropdowninputbtn{
   margin-top: 2px !important;
   margin-left: 2px !important;
@@ -12,6 +19,11 @@
 .dialog-prompt-activity{
   border-radius: 0px !important;
   margin-top: -50px !important;
+ 
+}
+
+.dialog-area{
+  background-color: #eceff1 !important;
 }
 
 
@@ -42,12 +54,7 @@
   z-index:100;   
 }
 
-body{
-  font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important;
-  color: #9e9e9e !important;
-  font-weight: 400;
-  overflow-x: hidden;
-}
+
 
 
 

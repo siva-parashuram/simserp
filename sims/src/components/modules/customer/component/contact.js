@@ -47,9 +47,9 @@ class contact extends React.Component {
       SuccessPrompt: false,
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
-      customerData: [],
+      contactData: [],
       CustomerContact: {  
-        ContactID: "",
+        ContactID: 0,
         CustID: this.props.CustID,
         ContactType: -1,
         Name: "",
@@ -93,25 +93,30 @@ class contact extends React.Component {
   }
 
   getCustomerContact = () => {
+    this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json",
     };
+
+
     let Url = APIURLS.APIURL.GetCustomerContact;
+    let CustomerContact= this.state.CustomerContact
+    CustomerContact.ContactType=0;
     let reqData = {
       ValidUser: ValidUser,
-      CustomerContact: this.state.CustomerContact,
+      CustomerContact: CustomerContact,
   };
     axios
       .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
-        this.setState({ customerData: data, ProgressLoader: true });
+        this.setState({ contactData: data, ProgressLoader: true });
       })
       .catch((error) => {
-        this.setState({ customerData: [], ProgressLoader: true });
+        this.setState({ contactData: [], ProgressLoader: true });
       });
   }
 
@@ -205,13 +210,31 @@ class contact extends React.Component {
       >
         <TableHead className="table-header-background">
           <TableRow>
-            <TableCell className="table-header-font">#</TableCell>
+          <TableCell className="table-header-font">#</TableCell>
+            <TableCell className="table-header-font">Name</TableCell>
             <TableCell className="table-header-font" align="left">
-              Name
+              Email
+            </TableCell>
+            <TableCell className="table-header-font" align="left">
+              Phone No
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody className="tableBody"></TableBody>
+        <TableBody className="tableBody">
+          {this.state.contactData.map((item, i) => (
+            <TableRow>
+               <TableCell> {i+1}</TableCell>
+            <TableCell> {item.Name}</TableCell>
+            <TableCell align="left">
+            {item.EmailID}
+            </TableCell>
+            <TableCell align="left">
+            {item.PhoneNo}
+            </TableCell>
+          </TableRow>
+          ))}
+          
+        </TableBody>
       </Table>
     );
 

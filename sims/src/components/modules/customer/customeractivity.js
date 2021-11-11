@@ -1195,7 +1195,7 @@ class customeractivity extends React.Component {
                     aria-describedby="dialog-description"
                     className="dialog-prompt-activity"
                 >
-                    <DialogTitle id="dialog-title">
+                    <DialogTitle id="dialog-title"  className="dialog-area">
                         <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={1} lg={1}>
                                 <IconButton aria-label="delete" style={{ textAlign: 'left', marginTop: 8 }}>
@@ -1207,7 +1207,7 @@ class customeractivity extends React.Component {
                             </Grid>
                         </Grid>
                     </DialogTitle>
-                    <DialogContent>
+                    <DialogContent className="dialog-area">
 
                         <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -1441,7 +1441,12 @@ class customeractivity extends React.Component {
             let Dialog = this.state.Dialog;
             Dialog.DialogStatus = false;
             this.setState({ Dialog: Dialog });
+            refreshDropdownList();
         };
+
+        const refreshDropdownList=()=>{
+           //refresh dropdown list
+        }
 
 
         return (
