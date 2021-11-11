@@ -64,6 +64,7 @@ export const URLS = {
   customerMaster:"/customerMaster",
   addCustomer:"/addCustomer",
   editCustomer:"/editCustomer",
+  
 };
 
 

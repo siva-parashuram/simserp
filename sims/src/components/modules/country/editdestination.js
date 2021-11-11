@@ -3,9 +3,7 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
 
-import TableRow from "@material-ui/core/TableRow";
 
 import Button from "@material-ui/core/Button";
 
@@ -15,8 +13,7 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 
 import Destination from "./destination";
@@ -430,13 +427,7 @@ class editdestination extends React.Component {
             </Grid>
           </Grid>
           <div className="breadcrumb-bottom"></div>
-          {/* <Grid container spacing={3}>
-            <Grid className="style-buttons" xs={1}>
-              <Button style={{ marginLeft: 5 }} onClick={updateDestination}>
-                Update
-              </Button>
-            </Grid>
-          </Grid> */}
+         
           <div className="New-link-bottom"></div>
 
           <div style={{ marginLeft: 10 }}>
@@ -537,38 +528,7 @@ class editdestination extends React.Component {
                                   value={this.state.stateId}
                                 />
 
-                                {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    State
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <Select
-                                      style={{ height: 40, marginTop: 14 }}
-                                      id="stateID"
-                                      label="State"
-                                      fullWidth
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                      }}
-                                      value={parseInt(this.state.stateId)}
-                                      onChange={(e) =>
-                                        updateFormValue("stateID", e)
-                                      }
-                                    >
-                                      {this.state.stateData.map((item, i) => (
-                                        <MenuItem value={item.stateId}>
-                                          {item.name}
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                  </TableCell>
-                                </TableRow> */}
+                                
                               </TableBody>
                             </Table>
                           </Grid>

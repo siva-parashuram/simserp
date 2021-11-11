@@ -1352,6 +1352,7 @@ class editbranch extends React.Component {
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
+                                    
                                   >
                                     Company
                                   </TableCell>
@@ -1396,6 +1397,7 @@ class editbranch extends React.Component {
                                   helperText={
                                     this.state.Validations.name.errorMsg
                                   }
+                                  isMandatory={true}
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -1417,6 +1419,7 @@ class editbranch extends React.Component {
                                   helperText={
                                     this.state.Validations.shortName.errorMsg
                                   }
+                                  isMandatory={true}
                                 />
 
                                 <Tablerowcelltextboxinput
