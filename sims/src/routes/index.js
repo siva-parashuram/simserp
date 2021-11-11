@@ -24,7 +24,7 @@ import addUser from "../components/modules/user/adduser";
 import editUser from "../components/modules/user/edituser";
 import branchMaster from "../components/modules/branch/branchmaster";
 import editBranch from "../components/modules/branch/editbranch";
-
+import salesPerson from "../components/modules/customer/component/salesPerson";
 import addBranch from "../components/modules/branch/addbranch";
 import loginExpired from "../components/user/loginexpired";
 import moduleMaster from "../components/modules/modules/modulemaster";
@@ -165,7 +165,6 @@ let routes = ({ location, ...rest }) => {
         {/* Customers */}
         <Route path={URLS.URLS.customerMaster} component={customerMaster} />
         <Route path={URLS.URLS.addCustomer} component={customeractivity} />
-        <Route path={URLS.URLS.editCustomer} component={customeractivity} />
         <Route path={URLS.URLS.editCustomer} component={customeractivity} />
         
         

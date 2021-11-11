@@ -458,38 +458,7 @@ class adddestination extends React.Component {
                                 value={this.state.stateId}
                               />
 
-                              {/* <TableRow>
-                                <TableCell
-                                  align="left"
-                                  className="no-border-table"
-                                >
-                                  State
-                                </TableCell>
-                                <TableCell
-                                  align="left"
-                                  className="no-border-table"
-                                >
-                                  <Select
-                                    style={{ height: 40, marginTop: 14 }}
-                                    id="stateID"
-                                    label="State"
-                                    fullWidth
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                    }}
-                                    value={parseInt(this.state.stateId)}
-                                    onChange={(e) =>
-                                      updateFormValue("stateID", e)
-                                    }
-                                  >
-                                    {this.state.stateData.map((item, i) => (
-                                      <option value={parseInt(item.stateId)}>
-                                        {item.name}
-                                      </option>
-                                    ))}
-                                  </Select>
-                                </TableCell>
-                              </TableRow> */}
+                              
                             </TableBody>
                           </Table>
                         </Grid>

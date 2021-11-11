@@ -225,7 +225,7 @@ class coaMaster extends React.Component {
                     startIcon={<EditIcon />}
                     onClick={(e) => this.openPage(this.state.editurl)}
                   >
-                    {APIURLS.buttonTitle.update}
+                    {APIURLS.buttonTitle.edit}
                   </Button>
                   <Button
                     className="action-btns"

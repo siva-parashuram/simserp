@@ -37,7 +37,7 @@ class tablerowcelldropdown extends React.Component {
                  >
                    {item.name} 
                  </option>
-                )):null}
+                )):null} 
               </select>
             </TableCell>
           </TableRow>

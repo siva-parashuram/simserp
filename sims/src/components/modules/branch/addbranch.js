@@ -751,6 +751,7 @@ class addbranch extends React.Component {
                                   helperText={
                                     this.state.Validations.name.errorMsg
                                   }
+                                  isMandatory={true}
                                 />
                                 
                                 <Tablerowcelltextboxinput
@@ -772,6 +773,7 @@ class addbranch extends React.Component {
                                   helperText={
                                     this.state.Validations.shortName.errorMsg
                                   }
+                                  isMandatory={true}
                                 />
                                 
                                 <Tablerowcelltextboxinput

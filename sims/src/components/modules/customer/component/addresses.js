@@ -115,9 +115,7 @@ class addresses extends React.Component {
               {APIURLS.buttonTitle.add}
             </Button>
          </Grid>
-          {/* <Grid xs={12} sm={12} md={10} lg={10}>
-            &nbsp;
-          </Grid>  */}
+          
         </Grid>
         <div style={{ height: 10 }}>&nbsp;</div>
 
@@ -125,7 +123,7 @@ class addresses extends React.Component {
           <Grid xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Accordion
+                <Accordion 
                   key="customerAddress-General-Details"
                   expanded={this.state.GeneralDetailsExpanded}
                 >
