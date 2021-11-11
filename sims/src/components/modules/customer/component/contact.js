@@ -57,6 +57,43 @@ class contact extends React.Component {
   componentDidMount() {}
 
   render() {
+
+    const updateFormValue = (param, e) => {
+      let CustomerContact = this.state.CustomerContact;
+      switch (param) {
+        case "CustID":
+          CustomerContact[param] = e.target.value;
+          setParams(CustomerContact);
+          break;
+        case "ContactType":
+          CustomerContact[param] = e.target.value;
+          setParams(CustomerContact);
+          break;
+        case "Name":
+          CustomerContact[param] = e.target.value;
+          setParams(CustomerContact);
+          break;
+        case "PhoneNo":
+          CustomerContact[param] = e.target.value;
+          setParams(CustomerContact);
+          break;
+        case "EmailID":
+          CustomerContact[param] = e.target.value;
+          setParams(CustomerContact);
+          break;
+        case "IsBlock":
+          CustomerContact[param] = e.target.checked;
+          setParams(CustomerContact);
+          break;
+
+        default:
+          break;
+      }
+    }
+    const setParams = (object) => {
+      this.setState({ Customer: object });
+  };
+
     const listCustomerContact = (
       <Table
         stickyHeader
@@ -80,7 +117,7 @@ class contact extends React.Component {
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            <Button  className="action-btns" style={{ marginLeft: 5 }} onClick={(e) => {}}>
             {APIURLS.buttonTitle.add}
 
             </Button>
@@ -99,36 +136,52 @@ class contact extends React.Component {
                   >
                     <TableBody className="tableBody">
                       <DropdownInput
+                        id="CustID"
+                        label="Customer"
+                         onChange={(e) => updateFormValue("CustID", e)}
+                        options={APIURLS.ContactType}
+                        isMandatory={true}
+                        value={this.state.CustomerContact.CustID}
+                      />
+                      <DropdownInput
                         id="ContactType"
                         label="ContactType"
-                        // onChange={ }
-                        // options={}
+                         onChange={(e) => updateFormValue("ContactType", e)}
+                        options={APIURLS.ContactType}
                         isMandatory={true}
+                        value={this.state.CustomerContact.ContactType}
                       />
                       <TextboxInput
                         id="Name"
                         label="Name"
                         variant="outlined"
                         size="small"
+                        onChange={(e) => updateFormValue("Name", e)}
+                        value={this.state.CustomerContact.Name}
                       />
                       <TextboxInput
                         id="PhoneNo"
                         label="PhoneNo"
                         variant="outlined"
                         size="small"
+                        onChange={(e) => updateFormValue("PhoneNo", e)}
+                        value={this.state.CustomerContact.PhoneNo}
                       />
                       <TextboxInput
                         id="EmailID"
                         label="EmailID"
                         variant="outlined"
                         size="small"
+                        onChange={(e) => updateFormValue("EmailID", e)}
+                        value={this.state.CustomerContact.EmailID}
                       />
                       <SwitchInput
                         key="IsBlock"
                         id="IsBlock"
                         label="IsBlock"
                         param={this.state.CustomerContact.IsBlock}
-                        // onChange={(e) => updateFormValue("IsBlock", e)}
+                        onChange={(e) => updateFormValue("IsBlock", e)}
+                        value={this.state.CustomerContact.IsBlock}
                       />
                     </TableBody>
                   </Table>

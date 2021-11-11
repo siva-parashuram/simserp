@@ -104,6 +104,8 @@ export const APIURL = {
   GetAllCustomer:domain+"api/Customer/GetAllCustomer",
   GetCustomer:domain+ "api/Customer/GetCustomer",
   UpdateCustomer:domain+"api/Customer/UpdateCustomer",
+  GetAllCustomerContact:domain+"api/Customer/GetAllCustomerContact",
+  CreateCustomerContact:domain+"api/Customer/CreateCustomerContact",
 };
 
 
@@ -124,6 +126,16 @@ export let pagination= {
   page: 0,
   rowsPerPage: 10,
 };
+
+// 0-Sales, 1-Shipping, 2-Account, 3-Internal
+
+
+export const ContactType=[
+  {name:"Sales",value:0},
+  {name:"Shipping",value:1},
+  {name:"Account",value:2},
+  {name:"Internal",value:3},
+];
 
 export const AddressType=[
   {name:"Billing",value:0},

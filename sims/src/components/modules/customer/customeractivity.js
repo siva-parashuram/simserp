@@ -36,6 +36,7 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Accordioncomponent from "../../compo/accordioncomponent";
 import TextboxInput from "../../compo/tablerowcelltextboxinput";
+import TablecustomInput from '../../compo/tablerowcellcustomhtml';
 import DropdownInput from "../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
 import Dualtabcomponent from '../../compo/dualtabcomponent';
@@ -554,7 +555,11 @@ class customeractivity extends React.Component {
                     Customer[param] = e.target.value;
                     setParams(Customer);
                     break;
-                case "EmailID":
+                case "SalesPersonID":
+                    Customer[param] = e.target.value;
+                    setParams(Customer);
+                    break;
+                case "CustomerCategoryID":
                     Customer[param] = e.target.value;
                     setParams(Customer);
                     break;
@@ -641,6 +646,29 @@ class customeractivity extends React.Component {
                     this.setState({ ErrorPrompt: true });
                 });
         }
+
+        const htmlcustominput1 = (
+            <Fragment>
+                <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={10} lg={10}>
+                        <select
+                            className="dropdown-css"
+                            id="SalesPersonID"
+                            onChange={(e) => updateFormValue("SalesPersonID", e)}
+                            value={this.state.Customer.SalesPersonID}
+                        >
+                            <option value="-" disabled>Select</option>
+                        </select>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={2} lg={2}>
+                        <button 
+                        className="dropdowninputbtn"
+                        onClick={(e) => openDialog('Contact')}
+                        >...</button>
+                    </Grid>
+                </Grid>
+            </Fragment>
+        );
 
 
         const generalform = (
@@ -749,6 +777,27 @@ class customeractivity extends React.Component {
                                                     value={this.state.Customer.EmailID}
                                                 />
 
+                                                <TablecustomInput
+                                                  id="SalesPersonID"
+                                                  label="Sales Person"
+                                                  html={htmlcustominput1}
+                                                />
+
+                                                <DropdownInput
+                                                    id="SalesPersonID"
+                                                    label="Sales Person"
+                                                    onChange={(e) => updateFormValue("SalesPersonID", e)}
+                                                    value={this.state.Customer.SalesPersonID}
+                                                    options={[]}
+                                                />
+                                                <DropdownInput
+                                                    id="CustomerCategoryID"
+                                                    label="Customer Category"
+                                                    onChange={(e) => updateFormValue("CustomerCategoryID", e)}
+                                                    value={this.state.Customer.CustomerCategoryID}
+                                                    options={[]}
+                                                />
+
 
                                             </TableBody>
                                         </Table>
@@ -831,7 +880,6 @@ class customeractivity extends React.Component {
                                                     label="IsGroupCompany"
                                                     param={this.state.Customer.IsGroupCompany}
                                                     onChange={(e) => updateFormValue("IsGroupCompany", e)}
-
                                                 />
 
                                                 <SwitchInput
