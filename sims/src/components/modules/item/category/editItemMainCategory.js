@@ -402,6 +402,7 @@ class editItemMainCategory extends React.Component {
                           onChange={(e) => updateFormValue("SuperCatID", e)}
                           options={this.state.SuperCategoryDataList}
                           value={this.state.SuperCatID}
+                          isMandatory={true}
                         />
                         <TextboxInput
                           id="Code"
@@ -416,6 +417,7 @@ class editItemMainCategory extends React.Component {
                           value={this.state.Code}
                           error={this.state.Validations.Code.errorState}
                           helperText={this.state.Validations.Code.errorMssg}
+                          isMandatory={true}
                         />
                         <TextboxInput
                           id="Description"

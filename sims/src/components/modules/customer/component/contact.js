@@ -10,18 +10,22 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
-
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import TablePagination from "@mui/material/TablePagination";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import Typography from "@material-ui/core/Typography";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
 import * as CF from "../../../../services/functions/customfunctions";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
@@ -42,6 +46,7 @@ class contact extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
+      GeneralDetailsExpanded: true ,
       CustomerContact: {
         ContactID: 0,
         CustID: 0,
@@ -118,24 +123,53 @@ class contact extends React.Component {
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Button  className="action-btns" style={{ marginLeft: 5 }} onClick={(e) => {}}>
-            {APIURLS.buttonTitle.add}
-
+              {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
+          <Grid xs={12} sm={12} md={10} lg={10}>
+            &nbsp;
+          </Grid>
         </Grid>
+       
+
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
+          <Grid xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={8} lg={8}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="CustomerContact List table"
+              <Grid xs={12}>
+                <Accordion
+                  key="customerContact-General-Details"
+                  expanded={this.state.GeneralDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("GeneralDetailsExpanded", e)
+                        }
+                      />
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
                   >
-                    <TableBody className="tableBody">
-                      <DropdownInput
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
+
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="CustomerContact List table"
+                          >
+                            <TableBody className="tableBody">
+                            <DropdownInput
                         id="CustID"
                         label="Customer"
                          onChange={(e) => updateFormValue("CustID", e)}
@@ -183,9 +217,13 @@ class contact extends React.Component {
                         onChange={(e) => updateFormValue("IsBlock", e)}
                         value={this.state.CustomerContact.IsBlock}
                       />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
               </Grid>
             </Grid>
           </Grid>
@@ -193,6 +231,13 @@ class contact extends React.Component {
       </Grid>
     );
 
+    const handleAccordionClick = (val, e) => {
+      if (val === "GeneralDetailsExpanded") {
+        this.state.GeneralDetailsExpanded === true
+          ? this.setState({ GeneralDetailsExpanded: false })
+          : this.setState({ GeneralDetailsExpanded: true });
+      }
+    };
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;

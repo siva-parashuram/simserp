@@ -407,6 +407,7 @@ this.getItemCategory();
                           onChange={(e) => updateFormValue("MainCatID", e)}
                           options={this.state.MainCategoryData}
                           value={this.state.MainCatID}
+                          isMandatory={true}
                         />
                         <TextboxInput
                           id="Code"
@@ -421,6 +422,7 @@ this.getItemCategory();
                           value={this.state.Code}
                           error={this.state.Validations.Code.errorState}
                           helperText={this.state.Validations.Code.errorMssg}
+                          isMandatory={true}
                         />
                         <TextboxInput
                           id="Description"

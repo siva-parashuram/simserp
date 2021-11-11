@@ -311,6 +311,7 @@ class addItemSuperCategory extends React.Component {
                           onChange={(e) => updateFormValue("ItemType", e)}
                           options={this.state.ItemTypeMaster}
                           value={this.state.ItemType}
+                          isMandatory={true}
                         />
 
                         <TextboxInput
@@ -322,6 +323,7 @@ class addItemSuperCategory extends React.Component {
                           value={this.state.Code}
                           error={this.state.Validations.Code.errorState}
                           helperText={this.state.Validations.Code.errorMssg}
+                          isMandatory={true}
                         />
                         <TextboxInput
                           id="Description"
