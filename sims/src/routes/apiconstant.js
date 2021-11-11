@@ -113,7 +113,8 @@ export const APIURL = {
 export const buttonTitle={
   add:"Add",
   edit:"Edit",
-  update:"Update"
+  update:"Update",
+  new:"New"
 };
 
 
