@@ -30,14 +30,12 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
 import Loader from "../../../compo/loader";
-import Breadcrumb from "../../../compo/breadcrumb";
+
 import Dualtabcomponent from "../../../compo/dualtabcomponent";
-import Accordioncomponent from "../../../compo/accordioncomponent";
-import Sectiontitle from "../../../compo/sectiontitle";
-import Inputcustom from "../../../compo/inputcustom";
+
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
-import { Divider } from "@material-ui/core";
+
 
 class contact extends React.Component {
   constructor(props) {
@@ -47,6 +45,7 @@ class contact extends React.Component {
       SuccessPrompt: false,
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      listStateCustomerContact: null,
       contactData: [],
       CustomerContact: {  
         ContactID: 0,
@@ -174,6 +173,7 @@ class contact extends React.Component {
           ValidUser: ValidUser,
           CustomerContact: this.state.CustomerContact,
       };
+      
       
       axios
           .post(Url, reqData, { headers })

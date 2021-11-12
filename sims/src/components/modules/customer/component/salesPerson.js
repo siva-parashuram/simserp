@@ -168,7 +168,8 @@ class salesPerson extends React.Component {
                             aria-label="SalesPerson List table"
                           >
                             <TableBody className="tableBody">
-                            <TextboxInput
+                              <TextboxInput
+                                type="number"
                                 id="PhoneNo"
                                 label="Phone No"
                                 variant="outlined"
@@ -187,7 +188,6 @@ class salesPerson extends React.Component {
                                 variant="outlined"
                                 size="small"
                               />
-                              
                             </TableBody>
                           </Table>
                         </TableContainer>

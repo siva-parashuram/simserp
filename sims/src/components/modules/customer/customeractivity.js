@@ -62,7 +62,7 @@ class customeractivity extends React.Component {
             accordion1: true,
             accordion2: false,
             accordion3: false,
-            type: "",
+           
             ProgressLoader: false,
             ErrorPrompt: false,
             SuccessPrompt: false,
@@ -1387,7 +1387,7 @@ class customeractivity extends React.Component {
         );
 
         const Address = (
-            <Addresses />
+            <Addresses CustID={this.state.CustID} />
         );
 
         const contact=(
