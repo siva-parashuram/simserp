@@ -1524,12 +1524,7 @@ class customeractivity extends React.Component {
                                             >
                                                 Category
                                             </Button>
-                                            <Button
-                                                className="action-btns"
-                                                onClick={(e) => openDialog('PaymentTerms')}
-                                            >
-                                                Payment Terms
-                                            </Button>
+                                             
                                         </div>
                                     ) : null}
 
