@@ -19,6 +19,7 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TextField from '@material-ui/core/TextField';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -48,6 +49,7 @@ class paymentTerms extends React.Component {
       SuccessPrompt: false,
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      listPaymentTerms:null,
       paymentTermsData: [],
       PaymentTerms: {
         PaymentTermID: 0,
@@ -58,99 +60,211 @@ class paymentTerms extends React.Component {
     };
   }
 
-  componentDidMount() { }
+  componentDidMount() { 
+    this.getPaymentTerms();
+  }
+
+  getPaymentTerms=()=>{
+    let paymentTermsData = this.state.paymentTermsData;
+    let blankTemplate = this.state.PaymentTerms;
+    paymentTermsData.push(blankTemplate);
+  //  const newArray = [blankTemplate].concat(paymentTermsData);
+    this.setState({ paymentTermsData: paymentTermsData },()=>{
+     this.setState({listPaymentTerms:this.listPaymentTerms()});
+    });
+  }
+
+  listPaymentTerms=()=>{
+    let o=(
+      <Fragment>
+      <Grid container spacing={0}>
+        <Grid xs={12} sm={12} md={8} lg={8}>
+          <Button className="action-btns" style={{ marginLeft: 5, marginBottom: 10 }} onClick={(e) => this.addNew(e)}>
+            <span style={{ paddingLeft: 7, paddingRight: 5 }}> {APIURLS.buttonTitle.new} </span>
+          </Button>
+          <Button className="action-btns" style={{ marginLeft: 5, marginBottom: 10 }} onClick={(e) => this.saveTermsList(e)}>
+            <span style={{ paddingLeft: 7, paddingRight: 5 }}> {APIURLS.buttonTitle.save} </span>
+          </Button>
+        </Grid>
+      </Grid>
+      <div style={{ height: 350, width: '100%', overflowY: 'scroll' }}>
+        <Grid container spacing={0}>
+          <Grid xs={12} sm={12} md={12} lg={12}>
+            <table>
+              <thead>
+                <tr style={{ textAlign: "center" }}>
+                  <td className="table-header-font">#</td>
+                  <td className="table-header-font">Code</td>
+                  <td className="table-header-font">Description</td>
+                  <td className="table-header-font">Due Days</td>
+                  <td>&nbsp;</td>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.paymentTermsData.map((item, i) => (
+                  <tr>
+                    <td> {i + 1}</td>
+                    <td>
+                      <TextField
+                        id={"Code_" + i}
+                        variant="outlined"
+                        size="small"
+                        InputProps={{
+                          className: "textFieldCss",
+                        }}
+                        onKeyUp={(e) => this.updateFormValue("Code", e,i)}
+                        defaultValue={item.Code}
+                      />
+                    </td>
+                    <td>
+                      <TextField
+                        id={"Description_" + i}
+                        variant="outlined"
+                        size="small"
+                        InputProps={{
+                          className: "textFieldCss",
+                        }}
+                        onKeyUp={(e) => this.updateFormValue("Description", e,i)}
+                      />
+                    </td>
+                    <td>
+                      <TextField
+                        id={"DueDays_" + i}
+                        variant="outlined"
+                        size="small"
+                        InputProps={{
+                          className: "textFieldCss",
+                        }}
+                        onKeyUp={(e) => this.updateFormValue("DueDays", e,i)}
+                      />
+                    </td>
+                    <td>
+                      <DeleteForeverIcon
+                        fontSize="small"
+                        className="table-delete-icon"
+                        onClick={(e) => this.deleteEntry(i, item)}  
+                      />
+                      {" - "+i}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+
+
+          </Grid>
+        </Grid>
+      </div>
+
+    </Fragment>
+    );
+    return o;
+  }
+
+  
+  addNew = (e) => {
+    let paymentTermsData = this.state.paymentTermsData;
+    let blankTemplate = {
+      PaymentTermID: 0,
+      Code: "",
+      Description: "",
+      DueDays: "",
+    };      
+    paymentTermsData.push(blankTemplate);
+    this.setState({ paymentTermsData: paymentTermsData },()=>{
+      this.setState({listPaymentTerms:this.listPaymentTerms()});
+    });
+  }
+
+
+   deleteEntry=(eindex, item)=>{
+    console.log("deleteEntry > eindex > ",eindex);
+    let paymentTermsData = this.state.paymentTermsData;
+    let newD=[];
+    for(let i=0;i<paymentTermsData.length;i++){
+      if(i===parseInt(eindex)){
+       
+      }else{
+        newD.push(paymentTermsData[i]);
+      }
+    }
+    
+    this.setState({paymentTermsData:newD},()=>{
+      this.setState({listPaymentTerms:this.listPaymentTerms()});
+    });
+  }
+
+
+  updateFormValue = (param, e, index) => {
+    console.log("updateFormValue > index > ", index);
+    let paymentTermsData = this.state.paymentTermsData;
+
+    switch (param) {
+      case "Code":
+        for (let i = 0; i < paymentTermsData.length; i++) {
+          if (i === index) {
+            console.log("paymentTermsData[i] > ", paymentTermsData[i]);
+            paymentTermsData[i][param] = e.target.value;
+          }
+        }
+        this.setParams(paymentTermsData);
+        break;
+      case "Description":
+        for (let i = 0; i < paymentTermsData.length; i++) {
+          if (i === index) {
+            console.log("paymentTermsData[i] > ", paymentTermsData[i]);
+            paymentTermsData[i][param] = e.target.value;
+          }
+        }
+        this.setParams(paymentTermsData);
+        break;
+      case "DueDays":
+        for (let i = 0; i < paymentTermsData.length; i++) {
+          if (i === index) {
+            console.log("paymentTermsData[i] > ", paymentTermsData[i]);
+            paymentTermsData[i][param] = CF.toInt(e.target.value);
+          }
+        }
+        this.setParams(paymentTermsData);
+        break;
+      default:
+        break;
+    }
+    
+     
+  }
+
+  setParams = (object) => {
+    this.setState({ paymentTermsData: object }, () => {
+      this.setState({ listPaymentTerms: this.listPaymentTerms() });
+    });
+  };
+
+
+  saveTermsList=()=>{
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+        "Content-Type": "application/json",
+    };
+  //  let Url = APIURLS.APIURL.CreateCustomerContact;
+    let reqData = {
+        ValidUser: ValidUser,
+        paymentTermsData: this.state.paymentTermsData,
+    };
+
+    console.log("reqData > ",reqData);
+
+  }
 
   render() {
 
-    const addNew = (e) => {
-      let paymentTermsData = this.state.paymentTermsData;
-      let blankTemplate = this.state.PaymentTerms;
-      const newArray = [blankTemplate].concat(paymentTermsData)
-      //paymentTermsData.unshift(blankTemplate);
-      this.setState({ paymentTermsData: newArray });
-    }
-
-    const listPaymentTerms = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button className="action-btns" style={{ marginLeft: 5, marginBottom: 10 }} onClick={(e) => addNew(e)}>
-              <span style={{ paddingLeft: 7, paddingRight: 5 }}> {APIURLS.buttonTitle.new} </span>
-            </Button>
-          </Grid>
-        </Grid>
 
 
 
-
-        <div style={{ height: 350, width: '100%', overflowY: 'scroll' }}>
-          <Grid container spacing={0}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Table
-                stickyHeader
-                size="small"
-                className=""
-                aria-label="paymentTerms List table"
-              >
-                <TableHead className="table-header-background">
-                  <TableRow>
-                    <TableCell className="table-header-font">#</TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Code
-                    </TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Description
-                    </TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Due Days
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody className="tableBody">
-                  {this.state.paymentTermsData.map((item, i) => (
-                    <TableRow>
-                      <TableCell > {i + 1}</TableCell>
-                      <TableCell align="left">
-                        <TextField
-                          id={"Code_" + i}
-                          variant="outlined"
-                          size="small"
-                          InputProps={{
-                            className: "textFieldCss",
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="left">
-                        <TextField
-                          id={"Description_" + i}
-                          variant="outlined"
-                          size="small"
-                          InputProps={{
-                            className: "textFieldCss",
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell align="left">
-                        <TextField
-                          id={"DueDays_" + i}
-                          variant="outlined"
-                          size="small"
-                          InputProps={{
-                            className: "textFieldCss",
-                          }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-
-                </TableBody>
-              </Table>
-            </Grid>
-          </Grid>
-        </div>
-
-      </Fragment>
-    );
+ 
 
     const createPaymentTerm = (
       <Grid container spacing={0}>
@@ -194,6 +308,9 @@ class paymentTerms extends React.Component {
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={9} lg={9}>
+
+
+
                         <TableContainer>
                           <Table
                             stickyHeader
@@ -274,13 +391,8 @@ class paymentTerms extends React.Component {
           <Grid item xs={12} sm={12} md={10} lg={10}>
             <Grid style={{ marginLeft: 15 }} container spacing={0}>
               <Grid item xs={12} sm={12} md={8} lg={8}>
-                {listPaymentTerms}
-                {/* <Dualtabcomponent
-                  tab1name="List"
-                  tab2name="New"
-                  tab1Html={listPaymentTerms}
-                  tab2Html={createPaymentTerm}
-                /> */}
+                {this.state.listPaymentTerms}
+               
               </Grid>
             </Grid>
           </Grid>

@@ -117,7 +117,8 @@ export const buttonTitle={
   add:"Add",
   edit:"Edit",
   update:"Update",
-  new:"New"
+  new:"New",
+  save:"Save"
 };
 
 
