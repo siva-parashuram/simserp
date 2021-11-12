@@ -242,23 +242,13 @@ class addresses extends React.Component {
         <Grid container spacing={0}>
           <Grid style={{ paddingTop: 10 }} container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>
-              {this.state.type === "EDIT" ? (
-                <Button
-                  className="action-btns"
-                  style={{ marginLeft: 10 }}
-                  onClick={(e) => this.updateAddress(e)}
-                >
-                  {APIURLS.buttonTitle.update}
-                </Button>
-              ) : (
-                <Button
-                  className="action-btns"
-                  style={{ marginLeft: 10 }}
-                  onClick={(e) => this.AddNew(e)}
-                >
-                  {APIURLS.buttonTitle.add}
-                </Button>
-              )}
+              <Button
+                className="action-btns"
+                style={{ marginLeft: 10 }}
+                onClick={(e) => this.AddNew(e)}
+              >
+                {APIURLS.buttonTitle.add}
+              </Button>
             </Grid>
           </Grid>
           <div style={{ height: 10 }}>&nbsp;</div>

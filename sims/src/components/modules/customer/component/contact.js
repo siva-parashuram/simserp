@@ -45,6 +45,15 @@ class contact extends React.Component {
       GeneralDetailsExpanded: true,
       listStateCustomerContact: null,
       stateCreateContact: null,
+      UpdateCustomerContact: {
+        ContactID: 0,
+        CustID: this.props.CustID,
+        ContactType: -1,
+        Name: "",
+        PhoneNo: "",
+        EmailID: "",
+        IsBlock: false,
+      },
       contactData: [],
       CustomerContact: {
         ContactID: 0,
@@ -111,6 +120,7 @@ class contact extends React.Component {
             stateCreateContact: this.stateCreateContact(),
           });
         });
+        this.InitialhandleRowClick(null, data[0], "row_0");
       })
       .catch((error) => {
         this.setState({ contactData: [], ProgressLoader: true });
@@ -140,7 +150,13 @@ class contact extends React.Component {
           </TableHead>
           <TableBody className="tableBody">
             {this.state.contactData.map((item, i) => (
-              <TableRow>
+              <TableRow
+                id={"row_" + i}
+                key={i}
+                onClick={(event) =>
+                  this.handleRowClick(event, item, "row_" + i)
+                }
+              >
                 <TableCell> {i + 1}</TableCell>
                 <TableCell> {item.Name}</TableCell>
                 <TableCell align="left">{item.EmailID}</TableCell>
@@ -221,7 +237,7 @@ class contact extends React.Component {
                                 id="ContactType"
                                 label="ContactType"
                                 onChange={(e) =>
-                                  this.updateFormValue("ContactType", e)
+                                  this.updateFormValue("ContactType", e, "ADD")
                                 }
                                 options={APIURLS.ContactType}
                                 isMandatory={true}
@@ -233,7 +249,7 @@ class contact extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
-                                  this.updateFormValue("Name", e)
+                                  this.updateFormValue("Name", e, "ADD")
                                 }
                                 value={this.state.CustomerContact.Name}
                               />
@@ -243,7 +259,7 @@ class contact extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
-                                  this.updateFormValue("PhoneNo", e)
+                                  this.updateFormValue("PhoneNo", e, "ADD")
                                 }
                                 value={this.state.CustomerContact.PhoneNo}
                               />
@@ -253,7 +269,7 @@ class contact extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
-                                  this.updateFormValue("EmailID", e)
+                                  this.updateFormValue("EmailID", e, "ADD")
                                 }
                                 value={this.state.CustomerContact.EmailID}
                               />
@@ -263,7 +279,7 @@ class contact extends React.Component {
                                 label="IsBlock"
                                 param={this.state.CustomerContact.IsBlock}
                                 onChange={(e) =>
-                                  this.updateFormValue("IsBlock", e)
+                                  this.updateFormValue("IsBlock", e, "ADD")
                                 }
                                 value={this.state.CustomerContact.IsBlock}
                               />
@@ -283,8 +299,14 @@ class contact extends React.Component {
     return o;
   };
 
-  updateFormValue = (param, e) => {
-    let CustomerContact = this.state.CustomerContact;
+  updateFormValue = (param, e, process) => {
+    let CustomerContact = {};
+
+    if (process === "EDIT") {
+      CustomerContact = this.state.UpdateCustomerContact;
+    } else {
+      CustomerContact = this.state.CustomerContact;
+    }
     switch (param) {
       // case "CustID":
       //   CustomerContact[param] = e.target.value;
@@ -292,35 +314,39 @@ class contact extends React.Component {
       //   break;
       case "ContactType":
         CustomerContact[param] = e.target.value;
-        this.setParams(CustomerContact);
+        this.setParams(CustomerContact, process);
         break;
       case "Name":
         CustomerContact[param] = e.target.value;
-        this.setParams(CustomerContact);
+        this.setParams(CustomerContact, process);
         break;
       case "PhoneNo":
         CustomerContact[param] = e.target.value;
-        this.setParams(CustomerContact);
+        this.setParams(CustomerContact, process);
         break;
       case "EmailID":
         CustomerContact[param] = e.target.value;
-        this.setParams(CustomerContact);
+        this.setParams(CustomerContact, process);
         break;
       case "IsBlock":
         CustomerContact[param] = e.target.checked;
-        this.setParams(CustomerContact);
+        this.setParams(CustomerContact, process);
         break;
 
       default:
         break;
     }
   };
-  setParams = (object) => {
-    this.setState({ CustomerContact: object }, () => {
-      this.setState({
-        stateCreateContact: this.stateCreateContact(),
+  setParams = (object,process) => {
+    if (process === "EDIT") {
+      this.setState({ UpdateCustomerContact: object });
+    } else {
+      this.setState({ CustomerContact: object }, () => {
+        this.setState({
+          stateCreateContact: this.stateCreateContact(),
+        });
       });
-    });
+    }
   };
 
   handleAccordionClick = (val, e) => {
@@ -377,49 +403,62 @@ class contact extends React.Component {
       });
   };
 
+  UpdateCustomerContact = (e) => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.UpdateCustomerContact;
+    let reqData = {
+      ValidUser: ValidUser,
+      CustomerContact: this.state.UpdateCustomerContact,
+    };
+
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200 || response.status === 201) {
+          this.setState({
+            ErrorPrompt: false,
+            SuccessPrompt: true,
+          });
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+  };
+
   InitialhandleRowClick(e, item, id) {
-    this.setState(
-      {
-        // CustomerAddress: item,
-      },
-      () => {
-        // this.setState({ stateForm: this.stateForm() });
-      }
-    );
+    this.setState({
+      UpdateCustomerContact: item,
+    });
 
     this.removeIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
 
   handleRowClick = (e, item, id) => {
-    this.setState(
-      {
-        CustomerAddress: item,
-        type: "EDIT",
-      },
-      () => {
-        this.setState({ stateForm: this.stateForm() });
-      }
-    );
+    this.setState({
+      UpdateCustomerContact: item,
+    });
     console.log("addressId>>", this.state.CustomerContact.ContactID);
     this.removeIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   };
 
   removeIsSelectedRowClasses = () => {
-    for (let i = 0; i < this.state.AddressData.length; i++) {
+    for (let i = 0; i < this.state.contactData.length; i++) {
       document.getElementById("row_" + i).className = "";
     }
   };
 
-
-
-
-
-
   render() {
-    
-
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -448,17 +487,112 @@ class contact extends React.Component {
         />
 
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={10} lg={10}>
-            <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={10} lg={10}>
-                <Dualtabcomponent
-                  tab1name="List"
-                  tab2name="New"
-                  tab1Html={this.state.listStateCustomerContact}
-                  tab2Html={this.state.stateCreateContact}
-                />
+          <Grid item xs={12} sm={12} md={8} lg={8}>
+            {/* <Grid style={{ marginLeft: 15 }} container spacing={0}>
+              <Grid item xs={12} sm={12} md={10} lg={10}> */}
+            <Dualtabcomponent
+              tab1name="List"
+              tab2name="New"
+              tab1Html={this.state.listStateCustomerContact}
+              tab2Html={this.state.stateCreateContact}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4} lg={4}>
+            <div style={{ marginLeft: 10, marginTop: -5 }}>
+              <Grid container spacing={6}>
+                <Grid item xs={12} sm={12} md={8} lg={8}>
+                  <div style={{ marginTop: -12, marginLeft: 1 }}>
+                    <h4>Detail view</h4>
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={12} md={4} lg={4}>
+                  <div>
+                    <Button
+                      className="action-btns"
+                      style={{ marginLeft: 10 }}
+                      onClick={(e) => this.UpdateCustomerContact(e)}
+                    >
+                      {APIURLS.buttonTitle.update}
+                    </Button>
+                  </div>
+                </Grid>
               </Grid>
-            </Grid>
+
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <div
+                    style={{
+                      height: 300,
+                      marginTop: 10,
+                      overflowX: "hidden",
+                      overflowY: "scroll",
+                      width: "100%",
+                      backgroundColor: "#ffffff",
+                    }}
+                  >
+                    <Table
+                      stickyHeader
+                      size="small"
+                      className="accordion-table"
+                      aria-label="customerAddress List table"
+                    >
+                      <TableBody className="tableBody">
+                        <DropdownInput
+                          id="ContactType"
+                          label="ContactType"
+                          onChange={(e) =>
+                            this.updateFormValue("ContactType", e, "EDIT")
+                          }
+                          options={APIURLS.ContactType}
+                          isMandatory={true}
+                          value={this.state.UpdateCustomerContact.ContactType}
+                        />
+                        <TextboxInput
+                          id="Name"
+                          label="Name"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) =>
+                            this.updateFormValue("Name", e, "EDIT")
+                          }
+                          value={this.state.UpdateCustomerContact.Name}
+                        />
+                        <TextboxInput
+                          id="PhoneNo"
+                          label="PhoneNo"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) =>
+                            this.updateFormValue("PhoneNo", e, "EDIT")
+                          }
+                          value={this.state.UpdateCustomerContact.PhoneNo}
+                        />
+                        <TextboxInput
+                          id="EmailID"
+                          label="EmailID"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) =>
+                            this.updateFormValue("EmailID", e, "EDIT")
+                          }
+                          value={this.state.UpdateCustomerContact.EmailID}
+                        />
+                        <SwitchInput
+                          key="IsBlock"
+                          id="IsBlock"
+                          label="IsBlock"
+                          param={this.state.CustomerContact.IsBlock}
+                          onChange={(e) =>
+                            this.updateFormValue("IsBlock", e, "EDIT")
+                          }
+                          value={this.state.UpdateCustomerContact.IsBlock}
+                        />
+                      </TableBody>
+                    </Table>
+                  </div>
+                </Grid>
+              </Grid>
+            </div>
           </Grid>
         </Grid>
       </Fragment>
