@@ -32,6 +32,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import SwitchInput from "../../compo/tablerowcellswitchinput";
 
 class editbranch extends React.Component {
   constructor(props) {
@@ -54,6 +55,7 @@ class editbranch extends React.Component {
       oldName: "",
       duplicate: false,
       branch: {
+        IsTrading:false, 
         address: null,
         address2: null,
         address3: null,
@@ -113,6 +115,7 @@ class editbranch extends React.Component {
         IsExportUnit: false,
         CurrID: null,
       },
+      IsTrading:false, 
       address: null,
       address2: null,
       address3: null,
@@ -435,7 +438,7 @@ class editbranch extends React.Component {
       VATPercentage: data.vatpercentage,
       IsGST: data.isGst === null ? false : data.isGst,
       GSTNo: data.gstno,
-
+      IsTrading:data.isTrading=== null ? false : data.isTrading,
       PANNo: data.panno,
       TANNo: data.tanno,
       CINNo: data.cinno,
@@ -837,6 +840,16 @@ class editbranch extends React.Component {
         ValidateName();
       }
 
+      if(id==="IsTrading"){
+        console.log("In is trading");
+        let branch = this.state.branch;
+        branch.IsTrading = e.target.checked;
+        this.setState({
+          branch: branch,
+          IsTrading: e.target.checked,
+        });
+      }
+
       //----------------TAXATION------------
 
       if (id === "VATNo") {
@@ -1163,6 +1176,8 @@ class editbranch extends React.Component {
         branch.RVNo = e.target.value;
       }
 
+    
+
       if (id === "EffectiveDate") {
         // moment().format("YYYY-MM-DD")
         let branch = this.state.branch;
@@ -1214,10 +1229,15 @@ class editbranch extends React.Component {
     const handleupdate = () => {
       ValidateName();
       this.setState({ ProgressLoader: false });
-      let branch = this.state.branch;
+     
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+      let branch = this.state.branch;
+      let dup="isTrading";
+      delete branch[dup];
+
       const data = {
         validUser: ValidUser,
         branch: branch,
@@ -1644,6 +1664,16 @@ class editbranch extends React.Component {
                                     this.state.Validations.address3.errorMsg
                                   }
                                 />
+
+                                <SwitchInput
+                                  key="IsTrading"
+                                  id="IsTrading"
+                                  label="IsTrading"
+                                  param={this.state.branch.IsTrading}
+                                  onChange={(e) => updateFormValue("IsTrading", e)}
+                                />
+                               - {this.state.branch.IsTrading}
+
                                 {/* <TableRow>
                                   <TableCell
                                     align="left"

@@ -163,7 +163,6 @@ class statemaster extends React.Component {
         .post(GetDestinationByCountryIdAndStateIdUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ destinations: data, ProgressLoader: true });
           } else {
@@ -294,7 +293,7 @@ class statemaster extends React.Component {
                                     item.stateId
                                   }
                                 >
-                                  {URLS.PREFIX.stateID + item.stateId}
+                                  {URLS.PREFIX.stateID + item.stateId} 
                                 </a>
                               </TableCell>
                               <TableCell align="left">{item.name}</TableCell>
