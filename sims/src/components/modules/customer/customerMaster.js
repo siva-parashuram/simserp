@@ -90,6 +90,7 @@ class customerMaster extends React.Component {
             editUrl: editUrl,
             editBtnDisable:false,
         });
+       
         this.removeIsSelectedRowClasses();
         document.getElementById(id).classList.add("selectedRow");
 
