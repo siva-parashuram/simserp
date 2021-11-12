@@ -1195,15 +1195,17 @@ class customeractivity extends React.Component {
                     aria-describedby="dialog-description"
                     className="dialog-prompt-activity"
                 >
-                    <DialogTitle id="dialog-title"  className="dialog-area">
+                    <DialogTitle id="dialog-title"  className="dialog-area" style={{maxHeight:40}}>
                         <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={1} lg={1}>
-                                <IconButton aria-label="delete" style={{ textAlign: 'left', marginTop: 8 }}>
+                                <IconButton aria-label="ArrowBackIcon" 
+                                // style={{ textAlign: 'left', marginTop: 8 }}
+                                >
                                     <ArrowBackIcon onClick={(e) => handleClose()} />
                                 </IconButton>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <div style={{ marginTop: 10, marginLeft: -50 }}>  {this.state.Dialog.DialogTitle}  </div>
+                            <Grid item xs={12} sm={12} md={2} lg={2}>                            
+                                <div style={{marginLeft: -50 }}>  {this.state.Dialog.DialogTitle}  </div>
                             </Grid>
                         </Grid>
                     </DialogTitle>
