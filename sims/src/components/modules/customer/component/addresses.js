@@ -172,7 +172,7 @@ class addresses extends React.Component {
         }
         this.setState({ countryData: newData, ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   getStateList = () => {
@@ -198,347 +198,337 @@ class addresses extends React.Component {
         }
         this.setState({ stateData: newData, ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   stateForm = () => {
     let o = (
-      <Grid container spacing={0}>
-        <Grid style={{ paddingTop: 10 }} container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            {this.state.type === "EDIT" ? (
-              <Button
-                className="action-btns"
-                style={{ marginLeft: 10 }}
-                onClick={(e) => this.updateAddress(e)}
-              >
-                {APIURLS.buttonTitle.update}
-              </Button>
-            ) : (
-              <Button
-                className="action-btns"
-                style={{ marginLeft: 10 }}
-                onClick={(e) => this.AddNew(e)}
-              >
-                {APIURLS.buttonTitle.add}
-              </Button>
-            )}
-          </Grid>
-        </Grid>
-        <div style={{ height: 10 }}>&nbsp;</div>
-
+      <div style={{ height: 500, overflowY: "scroll", overflowX: 'hidden', width: "100%" }}>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Accordion
-                  key="customerAddress-General-Details"
-                  expanded={this.state.GeneralDetailsExpanded}
+          <Grid style={{ paddingTop: 10 }} container spacing={0}>
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              {this.state.type === "EDIT" ? (
+                <Button
+                  className="action-btns"
+                  style={{ marginLeft: 10 }}
+                  onClick={(e) => this.updateAddress(e)}
                 >
-                  <AccordionSummary
-                    className="accordion-Header-Design"
-                    expandIcon={
-                      <ExpandMoreIcon
-                        onClick={(e) =>
-                          this.handleAccordionClick("GeneralDetailsExpanded", e)
-                        }
-                      />
-                    }
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                  {APIURLS.buttonTitle.update}
+                </Button>
+              ) : (
+                <Button
+                  className="action-btns"
+                  style={{ marginLeft: 10 }}
+                  onClick={(e) => this.AddNew(e)}
+                >
+                  {APIURLS.buttonTitle.add}
+                </Button>
+              )}
+            </Grid>
+          </Grid>
+          <div style={{ height: 10 }}>&nbsp;</div>
+
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={12} lg={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Accordion
+                    key="customerAddress-General-Details"
+                    expanded={this.state.GeneralDetailsExpanded}
                   >
-                    <Typography key="" className="accordion-Header-Title">
-                      General Details
-                    </Typography>
-                  </AccordionSummary>
+                    <AccordionSummary
+                      className="accordion-Header-Design"
+                      expandIcon={
+                        <ExpandMoreIcon
+                          onClick={(e) =>
+                            this.handleAccordionClick("GeneralDetailsExpanded", e)
+                          }
+                        />
+                      }
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                      style={{ minHeight: "40px", maxHeight: "40px" }}
+                    >
+                      <Typography key="" className="accordion-Header-Title">
+                        General Details
+                      </Typography>
+                    </AccordionSummary>
 
-                  <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={4} lg={4}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="customerAddress List table"
-                          >
-                            <TableBody className="tableBody">
-                              <DropdownInput
-                                id="AddressType"
-                                label="AddressType"
-                                onChange={(e) =>
-                                  this.updateFormValue("AddressType", e)
-                                }
-                                value={this.state.CustomerAddress.AddressType}
-                                options={APIURLS.AddressType}
-                                isMandatory={true}
-                              />
-                              <TextboxInput
-                                id="Code"
-                                label="Code"
-                                onChange={(e) =>
-                                  this.updateFormValue("Code", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                isMandatory={true}
-                                value={this.state.CustomerAddress.Code}
-                              />
-                              <TextboxInput
-                                id="Name"
-                                label="Name"
-                                onChange={(e) =>
-                                  this.updateFormValue("Name", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.Name}
-                              />
-                              <TextboxInput
-                                id="Address"
-                                label="Address"
-                                onChange={(e) =>
-                                  this.updateFormValue("Address", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.Address}
-                              />
-                              <TextboxInput
-                                id="Address2"
-                                label="Address2"
-                                onChange={(e) =>
-                                  this.updateFormValue("Address2", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.Address2}
-                              />
-                              <TextboxInput
-                                id="Address3"
-                                label="Address3"
-                                onChange={(e) =>
-                                  this.updateFormValue("Address3", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.Address3}
-                              />
-                              <TextboxInput
-                                id="City"
-                                label="City"
-                                onChange={(e) =>
-                                  this.updateFormValue("City", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.City}
-                              />
-                              <TextboxInput
-                                id="PostCode"
-                                label="PostCode"
-                                onChange={(e) =>
-                                  this.updateFormValue("PostCode", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.PostCode}
-                              />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={4} lg={4}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="customerAddress List table"
-                          >
-                            <TableBody className="tableBody">
-                              <DropdownInput
-                                id="CountryID"
-                                label="Country"
-                                onChange={(e) =>
-                                  this.updateFormValue("CountryID", e)
-                                }
-                                options={this.state.countryData}
-                                isMandatory={true}
-                                value={this.state.CustomerAddress.CountryID}
-                              />
-                              <DropdownInput
-                                id="StateID"
-                                label="State"
-                                onChange={(e) =>
-                                  this.updateFormValue("StateID", e)
-                                }
-                                options={this.state.stateData}
-                                value={this.state.CustomerAddress.StateID}
-                              />
-                              <TextboxInput
-                                id="ContactPerson"
-                                label="Contact Person"
-                                onChange={(e) =>
-                                  this.updateFormValue("ContactPerson", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.ContactPerson}
-                              />
-                              <TextboxInput
-                                id="PhoneNo"
-                                label="Phone No "
-                                onChange={(e) =>
-                                  this.updateFormValue("PhoneNo", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.PhoneNo}
-                              />
+                    <AccordionDetails key="" className="AccordionDetails-css">
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                          <TableContainer>
+                            <Table
+                              stickyHeader
+                              size="small"
+                              className="accordion-table"
+                              aria-label="customerAddress List table"
+                            >
+                              <TableBody className="tableBody">
+                                <DropdownInput
+                                  id="AddressType"
+                                  label="AddressType"
+                                  onChange={(e) =>
+                                    this.updateFormValue("AddressType", e)
+                                  }
+                                  value={this.state.CustomerAddress.AddressType}
+                                  options={APIURLS.AddressType}
+                                  isMandatory={true}
+                                />
+                                <TextboxInput
+                                  id="Code"
+                                  label="Code"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Code", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  isMandatory={true}
+                                  value={this.state.CustomerAddress.Code}
+                                />
+                                <TextboxInput
+                                  id="Name"
+                                  label="Name"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Name", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.Name}
+                                />
+                                <TextboxInput
+                                  id="Address"
+                                  label="Address"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Address", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.Address}
+                                />
+                                <TextboxInput
+                                  id="Address2"
+                                  label="Address2"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Address2", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.Address2}
+                                />
+                                <TextboxInput
+                                  id="Address3"
+                                  label="Address3"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Address3", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.Address3}
+                                />
+                                <TextboxInput
+                                  id="City"
+                                  label="City"
+                                  onChange={(e) =>
+                                    this.updateFormValue("City", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.City}
+                                />
+                                <TextboxInput
+                                  id="PostCode"
+                                  label="PostCode"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PostCode", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.PostCode}
+                                />
+                                <TextboxInput
+                                  id="TSSNo"
+                                  label="TSSNo"
+                                  onChange={(e) =>
+                                    this.updateFormValue("TSSNo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.TSSNo}
+                                />
+                                <SwitchInput
+                                  key="IsBlock"
+                                  id="IsBlock"
+                                  label="IsBlock"
+                                  param={this.state.CustomerAddress.IsBlock}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsBlock", e)
+                                  }
+                                  value={this.state.CustomerAddress.IsBlock}
+                                />
+                                <DropdownInput
+                                  id="IncoID"
+                                  label="IncoID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("IncoID", e)
+                                  }
+                                  // options={}
+                                  value={this.state.CustomerAddress.IncoID}
+                                />
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                          <TableContainer>
+                            <Table
+                              stickyHeader
+                              size="small"
+                              className="accordion-table"
+                              aria-label="customerAddress List table"
+                            >
+                              <TableBody className="tableBody">
+                                <DropdownInput
+                                  id="CountryID"
+                                  label="Country"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CountryID", e)
+                                  }
+                                  options={this.state.countryData}
+                                  isMandatory={true}
+                                  value={this.state.CustomerAddress.CountryID}
+                                />
+                                <DropdownInput
+                                  id="StateID"
+                                  label="State"
+                                  onChange={(e) =>
+                                    this.updateFormValue("StateID", e)
+                                  }
+                                  options={this.state.stateData}
+                                  value={this.state.CustomerAddress.StateID}
+                                />
+                                <TextboxInput
+                                  id="ContactPerson"
+                                  label="Contact Person"
+                                  onChange={(e) =>
+                                    this.updateFormValue("ContactPerson", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.ContactPerson}
+                                />
+                                <TextboxInput
+                                  id="PhoneNo"
+                                  label="Phone No "
+                                  onChange={(e) =>
+                                    this.updateFormValue("PhoneNo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.PhoneNo}
+                                />
 
-                              <TextboxInput
-                                id="EmailID"
-                                label="Email ID"
-                                onChange={(e) =>
-                                  this.updateFormValue("EmailID", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.EmailID}
-                              />
-                              <TextboxInput
-                                id="VATNo"
-                                label="VATNo"
-                                onChange={(e) =>
-                                  this.updateFormValue("VATNo", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.VATNo}
-                              />
-                              <TextboxInput
-                                id="GSTNo"
-                                label="GSTNo"
-                                onChange={(e) =>
-                                  this.updateFormValue("GSTNo", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.GSTNo}
-                              />
-                              <TextboxInput
-                                id="EORINo"
-                                label="EORINo"
-                                onChange={(e) =>
-                                  this.updateFormValue("EORINo", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.EORINo}
-                              />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                                <TextboxInput
+                                  id="EmailID"
+                                  label="Email ID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EmailID", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.EmailID}
+                                />
+                                <TextboxInput
+                                  id="VATNo"
+                                  label="VATNo"
+                                  onChange={(e) =>
+                                    this.updateFormValue("VATNo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.VATNo}
+                                />
+                                <TextboxInput
+                                  id="GSTNo"
+                                  label="GSTNo"
+                                  onChange={(e) =>
+                                    this.updateFormValue("GSTNo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.GSTNo}
+                                />
+                                <TextboxInput
+                                  id="EORINo"
+                                  label="EORINo"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EORINo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.EORINo}
+                                />
+                                <DropdownInput
+                                  id="ShipmentModeID"
+                                  label="ShipmentModeID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("ShipmentModeID", e)
+                                  }
+                                  // options={}
+                                  value={
+                                    this.state.CustomerAddress.ShipmentModeID
+                                  }
+                                />
+                                <TextboxInput
+                                  id="PostOfDischarge"
+                                  label="Post Of Discharge"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PostOfDischarge", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={
+                                    this.state.CustomerAddress.PostOfDischarge
+                                  }
+                                />
+                                <TextboxInput
+                                  id="FinalDestination"
+                                  label="Final Destination"
+                                  onChange={(e) =>
+                                    this.updateFormValue("FinalDestination", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={
+                                    this.state.CustomerAddress.FinalDestination
+                                  }
+                                />
+                                <TextboxInput
+                                  id="SpecialInstruction"
+                                  label="Special Instruction"
+                                  onChange={(e) =>
+                                    this.updateFormValue("SpecialInstruction", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={
+                                    this.state.CustomerAddress.SpecialInstruction
+                                  }
+                                />
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+
                       </Grid>
-                      <Grid item xs={12} sm={12} md={4} lg={4}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="customerAddress List table"
-                          >
-                            <TableBody className="tableBody">
-                              <TextboxInput
-                                id="TSSNo"
-                                label="TSSNo"
-                                onChange={(e) =>
-                                  this.updateFormValue("TSSNo", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={this.state.CustomerAddress.TSSNo}
-                              />
-                              <SwitchInput
-                                key="IsBlock"
-                                id="IsBlock"
-                                label="IsBlock"
-                                param={this.state.CustomerAddress.IsBlock}
-                                onChange={(e) =>
-                                  this.updateFormValue("IsBlock", e)
-                                }
-                                value={this.state.CustomerAddress.IsBlock}
-                              />
-                              <DropdownInput
-                                id="IncoID"
-                                label="IncoID"
-                                onChange={(e) =>
-                                  this.updateFormValue("IncoID", e)
-                                }
-                                // options={}
-                                value={this.state.CustomerAddress.IncoID}
-                              />
-                              <DropdownInput
-                                id="ShipmentModeID"
-                                label="ShipmentModeID"
-                                onChange={(e) =>
-                                  this.updateFormValue("ShipmentModeID", e)
-                                }
-                                // options={}
-                                value={
-                                  this.state.CustomerAddress.ShipmentModeID
-                                }
-                              />
-                              <TextboxInput
-                                id="PostOfDischarge"
-                                label="Post Of Discharge"
-                                onChange={(e) =>
-                                  this.updateFormValue("PostOfDischarge", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={
-                                  this.state.CustomerAddress.PostOfDischarge
-                                }
-                              />
-                              <TextboxInput
-                                id="FinalDestination"
-                                label="Final Destination"
-                                onChange={(e) =>
-                                  this.updateFormValue("FinalDestination", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={
-                                  this.state.CustomerAddress.FinalDestination
-                                }
-                              />
-                              <TextboxInput
-                                id="SpecialInstruction"
-                                label="Special Instruction"
-                                onChange={(e) =>
-                                  this.updateFormValue("SpecialInstruction", e)
-                                }
-                                variant="outlined"
-                                size="small"
-                                value={
-                                  this.state.CustomerAddress.SpecialInstruction
-                                }
-                              />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </div>
     );
     return o;
   };
@@ -546,7 +536,7 @@ class addresses extends React.Component {
   listCustomerAddresses = () => {
     let o = (
       <Fragment>
-        <div style={{ height: 300, overflowY: "scroll", width: "100%" }}>
+        <div style={{ height: 500, overflowY: "scroll", width: "100%" }}>
           <Table
             stickyHeader
             size="small"
@@ -556,7 +546,7 @@ class addresses extends React.Component {
             <TableHead className="table-header-background">
               <TableRow>
                 <TableCell className="table-header-font">#</TableCell>
-                <TableCell className="table-header-font">AddressType</TableCell>
+                <TableCell className="table-header-font">Address Type</TableCell>
                 <TableCell className="table-header-font" align="left">
                   Name
                 </TableCell>
@@ -798,7 +788,7 @@ class addresses extends React.Component {
     this.removeIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
-  
+
 
   handleRowClick = (e, item, id) => {
     // this.setState(
@@ -850,13 +840,289 @@ class addresses extends React.Component {
         />
 
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Grid item xs={12} sm={12} md={8} lg={8}>
             <Dualtabcomponent
               tab1name="List"
               tab2name={this.state.type === "EDIT" ? "EDIT" : "ADD"}
               tab1Html={this.state.listStateCustomerAddresses}
               tab2Html={this.state.stateForm}
             />
+          </Grid>
+          <Grid item xs={12} sm={12} md={4} lg={4}>
+            <div style={{ marginLeft: 10, marginTop:0 }}>
+             
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={8} lg={8}>
+                  <div style={{ marginTop: -12,marginLeft:1 }}>
+                    <h4>Detail view</h4>
+                  </div>
+
+                </Grid>
+                <Grid item xs={12} sm={12} md={4} lg={4}>
+                  <Button
+                    className="action-btns"
+                    style={{ marginLeft: 10 }}
+                    onClick={(e) => this.updateAddress(e)}
+                  >
+                    {APIURLS.buttonTitle.update}
+                  </Button>
+                </Grid>
+              </Grid>
+              
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <div style={{height:500,marginTop:10,overflowX:'hidden',overflowY:'scroll',width:'100%',backgroundColor:'#ffffff'}}>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label="customerAddress List table"
+                  >
+                    <TableBody className="tableBody">
+                      <DropdownInput
+                        id="AddressType"
+                        label="AddressType"
+                        onChange={(e) =>
+                          this.updateFormValue("AddressType", e)
+                        }
+                        value={this.state.CustomerAddress.AddressType}
+                        options={APIURLS.AddressType}
+                        isMandatory={true}
+                      />
+                      <TextboxInput
+                        id="Code"
+                        label="Code"
+                        onChange={(e) =>
+                          this.updateFormValue("Code", e)
+                        }
+                        variant="outlined"
+                        size="small"
+                        isMandatory={true}
+                        value={this.state.CustomerAddress.Code}
+                      />
+                      <TextboxInput
+                        id="Name"
+                        label="Name"
+                        onChange={(e) =>
+                          this.updateFormValue("Name", e)
+                        }
+                        variant="outlined"
+                        size="small"
+                        value={this.state.CustomerAddress.Name}
+                      />
+                      <TextboxInput
+                        id="Address"
+                        label="Address"
+                        onChange={(e) =>
+                          this.updateFormValue("Address", e)
+                        }
+                        variant="outlined"
+                        size="small"
+                        value={this.state.CustomerAddress.Address}
+                      />
+                      <TextboxInput
+                        id="Address2"
+                        label="Address2"
+                        onChange={(e) =>
+                          this.updateFormValue("Address2", e)
+                        }
+                        variant="outlined"
+                        size="small"
+                        value={this.state.CustomerAddress.Address2}
+                      />
+                      <TextboxInput
+                        id="Address3"
+                        label="Address3"
+                        onChange={(e) =>
+                          this.updateFormValue("Address3", e)
+                        }
+                        variant="outlined"
+                        size="small"
+                        value={this.state.CustomerAddress.Address3}
+                      />
+                      <TextboxInput
+                        id="City"
+                        label="City"
+                        onChange={(e) =>
+                          this.updateFormValue("City", e)
+                        }
+                        variant="outlined"
+                        size="small"
+                        value={this.state.CustomerAddress.City}
+                      />
+                      <TextboxInput
+                        id="PostCode"
+                        label="PostCode"
+                        onChange={(e) =>
+                          this.updateFormValue("PostCode", e)
+                        }
+                        variant="outlined"
+                        size="small"
+                        value={this.state.CustomerAddress.PostCode}
+                      />
+                      <TextboxInput
+                        id="TSSNo"
+                        label="TSSNo"
+                        onChange={(e) =>
+                          this.updateFormValue("TSSNo", e)
+                        }
+                        variant="outlined"
+                        size="small"
+                        value={this.state.CustomerAddress.TSSNo}
+                      />
+                      <SwitchInput
+                        key="IsBlock"
+                        id="IsBlock"
+                        label="IsBlock"
+                        param={this.state.CustomerAddress.IsBlock}
+                        onChange={(e) =>
+                          this.updateFormValue("IsBlock", e)
+                        }
+                        value={this.state.CustomerAddress.IsBlock}
+                      />
+                      <DropdownInput
+                        id="IncoID"
+                        label="IncoID"
+                        onChange={(e) =>
+                          this.updateFormValue("IncoID", e)
+                        }
+                        // options={}
+                        value={this.state.CustomerAddress.IncoID}
+                      />
+                       <DropdownInput
+                                  id="CountryID"
+                                  label="Country"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CountryID", e)
+                                  }
+                                  options={this.state.countryData}
+                                  isMandatory={true}
+                                  value={this.state.CustomerAddress.CountryID}
+                                />
+                                <DropdownInput
+                                  id="StateID"
+                                  label="State"
+                                  onChange={(e) =>
+                                    this.updateFormValue("StateID", e)
+                                  }
+                                  options={this.state.stateData}
+                                  value={this.state.CustomerAddress.StateID}
+                                />
+                                <TextboxInput
+                                  id="ContactPerson"
+                                  label="Contact Person"
+                                  onChange={(e) =>
+                                    this.updateFormValue("ContactPerson", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.ContactPerson}
+                                />
+                                <TextboxInput
+                                  id="PhoneNo"
+                                  label="Phone No "
+                                  onChange={(e) =>
+                                    this.updateFormValue("PhoneNo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.PhoneNo}
+                                />
+
+                                <TextboxInput
+                                  id="EmailID"
+                                  label="Email ID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EmailID", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.EmailID}
+                                />
+                                <TextboxInput
+                                  id="VATNo"
+                                  label="VATNo"
+                                  onChange={(e) =>
+                                    this.updateFormValue("VATNo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.VATNo}
+                                />
+                                <TextboxInput
+                                  id="GSTNo"
+                                  label="GSTNo"
+                                  onChange={(e) =>
+                                    this.updateFormValue("GSTNo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.GSTNo}
+                                />
+                                <TextboxInput
+                                  id="EORINo"
+                                  label="EORINo"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EORINo", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={this.state.CustomerAddress.EORINo}
+                                />
+                                <DropdownInput
+                                  id="ShipmentModeID"
+                                  label="ShipmentModeID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("ShipmentModeID", e)
+                                  }
+                                  // options={}
+                                  value={
+                                    this.state.CustomerAddress.ShipmentModeID
+                                  }
+                                />
+                                <TextboxInput
+                                  id="PostOfDischarge"
+                                  label="Post Of Discharge"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PostOfDischarge", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={
+                                    this.state.CustomerAddress.PostOfDischarge
+                                  }
+                                />
+                                <TextboxInput
+                                  id="FinalDestination"
+                                  label="Final Destination"
+                                  onChange={(e) =>
+                                    this.updateFormValue("FinalDestination", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={
+                                    this.state.CustomerAddress.FinalDestination
+                                  }
+                                />
+                                <TextboxInput
+                                  id="SpecialInstruction"
+                                  label="Special Instruction"
+                                  onChange={(e) =>
+                                    this.updateFormValue("SpecialInstruction", e)
+                                  }
+                                  variant="outlined"
+                                  size="small"
+                                  value={
+                                    this.state.CustomerAddress.SpecialInstruction
+                                  }
+                                />
+                    </TableBody>
+                  </Table>
+                  </div>
+                </Grid>
+              </Grid>
+            </div>
+
           </Grid>
         </Grid>
       </Fragment>
