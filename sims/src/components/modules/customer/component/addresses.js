@@ -307,7 +307,11 @@ class addresses extends React.Component {
                                   id="AddressType"
                                   label="AddressType"
                                   onChange={(e) =>
-                                    this.updateFormValue("AddressType", e,"ADD")
+                                    this.updateFormValue(
+                                      "AddressType",
+                                      e,
+                                      "ADD"
+                                    )
                                   }
                                   value={this.state.CustomerAddress.AddressType}
                                   options={APIURLS.AddressType}
@@ -317,7 +321,7 @@ class addresses extends React.Component {
                                   id="Code"
                                   label="Code"
                                   onChange={(e) =>
-                                    this.updateFormValue("Code", e,"ADD")
+                                    this.updateFormValue("Code", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -328,7 +332,7 @@ class addresses extends React.Component {
                                   id="Name"
                                   label="Name"
                                   onChange={(e) =>
-                                    this.updateFormValue("Name", e,"ADD")
+                                    this.updateFormValue("Name", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -338,7 +342,7 @@ class addresses extends React.Component {
                                   id="Address"
                                   label="Address"
                                   onChange={(e) =>
-                                    this.updateFormValue("Address", e,"ADD")
+                                    this.updateFormValue("Address", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -348,7 +352,7 @@ class addresses extends React.Component {
                                   id="Address2"
                                   label="Address2"
                                   onChange={(e) =>
-                                    this.updateFormValue("Address2", e,"ADD")
+                                    this.updateFormValue("Address2", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -358,7 +362,7 @@ class addresses extends React.Component {
                                   id="Address3"
                                   label="Address3"
                                   onChange={(e) =>
-                                    this.updateFormValue("Address3", e,"ADD")
+                                    this.updateFormValue("Address3", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -368,7 +372,7 @@ class addresses extends React.Component {
                                   id="City"
                                   label="City"
                                   onChange={(e) =>
-                                    this.updateFormValue("City", e,"ADD")
+                                    this.updateFormValue("City", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -378,7 +382,7 @@ class addresses extends React.Component {
                                   id="PostCode"
                                   label="PostCode"
                                   onChange={(e) =>
-                                    this.updateFormValue("PostCode", e,"ADD")
+                                    this.updateFormValue("PostCode", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -388,7 +392,7 @@ class addresses extends React.Component {
                                   id="TSSNo"
                                   label="TSSNo"
                                   onChange={(e) =>
-                                    this.updateFormValue("TSSNo", e,"ADD")
+                                    this.updateFormValue("TSSNo", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -400,7 +404,7 @@ class addresses extends React.Component {
                                   label="IsBlock"
                                   param={this.state.CustomerAddress.IsBlock}
                                   onChange={(e) =>
-                                    this.updateFormValue("IsBlock", e,"ADD")
+                                    this.updateFormValue("IsBlock", e, "ADD")
                                   }
                                   value={this.state.CustomerAddress.IsBlock}
                                 />
@@ -408,7 +412,7 @@ class addresses extends React.Component {
                                   id="IncoID"
                                   label="IncoID"
                                   onChange={(e) =>
-                                    this.updateFormValue("IncoID", e,"ADD")
+                                    this.updateFormValue("IncoID", e, "ADD")
                                   }
                                   // options={}
                                   value={this.state.CustomerAddress.IncoID}
@@ -430,7 +434,7 @@ class addresses extends React.Component {
                                   id="CountryID"
                                   label="Country"
                                   onChange={(e) =>
-                                    this.updateFormValue("CountryID", e,"ADD")
+                                    this.updateFormValue("CountryID", e, "ADD")
                                   }
                                   options={this.state.countryData}
                                   isMandatory={true}
@@ -440,7 +444,7 @@ class addresses extends React.Component {
                                   id="StateID"
                                   label="State"
                                   onChange={(e) =>
-                                    this.updateFormValue("StateID", e,"ADD")
+                                    this.updateFormValue("StateID", e, "ADD")
                                   }
                                   options={this.state.stateData}
                                   value={this.state.CustomerAddress.StateID}
@@ -449,7 +453,11 @@ class addresses extends React.Component {
                                   id="ContactPerson"
                                   label="Contact Person"
                                   onChange={(e) =>
-                                    this.updateFormValue("ContactPerson", e,"ADD")
+                                    this.updateFormValue(
+                                      "ContactPerson",
+                                      e,
+                                      "ADD"
+                                    )
                                   }
                                   variant="outlined"
                                   size="small"
@@ -461,7 +469,7 @@ class addresses extends React.Component {
                                   id="PhoneNo"
                                   label="Phone No "
                                   onChange={(e) =>
-                                    this.updateFormValue("PhoneNo", e,"ADD")
+                                    this.updateFormValue("PhoneNo", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -472,7 +480,7 @@ class addresses extends React.Component {
                                   id="EmailID"
                                   label="Email ID"
                                   onChange={(e) =>
-                                    this.updateFormValue("EmailID", e,"ADD")
+                                    this.updateFormValue("EmailID", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -482,7 +490,7 @@ class addresses extends React.Component {
                                   id="VATNo"
                                   label="VATNo"
                                   onChange={(e) =>
-                                    this.updateFormValue("VATNo", e,"ADD")
+                                    this.updateFormValue("VATNo", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -492,7 +500,7 @@ class addresses extends React.Component {
                                   id="GSTNo"
                                   label="GSTNo"
                                   onChange={(e) =>
-                                    this.updateFormValue("GSTNo", e,"ADD")
+                                    this.updateFormValue("GSTNo", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -502,7 +510,7 @@ class addresses extends React.Component {
                                   id="EORINo"
                                   label="EORINo"
                                   onChange={(e) =>
-                                    this.updateFormValue("EORINo", e,"ADD")
+                                    this.updateFormValue("EORINo", e, "ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -512,7 +520,11 @@ class addresses extends React.Component {
                                   id="ShipmentModeID"
                                   label="ShipmentModeID"
                                   onChange={(e) =>
-                                    this.updateFormValue("ShipmentModeID", e,"ADD")
+                                    this.updateFormValue(
+                                      "ShipmentModeID",
+                                      e,
+                                      "ADD"
+                                    )
                                   }
                                   // options={}
                                   value={
@@ -523,7 +535,11 @@ class addresses extends React.Component {
                                   id="PostOfDischarge"
                                   label="Post Of Discharge"
                                   onChange={(e) =>
-                                    this.updateFormValue("PostOfDischarge", e,"ADD")
+                                    this.updateFormValue(
+                                      "PostOfDischarge",
+                                      e,
+                                      "ADD"
+                                    )
                                   }
                                   variant="outlined"
                                   size="small"
@@ -535,7 +551,11 @@ class addresses extends React.Component {
                                   id="FinalDestination"
                                   label="Final Destination"
                                   onChange={(e) =>
-                                    this.updateFormValue("FinalDestination", e,"ADD")
+                                    this.updateFormValue(
+                                      "FinalDestination",
+                                      e,
+                                      "ADD"
+                                    )
                                   }
                                   variant="outlined"
                                   size="small"
@@ -549,7 +569,8 @@ class addresses extends React.Component {
                                   onChange={(e) =>
                                     this.updateFormValue(
                                       "SpecialInstruction",
-                                      e,"ADD"
+                                      e,
+                                      "ADD"
                                     )
                                   }
                                   variant="outlined"
@@ -644,108 +665,108 @@ class addresses extends React.Component {
     }
   };
 
-  updateFormValue = (param, e,process) => {
+  updateFormValue = (param, e, process) => {
     console.log("Display");
     let CustomerAddress = {};
 
-    if(process==="EDIT"){
+    if (process === "EDIT") {
       CustomerAddress = this.state.UpdateCustomerAddress;
-    }else{
+    } else {
       CustomerAddress = this.state.CustomerAddress;
     }
 
     switch (param) {
       case "AddressType":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "Code":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "Name":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "Address":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "Address2":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "Address3":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "City":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "PostCode":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "CountryID":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "StateID":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "ContactPerson":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "PhoneNo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "EmailID":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "VATNo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "GSTNo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "EORINo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "TSSNo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "IsBlock":
         CustomerAddress[param] = e.target.checked;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "IncoID":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "ShipmentModeID":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "PostOfDischarge":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "FinalDestination":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
       case "SpecialInstruction":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress,process);
+        this.setParams(CustomerAddress, process);
         break;
 
       default:
@@ -753,19 +774,16 @@ class addresses extends React.Component {
     }
   };
 
-  setParams = (object,process) => {
-
-if(process==="EDIT"){
-  this.setState({ UpdateCustomerAddress: object });
-}else{
-  this.setState({ CustomerAddress: object }, () => {
-    this.setState({
-      stateForm: this.stateForm(),
-    });
-  });
-}
-
-  
+  setParams = (object, process) => {
+    if (process === "EDIT") {
+      this.setState({ UpdateCustomerAddress: object });
+    } else {
+      this.setState({ CustomerAddress: object }, () => {
+        this.setState({
+          stateForm: this.stateForm(),
+        });
+      });
+    }
   };
 
   AddNew = (e) => {
@@ -825,6 +843,39 @@ if(process==="EDIT"){
               this.getCustomerAddress();
             }
           );
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+  };
+
+  UpdateCustomerAddress = (e) => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.UpdateCustomerAddress;
+    let reqData = {
+      ValidUser: ValidUser,
+      CustomerAddress: this.state.UpdateCustomerAddress,
+    };
+
+    console.log("ReqData>>>", reqData);
+
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200 || response.status === 201) {
+          this.setState({
+            ErrorPrompt: false,
+            SuccessPrompt: true,
+          });
         } else {
           this.setState({ ErrorPrompt: true, SuccessPrompt: false });
         }
@@ -908,7 +959,7 @@ if(process==="EDIT"){
                     <Button
                       className="action-btns"
                       style={{ marginLeft: 10 }}
-                      onClick={(e) => this.updateAddress(e)}
+                      onClick={(e) => this.UpdateCustomerAddress(e)}
                     >
                       {APIURLS.buttonTitle.update}
                     </Button>
@@ -939,7 +990,7 @@ if(process==="EDIT"){
                           id="AddressType"
                           label="AddressType"
                           onChange={(e) =>
-                            this.updateFormValue("AddressType", e,"EDIT")
+                            this.updateFormValue("AddressType", e, "EDIT")
                           }
                           value={this.state.UpdateCustomerAddress.AddressType}
                           options={APIURLS.AddressType}
@@ -948,7 +999,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="Code"
                           label="Code"
-                          onChange={(e) => this.updateFormValue("Code", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("Code", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           isMandatory={true}
@@ -957,7 +1010,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="Name"
                           label="Name"
-                          onChange={(e) => this.updateFormValue("Name", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("Name", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.Name}
@@ -965,7 +1020,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="Address"
                           label="Address"
-                          onChange={(e) => this.updateFormValue("Address", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("Address", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.Address}
@@ -973,7 +1030,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="Address2"
                           label="Address2"
-                          onChange={(e) => this.updateFormValue("Address2", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("Address2", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.Address2}
@@ -981,7 +1040,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="Address3"
                           label="Address3"
-                          onChange={(e) => this.updateFormValue("Address3", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("Address3", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.Address3}
@@ -989,7 +1050,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="City"
                           label="City"
-                          onChange={(e) => this.updateFormValue("City", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("City", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.City}
@@ -997,7 +1060,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="PostCode"
                           label="PostCode"
-                          onChange={(e) => this.updateFormValue("PostCode", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("PostCode", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.PostCode}
@@ -1005,7 +1070,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="TSSNo"
                           label="TSSNo"
-                          onChange={(e) => this.updateFormValue("TSSNo", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("TSSNo", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.TSSNo}
@@ -1015,20 +1082,26 @@ if(process==="EDIT"){
                           id="IsBlock"
                           label="IsBlock"
                           param={this.state.UpdateCustomerAddress.IsBlock}
-                          onChange={(e) => this.updateFormValue("IsBlock", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("IsBlock", e, "EDIT")
+                          }
                           value={this.state.UpdateCustomerAddress.IsBlock}
                         />
                         <DropdownInput
                           id="IncoID"
                           label="IncoID"
-                          onChange={(e) => this.updateFormValue("IncoID", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("IncoID", e, "EDIT")
+                          }
                           // options={}
                           value={this.state.UpdateCustomerAddress.IncoID}
                         />
                         <DropdownInput
                           id="CountryID"
                           label="Country"
-                          onChange={(e) => this.updateFormValue("CountryID", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("CountryID", e, "EDIT")
+                          }
                           options={this.state.countryData}
                           isMandatory={true}
                           value={this.state.UpdateCustomerAddress.CountryID}
@@ -1036,7 +1109,9 @@ if(process==="EDIT"){
                         <DropdownInput
                           id="StateID"
                           label="State"
-                          onChange={(e) => this.updateFormValue("StateID", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("StateID", e, "EDIT")
+                          }
                           options={this.state.stateData}
                           value={this.state.UpdateCustomerAddress.StateID}
                         />
@@ -1044,7 +1119,7 @@ if(process==="EDIT"){
                           id="ContactPerson"
                           label="Contact Person"
                           onChange={(e) =>
-                            this.updateFormValue("ContactPerson", e,"EDIT")
+                            this.updateFormValue("ContactPerson", e, "EDIT")
                           }
                           variant="outlined"
                           size="small"
@@ -1053,7 +1128,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="PhoneNo"
                           label="Phone No "
-                          onChange={(e) => this.updateFormValue("PhoneNo", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("PhoneNo", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.PhoneNo}
@@ -1062,7 +1139,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="EmailID"
                           label="Email ID"
-                          onChange={(e) => this.updateFormValue("EmailID", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("EmailID", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.EmailID}
@@ -1070,7 +1149,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="VATNo"
                           label="VATNo"
-                          onChange={(e) => this.updateFormValue("VATNo", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("VATNo", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.VATNo}
@@ -1078,7 +1159,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="GSTNo"
                           label="GSTNo"
-                          onChange={(e) => this.updateFormValue("GSTNo", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("GSTNo", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.GSTNo}
@@ -1086,7 +1169,9 @@ if(process==="EDIT"){
                         <TextboxInput
                           id="EORINo"
                           label="EORINo"
-                          onChange={(e) => this.updateFormValue("EORINo", e,"EDIT")}
+                          onChange={(e) =>
+                            this.updateFormValue("EORINo", e, "EDIT")
+                          }
                           variant="outlined"
                           size="small"
                           value={this.state.UpdateCustomerAddress.EORINo}
@@ -1095,7 +1180,7 @@ if(process==="EDIT"){
                           id="ShipmentModeID"
                           label="ShipmentModeID"
                           onChange={(e) =>
-                            this.updateFormValue("ShipmentModeID", e,"EDIT")
+                            this.updateFormValue("ShipmentModeID", e, "EDIT")
                           }
                           // options={}
                           value={
@@ -1106,7 +1191,7 @@ if(process==="EDIT"){
                           id="PostOfDischarge"
                           label="Post Of Discharge"
                           onChange={(e) =>
-                            this.updateFormValue("PostOfDischarge", e,"EDIT")
+                            this.updateFormValue("PostOfDischarge", e, "EDIT")
                           }
                           variant="outlined"
                           size="small"
@@ -1118,7 +1203,7 @@ if(process==="EDIT"){
                           id="FinalDestination"
                           label="Final Destination"
                           onChange={(e) =>
-                            this.updateFormValue("FinalDestination", e,"EDIT")
+                            this.updateFormValue("FinalDestination", e, "EDIT")
                           }
                           variant="outlined"
                           size="small"
@@ -1130,7 +1215,11 @@ if(process==="EDIT"){
                           id="SpecialInstruction"
                           label="Special Instruction"
                           onChange={(e) =>
-                            this.updateFormValue("SpecialInstruction", e,"EDIT")
+                            this.updateFormValue(
+                              "SpecialInstruction",
+                              e,
+                              "EDIT"
+                            )
                           }
                           variant="outlined"
                           size="small"
