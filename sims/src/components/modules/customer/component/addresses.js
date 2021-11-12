@@ -53,6 +53,34 @@ class addresses extends React.Component {
       stateForm: null,
       listStateCustomerAddresses: null,
       type: "ADD",
+
+      UpdateCustomerAddress: {
+        AddressID: 0,
+        CustID: this.props.CustID,
+        AddressType: 0,
+        Code: "",
+        Name: "",
+        Address: "",
+        Address2: "",
+        Address3: "",
+        City: "",
+        PostCode: "",
+        CountryID: 0,
+        StateID: 0,
+        ContactPerson: "",
+        PhoneNo: "",
+        EmailID: "",
+        VATNo: "",
+        GSTNo: "",
+        EORINo: "",
+        TSSNo: "",
+        IsBlock: false,
+        IncoID: 0,
+        ShipmentModeID: 0,
+        PostOfDischarge: "",
+        FinalDestination: "",
+        SpecialInstruction: "",
+      },
       CustomerAddress: {
         AddressID: 0,
         CustID: this.props.CustID,
@@ -172,7 +200,7 @@ class addresses extends React.Component {
         }
         this.setState({ countryData: newData, ProgressLoader: true });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   getStateList = () => {
@@ -198,12 +226,19 @@ class addresses extends React.Component {
         }
         this.setState({ stateData: newData, ProgressLoader: true });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   stateForm = () => {
     let o = (
-      <div style={{ height: 500, overflowY: "scroll", overflowX: 'hidden', width: "100%" }}>
+      <div
+        style={{
+          height: 500,
+          overflowY: "scroll",
+          overflowX: "hidden",
+          width: "100%",
+        }}
+      >
         <Grid container spacing={0}>
           <Grid style={{ paddingTop: 10 }} container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -241,7 +276,10 @@ class addresses extends React.Component {
                       expandIcon={
                         <ExpandMoreIcon
                           onClick={(e) =>
-                            this.handleAccordionClick("GeneralDetailsExpanded", e)
+                            this.handleAccordionClick(
+                              "GeneralDetailsExpanded",
+                              e
+                            )
                           }
                         />
                       }
@@ -269,7 +307,7 @@ class addresses extends React.Component {
                                   id="AddressType"
                                   label="AddressType"
                                   onChange={(e) =>
-                                    this.updateFormValue("AddressType", e)
+                                    this.updateFormValue("AddressType", e,"ADD")
                                   }
                                   value={this.state.CustomerAddress.AddressType}
                                   options={APIURLS.AddressType}
@@ -279,7 +317,7 @@ class addresses extends React.Component {
                                   id="Code"
                                   label="Code"
                                   onChange={(e) =>
-                                    this.updateFormValue("Code", e)
+                                    this.updateFormValue("Code", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -290,7 +328,7 @@ class addresses extends React.Component {
                                   id="Name"
                                   label="Name"
                                   onChange={(e) =>
-                                    this.updateFormValue("Name", e)
+                                    this.updateFormValue("Name", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -300,7 +338,7 @@ class addresses extends React.Component {
                                   id="Address"
                                   label="Address"
                                   onChange={(e) =>
-                                    this.updateFormValue("Address", e)
+                                    this.updateFormValue("Address", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -310,7 +348,7 @@ class addresses extends React.Component {
                                   id="Address2"
                                   label="Address2"
                                   onChange={(e) =>
-                                    this.updateFormValue("Address2", e)
+                                    this.updateFormValue("Address2", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -320,7 +358,7 @@ class addresses extends React.Component {
                                   id="Address3"
                                   label="Address3"
                                   onChange={(e) =>
-                                    this.updateFormValue("Address3", e)
+                                    this.updateFormValue("Address3", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -330,7 +368,7 @@ class addresses extends React.Component {
                                   id="City"
                                   label="City"
                                   onChange={(e) =>
-                                    this.updateFormValue("City", e)
+                                    this.updateFormValue("City", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -340,7 +378,7 @@ class addresses extends React.Component {
                                   id="PostCode"
                                   label="PostCode"
                                   onChange={(e) =>
-                                    this.updateFormValue("PostCode", e)
+                                    this.updateFormValue("PostCode", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -350,7 +388,7 @@ class addresses extends React.Component {
                                   id="TSSNo"
                                   label="TSSNo"
                                   onChange={(e) =>
-                                    this.updateFormValue("TSSNo", e)
+                                    this.updateFormValue("TSSNo", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -362,7 +400,7 @@ class addresses extends React.Component {
                                   label="IsBlock"
                                   param={this.state.CustomerAddress.IsBlock}
                                   onChange={(e) =>
-                                    this.updateFormValue("IsBlock", e)
+                                    this.updateFormValue("IsBlock", e,"ADD")
                                   }
                                   value={this.state.CustomerAddress.IsBlock}
                                 />
@@ -370,7 +408,7 @@ class addresses extends React.Component {
                                   id="IncoID"
                                   label="IncoID"
                                   onChange={(e) =>
-                                    this.updateFormValue("IncoID", e)
+                                    this.updateFormValue("IncoID", e,"ADD")
                                   }
                                   // options={}
                                   value={this.state.CustomerAddress.IncoID}
@@ -392,7 +430,7 @@ class addresses extends React.Component {
                                   id="CountryID"
                                   label="Country"
                                   onChange={(e) =>
-                                    this.updateFormValue("CountryID", e)
+                                    this.updateFormValue("CountryID", e,"ADD")
                                   }
                                   options={this.state.countryData}
                                   isMandatory={true}
@@ -402,7 +440,7 @@ class addresses extends React.Component {
                                   id="StateID"
                                   label="State"
                                   onChange={(e) =>
-                                    this.updateFormValue("StateID", e)
+                                    this.updateFormValue("StateID", e,"ADD")
                                   }
                                   options={this.state.stateData}
                                   value={this.state.CustomerAddress.StateID}
@@ -411,17 +449,19 @@ class addresses extends React.Component {
                                   id="ContactPerson"
                                   label="Contact Person"
                                   onChange={(e) =>
-                                    this.updateFormValue("ContactPerson", e)
+                                    this.updateFormValue("ContactPerson", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.ContactPerson}
+                                  value={
+                                    this.state.CustomerAddress.ContactPerson
+                                  }
                                 />
                                 <TextboxInput
                                   id="PhoneNo"
                                   label="Phone No "
                                   onChange={(e) =>
-                                    this.updateFormValue("PhoneNo", e)
+                                    this.updateFormValue("PhoneNo", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -432,7 +472,7 @@ class addresses extends React.Component {
                                   id="EmailID"
                                   label="Email ID"
                                   onChange={(e) =>
-                                    this.updateFormValue("EmailID", e)
+                                    this.updateFormValue("EmailID", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -442,7 +482,7 @@ class addresses extends React.Component {
                                   id="VATNo"
                                   label="VATNo"
                                   onChange={(e) =>
-                                    this.updateFormValue("VATNo", e)
+                                    this.updateFormValue("VATNo", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -452,7 +492,7 @@ class addresses extends React.Component {
                                   id="GSTNo"
                                   label="GSTNo"
                                   onChange={(e) =>
-                                    this.updateFormValue("GSTNo", e)
+                                    this.updateFormValue("GSTNo", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -462,7 +502,7 @@ class addresses extends React.Component {
                                   id="EORINo"
                                   label="EORINo"
                                   onChange={(e) =>
-                                    this.updateFormValue("EORINo", e)
+                                    this.updateFormValue("EORINo", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -472,7 +512,7 @@ class addresses extends React.Component {
                                   id="ShipmentModeID"
                                   label="ShipmentModeID"
                                   onChange={(e) =>
-                                    this.updateFormValue("ShipmentModeID", e)
+                                    this.updateFormValue("ShipmentModeID", e,"ADD")
                                   }
                                   // options={}
                                   value={
@@ -483,7 +523,7 @@ class addresses extends React.Component {
                                   id="PostOfDischarge"
                                   label="Post Of Discharge"
                                   onChange={(e) =>
-                                    this.updateFormValue("PostOfDischarge", e)
+                                    this.updateFormValue("PostOfDischarge", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -495,7 +535,7 @@ class addresses extends React.Component {
                                   id="FinalDestination"
                                   label="Final Destination"
                                   onChange={(e) =>
-                                    this.updateFormValue("FinalDestination", e)
+                                    this.updateFormValue("FinalDestination", e,"ADD")
                                   }
                                   variant="outlined"
                                   size="small"
@@ -507,19 +547,22 @@ class addresses extends React.Component {
                                   id="SpecialInstruction"
                                   label="Special Instruction"
                                   onChange={(e) =>
-                                    this.updateFormValue("SpecialInstruction", e)
+                                    this.updateFormValue(
+                                      "SpecialInstruction",
+                                      e,"ADD"
+                                    )
                                   }
                                   variant="outlined"
                                   size="small"
                                   value={
-                                    this.state.CustomerAddress.SpecialInstruction
+                                    this.state.CustomerAddress
+                                      .SpecialInstruction
                                   }
                                 />
                               </TableBody>
                             </Table>
                           </TableContainer>
                         </Grid>
-
                       </Grid>
                     </AccordionDetails>
                   </Accordion>
@@ -546,7 +589,9 @@ class addresses extends React.Component {
             <TableHead className="table-header-background">
               <TableRow>
                 <TableCell className="table-header-font">#</TableCell>
-                <TableCell className="table-header-font">Address Type</TableCell>
+                <TableCell className="table-header-font">
+                  Address Type
+                </TableCell>
                 <TableCell className="table-header-font" align="left">
                   Name
                 </TableCell>
@@ -599,101 +644,108 @@ class addresses extends React.Component {
     }
   };
 
-  updateFormValue = (param, e) => {
+  updateFormValue = (param, e,process) => {
     console.log("Display");
-    let CustomerAddress = this.state.CustomerAddress;
+    let CustomerAddress = {};
+
+    if(process==="EDIT"){
+      CustomerAddress = this.state.UpdateCustomerAddress;
+    }else{
+      CustomerAddress = this.state.CustomerAddress;
+    }
+
     switch (param) {
       case "AddressType":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "Code":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "Name":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "Address":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "Address2":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "Address3":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "City":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "PostCode":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "CountryID":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "StateID":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "ContactPerson":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "PhoneNo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "EmailID":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "VATNo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "GSTNo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "EORINo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "TSSNo":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "IsBlock":
         CustomerAddress[param] = e.target.checked;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "IncoID":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "ShipmentModeID":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "PostOfDischarge":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "FinalDestination":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
       case "SpecialInstruction":
         CustomerAddress[param] = e.target.value;
-        this.setParams(CustomerAddress);
+        this.setParams(CustomerAddress,process);
         break;
 
       default:
@@ -701,12 +753,19 @@ class addresses extends React.Component {
     }
   };
 
-  setParams = (object) => {
-    this.setState({ CustomerAddress: object }, () => {
-      this.setState({
-        stateForm: this.stateForm(),
-      });
+  setParams = (object,process) => {
+
+if(process==="EDIT"){
+  this.setState({ UpdateCustomerAddress: object });
+}else{
+  this.setState({ CustomerAddress: object }, () => {
+    this.setState({
+      stateForm: this.stateForm(),
     });
+  });
+}
+
+  
   };
 
   AddNew = (e) => {
@@ -776,30 +835,18 @@ class addresses extends React.Component {
   };
 
   InitialhandleRowClick(e, item, id) {
-    this.setState(
-      {
-        // CustomerAddress: item,
-      },
-      () => {
-        // this.setState({ stateForm: this.stateForm() });
-      }
-    );
+    this.setState({
+      UpdateCustomerAddress: item,
+    });
 
     this.removeIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
 
-
   handleRowClick = (e, item, id) => {
-    // this.setState(
-    //   {
-    //     CustomerAddress: item,
-    //     type: "EDIT",
-    //   },
-    //   () => {
-    //     this.setState({ stateForm: this.stateForm() });
-    //   }
-    // );
+    this.setState({
+      UpdateCustomerAddress: item,
+    });
     console.log("addressId>>", this.state.CustomerAddress.AddressID);
     this.removeIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
@@ -850,13 +897,11 @@ class addresses extends React.Component {
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4}>
             <div style={{ marginLeft: 10, marginTop: -5 }}>
-
               <Grid container spacing={6}>
                 <Grid item xs={12} sm={12} md={8} lg={8}>
                   <div style={{ marginTop: -12, marginLeft: 1 }}>
                     <h4>Detail view</h4>
                   </div>
-
                 </Grid>
                 <Grid item xs={12} sm={12} md={4} lg={4}>
                   <div>
@@ -868,13 +913,21 @@ class addresses extends React.Component {
                       {APIURLS.buttonTitle.update}
                     </Button>
                   </div>
-
                 </Grid>
               </Grid>
 
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <div style={{ height: 500, marginTop: 10, overflowX: 'hidden', overflowY: 'scroll', width: '100%', backgroundColor: '#ffffff' }}>
+                  <div
+                    style={{
+                      height: 500,
+                      marginTop: 10,
+                      overflowX: "hidden",
+                      overflowY: "scroll",
+                      width: "100%",
+                      backgroundColor: "#ffffff",
+                    }}
+                  >
                     <Table
                       stickyHeader
                       size="small"
@@ -886,237 +939,203 @@ class addresses extends React.Component {
                           id="AddressType"
                           label="AddressType"
                           onChange={(e) =>
-                            this.updateFormValue("AddressType", e)
+                            this.updateFormValue("AddressType", e,"EDIT")
                           }
-                          value={this.state.CustomerAddress.AddressType}
+                          value={this.state.UpdateCustomerAddress.AddressType}
                           options={APIURLS.AddressType}
                           isMandatory={true}
                         />
                         <TextboxInput
                           id="Code"
                           label="Code"
-                          onChange={(e) =>
-                            this.updateFormValue("Code", e)
-                          }
+                          onChange={(e) => this.updateFormValue("Code", e,"EDIT")}
                           variant="outlined"
                           size="small"
                           isMandatory={true}
-                          value={this.state.CustomerAddress.Code}
+                          value={this.state.UpdateCustomerAddress.Code}
                         />
                         <TextboxInput
                           id="Name"
                           label="Name"
-                          onChange={(e) =>
-                            this.updateFormValue("Name", e)
-                          }
+                          onChange={(e) => this.updateFormValue("Name", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.Name}
+                          value={this.state.UpdateCustomerAddress.Name}
                         />
                         <TextboxInput
                           id="Address"
                           label="Address"
-                          onChange={(e) =>
-                            this.updateFormValue("Address", e)
-                          }
+                          onChange={(e) => this.updateFormValue("Address", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.Address}
+                          value={this.state.UpdateCustomerAddress.Address}
                         />
                         <TextboxInput
                           id="Address2"
                           label="Address2"
-                          onChange={(e) =>
-                            this.updateFormValue("Address2", e)
-                          }
+                          onChange={(e) => this.updateFormValue("Address2", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.Address2}
+                          value={this.state.UpdateCustomerAddress.Address2}
                         />
                         <TextboxInput
                           id="Address3"
                           label="Address3"
-                          onChange={(e) =>
-                            this.updateFormValue("Address3", e)
-                          }
+                          onChange={(e) => this.updateFormValue("Address3", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.Address3}
+                          value={this.state.UpdateCustomerAddress.Address3}
                         />
                         <TextboxInput
                           id="City"
                           label="City"
-                          onChange={(e) =>
-                            this.updateFormValue("City", e)
-                          }
+                          onChange={(e) => this.updateFormValue("City", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.City}
+                          value={this.state.UpdateCustomerAddress.City}
                         />
                         <TextboxInput
                           id="PostCode"
                           label="PostCode"
-                          onChange={(e) =>
-                            this.updateFormValue("PostCode", e)
-                          }
+                          onChange={(e) => this.updateFormValue("PostCode", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.PostCode}
+                          value={this.state.UpdateCustomerAddress.PostCode}
                         />
                         <TextboxInput
                           id="TSSNo"
                           label="TSSNo"
-                          onChange={(e) =>
-                            this.updateFormValue("TSSNo", e)
-                          }
+                          onChange={(e) => this.updateFormValue("TSSNo", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.TSSNo}
+                          value={this.state.UpdateCustomerAddress.TSSNo}
                         />
                         <SwitchInput
                           key="IsBlock"
                           id="IsBlock"
                           label="IsBlock"
-                          param={this.state.CustomerAddress.IsBlock}
-                          onChange={(e) =>
-                            this.updateFormValue("IsBlock", e)
-                          }
-                          value={this.state.CustomerAddress.IsBlock}
+                          param={this.state.UpdateCustomerAddress.IsBlock}
+                          onChange={(e) => this.updateFormValue("IsBlock", e,"EDIT")}
+                          value={this.state.UpdateCustomerAddress.IsBlock}
                         />
                         <DropdownInput
                           id="IncoID"
                           label="IncoID"
-                          onChange={(e) =>
-                            this.updateFormValue("IncoID", e)
-                          }
+                          onChange={(e) => this.updateFormValue("IncoID", e,"EDIT")}
                           // options={}
-                          value={this.state.CustomerAddress.IncoID}
+                          value={this.state.UpdateCustomerAddress.IncoID}
                         />
                         <DropdownInput
                           id="CountryID"
                           label="Country"
-                          onChange={(e) =>
-                            this.updateFormValue("CountryID", e)
-                          }
+                          onChange={(e) => this.updateFormValue("CountryID", e,"EDIT")}
                           options={this.state.countryData}
                           isMandatory={true}
-                          value={this.state.CustomerAddress.CountryID}
+                          value={this.state.UpdateCustomerAddress.CountryID}
                         />
                         <DropdownInput
                           id="StateID"
                           label="State"
-                          onChange={(e) =>
-                            this.updateFormValue("StateID", e)
-                          }
+                          onChange={(e) => this.updateFormValue("StateID", e,"EDIT")}
                           options={this.state.stateData}
-                          value={this.state.CustomerAddress.StateID}
+                          value={this.state.UpdateCustomerAddress.StateID}
                         />
                         <TextboxInput
                           id="ContactPerson"
                           label="Contact Person"
                           onChange={(e) =>
-                            this.updateFormValue("ContactPerson", e)
+                            this.updateFormValue("ContactPerson", e,"EDIT")
                           }
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.ContactPerson}
+                          value={this.state.UpdateCustomerAddress.ContactPerson}
                         />
                         <TextboxInput
                           id="PhoneNo"
                           label="Phone No "
-                          onChange={(e) =>
-                            this.updateFormValue("PhoneNo", e)
-                          }
+                          onChange={(e) => this.updateFormValue("PhoneNo", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.PhoneNo}
+                          value={this.state.UpdateCustomerAddress.PhoneNo}
                         />
 
                         <TextboxInput
                           id="EmailID"
                           label="Email ID"
-                          onChange={(e) =>
-                            this.updateFormValue("EmailID", e)
-                          }
+                          onChange={(e) => this.updateFormValue("EmailID", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.EmailID}
+                          value={this.state.UpdateCustomerAddress.EmailID}
                         />
                         <TextboxInput
                           id="VATNo"
                           label="VATNo"
-                          onChange={(e) =>
-                            this.updateFormValue("VATNo", e)
-                          }
+                          onChange={(e) => this.updateFormValue("VATNo", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.VATNo}
+                          value={this.state.UpdateCustomerAddress.VATNo}
                         />
                         <TextboxInput
                           id="GSTNo"
                           label="GSTNo"
-                          onChange={(e) =>
-                            this.updateFormValue("GSTNo", e)
-                          }
+                          onChange={(e) => this.updateFormValue("GSTNo", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.GSTNo}
+                          value={this.state.UpdateCustomerAddress.GSTNo}
                         />
                         <TextboxInput
                           id="EORINo"
                           label="EORINo"
-                          onChange={(e) =>
-                            this.updateFormValue("EORINo", e)
-                          }
+                          onChange={(e) => this.updateFormValue("EORINo", e,"EDIT")}
                           variant="outlined"
                           size="small"
-                          value={this.state.CustomerAddress.EORINo}
+                          value={this.state.UpdateCustomerAddress.EORINo}
                         />
                         <DropdownInput
                           id="ShipmentModeID"
                           label="ShipmentModeID"
                           onChange={(e) =>
-                            this.updateFormValue("ShipmentModeID", e)
+                            this.updateFormValue("ShipmentModeID", e,"EDIT")
                           }
                           // options={}
                           value={
-                            this.state.CustomerAddress.ShipmentModeID
+                            this.state.UpdateCustomerAddress.ShipmentModeID
                           }
                         />
                         <TextboxInput
                           id="PostOfDischarge"
                           label="Post Of Discharge"
                           onChange={(e) =>
-                            this.updateFormValue("PostOfDischarge", e)
+                            this.updateFormValue("PostOfDischarge", e,"EDIT")
                           }
                           variant="outlined"
                           size="small"
                           value={
-                            this.state.CustomerAddress.PostOfDischarge
+                            this.state.UpdateCustomerAddress.PostOfDischarge
                           }
                         />
                         <TextboxInput
                           id="FinalDestination"
                           label="Final Destination"
                           onChange={(e) =>
-                            this.updateFormValue("FinalDestination", e)
+                            this.updateFormValue("FinalDestination", e,"EDIT")
                           }
                           variant="outlined"
                           size="small"
                           value={
-                            this.state.CustomerAddress.FinalDestination
+                            this.state.UpdateCustomerAddress.FinalDestination
                           }
                         />
                         <TextboxInput
                           id="SpecialInstruction"
                           label="Special Instruction"
                           onChange={(e) =>
-                            this.updateFormValue("SpecialInstruction", e)
+                            this.updateFormValue("SpecialInstruction", e,"EDIT")
                           }
                           variant="outlined"
                           size="small"
                           value={
-                            this.state.CustomerAddress.SpecialInstruction
+                            this.state.UpdateCustomerAddress.SpecialInstruction
                           }
                         />
                       </TableBody>
@@ -1125,7 +1144,6 @@ class addresses extends React.Component {
                 </Grid>
               </Grid>
             </div>
-
           </Grid>
         </Grid>
       </Fragment>
