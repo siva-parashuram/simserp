@@ -5,6 +5,14 @@ body{
   overflow-x: hidden;
 }
 
+.openfullbtn{
+  color: rgb(0, 126, 135) !important;
+}
+
+.openfullbtn:hover{
+ cursor: pointer !important;
+}
+
 .dropdowninputbtn{
   margin-top: 2px !important;
   margin-left: 2px !important;
