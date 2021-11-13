@@ -1181,21 +1181,19 @@ class customeractivity extends React.Component {
         );
 
 
-
+        
 
         const dialog = (
             <Fragment>
                 <Dialog
                     fullWidth={true}
                     maxWidth="lg"
-                    open={this.state.Dialog.DialogStatus}
-                    // onClose={(e) => handleClose()}
-                   
+                    open={this.state.Dialog.DialogStatus}                    
                     aria-labelledby="dialog-title"
                     aria-describedby="dialog-description"
                     className="dialog-prompt-activity"
                 >
-                    <DialogTitle id="dialog-title"  className="dialog-area" style={{maxHeight:40}}>
+                    <DialogTitle id="dialog-title"  className="dialog-area" style={{maxHeight:50}}>
                         <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={1} lg={1}>
                                 <IconButton aria-label="ArrowBackIcon" 

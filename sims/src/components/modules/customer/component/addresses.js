@@ -45,6 +45,7 @@ class addresses extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      FullSmallBtnArea:false,
       mainframeW: 12,
       hideSidePanel: true,
       ErrorPrompt: false,
@@ -898,6 +899,8 @@ class addresses extends React.Component {
   handleRowClick = (e, item, id) => {
     this.setState({
       UpdateCustomerAddress: item,
+      FullSmallBtnArea:true,
+      hideSidePanel:true
     },()=>{
       this.closeExpandFull(null);
     });
@@ -965,19 +968,22 @@ class addresses extends React.Component {
               &nbsp;
             </Grid>
             <Grid item xs={12} sm={12} md={1} lg={1}>
-              <div>
-                {this.state.hideSidePanel === false ? (
-                  <IconButton aria-label="OpenInFullIcon" onClick={(e) => this.expandFull(e)}>
-                    <OpenInFullIcon className="openfullbtn" fontSize="small" />
-                  </IconButton>
-
-                ) : null}
-                {this.state.hideSidePanel === true ? (
-                  <IconButton aria-label="CloseFullscreenIcon" onClick={(e) => this.closeExpandFull(e)} >
-                    <CloseFullscreenIcon className="openfullbtn" fontSize="small" />
-                  </IconButton>
-                ) : null}
-              </div>
+              {this.state.FullSmallBtnArea===true?(
+                 <div>
+                 {this.state.hideSidePanel === false ? (
+                   <IconButton aria-label="OpenInFullIcon" onClick={(e) => this.expandFull(e)}>
+                     <OpenInFullIcon className="openfullbtn" fontSize="small" />
+                   </IconButton>
+ 
+                 ) : null}
+                 {this.state.hideSidePanel === true ? (
+                   <IconButton aria-label="CloseFullscreenIcon" onClick={(e) => this.closeExpandFull(e)} >
+                     <CloseFullscreenIcon className="openfullbtn" fontSize="small" />
+                   </IconButton>
+                 ) : null}
+               </div>
+              ):null}
+             
             </Grid>
           </Grid>
           <div style={{ height: 10 }}>&nbsp;</div>

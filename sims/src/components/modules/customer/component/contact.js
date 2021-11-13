@@ -486,6 +486,8 @@ class contact extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
+<div style={{height:20}}>&nbsp;</div>
+
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
             {/* <Grid style={{ marginLeft: 15 }} container spacing={0}>
