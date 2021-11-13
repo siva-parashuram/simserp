@@ -19,6 +19,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import TablePagination from "@mui/material/TablePagination";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import Typography from "@material-ui/core/Typography";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
+import IconButton from "@mui/material/IconButton";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -42,6 +45,8 @@ class contact extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
+      mainframeW: 12,
+      hideSidePanel: true,
       GeneralDetailsExpanded: true,
       listStateCustomerContact: null,
       stateCreateContact: null,
@@ -337,7 +342,7 @@ class contact extends React.Component {
         break;
     }
   };
-  setParams = (object,process) => {
+  setParams = (object, process) => {
     if (process === "EDIT") {
       this.setState({ UpdateCustomerContact: object });
     } else {
@@ -458,6 +463,20 @@ class contact extends React.Component {
     }
   };
 
+  expandFull = (e) => {
+    this.setState({
+      mainframeW: 12,
+      hideSidePanel: true
+    });
+  }
+
+   closeExpandFull = (e) => {
+    this.setState({
+      mainframeW: 7,
+      hideSidePanel: false
+    });
+  }
+
   render() {
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -485,116 +504,163 @@ class contact extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
-
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={8} lg={8}>
-            {/* <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={10} lg={10}> */}
-            <Dualtabcomponent
-              tab1name="List"
-              tab2name="New"
-              tab1Html={this.state.listStateCustomerContact}
-              tab2Html={this.state.stateCreateContact}
-            />
-          </Grid>
-          <Grid item xs={12} sm={12} md={4} lg={4}>
-            <div style={{ marginLeft: 10, marginTop: -5 }}>
-              <Grid container spacing={6}>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <div style={{ marginTop: -12, marginLeft: 1 }}>
-                    <h4>Detail view</h4>
-                  </div>
-                </Grid>
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <div>
-                    <Button
-                      className="action-btns"
-                      style={{ marginLeft: 10 }}
-                      onClick={(e) => this.UpdateCustomerContact(e)}
-                    >
-                      {APIURLS.buttonTitle.update}
-                    </Button>
-                  </div>
-                </Grid>
-              </Grid>
-
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <div
-                    style={{
-                      height: 300,
-                      marginTop: 10,
-                      overflowX: "hidden",
-                      overflowY: "scroll",
-                      width: "100%",
-                      backgroundColor: "#ffffff",
-                    }}
+        <div style={{ marginTop: -25 }}>
+          <Grid container spacing={6}>
+            <Grid item xs={12} sm={12} md={11} lg={11}>
+              &nbsp;
+            </Grid>
+            <Grid item xs={12} sm={12} md={1} lg={1}>
+              <div>
+                {this.state.hideSidePanel === false ? (
+                  <IconButton
+                    aria-label="OpenInFullIcon"
+                    onClick={(e) => this.expandFull(e)}
                   >
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="customerAddress List table"
-                    >
-                      <TableBody className="tableBody">
-                        <DropdownInput
-                          id="ContactType"
-                          label="ContactType"
-                          onChange={(e) =>
-                            this.updateFormValue("ContactType", e, "EDIT")
-                          }
-                          options={APIURLS.ContactType}
-                          isMandatory={true}
-                          value={this.state.UpdateCustomerContact.ContactType}
-                        />
-                        <TextboxInput
-                          id="Name"
-                          label="Name"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) =>
-                            this.updateFormValue("Name", e, "EDIT")
-                          }
-                          value={this.state.UpdateCustomerContact.Name}
-                        />
-                        <TextboxInput
-                          id="PhoneNo"
-                          label="PhoneNo"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) =>
-                            this.updateFormValue("PhoneNo", e, "EDIT")
-                          }
-                          value={this.state.UpdateCustomerContact.PhoneNo}
-                        />
-                        <TextboxInput
-                          id="EmailID"
-                          label="EmailID"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) =>
-                            this.updateFormValue("EmailID", e, "EDIT")
-                          }
-                          value={this.state.UpdateCustomerContact.EmailID}
-                        />
-                        <SwitchInput
-                          key="IsBlock"
-                          id="IsBlock"
-                          label="IsBlock"
-                          param={this.state.CustomerContact.IsBlock}
-                          onChange={(e) =>
-                            this.updateFormValue("IsBlock", e, "EDIT")
-                          }
-                          value={this.state.UpdateCustomerContact.IsBlock}
-                        />
-                      </TableBody>
-                    </Table>
-                  </div>
+                    <OpenInFullIcon className="openfullbtn" fontSize="small" />
+                  </IconButton>
+                ) : null}
+                {this.state.hideSidePanel === true ? (
+                  <IconButton
+                    aria-label="CloseFullscreenIcon"
+                    onClick={(e) => this.closeExpandFull(e)}
+                  >
+                    <CloseFullscreenIcon
+                      className="openfullbtn"
+                      fontSize="small"
+                    />
+                  </IconButton>
+                ) : null}
+              </div>
+            </Grid>
+          </Grid>
+          <div style={{ height: 10 }}>&nbsp;</div>
+          <Loader ProgressLoader={this.state.ProgressLoader} />
+          <div style={{ height: 10 }}>&nbsp;</div>
+          
+          <Grid container spacing={0}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={this.state.mainframeW}
+              lg={this.state.mainframeW}
+            >
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={10} lg={10}>
+                  {/* <Grid style={{ marginLeft: 15 }} container spacing={0}>
+              <Grid item xs={12} sm={12} md={10} lg={10}> */}
+                  <Dualtabcomponent
+                    tab1name="List"
+                    tab2name="New"
+                    tab1Html={this.state.listStateCustomerContact}
+                    tab2Html={this.state.stateCreateContact}
+                  />
                 </Grid>
               </Grid>
-            </div>
+            </Grid>
+            {this.state.hideSidePanel === false ? (
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <div style={{ marginLeft: 10, marginTop: -5 }}>
+                  <Grid container spacing={6}>
+                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                      <div style={{ marginTop: -12, marginLeft: 1 }}>
+                        <h4>Detail view</h4>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={4} lg={4}>
+                      <div>
+                        <Button
+                          className="action-btns"
+                          style={{ marginLeft: 10 }}
+                          onClick={(e) => this.UpdateCustomerContact(e)}
+                        >
+                          {APIURLS.buttonTitle.update}
+                        </Button>
+                      </div>
+                    </Grid>
+                  </Grid>
+
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                      <div
+                        style={{
+                          height: 300,
+                          marginTop: 10,
+                          overflowX: "hidden",
+                          overflowY: "scroll",
+                          width: "100%",
+                          backgroundColor: "#ffffff",
+                        }}
+                      >
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="customerAddress List table"
+                        >
+                          <TableBody className="tableBody">
+                            <DropdownInput
+                              id="ContactType"
+                              label="ContactType"
+                              onChange={(e) =>
+                                this.updateFormValue("ContactType", e, "EDIT")
+                              }
+                              options={APIURLS.ContactType}
+                              isMandatory={true}
+                              value={
+                                this.state.UpdateCustomerContact.ContactType
+                              }
+                            />
+                            <TextboxInput
+                              id="Name"
+                              label="Name"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                this.updateFormValue("Name", e, "EDIT")
+                              }
+                              value={this.state.UpdateCustomerContact.Name}
+                            />
+                            <TextboxInput
+                              id="PhoneNo"
+                              label="PhoneNo"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                this.updateFormValue("PhoneNo", e, "EDIT")
+                              }
+                              value={this.state.UpdateCustomerContact.PhoneNo}
+                            />
+                            <TextboxInput
+                              id="EmailID"
+                              label="EmailID"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                this.updateFormValue("EmailID", e, "EDIT")
+                              }
+                              value={this.state.UpdateCustomerContact.EmailID}
+                            />
+                            <SwitchInput
+                              key="IsBlock"
+                              id="IsBlock"
+                              label="IsBlock"
+                              param={this.state.CustomerContact.IsBlock}
+                              onChange={(e) =>
+                                this.updateFormValue("IsBlock", e, "EDIT")
+                              }
+                              value={this.state.UpdateCustomerContact.IsBlock}
+                            />
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </div>
+              </Grid>
+            ) : null}
           </Grid>
-        </Grid>
+        </div>
       </Fragment>
     );
   }
