@@ -20,6 +20,7 @@ import TablePagination from "@mui/material/TablePagination";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+ 
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -45,6 +46,10 @@ class addresses extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       FullSmallBtnArea:false,
       mainframeW: 12,
       hideSidePanel: true,
@@ -619,7 +624,7 @@ class addresses extends React.Component {
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
-                  {this.state.AddressData.map((item, i) => (
+                  {this.getPageData(this.state.AddressData).map((item, i) => (
                     <TableRow
                       id={"row_" + i}
                       key={i}
@@ -640,6 +645,16 @@ class addresses extends React.Component {
                   ))}
                 </TableBody>
               </Table>
+
+              <TablePagination
+              rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+              component="div"
+              count={this.state.AddressData.length}
+              rowsPerPage={this.state.pagination.rowsPerPage}
+              page={this.state.pagination.page}
+              onPageChange={this.handlePageChange}
+            />
+
             </Grid>
           </Grid>
 
@@ -897,22 +912,28 @@ class addresses extends React.Component {
   }
 
   handleRowClick = (e, item, id) => {
-    this.setState({
-      UpdateCustomerAddress: item,
-      FullSmallBtnArea:true,
-      hideSidePanel:true
-    },()=>{
-      this.closeExpandFull(null);
-    });
-    console.log("addressId>>", this.state.CustomerAddress.AddressID);
-    this.removeIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
+    try{
+      this.setState({
+        UpdateCustomerAddress: item,
+        FullSmallBtnArea:true,
+        hideSidePanel:true
+      },()=>{
+        this.closeExpandFull(null);
+      });
+      console.log("addressId>>", this.state.CustomerAddress.AddressID);
+      this.removeIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+    }catch(ex){}
+    
   };
 
   removeIsSelectedRowClasses = () => {
-    for (let i = 0; i < this.state.AddressData.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
+    try{
+      for (let i = 0; i < this.state.AddressData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    }catch(ex){}
+  
   };
 
    expandFull = (e) => {
@@ -929,6 +950,24 @@ class addresses extends React.Component {
     });
   }
 
+  getPageData = (data) => {
+    let rows = data;
+    let page = parseInt(this.state.pagination.page);
+    let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
+    return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  };
+
+   handlePageChange = (event, newPage) => {
+    console.log("handlePageChange > event > ", event);
+    console.log("handlePageChange > newPage > ", newPage);
+    let pagination = this.state.pagination;
+    pagination.page = newPage;
+    this.setState({ pagination: pagination },()=>{
+      this.setState({listStateCustomerAddresses: this.listCustomerAddresses()});
+    });
+  };
+
+
   render() {
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -943,6 +982,9 @@ class addresses extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
+
+
+      
 
    
 

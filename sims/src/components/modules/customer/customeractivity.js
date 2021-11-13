@@ -1203,7 +1203,7 @@ class customeractivity extends React.Component {
                                 </IconButton>
                             </Grid>
                             <Grid item xs={12} sm={12} md={2} lg={2}>                            
-                                <div style={{marginLeft: -50 }}>  {this.state.Dialog.DialogTitle}  </div>
+                                <div style={{marginLeft: -50 }}> <span style={{fontSize:18,color:'rgb(80, 92, 109)'  }}> {this.state.Dialog.DialogTitle} </span> </div>
                             </Grid>
                         </Grid>
                     </DialogTitle>
