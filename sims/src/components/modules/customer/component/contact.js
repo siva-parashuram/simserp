@@ -47,6 +47,7 @@ class contact extends React.Component {
       ProgressLoader: true,
       mainframeW: 12,
       hideSidePanel: true,
+      FullSmallBtnArea:false,
       GeneralDetailsExpanded: true,
       listStateCustomerContact: null,
       stateCreateContact: null,
@@ -125,7 +126,7 @@ class contact extends React.Component {
             stateCreateContact: this.stateCreateContact(),
           });
         });
-        this.InitialhandleRowClick(null, data[0], "row_0");
+        // this.InitialhandleRowClick(null, data[0], "row_0");
       })
       .catch((error) => {
         this.setState({ contactData: [], ProgressLoader: true });
@@ -177,6 +178,15 @@ class contact extends React.Component {
 
   stateCreateContact = () => {
     let o = (
+
+      <div
+        style={{
+          height: 300,
+          overflowY: "scroll",
+          overflowX: "hidden",
+          width: "100%",
+        }}
+      >
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
@@ -300,6 +310,7 @@ class contact extends React.Component {
           </Grid>
         </Grid>
       </Grid>
+      </div>
     );
     return o;
   };
@@ -449,9 +460,16 @@ class contact extends React.Component {
   }
 
   handleRowClick = (e, item, id) => {
-    this.setState({
-      UpdateCustomerContact: item,
-    });
+    this.setState(
+      {
+        UpdateCustomerContact: item,
+        FullSmallBtnArea: true,
+        hideSidePanel: true,
+      },
+      () => {
+        this.closeExpandFull(null);
+      }
+    );
     console.log("addressId>>", this.state.CustomerContact.ContactID);
     this.removeIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
@@ -466,16 +484,16 @@ class contact extends React.Component {
   expandFull = (e) => {
     this.setState({
       mainframeW: 12,
-      hideSidePanel: true
+      hideSidePanel: true,
     });
-  }
+  };
 
-   closeExpandFull = (e) => {
+  closeExpandFull = (e) => {
     this.setState({
       mainframeW: 7,
-      hideSidePanel: false
+      hideSidePanel: false,
     });
-  }
+  };
 
   render() {
     const closeErrorPrompt = (event, reason) => {
@@ -494,8 +512,6 @@ class contact extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
-
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
@@ -505,23 +521,43 @@ class contact extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-<div style={{height:20}}>&nbsp;</div>
-
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={8} lg={8}>
-            {/* <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={10} lg={10}> */}
-            <Dualtabcomponent
-              tab1name="List"
-              tab2name="New"
-              tab1Html={this.state.listStateCustomerContact}
-              tab2Html={this.state.stateCreateContact}
-            />
+        <div style={{ marginTop: -25 }}>
+          <Grid container spacing={6}>
+            <Grid item xs={12} sm={12} md={11} lg={11}>
+              &nbsp;
+            </Grid>
+            <Grid item xs={12} sm={12} md={1} lg={1}>
+              {this.state.FullSmallBtnArea === true ? (
+                <div>
+                  {this.state.hideSidePanel === false ? (
+                    <IconButton
+                      aria-label="OpenInFullIcon"
+                      onClick={(e) => this.expandFull(e)}
+                    >
+                      <OpenInFullIcon
+                        className="openfullbtn"
+                        fontSize="small"
+                      />
+                    </IconButton>
+                  ) : null}
+                  {this.state.hideSidePanel === true ? (
+                    <IconButton
+                      aria-label="CloseFullscreenIcon"
+                      onClick={(e) => this.closeExpandFull(e)}
+                    >
+                      <CloseFullscreenIcon
+                        className="openfullbtn"
+                        fontSize="small"
+                      />
+                    </IconButton>
+                  ) : null}
+                </div>
+              ) : null}
+            </Grid>
           </Grid>
           <div style={{ height: 10 }}>&nbsp;</div>
           <Loader ProgressLoader={this.state.ProgressLoader} />
           <div style={{ height: 10 }}>&nbsp;</div>
-          
           <Grid container spacing={0}>
             <Grid
               item
@@ -531,9 +567,7 @@ class contact extends React.Component {
               lg={this.state.mainframeW}
             >
               <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={10} lg={10}>
-                  {/* <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={10} lg={10}> */}
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                   <Dualtabcomponent
                     tab1name="List"
                     tab2name="New"
@@ -557,7 +591,7 @@ class contact extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          onClick={(e) => this.UpdateCustomerContact(e)}
+                          onClick={(e) => this.UpdateCustomerAddress(e)}
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>
@@ -582,8 +616,9 @@ class contact extends React.Component {
                           size="small"
                           className="accordion-table"
                           aria-label="customerAddress List table"
+                          style={{marginTop:10}}
                         >
-                          <TableBody className="tableBody">
+                          <TableBody  className="tableBody">
                             <DropdownInput
                               id="ContactType"
                               label="ContactType"
@@ -645,8 +680,7 @@ class contact extends React.Component {
               </Grid>
             ) : null}
           </Grid>
-          </Grid>
-        
+        </div>
       </Fragment>
     );
   }
