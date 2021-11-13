@@ -553,6 +553,8 @@ class contact extends React.Component {
     });
   };
 
+  
+
   render() {
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
