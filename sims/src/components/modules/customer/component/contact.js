@@ -42,12 +42,16 @@ class contact extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
       mainframeW: 12,
       hideSidePanel: true,
-      FullSmallBtnArea:false,
+      FullSmallBtnArea: false,
       GeneralDetailsExpanded: true,
       listStateCustomerContact: null,
       stateCreateContact: null,
@@ -136,41 +140,62 @@ class contact extends React.Component {
   listStateCustomerContact = () => {
     let o = (
       <Fragment>
-        <Table
-          stickyHeader
-          size="small"
-          className=""
-          aria-label="CustomerContact List table"
+        <div
+          style={{
+            height: 500,
+            overflowY: "scroll",
+            overflowX: "hidden",
+            width: "100%",
+          }}
         >
-          <TableHead className="table-header-background">
-            <TableRow>
-              <TableCell className="table-header-font">#</TableCell>
-              <TableCell className="table-header-font">Name</TableCell>
-              <TableCell className="table-header-font" align="left">
-                Email
-              </TableCell>
-              <TableCell className="table-header-font" align="left">
-                Phone No
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody className="tableBody">
-            {this.state.contactData.map((item, i) => (
-              <TableRow
-                id={"row_" + i}
-                key={i}
-                onClick={(event) =>
-                  this.handleRowClick(event, item, "row_" + i)
-                }
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={12} lg={12}>
+              <Table
+                stickyHeader
+                size="small"
+                className=""
+                aria-label="CustomerContact List table"
               >
-                <TableCell> {i + 1}</TableCell>
-                <TableCell> {item.Name}</TableCell>
-                <TableCell align="left">{item.EmailID}</TableCell>
-                <TableCell align="left">{item.PhoneNo}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                <TableHead className="table-header-background">
+                  <TableRow>
+                    <TableCell className="table-header-font">#</TableCell>
+                    <TableCell className="table-header-font">Name</TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Email
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Phone No
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody className="tableBody">
+                  {this.getPageData(this.state.contactData).map((item, i) => (
+                    <TableRow
+                      id={"row_" + i}
+                      key={i}
+                      onClick={(event) =>
+                        this.handleRowClick(event, item, "row_" + i)
+                      }
+                    >
+                      <TableCell> {i + 1}</TableCell>
+                      <TableCell> {item.Name}</TableCell>
+                      <TableCell align="left">{item.EmailID}</TableCell>
+                      <TableCell align="left">{item.PhoneNo}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <TablePagination
+                rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                component="div"
+                count={this.state.contactData.length}
+                rowsPerPage={this.state.pagination.rowsPerPage}
+                page={this.state.pagination.page}
+                onPageChange={this.handlePageChange}
+              />
+            </Grid>
+          </Grid>
+        </div>
       </Fragment>
     );
     return o;
@@ -178,142 +203,156 @@ class contact extends React.Component {
 
   stateCreateContact = () => {
     let o = (
-
       <div
         style={{
-          height: 300,
+          height: 500,
           overflowY: "scroll",
           overflowX: "hidden",
           width: "100%",
         }}
       >
-      <Grid container spacing={0}>
-        <Grid style={{ paddingTop: 10 }} container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button
-              className="action-btns"
-              style={{ marginLeft: 5 }}
-              onClick={(e) => this.AddNew(e)}
-            >
-              {APIURLS.buttonTitle.add}
-            </Button>
-          </Grid>
-          <Grid xs={12} sm={12} md={10} lg={10}>
-            &nbsp;
-          </Grid>
-        </Grid>
-
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={2}>
-              <Grid xs={12}>
-                <Accordion
-                  key="customerContact-General-Details"
-                  expanded={this.state.GeneralDetailsExpanded}
-                >
-                  <AccordionSummary
-                    className="accordion-Header-Design"
-                    expandIcon={
-                      <ExpandMoreIcon
-                        onClick={(e) =>
-                          this.handleAccordionClick("GeneralDetailsExpanded", e)
-                        }
-                      />
-                    }
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    style={{ minHeight: "40px", maxHeight: "40px" }}
-                  >
-                    <Typography key="" className="accordion-Header-Title">
-                      General Details
-                    </Typography>
-                  </AccordionSummary>
+          <Grid style={{ paddingTop: 10 }} container spacing={0}>
+            <Grid xs={12} sm={12} md={8} lg={8}>
+              <Button
+                className="action-btns"
+                style={{ marginLeft: 5 }}
+                onClick={(e) => this.AddNew(e)}
+              >
+                {APIURLS.buttonTitle.add}
+              </Button>
+            </Grid>
+            <Grid xs={12} sm={12} md={10} lg={10}>
+              &nbsp;
+            </Grid>
+          </Grid>
 
-                  <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="CustomerContact List table"
-                          >
-                            <TableBody className="tableBody">
-                              {/* <DropdownInput
-                                id="CustID"
-                                label="Customer"
-                                onChange={(e) => updateFormValue("CustID", e)}
-                                options={this.state.customerData}
-                                isMandatory={true}
-                                value={this.state.CustomerContact.CustID}
-                              /> */}
-                              <DropdownInput
-                                id="ContactType"
-                                label="ContactType"
-                                onChange={(e) =>
-                                  this.updateFormValue("ContactType", e, "ADD")
-                                }
-                                options={APIURLS.ContactType}
-                                isMandatory={true}
-                                value={this.state.CustomerContact.ContactType}
-                              />
-                              <TextboxInput
-                                id="Name"
-                                label="Name"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) =>
-                                  this.updateFormValue("Name", e, "ADD")
-                                }
-                                value={this.state.CustomerContact.Name}
-                              />
-                              <TextboxInput
-                                id="PhoneNo"
-                                label="PhoneNo"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) =>
-                                  this.updateFormValue("PhoneNo", e, "ADD")
-                                }
-                                value={this.state.CustomerContact.PhoneNo}
-                              />
-                              <TextboxInput
-                                id="EmailID"
-                                label="EmailID"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) =>
-                                  this.updateFormValue("EmailID", e, "ADD")
-                                }
-                                value={this.state.CustomerContact.EmailID}
-                              />
-                              <SwitchInput
-                                key="IsBlock"
-                                id="IsBlock"
-                                label="IsBlock"
-                                param={this.state.CustomerContact.IsBlock}
-                                onChange={(e) =>
-                                  this.updateFormValue("IsBlock", e, "ADD")
-                                }
-                                value={this.state.CustomerContact.IsBlock}
-                              />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={12} lg={12}>
+              <Grid container spacing={2}>
+                <Grid xs={12}>
+                  <Accordion
+                    key="customerContact-General-Details"
+                    expanded={this.state.GeneralDetailsExpanded}
+                  >
+                    <AccordionSummary
+                      className="accordion-Header-Design"
+                      expandIcon={
+                        <ExpandMoreIcon
+                          onClick={(e) =>
+                            this.handleAccordionClick(
+                              "GeneralDetailsExpanded",
+                              e
+                            )
+                          }
+                        />
+                      }
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                      style={{ minHeight: "40px", maxHeight: "40px" }}
+                    >
+                      <Typography key="" className="accordion-Header-Title">
+                        General Details
+                      </Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails key="" className="AccordionDetails-css">
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={7} lg={7}>
+                          <TableContainer>
+                            <Table
+                              stickyHeader
+                              size="small"
+                              className="accordion-table"
+                              aria-label="CustomerContact List table"
+                            >
+                              <TableBody className="tableBody">
+                                
+                                <DropdownInput
+                                  id="ContactType"
+                                  label="ContactType"
+                                  onChange={(e) =>
+                                    this.updateFormValue(
+                                      "ContactType",
+                                      e,
+                                      "ADD"
+                                    )
+                                  }
+                                  options={APIURLS.ContactType}
+                                  isMandatory={true}
+                                  value={this.state.CustomerContact.ContactType}
+                                />
+                                <TextboxInput
+                                  id="Name"
+                                  label="Name"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Name", e, "ADD")
+                                  }
+                                  value={this.state.CustomerContact.Name}
+                                />
+                                <TextboxInput
+                                  id="PhoneNo"
+                                  label="PhoneNo"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PhoneNo", e, "ADD")
+                                  }
+                                  value={this.state.CustomerContact.PhoneNo}
+                                />
+                                </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <TableContainer>
+                            <Table
+                              stickyHeader
+                              size="small"
+                              className="accordion-table"
+                              aria-label="CustomerContact List table"
+                            >
+                              <TableBody className="tableBody">
+                                <TextboxInput
+                                  id="EmailID"
+                                  label="EmailID"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EmailID", e, "ADD")
+                                  }
+                                  value={this.state.CustomerContact.EmailID}
+                                />
+                                <SwitchInput
+                                  key="IsBlock"
+                                  id="IsBlock"
+                                  label="IsBlock"
+                                  param={this.state.CustomerContact.IsBlock}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsBlock", e, "ADD")
+                                  }
+                                  value={this.state.CustomerContact.IsBlock}
+                                />
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
       </div>
     );
     return o;
   };
+
+  
 
   updateFormValue = (param, e, process) => {
     let CustomerContact = {};
@@ -476,9 +515,11 @@ class contact extends React.Component {
   };
 
   removeIsSelectedRowClasses = () => {
-    for (let i = 0; i < this.state.contactData.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
+    try{
+      for (let i = 0; i < this.state.contactData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    }catch(ex){}
   };
 
   expandFull = (e) => {
@@ -492,6 +533,23 @@ class contact extends React.Component {
     this.setState({
       mainframeW: 7,
       hideSidePanel: false,
+    });
+  };
+
+  getPageData = (data) => {
+    let rows = data;
+    let page = parseInt(this.state.pagination.page);
+    let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
+    return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  };
+
+   handlePageChange = (event, newPage) => {
+    console.log("handlePageChange > event > ", event);
+    console.log("handlePageChange > newPage > ", newPage);
+    let pagination = this.state.pagination;
+    pagination.page = newPage;
+    this.setState({ pagination: pagination },()=>{
+      this.setState({listStateCustomerContact: this.listStateCustomerContact()});
     });
   };
 
@@ -616,9 +674,9 @@ class contact extends React.Component {
                           size="small"
                           className="accordion-table"
                           aria-label="customerAddress List table"
-                          style={{marginTop:10}}
+                          style={{ marginTop: 10 }}
                         >
-                          <TableBody  className="tableBody">
+                          <TableBody className="tableBody">
                             <DropdownInput
                               id="ContactType"
                               label="ContactType"
@@ -674,6 +732,7 @@ class contact extends React.Component {
                           </TableBody>
                         </Table>
                       </div>
+                      <div style={{height:20}}>&nbsp;</div>
                     </Grid>
                   </Grid>
                 </div>
