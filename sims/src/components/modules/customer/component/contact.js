@@ -504,34 +504,19 @@ class contact extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
-        <div style={{ marginTop: -25 }}>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sm={12} md={11} lg={11}>
-              &nbsp;
-            </Grid>
-            <Grid item xs={12} sm={12} md={1} lg={1}>
-              <div>
-                {this.state.hideSidePanel === false ? (
-                  <IconButton
-                    aria-label="OpenInFullIcon"
-                    onClick={(e) => this.expandFull(e)}
-                  >
-                    <OpenInFullIcon className="openfullbtn" fontSize="small" />
-                  </IconButton>
-                ) : null}
-                {this.state.hideSidePanel === true ? (
-                  <IconButton
-                    aria-label="CloseFullscreenIcon"
-                    onClick={(e) => this.closeExpandFull(e)}
-                  >
-                    <CloseFullscreenIcon
-                      className="openfullbtn"
-                      fontSize="small"
-                    />
-                  </IconButton>
-                ) : null}
-              </div>
-            </Grid>
+
+<div style={{height:20}}>&nbsp;</div>
+
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={8} lg={8}>
+            {/* <Grid style={{ marginLeft: 15 }} container spacing={0}>
+              <Grid item xs={12} sm={12} md={10} lg={10}> */}
+            <Dualtabcomponent
+              tab1name="List"
+              tab2name="New"
+              tab1Html={this.state.listStateCustomerContact}
+              tab2Html={this.state.stateCreateContact}
+            />
           </Grid>
           <div style={{ height: 10 }}>&nbsp;</div>
           <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -660,7 +645,8 @@ class contact extends React.Component {
               </Grid>
             ) : null}
           </Grid>
-        </div>
+          </Grid>
+        
       </Fragment>
     );
   }

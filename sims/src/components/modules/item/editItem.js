@@ -43,7 +43,7 @@ class editItem extends React.Component {
       itemDepartmentMasterData: [],
       ItemTypeMaster: APIURLS.ItemType,
       ItemId: 0,
-      ItemNo: 0,
+      ItemNo: "",
       ItemType: 0,
       Code: "",
       Alias: "",
