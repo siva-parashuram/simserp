@@ -1037,6 +1037,7 @@ class addresses extends React.Component {
                           backgroundColor: "#ffffff",
                         }}
                       >
+                        <div style={{height:20}}>&nbsp;</div>
                         <Table
                           stickyHeader
                           size="small"
@@ -1287,6 +1288,7 @@ class addresses extends React.Component {
                             />
                           </TableBody>
                         </Table>
+                        <div style={{height:20}}>&nbsp;</div>
                       </div>
                     </Grid>
                   </Grid>
