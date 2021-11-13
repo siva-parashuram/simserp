@@ -118,6 +118,7 @@ class addresses extends React.Component {
         FinalDestination: "",
         SpecialInstruction: "",
       },
+      updateBtnDisabled:false
     };
   }
 
@@ -1033,7 +1034,6 @@ class addresses extends React.Component {
           <div style={{ height: 10 }}>&nbsp;</div>
           <Grid container spacing={0}>
             <Grid item xs={12} sm={12} md={this.state.mainframeW} lg={this.state.mainframeW}>
-
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                   <Dualtabcomponent
@@ -1060,6 +1060,7 @@ class addresses extends React.Component {
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.UpdateCustomerAddress(e)}
+                          disabled={this.state.updateBtnDisabled}
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>

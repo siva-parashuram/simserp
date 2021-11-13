@@ -3,6 +3,7 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 
 import Button from "@material-ui/core/Button";
+import IconButton from '@mui/material/IconButton';
 import AddIcon from "@material-ui/icons/Add";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
@@ -20,6 +21,9 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TextField from '@material-ui/core/TextField';
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+ 
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -45,6 +49,13 @@ class paymentTerms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
+      FullSmallBtnArea:false,
+      mainframeW: 12,
+      hideSidePanel: true,
       initialCss: "",
       ErrorPrompt: false,
       SuccessPrompt: false,
@@ -53,7 +64,8 @@ class paymentTerms extends React.Component {
       listPaymentTerms: null,
       paymentTermsData: [],
       updatePaymentTerms: {},
-      createNew: false,
+      createNewBtn: false,
+      updateBtn:false,
       PaymentTerms: {
         PaymentTermID: 0,
         Code: "",
@@ -111,12 +123,37 @@ class paymentTerms extends React.Component {
     } catch (ex) { }
   };
 
+  showAddNewPanel = (e) => {
+    this.removeIsSelectedRowClasses();
+    let PaymentTermsTemplate = {
+      PaymentTermID: 0,
+      Code: "",
+      Description: "",
+      DueDays: "",
+    };
+
+    this.setState({
+      PaymentTerms:PaymentTermsTemplate,
+      FullSmallBtnArea:true,
+      mainframeW: 8,
+      hideSidePanel: false,
+      createNewBtn:true,
+      updateBtn:false,
+    });
+
+    //removeall list selected highlight
+    //show right panel
+    //show create new btn
+    //show expandLess btn
+
+  }
+
   listPaymentTerms = () => {
     let o = (
       <Fragment>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={10} lg={10}>
-            <Button className="action-btns" style={{ marginLeft: 5, marginBottom: 10 }} onClick={(e) => this.addNew(e)}>
+            <Button className="action-btns" style={{ marginLeft: 5, marginBottom: 10 }} onClick={(e) => this.showAddNewPanel(e)}>
               <span style={{ paddingLeft: 7, paddingRight: 5 }}> {APIURLS.buttonTitle.new} </span>
             </Button>
           </Grid>
@@ -125,7 +162,7 @@ class paymentTerms extends React.Component {
 
         <div style={{ height: 350, width: '100%', overflowY: 'scroll' }}>
           <Grid container spacing={0}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
+            <Grid xs={12} sm={12} md={11} lg={11}>
 
               <Table
                 stickyHeader
@@ -195,35 +232,20 @@ class paymentTerms extends React.Component {
 
   updateFormValue = (param, e, index) => {
     console.log("updateFormValue > index > ", index);
-    let paymentTermsData = this.state.paymentTermsData;
+    let PaymentTerms = this.state.PaymentTerms;
 
     switch (param) {
       case "Code":
-        for (let i = 0; i < paymentTermsData.length; i++) {
-          if (i === index) {
-            console.log("paymentTermsData[i] > ", paymentTermsData[i]);
-            paymentTermsData[i][param] = e.target.value;
-          }
-        }
-        this.setParams(paymentTermsData);
+        PaymentTerms[param] = e.target.value;
+        this.setParams(PaymentTerms);
         break;
       case "Description":
-        for (let i = 0; i < paymentTermsData.length; i++) {
-          if (i === index) {
-            console.log("paymentTermsData[i] > ", paymentTermsData[i]);
-            paymentTermsData[i][param] = e.target.value;
-          }
-        }
-        this.setParams(paymentTermsData);
+        PaymentTerms[param] = e.target.value;
+        this.setParams(PaymentTerms);
         break;
       case "DueDays":
-        for (let i = 0; i < paymentTermsData.length; i++) {
-          if (i === index) {
-            console.log("paymentTermsData[i] > ", paymentTermsData[i]);
-            paymentTermsData[i][param] = CF.toInt(e.target.value);
-          }
-        }
-        this.setParams(paymentTermsData);
+        PaymentTerms[param] = CF.toInt(e.target.value);
+        this.setParams(PaymentTerms);
         break;
       default:
         break;
@@ -233,27 +255,76 @@ class paymentTerms extends React.Component {
   }
 
   setParams = (object) => {
-    this.setState({ paymentTermsData: object }, () => {
-      this.setState({ listPaymentTerms: this.listPaymentTerms() });
-    });
+    this.setState({ PaymentTerms: object });
   };
 
 
-  saveTermsList = () => {
+  // UpdatePaymentTerms = () => {
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   //  let Url = APIURLS.APIURL.CreateCustomerContact;
+  //   let reqData = {
+  //     ValidUser: ValidUser,
+  //     paymentTermsData: this.state.paymentTermsData,
+  //   };
+
+  //   console.log("reqData > ", reqData);
+
+  // }
+
+  createPaymentTerms = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json",
     };
-    //  let Url = APIURLS.APIURL.CreateCustomerContact;
+    let Url = APIURLS.APIURL.UpdatePaymentTerms;
     let reqData = {
       ValidUser: ValidUser,
-      paymentTermsData: this.state.paymentTermsData,
+      PaymentTerms: [this.state.PaymentTerms],
     };
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          let PaymentTermsTemplate = {
+            PaymentTermID: 0,
+            Code: "",
+            Description: "",
+            DueDays: "",
+          };      
+          this.setState({
+            PaymentTerms:PaymentTermsTemplate,
+            SuccessPrompt: true
+          },()=>{
+            this.listPaymentTerms();
+          });
+        }else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+  }
 
-    console.log("reqData > ", reqData);
+  expandFull = (e) => {
+    this.setState({
+      mainframeW: 12,
+      hideSidePanel: true
+    });
+  }
 
+   closeExpandFull = (e) => {
+    this.setState({
+      mainframeW: 8,
+      hideSidePanel: false
+    });
   }
 
   render() {
@@ -263,91 +334,7 @@ class paymentTerms extends React.Component {
 
 
 
-    const createPaymentTerm = (
-      <Grid container spacing={0}>
-        <Grid style={{ paddingTop: 10 }} container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
-              {APIURLS.buttonTitle.add}
-            </Button>
-          </Grid>
-          <Grid xs={12} sm={12} md={10} lg={10}>
-            &nbsp;
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={2}>
-              <Grid xs={12}>
-                <Accordion
-                  key="paymentTerms-General-Details"
-                  expanded={this.state.GeneralDetailsExpanded}
-                >
-                  <AccordionSummary
-                    className="accordion-Header-Design"
-                    expandIcon={
-                      <ExpandMoreIcon
-                        onClick={(e) =>
-                          handleAccordionClick("GeneralDetailsExpanded", e)
-                        }
-                      />
-                    }
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    style={{ minHeight: "40px", maxHeight: "40px" }}
-                  >
-                    <Typography key="" className="accordion-Header-Title">
-                      General Details
-                    </Typography>
-                  </AccordionSummary>
-
-                  <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={9} lg={9}>
-
-
-
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="paymentTerms List table"
-                          >
-                            <TableBody className="tableBody">
-                              <TextboxInput
-                                id="Code"
-                                label="Code"
-                                variant="outlined"
-                                size="small"
-                                isMandatory={true}
-                              />
-                              <TextboxInput
-                                id="Description"
-                                label="Description"
-                                variant="outlined"
-                                size="small"
-                              />
-                              <TextboxInput
-                                id="DueDays"
-                                label="Due Days"
-                                variant="outlined"
-                                size="small"
-                              />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    );
+    
 
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -373,7 +360,7 @@ class paymentTerms extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        
 
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
@@ -384,97 +371,139 @@ class paymentTerms extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div style={{ height: 20 }}>&nbsp;</div>
+<Grid container spacing={6}>
+            <Grid item xs={12} sm={12} md={11} lg={11}>
+              &nbsp;
+            </Grid>
+            <Grid item xs={12} sm={12} md={1} lg={1}>
+              {this.state.FullSmallBtnArea===true?(
+                 <div>
+                 {this.state.hideSidePanel === false ? (
+                   <IconButton aria-label="OpenInFullIcon" onClick={(e) => this.expandFull(e)}>
+                     <OpenInFullIcon className="openfullbtn" fontSize="small" />
+                   </IconButton>
+ 
+                 ) : null}
+                 {this.state.hideSidePanel === true ? (
+                   <IconButton aria-label="CloseFullscreenIcon" onClick={(e) => this.closeExpandFull(e)} >
+                     <CloseFullscreenIcon className="openfullbtn" fontSize="small" />
+                   </IconButton>
+                 ) : null}
+               </div>
+              ):null}
+             
+            </Grid>
+          </Grid>
+
+          <div style={{ height: 10 }}>&nbsp;</div>
+          <Loader ProgressLoader={this.state.ProgressLoader} />
+          <div style={{ height: 10 }}>&nbsp;</div>
 
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={8} lg={8}>
+          <Grid item xs={12} sm={12}md={this.state.mainframeW} lg={this.state.mainframeW}>
             <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={9} lg={9}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                 {this.state.listPaymentTerms}
+                </Grid>
+              </Grid>
+               
               </Grid>
               
             </Grid>
           </Grid>
-          <Grid item xs={12} sm={12} md={4} lg={4}>
-                <div 
-                // style={{ marginLeft: 10, marginTop: 45 }}
-                >
-                  <Grid container spacing={0}>
-                    <Grid item xs={12} sm={12} md={8} lg={8}>
-                      <div style={{ marginTop: -12, marginLeft: 1 }}>
-                        <h4>Detail view</h4>
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={4} lg={4}>
-                      <div>
-                        {this.state.createNew === true ? (
-                          <Button
-                            className="action-btns"
-                            style={{ marginLeft: 10 }}
-                          // onClick={(e) => this.UpdateCustomerAddress(e)}
-                          >
-                            {APIURLS.buttonTitle.save}
-                          </Button>
-                        ) : (
-                          <Button
-                            className="action-btns"
-                            style={{ marginLeft: 10 }}
-                            onClick={(e) => this.UpdateCustomerAddress(e)}
-                          >
-                            {APIURLS.buttonTitle.save}
-                          </Button>
-                        )}
+         
+              {this.state.hideSidePanel === false ? (
+                 <Grid item xs={12} sm={12} md={4} lg={4}>
+                 <div 
+                 // style={{ marginLeft: 10, marginTop: 45 }}
+                 >
+                   <Grid container spacing={0}>
+                     <Grid item xs={12} sm={12} md={8} lg={8}>
+                       <div style={{ marginTop: -12, marginLeft: 1 }}>
+                         <h4>Detail view</h4>
+                       </div>
+                     </Grid>
+                     <Grid item xs={12} sm={12} md={4} lg={4}>
+                  
+                    <div>
+                      {this.state.createNewBtn === true ? (
+                        <Button
+                          className="action-btns"
+                          style={{ marginLeft: 10 }}
+                          onClick={(e) => this.createPaymentTerms(e)}
+                        >
+                          {APIURLS.buttonTitle.save}
+                        </Button>
+                      ) : null}
 
-                      </div>
-                    </Grid>
-                  </Grid>
-                  <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <div
-                        style={{
-                          height: 500,
-                          marginTop: 10,
-                          overflowX: "hidden",
-                          overflowY: "scroll",
-                          width: "100%",
-                          backgroundColor: "#ffffff",
-                        }}
-                      >
-                        <div style={{height:20}}>&nbsp;</div>
-                        <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="paymentTerms List table"
-                          >
-                            <TableBody className="tableBody">
-                              <TextboxInput
-                                id="Code"
-                                label="Code"
-                                variant="outlined"
-                                size="small"
-                                isMandatory={true}
-                              />
-                              <TextboxInput
-                                id="Description"
-                                label="Description"
-                                variant="outlined"
-                                size="small"
-                              />
-                              <TextboxInput
-                                id="DueDays"
-                                label="Due Days"
-                                variant="outlined"
-                                size="small"
-                              />
-                            </TableBody>
-                          </Table>
-                        <div style={{height:20}}>&nbsp;</div>
-                      </div>
-                  </Grid>
-                  </Grid>
-                </div>
-              </Grid>
+                      {this.state.updateBtn === true ? (
+                        <Button
+                          className="action-btns"
+                          style={{ marginLeft: 10 }}
+                          onClick={(e) => this.createPaymentTerms(e)}
+                        >
+                          {APIURLS.buttonTitle.save}
+                        </Button>
+                      ) : null}
+                    </div>
+                     </Grid>
+                   </Grid>
+                   <Grid container spacing={0}>
+                   <Grid item xs={12} sm={12} md={12} lg={12}>
+                   <div
+                         style={{
+                           height: 350,
+                           marginTop: 10,
+                           overflowX: "hidden",
+                           overflowY: "scroll",
+                           width: "100%",
+                           backgroundColor: "#ffffff",
+                         }}
+                       >
+                         <div style={{height:20}}>&nbsp;</div>
+                         <Table
+                             stickyHeader
+                             size="small"
+                             className="accordion-table"
+                             aria-label="paymentTerms List table"
+                           >
+                             <TableBody className="tableBody">
+                               <TextboxInput
+                                 id="Code"
+                                 label="Code"
+                                 variant="outlined"
+                                 size="small"
+                                 isMandatory={true}
+                                 value={this.state.PaymentTerms.Code}
+                                 onChange={(e) => this.updateFormValue("Code", e)}
+                               />
+                               <TextboxInput
+                                 id="Description"
+                                 label="Description"
+                                 variant="outlined"
+                                 size="small"
+                                 value={this.state.PaymentTerms.Description}
+                                 onChange={(e) => this.updateFormValue("Description", e)}
+                               />
+                               <TextboxInput
+                                 id="DueDays"
+                                 label="Due Days"
+                                 variant="outlined"
+                                 size="small"
+                                 value={this.state.PaymentTerms.DueDays}
+                                 onChange={(e) => this.updateFormValue("DueDays", e)}
+                               />
+                             </TableBody>
+                           </Table>
+                         <div style={{height:20}}>&nbsp;</div>
+                       </div>
+                   </Grid>
+                   </Grid>
+                 </div>
+               </Grid>
+              ):null}
         </Grid>
       </Fragment>
     );
