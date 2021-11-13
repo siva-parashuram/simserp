@@ -3,7 +3,7 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 
 import Button from "@material-ui/core/Button";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -18,9 +18,8 @@ import Typography from "@material-ui/core/Typography";
 
 import TablePagination from "@mui/material/TablePagination";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
-import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
- 
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -50,12 +49,13 @@ class addresses extends React.Component {
         page: 0,
         rowsPerPage: 10,
       },
-      FullSmallBtnArea:false,
+      FullSmallBtnArea: false,
       mainframeW: 12,
       hideSidePanel: true,
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
+      AddbtnDisable: true,
       GeneralDetailsExpanded: true,
       countryData: [],
       stateData: [],
@@ -118,7 +118,51 @@ class addresses extends React.Component {
         FinalDestination: "",
         SpecialInstruction: "",
       },
-      updateBtnDisabled:false
+      updateBtnDisabled: false,
+      Validations: {
+        CustomerAddress: {
+          Code: { errorState: false, errorMssg: "" },
+          Name: { errorState: false, errorMssg: "" },
+          Address: { errorState: false, errorMssg: "" },
+          Address2: { errorState: false, errorMssg: "" },
+          Address3: { errorState: false, errorMssg: "" },
+          City: { errorState: false, errorMssg: "" },
+          PostCode: { errorState: false, errorMssg: "" },
+
+          ContactPerson: { errorState: false, errorMssg: "" },
+          PhoneNo: { errorState: false, errorMssg: "" },
+          EmailID: { errorState: false, errorMssg: "" },
+          VATNo: { errorState: false, errorMssg: "" },
+          GSTNo: { errorState: false, errorMssg: "" },
+          EORINo: { errorState: false, errorMssg: "" },
+          TSSNo: { errorState: false, errorMssg: "" },
+
+          PostOfDischarge: { errorState: false, errorMssg: "" },
+          FinalDestination: { errorState: false, errorMssg: "" },
+          SpecialInstruction: { errorState: false, errorMssg: "" },
+        },
+        UpdateCustomerAddress: {
+          Code: { errorState: false, errorMssg: "" },
+          Name: { errorState: false, errorMssg: "" },
+          Address: { errorState: false, errorMssg: "" },
+          Address2: { errorState: false, errorMssg: "" },
+          Address3: { errorState: false, errorMssg: "" },
+          City: { errorState: false, errorMssg: "" },
+          PostCode: { errorState: false, errorMssg: "" },
+
+          ContactPerson: { errorState: false, errorMssg: "" },
+          PhoneNo: { errorState: false, errorMssg: "" },
+          EmailID: { errorState: false, errorMssg: "" },
+          VATNo: { errorState: false, errorMssg: "" },
+          GSTNo: { errorState: false, errorMssg: "" },
+          EORINo: { errorState: false, errorMssg: "" },
+          TSSNo: { errorState: false, errorMssg: "" },
+
+          PostOfDischarge: { errorState: false, errorMssg: "" },
+          FinalDestination: { errorState: false, errorMssg: "" },
+          SpecialInstruction: { errorState: false, errorMssg: "" },
+        },
+      },
     };
   }
 
@@ -180,7 +224,7 @@ class addresses extends React.Component {
             stateForm: this.stateForm(),
           });
         });
-       // this.InitialhandleRowClick(null, data[0], "row_0");
+        // this.InitialhandleRowClick(null, data[0], "row_0");
       })
       .catch((error) => {
         this.setState({ AddressData: [], ProgressLoader: true });
@@ -211,7 +255,7 @@ class addresses extends React.Component {
         }
         this.setState({ countryData: newData, ProgressLoader: true });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   getStateList = () => {
@@ -237,7 +281,7 @@ class addresses extends React.Component {
         }
         this.setState({ stateData: newData, ProgressLoader: true });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   stateForm = () => {
@@ -250,8 +294,6 @@ class addresses extends React.Component {
           width: "100%",
         }}
       >
-
-
         <Grid container spacing={0}>
           <Grid style={{ paddingTop: 10 }} container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>
@@ -330,6 +372,14 @@ class addresses extends React.Component {
                                   size="small"
                                   isMandatory={true}
                                   value={this.state.CustomerAddress.Code}
+                                  error={
+                                    this.state.Validations.CustomerAddress.Code
+                                      .errorState
+                                  }
+                                  helperText={
+                                    this.state.Validations.CustomerAddress.Code
+                                      .errorMssg
+                                  }
                                 />
                                 <TextboxInput
                                   id="Name"
@@ -603,7 +653,14 @@ class addresses extends React.Component {
   listCustomerAddresses = () => {
     let o = (
       <Fragment>
-        <div style={{ height: 500, overflowY: "scroll", overflowX: 'hidden', width: "100%" }}>
+        <div
+          style={{
+            height: 500,
+            overflowY: "scroll",
+            overflowX: "hidden",
+            width: "100%",
+          }}
+        >
           <Grid container spacing={0}>
             <Grid xs={12} sm={12} md={12} lg={12}>
               <Table
@@ -648,17 +705,15 @@ class addresses extends React.Component {
               </Table>
 
               <TablePagination
-              rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-              component="div"
-              count={this.state.AddressData.length}
-              rowsPerPage={this.state.pagination.rowsPerPage}
-              page={this.state.pagination.page}
-              onPageChange={this.handlePageChange}
-            />
-
+                rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                component="div"
+                count={this.state.AddressData.length}
+                rowsPerPage={this.state.pagination.rowsPerPage}
+                page={this.state.pagination.page}
+                onPageChange={this.handlePageChange}
+              />
             </Grid>
           </Grid>
-
         </div>
       </Fragment>
     );
@@ -696,11 +751,53 @@ class addresses extends React.Component {
     switch (param) {
       case "AddressType":
         CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress, process);
+
         break;
       case "Code":
         CustomerAddress[param] = e.target.value;
+        if (e.target.value === "" || e.target.value.length > 10) {
+          if (e.target.value === "") {
+            switch (process) {
+              case "EDIT":
+                v1 = this.state.Validations.UpdateCustomerAddress;
+                v1.Code = { errorState: true, errorMssg: "Cannot be blank" };
+                this.setState({ Validations: v1, updateBtnDisabled: true });
+                break;
+              case "ADD":
+                v1 = this.state.Validations.CustomerAddress;
+                v1.Code = { errorState: true, errorMssg: "Cannot be blank" };
+                this.setState({ Validations: v1, AddbtnDisable: true });
+            }
+          }
+          if (e.target.value.length>10) {
+            switch (process) {
+              case "EDIT":
+                v1 = this.state.Validations.UpdateCustomerAddress;
+                v1.Code = { errorState: true, errorMssg: "Maximum 10 characters" };
+                this.setState({ Validations: v1, updateBtnDisabled: true });
+                break;
+              case "ADD":
+                v1 = this.state.Validations.CustomerAddress;
+                v1.Code = { errorState: true, errorMssg: "Maximum 10 characters" };
+                this.setState({ Validations: v1, AddbtnDisable: true });
+            }
+          }else{
+            switch (process) {
+              case "EDIT":
+                v1 = this.state.Validations.UpdateCustomerAddress;
+                v1.Code = { errorState: false, errorMssg: "" };
+                this.setState({ Validations: v1, updateBtnDisabled: true });
+                break;
+              case "ADD":
+                v1 = this.state.Validations.CustomerAddress;
+                v1.Code = { errorState: false, errorMssg: "" };
+                this.setState({ Validations: v1, AddbtnDisable: true });
+            }
+          }
+        }
+
         this.setParams(CustomerAddress, process);
+
         break;
       case "Name":
         CustomerAddress[param] = e.target.value;
@@ -913,43 +1010,44 @@ class addresses extends React.Component {
   }
 
   handleRowClick = (e, item, id) => {
-    try{
-      this.setState({
-        UpdateCustomerAddress: item,
-        FullSmallBtnArea:true,
-        hideSidePanel:true
-      },()=>{
-        this.closeExpandFull(null);
-      });
+    try {
+      this.setState(
+        {
+          UpdateCustomerAddress: item,
+          FullSmallBtnArea: true,
+          hideSidePanel: true,
+        },
+        () => {
+          this.closeExpandFull(null);
+        }
+      );
       console.log("addressId>>", this.state.CustomerAddress.AddressID);
       this.removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
-    }catch(ex){}
-    
+    } catch (ex) {}
   };
 
   removeIsSelectedRowClasses = () => {
-    try{
+    try {
       for (let i = 0; i < this.state.AddressData.length; i++) {
         document.getElementById("row_" + i).className = "";
       }
-    }catch(ex){}
-  
+    } catch (ex) {}
   };
 
-   expandFull = (e) => {
+  expandFull = (e) => {
     this.setState({
       mainframeW: 12,
-      hideSidePanel: true
+      hideSidePanel: true,
     });
-  }
+  };
 
-   closeExpandFull = (e) => {
+  closeExpandFull = (e) => {
     this.setState({
       mainframeW: 8,
-      hideSidePanel: false
+      hideSidePanel: false,
     });
-  }
+  };
 
   getPageData = (data) => {
     let rows = data;
@@ -958,16 +1056,17 @@ class addresses extends React.Component {
     return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   };
 
-   handlePageChange = (event, newPage) => {
+  handlePageChange = (event, newPage) => {
     console.log("handlePageChange > event > ", event);
     console.log("handlePageChange > newPage > ", newPage);
     let pagination = this.state.pagination;
     pagination.page = newPage;
-    this.setState({ pagination: pagination },()=>{
-      this.setState({listStateCustomerAddresses: this.listCustomerAddresses()});
+    this.setState({ pagination: pagination }, () => {
+      this.setState({
+        listStateCustomerAddresses: this.listCustomerAddresses(),
+      });
     });
   };
-
 
   render() {
     const closeErrorPrompt = (event, reason) => {
@@ -984,15 +1083,8 @@ class addresses extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-
-      
-
-   
-
     return (
       <Fragment>
-        
-
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
@@ -1002,38 +1094,51 @@ class addresses extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-
-
-
         <div style={{ marginTop: -25 }}>
           <Grid container spacing={6}>
             <Grid item xs={12} sm={12} md={11} lg={11}>
               &nbsp;
             </Grid>
             <Grid item xs={12} sm={12} md={1} lg={1}>
-              {this.state.FullSmallBtnArea===true?(
-                 <div>
-                 {this.state.hideSidePanel === false ? (
-                   <IconButton aria-label="OpenInFullIcon" onClick={(e) => this.expandFull(e)}>
-                     <OpenInFullIcon className="openfullbtn" fontSize="small" />
-                   </IconButton>
- 
-                 ) : null}
-                 {this.state.hideSidePanel === true ? (
-                   <IconButton aria-label="CloseFullscreenIcon" onClick={(e) => this.closeExpandFull(e)} >
-                     <CloseFullscreenIcon className="openfullbtn" fontSize="small" />
-                   </IconButton>
-                 ) : null}
-               </div>
-              ):null}
-             
+              {this.state.FullSmallBtnArea === true ? (
+                <div>
+                  {this.state.hideSidePanel === false ? (
+                    <IconButton
+                      aria-label="OpenInFullIcon"
+                      onClick={(e) => this.expandFull(e)}
+                    >
+                      <OpenInFullIcon
+                        className="openfullbtn"
+                        fontSize="small"
+                      />
+                    </IconButton>
+                  ) : null}
+                  {this.state.hideSidePanel === true ? (
+                    <IconButton
+                      aria-label="CloseFullscreenIcon"
+                      onClick={(e) => this.closeExpandFull(e)}
+                    >
+                      <CloseFullscreenIcon
+                        className="openfullbtn"
+                        fontSize="small"
+                      />
+                    </IconButton>
+                  ) : null}
+                </div>
+              ) : null}
             </Grid>
           </Grid>
           <div style={{ height: 10 }}>&nbsp;</div>
           <Loader ProgressLoader={this.state.ProgressLoader} />
           <div style={{ height: 10 }}>&nbsp;</div>
           <Grid container spacing={0}>
-            <Grid item xs={12} sm={12} md={this.state.mainframeW} lg={this.state.mainframeW}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={this.state.mainframeW}
+              lg={this.state.mainframeW}
+            >
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                   <Dualtabcomponent
@@ -1080,7 +1185,7 @@ class addresses extends React.Component {
                           backgroundColor: "#ffffff",
                         }}
                       >
-                        <div style={{height:20}}>&nbsp;</div>
+                        <div style={{ height: 20 }}>&nbsp;</div>
                         <Table
                           stickyHeader
                           size="small"
@@ -1094,7 +1199,9 @@ class addresses extends React.Component {
                               onChange={(e) =>
                                 this.updateFormValue("AddressType", e, "EDIT")
                               }
-                              value={this.state.UpdateCustomerAddress.AddressType}
+                              value={
+                                this.state.UpdateCustomerAddress.AddressType
+                              }
                               options={APIURLS.AddressType}
                               isMandatory={true}
                             />
@@ -1108,6 +1215,14 @@ class addresses extends React.Component {
                               size="small"
                               isMandatory={true}
                               value={this.state.UpdateCustomerAddress.Code}
+                              error={
+                                this.state.Validations.UpdateCustomerAddress
+                                  .Code.errorState
+                              }
+                              helperText={
+                                this.state.Validations.UpdateCustomerAddress
+                                  .Code.errorMssg
+                              }
                             />
                             <TextboxInput
                               id="Name"
@@ -1225,7 +1340,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.ContactPerson}
+                              value={
+                                this.state.UpdateCustomerAddress.ContactPerson
+                              }
                             />
                             <TextboxInput
                               id="PhoneNo"
@@ -1282,7 +1399,11 @@ class addresses extends React.Component {
                               id="ShipmentModeID"
                               label="ShipmentModeID"
                               onChange={(e) =>
-                                this.updateFormValue("ShipmentModeID", e, "EDIT")
+                                this.updateFormValue(
+                                  "ShipmentModeID",
+                                  e,
+                                  "EDIT"
+                                )
                               }
                               // options={}
                               value={
@@ -1293,7 +1414,11 @@ class addresses extends React.Component {
                               id="PostOfDischarge"
                               label="Post Of Discharge"
                               onChange={(e) =>
-                                this.updateFormValue("PostOfDischarge", e, "EDIT")
+                                this.updateFormValue(
+                                  "PostOfDischarge",
+                                  e,
+                                  "EDIT"
+                                )
                               }
                               variant="outlined"
                               size="small"
@@ -1305,12 +1430,17 @@ class addresses extends React.Component {
                               id="FinalDestination"
                               label="Final Destination"
                               onChange={(e) =>
-                                this.updateFormValue("FinalDestination", e, "EDIT")
+                                this.updateFormValue(
+                                  "FinalDestination",
+                                  e,
+                                  "EDIT"
+                                )
                               }
                               variant="outlined"
                               size="small"
                               value={
-                                this.state.UpdateCustomerAddress.FinalDestination
+                                this.state.UpdateCustomerAddress
+                                  .FinalDestination
                               }
                             />
                             <TextboxInput
@@ -1326,22 +1456,21 @@ class addresses extends React.Component {
                               variant="outlined"
                               size="small"
                               value={
-                                this.state.UpdateCustomerAddress.SpecialInstruction
+                                this.state.UpdateCustomerAddress
+                                  .SpecialInstruction
                               }
                             />
                           </TableBody>
                         </Table>
-                        <div style={{height:20}}>&nbsp;</div>
+                        <div style={{ height: 20 }}>&nbsp;</div>
                       </div>
                     </Grid>
                   </Grid>
                 </div>
               </Grid>
             ) : null}
-
           </Grid>
         </div>
-
       </Fragment>
     );
   }
