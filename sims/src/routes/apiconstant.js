@@ -112,6 +112,7 @@ export const APIURL = {
   GetCustomerAddress:domain+"api/Customer/GetCustomerAddress",
   UpdateCustomerAddress:domain+"api/Customer/UpdateCustomerAddress",
   UpdateCustomerContact:domain+"api/Customer/UpdateCustomerContact",
+  GetAllPaymentTerms:domain+"api/Customer/GetAllPaymentTerms",
 };
 
 

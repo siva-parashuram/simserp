@@ -45,12 +45,15 @@ class paymentTerms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      initialCss: "",
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
-      listPaymentTerms:null,
+      listPaymentTerms: null,
       paymentTermsData: [],
+      updatePaymentTerms: {},
+      createNew: false,
       PaymentTerms: {
         PaymentTermID: 0,
         Code: "",
@@ -60,140 +63,134 @@ class paymentTerms extends React.Component {
     };
   }
 
-  componentDidMount() { 
+  componentDidMount() {
     this.getPaymentTerms();
   }
 
-  getPaymentTerms=()=>{
-    let paymentTermsData = this.state.paymentTermsData;
-    let blankTemplate = this.state.PaymentTerms;
-    paymentTermsData.push(blankTemplate);
-  //  const newArray = [blankTemplate].concat(paymentTermsData);
-    this.setState({ paymentTermsData: paymentTermsData },()=>{
-     this.setState({listPaymentTerms:this.listPaymentTerms()});
-    });
+  getPaymentTerms = () => {
+
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllPaymentTerms;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        this.setState({ paymentTermsData: data, ProgressLoader: true }, () => {
+          this.setState({ listPaymentTerms: this.listPaymentTerms() });
+        });
+      })
+      .catch((error) => {
+        this.setState({ paymentTermsData: [], ProgressLoader: true }, () => {
+          this.setState({ listPaymentTerms: this.listPaymentTerms() });
+        });
+      });
+
+
   }
 
-  listPaymentTerms=()=>{
-    let o=(
+  handleRowClick = (e, item, id) => {
+    try {
+      this.setState({
+        updatePaymentTerms: item
+      });
+      this.removeIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+    } catch (ex) { }
+  };
+
+  removeIsSelectedRowClasses = () => {
+    try {
+      for (let i = 0; i < this.state.paymentTermsData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    } catch (ex) { }
+  };
+
+  listPaymentTerms = () => {
+    let o = (
       <Fragment>
-      <Grid container spacing={0}>
-        <Grid xs={12} sm={12} md={8} lg={8}>
-          <Button className="action-btns" style={{ marginLeft: 5, marginBottom: 10 }} onClick={(e) => this.addNew(e)}>
-            <span style={{ paddingLeft: 7, paddingRight: 5 }}> {APIURLS.buttonTitle.new} </span>
-          </Button>
-          <Button className="action-btns" style={{ marginLeft: 5, marginBottom: 10 }} onClick={(e) => this.saveTermsList(e)}>
-            <span style={{ paddingLeft: 7, paddingRight: 5 }}> {APIURLS.buttonTitle.save} </span>
-          </Button>
-        </Grid>
-      </Grid>
-      <div style={{ height: 350, width: '100%', overflowY: 'scroll' }}>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={12} lg={12}>
-            <table>
-              <thead>
-                <tr style={{ textAlign: "center" }}>
-                  <td className="table-header-font">#</td>
-                  <td className="table-header-font">Code</td>
-                  <td className="table-header-font">Description</td>
-                  <td className="table-header-font">Due Days</td>
-                  <td>&nbsp;</td>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.paymentTermsData.map((item, i) => (
-                  <tr>
-                    <td> {i + 1}</td>
-                    <td>
-                      <TextField
-                        id={"Code_" + i}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                          className: "textFieldCss",
-                        }}
-                        onKeyUp={(e) => this.updateFormValue("Code", e,i)}
-                        defaultValue={item.Code}
-                      />
-                    </td>
-                    <td>
-                      <TextField
-                        id={"Description_" + i}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                          className: "textFieldCss",
-                        }}
-                        onKeyUp={(e) => this.updateFormValue("Description", e,i)}
-                      />
-                    </td>
-                    <td>
-                      <TextField
-                        id={"DueDays_" + i}
-                        variant="outlined"
-                        size="small"
-                        InputProps={{
-                          className: "textFieldCss",
-                        }}
-                        onKeyUp={(e) => this.updateFormValue("DueDays", e,i)}
-                      />
-                    </td>
-                    <td>
-                      <DeleteForeverIcon
-                        fontSize="small"
-                        className="table-delete-icon"
-                        onClick={(e) => this.deleteEntry(i, item)}  
-                      />
-                      {" - "+i}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-
-
+          <Grid xs={12} sm={12} md={10} lg={10}>
+            <Button className="action-btns" style={{ marginLeft: 5, marginBottom: 10 }} onClick={(e) => this.addNew(e)}>
+              <span style={{ paddingLeft: 7, paddingRight: 5 }}> {APIURLS.buttonTitle.new} </span>
+            </Button>
           </Grid>
-        </Grid>
-      </div>
 
-    </Fragment>
+        </Grid>
+
+        <div style={{ height: 350, width: '100%', overflowY: 'scroll' }}>
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={12} lg={12}>
+
+              <Table
+                stickyHeader
+                size="small"
+                className=""
+                aria-label="item List table"
+              >
+                <TableHead className="table-header-background">
+                  <TableRow>
+                    <TableCell className="table-header-font">#</TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Code
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Description
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      DueDays
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody className="tableBody">
+                  {this.state.paymentTermsData.map((item, i) => (
+                    <TableRow
+                      id={"row_" + i}
+                      className={this.state.initialCss}
+                      hover
+                      key={i}
+                      onClick={(event) =>
+                        this.handleRowClick(event, item, "row_" + i)
+                      }
+                    >
+                      <TableCell align="left">
+                        {i + 1}
+                      </TableCell>
+                      <TableCell align="left">
+                        {item.Code}
+                      </TableCell>
+                      <TableCell align="left">
+                        {item.Description}
+                      </TableCell>
+                      <TableCell align="left">
+                        {item.DueDays}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+
+                </TableBody>
+              </Table>
+
+
+            </Grid>
+          </Grid>
+        </div>
+
+      </Fragment>
     );
     return o;
   }
 
-  
-  addNew = (e) => {
-    let paymentTermsData = this.state.paymentTermsData;
-    let blankTemplate = {
-      PaymentTermID: 0,
-      Code: "",
-      Description: "",
-      DueDays: "",
-    };      
-    paymentTermsData.push(blankTemplate);
-    this.setState({ paymentTermsData: paymentTermsData },()=>{
-      this.setState({listPaymentTerms:this.listPaymentTerms()});
-    });
-  }
 
 
-   deleteEntry=(eindex, item)=>{
-    console.log("deleteEntry > eindex > ",eindex);
-    let paymentTermsData = this.state.paymentTermsData;
-    let newD=[];
-    for(let i=0;i<paymentTermsData.length;i++){
-      if(i===parseInt(eindex)){
-       
-      }else{
-        newD.push(paymentTermsData[i]);
-      }
-    }
-    
-    this.setState({paymentTermsData:newD},()=>{
-      this.setState({listPaymentTerms:this.listPaymentTerms()});
-    });
-  }
+
+
+
 
 
   updateFormValue = (param, e, index) => {
@@ -231,8 +228,8 @@ class paymentTerms extends React.Component {
       default:
         break;
     }
-    
-     
+
+
   }
 
   setParams = (object) => {
@@ -242,20 +239,20 @@ class paymentTerms extends React.Component {
   };
 
 
-  saveTermsList=()=>{
+  saveTermsList = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
-        "Content-Type": "application/json",
+      "Content-Type": "application/json",
     };
-  //  let Url = APIURLS.APIURL.CreateCustomerContact;
+    //  let Url = APIURLS.APIURL.CreateCustomerContact;
     let reqData = {
-        ValidUser: ValidUser,
-        paymentTermsData: this.state.paymentTermsData,
+      ValidUser: ValidUser,
+      paymentTermsData: this.state.paymentTermsData,
     };
 
-    console.log("reqData > ",reqData);
+    console.log("reqData > ", reqData);
 
   }
 
@@ -264,7 +261,7 @@ class paymentTerms extends React.Component {
 
 
 
- 
+
 
     const createPaymentTerm = (
       <Grid container spacing={0}>
@@ -387,17 +384,97 @@ class paymentTerms extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
- <div style={{height:20}}>&nbsp;</div>
+        <div style={{ height: 20 }}>&nbsp;</div>
 
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={10} lg={10}>
+          <Grid item xs={12} sm={12} md={8} lg={8}>
             <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={8} lg={8}>
+              <Grid item xs={12} sm={12} md={9} lg={9}>
                 {this.state.listPaymentTerms}
-               
               </Grid>
+              
             </Grid>
           </Grid>
+          <Grid item xs={12} sm={12} md={4} lg={4}>
+                <div 
+                // style={{ marginLeft: 10, marginTop: 45 }}
+                >
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                      <div style={{ marginTop: -12, marginLeft: 1 }}>
+                        <h4>Detail view</h4>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={4} lg={4}>
+                      <div>
+                        {this.state.createNew === true ? (
+                          <Button
+                            className="action-btns"
+                            style={{ marginLeft: 10 }}
+                          // onClick={(e) => this.UpdateCustomerAddress(e)}
+                          >
+                            {APIURLS.buttonTitle.save}
+                          </Button>
+                        ) : (
+                          <Button
+                            className="action-btns"
+                            style={{ marginLeft: 10 }}
+                            onClick={(e) => this.UpdateCustomerAddress(e)}
+                          >
+                            {APIURLS.buttonTitle.save}
+                          </Button>
+                        )}
+
+                      </div>
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <div
+                        style={{
+                          height: 500,
+                          marginTop: 10,
+                          overflowX: "hidden",
+                          overflowY: "scroll",
+                          width: "100%",
+                          backgroundColor: "#ffffff",
+                        }}
+                      >
+                        <div style={{height:20}}>&nbsp;</div>
+                        <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="paymentTerms List table"
+                          >
+                            <TableBody className="tableBody">
+                              <TextboxInput
+                                id="Code"
+                                label="Code"
+                                variant="outlined"
+                                size="small"
+                                isMandatory={true}
+                              />
+                              <TextboxInput
+                                id="Description"
+                                label="Description"
+                                variant="outlined"
+                                size="small"
+                              />
+                              <TextboxInput
+                                id="DueDays"
+                                label="Due Days"
+                                variant="outlined"
+                                size="small"
+                              />
+                            </TableBody>
+                          </Table>
+                        <div style={{height:20}}>&nbsp;</div>
+                      </div>
+                  </Grid>
+                  </Grid>
+                </div>
+              </Grid>
         </Grid>
       </Fragment>
     );

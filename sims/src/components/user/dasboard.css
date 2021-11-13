@@ -5,6 +5,14 @@ body{
   overflow-x: hidden;
 }
 
+.btn-area-div-row{
+  /* border-top-style: solid !important; */
+  border-bottom-style: solid !important;
+  border-width: 1px !important;
+  height: 40px !important;
+  border-color: #bdbdbd !important;
+}
+
 .openfullbtn{
   color: rgb(0, 126, 135) !important;
 }
