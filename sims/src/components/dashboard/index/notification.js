@@ -135,7 +135,7 @@ class notification extends React.Component {
 
         return (
             <Fragment>
-                <div style={{ marginLeft: 15, marginTop: 5 }}>
+                <div style={{ marginLeft: 0, marginTop: 5 }}>
                     <Grid container spacing={1}>
                         <Grid item xs={1} sm={1}></Grid>
                         <Grid item xs={10} sm={10}>

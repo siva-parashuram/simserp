@@ -52,6 +52,7 @@ class userDashboard extends React.Component {
 
     return (
       <Fragment>
+         <div style={{ height: 20 }}></div>
         <Notify/>   
        
         <div style={{ height: 20 }}></div>

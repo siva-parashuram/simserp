@@ -31,7 +31,7 @@ class insights extends React.Component {
     render() {
         return (
             <Fragment>
-                <div style={{ marginLeft: 15 }}>
+                <div style={{ marginLeft: 0 }}>
                     <Grid container spacing={0}>
                         <Grid item xs={12} sm={12}>
                             <div className="dash-row-header dash-header">

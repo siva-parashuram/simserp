@@ -35,7 +35,11 @@ body{
 .dialog-prompt-activity{
   border-radius: 0px !important;
   margin-top: -50px !important;
- 
+  border-top-left-radius: 0px !important;
+}
+
+.css-cyxlny-MuiPaper-root-MuiDialog-paper{
+  border-radius: 0px !important;
 }
 
 .dialog-area{
