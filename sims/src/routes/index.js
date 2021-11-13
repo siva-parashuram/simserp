@@ -78,9 +78,8 @@ let routes = ({ location, ...rest }) => {
 
       {window.location.pathname === "/" ? null : <Header />}
 
-
-
-      <Switch>
+     <div style={{marginLeft:10}}>
+     <Switch>
         <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
         <Route path={URLS.URLS.userDashboard} component={userDashboard} />
         <Route path={URLS.URLS.testReport} component={testReport} />
@@ -176,6 +175,9 @@ let routes = ({ location, ...rest }) => {
 
         <Route component={pageNotFound} />
       </Switch>
+     </div>
+
+    
     </Router>
 
   );

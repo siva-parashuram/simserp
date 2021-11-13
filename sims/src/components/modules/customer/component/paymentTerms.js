@@ -108,7 +108,12 @@ class paymentTerms extends React.Component {
   handleRowClick = (e, item, id) => {
     try {
       this.setState({
-        updatePaymentTerms: item
+        updatePaymentTerms: item,
+        PaymentTerms:item,
+        FullSmallBtnArea:true,
+        mainframeW: 8,
+        hideSidePanel: false,
+        updateBtn:true
       });
       this.removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
@@ -147,6 +152,8 @@ class paymentTerms extends React.Component {
     //show expandLess btn
 
   }
+
+   
 
   listPaymentTerms = () => {
     let o = (
@@ -224,12 +231,6 @@ class paymentTerms extends React.Component {
   }
 
 
-
-
-
-
-
-
   updateFormValue = (param, e, index) => {
     console.log("updateFormValue > index > ", index);
     let PaymentTerms = this.state.PaymentTerms;
@@ -286,7 +287,7 @@ class paymentTerms extends React.Component {
     let Url = APIURLS.APIURL.UpdatePaymentTerms;
     let reqData = {
       ValidUser: ValidUser,
-      PaymentTerms: [this.state.PaymentTerms],
+      PaymentTermsList: [this.state.PaymentTerms],
     };
     axios
       .post(Url, reqData, { headers })
@@ -302,7 +303,8 @@ class paymentTerms extends React.Component {
             PaymentTerms:PaymentTermsTemplate,
             SuccessPrompt: true
           },()=>{
-            this.listPaymentTerms();
+            this.getPaymentTerms();           
+            
           });
         }else {
           this.setState({ ErrorPrompt: true, SuccessPrompt: false });
@@ -330,19 +332,6 @@ class paymentTerms extends React.Component {
   render() {
 
 
-
-
-
-
-    
-
-    const handleAccordionClick = (val, e) => {
-      if (val === "GeneralDetailsExpanded") {
-        this.state.GeneralDetailsExpanded === true
-          ? this.setState({ GeneralDetailsExpanded: false })
-          : this.setState({ GeneralDetailsExpanded: true });
-      }
-    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -454,7 +443,7 @@ class paymentTerms extends React.Component {
                    <Grid item xs={12} sm={12} md={12} lg={12}>
                    <div
                          style={{
-                           height: 350,
+                           height: 300,
                            marginTop: 10,
                            overflowX: "hidden",
                            overflowY: "scroll",

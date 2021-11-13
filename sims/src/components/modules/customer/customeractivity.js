@@ -75,6 +75,8 @@ class customeractivity extends React.Component {
             type: "",
             CreditRating: APIURLS.CreditRating,
             GSTCutomerType: APIURLS.GSTCutomerType,
+           
+            paymentTermsData:[],
             GeneralPostingGroupList: [],
             CustomerPostingGroupList: [],
             currencyList: [],
@@ -144,6 +146,7 @@ class customeractivity extends React.Component {
         this.getCurrencyList();
         this.getCountryList();
         this.getStateList();
+        this.getPaymentTerms();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -159,6 +162,9 @@ class customeractivity extends React.Component {
             compName +
             "&branchName=" +
             branchName;
+
+        
+
 
         let Customer = this.state.Customer;
         Customer.BranchID = CF.toInt(branchId);
@@ -178,6 +184,37 @@ class customeractivity extends React.Component {
 
         console.log("On load state > ", this.state);
     }
+
+   
+
+    getPaymentTerms = () => {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.GetAllPaymentTerms;
+        axios
+          .post(Url, ValidUser, { headers })
+          .then((response) => {
+            let data = response.data;
+            let newD = [];
+            for (let i = 0; i < data.length; i++) {
+                let o = {
+                    name: data[i].Code + "-" + data[i].Description+"-" + data[i].DueDays,
+                    value: data[i].PaymentTermID
+                };
+                newD.push(o);
+            }
+            this.setState({ paymentTermsData: newD, ProgressLoader: true });
+          })
+          .catch((error) => {
+            this.setState({ paymentTermsData: [], ProgressLoader: true });
+          });
+    
+    
+      }
 
     getAllCustomerPostingGroup = () => {
 
@@ -349,7 +386,211 @@ class customeractivity extends React.Component {
             });
     }
 
+     updateFormValue = (param, e) => {
+        let Customer = this.state.Customer;
+        switch (param) {
+            case "Code":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "Name":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "Address":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "Address2":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "Address3":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "City":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "PostCode":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "CountryID":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "StateID":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "Website":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "PhoneNo":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "FaxNo":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "IsGroupCompany":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "CreditDays":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "CreditLimit":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "PaymentTermID":
+                console.log("Setting PaymentTermID");
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "CreditRating":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "GraceDays":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "CurrID":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "IsGrowthBonanza":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "IsSlabDiscount":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "IsCarriage":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "IsDueEndOfMonth":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "IsBankCharge":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "BankCharge":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "IsBlock":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "IsEmailAlert":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "SalesPersonID":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "CustomerCategoryID":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "GeneralPostingGroupID":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "CustomerPostingGroupID":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "IsTaxExempt":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "Reason":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "IsEcommerce":
+                Customer[param] = e.target.checked;
+                this.setParams(Customer);
+                break;
+            case "EcommerceGSTNo":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "EcommerceB2B":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "EcommerceNoSeries":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "GSTCutomerType":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "GSTNo":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "PANNo":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "IncoID":
+                Customer[param] = CF.toInt(e.target.value);
+                this.setParams(Customer);
+                break;
+            case "VATNo":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "EORINo":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "TSSNo":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "ContactPerson":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "SalesPersonID":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            case "CustomerCategoryID":
+                Customer[param] = e.target.value;
+                this.setParams(Customer);
+                break;
+            default:
+                break;
+        }
+    }
 
+     setParams = (object) => {
+        this.setState({ Customer: object });
+    };
+
+     openPage = (url) => {
+        this.setState({ ProgressLoader: false });
+        window.location = url;
+    };
 
     render() {
 
@@ -372,210 +613,13 @@ class customeractivity extends React.Component {
         };
 
 
-        const updateFormValue = (param, e) => {
-            let Customer = this.state.Customer;
-            switch (param) {
-                case "Code":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "Name":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "Address":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "Address2":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "Address3":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "City":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "PostCode":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "CountryID":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "StateID":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "Website":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "PhoneNo":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "FaxNo":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "IsGroupCompany":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "CreditDays":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "CreditLimit":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "PaymentTermID":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "CreditRating":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "GraceDays":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "CurrID":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "IsGrowthBonanza":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "IsSlabDiscount":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "IsCarriage":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "IsDueEndOfMonth":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "IsBankCharge":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "BankCharge":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "IsBlock":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "IsEmailAlert":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "SalesPersonID":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "CustomerCategoryID":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "GeneralPostingGroupID":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "CustomerPostingGroupID":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "IsTaxExempt":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "Reason":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "IsEcommerce":
-                    Customer[param] = e.target.checked;
-                    setParams(Customer);
-                    break;
-                case "EcommerceGSTNo":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "EcommerceB2B":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "EcommerceNoSeries":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "GSTCutomerType":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "GSTNo":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "PANNo":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "IncoID":
-                    Customer[param] = CF.toInt(e.target.value);
-                    setParams(Customer);
-                    break;
-                case "VATNo":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "EORINo":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "TSSNo":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "ContactPerson":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "SalesPersonID":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                case "CustomerCategoryID":
-                    Customer[param] = e.target.value;
-                    setParams(Customer);
-                    break;
-                default:
-                    break;
-            }
-        }
+        
 
         const setParams = (object) => {
             this.setState({ Customer: object });
         };
 
-        const openPage = (url) => {
-            this.setState({ ProgressLoader: false });
-            window.location = url;
-        };
+        
 
         const closeErrorPrompt = (event, reason) => {
             if (reason === "clickaway") {
@@ -647,30 +691,6 @@ class customeractivity extends React.Component {
                 });
         }
 
-        const htmlcustomPaymentTermID = (
-            <Fragment>
-                <Grid container spacing={0}>
-                    <Grid item xs={12} sm={12} md={10} lg={10}>
-                        <select
-                            className="dropdown-css"
-                            id="SalesPersonID"
-                            onChange={(e) => updateFormValue("PaymentTermID", e)}
-                            value={this.state.Customer.SalesPersonID}
-                        >
-                            <option value="-" disabled>Select</option>
-                        </select>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={2} lg={2}>
-                        <button 
-                        className="dropdowninputbtn"
-                        onClick={(e) => openDialog('PaymentTerms')}
-                        >...</button>
-                    </Grid>
-                </Grid>
-            </Fragment>
-        );
-
-
         const generalform = (
             <Fragment>
                 <Grid container spacing={0}>
@@ -691,7 +711,7 @@ class customeractivity extends React.Component {
                                                     label="Code"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("Code", e)}
+                                                    onChange={(e) => this.updateFormValue("Code", e)}
                                                     value={this.state.Customer.Code}
                                                     isMandatory={true}
                                                 />
@@ -700,7 +720,7 @@ class customeractivity extends React.Component {
                                                     label="Name"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("Name", e)}
+                                                    onChange={(e) => this.updateFormValue("Name", e)}
                                                     value={this.state.Customer.Name}
                                                     isMandatory={true}
                                                 />
@@ -709,7 +729,7 @@ class customeractivity extends React.Component {
                                                     label="Address"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("Address", e)}
+                                                    onChange={(e) => this.updateFormValue("Address", e)}
                                                     value={this.state.Customer.Address}
                                                 />
                                                 <TextboxInput
@@ -717,7 +737,7 @@ class customeractivity extends React.Component {
                                                     label="Address2"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("Address2", e)}
+                                                    onChange={(e) => this.updateFormValue("Address2", e)}
                                                     value={this.state.Customer.Address2}
                                                 />
                                                 <TextboxInput
@@ -725,7 +745,7 @@ class customeractivity extends React.Component {
                                                     label="Address3"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("Address3", e)}
+                                                    onChange={(e) => this.updateFormValue("Address3", e)}
                                                     value={this.state.Customer.Address3}
                                                 />
                                                 <TextboxInput
@@ -733,7 +753,7 @@ class customeractivity extends React.Component {
                                                     label="City"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("City", e)}
+                                                    onChange={(e) => this.updateFormValue("City", e)}
                                                     value={this.state.Customer.City}
                                                 />
                                                 <TextboxInput
@@ -741,13 +761,13 @@ class customeractivity extends React.Component {
                                                     label="PostCode"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("PostCode", e)}
+                                                    onChange={(e) => this.updateFormValue("PostCode", e)}
                                                     value={this.state.Customer.PostCode}
                                                 />
                                                 <DropdownInput
                                                     id="CountryID"
                                                     label="Country"
-                                                    onChange={(e) => updateFormValue("CountryID", e)}
+                                                    onChange={(e) => this.updateFormValue("CountryID", e)}
                                                     value={this.state.Customer.CountryID}
                                                     options={this.state.countryData}
                                                     isMandatory={true}
@@ -755,7 +775,7 @@ class customeractivity extends React.Component {
                                                 <DropdownInput
                                                     id="StateID"
                                                     label="State"
-                                                    onChange={(e) => updateFormValue("StateID", e)}
+                                                    onChange={(e) => this.updateFormValue("StateID", e)}
                                                     value={this.state.Customer.StateID}
                                                     options={this.state.stateData}
                                                 />
@@ -765,7 +785,7 @@ class customeractivity extends React.Component {
                                                     label="ContactPerson"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("ContactPerson", e)}
+                                                    onChange={(e) => this.updateFormValue("ContactPerson", e)}
                                                     value={this.state.Customer.ContactPerson}
                                                 />
                                                 <TextboxInput
@@ -773,7 +793,7 @@ class customeractivity extends React.Component {
                                                     label="EmailID"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("EmailID", e)}
+                                                    onChange={(e) => this.updateFormValue("EmailID", e)}
                                                     value={this.state.Customer.EmailID}
                                                 />
 
@@ -782,14 +802,14 @@ class customeractivity extends React.Component {
                                                 <DropdownInput
                                                     id="SalesPersonID"
                                                     label="Sales Person"
-                                                    onChange={(e) => updateFormValue("SalesPersonID", e)}
+                                                    onChange={(e) => this.updateFormValue("SalesPersonID", e)}
                                                     value={this.state.Customer.SalesPersonID}
                                                     options={[]}
                                                 />
                                                 <DropdownInput
                                                     id="CustomerCategoryID"
                                                     label="Customer Category"
-                                                    onChange={(e) => updateFormValue("CustomerCategoryID", e)}
+                                                    onChange={(e) => this.updateFormValue("CustomerCategoryID", e)}
                                                     value={this.state.Customer.CustomerCategoryID}
                                                     options={[]}
                                                 />
@@ -815,7 +835,7 @@ class customeractivity extends React.Component {
                                                     label="Website"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("Website", e)}
+                                                    onChange={(e) => this.updateFormValue("Website", e)}
                                                     value={this.state.Customer.Website}
                                                 />
                                                 <TextboxInput
@@ -823,7 +843,7 @@ class customeractivity extends React.Component {
                                                     label="PhoneNo"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("PhoneNo", e)}
+                                                    onChange={(e) => this.updateFormValue("PhoneNo", e)}
                                                     value={this.state.Customer.PhoneNo}
                                                 />
                                                 <TextboxInput
@@ -831,7 +851,7 @@ class customeractivity extends React.Component {
                                                     label="FaxNo"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("FaxNo", e)}
+                                                    onChange={(e) => this.updateFormValue("FaxNo", e)}
                                                     value={this.state.Customer.FaxNo}
                                                 />
 
@@ -840,7 +860,7 @@ class customeractivity extends React.Component {
                                                     label="CreditDays"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("CreditDays", e)}
+                                                    onChange={(e) => this.updateFormValue("CreditDays", e)}
                                                     value={this.state.Customer.CreditDays}
                                                 />
                                                 <TextboxInput
@@ -848,14 +868,14 @@ class customeractivity extends React.Component {
                                                     label="CreditLimit"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("CreditLimit", e)}
+                                                    onChange={(e) => this.updateFormValue("CreditLimit", e)}
                                                     value={this.state.Customer.CreditLimit}
                                                 />
 
                                                 <DropdownInput
                                                     id="CreditRating"
                                                     label="CreditRating"
-                                                    onChange={(e) => updateFormValue("CreditRating", e)}
+                                                    onChange={(e) => this.updateFormValue("CreditRating", e)}
                                                     value={this.state.Customer.CreditRating}
                                                     options={this.state.CreditRating}
                                                 />
@@ -865,7 +885,7 @@ class customeractivity extends React.Component {
                                                     label="GraceDays"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("GraceDays", e)}
+                                                    onChange={(e) => this.updateFormValue("GraceDays", e)}
                                                     value={this.state.Customer.GraceDays}
                                                 />
 
@@ -875,7 +895,7 @@ class customeractivity extends React.Component {
                                                     id="IsGroupCompany"
                                                     label="IsGroupCompany"
                                                     param={this.state.Customer.IsGroupCompany}
-                                                    onChange={(e) => updateFormValue("IsGroupCompany", e)}
+                                                    onChange={(e) => this.updateFormValue("IsGroupCompany", e)}
                                                 />
 
                                                 <SwitchInput
@@ -883,14 +903,14 @@ class customeractivity extends React.Component {
                                                     id="IsBlock"
                                                     label="IsBlock"
                                                     param={this.state.Customer.IsBlock}
-                                                    onChange={(e) => updateFormValue("IsBlock", e)}
+                                                    onChange={(e) => this.updateFormValue("IsBlock", e)}
                                                 />
                                                 <SwitchInput
                                                     key="IsEmailAlert"
                                                     id="IsEmailAlert"
                                                     label="IsEmailAlert"
                                                     param={this.state.Customer.IsEmailAlert}
-                                                    onChange={(e) => updateFormValue("IsEmailAlert", e)}
+                                                    onChange={(e) => this.updateFormValue("IsEmailAlert", e)}
                                                 />
 
 
@@ -926,7 +946,7 @@ class customeractivity extends React.Component {
                                                 <DropdownInput
                                                     id="CurrID"
                                                     label="CurrID"
-                                                    onChange={(e) => updateFormValue("CurrID", e)}
+                                                    onChange={(e) => this.updateFormValue("CurrID", e)}
                                                     value={this.state.Customer.CurrID}
                                                     options={this.state.currencyList}
                                                     isMandatory={true}
@@ -936,7 +956,7 @@ class customeractivity extends React.Component {
                                                     id="IsGrowthBonanza"
                                                     label="IsGrowthBonanza"
                                                     param={this.state.Customer.IsGrowthBonanza}
-                                                    onChange={(e) => updateFormValue("IsGrowthBonanza", e)}
+                                                    onChange={(e) => this.updateFormValue("IsGrowthBonanza", e)}
 
                                                 />
                                                 <SwitchInput
@@ -944,21 +964,21 @@ class customeractivity extends React.Component {
                                                     id="IsSlabDiscount"
                                                     label="IsSlabDiscount"
                                                     param={this.state.Customer.IsSlabDiscount}
-                                                    onChange={(e) => updateFormValue("IsSlabDiscount", e)}
+                                                    onChange={(e) => this.updateFormValue("IsSlabDiscount", e)}
                                                 />
                                                 <SwitchInput
                                                     key="IsCarriage"
                                                     id="IsCarriage"
                                                     label="IsCarriage"
                                                     param={this.state.Customer.IsCarriage}
-                                                    onChange={(e) => updateFormValue("IsCarriage", e)}
+                                                    onChange={(e) => this.updateFormValue("IsCarriage", e)}
                                                 />
                                                 <SwitchInput
                                                     key="IsDueEndOfMonth"
                                                     id="IsDueEndOfMonth"
                                                     label="IsDueEndOfMonth"
                                                     param={this.state.Customer.IsDueEndOfMonth}
-                                                    onChange={(e) => updateFormValue("IsDueEndOfMonth", e)}
+                                                    onChange={(e) => this.updateFormValue("IsDueEndOfMonth", e)}
                                                 />
 
 
@@ -982,21 +1002,21 @@ class customeractivity extends React.Component {
                                                     id="IsBankCharge"
                                                     label="IsBankCharge"
                                                     param={this.state.Customer.IsBankCharge}
-                                                    onChange={(e) => updateFormValue("IsBankCharge", e)}
+                                                    onChange={(e) => this.updateFormValue("IsBankCharge", e)}
                                                 />
                                                 <TextboxInput
                                                     id="BankCharge"
                                                     label="BankCharge"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("BankCharge", e)}
+                                                    onChange={(e) => this.updateFormValue("BankCharge", e)}
                                                     value={this.state.Customer.BankCharge}
                                                 />
 
                                                 <DropdownInput
                                                     id="GeneralPostingGroupID"
                                                     label="GeneralPostingGroupID"
-                                                    onChange={(e) => updateFormValue("GeneralPostingGroupID", e)}
+                                                    onChange={(e) => this.updateFormValue("GeneralPostingGroupID", e)}
                                                     value={this.state.Customer.GeneralPostingGroupID}
                                                     options={this.state.GeneralPostingGroupList}
                                                     isMandatory={true}
@@ -1004,17 +1024,45 @@ class customeractivity extends React.Component {
                                                 <DropdownInput
                                                     id="CustomerPostingGroupID"
                                                     label="CustomerPostingGroupID"
-                                                    onChange={(e) => updateFormValue("CustomerPostingGroupID", e)}
+                                                    onChange={(e) => this.updateFormValue("CustomerPostingGroupID", e)}
                                                     value={this.state.Customer.CustomerPostingGroupID}
                                                     options={this.state.CustomerPostingGroupList}
                                                     isMandatory={true}
-                                                />
+                                                />                                               
 
-                                                <TablecustomInput
-                                                    id="PaymentTermID"
-                                                    label="Payment Term"
-                                                    html={htmlcustomPaymentTermID}
-                                                />
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">Payment Term</TableCell>
+                                                    <TableCell align="left" className="no-border-table">
+                                                        <Grid container spacing={0}>
+                                                            <Grid item xs={12} sm={12} md={10} lg={10}>
+                                                                <select
+                                                                    className="dropdown-css"
+                                                                    id="PaymentTermID"
+                                                                    onChange={(e) => this.updateFormValue("PaymentTermID", e)}
+                                                                    value={this.state.Customer.PaymentTermID}
+                                                                >
+                                                                    <option value="-" disabled>Select</option>
+
+                                                                    {this.state.paymentTermsData.map((item, i) => (
+                                                                        <option
+                                                                            value={parseInt(item.value)}
+
+                                                                        >
+                                                                            {item.name}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={12} md={2} lg={2}>
+                                                                <button
+                                                                    className="dropdowninputbtn"
+                                                                    onClick={(e) => openDialog('PaymentTerms')}
+                                                                >...</button>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </TableCell>
+                                                </TableRow>
+
 
 
                                             </TableBody>
@@ -1048,14 +1096,14 @@ class customeractivity extends React.Component {
                                                     id="IsTaxExempt"
                                                     label="IsTaxExempt"
                                                     param={this.state.Customer.IsTaxExempt}
-                                                    onChange={(e) => updateFormValue("IsTaxExempt", e)}
+                                                    onChange={(e) => this.updateFormValue("IsTaxExempt", e)}
                                                 />
                                                 <TextboxInput
                                                     id="Reason"
                                                     label="Reason"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("Reason", e)}
+                                                    onChange={(e) => this.updateFormValue("Reason", e)}
                                                     value={this.state.Customer.Reason}
                                                 />
 
@@ -1064,14 +1112,14 @@ class customeractivity extends React.Component {
                                                     id="IsEcommerce"
                                                     label="IsEcommerce"
                                                     param={this.state.Customer.IsEcommerce}
-                                                    onChange={(e) => updateFormValue("IsEcommerce", e)}
+                                                    onChange={(e) => this.updateFormValue("IsEcommerce", e)}
                                                 />
                                                 <TextboxInput
                                                     id="EcommerceGSTNo"
                                                     label="EcommerceGSTNo"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("EcommerceGSTNo", e)}
+                                                    onChange={(e) => this.updateFormValue("EcommerceGSTNo", e)}
                                                     value={this.state.Customer.EcommerceGSTNo}
                                                 />
 
@@ -1080,13 +1128,13 @@ class customeractivity extends React.Component {
                                                     id="EcommerceB2B"
                                                     label="EcommerceB2B"
                                                     param={this.state.Customer.EcommerceB2B}
-                                                    onChange={(e) => updateFormValue("EcommerceB2B", e)}
+                                                    onChange={(e) => this.updateFormValue("EcommerceB2B", e)}
                                                 />
 
                                                 <DropdownInput
                                                     id="EcommerceNoSeries"
                                                     label="EcommerceNoSeries"
-                                                    onChange={(e) => updateFormValue("EcommerceNoSeries", e)}
+                                                    onChange={(e) => this.updateFormValue("EcommerceNoSeries", e)}
                                                     value={this.state.Customer.EcommerceNoSeries}
                                                     options={[]}
                                                 />
@@ -1115,14 +1163,14 @@ class customeractivity extends React.Component {
                                                 <DropdownInput
                                                     id="GSTCutomerType"
                                                     label="GSTCutomerType"
-                                                    onChange={(e) => updateFormValue("GSTCutomerType", e)}
+                                                    onChange={(e) => this.updateFormValue("GSTCutomerType", e)}
                                                     value={this.state.Customer.GSTCutomerType}
                                                     options={this.state.GSTCutomerType}
                                                 />
                                                 <DropdownInput
                                                     id="IncoID"
                                                     label="IncoID"
-                                                    onChange={(e) => updateFormValue("IncoID", e)}
+                                                    onChange={(e) => this.updateFormValue("IncoID", e)}
                                                     value={this.state.Customer.IncoID}
                                                     options={[]}
                                                 />
@@ -1131,7 +1179,7 @@ class customeractivity extends React.Component {
                                                     label="VATNo"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("VATNo", e)}
+                                                    onChange={(e) => this.updateFormValue("VATNo", e)}
                                                     value={this.state.Customer.VATNo}
                                                 />
 
@@ -1140,7 +1188,7 @@ class customeractivity extends React.Component {
                                                     label="EORINo"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("EORINo", e)}
+                                                    onChange={(e) => this.updateFormValue("EORINo", e)}
                                                     value={this.state.Customer.EORINo}
                                                 />
                                                 <TextboxInput
@@ -1148,7 +1196,7 @@ class customeractivity extends React.Component {
                                                     label="TSSNo"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("TSSNo", e)}
+                                                    onChange={(e) => this.updateFormValue("TSSNo", e)}
                                                     value={this.state.Customer.TSSNo}
                                                 />
                                                 <TextboxInput
@@ -1156,7 +1204,7 @@ class customeractivity extends React.Component {
                                                     label="ContactPerson"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("ContactPerson", e)}
+                                                    onChange={(e) => this.updateFormValue("ContactPerson", e)}
                                                     value={this.state.Customer.ContactPerson}
                                                 />
                                                 <TextboxInput
@@ -1165,7 +1213,7 @@ class customeractivity extends React.Component {
                                                     label="EmailID"
                                                     variant="outlined"
                                                     size="small"
-                                                    onChange={(e) => updateFormValue("EmailID", e)}
+                                                    onChange={(e) => this.updateFormValue("EmailID", e)}
                                                     value={this.state.Customer.EmailID}
                                                 />
 
@@ -1442,6 +1490,7 @@ class customeractivity extends React.Component {
             Dialog.DialogStatus = false;
             this.setState({ Dialog: Dialog });
             refreshDropdownList();
+            this.getPaymentTerms();
         };
 
         const refreshDropdownList=()=>{
