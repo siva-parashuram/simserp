@@ -1454,6 +1454,7 @@ class customeractivity extends React.Component {
                 <Loader ProgressLoader={this.state.ProgressLoader} />
                 <ErrorSnackBar ErrorPrompt={this.state.ErrorPrompt} closeErrorPrompt={closeErrorPrompt} />
                 <SuccessSnackBar SuccessPrompt={this.state.SuccessPrompt} closeSuccessPrompt={closeSuccessPrompt} />
+               
 
                 <div className="breadcrumb-height">
                     <Grid container spacing={1}>
@@ -1480,8 +1481,9 @@ class customeractivity extends React.Component {
                                 />
                             </div>
                         </Grid>
-                        <Grid xs={12} sm={12} md={8} lg={8}>
-                            <div style={{ marginLeft: 10, marginTop: 1 }}>
+                        <Grid xs={12} sm={12} md={7} lg={7}>
+                        <div className="btn-area-div-row">
+                        <div style={{ marginLeft: 10, marginTop: 1 }}>
                                 <ButtonGroup
                                     size="small"
                                     variant="text"
@@ -1530,6 +1532,8 @@ class customeractivity extends React.Component {
 
                                 </ButtonGroup>
                             </div>
+                        </div>
+                           
                         </Grid>
                     </Grid>
                 </div>
