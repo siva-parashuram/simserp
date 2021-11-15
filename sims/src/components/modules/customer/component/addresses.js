@@ -585,6 +585,7 @@ class addresses extends React.Component {
                                   }
                                 />
                                 <TextboxInput
+                                  type="number"
                                   id="PhoneNo"
                                   label="Phone No "
                                   onChange={(e) =>
@@ -876,15 +877,14 @@ class addresses extends React.Component {
       ) {
         this.setState({ updateBtnDisabled: true });
       }
-    } else if(this.state.process === "ADD"){
+    } else if (this.state.process === "ADD") {
       if (
         this.state.CustomerAddress.Code === "" ||
         this.state.CustomerAddress.Code.length > 10
       ) {
         this.setState({ AddbtnDisable: true });
       }
-    }else{
-
+    } else {
     }
   };
 
@@ -964,13 +964,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
-            this.setState({ Validations: v2,  });
+            this.setState({ Validations: v2 });
           } else {
             v2.CustomerAddress.Name = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
-            this.setState({ Validations: v2, });
+            this.setState({ Validations: v2 });
           }
         } else {
           if (process === "EDIT") {
@@ -978,13 +978,14 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v2,  });
+            this.setState({ Validations: v2 });
           } else {
             v2.CustomerAddress.Name = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v2,  });
+            this.setState({ Validations: v2 });
           }
+          this.setParams(CustomerAddress, process);
         }
-        this.setParams(CustomerAddress, process);
+       
         this.checkCode();
         break;
       case "Address":
@@ -996,13 +997,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
-            this.setState({ Validations: v3,  });
+            this.setState({ Validations: v3 });
           } else {
             v3.CustomerAddress.Address = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
-            this.setState({ Validations: v3, });
+            this.setState({ Validations: v3 });
           }
         } else {
           if (process === "EDIT") {
@@ -1010,10 +1011,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v3,  });
+            this.setState({ Validations: v3 });
           } else {
             v3.CustomerAddress.Address = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v3, });
+            this.setState({ Validations: v3 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1028,13 +1029,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
-            this.setState({ Validations: v4,  });
+            this.setState({ Validations: v4 });
           } else {
             v4.CustomerAddress.Address2 = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
-            this.setState({ Validations: v4, });
+            this.setState({ Validations: v4 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1043,10 +1044,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v4,  });
+            this.setState({ Validations: v4 });
           } else {
             v4.CustomerAddress.Address2 = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v4, });
+            this.setState({ Validations: v4 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1061,13 +1062,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
-            this.setState({ Validations: v5,  });
+            this.setState({ Validations: v5 });
           } else {
             v5.CustomerAddress.Address3 = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
-            this.setState({ Validations: v5,  });
+            this.setState({ Validations: v5 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1076,10 +1077,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v5, });
+            this.setState({ Validations: v5 });
           } else {
             v5.CustomerAddress.Address3 = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v5, });
+            this.setState({ Validations: v5 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1094,13 +1095,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v6,  });
+            this.setState({ Validations: v6 });
           } else {
             v6.CustomerAddress.City = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v6, });
+            this.setState({ Validations: v6 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1109,10 +1110,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v6,  });
+            this.setState({ Validations: v6 });
           } else {
             v6.CustomerAddress.City = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v6, });
+            this.setState({ Validations: v6 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1127,13 +1128,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 10 characters allowed",
             };
-            this.setState({ Validations: v7,  });
+            this.setState({ Validations: v7 });
           } else {
             v7.CustomerAddress.PostCode = {
               errorState: true,
               errorMssg: "Maximum 10 characters allowed",
             };
-            this.setState({ Validations: v7,  });
+            this.setState({ Validations: v7 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1142,10 +1143,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v7, });
+            this.setState({ Validations: v7 });
           } else {
             v7.CustomerAddress.PostCode = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v7,  });
+            this.setState({ Validations: v7 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1170,13 +1171,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v8,  });
+            this.setState({ Validations: v8 });
           } else {
             v8.CustomerAddress.ContactPerson = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v8,  });
+            this.setState({ Validations: v8 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1185,20 +1186,20 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v8,  });
+            this.setState({ Validations: v8 });
           } else {
             v8.CustomerAddress.ContactPerson = {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v8, });
+            this.setState({ Validations: v8 });
           }
         }
         this.setParams(CustomerAddress, process);
         this.checkCode();
         break;
       case "PhoneNo":
-        CustomerAddress[param] = CF.chkIfNumber(e.target.value);
+        CustomerAddress[param] = CF.toInt(e.target.value);
         let v9 = this.state.Validations;
         if (e.target.value.length > 20) {
           if (process === "EDIT") {
@@ -1206,13 +1207,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v9, });
+            this.setState({ Validations: v9 });
           } else {
             v9.CustomerAddress.PhoneNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v9,  });
+            this.setState({ Validations: v9 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1221,10 +1222,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v9,  });
+            this.setState({ Validations: v9 });
           } else {
             v9.CustomerAddress.PhoneNo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v9,  });
+            this.setState({ Validations: v9 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1239,13 +1240,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v10,  });
+            this.setState({ Validations: v10 });
           } else {
             v10.CustomerAddress.EmailID = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v10, });
+            this.setState({ Validations: v10 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1254,10 +1255,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v10,  });
+            this.setState({ Validations: v10 });
           } else {
             v10.CustomerAddress.EmailID = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v10,  });
+            this.setState({ Validations: v10 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1272,13 +1273,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v11,  });
+            this.setState({ Validations: v11 });
           } else {
             v11.CustomerAddress.VATNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v11,  });
+            this.setState({ Validations: v11 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1287,10 +1288,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v11,  });
+            this.setState({ Validations: v11 });
           } else {
             v11.CustomerAddress.VATNo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v11,  });
+            this.setState({ Validations: v11 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1305,13 +1306,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v12,  });
+            this.setState({ Validations: v12 });
           } else {
             v12.CustomerAddress.GSTNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v12,  });
+            this.setState({ Validations: v12 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1320,10 +1321,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v12,  });
+            this.setState({ Validations: v12 });
           } else {
             v12.CustomerAddress.GSTNo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v12, });
+            this.setState({ Validations: v12 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1338,13 +1339,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v13,  });
+            this.setState({ Validations: v13 });
           } else {
             v13.CustomerAddress.EORINo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v13,  });
+            this.setState({ Validations: v13 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1353,10 +1354,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v13,  });
+            this.setState({ Validations: v13 });
           } else {
             v13.CustomerAddress.EORINo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v13,  });
+            this.setState({ Validations: v13 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1371,13 +1372,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v14,  });
+            this.setState({ Validations: v14 });
           } else {
             v14.CustomerAddress.TSSNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
-            this.setState({ Validations: v14,  });
+            this.setState({ Validations: v14 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1386,10 +1387,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v14,  });
+            this.setState({ Validations: v14 });
           } else {
             v14.CustomerAddress.TSSNo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v14,  });
+            this.setState({ Validations: v14 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1419,13 +1420,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v15,  });
+            this.setState({ Validations: v15 });
           } else {
             v15.CustomerAddress.PostOfDischarge = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v15,  });
+            this.setState({ Validations: v15 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1434,13 +1435,13 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v15,  });
+            this.setState({ Validations: v15 });
           } else {
             v15.CustomerAddress.PostOfDischarge = {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v15,  });
+            this.setState({ Validations: v15 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1455,13 +1456,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v16,  });
+            this.setState({ Validations: v16 });
           } else {
             v16.CustomerAddress.FinalDestination = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v16,  });
+            this.setState({ Validations: v16 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1470,13 +1471,13 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v16,  });
+            this.setState({ Validations: v16 });
           } else {
             v16.CustomerAddress.FinalDestination = {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v16, });
+            this.setState({ Validations: v16 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1491,13 +1492,13 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 250 characters allowed",
             };
-            this.setState({ Validations: v17,  });
+            this.setState({ Validations: v17 });
           } else {
             v17.CustomerAddress.SpecialInstruction = {
               errorState: true,
               errorMssg: "Maximum 250 characters allowed",
             };
-            this.setState({ Validations: v17,  });
+            this.setState({ Validations: v17 });
           }
         } else {
           CustomerAddress[param] = e.target.value;
@@ -1506,13 +1507,13 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v17,  });
+            this.setState({ Validations: v17 });
           } else {
             v17.CustomerAddress.SpecialInstruction = {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v17,  });
+            this.setState({ Validations: v17 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -1601,6 +1602,29 @@ class addresses extends React.Component {
         this.setState({ ErrorPrompt: true });
       });
   };
+
+  //  setStateParam = (validations, key, value) => {
+  //   console.log("validations > ", validations);
+  //   console.log("key > ", key);
+  //   console.log("value > ", value);
+  //   if (
+  //     Object.keys(validations).length === 0 &&
+  //     validations.constructor === Object
+  //   ) {
+  //     console.log("validations is Empty ");
+  //     this.setState({ [key]: value });
+  //   } else {
+  //     if (validations.validate) {
+  //       !validations.isEmpty
+  //         ? validations.isNumber
+  //           ? this.setState({ [key]: value })
+  //           : this.setState({ [key]: 0 })
+  //         : this.setState({ [key]: 0 });
+  //     } else {
+  //       this.setState({ [key]: value });
+  //     }
+  //   }
+  // };
 
   UpdateCustomerAddress = (e) => {
     let ValidUser = APIURLS.ValidUser;
@@ -2044,6 +2068,7 @@ class addresses extends React.Component {
                               }
                             />
                             <TextboxInput
+                              type="number"
                               id="PhoneNo"
                               label="Phone No "
                               onChange={(e) =>
