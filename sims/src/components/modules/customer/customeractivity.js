@@ -55,7 +55,7 @@ class customeractivity extends React.Component {
         DialogStatus: false,
         DialogContent: null,
       },
-      BranchID:0,
+      BranchID: 0,
       accordion1: true,
       accordion2: false,
       accordion3: false,
@@ -155,7 +155,7 @@ class customeractivity extends React.Component {
         ContactPerson: { errorState: false, errorMssg: "" },
         EmailID: { errorState: false, errorMssg: "" },
         BankCharge: { errorState: false, errorMssg: "" },
-        EcommerceGSTNo:{ errorState: false, errorMssg: "" },
+        EcommerceGSTNo: { errorState: false, errorMssg: "" },
       },
     };
   }
@@ -197,7 +197,7 @@ class customeractivity extends React.Component {
       type: type,
       typoTitle: typoTitle,
       ProgressLoader: type === "add" ? true : false,
-      BranchID:CF.toInt(branchId)
+      BranchID: CF.toInt(branchId),
     });
 
     console.log("On load state > ", this.state);
@@ -363,6 +363,7 @@ class customeractivity extends React.Component {
             value: data[i].GeneralPostingGroupID,
           };
           newD.push(o);
+          console.log("newD>>", newD);
         }
         this.setState({ GeneralPostingGroupList: newD });
       })
@@ -402,6 +403,16 @@ class customeractivity extends React.Component {
       });
   };
 
+  checkMandatory = () => {
+    if (this.state.Customer.No === "" || this.state.Customer.Name === "") {
+      if (this.state.type === "add") {
+        this.setState({ DisableCreatebtn: true });
+      } else {
+        this.setState({ DisableUpdatebtn: true });
+      }
+    }
+  };
+
   updateFormValue = (param, e) => {
     let Customer = this.state.Customer;
     switch (param) {
@@ -438,7 +449,7 @@ class customeractivity extends React.Component {
           }
           this.setParams(Customer);
         }
-
+        this.checkMandatory();
         break;
       case "Name":
         let v2 = this.state.Validations;
@@ -473,6 +484,7 @@ class customeractivity extends React.Component {
           }
           this.setParams(Customer);
         }
+        this.checkMandatory();
 
         break;
       case "Address":
@@ -492,6 +504,7 @@ class customeractivity extends React.Component {
 
           this.setParams(Customer);
         }
+
         break;
       case "Address2":
         let v4 = this.state.Validations;
@@ -601,7 +614,7 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v9 });
         } else {
-          Customer[param] = (e.target.value);
+          Customer[param] = e.target.value;
           v9.PhoneNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v9 });
@@ -659,7 +672,7 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v12 });
         } else {
-          Customer[param] = (e.target.value);
+          Customer[param] = CF.toFloat(e.target.value);
           v12.CreditLimit = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v12 });
@@ -686,7 +699,7 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v13 });
         } else {
-          Customer[param] = (e.target.value);
+          Customer[param] = CF.toInt(e.target.value);
           v13.GraceDays = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v13 });
@@ -729,7 +742,7 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v14 });
         } else {
-          Customer[param] = (e.target.value);
+          Customer[param] = CF.toFloat(e.target.value);
           v14.BankCharge = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v14 });
@@ -746,7 +759,7 @@ class customeractivity extends React.Component {
         this.setParams(Customer);
         break;
       case "SalesPersonID":
-        Customer[param] = e.target.value;
+        Customer[param] = CF.toInt(e.target.value);
         this.setParams(Customer);
         break;
       case "CustomerCategoryID":
@@ -768,14 +781,14 @@ class customeractivity extends React.Component {
       case "Reason":
         let v15 = this.state.Validations;
         if (e.target.value.length > 50) {
-            v15.Reason = {
+          v15.Reason = {
             errorState: true,
             errorMssg: "Maximum 50 Characters allowed!",
           };
 
           this.setState({ Validations: v15 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v15.Reason = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v15 });
@@ -790,14 +803,14 @@ class customeractivity extends React.Component {
       case "EcommerceGSTNo":
         let v16 = this.state.Validations;
         if (e.target.value.length > 20) {
-            v16.EcommerceGSTNo = {
+          v16.EcommerceGSTNo = {
             errorState: true,
             errorMssg: "Maximum 20 Characters allowed!",
           };
 
           this.setState({ Validations: v16 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v16.EcommerceGSTNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v16 });
@@ -806,7 +819,7 @@ class customeractivity extends React.Component {
         }
         break;
       case "EcommerceB2B":
-        Customer[param] = e.target.value;
+        Customer[param] = e.target.checked;
         this.setParams(Customer);
         break;
       case "EcommerceNoSeries":
@@ -820,14 +833,14 @@ class customeractivity extends React.Component {
       case "GSTNo":
         let v17 = this.state.Validations;
         if (e.target.value.length > 20) {
-            v17.GSTNo = {
+          v17.GSTNo = {
             errorState: true,
             errorMssg: "Maximum 20 Characters allowed!",
           };
 
           this.setState({ Validations: v17 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v17.GSTNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v17 });
@@ -838,14 +851,14 @@ class customeractivity extends React.Component {
       case "PANNo":
         let v18 = this.state.Validations;
         if (e.target.value.length > 20) {
-            v18.PANNo = {
+          v18.PANNo = {
             errorState: true,
             errorMssg: "Maximum 20 Characters allowed!",
           };
 
           this.setState({ Validations: v18 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v18.PANNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v18 });
@@ -860,14 +873,14 @@ class customeractivity extends React.Component {
       case "VATNo":
         let v19 = this.state.Validations;
         if (e.target.value.length > 20) {
-            v19.VATNo = {
+          v19.VATNo = {
             errorState: true,
             errorMssg: "Maximum 20 Characters allowed!",
           };
 
           this.setState({ Validations: v19 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v19.VATNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v19 });
@@ -878,14 +891,14 @@ class customeractivity extends React.Component {
       case "EORINo":
         let v20 = this.state.Validations;
         if (e.target.value.length > 20) {
-            v20.EORINo = {
+          v20.EORINo = {
             errorState: true,
             errorMssg: "Maximum 20 Characters allowed!",
           };
 
           this.setState({ Validations: v20 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v20.EORINo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v20 });
@@ -896,14 +909,14 @@ class customeractivity extends React.Component {
       case "TSSNo":
         let v21 = this.state.Validations;
         if (e.target.value.length > 20) {
-            v21.TSSNo = {
+          v21.TSSNo = {
             errorState: true,
             errorMssg: "Maximum 20 Characters allowed!",
           };
 
           this.setState({ Validations: v21 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v21.TSSNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v21 });
@@ -914,14 +927,14 @@ class customeractivity extends React.Component {
       case "ContactPerson":
         let v22 = this.state.Validations;
         if (e.target.value.length > 50) {
-            v22.ContactPerson = {
+          v22.ContactPerson = {
             errorState: true,
             errorMssg: "Maximum 50 Characters allowed!",
           };
 
           this.setState({ Validations: v22 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v22.ContactPerson = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v22 });
@@ -929,17 +942,17 @@ class customeractivity extends React.Component {
           this.setParams(Customer);
         }
         break;
-        case "EmailID":
-            let v23 = this.state.Validations;
+      case "EmailID":
+        let v23 = this.state.Validations;
         if (e.target.value.length > 50) {
-            v23.EmailID = {
+          v23.EmailID = {
             errorState: true,
             errorMssg: "Maximum 50 Characters allowed!",
           };
 
           this.setState({ Validations: v23 });
         } else {
-          Customer[param] =(e.target.value);
+          Customer[param] = e.target.value;
           v23.EmailID = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v23 });
@@ -959,7 +972,6 @@ class customeractivity extends React.Component {
         break;
     }
   };
-   
 
   setParams = (object) => {
     this.setState({ Customer: object });
@@ -989,8 +1001,6 @@ class customeractivity extends React.Component {
       }
     };
 
-   
-
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -1006,7 +1016,7 @@ class customeractivity extends React.Component {
     };
 
     const AddNew = (e) => {
-        console.log("Adding new")
+      console.log("Adding new");
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -1023,7 +1033,7 @@ class customeractivity extends React.Component {
         .post(Url, reqData, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("DATA>>",data)
+          console.log("DATA>>", data);
           if (response.status === 200 || response.status === 201) {
             this.setState({ ErrorPrompt: false, SuccessPrompt: true });
           } else {
@@ -1043,20 +1053,19 @@ class customeractivity extends React.Component {
         "Content-Type": "application/json",
       };
       let Url = APIURLS.APIURL.UpdateCustomer;
-      let Customer=this.state.Customer;
+      let Customer = this.state.Customer;
       Customer.BranchID = CF.toInt(this.state.BranchID);
       Customer.UserID = CF.toInt(getCookie(COOKIE.USERID));
-    //   Customer.CustomerAddress=[];
-    //   Customer.CustomerContact=[];
-    //   Customer.CustomerBranchMapping=[];
-      delete Customer['CustomerAddress'];
-      delete Customer['CustomerBranchMapping'];
-      delete Customer['CustomerContact'];
+      //   Customer.CustomerAddress=[];
+      //   Customer.CustomerContact=[];
+      //   Customer.CustomerBranchMapping=[];
+      delete Customer["CustomerAddress"];
+      delete Customer["CustomerBranchMapping"];
+      delete Customer["CustomerContact"];
 
-      
       let reqData = {
-          ValidUser: ValidUser,
-          Customer: Customer,
+        ValidUser: ValidUser,
+        Customer: Customer,
       };
       console.log("updateCustomer > reqData >", reqData);
       axios
@@ -1186,8 +1195,12 @@ class customeractivity extends React.Component {
                             this.updateFormValue("ContactPerson", e)
                           }
                           value={this.state.Customer.ContactPerson}
-                          error={this.state.Validations.ContactPerson.errorState}
-                          helperText={this.state.Validations.ContactPerson.errorMssg}
+                          error={
+                            this.state.Validations.ContactPerson.errorState
+                          }
+                          helperText={
+                            this.state.Validations.ContactPerson.errorMssg
+                          }
                         />
                         <TextboxInput
                           id="EmailID"
@@ -1244,7 +1257,7 @@ class customeractivity extends React.Component {
                           helperText={this.state.Validations.Website.errorMssg}
                         />
                         <TextboxInput
-                          
+                          type="number"
                           id="PhoneNo"
                           label="PhoneNo"
                           variant="outlined"
@@ -1275,7 +1288,9 @@ class customeractivity extends React.Component {
                           }
                           value={this.state.Customer.CreditDays}
                           error={this.state.Validations.CreditDays.errorState}
-                          helperText={this.state.Validations.CreditDays.errorMssg}
+                          helperText={
+                            this.state.Validations.CreditDays.errorMssg
+                          }
                         />
                         <TextboxInput
                           id="CreditLimit"
@@ -1287,7 +1302,9 @@ class customeractivity extends React.Component {
                           }
                           value={this.state.Customer.CreditLimit}
                           error={this.state.Validations.CreditLimit.errorState}
-                          helperText={this.state.Validations.CreditLimit.errorMssg}
+                          helperText={
+                            this.state.Validations.CreditLimit.errorMssg
+                          }
                         />
 
                         <DropdownInput
@@ -1308,7 +1325,9 @@ class customeractivity extends React.Component {
                           onChange={(e) => this.updateFormValue("GraceDays", e)}
                           value={this.state.Customer.GraceDays}
                           error={this.state.Validations.GraceDays.errorState}
-                          helperText={this.state.Validations.GraceDays.errorMssg}
+                          helperText={
+                            this.state.Validations.GraceDays.errorMssg
+                          }
                         />
 
                         <SwitchInput
@@ -1441,7 +1460,9 @@ class customeractivity extends React.Component {
                           }
                           value={this.state.Customer.BankCharge}
                           error={this.state.Validations.BankCharge.errorState}
-                          helperText={this.state.Validations.BankCharge.errorMssg}
+                          helperText={
+                            this.state.Validations.BankCharge.errorMssg
+                          }
                         />
 
                         <DropdownInput
@@ -1568,8 +1589,12 @@ class customeractivity extends React.Component {
                             this.updateFormValue("EcommerceGSTNo", e)
                           }
                           value={this.state.Customer.EcommerceGSTNo}
-                          error={this.state.Validations.EcommerceGSTNo.errorState}
-                          helperText={this.state.Validations.EcommerceGSTNo.errorMssg}
+                          error={
+                            this.state.Validations.EcommerceGSTNo.errorState
+                          }
+                          helperText={
+                            this.state.Validations.EcommerceGSTNo.errorMssg
+                          }
                         />
 
                         <SwitchInput
@@ -1615,7 +1640,6 @@ class customeractivity extends React.Component {
                       aria-label="Coa Activity table"
                     >
                       <TableBody className="tableBody">
-                        
                         <TextboxInput
                           id="GSTNo"
                           label="GST No"
@@ -1674,7 +1698,6 @@ class customeractivity extends React.Component {
                           error={this.state.Validations.TSSNo.errorState}
                           helperText={this.state.Validations.TSSNo.errorMssg}
                         />
-                        
                       </TableBody>
                     </Table>
                   </Grid>
