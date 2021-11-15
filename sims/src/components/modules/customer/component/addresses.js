@@ -202,6 +202,7 @@ class addresses extends React.Component {
   };
 
   getCustomerAddress = () => {
+    console.log("Props >CustID > ",this.props.CustID);
     console.log("Refreshing");
     this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
