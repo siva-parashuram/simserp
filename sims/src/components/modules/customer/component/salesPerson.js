@@ -10,7 +10,9 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
-
+import IconButton from "@mui/material/IconButton";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
@@ -47,6 +49,15 @@ class salesPerson extends React.Component {
       SuccessPrompt: false,
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      FullSmallBtnArea: false,
+      mainframeW: 12,
+      hideSidePanel: true,
+      initialCss: "",
+      listSalesPerson: null,
+      updateSalesPerson: {},
+      SalesPersonData: [],
+      createNewBtn: false,
+      updateBtn: false,
       SalesPerson: {
         SalesPersonID: 0,
         Code: "",
@@ -60,156 +71,152 @@ class salesPerson extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getSalesPerson();
+  }
 
-  render() {
-    const listSalesPerson = (
-      <Table
-        stickyHeader
-        size="small"
-        className=""
-        aria-label="CustomerCategory List table"
-      >
-        <TableHead className="table-header-background">
-          <TableRow>
-            <TableCell className="table-header-font">#</TableCell>
-            <TableCell className="table-header-font" align="left">
-              Name
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody className="tableBody"></TableBody>
-      </Table>
-    );
+  getSalesPerson = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    // let Url = APIURLS.APIURL.;
+    axios
+      .post(ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        this.setState({ SalesPersonData: data, ProgressLoader: true }, () => {
+          this.setState({
+            listSalesPerson: this.listSalesPerson(),
+          });
+        });
+      })
+      .catch((error) => {
+        this.setState({ SalesPersonData: [], ProgressLoader: true }, () => {
+          this.setState({
+            listSalesPerson: this.listSalesPerson(),
+          });
+        });
+      });
+  };
 
-    const createSalesPerson = (
-      <Grid container spacing={0}>
-        <Grid style={{ paddingTop: 10 }} container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-              {APIURLS.buttonTitle.add}
+  handleRowClick = (e, item, id) => {
+    try {
+      this.setState({
+        SalesPerson: item,
+        FullSmallBtnArea: true,
+        mainframeW: 8,
+        hideSidePanel: false,
+        updateBtn: true,
+        createNewBtn: false,
+      });
+      this.removeIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+    } catch (ex) {}
+  };
+
+  removeIsSelectedRowClasses = () => {
+    try {
+      for (let i = 0; i < this.state.SalesPersonData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    } catch (ex) {}
+  };
+
+  showAddNewPanel = (e) => {
+    this.removeIsSelectedRowClasses();
+    let SalesPersonTemplate = {
+      SalesPersonID: 0,
+        Code: "",
+        Name: "",
+        JobTitle: "",
+        EmailID: "",
+        PhoneNo: "",
+        IsActive: false,
+        CommsionPecentage: "",
+    };
+
+    this.setState({
+      SalesPerson: SalesPersonTemplate,
+      FullSmallBtnArea: true,
+      mainframeW: 8,
+      hideSidePanel: false,
+      createNewBtn: true,
+      updateBtn: false,
+    });
+  };
+
+  listSalesPerson = () => {
+    let o = (
+      <Fragment>
+        <Grid container spacing={0}>
+          <Grid xs={12} sm={12} md={10} lg={10}>
+            <Button
+              className="action-btns"
+              style={{ marginLeft: 5, marginBottom: 10 }}
+              onClick={(e) => this.showAddNewPanel(e)}
+            >
+              <span style={{ paddingLeft: 7, paddingRight: 5 }}>
+                {APIURLS.buttonTitle.new}
+              </span>
             </Button>
           </Grid>
         </Grid>
-        <div style={{ height: 10 }}>&nbsp;</div>
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={10} lg={10}>
-            <Grid container spacing={0}>
-              <Grid item xs={12}>
-                <Accordion
-                  key="SalesPerson-General-Details"
-                  expanded={this.state.GeneralDetailsExpanded}
-                >
-                  <AccordionSummary
-                    className="accordion-Header-Design"
-                    expandIcon={
-                      <ExpandMoreIcon
-                        onClick={(e) =>
-                          handleAccordionClick("GeneralDetailsExpanded", e)
-                        }
-                      />
-                    }
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    style={{ minHeight: "40px", maxHeight: "40px" }}
-                  >
-                    <Typography key="" className="accordion-Header-Title">
-                      General Details
-                    </Typography>
-                  </AccordionSummary>
 
-                  <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={5} lg={5}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="SalesPerson List table"
-                          >
-                            <TableBody className="tableBody">
-                              <TextboxInput
-                                id="Code"
-                                label="Code"
-                                variant="outlined"
-                                size="small"
-                                isMandatory={true}
-                              />
-                              <TextboxInput
-                                id="Name"
-                                label="Name"
-                                variant="outlined"
-                                size="small"
-                                isMandatory={true}
-                              />
-                              <TextboxInput
-                                id="JobTitle"
-                                label="Job Title"
-                                variant="outlined"
-                                size="small"
-                              />
-                              <TextboxInput
-                                id="EmailID"
-                                label="EmailID"
-                                variant="outlined"
-                                size="small"
-                              />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={5} lg={5}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="SalesPerson List table"
-                          >
-                            <TableBody className="tableBody">
-                              <TextboxInput
-                                type="number"
-                                id="PhoneNo"
-                                label="Phone No"
-                                variant="outlined"
-                                size="small"
-                              />
-                              <SwitchInput
-                                key="IsActive"
-                                id="IsActive"
-                                label="IsActive"
-                                param={this.state.SalesPerson.IsActive}
-                                // onChange={(e) => updateFormValue("IsActive", e)}
-                              />
-                              <TextboxInput
-                                id="CommsionPecentage"
-                                label="Commsion Pecentage"
-                                variant="outlined"
-                                size="small"
-                              />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
-              </Grid>
+        <div style={{ height: 350, width: "100%", overflowY: "scroll" }}>
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={11} lg={11}>
+              <Table
+                stickyHeader
+                size="small"
+                className=""
+                aria-label="CustomerCategory List table"
+              >
+                <TableHead className="table-header-background">
+                  <TableRow>
+                    <TableCell className="table-header-font">#</TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Name
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody className="tableBody"></TableBody>
+              </Table>
             </Grid>
           </Grid>
-        </Grid>
-      </Grid>
+        </div>
+      </Fragment>
     );
+    return o;
+  };
 
-    const handleAccordionClick = (val, e) => {
-      if (val === "GeneralDetailsExpanded") {
-        this.state.GeneralDetailsExpanded === true
-          ? this.setState({ GeneralDetailsExpanded: false })
-          : this.setState({ GeneralDetailsExpanded: true });
-      }
-    };
+  updateFormValue = (param, e, index) => {
+    console.log("updateFormValue > index > ", index);
+    let SalesPerson = this.state.SalesPerson;
+  };
 
+  setParams = (object) => {
+    this.setState({ SalesPerson: object });
+  };
+
+  expandFull = (e) => {
+    this.setState({
+      mainframeW: 12,
+      hideSidePanel: true,
+    });
+  };
+
+  closeExpandFull = (e) => {
+    this.setState({
+      mainframeW: 8,
+      hideSidePanel: false,
+    });
+  };
+
+  
+  render() {
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -237,19 +244,169 @@ class salesPerson extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
+        <Grid container spacing={6}>
+          <Grid item xs={12} sm={12} md={11} lg={11}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={1} lg={1}>
+            {this.state.FullSmallBtnArea === true ? (
+              <div>
+                {this.state.hideSidePanel === false ? (
+                  <IconButton
+                    aria-label="OpenInFullIcon"
+                    onClick={(e) => this.expandFull(e)}
+                  >
+                    <OpenInFullIcon className="openfullbtn" fontSize="small" />
+                  </IconButton>
+                ) : null}
+                {this.state.hideSidePanel === true ? (
+                  <IconButton
+                    aria-label="CloseFullscreenIcon"
+                    onClick={(e) => this.closeExpandFull(e)}
+                  >
+                    <CloseFullscreenIcon
+                      className="openfullbtn"
+                      fontSize="small"
+                    />
+                  </IconButton>
+                ) : null}
+              </div>
+            ) : null}
+          </Grid>
+        </Grid>
+
+        <div style={{ height: 10 }}>&nbsp;</div>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <div style={{ height: 10 }}>&nbsp;</div>
+
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={10} lg={10}>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={this.state.mainframeW}
+            lg={this.state.mainframeW}
+          >
             <Grid style={{ marginLeft: 15 }} container spacing={0}>
-              <Grid item xs={12} sm={12} md={10} lg={10}>
-                <Dualtabcomponent
-                  tab1name="List"
-                  tab2name="New"
-                  tab1Html={listSalesPerson}
-                  tab2Html={createSalesPerson}
-                />
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    {this.state.listSalesPerson}
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
+
+          {this.state.hideSidePanel === false ? (
+            <Grid item xs={12} sm={12} md={4} lg={4}>
+              <div
+              // style={{ marginLeft: 10, marginTop: 45 }}
+              >
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={8} lg={8}>
+                    <div style={{ marginTop: -12, marginLeft: 1 }}>
+                      <h4>Detail view</h4>
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={4} lg={4}>
+                    <div>
+                      {this.state.createNewBtn === true ? (
+                        <Button
+                          className="action-btns"
+                          style={{ marginLeft: 10 }}
+                          // onClick={(e) => }
+                        >
+                          {APIURLS.buttonTitle.save}
+                        </Button>
+                      ) : (
+                        <Button
+                          className="action-btns"
+                          style={{ marginLeft: 10 }}
+                          // onClick={(e) => }
+                        >
+                          {APIURLS.buttonTitle.update}
+                        </Button>
+                      )}
+                    </div>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div
+                      style={{
+                        height: 300,
+                        marginTop: 10,
+                        overflowX: "hidden",
+                        overflowY: "scroll",
+                        width: "100%",
+                        backgroundColor: "#ffffff",
+                      }}
+                    >
+                      <div style={{ height: 20 }}>&nbsp;</div>
+                      <Table
+                        stickyHeader
+                        size="small"
+                        className="accordion-table"
+                        aria-label="SalesPerson  table"
+                      >
+                        <TableBody className="tableBody">
+                          <TextboxInput
+                            id="Code"
+                            label="Code"
+                            variant="outlined"
+                            size="small"
+                            isMandatory={true}
+                          />
+                          <TextboxInput
+                            id="Name"
+                            label="Name"
+                            variant="outlined"
+                            size="small"
+                            isMandatory={true}
+                          />
+                          <TextboxInput
+                            id="JobTitle"
+                            label="Job Title"
+                            variant="outlined"
+                            size="small"
+                          />
+                          <TextboxInput
+                            id="EmailID"
+                            label="EmailID"
+                            variant="outlined"
+                            size="small"
+                          />
+
+                          <TextboxInput
+                            type="number"
+                            id="PhoneNo"
+                            label="Phone No"
+                            variant="outlined"
+                            size="small"
+                          />
+                          <SwitchInput
+                            key="IsActive"
+                            id="IsActive"
+                            label="IsActive"
+                            param={this.state.SalesPerson.IsActive}
+                            // onChange={(e) => updateFormValue("IsActive", e)}
+                          />
+                          <TextboxInput
+                            id="CommsionPecentage"
+                            label="Commsion Pecentage"
+                            variant="outlined"
+                            size="small"
+                          />
+                        </TableBody>
+                      </Table>
+                      <div style={{ height: 20 }}>&nbsp;</div>
+                    </div>
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          ) : null}
         </Grid>
       </Fragment>
     );
