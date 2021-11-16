@@ -105,4 +105,10 @@ export const toFloat=(value)=>{
   return parseFloat(value);
 }
 
+export const validateEmail = (input) => {
+  let valid = true;
+  
+  return valid;
+}
+
  

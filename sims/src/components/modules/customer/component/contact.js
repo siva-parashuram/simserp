@@ -474,7 +474,7 @@ class contact extends React.Component {
     let Url = APIURLS.APIURL.UpdateCustomerContact;
     let reqData = {
       ValidUser: ValidUser,
-      CustomerContact: [this.state.UpdateCustomerContact],
+      CustomerContactList: [this.state.UpdateCustomerContact],
     };
 
     axios
