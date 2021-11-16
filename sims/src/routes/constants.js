@@ -64,7 +64,9 @@ export const URLS = {
   customerMaster:"/customerMaster",
   addCustomer:"/addCustomer",
   editCustomer:"/editCustomer",
-  
+  supplierMaster:"/supplierMaster",
+  addSupplier:"/addSupplier",
+  editSupplier:"/editSupplier"
 };
 
 

@@ -28,7 +28,7 @@ import Dualtabcomponent from '../../compo/dualtabcomponent';
 
 
 
-class customerMaster extends React.Component {
+class supplierMaster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -80,13 +80,13 @@ class customerMaster extends React.Component {
     handleRowClick = (e, item, id) => {
 
         let editUrl =
-            URLS.URLS.editCustomer +
+            URLS.URLS.editSupplier +
             this.state.urlparams +
-            "&editCustID=" +
-            item.CustID;
+            "&editSuplID=" +
+            item.SuplID;
         editUrl = editUrl + "&type=edit";
         this.setState({
-            CustID: item.CustID,
+            SuplID: item.SuplID,
             editUrl: editUrl,
             editBtnDisable:false,
         });
@@ -374,7 +374,7 @@ class customerMaster extends React.Component {
                                     backOnClick={this.props.history.goBack}
                                     linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                                     linkTitle="Dashboard"
-                                    typoTitle="Customer Master"
+                                    typoTitle="Supplier Master"
                                     level={1}
                                 />
                             </div>
@@ -390,7 +390,7 @@ class customerMaster extends React.Component {
                                         className="action-btns"
                                         startIcon={<AddIcon />}
                                         onClick={(e) =>
-                                            openPage(URLS.URLS.addCustomer + this.state.urlparams + "&type=add")
+                                            openPage(URLS.URLS.addSupplier + this.state.urlparams + "&type=add")
                                         }
                                     >
                                         {APIURLS.buttonTitle.add}
@@ -435,5 +435,5 @@ class customerMaster extends React.Component {
     }
 
 }
-export default customerMaster;
+export default supplierMaster;
 
