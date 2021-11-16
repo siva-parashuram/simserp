@@ -59,7 +59,6 @@ class customeractivity extends React.Component {
       accordion1: true,
       accordion2: false,
       accordion3: false,
-
       ProgressLoader: false,
       ErrorPrompt: false,
       SuccessPrompt: false,
@@ -72,7 +71,7 @@ class customeractivity extends React.Component {
       type: "",
       CreditRating: APIURLS.CreditRating,
       GSTCutomerType: APIURLS.GSTCutomerType,
-
+      customerCategoryData:[],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
       CustomerPostingGroupList: [],
@@ -1249,7 +1248,7 @@ class customeractivity extends React.Component {
                           value={this.state.Customer.SalesPersonID}
                           options={[]}
                         />
-                        <DropdownInput
+                        {/* <DropdownInput
                           id="CustomerCategoryID"
                           label="Customer Category"
                           onChange={(e) =>
@@ -1257,7 +1256,49 @@ class customeractivity extends React.Component {
                           }
                           value={this.state.Customer.CustomerCategoryID}
                           options={[]}
-                        />
+                        /> */}
+
+<TableRow>
+                          <TableCell align="left" className="no-border-table">
+                          Customer Category
+                          </TableCell>
+                          <TableCell align="left" className="no-border-table">
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={10} lg={10}>
+                                <select
+                                  className="dropdown-css"
+                                  id="CustomerCategoryID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CustomerCategoryID", e)
+                                  }
+                                  value={this.state.Customer.CustomerCategoryID}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
+
+                                  {this.state.customerCategoryData.map(
+                                    (item, i) => (
+                                      <option value={parseInt(item.value)}>
+                                        {item.name}
+                                      </option>
+                                    )
+                                  )}
+                                </select>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={2} lg={2}>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) => openDialog("CustomerCategory")}
+                                >
+                                  ...
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                        </TableRow>
+
+
                       </TableBody>
                     </Table>
                   </Grid>
