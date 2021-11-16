@@ -113,7 +113,8 @@ class paymentTerms extends React.Component {
         FullSmallBtnArea:true,
         mainframeW: 8,
         hideSidePanel: false,
-        updateBtn:true
+        updateBtn:true,
+        createNewBtn:false
       });
       this.removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
@@ -425,9 +426,17 @@ class paymentTerms extends React.Component {
                         >
                           {APIURLS.buttonTitle.save}
                         </Button>
-                      ) : null}
+                      ) : (
+                        <Button
+                          className="action-btns"
+                          style={{ marginLeft: 10 }}
+                          onClick={(e) => this.createPaymentTerms(e)}
+                        >
+                          {APIURLS.buttonTitle.update}
+                        </Button>
+                      )}
 
-                      {this.state.updateBtn === true ? (
+                      {/* {this.state.updateBtn === true ? (
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
@@ -435,7 +444,7 @@ class paymentTerms extends React.Component {
                         >
                           {APIURLS.buttonTitle.save}
                         </Button>
-                      ) : null}
+                      ) : null} */}
                     </div>
                      </Grid>
                    </Grid>
