@@ -106,9 +106,14 @@ export const toFloat=(value)=>{
 }
 
 export const validateEmail = (input) => {
-  let valid = true;
-  
-  return valid;
+  let valid=true;
+  let  mailformat = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  let value=mailformat.test(input)
+  if(value===true){
+    valid=true;
+  }else{
+    valid=false;
+  }
+return valid;
 }
-
  
