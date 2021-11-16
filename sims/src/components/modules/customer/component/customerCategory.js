@@ -193,6 +193,8 @@ class customerCategory extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
+<div style={{ height: 10 }}>&nbsp;</div>
+
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={10} lg={10}>
             <Grid style={{ marginLeft: 15 }} container spacing={0}>
