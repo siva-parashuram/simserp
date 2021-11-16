@@ -72,8 +72,8 @@ class customeractivity extends React.Component {
       type: "",
       CreditRating: APIURLS.CreditRating,
       GSTCutomerType: APIURLS.GSTCutomerType,
-      salesPersonData:[],
-      customerCategoryData:[],
+      salesPersonData: [],
+      customerCategoryData: [],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
       CustomerPostingGroupList: [],
@@ -81,6 +81,7 @@ class customeractivity extends React.Component {
       countryData: [],
       stateData: [],
       CustID: 0,
+      emailVerify: false,
       Customer: {
         CustID: 0,
         No: "",
@@ -404,20 +405,12 @@ class customeractivity extends React.Component {
       });
   };
 
-  checkMandatory = () => {
-    if (this.state.Customer.No === "" || this.state.Customer.Name === "") {
-      if (this.state.type === "add") {
-        this.setState({ DisableCreatebtn: true });
-      } else {
-        this.setState({ DisableUpdatebtn: true });
-      }
-    }
-  };
+ 
 
   updateFormValue = (param, e) => {
     let Customer = this.state.Customer;
     switch (param) {
-     case "Name":
+      case "Name":
         let v2 = this.state.Validations;
         if (e.target.value === "" || e.target.value.length > 100) {
           if (e.target.value === "") {
@@ -450,8 +443,7 @@ class customeractivity extends React.Component {
           }
           this.setParams(Customer);
         }
-        this.checkMandatory();
-
+        
         break;
       case "Address":
         let v3 = this.state.Validations;
@@ -915,6 +907,7 @@ class customeractivity extends React.Component {
       case "EmailID":
         let v23 = this.state.Validations;
         let email = CF.validateEmail(e.target.value);
+        this.setState({ emailVerify: email });
         if (email === true) {
           if (e.target.value.length > 50) {
             v23.EmailID = {
@@ -928,7 +921,11 @@ class customeractivity extends React.Component {
 
             v23.EmailID = { errorState: false, errorMssg: "" };
 
-            this.setState({ Validations: v23, DisableUpdatebtn: false,  DisableCreatebtn: false,});
+            this.setState({
+              Validations: v23,
+              DisableUpdatebtn: false,
+              DisableCreatebtn: false,
+            });
 
             this.setParams(Customer);
           }
@@ -945,7 +942,7 @@ class customeractivity extends React.Component {
             DisableUpdatebtn: true,
           });
         }
-
+        
         break;
       case "SalesPersonID":
         Customer[param] = e.target.value;
@@ -982,8 +979,8 @@ class customeractivity extends React.Component {
       ValidUser: ValidUser,
       DocumentNumber: {
         NoSeriesID: 1,
-        TransDate: moment().format("MM-DD-YYYY")
-      }
+        TransDate: moment().format("MM-DD-YYYY"),
+      },
     };
     let Url = APIURLS.APIURL.GetMasterDocumentNumber;
     axios
@@ -997,7 +994,7 @@ class customeractivity extends React.Component {
         this.setState({ ErrorPrompt: true });
       });
     return No;
-  }
+  };
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -1041,11 +1038,8 @@ class customeractivity extends React.Component {
         "Content-Type": "application/json",
       };
       let Url = APIURLS.APIURL.CreateCustomer;
-      let Customer=this.state.Customer;
-      Customer.No=this.GetMasterDocumentNumber();;
-      
-      
-
+      let Customer = this.state.Customer;
+      Customer.No = this.GetMasterDocumentNumber();
 
       let reqData = {
         ValidUser: ValidUser,
@@ -1237,8 +1231,6 @@ class customeractivity extends React.Component {
                           helperText={this.state.Validations.EmailID.errorMssg}
                         />
 
-                         
-
                         <TableRow>
                           <TableCell align="left" className="no-border-table">
                             Sales Person
@@ -1258,19 +1250,19 @@ class customeractivity extends React.Component {
                                     Select
                                   </option>
 
-                                  {this.state.salesPersonData.map(
-                                    (item, i) => (
-                                      <option value={parseInt(item.value)}>
-                                        {item.name}
-                                      </option>
-                                    )
-                                  )}
+                                  {this.state.salesPersonData.map((item, i) => (
+                                    <option value={parseInt(item.value)}>
+                                      {item.name}
+                                    </option>
+                                  ))}
                                 </select>
                               </Grid>
                               <Grid item xs={12} sm={12} md={2} lg={2}>
                                 <button
                                   className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("CustomerCategory")}
+                                  onClick={(e) =>
+                                    openDialog("CustomerCategory")
+                                  }
                                 >
                                   ...
                                 </button>
@@ -1278,7 +1270,6 @@ class customeractivity extends React.Component {
                             </Grid>
                           </TableCell>
                         </TableRow>
-                         
 
                         <TableRow>
                           <TableCell align="left" className="no-border-table">
@@ -1291,7 +1282,10 @@ class customeractivity extends React.Component {
                                   className="dropdown-css"
                                   id="CustomerCategoryID"
                                   onChange={(e) =>
-                                    this.updateFormValue("CustomerCategoryID", e)
+                                    this.updateFormValue(
+                                      "CustomerCategoryID",
+                                      e
+                                    )
                                   }
                                   value={this.state.Customer.CustomerCategoryID}
                                 >
@@ -1311,7 +1305,9 @@ class customeractivity extends React.Component {
                               <Grid item xs={12} sm={12} md={2} lg={2}>
                                 <button
                                   className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("CustomerCategory")}
+                                  onClick={(e) =>
+                                    openDialog("CustomerCategory")
+                                  }
                                 >
                                   ...
                                 </button>
@@ -1319,8 +1315,6 @@ class customeractivity extends React.Component {
                             </Grid>
                           </TableCell>
                         </TableRow>
-
-
                       </TableBody>
                     </Table>
                   </Grid>
