@@ -56,7 +56,7 @@ class customerCategory extends React.Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   render() {
     const listCustomerCategory = (
@@ -82,7 +82,7 @@ class customerCategory extends React.Component {
       <Grid container spacing={0}>
         <Grid style={{ paddingTop: 10 }} container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            <Button style={{ marginLeft: 5 }} onClick={(e) => { }}>
               {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
@@ -142,7 +142,7 @@ class customerCategory extends React.Component {
                                 id="IsActive"
                                 label="IsActive"
                                 param={this.state.CustomerCategory.IsActive}
-                                // onChange={(e) => updateFormValue("IsActive", e)}
+                              // onChange={(e) => updateFormValue("IsActive", e)}
                               />
                             </TableBody>
                           </Table>
@@ -193,7 +193,7 @@ class customerCategory extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-<div style={{ height: 10 }}>&nbsp;</div>
+        <div style={{ height: 10 }}>&nbsp;</div>
 
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={10} lg={10}>
