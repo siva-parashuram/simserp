@@ -970,36 +970,7 @@ class customeractivity extends React.Component {
     window.location = url;
   };
 
-  GetMasterDocumentNumber = () => {
-    console.log("-------------In GetMasterDocumentNumber-----------------");
-    let No = "";
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let reqData = {
-      ValidUser: ValidUser,
-      DocumentNumber: {
-        NoSeriesID: 1,
-        TransDate: moment().format("MM-DD-YYYY")
-      }
-    };
-    let Url = APIURLS.APIURL.GetMasterDocumentNumber;
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        let data = response.data;
-        console.log("---> No Series DATA > ", data);
-        No = data;
-      })
-      .catch((error) => {
-        this.setState({ ErrorPrompt: true });
-      });
-    return No;
-  }
-
+   
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -1034,6 +1005,7 @@ class customeractivity extends React.Component {
     };
 
     const AddNew = (e) => {
+      this.setState({ Loader: false });
       console.log("Adding new");
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -1041,30 +1013,49 @@ class customeractivity extends React.Component {
       const headers = {
         "Content-Type": "application/json",
       };
-      let Url = APIURLS.APIURL.CreateCustomer;
-      let Customer=this.state.Customer;
-      Customer.No=this.GetMasterDocumentNumber();;
-          
 
+      let Customer = this.state.Customer;
       let reqData = {
         ValidUser: ValidUser,
-        Customer: Customer,
+        DocumentNumber: {
+          NoSeriesID: 1,
+          TransDate: moment().format("MM-DD-YYYY")
+        }
       };
-      console.log("createCoa > reqData >", reqData);
+      let Url = APIURLS.APIURL.GetMasterDocumentNumber;
       axios
         .post(Url, reqData, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("DATA>>", data);
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ErrorPrompt: false, SuccessPrompt: true });
-          } else {
-            this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-          }
+          console.log("---> No Series DATA > ", data);
+          Customer.No = data;
+          reqData = {
+            ValidUser: ValidUser,
+            Customer: Customer,
+          };
+          console.log("createCoa > reqData >", reqData);
+          Url = APIURLS.APIURL.CreateCustomer;
+          axios
+            .post(Url, reqData, { headers })
+            .then((response) => {
+              let data = response.data;
+              console.log("DATA>>", data);
+              if (response.status === 200 || response.status === 201) {
+                this.setState({ ErrorPrompt: false, SuccessPrompt: true,Loader: true });
+                this.openPage(URLS.URLS.customerMaster + this.state.urlparams);
+              } else {
+                this.setState({ ErrorPrompt: true, SuccessPrompt: false,Loader: true });
+              }
+            })
+            .catch((error) => {
+              this.setState({ ErrorPrompt: true,Loader: true });
+            });
+
         })
         .catch((error) => {
-          this.setState({ ErrorPrompt: true });
+          this.setState({ ErrorPrompt: true,Loader: true });
         });
+
     };
 
     const updateCustomer = (e) => {
