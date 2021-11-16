@@ -117,6 +117,8 @@ export const APIURL = {
   GetAllPaymentTerms:domain+"api/Customer/GetAllPaymentTerms",
   CreatePaymentTerms:domain+"api/Customer/CreatePaymentTerms",
   UpdatePaymentTerms:domain+"api/Customer/UpdatePaymentTerms",
+  GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
+  GetMasterDocumentNumber:domain+"api/Common/GetMasterDocumentNumber",
 };
 
 

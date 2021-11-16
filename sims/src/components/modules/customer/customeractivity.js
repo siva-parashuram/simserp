@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import axios from "axios";
+import moment from "moment";
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -71,6 +72,7 @@ class customeractivity extends React.Component {
       type: "",
       CreditRating: APIURLS.CreditRating,
       GSTCutomerType: APIURLS.GSTCutomerType,
+      salesPersonData:[],
       customerCategoryData:[],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
@@ -415,42 +417,7 @@ class customeractivity extends React.Component {
   updateFormValue = (param, e) => {
     let Customer = this.state.Customer;
     switch (param) {
-      case "No":
-        let v1 = this.state.Validations;
-        if (e.target.value === "" || e.target.value.length > 10) {
-          if (e.target.value === "") {
-            Customer[param] = e.target.value;
-            v1.No = { errorState: true, errorMssg: "Cannot be blank!" };
-            if (this.state.type === "add") {
-              this.setState({ Validations: v1, DisableCreatebtn: true });
-            } else {
-              this.setState({ Validations: v1, DisableUpdatebtn: true });
-            }
-          }
-          if (e.target.value.length > 10) {
-            v1.No = {
-              errorState: true,
-              errorMssg: "Maximum 10 characters allowed!",
-            };
-            if (this.state.type === "add") {
-              this.setState({ Validations: v1, DisableCreatebtn: true });
-            } else {
-              this.setState({ Validations: v1, DisableUpdatebtn: true });
-            }
-          }
-        } else {
-          Customer[param] = e.target.value;
-          v1.No = { errorState: false, errorMssg: "" };
-          if (this.state.type === "add") {
-            this.setState({ Validations: v1, DisableCreatebtn: false });
-          } else {
-            this.setState({ Validations: v1, DisableUpdatebtn: false });
-          }
-          this.setParams(Customer);
-        }
-        this.checkMandatory();
-        break;
-      case "Name":
+     case "Name":
         let v2 = this.state.Validations;
         if (e.target.value === "" || e.target.value.length > 100) {
           if (e.target.value === "") {
@@ -1002,6 +969,36 @@ class customeractivity extends React.Component {
     window.location = url;
   };
 
+  GetMasterDocumentNumber = () => {
+    console.log("-------------In GetMasterDocumentNumber-----------------");
+    let No = "";
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let reqData = {
+      ValidUser: ValidUser,
+      DocumentNumber: {
+        NoSeriesID: 1,
+        TransDate: moment().format("MM-DD-YYYY")
+      }
+    };
+    let Url = APIURLS.APIURL.GetMasterDocumentNumber;
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("---> No Series DATA > ", data);
+        No = data;
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+    return No;
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -1045,8 +1042,9 @@ class customeractivity extends React.Component {
       };
       let Url = APIURLS.APIURL.CreateCustomer;
       let Customer=this.state.Customer;
-      Customer.No="XYZ";
-      //get No from
+      Customer.No=this.GetMasterDocumentNumber();;
+      
+      
 
 
       let reqData = {
@@ -1239,28 +1237,52 @@ class customeractivity extends React.Component {
                           helperText={this.state.Validations.EmailID.errorMssg}
                         />
 
-                        <DropdownInput
-                          id="SalesPersonID"
-                          label="Sales Person"
-                          onChange={(e) =>
-                            this.updateFormValue("SalesPersonID", e)
-                          }
-                          value={this.state.Customer.SalesPersonID}
-                          options={[]}
-                        />
-                        {/* <DropdownInput
-                          id="CustomerCategoryID"
-                          label="Customer Category"
-                          onChange={(e) =>
-                            this.updateFormValue("CustomerCategoryID", e)
-                          }
-                          value={this.state.Customer.CustomerCategoryID}
-                          options={[]}
-                        /> */}
+                         
 
-<TableRow>
+                        <TableRow>
                           <TableCell align="left" className="no-border-table">
-                          Customer Category
+                            Sales Person
+                          </TableCell>
+                          <TableCell align="left" className="no-border-table">
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={10} lg={10}>
+                                <select
+                                  className="dropdown-css"
+                                  id="SalesPersonID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("SalesPersonID", e)
+                                  }
+                                  value={this.state.Customer.SalesPersonID}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
+
+                                  {this.state.salesPersonData.map(
+                                    (item, i) => (
+                                      <option value={parseInt(item.value)}>
+                                        {item.name}
+                                      </option>
+                                    )
+                                  )}
+                                </select>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={2} lg={2}>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) => openDialog("CustomerCategory")}
+                                >
+                                  ...
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                        </TableRow>
+                         
+
+                        <TableRow>
+                          <TableCell align="left" className="no-border-table">
+                            Customer Category
                           </TableCell>
                           <TableCell align="left" className="no-border-table">
                             <Grid container spacing={0}>
