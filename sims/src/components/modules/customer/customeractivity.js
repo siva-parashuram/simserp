@@ -1045,9 +1045,14 @@ class customeractivity extends React.Component {
         "Content-Type": "application/json",
       };
       let Url = APIURLS.APIURL.CreateCustomer;
+      let Customer=this.state.Customer;
+      Customer.No="XYZ";
+      //get No from
+
+
       let reqData = {
         ValidUser: ValidUser,
-        Customer: this.state.Customer,
+        Customer: Customer,
       };
       console.log("createCoa > reqData >", reqData);
       axios
@@ -1129,6 +1134,7 @@ class customeractivity extends React.Component {
                           isMandatory={true}
                           error={this.state.Validations.No.errorState}
                           helperText={this.state.Validations.No.errorMssg}
+                          disabled={true}
                         />
                         <TextboxInput
                           id="Name"
