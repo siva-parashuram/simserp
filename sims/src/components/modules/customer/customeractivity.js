@@ -606,20 +606,25 @@ class customeractivity extends React.Component {
         break;
       case "PhoneNo":
         let v9 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v9.PhoneNo = {
-            errorState: true,
-            errorMssg: "Maximum 20 characters allowed!",
-          };
-
-          this.setState({ Validations: v9 });
-        } else {
-          Customer[param] = e.target.value;
-          v9.PhoneNo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v9 });
-
-          this.setParams(Customer);
+        
+          let numbers = /^[0-9\b]+$/;
+           if (numbers.test(e.target.value)) {
+            if (e.target.value.length > 20) {
+              v9.PhoneNo = {
+                errorState: true,
+                errorMssg: "Maximum 20 characters allowed!",
+              };
+    
+              this.setState({ Validations: v9 });
+             } else {
+            Customer[param] = e.target.value;
+            v9.PhoneNo = { errorState: false, errorMssg: "" };
+  
+            this.setState({ Validations: v9 });
+  
+            this.setParams(Customer);
+           }
+         
         }
         break;
       case "FaxNo":
