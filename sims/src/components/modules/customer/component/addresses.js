@@ -835,7 +835,7 @@ class addresses extends React.Component {
                       <TableCell> {item.Name}</TableCell>
 
                       <TableCell align="left">
-                        {item.Address},{item.Address2},{item.Address3}
+                        {item.Address} {item.Address2} {item.Address3}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -1643,7 +1643,7 @@ class addresses extends React.Component {
     let Url = APIURLS.APIURL.UpdateCustomerAddress;
     let reqData = {
       ValidUser: ValidUser,
-      CustomerAddress: this.state.UpdateCustomerAddress,
+      CustomerAddressList: [this.state.UpdateCustomerAddress],
     };
 
     console.log("ReqData>>>", reqData);
@@ -1656,7 +1656,7 @@ class addresses extends React.Component {
           this.setState({
             ErrorPrompt: false,
             SuccessPrompt: true,
-          });
+          },()=>this.getCustomerAddress());
         } else {
           this.setState({ ErrorPrompt: true, SuccessPrompt: false });
         }

@@ -474,7 +474,7 @@ class contact extends React.Component {
     let Url = APIURLS.APIURL.UpdateCustomerContact;
     let reqData = {
       ValidUser: ValidUser,
-      CustomerContactList: [this.state.UpdateCustomerContact],
+      CustomerContactList: [this.state.UpdateCustomerContact], 
     };
 
     axios
@@ -482,9 +482,23 @@ class contact extends React.Component {
       .then((response) => {
         let data = response.data;
         if (response.status === 200 || response.status === 201) {
+          
           this.setState({
             ErrorPrompt: false,
             SuccessPrompt: true,
+           
+          },()=>{
+            let o={
+              ContactID: 0,
+              CustID: this.props.CustID,
+              ContactType: -1,
+              Name: "",
+              PhoneNo: "",
+              EmailID: "",
+              IsBlock: false,
+            };
+            this.setState({ CustomerContact:o,});
+            this.getCustomerContact();
           });
         } else {
           this.setState({ ErrorPrompt: true, SuccessPrompt: false });
