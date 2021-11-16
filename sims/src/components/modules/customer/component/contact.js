@@ -118,10 +118,16 @@ class contact extends React.Component {
       "Content-Type": "application/json",
     };
 
-    let Url = APIURLS.APIURL.GetAllCustomerContact;
+    let Url = APIURLS.APIURL.GetAllCustomerContactByCustID;
+    let data={
+      ValidUser:ValidUser,
+      Customer:{
+        CustID:this.props.CustID
+      }
+    };
 
     axios
-      .post(Url, ValidUser, { headers })
+      .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
         this.setState({ contactData: data, ProgressLoader: true }, () => {
@@ -368,7 +374,7 @@ class contact extends React.Component {
       //   setParams(CustomerContact);
       //   break;
       case "ContactType":
-        CustomerContact[param] = e.target.value;
+        CustomerContact[param] =CF.toInt(e.target.value) ;
         this.setParams(CustomerContact, process);
         break;
       case "Name":
@@ -468,7 +474,7 @@ class contact extends React.Component {
     let Url = APIURLS.APIURL.UpdateCustomerContact;
     let reqData = {
       ValidUser: ValidUser,
-      CustomerContact: this.state.UpdateCustomerContact,
+      CustomerContact: [this.state.UpdateCustomerContact],
     };
 
     axios
@@ -651,7 +657,7 @@ class contact extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          onClick={(e) => this.UpdateCustomerAddress(e)}
+                          onClick={(e) => this.UpdateCustomerContact(e)}
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>

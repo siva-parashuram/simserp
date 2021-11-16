@@ -202,6 +202,7 @@ class addresses extends React.Component {
   };
 
   getCustomerAddress = () => {
+    console.log("Props >CustID > ",this.props.CustID);
     console.log("Refreshing");
     this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
@@ -211,10 +212,16 @@ class addresses extends React.Component {
       "Content-Type": "application/json",
     };
 
-    let Url = APIURLS.APIURL.GetAllCustomerAddress;
+    let Url = APIURLS.APIURL.GetAllCustomerAddressByCustID;
+    let data={
+      ValidUser:ValidUser,
+      Customer:{
+        CustID:this.props.CustID
+      }
+    };
 
     axios
-      .post(Url, ValidUser, { headers })
+      .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
         console.log("dataAddress>>", data);
