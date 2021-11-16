@@ -970,7 +970,7 @@ class customeractivity extends React.Component {
           Customer[param] = e.target.value;
           v23.EmailID = {
             errorState: true,
-            errorMssg: "Incorrect Email ID ",
+            errorMssg: "Incorrect EmailID",
           };
 
           this.setState({
