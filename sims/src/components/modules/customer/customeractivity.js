@@ -46,6 +46,7 @@ import Addresses from "./component/addresses";
 import Contact from "./component/contact";
 import CustomerCategory from "./component/customerCategory";
 import PaymentTerms from "./component/paymentTerms";
+import SalesPerson from "./component/salesPerson";
 
 class customeractivity extends React.Component {
   constructor(props) {
@@ -1043,9 +1044,7 @@ class customeractivity extends React.Component {
       let Url = APIURLS.APIURL.CreateCustomer;
       let Customer=this.state.Customer;
       Customer.No=this.GetMasterDocumentNumber();;
-      
-      
-
+          
 
       let reqData = {
         ValidUser: ValidUser,
@@ -1079,9 +1078,7 @@ class customeractivity extends React.Component {
       let Customer = this.state.Customer;
       Customer.BranchID = CF.toInt(this.state.BranchID);
       Customer.UserID = CF.toInt(getCookie(COOKIE.USERID));
-      //   Customer.CustomerAddress=[];
-      //   Customer.CustomerContact=[];
-      //   Customer.CustomerBranchMapping=[];
+      
       delete Customer["CustomerAddress"];
       delete Customer["CustomerBranchMapping"];
       delete Customer["CustomerContact"];
@@ -1270,7 +1267,7 @@ class customeractivity extends React.Component {
                               <Grid item xs={12} sm={12} md={2} lg={2}>
                                 <button
                                   className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("CustomerCategory")}
+                                  onClick={(e) => openDialog("SalesPerson")}
                                 >
                                   ...
                                 </button>
@@ -2123,9 +2120,11 @@ class customeractivity extends React.Component {
 
     const contact = <Contact CustID={this.state.CustID} />;
 
-    const customerCategory = <CustomerCategory />;
+    const customerCategory = <CustomerCategory CustID={this.state.CustID} />;
 
-    const paymentTerms = <PaymentTerms />;
+    const paymentTerms = <PaymentTerms CustID={this.state.CustID} />;
+
+    const salesPerson = <SalesPerson CustID={this.state.CustID} />;
 
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
@@ -2147,6 +2146,10 @@ class customeractivity extends React.Component {
           break;
         case "PaymentTerms":
           Dialog.DialogContent = paymentTerms;
+          this.setState({ Dialog: Dialog });
+          break;
+        case "SalesPerson":
+          Dialog.DialogContent = salesPerson;
           this.setState({ Dialog: Dialog });
           break;
         default:
@@ -2243,12 +2246,7 @@ class customeractivity extends React.Component {
                         >
                           Contact
                         </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("CustomerCategory")}
-                        >
-                          Category
-                        </Button>
+                       
                       </div>
                     ) : null}
                   </ButtonGroup>
