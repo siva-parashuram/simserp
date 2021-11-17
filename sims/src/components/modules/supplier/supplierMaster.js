@@ -63,9 +63,9 @@ class supplierMaster extends React.Component {
         const headers = {
             "Content-Type": "application/json",
         };
-        // let Url = APIURLS.APIURL.GetAllCustomer;
+        let Url = APIURLS.APIURL.GetAllCustomer;
         axios
-            .post( ValidUser, { headers })
+            .post(Url,ValidUser, { headers })
             .then((response) => {
                 let data = response.data; 
                 this.setState({ SupplierData: data, ProgressLoader: true },()=>{
