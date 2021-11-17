@@ -135,7 +135,15 @@ export const buttonTitle={
 };
 
 
-
+export const TypeOfEnterprise = [
+  { name: "A-Micro(M)", value: 0 },
+  { name: "B-Small(M)", value: 1 },
+  { name: "C-Medium(M)", value: 2 },
+  { name: "D-Micro(S)", value: 3 },
+  { name: "E-Small(S)", value: 4 },
+  { name: "F-Medium(S)", value: 5 },
+  
+];
 
 
 
@@ -169,6 +177,16 @@ export const CreditRating=[
 {name:"D",value:3}
 ];
 
+
+export const GSTSupplierType = [
+  { name: "N/A", value: 0 },
+  { name: "Registered", value: 1 },
+  { name: "Unregistered", value: 2 },
+  { name: "Export", value: 3 },
+  { name: "Deemed Export", value: 4 },
+  { name: "Exempted", value: 5 },
+  { name: "SEZ", value: 6 }
+];
 export const GSTCutomerType = [
   { name: "N/A", value: 0 },
   { name: "Registered", value: 1 },
