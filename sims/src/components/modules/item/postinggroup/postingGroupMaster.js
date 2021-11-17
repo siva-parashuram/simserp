@@ -64,6 +64,7 @@ class postingGroupMaster extends React.Component {
       GeneralPostingGroupList: [],
       selectedGeneralPostingGroupList: [],
       CustomerPostingGroupList: [],
+      SupplierPostingGroupList:[],
       ItemPostingGroup: {
         ItemPostingGroupID: 0,
         Code: "",
@@ -81,6 +82,14 @@ class postingGroupMaster extends React.Component {
         PayableAccount: 0,
         ReceivableAccount: 0,
         RoundingAmount: 0
+      },
+      SupplierPostingGroup:{
+       SupplierPostingGroupID:0,
+       Code:"",
+       Description:"",
+       PayableAccount:0,
+       ReceivableAccount:0,
+       RoundingAmount:0
       },
       Validations: {
         ItemPostingGroup: {
@@ -100,6 +109,7 @@ class postingGroupMaster extends React.Component {
     this.getAllItemPostingGroup();
     this.getAllGeneralPostingGroup();
     this.getAllCustomerPostingGroup();
+    this.getAllSupplierPostingGroup();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -200,6 +210,24 @@ class postingGroupMaster extends React.Component {
       .catch((error) => { });
   };
 
+  getAllSupplierPostingGroup=()=>{
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllSupplierPostingGroup;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ SupplierPostingGroupList: data });
+      })
+      .catch((error) => { }); 
+  }
+
 
 
   render() {
@@ -296,10 +324,22 @@ class postingGroupMaster extends React.Component {
               break;
           }
           break;
-        default:
+        case"SupplierPostingGroup":
+        stateParent = this.state.SupplierPostingGroup;
+          if (key === "Code" || key === "Description") {
+            stateParent[key] = e.target.value;
+          }
+          if (key === "PayableAccount" || key === "ReceivableAccount" || key === "RoundingAmount") {
+            stateParent[key] = CF.toInt(e.target.value);
+          }
+          setStateParam({}, parent, stateParent);
+        break;
+          default:
           break;
       }
     };
+
+   
 
     const setStateParam = (validations, key, value) => {
       console.log("validations > ", validations);
@@ -540,6 +580,50 @@ class postingGroupMaster extends React.Component {
     };
 
     const updateGeneralPostingGroupSetup = (e) => { };
+
+    const createSupplierPostingGroup=(e)=>{
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.CreateSupplierPostingGroup;
+      let reqData = {
+        validUser: ValidUser,
+        SupplierPostingGroup: this.state.SupplierPostingGroup,
+      };
+      axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          let SupplierPostingGroup={
+            SupplierPostingGroupID:0,
+            Code:"",
+            Description:"",
+            PayableAccount:0,
+            ReceivableAccount:0,
+            RoundingAmount:0
+           };
+          let data = response.data;
+          console.log("data > ", data);
+          this.setState({
+            ProgressLoader: true,
+            SuccessPrompt: true,
+            SupplierPostingGroup: SupplierPostingGroup,
+          });
+          this.getAllSupplierPostingGroup();
+        } else {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+      });
+
+    }
+
+   
 
     const removeOldIfExist = (parent, item, stateArray) => {
       let newArray = [];
@@ -1186,12 +1270,13 @@ class postingGroupMaster extends React.Component {
       <Grid container spacing={0}>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
+            <Button style={{ marginLeft: 5 }} onClick={(e) => createSupplierPostingGroup(e)}>
             {APIURLS.buttonTitle.add}
             </Button>
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={11} lg={11}>
+       
           <TableContainer>
             <Table
               stickyHeader
@@ -1206,30 +1291,47 @@ class postingGroupMaster extends React.Component {
                   variant="outlined"
                   size="small"
                   isMandatory={true}
+                  value={this.state.SupplierPostingGroup.Code}
+                  onChange={(e) =>
+                    updateFormValue("SupplierPostingGroup", "Code", e)
+                  }
                 />
                 <TextboxInput
                   id="descriptionSupplierPostingGroup"
                   label="Description"
                   variant="outlined"
                   size="small"
+                  value={this.state.SupplierPostingGroup.Description}
+                  onChange={(e) =>
+                    updateFormValue("SupplierPostingGroup", "Description", e)
+                  }
                 />
                 <DropdownInput
                   id="PayableAccount"
-                  label="Payable Account"
-                  // onChange={(e) => updateFormValue("PayableAccount", e)}
+                  label="Payable Account"                   
                   options={this.state.COAList}
+                  value={this.state.SupplierPostingGroup.PayableAccount}
+                  onChange={(e) =>
+                    updateFormValue("SupplierPostingGroup", "PayableAccount", e)
+                  }
                 />
                 <DropdownInput
                   id="ReceivableAccount"
-                  label="Receivable Account"
-                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  label="Receivable Account"                  
                   options={this.state.COAList}
+                  value={this.state.SupplierPostingGroup.ReceivableAccount}
+                  onChange={(e) =>
+                    updateFormValue("SupplierPostingGroup", "ReceivableAccount", e)
+                  }
                 />
                 <DropdownInput
                   id="RoundingAmount"
-                  label="Rounding Amount"
-                  // onChange={(e) => updateFormValue("ReceivableAccount", e)}
+                  label="Rounding Amount"                  
                   options={this.state.COAList}
+                  value={this.state.SupplierPostingGroup.RoundingAmount}
+                  onChange={(e) =>
+                    updateFormValue("SupplierPostingGroup", "RoundingAmount", e)
+                  }
                 />
               </TableBody>
             </Table>

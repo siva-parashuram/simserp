@@ -142,13 +142,18 @@ class supplieractivity extends React.Component {
     };
   }
 
-  componentDidMount() {
+  loadDropdowns=()=>{
     this.getAllGeneralPostingGroup();
     this.getAllSupplierPostingGroup();
     this.getCurrencyList();
     this.getCountryList();
     this.getStateList();
     this.getPaymentTerms();
+  }
+
+  componentDidMount() {
+     this.loadDropdowns();
+    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -169,7 +174,7 @@ class supplieractivity extends React.Component {
     Supplier.BranchID = CF.toInt(branchId);
     if (type === "edit") {
       Supplier.SuplID = CF.toInt(SuplID);
-      // this.getSupplierDetails(Supplier);
+      this.getSupplierDetails(Supplier);
     }
 
     this.setState({
@@ -183,6 +188,25 @@ class supplieractivity extends React.Component {
     });
 
     console.log("On load state > ", this.state);
+  }
+
+  getAllSupplierPostingGroup=()=>{  
+    console.log("getAllSupplierPostingGroup > ");
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllSupplierPostingGroup;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("getAllSupplierPostingGroup > data > ", data);
+        this.setState({ SupplierPostingGroupList: data });
+      })
+      .catch((error) => { }); 
   }
 
   getPaymentTerms = () => {
@@ -352,38 +376,38 @@ class supplieractivity extends React.Component {
       .catch((error) => {});
   };
 
-  // getSupplierDetails = (Supplier) => {
-  //   this.setState({ ProgressLoader: false });
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   let Url = APIURLS.APIURL.GetCustomer;
-  //   let reqData = {
-  //     ValidUser: ValidUser,
-  //     Supplier: Supplier,
-  //   };
-  //   console.log("getCustomerDetails > getCustomerDetails >", reqData);
-  //   axios
-  //     .post(Url, reqData, { headers })
-  //     .then((response) => {
-  //       let data = response.data;
-  //       if (response.status === 200 || response.status === 201) {
-  //         this.setState({ Supplier: data, ProgressLoader: true });
-  //       } else {
-  //         this.setState({
-  //           ErrorPrompt: true,
-  //           SuccessPrompt: false,
-  //           ProgressLoader: true,
-  //         });
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       this.setState({ ErrorPrompt: true, ProgressLoader: true });
-  //     });
-  // };
+  getSupplierDetails = (Supplier) => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetSupplier;
+    let reqData = {
+      ValidUser: ValidUser,
+      Supplier: Supplier,
+    };
+    console.log("getCustomerDetails > getCustomerDetails >", reqData);
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200 || response.status === 201) {
+          this.setState({ Supplier: data, ProgressLoader: true });
+        } else {
+          this.setState({
+            ErrorPrompt: true,
+            SuccessPrompt: false,
+            ProgressLoader: true,
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true, ProgressLoader: true });
+      });
+  };
 
   updateFormValue = (param, e) => {
     let Suplier = this.state.Suplier;
@@ -444,53 +468,53 @@ class supplieractivity extends React.Component {
       };
 
       let Supplier = this.state.Supplier;
-      // let reqData = {
-      //   ValidUser: ValidUser,
-      //   DocumentNumber: {
-      //     NoSeriesID: 1,
-      //     TransDate: moment().format("MM-DD-YYYY"),
-      //   },
-      // };
-      // let Url = APIURLS.APIURL.GetMasterDocumentNumber;
-      // axios
-      //   .post(Url, reqData, { headers })
-      //   .then((response) => {
-      //     let data = response.data;
-      //     console.log("---> No Series DATA > ", data);
-      //     Customer.No = data;
-      //     reqData = {
-      //       ValidUser: ValidUser,
-      //       Customer: Customer,
-      //     };
-      //     console.log("createCoa > reqData >", reqData);
-      //     Url = APIURLS.APIURL.CreateCustomer;
-      //     axios
-      //       .post(Url, reqData, { headers })
-      //       .then((response) => {
-      //         let data = response.data;
-      //         console.log("DATA>>", data);
-      //         if (response.status === 200 || response.status === 201) {
-      //           this.setState({
-      //             ErrorPrompt: false,
-      //             SuccessPrompt: true,
-      //             Loader: true,
-      //           });
-      //           this.openPage(URLS.URLS.customerMaster + this.state.urlparams);
-      //         } else {
-      //           this.setState({
-      //             ErrorPrompt: true,
-      //             SuccessPrompt: false,
-      //             Loader: true,
-      //           });
-      //         }
-      //       })
-      //       .catch((error) => {
-      //         this.setState({ ErrorPrompt: true, Loader: true });
-      //       });
-      //   })
-      //   .catch((error) => {
-      //     this.setState({ ErrorPrompt: true, Loader: true });
-      //   });
+      let reqData = {
+        ValidUser: ValidUser,
+        DocumentNumber: {
+          NoSeriesID: 2,
+          TransDate: moment().format("MM-DD-YYYY"),
+        },
+      };
+      let Url = APIURLS.APIURL.GetMasterDocumentNumber;
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          console.log("---> No Series DATA > ", data);
+          Supplier.No = data;
+          reqData = {
+            ValidUser: ValidUser,
+            Supplier: Supplier,
+          };
+          console.log("createCoa > reqData >", reqData);
+          Url = APIURLS.APIURL.CreateSupplier;
+          axios
+            .post(Url, reqData, { headers })
+            .then((response) => {
+              let data = response.data;
+              console.log("DATA>>", data);
+              if (response.status === 200 || response.status === 201) {
+                this.setState({
+                  ErrorPrompt: false,
+                  SuccessPrompt: true,
+                  Loader: true,
+                });
+                this.openPage(URLS.URLS.supplierMaster + this.state.urlparams);
+              } else {
+                this.setState({
+                  ErrorPrompt: true,
+                  SuccessPrompt: false,
+                  Loader: true,
+                });
+              }
+            })
+            .catch((error) => {
+              this.setState({ ErrorPrompt: true, Loader: true });
+            });
+        })
+        .catch((error) => {
+          this.setState({ ErrorPrompt: true, Loader: true });
+        });
     };
 
     const updateSupplier = (e) => {
