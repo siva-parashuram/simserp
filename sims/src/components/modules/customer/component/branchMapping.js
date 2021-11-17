@@ -63,7 +63,10 @@ class branchMapping extends React.Component {
       createNewBtn: false,
       updateBtn: false,
       BranchMapping: {
-        
+        CustID: 0,
+        BranchID: 0,
+        GeneralPostingGroupID: 0,
+        CustomerPostingGroupID: 0,
       },
     };
   }
@@ -80,31 +83,25 @@ class branchMapping extends React.Component {
       "Content-Type": "application/json",
     };
     let Url = APIURLS.APIURL.GetAllCustomerCategory;
-    let data={
-      ValidUser:ValidUser,      
+    let data = {
+      ValidUser: ValidUser,
     };
-    axios    
-    .post(Url,data, { headers })
+    axios
+      .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-        this.setState(
-          { BranchMappingData: data, ProgressLoader: true },
-          () => {
-            this.setState({
-              listBranchMapping: this.listBranchMapping(),
-            });
-          }
-        );
+        this.setState({ BranchMappingData: data, ProgressLoader: true }, () => {
+          this.setState({
+            listBranchMapping: this.listBranchMapping(),
+          });
+        });
       })
       .catch((error) => {
-        this.setState(
-          { BranchMappingData: [], ProgressLoader: true },
-          () => {
-            this.setState({
-              listBranchMapping: this.listBranchMapping(),
-            });
-          }
-        );
+        this.setState({ BranchMappingData: [], ProgressLoader: true }, () => {
+          this.setState({
+            listBranchMapping: this.listBranchMapping(),
+          });
+        });
       });
   };
 
@@ -118,7 +115,7 @@ class branchMapping extends React.Component {
         updateBtn: true,
         createNewBtn: false,
       });
-     
+
       this.removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     } catch (ex) {}
@@ -135,7 +132,10 @@ class branchMapping extends React.Component {
   showAddNewPanel = (e) => {
     this.removeIsSelectedRowClasses();
     let BranchMappingTemplate = {
-      
+      CustID: 0,
+      BranchID: 0,
+      GeneralPostingGroupID: 0,
+      CustomerPostingGroupID: 0,
     };
 
     this.setState({
@@ -185,40 +185,17 @@ class branchMapping extends React.Component {
                   <TableRow>
                     <TableCell className="table-header-font">#</TableCell>
                     <TableCell className="table-header-font" align="left">
-                      Code
+                      Branch
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                      Description
+                      General Posting Group
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                      Status
+                      Customer Posting Group
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody className="tableBody">
-
-                
-                {this.getPageData(this.state.CustomerCategoryData).map((item, i) => (
-                    <TableRow
-                      id={"row_" + i}
-                      key={i}
-                      onClick={(event) =>
-                        this.handleRowClick(event, item, "row_" + i)
-                      }
-                    >
-                      <TableCell> {i + 1}</TableCell>
-                      <TableCell align="left">
-                        {item.Code}
-                      </TableCell>
-                      <TableCell> {item.Description}</TableCell>
-
-                      <TableCell align="left">
-                        {item.IsActive===true?<span>Active</span>:<span>Not Active</span>}  
-                      </TableCell>
-                    </TableRow>
-                  ))}
-
-                </TableBody>
+                <TableBody className="tableBody"></TableBody>
               </Table>
             </Grid>
           </Grid>
@@ -228,66 +205,54 @@ class branchMapping extends React.Component {
     return o;
   };
 
-  updateFormValue = (param, e, index) => {
-    console.log("updateFormValue > index > ", index);
-    let CustomerCategory = this.state.CustomerCategory;
+  updateFormValue = (param, e) => {
+    let BranchMapping = this.state.BranchMapping;
 
     switch (param) {
-      case "Code":
-        CustomerCategory[param] = e.target.value;
-        this.setParams(CustomerCategory);
-        break;
-      case "Description":
-        CustomerCategory[param] = e.target.value;
-        this.setParams(CustomerCategory);
-        break;
-      case "IsActive":
-        CustomerCategory[param] = e.target.checked;
-        this.setParams(CustomerCategory);
-        break;
-      default:
-        break;
     }
   };
 
-  createCustomerCategory = () => {
+  createBranchMapping = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.UpdateCustomerCategory;
-    let reqData = {
-      ValidUser: ValidUser,
-      CustomerCategoryList: [this.state.CustomerCategory],
-    };
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        if (response.status === 200 || response.status === 201) {
-          let CustomerCategoryTemplate = {
-            CustomerCategoryID: 0,
-            Code: "",
-            Description: "",
-            IsActive: false,
-          };
-          this.setState({
-            CustomerCategory: CustomerCategoryTemplate,
-            SuccessPrompt: true
-          }, () => {
-            this.getCustomerCategory();
-            this.expandFull();
-            this.removeIsSelectedRowClasses();
-          });
-        } else {
-          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-        }
-      })
-      .catch((error) => {
-        this.setState({ ErrorPrompt: true });
-      });
-  }
+    //  let Url = APIURLS.APIURL.;
+    // let reqData = {
+    //   ValidUser: ValidUser,
+    //   BranchMapping: [this.state.BranchMapping],
+    // };
+    // axios
+    //   .post(Url, reqData, { headers })
+    //   .then((response) => {
+    //     if (response.status === 200 || response.status === 201) {
+    //       let BranchMappingTemplate = {
+    // CustID: 0,
+    // BranchID: 0,
+    // GeneralPostingGroupID: 0,
+    // CustomerPostingGroupID: 0,
+    //       };
+    //       this.setState(
+    //         {
+    //           BranchMapping: BranchMappingTemplate,
+    //           SuccessPrompt: true,
+    //         },
+    //         () => {
+    //           this.getBranchMapping();
+    //           this.expandFull();
+    //           this.removeIsSelectedRowClasses();
+    //         }
+    //       );
+    //     } else {
+    //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ ErrorPrompt: true });
+    //   });
+  };
 
   setParams = (object) => {
     this.setState({ CustomerCategory: object });
@@ -299,8 +264,6 @@ class branchMapping extends React.Component {
       hideSidePanel: true,
     });
   };
-
- 
 
   closeExpandFull = (e) => {
     this.setState({
@@ -384,7 +347,7 @@ class branchMapping extends React.Component {
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
-                    {this.state.listCustomerCategory}
+                    {this.state.listBranchMapping}
                   </Grid>
                 </Grid>
               </Grid>
@@ -408,7 +371,7 @@ class branchMapping extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          onClick={(e) => this.createCustomerCategory(e)}
+                          // onClick={(e) => }
                         >
                           {APIURLS.buttonTitle.save}
                         </Button>
@@ -416,7 +379,7 @@ class branchMapping extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          onClick={(e) => this.createCustomerCategory(e)}
+                          // onClick={(e) => }
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>
@@ -443,35 +406,40 @@ class branchMapping extends React.Component {
                         className="accordion-table"
                         aria-label="Customercategory  table"
                       >
-
- 
                         <TableBody className="tableBody">
-                          <TextboxInput
-                            id="Code"
-                            label="Code"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => this.updateFormValue("Code", e)}
-                            value={this.state.CustomerCategory.Code}
-                          />
-                          <TextboxInput
-                            id="Description"
-                            label="Description"
-                            variant="outlined"
-                            size="small"
+                          <DropdownInput
+                            id="BranchID"
+                            label="BranchID"
                             onChange={(e) =>
-                              this.updateFormValue("Description", e)
+                              this.updateFormValue("BranchID", e)
                             }
-                            value={this.state.CustomerCategory.Description}
+                            value={this.state.BranchMapping.BranchID}
+                            //   options={}
+                            isMandatory={true}
                           />
-                          <SwitchInput
-                            key="IsActive"
-                            label="IsActive"
-                            param={this.state.CustomerCategory.IsActive}
+                          <DropdownInput
+                            id="GeneralPostingGroupID"
+                            label="GeneralPostingGroupID"
                             onChange={(e) =>
-                              this.updateFormValue("IsActive", e)
+                              this.updateFormValue("GeneralPostingGroupID", e)
                             }
-                            value={this.state.CustomerCategory.IsActive}
+                            value={
+                              this.state.BranchMapping.GeneralPostingGroupID
+                            }
+                            //   options={}
+                            isMandatory={true}
+                          />
+                          <DropdownInput
+                            id="CustomerPostingGroupID"
+                            label="CustomerPostingGroupID"
+                            onChange={(e) =>
+                              this.updateFormValue("CustomerPostingGroupID", e)
+                            }
+                            value={
+                              this.state.BranchMapping.CustomerPostingGroupID
+                            }
+                            //   options={}
+                            isMandatory={true}
                           />
                         </TableBody>
                       </Table>
