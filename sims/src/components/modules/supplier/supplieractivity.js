@@ -398,14 +398,42 @@ class supplieractivity extends React.Component {
   };
 
   updateFormValue = (param, e) => {
-    let Suplier = this.state.Suplier;
+    let Supplier = this.state.Supplier;
     switch (param) {
+      case "CurrID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+      case "GeneralPostingGroupID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+      case "StateID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+      case "CountryID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+
+      default:
+        Supplier[param] = e.target.value;
+        this.setParams(Supplier);
+        break;
     }
+
+
+    this.validateBtnEnable();
   };
 
   setParams = (object) => {
     this.setState({ Customer: object });
   };
+
+  validateBtnEnable=()=>{
+    this.setState({DisableCreatebtn:false});
+  }
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -563,7 +591,7 @@ class supplieractivity extends React.Component {
                           size="small"
                           onChange={(e) => this.updateFormValue("No", e)}
                           value={this.state.Supplier.No}
-                          isMandatory={true}
+                        
                           error={this.state.Validations.No.errorState}
                           helperText={this.state.Validations.No.errorMssg}
                           disabled={true}
