@@ -47,7 +47,6 @@ import Contact from "./component/contact";
 import CustomerCategory from "./component/customerCategory";
 import PaymentTerms from "./component/paymentTerms";
 import SalesPerson from "./component/salesPerson";
-import customerPrice from "./component/customerPrice";
 
 class customeractivity extends React.Component {
   constructor(props) {
@@ -2294,8 +2293,6 @@ class customeractivity extends React.Component {
 
     const salesPerson = <SalesPerson CustID={this.state.CustID} />;
 
-    
-
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -2322,7 +2319,6 @@ class customeractivity extends React.Component {
           Dialog.DialogContent = salesPerson;
           this.setState({ Dialog: Dialog });
           break;
-         
         default:
           break;
       }
@@ -2421,7 +2417,18 @@ class customeractivity extends React.Component {
                         >
                           Branch Mapping
                         </Button>
-                        
+                        <Button
+                          className="action-btns"
+                          onClick={(e) => openDialog("Price")}
+                        >
+                          Price
+                        </Button>
+                        <Button
+                          className="action-btns"
+                          onClick={(e) => openDialog("SlabDiscount")}
+                        >
+                          Discount
+                        </Button>
                       </div>
                     ) : null}
                   </ButtonGroup>
