@@ -23,7 +23,9 @@ class tablerowcelltextboxinput extends React.Component {
                     onChange={this.props.onChange}
                     fullWidth
                     value={this.props.value}
-                    InputProps={this.props.InputProps}
+                    InputProps={{
+                        className: "textFieldCss",
+                      }} 
                     error={this.props.error}
                     helperText={this.props.helperText}
                     />

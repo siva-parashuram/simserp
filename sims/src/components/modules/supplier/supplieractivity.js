@@ -408,6 +408,10 @@ class supplieractivity extends React.Component {
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);
         break;
+       case "SupplierPostingGroupID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+         break; 
       case "StateID":
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);

@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import axios from "axios";
+import moment from "moment";
 import Grid from "@material-ui/core/Grid";
 
 import Button from "@material-ui/core/Button";
@@ -38,7 +39,10 @@ import Accordioncomponent from "../../../compo/accordioncomponent";
 import Sectiontitle from "../../../compo/sectiontitle";
 import Inputcustom from "../../../compo/inputcustom";
 
+
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
+import DateTextboxInput from "../../../compo/tablerowcelldateinput";
+
 import { Divider } from "@material-ui/core";
 
 class customerPrice extends React.Component {
@@ -62,7 +66,12 @@ class customerPrice extends React.Component {
       GeneralDetailsExpanded: true,
       createNewBtn: false,
       updateBtn: false,
-      customerPrice: {
+      currencyList:[],
+      itemDataList:[],
+      UOMList:[],
+      CustomerPriceList:[],
+      CustomerPriceHistory:[],
+      CustomerPrice: {
         CustID: 0,
         StartDate: "",
         EndDate: "",
@@ -79,8 +88,106 @@ class customerPrice extends React.Component {
 
   componentDidMount() {
     this.getCustomerPrice();
-    
+    this.getAllDropdowns();
   }
+
+  getAllDropdowns = () => {
+    this.getCurrencyList();
+    this.getItems();
+    this.getUOMList();
+  }
+
+  getCurrencyList = () => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetCurrencies;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].code,
+            value: data[i].currId,
+          };
+          newD.push(o);
+        }
+
+        this.setState({
+          currencyList: newD,
+          ProgressLoader: true,
+        });
+      })
+      .catch((error) => { });
+  };
+
+  getItems() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetAllItems;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].code,
+            value: data[i].itemId,
+          };
+          newD.push(o);
+        }
+        this.setState({itemDataList:newD});
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => { });
+  }
+
+  getUOMList = () => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllUOM;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].name,
+            value: data[i].uomid,
+          };
+          newD.push(o);
+        }
+
+        this.setState({
+          UOMList: newD,
+          ProgressLoader: true,
+        });
+      })
+      .catch((error) => { });
+  };
 
   getCustomerPrice = () => {
     console.log("-----Price----");
@@ -92,19 +199,21 @@ class customerPrice extends React.Component {
     };
     let data = {
       ValidUser: ValidUser,
+
     };
+    let Url=APIURLS.APIURL.GetCustomerPriceByCustID;
     axios
-      .post(data, { headers })
+      .post(Url,data, { headers })
       .then((response) => {
         let data = response.data;
-        this.setState({ CustomerPriceData: data, ProgressLoader: true }, () => {
+        this.setState({CustomerPriceList:data, CustomerPriceData: data, ProgressLoader: true }, () => {
           this.setState({
             listCustomerPrice: this.listCustomerPrice(),
           });
         });
       })
       .catch((error) => {
-        this.setState({ CustomerPriceData: [], ProgressLoader: true }, () => {
+        this.setState({CustomerPriceList:[], CustomerPriceData: [], ProgressLoader: true }, () => {
           this.setState({
             listCustomerPrice: this.listCustomerPrice(),
           });
@@ -208,7 +317,23 @@ class customerPrice extends React.Component {
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody className="tableBody"></TableBody>
+                <TableBody className="tableBody">
+                  {this.state.CustomerPriceList.map((item, i) => (
+                    <TableRow>
+                      <TableCell>{i+1}</TableCell>
+                      <TableCell align="left">
+                        Start Date
+                      </TableCell>
+                      <TableCell align="left">
+                        End Date
+                      </TableCell>
+                      <TableCell align="left">
+                        Item
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                 
+                </TableBody>
               </Table>
             </Grid>
           </Grid>
@@ -219,63 +344,120 @@ class customerPrice extends React.Component {
   };
 
   updateFormValue = (param, e) => {
-    let customerPrice = this.state.customerPrice;
-
+    let CustomerPrice = this.state.CustomerPrice;
     switch (param) {
+      case "ItemID":
+        CustomerPrice[param] = CF.toInt(e.target.value);
+        this.setParams(CustomerPrice);
+        break;
+      case "UOM":
+        CustomerPrice[param] = CF.toInt(e.target.value);
+        this.setParams(CustomerPrice);
+        break;
+      case "CurrID":
+        CustomerPrice[param] = CF.toInt(e.target.value);
+        this.setParams(CustomerPrice);
+        break;
+      case "MinQty":
+        CustomerPrice[param] = CF.toInt(e.target.value);
+        this.setParams(CustomerPrice);
+        break;
+      case "MaxQty":
+        CustomerPrice[param] = CF.toInt(e.target.value);
+        this.setParams(CustomerPrice);
+        break;
+      case "UnitPrice":
+        CustomerPrice[param] = CF.toInt(e.target.value);
+        this.setParams(CustomerPrice);
+        break;
+      default:
+        CustomerPrice[param] = e.target.value;
+        this.setParams(CustomerPrice);
+        break;
     }
+
   };
 
-//   createCustomerPrice = () => {
-//     let ValidUser = APIURLS.ValidUser;
-//     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-//     ValidUser.Token = getCookie(COOKIE.TOKEN);
-//     const headers = {
-//       "Content-Type": "application/json",
-//     };
-//     let Url = APIURLS.APIURL.UpdateCustomerCategory;
-//     let reqData = {
-//       ValidUser: ValidUser,
-//       customerPrice: [this.state.customerPrice],
-//     };
-//     axios
-//       .post(Url, reqData, { headers })
-//       .then((response) => {
-//         if (response.status === 200 || response.status === 201) {
-//           let CustomerPriceTemplate = {
-//             CustID: 0,
-//             StartDate: "",
-//             EndDate: "",
-//             ItemID: 0,
-//             UOM: 0,
-//             CurrID: 0,
-//             MinQty: 0,
-//             MaxQty: 0,
-//             UnitPrice: 0,
-//             EmailID: "",
-//           };
-//           this.setState(
-//             {
-//               CustomerPrice: CustomerPriceTemplate,
-//               SuccessPrompt: true,
-//             },
-//             () => {
-//               this.getCustomerPrice();
-//               this.expandFull();
-//               this.removeIsSelectedRowClasses();
-//             }
-//           );
-//         } else {
-//           this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-//         }
-//       })
-//       .catch((error) => {
-//         this.setState({ ErrorPrompt: true });
-//       });
-//   };
+  formatDate=(array)=>{
+    for(let i=0;i<array.length;i++){
+      let StartDate=array[i].StartDate;
+      let EndDate=array[i].EndDate;
+      array[i].StartDate=moment(StartDate).format("MM/DD/YYYY");
+      array[i].EndDate=moment(EndDate).format("MM/DD/YYYY");
+    }
+    return array;
+  }
 
-//   setParams = (object) => {
-//     this.setState({ CustomerPrice: object });
-//   };
+  createCustomerPrice = (param) => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.Add_UpdateCustomerPrice;
+    let CustomerPriceList=this.state.CustomerPriceList;
+    let CustomerPriceHistory=this.state.CustomerPriceHistory;
+
+    switch (param) {
+      case "NEW":
+        CustomerPriceList.push(this.state.CustomerPrice);
+        CustomerPriceHistory=[];
+        break;
+      default:
+        break;
+    }
+
+    CustomerPriceList=this.formatDate(CustomerPriceList);
+    CustomerPriceHistory=this.formatDate(CustomerPriceHistory);
+
+    let reqData = {
+      ValidUser: ValidUser,
+      CustomerPriceList: CustomerPriceList,
+      CustomerPriceHistoryList:CustomerPriceHistory
+    };
+  console.log("createCustomerPrice > reqData > ",reqData);
+ 
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          let CustomerPriceTemplate = {
+            CustID: 0,
+            StartDate: null,
+            EndDate: null,
+            ItemID: 0,
+            UOM: 0,
+            CurrID: 0,
+            MinQty: 0,
+            MaxQty: 0,
+            UnitPrice: 0,
+            EmailID: "",
+          };
+          this.setState(
+            {
+              CustomerPrice: CustomerPriceTemplate,
+              SuccessPrompt: true,
+            },
+            () => {
+              this.getCustomerPrice();
+              this.expandFull();
+              this.removeIsSelectedRowClasses();
+            }
+          );
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+      
+  };
+
+  setParams = (object) => {
+    this.setState({ CustomerPrice: object });
+  };
 
   expandFull = (e) => {
     this.setState({
@@ -390,7 +572,7 @@ class customerPrice extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                        //   onClick={(e) => this.createCustomerPrice(e)}
+                           onClick={(e) => this.createCustomerPrice("NEW")}
                         >
                           {APIURLS.buttonTitle.save}
                         </Button>
@@ -398,7 +580,7 @@ class customerPrice extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                        //   onClick={(e) => this.createCustomerPrice(e)}
+                          onClick={(e) => this.createCustomerPrice("UPDATE")}
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>
@@ -410,7 +592,7 @@ class customerPrice extends React.Component {
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div
                       style={{
-                        height: 300,
+                        height: 400,
                         marginTop: 10,
                         overflowX: "hidden",
                         overflowY: "scroll",
@@ -426,7 +608,7 @@ class customerPrice extends React.Component {
                         aria-label="Customercategory  table"
                       >
                         <TableBody className="tableBody">
-                          <TextboxInput
+                          <DateTextboxInput
                             id="StartDate"
                             label="StartDate"
                             variant="outlined"
@@ -434,41 +616,40 @@ class customerPrice extends React.Component {
                             onChange={(e) =>
                               this.updateFormValue("StartDate", e)
                             }
-                            value={this.state.customerPrice.StartDate}
+                            value={this.state.CustomerPrice.StartDate}
                           />
-                          <TextboxInput
+                          <DateTextboxInput
                             id="EndDate"
                             label="EndDate"
                             variant="outlined"
                             size="small"
                             onChange={(e) => this.updateFormValue("EndDate", e)}
-                            value={this.state.customerPrice.EndDate}
+                            value={this.state.CustomerPrice.EndDate}
                           />
                           <DropdownInput
                             id="ItemID"
                             label="ItemID"
                             onChange={(e) => this.updateFormValue("ItemID", e)}
-                            value={this.state.customerPrice.ItemID}
-                            //   options={}
+                            value={this.state.CustomerPrice.ItemID}
+                             options={this.state.itemDataList}
                             isMandatory={true}
                           />
                            <DropdownInput
                             id="UOM"
                             label="UOM"
                             onChange={(e) => this.updateFormValue("UOM", e)}
-                            value={this.state.customerPrice.UOM}
-                            //   options={}
+                            value={this.state.CustomerPrice.UOM}
+                            options={this.state.UOMList}
                             isMandatory={true}
                           />
                           <DropdownInput
                             id="CurrID"
                             label="CurrID"
                             onChange={(e) => this.updateFormValue("CurrID", e)}
-                            value={this.state.customerPrice.CurrID}
-                            //   options={}
+                            value={this.state.CustomerPrice.CurrID}
+                            options={this.state.currencyList}
                             isMandatory={true}
-                          />
-                         
+                          />                        
                           
                           <TextboxInput
                             id="MinQty"
@@ -476,7 +657,7 @@ class customerPrice extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => this.updateFormValue("MinQty", e)}
-                            value={this.state.customerPrice.MinQty}
+                            value={this.state.CustomerPrice.MinQty}
                             
                             
                           />
@@ -486,7 +667,7 @@ class customerPrice extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => this.updateFormValue("MaxQty", e)}
-                            value={this.state.customerPrice.MaxQty}
+                            value={this.state.CustomerPrice.MaxQty}
                             
                           />
                           <TextboxInput
@@ -497,7 +678,7 @@ class customerPrice extends React.Component {
                             onChange={(e) =>
                               this.updateFormValue("UnitPrice", e)
                             }
-                            value={this.state.customerPrice.UnitPrice}
+                            value={this.state.CustomerPrice.UnitPrice}
                           />
                           <TextboxInput
                             id="EmailID"
@@ -505,7 +686,7 @@ class customerPrice extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => this.updateFormValue("EmailID", e)}
-                            value={this.state.customerPrice.EmailID}
+                            value={this.state.CustomerPrice.EmailID}
                           />
                         </TableBody>
                       </Table>

@@ -124,6 +124,9 @@ export const APIURL = {
   UpdateCustomerCategory:domain+"api/Customer/UpdateCustomerCategory",
   GetAllSalesPerson:domain+"api/Customer/GetAllSalesPerson",
   UpdateSalesPerson:domain+"api/Customer/UpdateSalesPerson",
+  GetAllUOM:domain+"api/Common/GetAllUOM",
+  Add_UpdateCustomerPrice:domain+"api/Customer/Add_UpdateCustomerPrice",
+  GetCustomerPriceByCustID:domain+"api/Customer/GetCustomerPriceByCustID",
 
   GetAllSupplier:domain+"api/Supplier/GetAllSupplier",
   UpdateSupplier:domain+"api/Customer/UpdateSupplier",
