@@ -50,6 +50,7 @@ import SalesPerson from "./component/salesPerson";
 
 import CustomerPrice from "./component/customerPrice";
 import BranchMapping from "./component/branchMapping";
+import Discount from "./component/discount";
 
 class customeractivity extends React.Component {
   constructor(props) {
@@ -2275,6 +2276,8 @@ class customeractivity extends React.Component {
 
     const branchMapping = <BranchMapping CustID={this.state.CustID} />;
 
+    const discount = <Discount CustID={this.state.CustID} />;
+
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -2307,6 +2310,10 @@ class customeractivity extends React.Component {
           break;
           case "BranchMapping":
           Dialog.DialogContent = branchMapping;
+          this.setState({ Dialog: Dialog });
+          break;
+          case "SlabDiscount":
+          Dialog.DialogContent = discount;
           this.setState({ Dialog: Dialog });
           break;
         default:

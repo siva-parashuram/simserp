@@ -125,17 +125,14 @@ class supplieractivity extends React.Component {
         Address3: { errorState: false, errorMssg: "" },
         City: { errorState: false, errorMssg: "" },
         PostCode: { errorState: false, errorMssg: "" },
-
         Website: { errorState: false, errorMssg: "" },
         PhoneNo: { errorState: false, errorMssg: "" },
         FaxNo: { errorState: false, errorMssg: "" },
         CreditDays: { errorState: false, errorMssg: "" },
-
         Reason: { errorState: false, errorMssg: "" },
         GSTNo: { errorState: false, errorMssg: "" },
         PANNo: { errorState: false, errorMssg: "" },
         VATNo: { errorState: false, errorMssg: "" },
-
         ContactPerson: { errorState: false, errorMssg: "" },
         EmailID: { errorState: false, errorMssg: "" },
       },
