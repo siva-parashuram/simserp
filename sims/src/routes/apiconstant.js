@@ -121,6 +121,9 @@ export const APIURL = {
   UpdateCustomerCategory:domain+"api/Customer/UpdateCustomerCategory",
   GetAllSalesPerson:domain+"api/Customer/GetAllSalesPerson",
   UpdateSalesPerson:domain+"api/Customer/UpdateSalesPerson",
+
+
+  UpdateSupplier:domain+"api/Customer/UpdateSupplier",
   GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
   GetMasterDocumentNumber:domain+"api/Common/GetMasterDocumentNumber",
 };
@@ -136,12 +139,12 @@ export const buttonTitle={
 
 
 export const TypeOfEnterprise = [
-  { name: "A-Micro(M)", value: 0 },
-  { name: "B-Small(M)", value: 1 },
-  { name: "C-Medium(M)", value: 2 },
-  { name: "D-Micro(S)", value: 3 },
-  { name: "E-Small(S)", value: 4 },
-  { name: "F-Medium(S)", value: 5 },
+  { name: "A-Micro(M)", value: 1 },
+  { name: "B-Small(M)", value: 2 },
+  { name: "C-Medium(M)", value: 3 },
+  { name: "D-Micro(S)", value: 4 },
+  { name: "E-Small(S)", value: 5 },
+  { name: "F-Medium(S)", value: 6 },
   
 ];
 
