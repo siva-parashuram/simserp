@@ -78,7 +78,7 @@ class customerPrice extends React.Component {
   }
 
   componentDidMount() {
-    this.getCustomerCategory();
+    this.getCustomerPrice();
   }
 
   getCustomerPrice = () => {
@@ -88,27 +88,27 @@ class customerPrice extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.GetAllCustomerCategory;
-    let data = {
-      ValidUser: ValidUser,
-    };
-    axios
-      .post(Url, data, { headers })
-      .then((response) => {
-        let data = response.data;
-        this.setState({ CustomerPriceData: data, ProgressLoader: true }, () => {
-          this.setState({
-            listCustomerPrice: this.listCustomerPrice(),
-          });
-        });
-      })
-      .catch((error) => {
-        this.setState({ CustomerPriceData: [], ProgressLoader: true }, () => {
-          this.setState({
-            listCustomerPrice: this.listCustomerPrice(),
-          });
-        });
-      });
+    // let Url = APIURLS.APIURL.GetAllCustomerCategory;
+    // let data = {
+    //   ValidUser: ValidUser,
+    // };
+    // axios
+    //   .post(Url, data, { headers })
+    //   .then((response) => {
+    //     let data = response.data;
+    //     this.setState({ CustomerPriceData: data, ProgressLoader: true }, () => {
+    //       this.setState({
+    //         listCustomerPrice: this.listCustomerPrice(),
+    //       });
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ CustomerPriceData: [], ProgressLoader: true }, () => {
+    //       this.setState({
+    //         listCustomerPrice: this.listCustomerPrice(),
+    //       });
+    //     });
+    //   });
   };
 
   handleRowClick = (e, item, id) => {
@@ -151,7 +151,7 @@ class customerPrice extends React.Component {
     };
 
     this.setState({
-        CustomerPrice: CustomerPriceTemplate,
+    customerPrice: CustomerPriceTemplate,
       FullSmallBtnArea: true,
       mainframeW: 8,
       hideSidePanel: false,
@@ -220,24 +220,9 @@ class customerPrice extends React.Component {
   };
 
   updateFormValue = (param, e) => {
-    console.log("updateFormValue > index > ", index);
     let customerPrice = this.state.customerPrice;
 
     switch (param) {
-      case "Code":
-        CustomerCategory[param] = e.target.value;
-        this.setParams(CustomerCategory);
-        break;
-      case "Description":
-        CustomerCategory[param] = e.target.value;
-        this.setParams(CustomerCategory);
-        break;
-      case "IsActive":
-        CustomerCategory[param] = e.target.checked;
-        this.setParams(CustomerCategory);
-        break;
-      default:
-        break;
     }
   };
 
