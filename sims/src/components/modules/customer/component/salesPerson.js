@@ -45,6 +45,10 @@ class salesPerson extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
@@ -66,7 +70,7 @@ class salesPerson extends React.Component {
         EmailID: "",
         PhoneNo: "",
         IsActive: false,
-        CommsionPecentage: "",
+        CommsionPercentage: "",
       },
     };
   }
@@ -82,9 +86,9 @@ class salesPerson extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    // let Url = APIURLS.APIURL.;
+    let Url = APIURLS.APIURL.GetAllSalesPerson;
     axios
-      .post(ValidUser, { headers })
+      .post(Url,ValidUser, { headers })
       .then((response) => {
         let data = response.data;
         this.setState({ SalesPersonData: data, ProgressLoader: true }, () => {
@@ -129,13 +133,13 @@ class salesPerson extends React.Component {
     this.removeIsSelectedRowClasses();
     let SalesPersonTemplate = {
       SalesPersonID: 0,
-      Code: "",
-      Name: "",
-      JobTitle: "",
-      EmailID: "",
-      PhoneNo: "",
-      IsActive: false,
-      CommsionPecentage: "",
+        Code: "",
+        Name: "",
+        JobTitle: "",
+        EmailID: "",
+        PhoneNo: "",
+        IsActive: false,
+        CommsionPercentage: "",
     };
 
     this.setState({
@@ -146,6 +150,13 @@ class salesPerson extends React.Component {
       createNewBtn: true,
       updateBtn: false,
     });
+  };
+
+  getPageData = (data) => {
+    let rows = data;
+    let page = parseInt(this.state.pagination.page);
+    let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
+    return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   };
 
   listSalesPerson = () => {
@@ -178,11 +189,44 @@ class salesPerson extends React.Component {
                   <TableRow>
                     <TableCell className="table-header-font">#</TableCell>
                     <TableCell className="table-header-font" align="left">
+                      Code
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
                       Name
                     </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Email
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                     JobTitle
+                    </TableCell>    
+                    <TableCell className="table-header-font" align="left">
+                     Status
+                    </TableCell>                    
                   </TableRow>
                 </TableHead>
-                <TableBody className="tableBody"></TableBody>
+                <TableBody className="tableBody">
+                {this.getPageData(this.state.SalesPersonData).map((item, i) => (
+                    <TableRow
+                      id={"row_" + i}
+                      key={i}
+                      onClick={(event) =>
+                        this.handleRowClick(event, item, "row_" + i)
+                      }
+                    >
+                      <TableCell> {i + 1}</TableCell>
+                      <TableCell align="left">
+                        {item.Code}
+                      </TableCell>
+                      <TableCell> {item.Name}</TableCell>
+                      <TableCell> {item.EmailID}</TableCell>
+                      <TableCell> {item.JobTitle}</TableCell>
+                      <TableCell align="left">
+                        {item.IsActive===true?<span>Active</span>:<span>Not Active</span>}  
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
               </Table>
             </Grid>
           </Grid>
@@ -195,37 +239,20 @@ class salesPerson extends React.Component {
   updateFormValue = (param, e) => {
     
     let SalesPerson = this.state.SalesPerson;
+
     switch (param) {
-      case "Code":
-        SalesPerson[param] = e.target.value;
-        this.setParams(SalesPerson);
-        break;
-      case "Name":
-        SalesPerson[param] = e.target.value;
-        this.setParams(SalesPerson);
-        break;
-      case "JobTitle":
-        SalesPerson[param] = e.target.value;
-        this.setParams(SalesPerson);
-        break;
-      case "EmailID":
-        SalesPerson[param] = e.target.value;
-        this.setParams(SalesPerson);
-        break;
-      case "PhoneNo":
-        SalesPerson[param] = e.target.value;
-        this.setParams(SalesPerson);
-        break;
       case "IsActive":
         SalesPerson[param] = e.target.checked;
         this.setParams(SalesPerson);
         break;
-      case "CommsionPecentage":
-        SalesPerson[param] = e.target.value;
-        this.setParams(SalesPerson);
-        break;
-
       default:
+        if(isNaN(e.target.value)){
+          SalesPerson[param] = e.target.value;
+        }else{
+          SalesPerson[param] = CF.toInt(e.target.value);
+        }
+        
+        this.setParams(SalesPerson);
         break;
     }
   };
@@ -248,6 +275,51 @@ class salesPerson extends React.Component {
     });
   };
 
+
+  createSalesPerson = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.UpdateSalesPerson;
+    let reqData = {
+      ValidUser: ValidUser,
+      SalesPersonList: [this.state.SalesPerson],
+    };
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          let  SalesPerson= {
+            SalesPersonID: 0,
+            Code: "",
+            Name: "",
+            JobTitle: "",
+            EmailID: "",
+            PhoneNo: "",
+            IsActive: false,
+            CommsionPecentage: "",
+          };
+          this.setState({
+            SalesPerson: SalesPerson,
+            SuccessPrompt: true
+          }, () => {
+            this.getSalesPerson();
+            this.expandFull();
+            this.removeIsSelectedRowClasses();
+          });
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+  }
+
+  
   render() {
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -347,7 +419,7 @@ class salesPerson extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          // onClick={(e) => }
+                          onClick={(e) =>this.createSalesPerson() }
                         >
                           {APIURLS.buttonTitle.save}
                         </Button>
@@ -355,7 +427,7 @@ class salesPerson extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          // onClick={(e) => }
+                          onClick={(e) =>this.createSalesPerson() }
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>
@@ -376,6 +448,7 @@ class salesPerson extends React.Component {
                       }}
                     >
                       <div style={{ height: 20 }}>&nbsp;</div>
+                     
                       <Table
                         stickyHeader
                         size="small"
@@ -389,6 +462,7 @@ class salesPerson extends React.Component {
                             variant="outlined"
                             size="small"
                             isMandatory={true}
+                            value={this.state.SalesPerson.Code}
                             onChange={(e) => this.updateFormValue("Code", e)}
                           />
                           <TextboxInput
@@ -397,21 +471,24 @@ class salesPerson extends React.Component {
                             variant="outlined"
                             size="small"
                             isMandatory={true}
-                            onChange={(e) =>  this.updateFormValue("Name", e)}
+                            value={this.state.SalesPerson.Name}
+                            onChange={(e) => this.updateFormValue("Name", e)}
                           />
                           <TextboxInput
                             id="JobTitle"
                             label="Job Title"
                             variant="outlined"
                             size="small"
-                            onChange={(e) =>  this.updateFormValue("JobTitle", e)}
+                            value={this.state.SalesPerson.JobTitle}
+                            onChange={(e) => this.updateFormValue("JobTitle", e)}
                           />
                           <TextboxInput
                             id="EmailID"
                             label="EmailID"
                             variant="outlined"
                             size="small"
-                            onChange={(e) =>  this.updateFormValue("EmailID", e)}
+                            value={this.state.SalesPerson.EmailID}
+                            onChange={(e) => this.updateFormValue("EmailID", e)}
                           />
 
                           <TextboxInput
@@ -420,21 +497,24 @@ class salesPerson extends React.Component {
                             label="Phone No"
                             variant="outlined"
                             size="small"
-                            onChange={(e) =>  this.updateFormValue("PhoneNo", e)}
+                            value={this.state.SalesPerson.PhoneNo}
+                            onChange={(e) => this.updateFormValue("PhoneNo", e)}
                           />
                           <SwitchInput
                             key="IsActive"
                             id="IsActive"
                             label="IsActive"
                             param={this.state.SalesPerson.IsActive}
-                            onChange={(e) =>  this.updateFormValue("IsActive", e)}
+                            onChange={(e) => this.updateFormValue("IsActive", e)}
+                            
                           />
                           <TextboxInput
-                            id="CommsionPecentage"
-                            label="Commsion Pecentage"
+                            id="CommsionPercentage"
+                            label="Commision Pecentage"
                             variant="outlined"
                             size="small"
-                            onChange={(e) =>  this.updateFormValue("CommsionPecentage", e)}
+                            value={this.state.SalesPerson.CommsionPercentage}
+                            onChange={(e) => this.updateFormValue("CommsionPercentage", e)}
                           />
                         </TableBody>
                       </Table>

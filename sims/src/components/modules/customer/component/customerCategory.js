@@ -45,6 +45,10 @@ class customerCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
@@ -78,9 +82,12 @@ class customerCategory extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    // let Url = APIURLS.APIURL.;
-    axios
-      .post(ValidUser, { headers })
+    let Url = APIURLS.APIURL.GetAllCustomerCategory;
+    let data={
+      ValidUser:ValidUser,      
+    };
+    axios    
+    .post(Url,data, { headers })
       .then((response) => {
         let data = response.data;
         this.setState(
@@ -114,6 +121,7 @@ class customerCategory extends React.Component {
         updateBtn: true,
         createNewBtn: false,
       });
+     
       this.removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     } catch (ex) {}
@@ -146,6 +154,13 @@ class customerCategory extends React.Component {
     });
   };
 
+  getPageData = (data) => {
+    let rows = data;
+    let page = parseInt(this.state.pagination.page);
+    let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
+    return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  };
+
   listCustomerCategory = () => {
     let o = (
       <Fragment>
@@ -176,11 +191,40 @@ class customerCategory extends React.Component {
                   <TableRow>
                     <TableCell className="table-header-font">#</TableCell>
                     <TableCell className="table-header-font" align="left">
-                      Name
+                      Code
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Description
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                      Status
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody className="tableBody"></TableBody>
+                <TableBody className="tableBody">
+
+                
+                {this.getPageData(this.state.CustomerCategoryData).map((item, i) => (
+                    <TableRow
+                      id={"row_" + i}
+                      key={i}
+                      onClick={(event) =>
+                        this.handleRowClick(event, item, "row_" + i)
+                      }
+                    >
+                      <TableCell> {i + 1}</TableCell>
+                      <TableCell align="left">
+                        {item.Code}
+                      </TableCell>
+                      <TableCell> {item.Description}</TableCell>
+
+                      <TableCell align="left">
+                        {item.IsActive===true?<span>Active</span>:<span>Not Active</span>}  
+                      </TableCell>
+                    </TableRow>
+                  ))}
+
+                </TableBody>
               </Table>
             </Grid>
           </Grid>
@@ -212,43 +256,44 @@ class customerCategory extends React.Component {
     }
   };
 
-  // createCustomerCategory = () => {
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   // let Url = APIURLS.APIURL.;
-  //   let reqData = {
-  //     ValidUser: ValidUser,
-  //     CustomerCategoryList: [this.state.CustomerCategory],
-  //   };
-  //   axios
-  //     .post(Url, reqData, { headers })
-  //     .then((response) => {
-  //       if (response.status === 200 || response.status === 201) {
-  //         let CustomerCategoryTemplate = {
-  //           CustomerCategoryID: 0,
-  //           Code: "",
-  //           Description: "",
-  //           IsActive: false,
-  //         };     
-  //         this.setState({
-  //           CustomerCategory:CustomerCategoryTemplate,
-  //           SuccessPrompt: true
-  //         },()=>{
-  //           this.getCustomerCategory();           
-            
-  //         });
-  //       }else {
-  //         this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       this.setState({ ErrorPrompt: true });
-  //     });
-  // }
+  createCustomerCategory = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.UpdateCustomerCategory;
+    let reqData = {
+      ValidUser: ValidUser,
+      CustomerCategoryList: [this.state.CustomerCategory],
+    };
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          let CustomerCategoryTemplate = {
+            CustomerCategoryID: 0,
+            Code: "",
+            Description: "",
+            IsActive: false,
+          };
+          this.setState({
+            CustomerCategory: CustomerCategoryTemplate,
+            SuccessPrompt: true
+          }, () => {
+            this.getCustomerCategory();
+            this.expandFull();
+            this.removeIsSelectedRowClasses();
+          });
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+  }
 
   setParams = (object) => {
     this.setState({ CustomerCategory: object });
@@ -260,6 +305,8 @@ class customerCategory extends React.Component {
       hideSidePanel: true,
     });
   };
+
+ 
 
   closeExpandFull = (e) => {
     this.setState({
@@ -367,7 +414,7 @@ class customerCategory extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          // onClick={(e) => }
+                          onClick={(e) => this.createCustomerCategory(e)}
                         >
                           {APIURLS.buttonTitle.save}
                         </Button>
@@ -375,7 +422,7 @@ class customerCategory extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          // onClick={(e) => }
+                          onClick={(e) => this.createCustomerCategory(e)}
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>
@@ -402,6 +449,8 @@ class customerCategory extends React.Component {
                         className="accordion-table"
                         aria-label="Customercategory  table"
                       >
+
+ 
                         <TableBody className="tableBody">
                           <TextboxInput
                             id="Code"
@@ -409,6 +458,7 @@ class customerCategory extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => this.updateFormValue("Code", e)}
+                            value={this.state.CustomerCategory.Code}
                           />
                           <TextboxInput
                             id="Description"
@@ -418,6 +468,7 @@ class customerCategory extends React.Component {
                             onChange={(e) =>
                               this.updateFormValue("Description", e)
                             }
+                            value={this.state.CustomerCategory.Description}
                           />
                           <SwitchInput
                             key="IsActive"
@@ -426,6 +477,7 @@ class customerCategory extends React.Component {
                             onChange={(e) =>
                               this.updateFormValue("IsActive", e)
                             }
+                            value={this.state.CustomerCategory.IsActive}
                           />
                         </TableBody>
                       </Table>
