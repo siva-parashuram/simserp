@@ -49,6 +49,7 @@ import PaymentTerms from "./component/paymentTerms";
 import SalesPerson from "./component/salesPerson";
 
 import CustomerPrice from "./component/customerPrice";
+import BranchMapping from "./component/branchMapping";
 
 class customeractivity extends React.Component {
   constructor(props) {
@@ -2272,6 +2273,8 @@ class customeractivity extends React.Component {
 
     const customerPrice = <CustomerPrice CustID={this.state.CustID} />;
 
+    const branchMapping = <BranchMapping CustID={this.state.CustID} />;
+
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -2300,6 +2303,10 @@ class customeractivity extends React.Component {
           break;
         case "customerPrice":
           Dialog.DialogContent = customerPrice;
+          this.setState({ Dialog: Dialog });
+          break;
+          case "BranchMapping":
+          Dialog.DialogContent = branchMapping;
           this.setState({ Dialog: Dialog });
           break;
         default:
@@ -2393,7 +2400,7 @@ class customeractivity extends React.Component {
                         </Button>
                         <Button
                           className="action-btns"
-                          onClick={(e) => openDialog("Contact")}
+                          onClick={(e) => openDialog("BranchMapping")}
                         >
                           Branch Mapping
                         </Button>
