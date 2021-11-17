@@ -71,10 +71,9 @@ class supplieractivity extends React.Component {
       editurl: "",
       typoTitle: "",
       type: "",
-      // CreditRating: APIURLS.CreditRating,
-      // GSTCutomerType: APIURLS.GSTCutomerType,
-      salesPersonData: [],
-      SupplierCategoryData: [],
+      TypeOfEnterprise: APIURLS.TypeOfEnterprise,
+      GSTSupplierType: APIURLS.GSTSupplierType,
+      SalesPersonData: [],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
       SupplierPostingGroupList: [],
@@ -102,24 +101,20 @@ class supplieractivity extends React.Component {
         TypeOfEnterprise: 0,
         GSTSupplierType: 0,
         CurrID: 0,
-        DueDays: "",
+        DueDays: 0,
         IsBlock: false,
-
         SalesPersonID: 0,
-        CustomerCategoryID: 0,
         GeneralPostingGroupID: 0,
         SupplierPostingGroupID: 0,
         IsTaxExempt: false,
         Reason: "",
-
-        GSTCutomerType: 0,
+        GSTSupplierType: 0,
         GSTNo: "",
         PANNo: "",
         VATNo: "",
         ContactPerson: "",
         EmailID: "",
         UserID: CF.toInt(getCookie(COOKIE.USERID)),
-
         BranchID: 0,
       },
       Validations: {
@@ -174,7 +169,7 @@ class supplieractivity extends React.Component {
     Supplier.BranchID = CF.toInt(branchId);
     if (type === "edit") {
       Supplier.SuplID = CF.toInt(SuplID);
-      // this.getCustomerDetails(Supplier);
+      // this.getSupplierDetails(Supplier);
     }
 
     this.setState({
@@ -239,7 +234,7 @@ class supplieractivity extends React.Component {
     //       };
     //       newD.push(o);
     //     }
-    //     this.setState({ SupplierPostingGroupID: newD });
+    //     this.setState({ SupplierPostingGroupList: newD });
     //   })
     //   .catch((error) => {});
   };
@@ -357,7 +352,7 @@ class supplieractivity extends React.Component {
       .catch((error) => {});
   };
 
-  // getCustomerDetails = (Customer) => {
+  // getSupplierDetails = (Supplier) => {
   //   this.setState({ ProgressLoader: false });
   //   let ValidUser = APIURLS.ValidUser;
   //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -368,7 +363,7 @@ class supplieractivity extends React.Component {
   //   let Url = APIURLS.APIURL.GetCustomer;
   //   let reqData = {
   //     ValidUser: ValidUser,
-  //     Customer: Customer,
+  //     Supplier: Supplier,
   //   };
   //   console.log("getCustomerDetails > getCustomerDetails >", reqData);
   //   axios
@@ -376,7 +371,7 @@ class supplieractivity extends React.Component {
   //     .then((response) => {
   //       let data = response.data;
   //       if (response.status === 200 || response.status === 201) {
-  //         this.setState({ Customer: data, ProgressLoader: true });
+  //         this.setState({ Supplier: data, ProgressLoader: true });
   //       } else {
   //         this.setState({
   //           ErrorPrompt: true,
@@ -392,7 +387,8 @@ class supplieractivity extends React.Component {
 
   updateFormValue = (param, e) => {
     let Suplier = this.state.Suplier;
-    switch (param) {}
+    switch (param) {
+    }
   };
 
   setParams = (object) => {
@@ -794,13 +790,13 @@ class supplieractivity extends React.Component {
                     >
                       <TableBody className="tableBody">
                         <DropdownInput
-                          id="CustomerPostingGroupID"
-                          label="CustomerPostingGroupID"
+                          id="SupplierPostingGroupID"
+                          label="SupplierPostingGroupID"
                           onChange={(e) =>
-                            this.updateFormValue("CustomerPostingGroupID", e)
+                            this.updateFormValue("SupplierPostingGroupID", e)
                           }
-                          value={this.state.Supplier.CustomerPostingGroupID}
-                          options={this.state.SupplierPostingGroupID}
+                          value={this.state.Supplier.SupplierPostingGroupID}
+                          options={this.state.SupplierPostingGroupList}
                           isMandatory={true}
                         />
 
@@ -885,7 +881,7 @@ class supplieractivity extends React.Component {
                             this.updateFormValue("TypeOfEnterprise", e)
                           }
                           value={this.state.Supplier.TypeOfEnterprise}
-                          options={[]}
+                          options={this.state.TypeOfEnterprise}
                         />
                         <SwitchInput
                           key="IsTaxExempt"
@@ -914,7 +910,7 @@ class supplieractivity extends React.Component {
                             this.updateFormValue("GSTSupplierType", e)
                           }
                           value={this.state.Supplier.GSTSupplierType}
-                          options={[]}
+                          options={this.state.GSTSupplierType}
                         />
                       </TableBody>
                     </Table>
