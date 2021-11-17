@@ -74,8 +74,8 @@ class customeractivity extends React.Component {
       CreditRating: APIURLS.CreditRating,
       GSTCutomerType: APIURLS.GSTCutomerType,
       customerData: [],
-      salesPersonData: [],
-      customerCategoryData: [],
+      SalesPersonData: [],
+      CustomerCategoryData: [],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
       CustomerPostingGroupList: [],
@@ -166,6 +166,8 @@ class customeractivity extends React.Component {
   }
 
   componentDidMount() {
+    this.getSalesPerson();
+    this.getCustomerCategory();
     this.getCustomerList();
     this.getAllGeneralPostingGroup();
     this.getAllCustomerPostingGroup();
@@ -393,6 +395,68 @@ class customeractivity extends React.Component {
         this.setState({ GeneralPostingGroupList: newD });
       })
       .catch((error) => {});
+  };
+
+  getCustomerCategory = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllCustomerCategory;
+    let data={
+      ValidUser:ValidUser,      
+    };
+    axios    
+    .post(Url,data, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code + "-" + data[i].Description,
+            value: data[i].CustomerCategoryID,
+          };
+          newD.push(o);
+          console.log("newD>>", newD);
+        }
+        this.setState(
+          { CustomerCategoryData: newD, ProgressLoader: true }
+        );
+      })
+      .catch((error) => {
+        this.setState(
+          { CustomerCategoryData: [], ProgressLoader: true });
+      });
+  };
+
+  getSalesPerson = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllSalesPerson;
+    axios
+      .post(Url,ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code,
+            value: data[i].SalesPersonID,
+          };
+          newD.push(o);
+          console.log("newD>>", newD);
+        }
+        this.setState({ SalesPersonData: newD, ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ SalesPersonData: [], ProgressLoader: true });
+      });
   };
 
   getCustomerDetails = (Customer) => {
@@ -1065,6 +1129,18 @@ class customeractivity extends React.Component {
     window.location = url;
   };
 
+  refreshDropdownList = () => {
+    this.getSalesPerson();
+    this.getCustomerCategory();
+    this.getCustomerList();
+    this.getAllGeneralPostingGroup();
+    this.getAllCustomerPostingGroup();
+    this.getCurrencyList();
+    this.getCountryList();
+    this.getStateList();
+    this.getPaymentTerms();
+  };
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -1343,7 +1419,7 @@ class customeractivity extends React.Component {
                                     Select
                                   </option>
 
-                                  {this.state.salesPersonData.map((item, i) => (
+                                  {this.state.SalesPersonData.map((item, i) => (
                                     <option value={parseInt(item.value)}>
                                       {item.name}
                                     </option>
@@ -1384,7 +1460,7 @@ class customeractivity extends React.Component {
                                     Select
                                   </option>
 
-                                  {this.state.customerCategoryData.map(
+                                  {this.state.CustomerCategoryData.map(
                                     (item, i) => (
                                       <option value={parseInt(item.value)}>
                                         {item.name}
@@ -1406,6 +1482,8 @@ class customeractivity extends React.Component {
                             </Grid>
                           </TableCell>
                         </TableRow>
+           
+
                       </TableBody>
                     </Table>
                   </Grid>
@@ -2251,13 +2329,11 @@ class customeractivity extends React.Component {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = false;
       this.setState({ Dialog: Dialog });
-      refreshDropdownList();
-      this.getPaymentTerms();
+      this.refreshDropdownList();
+       
     };
 
-    const refreshDropdownList = () => {
-      //refresh dropdown list
-    };
+      
 
     return (
       <Fragment>

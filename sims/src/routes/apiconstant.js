@@ -117,6 +117,10 @@ export const APIURL = {
   GetAllPaymentTerms:domain+"api/Customer/GetAllPaymentTerms",
   CreatePaymentTerms:domain+"api/Customer/CreatePaymentTerms",
   UpdatePaymentTerms:domain+"api/Customer/UpdatePaymentTerms",
+  GetAllCustomerCategory:domain+"api/Customer/GetAllCustomerCategory",
+  UpdateCustomerCategory:domain+"api/Customer/UpdateCustomerCategory",
+  GetAllSalesPerson:domain+"api/Customer/GetAllSalesPerson",
+  UpdateSalesPerson:domain+"api/Customer/UpdateSalesPerson",
   GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
   GetMasterDocumentNumber:domain+"api/Common/GetMasterDocumentNumber",
 };
