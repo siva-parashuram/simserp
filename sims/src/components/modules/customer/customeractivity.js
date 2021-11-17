@@ -2417,6 +2417,18 @@ class customeractivity extends React.Component {
                         >
                           Branch Mapping
                         </Button>
+                        <Button
+                          className="action-btns"
+                          onClick={(e) => openDialog("Price")}
+                        >
+                          Price
+                        </Button>
+                        <Button
+                          className="action-btns"
+                          onClick={(e) => openDialog("SlabDiscount")}
+                        >
+                          Discount
+                        </Button>
                       </div>
                     ) : null}
                   </ButtonGroup>
