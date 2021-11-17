@@ -2411,6 +2411,12 @@ class customeractivity extends React.Component {
                         >
                           Contact
                         </Button>
+                        <Button
+                          className="action-btns"
+                          onClick={(e) => openDialog("Contact")}
+                        >
+                          Branch Mapping
+                        </Button>
                       </div>
                     ) : null}
                   </ButtonGroup>
