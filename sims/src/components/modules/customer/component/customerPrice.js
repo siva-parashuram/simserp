@@ -72,7 +72,7 @@ class customerPrice extends React.Component {
       CustomerPriceList:[],
       CustomerPriceHistory:[],
       CustomerPrice: {
-        CustID: 0,
+        CustID: this.props.CustID,
         StartDate: "",
         EndDate: "",
         ItemID: 0,
@@ -199,7 +199,9 @@ class customerPrice extends React.Component {
     };
     let data = {
       ValidUser: ValidUser,
-
+      CustomerPrice:{
+        CustID: this.props.CustID
+      }
     };
     let Url=APIURLS.APIURL.GetCustomerPriceByCustID;
     axios
@@ -248,7 +250,7 @@ class customerPrice extends React.Component {
   showAddNewPanel = (e) => {
     this.removeIsSelectedRowClasses();
     let CustomerPriceTemplate = {
-      CustID: 0,
+      CustID: this.props.CustID,
       StartDate: "",
       EndDate: "",
       ItemID: 0,
@@ -315,6 +317,19 @@ class customerPrice extends React.Component {
                     <TableCell className="table-header-font" align="left">
                       Item
                     </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                    UOMCode
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                    CurrCode
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                    Min Qty
+                    </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                    Max Qty
+                    </TableCell>
+                    
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
@@ -322,14 +337,28 @@ class customerPrice extends React.Component {
                     <TableRow>
                       <TableCell>{i+1}</TableCell>
                       <TableCell align="left">
-                        Start Date
+                        {moment(item.StartDate).format("MM/DD/YYYY")}
                       </TableCell>
                       <TableCell align="left">
-                        End Date
+                      {moment(item.EndDate).format("MM/DD/YYYY")}
                       </TableCell>
                       <TableCell align="left">
-                        Item
+                      {item.ItemID}
                       </TableCell>
+                      <TableCell align="left">
+                      {item.UOMCode}
+                      </TableCell>
+                      <TableCell align="left">
+                      {item.CurrCode}
+                      </TableCell>
+                      <TableCell align="left">
+                      {item.MinQty}
+                      </TableCell>
+                      <TableCell align="left">
+                      {item.MaxQty}
+                      </TableCell>
+
+                      
                     </TableRow>
                   ))}
                  
