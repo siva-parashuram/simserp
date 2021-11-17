@@ -152,6 +152,7 @@ class supplieractivity extends React.Component {
   }
 
   componentDidMount() {
+    console.log("-----------------supplieractivity--------------");
      this.loadDropdowns();
     
     var url = new URL(window.location.href);
@@ -190,7 +191,7 @@ class supplieractivity extends React.Component {
     console.log("On load state > ", this.state);
   }
 
-  getAllSupplierPostingGroup=()=>{  
+  getAllSupplierPostingGroup = () => {
     console.log("getAllSupplierPostingGroup > ");
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -204,9 +205,20 @@ class supplieractivity extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("getAllSupplierPostingGroup > data > ", data);
-        this.setState({ SupplierPostingGroupList: data });
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code ,
+            value: data[i].SupplierPostingGroupID,
+          };
+          newD.push(o);
+          console.log("newD>>", newD);
+        }
+        this.setState({ SupplierPostingGroupList: newD });
       })
-      .catch((error) => { }); 
+      .catch((error) => {
+        console.log("getAllSupplierPostingGroup > error > ", error);
+       });
   }
 
   getPaymentTerms = () => {
@@ -237,31 +249,7 @@ class supplieractivity extends React.Component {
       });
   };
 
-  getAllSupplierPostingGroup = () => {
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    // let Url = APIURLS.APIURL.GetAllCustomerPostingGroup;
-    // axios
-    //   .post(Url, ValidUser, { headers })
-    //   .then((response) => {
-    //     let data = response.data;
-    //     console.log("data > ", data);
-    //     let newD = [];
-    //     for (let i = 0; i < data.length; i++) {
-    //       let o = {
-    //         name: data[i].Code + "-" + data[i].Description,
-    //         value: data[i].SupplierPostingGroupID,
-    //       };
-    //       newD.push(o);
-    //     }
-    //     this.setState({ SupplierPostingGroupList: newD });
-    //   })
-    //   .catch((error) => {});
-  };
+  
 
   getStateList = () => {
     let rows = [];
