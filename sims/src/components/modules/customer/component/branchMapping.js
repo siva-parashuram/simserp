@@ -56,26 +56,23 @@ class branchMapping extends React.Component {
       mainframeW: 12,
       hideSidePanel: true,
       initialCss: "",
-      listCustomerCategory: null,
-      updateCustomerCategory: {},
-      CustomerCategoryData: [],
+      listBranchMapping: null,
+      updateBranchMapping: {},
+      BranchMappingData: [],
       GeneralDetailsExpanded: true,
       createNewBtn: false,
       updateBtn: false,
-      CustomerCategory: {
-        CustomerCategoryID: 0,
-        Code: "",
-        Description: "",
-        IsActive: false,
+      BranchMapping: {
+        
       },
     };
   }
 
   componentDidMount() {
-    this.getCustomerCategory();
+    this.getBranchMapping();
   }
 
-  getCustomerCategory = () => {
+  getBranchMapping = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -91,20 +88,20 @@ class branchMapping extends React.Component {
       .then((response) => {
         let data = response.data;
         this.setState(
-          { CustomerCategoryData: data, ProgressLoader: true },
+          { BranchMappingData: data, ProgressLoader: true },
           () => {
             this.setState({
-              listCustomerCategory: this.listCustomerCategory(),
+              listBranchMapping: this.listBranchMapping(),
             });
           }
         );
       })
       .catch((error) => {
         this.setState(
-          { CustomerCategoryData: [], ProgressLoader: true },
+          { BranchMappingData: [], ProgressLoader: true },
           () => {
             this.setState({
-              listCustomerCategory: this.listCustomerCategory(),
+              listBranchMapping: this.listBranchMapping(),
             });
           }
         );
@@ -114,7 +111,7 @@ class branchMapping extends React.Component {
   handleRowClick = (e, item, id) => {
     try {
       this.setState({
-        CustomerCategory: item,
+        BranchMapping: item,
         FullSmallBtnArea: true,
         mainframeW: 8,
         hideSidePanel: false,
@@ -129,7 +126,7 @@ class branchMapping extends React.Component {
 
   removeIsSelectedRowClasses = () => {
     try {
-      for (let i = 0; i < this.state.CustomerCategoryData.length; i++) {
+      for (let i = 0; i < this.state.BranchMappingData.length; i++) {
         document.getElementById("row_" + i).className = "";
       }
     } catch (ex) {}
@@ -137,15 +134,12 @@ class branchMapping extends React.Component {
 
   showAddNewPanel = (e) => {
     this.removeIsSelectedRowClasses();
-    let CustomerCategoryTemplate = {
-      CustomerCategoryID: 0,
-      Code: "",
-      Description: "",
-      IsActive: false,
+    let BranchMappingTemplate = {
+      
     };
 
     this.setState({
-      CustomerCategory: CustomerCategoryTemplate,
+      BranchMapping: BranchMappingTemplate,
       FullSmallBtnArea: true,
       mainframeW: 8,
       hideSidePanel: false,
@@ -161,7 +155,7 @@ class branchMapping extends React.Component {
     return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   };
 
-  listCustomerCategory = () => {
+  listBranchMapping = () => {
     let o = (
       <Fragment>
         <Grid container spacing={0}>
