@@ -48,6 +48,8 @@ import CustomerCategory from "./component/customerCategory";
 import PaymentTerms from "./component/paymentTerms";
 import SalesPerson from "./component/salesPerson";
 
+import CustomerPrice from "./component/customerPrice";
+
 class customeractivity extends React.Component {
   constructor(props) {
     super(props);
@@ -138,7 +140,6 @@ class customeractivity extends React.Component {
         BranchID: 0,
       },
       Validations: {
-        
         Name: { errorState: false, errorMssg: "" },
         Address: { errorState: false, errorMssg: "" },
         Address2: { errorState: false, errorMssg: "" },
@@ -405,11 +406,11 @@ class customeractivity extends React.Component {
       "Content-Type": "application/json",
     };
     let Url = APIURLS.APIURL.GetAllCustomerCategory;
-    let data={
-      ValidUser:ValidUser,      
+    let data = {
+      ValidUser: ValidUser,
     };
-    axios    
-    .post(Url,data, { headers })
+    axios
+      .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
         let newD = [];
@@ -421,13 +422,10 @@ class customeractivity extends React.Component {
           newD.push(o);
           console.log("newD>>", newD);
         }
-        this.setState(
-          { CustomerCategoryData: newD, ProgressLoader: true }
-        );
+        this.setState({ CustomerCategoryData: newD, ProgressLoader: true });
       })
       .catch((error) => {
-        this.setState(
-          { CustomerCategoryData: [], ProgressLoader: true });
+        this.setState({ CustomerCategoryData: [], ProgressLoader: true });
       });
   };
 
@@ -440,7 +438,7 @@ class customeractivity extends React.Component {
     };
     let Url = APIURLS.APIURL.GetAllSalesPerson;
     axios
-      .post(Url,ValidUser, { headers })
+      .post(Url, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
         let newD = [];
@@ -499,14 +497,12 @@ class customeractivity extends React.Component {
         let v2 = this.state.Validations;
         Customer[param] = e.target.value;
         if (e.target.value === "" || e.target.value.length > 100) {
-         
           if (e.target.value === "") {
-           
             v2.Name = { errorState: true, errorMssg: "Cannot be blank!" };
             if (this.state.type === "add") {
-              this.setState({ Validations: v2});
+              this.setState({ Validations: v2 });
             } else {
-              this.setState({ Validations: v2});
+              this.setState({ Validations: v2 });
             }
           }
           if (e.target.value.length > 100) {
@@ -521,10 +517,9 @@ class customeractivity extends React.Component {
             }
           }
         } else {
-         
           v2.Name = { errorState: false, errorMssg: "" };
           if (this.state.type === "add") {
-            this.setState({ Validations: v2});
+            this.setState({ Validations: v2 });
           } else {
             this.setState({ Validations: v2 });
           }
@@ -543,7 +538,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v3 });
         } else {
-          
           v3.Address = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v3 });
@@ -563,7 +557,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v4 });
         } else {
-         
           v4.Address2 = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v4 });
@@ -582,7 +575,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v5 });
         } else {
-         
           v5.Address3 = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v5 });
@@ -601,7 +593,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v6 });
         } else {
-          
           v6.City = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v6 });
@@ -620,7 +611,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v7 });
         } else {
-          
           v7.PostCode = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v7 });
@@ -647,7 +637,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v8 });
         } else {
-         
           v8.Website = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v8 });
@@ -669,7 +658,6 @@ class customeractivity extends React.Component {
 
             this.setState({ Validations: v9 });
           } else {
-            
             v9.PhoneNo = { errorState: false, errorMssg: "" };
 
             this.setState({ Validations: v9 });
@@ -689,7 +677,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v10 });
         } else {
-          
           v10.FaxNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v10 });
@@ -712,7 +699,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v11 });
         } else {
-         
           v11.CreditDays = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v11 });
@@ -731,7 +717,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v12 });
         } else {
-         
           v12.CreditLimit = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v12 });
@@ -759,7 +744,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v13 });
         } else {
-          
           v13.GraceDays = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v13 });
@@ -803,7 +787,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v14 });
         } else {
-         
           v14.BankCharge = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v14 });
@@ -850,7 +833,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v15 });
         } else {
-          
           v15.Reason = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v15 });
@@ -903,7 +885,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v17 });
         } else {
-          
           v17.GSTNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v17 });
@@ -922,7 +903,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v18 });
         } else {
-         
           v18.PANNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v18 });
@@ -945,7 +925,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v19 });
         } else {
-         
           v19.VATNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v19 });
@@ -964,7 +943,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v20 });
         } else {
-          
           v20.EORINo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v20 });
@@ -983,7 +961,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v21 });
         } else {
-         
           v21.TSSNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v21 });
@@ -1002,7 +979,6 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v22 });
         } else {
-          
           v22.ContactPerson = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v22 });
@@ -1011,84 +987,72 @@ class customeractivity extends React.Component {
         }
         break;
       case "EmailID":
-        Customer[param] = e.target.value;  
+        Customer[param] = e.target.value;
         let v23 = this.state.Validations;
         let duplicateExist = CF.chkDuplicateName(
           this.state.customerData,
           "EmailID",
           e.target.value
         );
-       console.log("duplicateExist>>",duplicateExist);
-        
+        console.log("duplicateExist>>", duplicateExist);
 
-      if (duplicateExist) {
-        switch (duplicateExist) {
-          case true:    
-              
-            let ev23T = this.state.Validations;
-            ev23T.EmailID = {
-              errorState: true,
-              errorMssg: "Email already Exists",
-            };
+        if (duplicateExist) {
+          switch (duplicateExist) {
+            case true:
+              let ev23T = this.state.Validations;
+              ev23T.EmailID = {
+                errorState: true,
+                errorMssg: "Email already Exists",
+              };
 
-            this.setState({
-              Validations: ev23T,
-              
-            });
-            break;
-          case false:
-              
-            let ev23F = this.state.Validations;
-            ev23F.EmailID = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({
-              Validations: ev23F,
-              
-            });
-            break;
-          default:
-            break;
-        }
-      } else {
-        let email = CF.validateEmail(e.target.value);
+              this.setState({
+                Validations: ev23T,
+              });
+              break;
+            case false:
+              let ev23F = this.state.Validations;
+              ev23F.EmailID = {
+                errorState: false,
+                errorMssg: "",
+              };
+              this.setState({
+                Validations: ev23F,
+              });
+              break;
+            default:
+              break;
+          }
+        } else {
+          let email = CF.validateEmail(e.target.value);
 
-        if (email === true) {
-          if (e.target.value.length > 50) {
+          if (email === true) {
+            if (e.target.value.length > 50) {
+              v23.EmailID = {
+                errorState: true,
+                errorMssg: "Maximum 50 Characters allowed!",
+              };
+
+              this.setState({ Validations: v23 });
+            } else {
+              v23.EmailID = { errorState: false, errorMssg: "" };
+
+              this.setState({
+                Validations: v23,
+              });
+
+              this.setParams(Customer);
+            }
+          } else {
             v23.EmailID = {
               errorState: true,
-              errorMssg: "Maximum 50 Characters allowed!",
+              errorMssg: "Incorrect EmailID",
             };
-
-            this.setState({ Validations: v23 });
-          } else {
-           
-
-            v23.EmailID = { errorState: false, errorMssg: "" };
 
             this.setState({
               Validations: v23,
-              
             });
-
-            this.setParams(Customer);
           }
-        } else {
-         
-          v23.EmailID = {
-            errorState: true,
-            errorMssg: "Incorrect EmailID",
-          };
-
-          this.setState({
-            Validations: v23,
-           
-          });
         }
-      }
-
-        
 
         break;
       case "SalesPersonID":
@@ -1105,21 +1069,37 @@ class customeractivity extends React.Component {
     this.validateBtnEnable();
   };
 
-  validateBtnEnable=()=>{
-    let Validations=this.state.Validations;    
-      if(Validations['Name'].errorState===true||Validations['Address'].errorState===true||Validations['Address2'].errorState===true
-      ||Validations['Address3'].errorState===true||Validations['City'].errorState===true||Validations['PostCode'].errorState===true||
-      Validations['Website'].errorState===true||Validations['PhoneNo'].errorState===true||Validations['FaxNo'].errorState===true
-      ||Validations['CreditDays'].errorState===true||Validations['CreditLimit'].errorState===true||Validations['GraceDays'].errorState===true 
-      ||Validations['Reason'].errorState===true||Validations['GSTNo'].errorState===true||Validations['PANNo'].errorState===true ||Validations['VATNo'].errorState===true
-      ||Validations['EORINo'].errorState===true||Validations['TSSNo'].errorState===true||Validations['ContactPerson'].errorState===true||Validations['EmailID'].errorState===true 
-      ||Validations['BankCharge'].errorState===true||Validations['EcommerceGSTNo'].errorState===true){
-      this.setState({DisableCreatebtn: true,DisableUpdatebtn:true});
-    }else{
-      this.setState({DisableCreatebtn: false,DisableUpdatebtn:false});
+  validateBtnEnable = () => {
+    let Validations = this.state.Validations;
+    if (
+      Validations["Name"].errorState === true ||
+      Validations["Address"].errorState === true ||
+      Validations["Address2"].errorState === true ||
+      Validations["Address3"].errorState === true ||
+      Validations["City"].errorState === true ||
+      Validations["PostCode"].errorState === true ||
+      Validations["Website"].errorState === true ||
+      Validations["PhoneNo"].errorState === true ||
+      Validations["FaxNo"].errorState === true ||
+      Validations["CreditDays"].errorState === true ||
+      Validations["CreditLimit"].errorState === true ||
+      Validations["GraceDays"].errorState === true ||
+      Validations["Reason"].errorState === true ||
+      Validations["GSTNo"].errorState === true ||
+      Validations["PANNo"].errorState === true ||
+      Validations["VATNo"].errorState === true ||
+      Validations["EORINo"].errorState === true ||
+      Validations["TSSNo"].errorState === true ||
+      Validations["ContactPerson"].errorState === true ||
+      Validations["EmailID"].errorState === true ||
+      Validations["BankCharge"].errorState === true ||
+      Validations["EcommerceGSTNo"].errorState === true
+    ) {
+      this.setState({ DisableCreatebtn: true, DisableUpdatebtn: true });
+    } else {
+      this.setState({ DisableCreatebtn: false, DisableUpdatebtn: false });
     }
-
-  }
+  };
 
   setParams = (object) => {
     this.setState({ Customer: object });
@@ -1294,7 +1274,6 @@ class customeractivity extends React.Component {
                           onChange={(e) => this.updateFormValue("No", e)}
                           value={this.state.Customer.No}
                           isMandatory={true}
-                          
                           disabled={true}
                         />
                         <TextboxInput
@@ -1483,8 +1462,6 @@ class customeractivity extends React.Component {
                             </Grid>
                           </TableCell>
                         </TableRow>
-           
-
                       </TableBody>
                     </Table>
                   </Grid>
@@ -2293,6 +2270,8 @@ class customeractivity extends React.Component {
 
     const salesPerson = <SalesPerson CustID={this.state.CustID} />;
 
+    const customerPrice = <CustomerPrice CustID={this.state.CustID} />;
+
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -2319,6 +2298,10 @@ class customeractivity extends React.Component {
           Dialog.DialogContent = salesPerson;
           this.setState({ Dialog: Dialog });
           break;
+        case "customerPrice":
+          Dialog.DialogContent = customerPrice;
+          this.setState({ Dialog: Dialog });
+          break;
         default:
           break;
       }
@@ -2331,10 +2314,7 @@ class customeractivity extends React.Component {
       Dialog.DialogStatus = false;
       this.setState({ Dialog: Dialog });
       this.refreshDropdownList();
-       
     };
-
-      
 
     return (
       <Fragment>
@@ -2419,7 +2399,7 @@ class customeractivity extends React.Component {
                         </Button>
                         <Button
                           className="action-btns"
-                          onClick={(e) => openDialog("Price")}
+                          onClick={(e) => openDialog("customerPrice")}
                         >
                           Price
                         </Button>
