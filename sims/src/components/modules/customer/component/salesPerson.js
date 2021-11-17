@@ -129,13 +129,13 @@ class salesPerson extends React.Component {
     this.removeIsSelectedRowClasses();
     let SalesPersonTemplate = {
       SalesPersonID: 0,
-        Code: "",
-        Name: "",
-        JobTitle: "",
-        EmailID: "",
-        PhoneNo: "",
-        IsActive: false,
-        CommsionPecentage: "",
+      Code: "",
+      Name: "",
+      JobTitle: "",
+      EmailID: "",
+      PhoneNo: "",
+      IsActive: false,
+      CommsionPecentage: "",
     };
 
     this.setState({
@@ -192,9 +192,42 @@ class salesPerson extends React.Component {
     return o;
   };
 
-  updateFormValue = (param, e, index) => {
-    console.log("updateFormValue > index > ", index);
+  updateFormValue = (param, e) => {
+    
     let SalesPerson = this.state.SalesPerson;
+    switch (param) {
+      case "Code":
+        SalesPerson[param] = e.target.value;
+        this.setParams(SalesPerson);
+        break;
+      case "Name":
+        SalesPerson[param] = e.target.value;
+        this.setParams(SalesPerson);
+        break;
+      case "JobTitle":
+        SalesPerson[param] = e.target.value;
+        this.setParams(SalesPerson);
+        break;
+      case "EmailID":
+        SalesPerson[param] = e.target.value;
+        this.setParams(SalesPerson);
+        break;
+      case "PhoneNo":
+        SalesPerson[param] = e.target.value;
+        this.setParams(SalesPerson);
+        break;
+      case "IsActive":
+        SalesPerson[param] = e.target.checked;
+        this.setParams(SalesPerson);
+        break;
+      case "CommsionPecentage":
+        SalesPerson[param] = e.target.value;
+        this.setParams(SalesPerson);
+        break;
+
+      default:
+        break;
+    }
   };
 
   setParams = (object) => {
@@ -215,7 +248,6 @@ class salesPerson extends React.Component {
     });
   };
 
-  
   render() {
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -357,6 +389,7 @@ class salesPerson extends React.Component {
                             variant="outlined"
                             size="small"
                             isMandatory={true}
+                            onChange={(e) => this.updateFormValue("Code", e)}
                           />
                           <TextboxInput
                             id="Name"
@@ -364,18 +397,21 @@ class salesPerson extends React.Component {
                             variant="outlined"
                             size="small"
                             isMandatory={true}
+                            onChange={(e) =>  this.updateFormValue("Name", e)}
                           />
                           <TextboxInput
                             id="JobTitle"
                             label="Job Title"
                             variant="outlined"
                             size="small"
+                            onChange={(e) =>  this.updateFormValue("JobTitle", e)}
                           />
                           <TextboxInput
                             id="EmailID"
                             label="EmailID"
                             variant="outlined"
                             size="small"
+                            onChange={(e) =>  this.updateFormValue("EmailID", e)}
                           />
 
                           <TextboxInput
@@ -384,19 +420,21 @@ class salesPerson extends React.Component {
                             label="Phone No"
                             variant="outlined"
                             size="small"
+                            onChange={(e) =>  this.updateFormValue("PhoneNo", e)}
                           />
                           <SwitchInput
                             key="IsActive"
                             id="IsActive"
                             label="IsActive"
                             param={this.state.SalesPerson.IsActive}
-                            // onChange={(e) => updateFormValue("IsActive", e)}
+                            onChange={(e) =>  this.updateFormValue("IsActive", e)}
                           />
                           <TextboxInput
                             id="CommsionPecentage"
                             label="Commsion Pecentage"
                             variant="outlined"
                             size="small"
+                            onChange={(e) =>  this.updateFormValue("CommsionPecentage", e)}
                           />
                         </TableBody>
                       </Table>

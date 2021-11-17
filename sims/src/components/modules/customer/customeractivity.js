@@ -686,6 +686,7 @@ class customeractivity extends React.Component {
         break;
       case "GraceDays":
         let v13 = this.state.Validations;
+        Customer[param] = CF.toInt(e.target.value);
         if (e.target.value.length > 2) {
           v13.GraceDays = {
             errorState: true,
@@ -694,7 +695,7 @@ class customeractivity extends React.Component {
 
           this.setState({ Validations: v13 });
         } else {
-          Customer[param] = CF.toInt(e.target.value);
+          
           v13.GraceDays = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v13 });

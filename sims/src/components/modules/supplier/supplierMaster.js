@@ -37,11 +37,11 @@ class supplierMaster extends React.Component {
             initialCss: "",
             urlparams: "",
             editUrl: "",
-            customerData: []
+            SupplierData: []
         }
     }
     componentDidMount() {
-        this.getCustomerList();
+        this.getSupplierList();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -56,24 +56,24 @@ class supplierMaster extends React.Component {
         this.setState({ urlparams: urlparams });
     }
 
-    getCustomerList = () => {
+    getSupplierList = () => {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
             "Content-Type": "application/json",
         };
-        let Url = APIURLS.APIURL.GetAllCustomer;
+        // let Url = APIURLS.APIURL.GetAllCustomer;
         axios
-            .post(Url, ValidUser, { headers })
+            .post( ValidUser, { headers })
             .then((response) => {
                 let data = response.data; 
-                this.setState({ customerData: data, ProgressLoader: true },()=>{
+                this.setState({ SupplierData: data, ProgressLoader: true },()=>{
                     this.handleRowClick(null, data[0], "row_0");
                 });
             })
             .catch((error) => {
-                this.setState({ customerData: [], ProgressLoader: true });
+                this.setState({ SupplierData: [], ProgressLoader: true });
             });
     }
 
@@ -97,7 +97,7 @@ class supplierMaster extends React.Component {
     };
   
        removeIsSelectedRowClasses = () => {
-        for (let i = 0; i < this.state.customerData.length; i++) {
+        for (let i = 0; i < this.state.SupplierData.length; i++) {
           document.getElementById("row_" + i).className = "";
         }
       };
@@ -115,7 +115,7 @@ class supplierMaster extends React.Component {
 
         const customerList = (
             <Fragment>
-                {this.state.customerData.length > 0 ? (
+                {this.state.SupplierData.length > 0 ? (
                     <Fragment>
                         <TableContainer style={{ maxHeight: 440 }}>
                             <Table
@@ -141,7 +141,7 @@ class supplierMaster extends React.Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody className="tableBody">
-                                    {this.state.customerData.map((item, i) => (
+                                    {this.state.SupplierData.map((item, i) => (
                                         <TableRow
                                             id={"row_" + i}
                                             className={this.state.initialCss}

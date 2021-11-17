@@ -71,19 +71,19 @@ class supplieractivity extends React.Component {
       editurl: "",
       typoTitle: "",
       type: "",
-      CreditRating: APIURLS.CreditRating,
-      GSTCutomerType: APIURLS.GSTCutomerType,
-      salesPersonData:[],
-      customerCategoryData:[],
+      // CreditRating: APIURLS.CreditRating,
+      // GSTCutomerType: APIURLS.GSTCutomerType,
+      salesPersonData: [],
+      SupplierCategoryData: [],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
-      CustomerPostingGroupList: [],
+      SupplierPostingGroupList: [],
       currencyList: [],
       countryData: [],
       stateData: [],
-      CustID: 0,
-      Customer: {
-        CustID: 0,
+      SuplID: 0,
+      Supplier: {
+        SuplID: 0,
         No: "",
         Name: "",
         Address: "",
@@ -97,37 +97,25 @@ class supplieractivity extends React.Component {
         PhoneNo: "",
         FaxNo: "",
         IsGroupCompany: false,
-        CreditDays: 0,
-        CreditLimit: 0,
+        SupplierClasification: 0,
         PaymentTermID: 0,
-        CreditRating: 0,
-        GraceDays: 0,
+        TypeOfEnterprise: 0,
+        GSTSupplierType: 0,
         CurrID: 0,
-        IsGrowthBonanza: false,
-        IsSlabDiscount: false,
-        IsCarriage: false,
-        IsDueEndOfMonth: false,
-        IsBankCharge: false,
-        BankCharge: 0,
+        DueDays: "",
         IsBlock: false,
-        IsEmailAlert: false,
+
         SalesPersonID: 0,
         CustomerCategoryID: 0,
         GeneralPostingGroupID: 0,
-        CustomerPostingGroupID: 0,
+        SupplierPostingGroupID: 0,
         IsTaxExempt: false,
         Reason: "",
-        IsEcommerce: false,
-        EcommerceGSTNo: "",
-        EcommerceB2B: false,
-        EcommerceNoSeries: 0,
+
         GSTCutomerType: 0,
         GSTNo: "",
         PANNo: "",
-        IncoID: 0,
         VATNo: "",
-        EORINo: "",
-        TSSNo: "",
         ContactPerson: "",
         EmailID: "",
         UserID: CF.toInt(getCookie(COOKIE.USERID)),
@@ -142,29 +130,26 @@ class supplieractivity extends React.Component {
         Address3: { errorState: false, errorMssg: "" },
         City: { errorState: false, errorMssg: "" },
         PostCode: { errorState: false, errorMssg: "" },
-        GraceDays: { errorState: false, errorMssg: "" },
+
         Website: { errorState: false, errorMssg: "" },
         PhoneNo: { errorState: false, errorMssg: "" },
         FaxNo: { errorState: false, errorMssg: "" },
         CreditDays: { errorState: false, errorMssg: "" },
-        CreditLimit: { errorState: false, errorMssg: "" },
+
         Reason: { errorState: false, errorMssg: "" },
         GSTNo: { errorState: false, errorMssg: "" },
         PANNo: { errorState: false, errorMssg: "" },
         VATNo: { errorState: false, errorMssg: "" },
-        EORINo: { errorState: false, errorMssg: "" },
-        TSSNo: { errorState: false, errorMssg: "" },
+
         ContactPerson: { errorState: false, errorMssg: "" },
         EmailID: { errorState: false, errorMssg: "" },
-        BankCharge: { errorState: false, errorMssg: "" },
-        EcommerceGSTNo: { errorState: false, errorMssg: "" },
       },
     };
   }
 
   componentDidMount() {
     this.getAllGeneralPostingGroup();
-    this.getAllCustomerPostingGroup();
+    this.getAllSupplierPostingGroup();
     this.getCurrencyList();
     this.getCountryList();
     this.getStateList();
@@ -174,7 +159,7 @@ class supplieractivity extends React.Component {
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
     let type = url.searchParams.get("type");
-    let CustID = type === "edit" ? url.searchParams.get("editCustID") : 0;
+    let SuplID = type === "edit" ? url.searchParams.get("editSuplID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
     let urlparams =
@@ -185,16 +170,16 @@ class supplieractivity extends React.Component {
       "&branchName=" +
       branchName;
 
-    let Customer = this.state.Customer;
-    Customer.BranchID = CF.toInt(branchId);
+    let Supplier = this.state.Supplier;
+    Supplier.BranchID = CF.toInt(branchId);
     if (type === "edit") {
-      Customer.CustID = CF.toInt(CustID);
-      this.getCustomerDetails(Customer);
+      Supplier.SuplID = CF.toInt(SuplID);
+      // this.getCustomerDetails(Supplier);
     }
 
     this.setState({
-      Customer: Customer,
-      CustID: type === "edit" ? CF.toInt(CustID) : 0,
+      Supplier: Supplier,
+      SuplID: type === "edit" ? CF.toInt(SuplID) : 0,
       urlparams: urlparams,
       type: type,
       typoTitle: typoTitle,
@@ -233,30 +218,30 @@ class supplieractivity extends React.Component {
       });
   };
 
-  getAllCustomerPostingGroup = () => {
+  getAllSupplierPostingGroup = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.GetAllCustomerPostingGroup;
-    axios
-      .post(Url, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-        console.log("data > ", data);
-        let newD = [];
-        for (let i = 0; i < data.length; i++) {
-          let o = {
-            name: data[i].Code + "-" + data[i].Description,
-            value: data[i].CustomerPostingGroupID,
-          };
-          newD.push(o);
-        }
-        this.setState({ CustomerPostingGroupList: newD });
-      })
-      .catch((error) => {});
+    // let Url = APIURLS.APIURL.GetAllCustomerPostingGroup;
+    // axios
+    //   .post(Url, ValidUser, { headers })
+    //   .then((response) => {
+    //     let data = response.data;
+    //     console.log("data > ", data);
+    //     let newD = [];
+    //     for (let i = 0; i < data.length; i++) {
+    //       let o = {
+    //         name: data[i].Code + "-" + data[i].Description,
+    //         value: data[i].SupplierPostingGroupID,
+    //       };
+    //       newD.push(o);
+    //     }
+    //     this.setState({ SupplierPostingGroupID: newD });
+    //   })
+    //   .catch((error) => {});
   };
 
   getStateList = () => {
@@ -372,593 +357,42 @@ class supplieractivity extends React.Component {
       .catch((error) => {});
   };
 
-  getCustomerDetails = (Customer) => {
-    this.setState({ ProgressLoader: false });
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetCustomer;
-    let reqData = {
-      ValidUser: ValidUser,
-      Customer: Customer,
-    };
-    console.log("getCustomerDetails > getCustomerDetails >", reqData);
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        let data = response.data;
-        if (response.status === 200 || response.status === 201) {
-          this.setState({ Customer: data, ProgressLoader: true });
-        } else {
-          this.setState({
-            ErrorPrompt: true,
-            SuccessPrompt: false,
-            ProgressLoader: true,
-          });
-        }
-      })
-      .catch((error) => {
-        this.setState({ ErrorPrompt: true, ProgressLoader: true });
-      });
-  };
-
-  checkMandatory = () => {
-    if (this.state.Customer.No === "" || this.state.Customer.Name === "") {
-      if (this.state.type === "add") {
-        this.setState({ DisableCreatebtn: true });
-      } else {
-        this.setState({ DisableUpdatebtn: true });
-      }
-    }
-  };
+  // getCustomerDetails = (Customer) => {
+  //   this.setState({ ProgressLoader: false });
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let Url = APIURLS.APIURL.GetCustomer;
+  //   let reqData = {
+  //     ValidUser: ValidUser,
+  //     Customer: Customer,
+  //   };
+  //   console.log("getCustomerDetails > getCustomerDetails >", reqData);
+  //   axios
+  //     .post(Url, reqData, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
+  //       if (response.status === 200 || response.status === 201) {
+  //         this.setState({ Customer: data, ProgressLoader: true });
+  //       } else {
+  //         this.setState({
+  //           ErrorPrompt: true,
+  //           SuccessPrompt: false,
+  //           ProgressLoader: true,
+  //         });
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       this.setState({ ErrorPrompt: true, ProgressLoader: true });
+  //     });
+  // };
 
   updateFormValue = (param, e) => {
-    let Customer = this.state.Customer;
-    switch (param) {
-     case "Name":
-        let v2 = this.state.Validations;
-        if (e.target.value === "" || e.target.value.length > 100) {
-          if (e.target.value === "") {
-            Customer[param] = e.target.value;
-            v2.Name = { errorState: true, errorMssg: "Cannot be blank!" };
-            if (this.state.type === "add") {
-              this.setState({ Validations: v2, DisableCreatebtn: true });
-            } else {
-              this.setState({ Validations: v2, DisableUpdatebtn: true });
-            }
-          }
-          if (e.target.value.length > 100) {
-            v2.Name = {
-              errorState: true,
-              errorMssg: "Maximum 100 characters allowed!",
-            };
-            if (this.state.type === "add") {
-              this.setState({ Validations: v2, DisableCreatebtn: true });
-            } else {
-              this.setState({ Validations: v2, DisableUpdatebtn: true });
-            }
-          }
-        } else {
-          Customer[param] = e.target.value;
-          v2.Name = { errorState: false, errorMssg: "" };
-          if (this.state.type === "add") {
-            this.setState({ Validations: v2, DisableCreatebtn: false });
-          } else {
-            this.setState({ Validations: v2, DisableUpdatebtn: false });
-          }
-          this.setParams(Customer);
-        }
-        this.checkMandatory();
-
-        break;
-      case "Address":
-        let v3 = this.state.Validations;
-        if (e.target.value.length > 100) {
-          v3.Address = {
-            errorState: true,
-            errorMssg: "Maximum 100 characters allowed!",
-          };
-
-          this.setState({ Validations: v3 });
-        } else {
-          Customer[param] = e.target.value;
-          v3.Address = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v3 });
-
-          this.setParams(Customer);
-        }
-
-        break;
-      case "Address2":
-        let v4 = this.state.Validations;
-        if (e.target.value.length > 100) {
-          v4.Address2 = {
-            errorState: true,
-            errorMssg: "Maximum 100 characters allowed!",
-          };
-
-          this.setState({ Validations: v4 });
-        } else {
-          Customer[param] = e.target.value;
-          v4.Address2 = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v4 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "Address3":
-        let v5 = this.state.Validations;
-        if (e.target.value.length > 100) {
-          v5.Address3 = {
-            errorState: true,
-            errorMssg: "Maximum 100 characters allowed!",
-          };
-
-          this.setState({ Validations: v5 });
-        } else {
-          Customer[param] = e.target.value;
-          v5.Address3 = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v5 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "City":
-        let v6 = this.state.Validations;
-        if (e.target.value.length > 50) {
-          v6.City = {
-            errorState: true,
-            errorMssg: "Maximum 50 characters allowed!",
-          };
-
-          this.setState({ Validations: v6 });
-        } else {
-          Customer[param] = e.target.value;
-          v6.City = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v6 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "PostCode":
-        let v7 = this.state.Validations;
-        if (e.target.value.length > 10) {
-          v7.PostCode = {
-            errorState: true,
-            errorMssg: "Maximum 10 characters allowed!",
-          };
-
-          this.setState({ Validations: v7 });
-        } else {
-          Customer[param] = e.target.value;
-          v7.PostCode = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v7 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "CountryID":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "StateID":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "Website":
-        let v8 = this.state.Validations;
-        if (e.target.value.length > 50) {
-          v8.Website = {
-            errorState: true,
-            errorMssg: "Maximum 50 characters allowed!",
-          };
-
-          this.setState({ Validations: v8 });
-        } else {
-          Customer[param] = e.target.value;
-          v8.Website = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v8 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "PhoneNo":
-        let v9 = this.state.Validations;
-
-        let numbers = /^[0-9\b]+$/;
-        if (numbers.test(e.target.value)) {
-          if (e.target.value.length > 20) {
-            v9.PhoneNo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed!",
-            };
-
-            this.setState({ Validations: v9 });
-          } else {
-            Customer[param] = e.target.value;
-            v9.PhoneNo = { errorState: false, errorMssg: "" };
-
-            this.setState({ Validations: v9 });
-
-            this.setParams(Customer);
-          }
-        }
-        break;
-      case "FaxNo":
-        let v10 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v10.FaxNo = {
-            errorState: true,
-            errorMssg: "Maximum 20 characters allowed!",
-          };
-
-          this.setState({ Validations: v10 });
-        } else {
-          Customer[param] = e.target.value;
-          v10.FaxNo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v10 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "IsGroupCompany":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "CreditDays":
-        let v11 = this.state.Validations;
-        if (e.target.value.length > 2) {
-          v11.CreditDays = {
-            errorState: true,
-            errorMssg: "Maximum 2 Numbers allowed!",
-          };
-
-          this.setState({ Validations: v11 });
-        } else {
-          Customer[param] = CF.toInt(e.target.value);
-          v11.CreditDays = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v11 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "CreditLimit":
-        let v12 = this.state.Validations;
-        if (e.target.value.length > 8) {
-          v12.CreditLimit = {
-            errorState: true,
-            errorMssg: "Maximum 8 Numbers allowed!",
-          };
-
-          this.setState({ Validations: v12 });
-        } else {
-          Customer[param] = CF.toFloat(e.target.value);
-          v12.CreditLimit = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v12 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "PaymentTermID":
-        console.log("Setting PaymentTermID");
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "CreditRating":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "GraceDays":
-        let v13 = this.state.Validations;
-        if (e.target.value.length > 2) {
-          v13.GraceDays = {
-            errorState: true,
-            errorMssg: "Maximum 2 Numbers allowed!",
-          };
-
-          this.setState({ Validations: v13 });
-        } else {
-          Customer[param] = CF.toInt(e.target.value);
-          v13.GraceDays = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v13 });
-
-          this.setParams(Customer);
-        }
-        break;
-
-      case "CurrID":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "IsGrowthBonanza":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "IsSlabDiscount":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "IsCarriage":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "IsDueEndOfMonth":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "IsBankCharge":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "BankCharge":
-        let v14 = this.state.Validations;
-        if (e.target.value.length > 8) {
-          v14.BankCharge = {
-            errorState: true,
-            errorMssg: "Maximum 8 Numbers allowed!",
-          };
-
-          this.setState({ Validations: v14 });
-        } else {
-          Customer[param] = CF.toFloat(e.target.value);
-          v14.BankCharge = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v14 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "IsBlock":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "IsEmailAlert":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "SalesPersonID":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "CustomerCategoryID":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "GeneralPostingGroupID":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "CustomerPostingGroupID":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "IsTaxExempt":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "Reason":
-        let v15 = this.state.Validations;
-        if (e.target.value.length > 50) {
-          v15.Reason = {
-            errorState: true,
-            errorMssg: "Maximum 50 Characters allowed!",
-          };
-
-          this.setState({ Validations: v15 });
-        } else {
-          Customer[param] = e.target.value;
-          v15.Reason = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v15 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "IsEcommerce":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "EcommerceGSTNo":
-        let v16 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v16.EcommerceGSTNo = {
-            errorState: true,
-            errorMssg: "Maximum 20 Characters allowed!",
-          };
-
-          this.setState({ Validations: v16 });
-        } else {
-          Customer[param] = e.target.value;
-          v16.EcommerceGSTNo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v16 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "EcommerceB2B":
-        Customer[param] = e.target.checked;
-        this.setParams(Customer);
-        break;
-      case "EcommerceNoSeries":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "GSTCutomerType":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "GSTNo":
-        let v17 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v17.GSTNo = {
-            errorState: true,
-            errorMssg: "Maximum 20 Characters allowed!",
-          };
-
-          this.setState({ Validations: v17 });
-        } else {
-          Customer[param] = e.target.value;
-          v17.GSTNo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v17 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "PANNo":
-        let v18 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v18.PANNo = {
-            errorState: true,
-            errorMssg: "Maximum 20 Characters allowed!",
-          };
-
-          this.setState({ Validations: v18 });
-        } else {
-          Customer[param] = e.target.value;
-          v18.PANNo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v18 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "IncoID":
-        Customer[param] = CF.toInt(e.target.value);
-        this.setParams(Customer);
-        break;
-      case "VATNo":
-        let v19 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v19.VATNo = {
-            errorState: true,
-            errorMssg: "Maximum 20 Characters allowed!",
-          };
-
-          this.setState({ Validations: v19 });
-        } else {
-          Customer[param] = e.target.value;
-          v19.VATNo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v19 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "EORINo":
-        let v20 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v20.EORINo = {
-            errorState: true,
-            errorMssg: "Maximum 20 Characters allowed!",
-          };
-
-          this.setState({ Validations: v20 });
-        } else {
-          Customer[param] = e.target.value;
-          v20.EORINo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v20 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "TSSNo":
-        let v21 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v21.TSSNo = {
-            errorState: true,
-            errorMssg: "Maximum 20 Characters allowed!",
-          };
-
-          this.setState({ Validations: v21 });
-        } else {
-          Customer[param] = e.target.value;
-          v21.TSSNo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v21 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "ContactPerson":
-        let v22 = this.state.Validations;
-        if (e.target.value.length > 50) {
-          v22.ContactPerson = {
-            errorState: true,
-            errorMssg: "Maximum 50 Characters allowed!",
-          };
-
-          this.setState({ Validations: v22 });
-        } else {
-          Customer[param] = e.target.value;
-          v22.ContactPerson = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v22 });
-
-          this.setParams(Customer);
-        }
-        break;
-      case "EmailID":
-        let v23 = this.state.Validations;
-        let email = CF.validateEmail(e.target.value);
-        if (email === true) {
-          if (e.target.value.length > 50) {
-            v23.EmailID = {
-              errorState: true,
-              errorMssg: "Maximum 50 Characters allowed!",
-            };
-
-            this.setState({ Validations: v23 });
-          } else {
-            Customer[param] = e.target.value;
-
-            v23.EmailID = { errorState: false, errorMssg: "" };
-
-            this.setState({ Validations: v23, DisableUpdatebtn: false,  DisableCreatebtn: false,});
-
-            this.setParams(Customer);
-          }
-        } else {
-          Customer[param] = e.target.value;
-          v23.EmailID = {
-            errorState: true,
-            errorMssg: "Incorrect EmailID",
-          };
-
-          this.setState({
-            Validations: v23,
-            DisableCreatebtn: true,
-            DisableUpdatebtn: true,
-          });
-        }
-
-        break;
-      case "SalesPersonID":
-        Customer[param] = e.target.value;
-        this.setParams(Customer);
-        break;
-      case "CustomerCategoryID":
-        Customer[param] = e.target.value;
-        this.setParams(Customer);
-        break;
-      default:
-        break;
-    }
+    let Suplier = this.state.Suplier;
+    switch (param) {}
   };
 
   setParams = (object) => {
@@ -970,7 +404,6 @@ class supplieractivity extends React.Component {
     window.location = url;
   };
 
-   
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -1014,84 +447,90 @@ class supplieractivity extends React.Component {
         "Content-Type": "application/json",
       };
 
-      let Customer = this.state.Customer;
-      let reqData = {
-        ValidUser: ValidUser,
-        DocumentNumber: {
-          NoSeriesID: 1,
-          TransDate: moment().format("MM-DD-YYYY")
-        }
-      };
-      let Url = APIURLS.APIURL.GetMasterDocumentNumber;
-      axios
-        .post(Url, reqData, { headers })
-        .then((response) => {
-          let data = response.data;
-          console.log("---> No Series DATA > ", data);
-          Customer.No = data;
-          reqData = {
-            ValidUser: ValidUser,
-            Customer: Customer,
-          };
-          console.log("createCoa > reqData >", reqData);
-          Url = APIURLS.APIURL.CreateCustomer;
-          axios
-            .post(Url, reqData, { headers })
-            .then((response) => {
-              let data = response.data;
-              console.log("DATA>>", data);
-              if (response.status === 200 || response.status === 201) {
-                this.setState({ ErrorPrompt: false, SuccessPrompt: true,Loader: true });
-                this.openPage(URLS.URLS.customerMaster + this.state.urlparams);
-              } else {
-                this.setState({ ErrorPrompt: true, SuccessPrompt: false,Loader: true });
-              }
-            })
-            .catch((error) => {
-              this.setState({ ErrorPrompt: true,Loader: true });
-            });
-
-        })
-        .catch((error) => {
-          this.setState({ ErrorPrompt: true,Loader: true });
-        });
-
+      let Supplier = this.state.Supplier;
+      // let reqData = {
+      //   ValidUser: ValidUser,
+      //   DocumentNumber: {
+      //     NoSeriesID: 1,
+      //     TransDate: moment().format("MM-DD-YYYY"),
+      //   },
+      // };
+      // let Url = APIURLS.APIURL.GetMasterDocumentNumber;
+      // axios
+      //   .post(Url, reqData, { headers })
+      //   .then((response) => {
+      //     let data = response.data;
+      //     console.log("---> No Series DATA > ", data);
+      //     Customer.No = data;
+      //     reqData = {
+      //       ValidUser: ValidUser,
+      //       Customer: Customer,
+      //     };
+      //     console.log("createCoa > reqData >", reqData);
+      //     Url = APIURLS.APIURL.CreateCustomer;
+      //     axios
+      //       .post(Url, reqData, { headers })
+      //       .then((response) => {
+      //         let data = response.data;
+      //         console.log("DATA>>", data);
+      //         if (response.status === 200 || response.status === 201) {
+      //           this.setState({
+      //             ErrorPrompt: false,
+      //             SuccessPrompt: true,
+      //             Loader: true,
+      //           });
+      //           this.openPage(URLS.URLS.customerMaster + this.state.urlparams);
+      //         } else {
+      //           this.setState({
+      //             ErrorPrompt: true,
+      //             SuccessPrompt: false,
+      //             Loader: true,
+      //           });
+      //         }
+      //       })
+      //       .catch((error) => {
+      //         this.setState({ ErrorPrompt: true, Loader: true });
+      //       });
+      //   })
+      //   .catch((error) => {
+      //     this.setState({ ErrorPrompt: true, Loader: true });
+      //   });
     };
 
-    const updateCustomer = (e) => {
+    const updateSupplier = (e) => {
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       const headers = {
         "Content-Type": "application/json",
       };
-      let Url = APIURLS.APIURL.UpdateCustomer;
-      let Customer = this.state.Customer;
-      Customer.BranchID = CF.toInt(this.state.BranchID);
-      Customer.UserID = CF.toInt(getCookie(COOKIE.USERID));
-      
-      delete Customer["CustomerAddress"];
-      delete Customer["CustomerBranchMapping"];
-      delete Customer["CustomerContact"];
+      // let Url = APIURLS.APIURL.UpdateCustomer;
+      // let Customer = this.state.Customer;
+      // Customer.BranchID = CF.toInt(this.state.BranchID);
+      // Customer.UserID = CF.toInt(getCookie(COOKIE.USERID));
 
-      let reqData = {
-        ValidUser: ValidUser,
-        Customer: Customer,
-      };
-      console.log("updateCustomer > reqData >", reqData);
-      axios
-        .post(Url, reqData, { headers })
-        .then((response) => {
-          let data = response.data;
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ErrorPrompt: false, SuccessPrompt: true });
-          } else {
-            this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-          }
-        })
-        .catch((error) => {
-          this.setState({ ErrorPrompt: true });
-        });
+      // delete Customer["CustomerAddress"];
+      // delete Customer["CustomerBranchMapping"];
+      // delete Customer["CustomerContact"];
+
+      // let reqData = {
+      //   ValidUser: ValidUser,
+      //   Customer: Customer,
+      // };
+      // console.log("updateCustomer > reqData >", reqData);
+      // axios
+      //   .post(Url, reqData, { headers })
+      //   .then((response) => {
+      //     let data = response.data;
+      //     if (response.status === 200 || response.status === 201) {
+      //       this.setState({ ErrorPrompt: false, SuccessPrompt: true });
+      //     } else {
+      //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     this.setState({ ErrorPrompt: true });
+      //   });
     };
 
     const generalform = (
@@ -1115,7 +554,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("No", e)}
-                          value={this.state.Customer.No}
+                          value={this.state.Supplier.No}
                           isMandatory={true}
                           error={this.state.Validations.No.errorState}
                           helperText={this.state.Validations.No.errorMssg}
@@ -1127,7 +566,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("Name", e)}
-                          value={this.state.Customer.Name}
+                          value={this.state.Supplier.Name}
                           isMandatory={true}
                           error={this.state.Validations.Name.errorState}
                           helperText={this.state.Validations.Name.errorMssg}
@@ -1138,7 +577,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("Address", e)}
-                          value={this.state.Customer.Address}
+                          value={this.state.Supplier.Address}
                           error={this.state.Validations.Address.errorState}
                           helperText={this.state.Validations.Address.errorMssg}
                         />
@@ -1148,7 +587,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("Address2", e)}
-                          value={this.state.Customer.Address2}
+                          value={this.state.Supplier.Address2}
                           error={this.state.Validations.Address2.errorState}
                           helperText={this.state.Validations.Address2.errorMssg}
                         />
@@ -1158,7 +597,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("Address3", e)}
-                          value={this.state.Customer.Address3}
+                          value={this.state.Supplier.Address3}
                           error={this.state.Validations.Address3.errorState}
                           helperText={this.state.Validations.Address3.errorMssg}
                         />
@@ -1168,7 +607,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("City", e)}
-                          value={this.state.Customer.City}
+                          value={this.state.Supplier.City}
                           error={this.state.Validations.City.errorState}
                           helperText={this.state.Validations.City.errorMssg}
                         />
@@ -1178,7 +617,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("PostCode", e)}
-                          value={this.state.Customer.PostCode}
+                          value={this.state.Supplier.PostCode}
                           error={this.state.Validations.PostCode.errorState}
                           helperText={this.state.Validations.PostCode.errorMssg}
                         />
@@ -1186,7 +625,7 @@ class supplieractivity extends React.Component {
                           id="CountryID"
                           label="Country"
                           onChange={(e) => this.updateFormValue("CountryID", e)}
-                          value={this.state.Customer.CountryID}
+                          value={this.state.Supplier.CountryID}
                           options={this.state.countryData}
                           isMandatory={true}
                         />
@@ -1194,121 +633,9 @@ class supplieractivity extends React.Component {
                           id="StateID"
                           label="State"
                           onChange={(e) => this.updateFormValue("StateID", e)}
-                          value={this.state.Customer.StateID}
+                          value={this.state.Supplier.StateID}
                           options={this.state.stateData}
                         />
-
-                        <TextboxInput
-                          id="ContactPerson"
-                          label="ContactPerson"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) =>
-                            this.updateFormValue("ContactPerson", e)
-                          }
-                          value={this.state.Customer.ContactPerson}
-                          error={
-                            this.state.Validations.ContactPerson.errorState
-                          }
-                          helperText={
-                            this.state.Validations.ContactPerson.errorMssg
-                          }
-                        />
-                        <TextboxInput
-                          id="EmailID"
-                          label="EmailID"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => this.updateFormValue("EmailID", e)}
-                          value={this.state.Customer.EmailID}
-                          error={this.state.Validations.EmailID.errorState}
-                          helperText={this.state.Validations.EmailID.errorMssg}
-                        />
-
-                         
-
-                        <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Sales Person
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
-                                <select
-                                  className="dropdown-css"
-                                  id="SalesPersonID"
-                                  onChange={(e) =>
-                                    this.updateFormValue("SalesPersonID", e)
-                                  }
-                                  value={this.state.Customer.SalesPersonID}
-                                >
-                                  <option value="-" disabled>
-                                    Select
-                                  </option>
-
-                                  {this.state.salesPersonData.map(
-                                    (item, i) => (
-                                      <option value={parseInt(item.value)}>
-                                        {item.name}
-                                      </option>
-                                    )
-                                  )}
-                                </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <button
-                                  className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("SalesPerson")}
-                                >
-                                  ...
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow>
-                         
-
-                        <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Customer Category
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
-                                <select
-                                  className="dropdown-css"
-                                  id="CustomerCategoryID"
-                                  onChange={(e) =>
-                                    this.updateFormValue("CustomerCategoryID", e)
-                                  }
-                                  value={this.state.Customer.CustomerCategoryID}
-                                >
-                                  <option value="-" disabled>
-                                    Select
-                                  </option>
-
-                                  {this.state.customerCategoryData.map(
-                                    (item, i) => (
-                                      <option value={parseInt(item.value)}>
-                                        {item.name}
-                                      </option>
-                                    )
-                                  )}
-                                </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <button
-                                  className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("CustomerCategory")}
-                                >
-                                  ...
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow>
-
-
                       </TableBody>
                     </Table>
                   </Grid>
@@ -1325,12 +652,38 @@ class supplieractivity extends React.Component {
                     >
                       <TableBody className="tableBody">
                         <TextboxInput
+                          id="ContactPerson"
+                          label="ContactPerson"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) =>
+                            this.updateFormValue("ContactPerson", e)
+                          }
+                          value={this.state.Supplier.ContactPerson}
+                          error={
+                            this.state.Validations.ContactPerson.errorState
+                          }
+                          helperText={
+                            this.state.Validations.ContactPerson.errorMssg
+                          }
+                        />
+                        <TextboxInput
+                          id="EmailID"
+                          label="EmailID"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => this.updateFormValue("EmailID", e)}
+                          value={this.state.Supplier.EmailID}
+                          error={this.state.Validations.EmailID.errorState}
+                          helperText={this.state.Validations.EmailID.errorMssg}
+                        />
+                        <TextboxInput
                           id="Website"
                           label="Website"
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("Website", e)}
-                          value={this.state.Customer.Website}
+                          value={this.state.Supplier.Website}
                           error={this.state.Validations.Website.errorState}
                           helperText={this.state.Validations.Website.errorMssg}
                         />
@@ -1341,7 +694,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("PhoneNo", e)}
-                          value={this.state.Customer.PhoneNo}
+                          value={this.state.Supplier.PhoneNo}
                           error={this.state.Validations.PhoneNo.errorState}
                           helperText={this.state.Validations.PhoneNo.errorMssg}
                         />
@@ -1351,88 +704,35 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("FaxNo", e)}
-                          value={this.state.Customer.FaxNo}
+                          value={this.state.Supplier.FaxNo}
                           error={this.state.Validations.FaxNo.errorState}
                           helperText={this.state.Validations.FaxNo.errorMssg}
                         />
-
-                        <TextboxInput
-                          id="CreditDays"
-                          label="CreditDays"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) =>
-                            this.updateFormValue("CreditDays", e)
-                          }
-                          value={this.state.Customer.CreditDays}
-                          error={this.state.Validations.CreditDays.errorState}
-                          helperText={
-                            this.state.Validations.CreditDays.errorMssg
-                          }
-                        />
-                        <TextboxInput
-                          id="CreditLimit"
-                          label="CreditLimit"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) =>
-                            this.updateFormValue("CreditLimit", e)
-                          }
-                          value={this.state.Customer.CreditLimit}
-                          error={this.state.Validations.CreditLimit.errorState}
-                          helperText={
-                            this.state.Validations.CreditLimit.errorMssg
-                          }
-                        />
-
-                        <DropdownInput
-                          id="CreditRating"
-                          label="CreditRating"
-                          onChange={(e) =>
-                            this.updateFormValue("CreditRating", e)
-                          }
-                          value={this.state.Customer.CreditRating}
-                          options={this.state.CreditRating}
-                        />
-
-                        <TextboxInput
-                          id="GraceDays"
-                          label="GraceDays"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => this.updateFormValue("GraceDays", e)}
-                          value={this.state.Customer.GraceDays}
-                          error={this.state.Validations.GraceDays.errorState}
-                          helperText={
-                            this.state.Validations.GraceDays.errorMssg
-                          }
-                        />
-
                         <SwitchInput
                           key="IsGroupCompany"
                           id="IsGroupCompany"
                           label="IsGroupCompany"
-                          param={this.state.Customer.IsGroupCompany}
+                          param={this.state.Supplier.IsGroupCompany}
                           onChange={(e) =>
                             this.updateFormValue("IsGroupCompany", e)
                           }
+                        />
+
+                        <TextboxInput
+                          id="DueDays"
+                          label="Due Days"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => this.updateFormValue("DueDays", e)}
+                          value={this.state.Supplier.DueDays}
                         />
 
                         <SwitchInput
                           key="IsBlock"
                           id="IsBlock"
                           label="IsBlock"
-                          param={this.state.Customer.IsBlock}
+                          param={this.state.Supplier.IsBlock}
                           onChange={(e) => this.updateFormValue("IsBlock", e)}
-                        />
-                        <SwitchInput
-                          key="IsEmailAlert"
-                          id="IsEmailAlert"
-                          label="IsEmailAlert"
-                          param={this.state.Customer.IsEmailAlert}
-                          onChange={(e) =>
-                            this.updateFormValue("IsEmailAlert", e)
-                          }
                         />
                       </TableBody>
                     </Table>
@@ -1464,45 +764,19 @@ class supplieractivity extends React.Component {
                           id="CurrID"
                           label="CurrID"
                           onChange={(e) => this.updateFormValue("CurrID", e)}
-                          value={this.state.Customer.CurrID}
+                          value={this.state.Supplier.CurrID}
                           options={this.state.currencyList}
                           isMandatory={true}
                         />
-                        <SwitchInput
-                          key="IsGrowthBonanza"
-                          id="IsGrowthBonanza"
-                          label="IsGrowthBonanza"
-                          param={this.state.Customer.IsGrowthBonanza}
+                        <DropdownInput
+                          id="GeneralPostingGroupID"
+                          label="GeneralPostingGroupID"
                           onChange={(e) =>
-                            this.updateFormValue("IsGrowthBonanza", e)
+                            this.updateFormValue("GeneralPostingGroupID", e)
                           }
-                        />
-                        <SwitchInput
-                          key="IsSlabDiscount"
-                          id="IsSlabDiscount"
-                          label="IsSlabDiscount"
-                          param={this.state.Customer.IsSlabDiscount}
-                          onChange={(e) =>
-                            this.updateFormValue("IsSlabDiscount", e)
-                          }
-                        />
-                        <SwitchInput
-                          key="IsCarriage"
-                          id="IsCarriage"
-                          label="IsCarriage"
-                          param={this.state.Customer.IsCarriage}
-                          onChange={(e) =>
-                            this.updateFormValue("IsCarriage", e)
-                          }
-                        />
-                        <SwitchInput
-                          key="IsDueEndOfMonth"
-                          id="IsDueEndOfMonth"
-                          label="IsDueEndOfMonth"
-                          param={this.state.Customer.IsDueEndOfMonth}
-                          onChange={(e) =>
-                            this.updateFormValue("IsDueEndOfMonth", e)
-                          }
+                          value={this.state.Supplier.GeneralPostingGroupID}
+                          options={this.state.GeneralPostingGroupList}
+                          isMandatory={true}
                         />
                       </TableBody>
                     </Table>
@@ -1519,48 +793,14 @@ class supplieractivity extends React.Component {
                       aria-label="Coa Activity table"
                     >
                       <TableBody className="tableBody">
-                        <SwitchInput
-                          key="IsBankCharge"
-                          id="IsBankCharge"
-                          label="IsBankCharge"
-                          param={this.state.Customer.IsBankCharge}
-                          onChange={(e) =>
-                            this.updateFormValue("IsBankCharge", e)
-                          }
-                        />
-                        <TextboxInput
-                          id="BankCharge"
-                          label="BankCharge"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) =>
-                            this.updateFormValue("BankCharge", e)
-                          }
-                          value={this.state.Customer.BankCharge}
-                          error={this.state.Validations.BankCharge.errorState}
-                          helperText={
-                            this.state.Validations.BankCharge.errorMssg
-                          }
-                        />
-
-                        <DropdownInput
-                          id="GeneralPostingGroupID"
-                          label="GeneralPostingGroupID"
-                          onChange={(e) =>
-                            this.updateFormValue("GeneralPostingGroupID", e)
-                          }
-                          value={this.state.Customer.GeneralPostingGroupID}
-                          options={this.state.GeneralPostingGroupList}
-                          isMandatory={true}
-                        />
                         <DropdownInput
                           id="CustomerPostingGroupID"
                           label="CustomerPostingGroupID"
                           onChange={(e) =>
                             this.updateFormValue("CustomerPostingGroupID", e)
                           }
-                          value={this.state.Customer.CustomerPostingGroupID}
-                          options={this.state.CustomerPostingGroupList}
+                          value={this.state.Supplier.CustomerPostingGroupID}
+                          options={this.state.SupplierPostingGroupID}
                           isMandatory={true}
                         />
 
@@ -1577,7 +817,7 @@ class supplieractivity extends React.Component {
                                   onChange={(e) =>
                                     this.updateFormValue("PaymentTermID", e)
                                   }
-                                  value={this.state.Customer.PaymentTermID}
+                                  value={this.state.Supplier.PaymentTermID}
                                 >
                                   <option value="-" disabled>
                                     Select
@@ -1629,11 +869,29 @@ class supplieractivity extends React.Component {
                       aria-label="Taxinfo Activity table"
                     >
                       <TableBody className="tableBody">
+                        <DropdownInput
+                          id="SupplierClasification"
+                          label="SupplierClasification"
+                          onChange={(e) =>
+                            this.updateFormValue("SupplierClasification", e)
+                          }
+                          value={this.state.Supplier.SupplierClasification}
+                          options={[]}
+                        />
+                        <DropdownInput
+                          id="TypeOfEnterprise"
+                          label="Type Of Enterprise"
+                          onChange={(e) =>
+                            this.updateFormValue("TypeOfEnterprise", e)
+                          }
+                          value={this.state.Supplier.TypeOfEnterprise}
+                          options={[]}
+                        />
                         <SwitchInput
                           key="IsTaxExempt"
                           id="IsTaxExempt"
                           label="IsTaxExempt"
-                          param={this.state.Customer.IsTaxExempt}
+                          param={this.state.Supplier.IsTaxExempt}
                           onChange={(e) =>
                             this.updateFormValue("IsTaxExempt", e)
                           }
@@ -1644,64 +902,19 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("Reason", e)}
-                          value={this.state.Customer.Reason}
+                          value={this.state.Supplier.Reason}
                           error={this.state.Validations.Reason.errorState}
                           helperText={this.state.Validations.Reason.errorMssg}
                         />
 
-                        <SwitchInput
-                          key="IsEcommerce"
-                          id="IsEcommerce"
-                          label="IsEcommerce"
-                          param={this.state.Customer.IsEcommerce}
-                          onChange={(e) =>
-                            this.updateFormValue("IsEcommerce", e)
-                          }
-                        />
-                        <TextboxInput
-                          id="EcommerceGSTNo"
-                          label="EcommerceGSTNo"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) =>
-                            this.updateFormValue("EcommerceGSTNo", e)
-                          }
-                          value={this.state.Customer.EcommerceGSTNo}
-                          error={
-                            this.state.Validations.EcommerceGSTNo.errorState
-                          }
-                          helperText={
-                            this.state.Validations.EcommerceGSTNo.errorMssg
-                          }
-                        />
-
-                        <SwitchInput
-                          key="EcommerceB2B"
-                          id="EcommerceB2B"
-                          label="EcommerceB2B"
-                          param={this.state.Customer.EcommerceB2B}
-                          onChange={(e) =>
-                            this.updateFormValue("EcommerceB2B", e)
-                          }
-                        />
-
                         <DropdownInput
-                          id="EcommerceNoSeries"
-                          label="EcommerceNoSeries"
+                          id="GSTSupplierType"
+                          label="GST SupplierType"
                           onChange={(e) =>
-                            this.updateFormValue("EcommerceNoSeries", e)
+                            this.updateFormValue("GSTSupplierType", e)
                           }
-                          value={this.state.Customer.EcommerceNoSeries}
+                          value={this.state.Supplier.GSTSupplierType}
                           options={[]}
-                        />
-                        <DropdownInput
-                          id="GSTCutomerType"
-                          label="GSTCutomerType"
-                          onChange={(e) =>
-                            this.updateFormValue("GSTCutomerType", e)
-                          }
-                          value={this.state.Customer.GSTCutomerType}
-                          options={this.state.GSTCutomerType}
                         />
                       </TableBody>
                     </Table>
@@ -1724,7 +937,7 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("GSTNo", e)}
-                          value={this.state.Customer.GSTNo}
+                          value={this.state.Supplier.GSTNo}
                           error={this.state.Validations.GSTNo.errorState}
                           helperText={this.state.Validations.GSTNo.errorMssg}
                         />
@@ -1734,47 +947,20 @@ class supplieractivity extends React.Component {
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("PANNo", e)}
-                          value={this.state.Customer.PANNo}
+                          value={this.state.Supplier.PANNo}
                           error={this.state.Validations.PANNo.errorState}
                           helperText={this.state.Validations.PANNo.errorMssg}
                         />
-                        <DropdownInput
-                          id="IncoID"
-                          label="IncoID"
-                          onChange={(e) => this.updateFormValue("IncoID", e)}
-                          value={this.state.Customer.IncoID}
-                          options={[]}
-                        />
+
                         <TextboxInput
                           id="VATNo"
                           label="VATNo"
                           variant="outlined"
                           size="small"
                           onChange={(e) => this.updateFormValue("VATNo", e)}
-                          value={this.state.Customer.VATNo}
+                          value={this.state.Supplier.VATNo}
                           error={this.state.Validations.VATNo.errorState}
                           helperText={this.state.Validations.VATNo.errorMssg}
-                        />
-
-                        <TextboxInput
-                          id="EORINo"
-                          label="EORINo"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => this.updateFormValue("EORINo", e)}
-                          value={this.state.Customer.EORINo}
-                          error={this.state.Validations.EORINo.errorState}
-                          helperText={this.state.Validations.EORINo.errorMssg}
-                        />
-                        <TextboxInput
-                          id="TSSNo"
-                          label="TSSNo"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => this.updateFormValue("TSSNo", e)}
-                          value={this.state.Customer.TSSNo}
-                          error={this.state.Validations.TSSNo.errorState}
-                          helperText={this.state.Validations.TSSNo.errorMssg}
                         />
                       </TableBody>
                     </Table>
@@ -1846,7 +1032,7 @@ class supplieractivity extends React.Component {
               style={{ backgroundColor: "#fff" }}
             >
               <div style={{ marginTop: 5, marginLeft: 15 }}>
-                <h4 style={{ color: "#000000" }}>Customer Sales history</h4>
+                <h4 style={{ color: "#000000" }}>Supplier Sales history</h4>
               </div>
               <TableContainer>
                 <Table
@@ -1858,7 +1044,7 @@ class supplieractivity extends React.Component {
                   <TableBody className="tableBody">
                     <TableRow>
                       <TableCell align="left" className="no-border-table">
-                        Customer No
+                        Suplier No
                       </TableCell>
                       <TableCell align="right" className="no-border-table">
                         123456
@@ -2107,15 +1293,15 @@ class supplieractivity extends React.Component {
       </Fragment>
     );
 
-    const Address = <Addresses CustID={this.state.CustID} />;
+    const Address = <Addresses SuplID={this.state.SuplID} />;
 
-    const contact = <Contact CustID={this.state.CustID} />;
+    const contact = <Contact SuplID={this.state.SuplID} />;
 
-    const customerCategory = <CustomerCategory CustID={this.state.CustID} />;
+    const customerCategory = <CustomerCategory SuplID={this.state.SuplID} />;
 
-    const paymentTerms = <PaymentTerms CustID={this.state.CustID} />;
+    const paymentTerms = <PaymentTerms SuplID={this.state.SuplID} />;
 
-    const salesPerson = <SalesPerson CustID={this.state.CustID} />;
+    const salesPerson = <SalesPerson SuplID={this.state.SuplID} />;
 
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
@@ -2192,8 +1378,8 @@ class supplieractivity extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  masterHref={URLS.URLS.customerMaster + this.state.urlparams}
-                  masterLinkTitle="Customer Master"
+                  masterHref={URLS.URLS.supplierMaster + this.state.urlparams}
+                  masterLinkTitle="Supplier Master"
                   typoTitle={this.state.typoTitle}
                   level={2}
                 />
@@ -2220,7 +1406,7 @@ class supplieractivity extends React.Component {
                       <div>
                         <Button
                           className="action-btns"
-                          onClick={(e) => updateCustomer(e)}
+                          onClick={(e) => updateSupplier(e)}
                           disabled={this.state.DisableUpdatebtn}
                         >
                           {APIURLS.buttonTitle.update}
@@ -2237,7 +1423,6 @@ class supplieractivity extends React.Component {
                         >
                           Contact
                         </Button>
-                       
                       </div>
                     ) : null}
                   </ButtonGroup>
