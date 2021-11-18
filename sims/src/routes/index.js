@@ -68,7 +68,7 @@ import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
 import Ftptest from "../components/ftp/ftptest";
 import Header from "../components/user/userheaderconstants";
-import ErrorBoundary from "./ErrorBoundary";
+ 
 
 
 
@@ -76,12 +76,7 @@ let routes = ({ location, ...rest }) => {
   return (
 
     <Router>
-
-
-
-
-      {window.location.pathname === "/" ? null : <Header />}
-
+      {(window.location.pathname === "/" || window.location.pathname) === "/loginExpired" ? null : <Header />}
      <div style={{marginLeft:10}}>
      <Switch>
         <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
@@ -184,9 +179,7 @@ let routes = ({ location, ...rest }) => {
 
         <Route component={pageNotFound} />
       </Switch>
-     </div>
-
-    
+     </div>    
     </Router>
 
   );

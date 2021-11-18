@@ -167,10 +167,10 @@ export default function ButtonAppBar() {
 
           </Toolbar>
         </AppBar>
-        <Logincheck />
+
 
         <Popover
-          style={{marginTop:15}}
+          style={{ marginTop: 15 }}
           id={id}
           open={openMessage}
           anchorEl={MessageanchorEl}
@@ -187,6 +187,7 @@ export default function ButtonAppBar() {
 
 
       </div>
+      <Logincheck />
     </Fragment>
   );
 }
