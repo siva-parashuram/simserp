@@ -131,6 +131,7 @@ class supplieractivity extends React.Component {
         DueDays: { errorState: false, errorMssg: "" },
         Reason: { errorState: false, errorMssg: "" },
         GSTNo: { errorState: false, errorMssg: "" },
+        CurrID: { errorState: false, errorMssg: "" },
         PANNo: { errorState: false, errorMssg: "" },
         VATNo: { errorState: false, errorMssg: "" },
         ContactPerson: { errorState: false, errorMssg: "" },
@@ -721,6 +722,7 @@ class supplieractivity extends React.Component {
       case "CurrID":
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);
+
         break;
 
       case "IsBlock":
@@ -787,6 +789,7 @@ class supplieractivity extends React.Component {
 
           this.setParams(Supplier);
         }
+        
         break;
       case "PANNo":
         let v18 = this.state.Validations;
@@ -856,7 +859,8 @@ class supplieractivity extends React.Component {
       Validations["PANNo"].errorState === true ||
       Validations["VATNo"].errorState === true ||
       Validations["ContactPerson"].errorState === true ||
-      Validations["EmailID"].errorState === true
+      Validations["EmailID"].errorState === true ||
+      Validations["CurrID"].errorState === true
     ) {
       this.setState({ DisableCreatebtn: true, DisableUpdatebtn: true });
     } else {
@@ -1231,6 +1235,7 @@ class supplieractivity extends React.Component {
                           value={this.state.Supplier.CurrID}
                           options={this.state.currencyList}
                           isMandatory={true}
+                         
                         />
                         <DropdownInput
                           id="GeneralPostingGroupID"

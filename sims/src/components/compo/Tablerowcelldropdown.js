@@ -27,7 +27,8 @@ class tablerowcelldropdown extends React.Component {
                 value={isNaN(this.props.value) ? this.props.value : parseInt(this.props.value)}
                 onChange={this.props.onChange} 
                 disabled={this.props.disabled}
-                
+                error={this.props.error}
+                helperText={this.props.helperText}
               >
                 <option value="-1" disabled>Select</option>
                 {this.props.options?this.props.options.map((item, i) => (
