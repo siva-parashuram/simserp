@@ -59,6 +59,7 @@ class discount extends React.Component {
       initialCss: "",
       listDiscount: null,
       updateDiscount: {},
+      branchData: [],
       DiscountData: [],
       GeneralDetailsExpanded: true,
       createNewBtn: false,
@@ -91,6 +92,35 @@ class discount extends React.Component {
 
   componentDidMount() {
     this.getDiscount();
+    this.getBranches();
+  }
+
+  getBranches() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+
+    axios
+      .post(GetBrachesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].name,
+            value: data[i].branchId,
+          };
+          newD.push(o);
+        }
+        this.setState({ branchData: newD, ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ branchData: [], ProgressLoader: true });
+      });
   }
 
   getDiscount = () => {
@@ -243,6 +273,76 @@ class discount extends React.Component {
     let Discount = this.state.Discount;
 
     switch (param) {
+      case "BranchID":
+        Discount[param] = CF.toInt(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "IsActive":
+        Discount[param] = e.target.checked;
+        this.setParams(Discount);
+        break;
+      case "LowerLimit1":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "LowerLimit2":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "LowerLimit3":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "LowerLimit4":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "UpperLimit1":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "UpperLimit2":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "UpperLimit3":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "Percentage1":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "Percentage2":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "Percentage3":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "Percentage4":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "Surcharge1":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "Surcharge2":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "Surcharge3":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      case "Surcharge4":
+        Discount[param] = CF.toFloat(e.target.value);
+        this.setParams(Discount);
+        break;
+      default:
+        break;
     }
   };
 
@@ -441,7 +541,7 @@ class discount extends React.Component {
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div
                       style={{
-                        height: 300,
+                        height: 400,
                         marginTop: 10,
                         overflowX: "hidden",
                         overflowY: "scroll",
@@ -450,269 +550,296 @@ class discount extends React.Component {
                       }}
                     >
                       <div style={{ height: 20 }}>&nbsp;</div>
-                      <Table
-                        stickyHeader
-                        size="small"
-                        className="accordion-table"
-                        aria-label="Customercategory  table"
-                      >
-                        <TableBody className="tableBody">
-                          <DropdownInput
-                            id="BranchID"
-                            label="BranchID"
-                            onChange={(e) =>
-                              this.updateFormValue("BranchID", e)
-                            }
-                            value={this.state.Discount.BranchID}
-                            //   options={}
-                            isMandatory={true}
-                          />
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                              <Table
+                                stickyHeader
+                                size="small"
+                                className="accordion-table"
+                                aria-label="Customercategory  table"
+                              >
+                                <TableBody className="tableBody">
+                                  <DropdownInput
+                                    id="BranchID"
+                                    label="BranchID"
+                                    onChange={(e) =>
+                                      this.updateFormValue("BranchID", e)
+                                    }
+                                    value={this.state.Discount.BranchID}
+                                    options={this.state.branchData}
+                                    isMandatory={true}
+                                  />
 
-                          <TableRow>
-                              <TableCell>
-                              <table>
-                            <thead>
-                              <tr>
-                                <td>LowerLimit</td>
-                                <td>UpperLimit</td>
-                                <td>Percentage</td>
-                                <td>Surcharge</td>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <Inputcustom
-                                    id="LowerLimit1"
-                                    label="Lower Limit1"
+                                  <DateTextboxInput
+                                    id="StartDate"
+                                    label="StartDate"
                                     variant="outlined"
                                     size="small"
                                     onChange={(e) =>
-                                      this.updateFormValue("LowerLimit1", e)
+                                      this.updateFormValue("StartDate", e)
                                     }
-                                    value={this.state.Discount.LowerLimit1}
+                                    value={this.state.Discount.StartDate}
                                   />
-                                </td>
-                                <td>
-                                  {" "}
-                                  <Inputcustom
-                                    id="UpperLimit1"
-                                    label="Upper Limit1"
+                                  <DateTextboxInput
+                                    id="EndDate"
+                                    label="EndDate"
                                     variant="outlined"
                                     size="small"
                                     onChange={(e) =>
-                                      this.updateFormValue("UpperLimit1", e)
+                                      this.updateFormValue("EndDate", e)
                                     }
-                                    value={this.state.Discount.UpperLimit1}
+                                    value={this.state.Discount.EndDate}
                                   />
-                                </td>
-                                <td>
-                                  <Inputcustom
-                                    id="Percentage1"
-                                    label="Percentage1"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("Percentage1", e)
-                                    }
-                                    value={this.state.Discount.Percentage1}
-                                  />
-                                </td>
-                                <td>
-                                  {" "}
-                                  <Inputcustom
-                                    id="Surcharge1"
-                                    label="Surcharge1"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("Surcharge1", e)
-                                    }
-                                    value={this.state.Discount.Surcharge1}
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <Inputcustom
-                                    id="LowerLimit2"
-                                    label="LowerLimit2"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("LowerLimit2", e)
-                                    }
-                                    value={this.state.Discount.LowerLimit2}
-                                  />
-                                </td>
-                                <td>
-                                  <Inputcustom
-                                    id="UpperLimit2"
-                                    label="Upper Limit2"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("UpperLimit2", e)
-                                    }
-                                    value={this.state.Discount.UpperLimit2}
-                                  />
-                                </td>
-                                <td>
-                                  <Inputcustom
-                                    id="Percentage2"
-                                    label="Percentage2"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("Percentage2", e)
-                                    }
-                                    value={this.state.Discount.Percentage2}
-                                  />
-                                </td>
-                                <td>
-                                  {" "}
-                                  <Inputcustom
-                                    id="Surcharge2"
-                                    label="Surcharge2"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("Surcharge2", e)
-                                    }
-                                    value={this.state.Discount.Surcharge2}
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  {" "}
-                                  <Inputcustom
-                                    id="LowerLimit3"
-                                    label="Lower Limit3"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("LowerLimit3", e)
-                                    }
-                                    value={this.state.Discount.LowerLimit3}
-                                  />
-                                </td>
-                                <td>
-                                  {" "}
-                                  <Inputcustom
-                                    id="UpperLimit3"
-                                    label="Upper Limit3"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("UpperLimit3", e)
-                                    }
-                                    value={this.state.Discount.UpperLimit3}
-                                  />
-                                </td>
-                                <td>
-                                  <Inputcustom
-                                    id="Percentage3"
-                                    label="Percentage3"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("Percentage3", e)
-                                    }
-                                    value={this.state.Discount.Percentage3}
-                                  />
-                                </td>
-                                <td>
-                                  <Inputcustom
-                                    id="Surcharge3"
-                                    label="Surcharge3"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("Surcharge3", e)
-                                    }
-                                    value={this.state.Discount.Surcharge3}
-                                  />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  {" "}
-                                  <Inputcustom
-                                    id="LowerLimit4"
-                                    label="Lower Limit4"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("LowerLimit4", e)
-                                    }
-                                    value={this.state.Discount.LowerLimit4}
-                                  />
-                                </td>
-                                <td></td>
-                                <td>
-                                  <Inputcustom
-                                    id="Percentage4"
-                                    label="Percentage4"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("Percentage4", e)
-                                    }
-                                    value={this.state.Discount.Percentage4}
-                                  />
-                                </td>
-                                <td>
-                                  <Inputcustom
-                                    id="Surcharge4"
-                                    label="Surcharge4"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("Surcharge4", e)
-                                    }
-                                    value={this.state.Discount.Surcharge4}
-                                  />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                              </TableCell>
-                          </TableRow>
 
-                       
+                                  <SwitchInput
+                                    key="IsActive"
+                                    id="IsActive"
+                                    label="IsActive"
+                                    param={this.state.Discount.IsActive}
+                                    onChange={(e) =>
+                                      this.updateFormValue("IsActive", e)
+                                    }
+                                    value={this.state.Discount.IsActive}
+                                  />
+                                </TableBody>
+                              </Table>
+                            </Grid>
+                          </Grid>
 
-                          <DateTextboxInput
-                            id="StartDate"
-                            label="StartDate"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) =>
-                              this.updateFormValue("StartDate", e)
-                            }
-                            value={this.state.Discount.StartDate}
-                          />
-                          <DateTextboxInput
-                            id="EndDate"
-                            label="EndDate"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => this.updateFormValue("EndDate", e)}
-                            value={this.state.Discount.EndDate}
-                          />
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={10} lg={10}>
+                              <Table
+                                stickyHeader
+                                size="small"
+                                className="accordion-table"
+                                aria-label="Customercategory  table"
+                              >
+                                <TableHead className="table-header-background">
+                                  <TableCell
+                                    className="table-header-font"
+                                    align="left"
+                                  >
+                                    LowerLimit
+                                  </TableCell>
+                                  <TableCell
+                                    className="table-header-font"
+                                    align="left"
+                                  >
+                                    UpperLimit
+                                  </TableCell>
+                                  <TableCell
+                                    className="table-header-font"
+                                    align="left"
+                                  >
+                                    Percentage
+                                  </TableCell>
+                                  <TableCell
+                                    className="table-header-font"
+                                    align="left"
+                                  >
+                                    Surcharge
+                                  </TableCell>
+                                </TableHead>
+                                <TableBody className="tableBody">
+                                  <TableRow>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="LowerLimit1"
+                                        // label="Lower Limit1"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("LowerLimit1", e)
+                                        }
+                                        value={this.state.Discount.LowerLimit1}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="UpperLimit1"
+                                        // label="Upper Limit1"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("UpperLimit1", e)
+                                        }
+                                        value={this.state.Discount.UpperLimit1}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="Percentage1"
+                                        // label="Percentage1"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("Percentage1", e)
+                                        }
+                                        value={this.state.Discount.Percentage1}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      {" "}
+                                      <Inputcustom
+                                        id="Surcharge1"
+                                        // label="Surcharge1"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("Surcharge1", e)
+                                        }
+                                        value={this.state.Discount.Surcharge1}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="LowerLimit2"
+                                        // label="LowerLimit2"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("LowerLimit2", e)
+                                        }
+                                        value={this.state.Discount.LowerLimit2}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="UpperLimit2"
+                                        // label="Upper Limit2"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("UpperLimit2", e)
+                                        }
+                                        value={this.state.Discount.UpperLimit2}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="Percentage2"
+                                        // label="Percentage2"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("Percentage2", e)
+                                        }
+                                        value={this.state.Discount.Percentage2}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="Surcharge2"
+                                        // label="Surcharge2"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("Surcharge2", e)
+                                        }
+                                        value={this.state.Discount.Surcharge2}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="LowerLimit3"
+                                        // label="Lower Limit3"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("LowerLimit3", e)
+                                        }
+                                        value={this.state.Discount.LowerLimit3}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="UpperLimit3"
+                                        // label="Upper Limit3"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("UpperLimit3", e)
+                                        }
+                                        value={this.state.Discount.UpperLimit3}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="Percentage3"
+                                        // label="Percentage3"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("Percentage3", e)
+                                        }
+                                        value={this.state.Discount.Percentage3}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="Surcharge3"
+                                        // label="Surcharge3"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("Surcharge3", e)
+                                        }
+                                        value={this.state.Discount.Surcharge3}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                  <TableRow>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="LowerLimit4"
+                                        // label="Lower Limit4"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("LowerLimit4", e)
+                                        }
+                                        value={this.state.Discount.LowerLimit4}
+                                      />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="Percentage4"
+                                        // label="Percentage4"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("Percentage4", e)
+                                        }
+                                        value={this.state.Discount.Percentage4}
+                                      />
+                                    </TableCell>
+                                    <TableCell></TableCell>
+                                    <TableCell>
+                                      <Inputcustom
+                                        id="Surcharge4"
+                                        // label="Surcharge4"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          this.updateFormValue("Surcharge4", e)
+                                        }
+                                        value={this.state.Discount.Surcharge4}
+                                      />
+                                    </TableCell>
+                                  </TableRow>
+                                </TableBody>
+                              </Table>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
 
-                          <DropdownInput
-                            id="IsActive"
-                            label="IsActive"
-                            onChange={(e) =>
-                              this.updateFormValue("IsActive", e)
-                            }
-                            value={this.state.Discount.IsActive}
-                            //   options={}
-                            isMandatory={true}
-                          />
-                        </TableBody>
-                      </Table>
                       <div style={{ height: 20 }}>&nbsp;</div>
                     </div>
                   </Grid>

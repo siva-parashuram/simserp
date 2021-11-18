@@ -17,6 +17,8 @@ class inputcustom extends React.Component {
                 defaultValue={this.props.defaultValue}
                 value={this.props.value}
                 onKeyUp={this.props.onKeyUp}
+                style={{width:500}}
+                
             />
         )
     }

@@ -73,6 +73,7 @@ class supplieractivity extends React.Component {
       type: "",
       TypeOfEnterprise: APIURLS.TypeOfEnterprise,
       GSTSupplierType: APIURLS.GSTSupplierType,
+      SupplierData: [],
       SalesPersonData: [],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
@@ -118,7 +119,6 @@ class supplieractivity extends React.Component {
         BranchID: 0,
       },
       Validations: {
-        No: { errorState: false, errorMssg: "" },
         Name: { errorState: false, errorMssg: "" },
         Address: { errorState: false, errorMssg: "" },
         Address2: { errorState: false, errorMssg: "" },
@@ -128,7 +128,7 @@ class supplieractivity extends React.Component {
         Website: { errorState: false, errorMssg: "" },
         PhoneNo: { errorState: false, errorMssg: "" },
         FaxNo: { errorState: false, errorMssg: "" },
-        CreditDays: { errorState: false, errorMssg: "" },
+        DueDays: { errorState: false, errorMssg: "" },
         Reason: { errorState: false, errorMssg: "" },
         GSTNo: { errorState: false, errorMssg: "" },
         PANNo: { errorState: false, errorMssg: "" },
@@ -139,19 +139,19 @@ class supplieractivity extends React.Component {
     };
   }
 
-  loadDropdowns=()=>{
+  loadDropdowns = () => {
     this.getAllGeneralPostingGroup();
     this.getAllSupplierPostingGroup();
     this.getCurrencyList();
     this.getCountryList();
     this.getStateList();
     this.getPaymentTerms();
-  }
+  };
 
   componentDidMount() {
     console.log("-----------------supplieractivity--------------");
-     this.loadDropdowns();
-    
+    this.loadDropdowns();
+    this.getSupplierList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -188,6 +188,29 @@ class supplieractivity extends React.Component {
     console.log("On load state > ", this.state);
   }
 
+  getSupplierList = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllSupplier;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (data.length > 0) {
+          this.setState({ SupplierData: data, ProgressLoader: true });
+        } else {
+          this.setState({ SupplierData: data, ProgressLoader: true });
+        }
+      })
+      .catch((error) => {
+        this.setState({ SupplierData: [], ProgressLoader: true });
+      });
+  };
+
   getAllSupplierPostingGroup = () => {
     console.log("getAllSupplierPostingGroup > ");
     let ValidUser = APIURLS.ValidUser;
@@ -205,7 +228,7 @@ class supplieractivity extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].Code ,
+            name: data[i].Code,
             value: data[i].SupplierPostingGroupID,
           };
           newD.push(o);
@@ -215,8 +238,8 @@ class supplieractivity extends React.Component {
       })
       .catch((error) => {
         console.log("getAllSupplierPostingGroup > error > ", error);
-       });
-  }
+      });
+  };
 
   getPaymentTerms = () => {
     let ValidUser = APIURLS.ValidUser;
@@ -245,8 +268,6 @@ class supplieractivity extends React.Component {
         this.setState({ paymentTermsData: [], ProgressLoader: true });
       });
   };
-
-  
 
   getStateList = () => {
     let rows = [];
@@ -397,7 +418,320 @@ class supplieractivity extends React.Component {
   updateFormValue = (param, e) => {
     let Supplier = this.state.Supplier;
     switch (param) {
+      case "Name":
+        let v2 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value === "" || e.target.value.length > 100) {
+          if (e.target.value === "") {
+            v2.Name = { errorState: true, errorMssg: "Cannot be blank!" };
+
+            this.setState({ Validations: v2 });
+          }
+          if (e.target.value.length > 100) {
+            v2.Name = {
+              errorState: true,
+              errorMssg: "Maximum 100 characters allowed!",
+            };
+
+            this.setState({ Validations: v2 });
+          }
+        } else {
+          v2.Name = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v2 });
+
+          this.setParams(Supplier);
+        }
+
+        break;
+
+      case "Address":
+        let v3 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 100) {
+          v3.Address = {
+            errorState: true,
+            errorMssg: "Maximum 100 characters allowed!",
+          };
+
+          this.setState({ Validations: v3 });
+        } else {
+          v3.Address = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v3 });
+
+          this.setParams(Supplier);
+        }
+
+        break;
+      case "Address2":
+        let v4 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 100) {
+          v4.Address2 = {
+            errorState: true,
+            errorMssg: "Maximum 100 characters allowed!",
+          };
+
+          this.setState({ Validations: v4 });
+        } else {
+          v4.Address2 = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v4 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "Address3":
+        let v5 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 100) {
+          v5.Address3 = {
+            errorState: true,
+            errorMssg: "Maximum 100 characters allowed!",
+          };
+
+          this.setState({ Validations: v5 });
+        } else {
+          v5.Address3 = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v5 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "City":
+        let v6 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 50) {
+          v6.City = {
+            errorState: true,
+            errorMssg: "Maximum 50 characters allowed!",
+          };
+
+          this.setState({ Validations: v6 });
+        } else {
+          v6.City = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v6 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "PostCode":
+        let v7 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 10) {
+          v7.PostCode = {
+            errorState: true,
+            errorMssg: "Maximum 10 characters allowed!",
+          };
+
+          this.setState({ Validations: v7 });
+        } else {
+          v7.PostCode = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v7 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "CountryID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+      case "StateID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+      case "Website":
+        let v8 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 50) {
+          v8.Website = {
+            errorState: true,
+            errorMssg: "Maximum 50 characters allowed!",
+          };
+
+          this.setState({ Validations: v8 });
+        } else {
+          v8.Website = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v8 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "PhoneNo":
+        let v9 = this.state.Validations;
+
+        let numbers = /^[0-9\b]+$/;
+        if (numbers.test(e.target.value)) {
+          Supplier[param] = e.target.value;
+          if (e.target.value.length > 20) {
+            v9.PhoneNo = {
+              errorState: true,
+              errorMssg: "Maximum 20 characters allowed!",
+            };
+
+            this.setState({ Validations: v9 });
+          } else {
+            v9.PhoneNo = { errorState: false, errorMssg: "" };
+
+            this.setState({ Validations: v9 });
+
+            this.setParams(Supplier);
+          }
+        }
+        break;
+      case "FaxNo":
+        let v10 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 20) {
+          v10.FaxNo = {
+            errorState: true,
+            errorMssg: "Maximum 20 characters allowed!",
+          };
+
+          this.setState({ Validations: v10 });
+        } else {
+          v10.FaxNo = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v10 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "IsGroupCompany":
+        Supplier[param] = e.target.checked;
+        this.setParams(Supplier);
+        break;
+      case "DueDays":
+        let v11 = this.state.Validations;
+        Supplier[param] = CF.toInt(e.target.value);
+        if (e.target.value.length > 2) {
+          v11.DueDays = {
+            errorState: true,
+            errorMssg: "Maximum 2 Numbers allowed!",
+          };
+
+          this.setState({ Validations: v11 });
+        } else {
+          v11.DueDays = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v11 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "ContactPerson":
+        let v22 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 50) {
+          v22.ContactPerson = {
+            errorState: true,
+            errorMssg: "Maximum 50 Characters allowed!",
+          };
+
+          this.setState({ Validations: v22 });
+        } else {
+          v22.ContactPerson = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v22 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "EmailID":
+        Supplier[param] = e.target.value;
+        let v23 = this.state.Validations;
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.SupplierData,
+          "EmailID",
+          e.target.value
+        );
+        console.log("duplicateExist>>", duplicateExist);
+
+        if (duplicateExist) {
+          switch (duplicateExist) {
+            case true:
+              let ev23T = this.state.Validations;
+              ev23T.EmailID = {
+                errorState: true,
+                errorMssg: "Email already Exists",
+              };
+
+              this.setState({
+                Validations: ev23T,
+              });
+              break;
+            case false:
+              let ev23F = this.state.Validations;
+              ev23F.EmailID = {
+                errorState: false,
+                errorMssg: "",
+              };
+              this.setState({
+                Validations: ev23F,
+              });
+              break;
+            default:
+              break;
+          }
+        } else {
+          let email = CF.validateEmail(e.target.value);
+
+          if (email === true) {
+            if (e.target.value.length > 50) {
+              v23.EmailID = {
+                errorState: true,
+                errorMssg: "Maximum 50 Characters allowed!",
+              };
+
+              this.setState({ Validations: v23 });
+            } else {
+              v23.EmailID = { errorState: false, errorMssg: "" };
+
+              this.setState({
+                Validations: v23,
+              });
+
+              this.setParams(Supplier);
+            }
+          } else {
+            v23.EmailID = {
+              errorState: true,
+              errorMssg: "Incorrect EmailID",
+            };
+
+            this.setState({
+              Validations: v23,
+            });
+          }
+        }
+
+        break;
+
+      case "PaymentTermID":
+        console.log("Setting PaymentTermID");
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+
       case "CurrID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+
+      case "IsBlock":
+        Supplier[param] = e.target.checked;
+        this.setParams(Supplier);
+        break;
+      case "SupplierClasification":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
+      case "TypeOfEnterprise":
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);
         break;
@@ -405,17 +739,91 @@ class supplieractivity extends React.Component {
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);
         break;
-       case "SupplierPostingGroupID":
-        Supplier[param] = CF.toInt(e.target.value);
-        this.setParams(Supplier);
-         break; 
-      case "StateID":
+      case "SupplierPostingGroupID":
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);
         break;
-      case "CountryID":
+      case "IsTaxExempt":
+        Supplier[param] = e.target.checked;
+        this.setParams(Supplier);
+        break;
+      case "Reason":
+        let v15 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 50) {
+          v15.Reason = {
+            errorState: true,
+            errorMssg: "Maximum 50 Characters allowed!",
+          };
+
+          this.setState({ Validations: v15 });
+        } else {
+          v15.Reason = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v15 });
+
+          this.setParams(Supplier);
+        }
+        break;
+
+      case "GSTSupplierType":
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);
+        break;
+      case "GSTNo":
+        let v17 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 20) {
+          v17.GSTNo = {
+            errorState: true,
+            errorMssg: "Maximum 20 Characters allowed!",
+          };
+
+          this.setState({ Validations: v17 });
+        } else {
+          v17.GSTNo = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v17 });
+
+          this.setParams(Supplier);
+        }
+        break;
+      case "PANNo":
+        let v18 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 20) {
+          v18.PANNo = {
+            errorState: true,
+            errorMssg: "Maximum 20 Characters allowed!",
+          };
+
+          this.setState({ Validations: v18 });
+        } else {
+          v18.PANNo = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v18 });
+
+          this.setParams(Supplier);
+        }
+        break;
+
+      case "VATNo":
+        let v19 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 20) {
+          v19.VATNo = {
+            errorState: true,
+            errorMssg: "Maximum 20 Characters allowed!",
+          };
+
+          this.setState({ Validations: v19 });
+        } else {
+          v19.VATNo = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v19 });
+
+          this.setParams(Supplier);
+        }
         break;
 
       default:
@@ -423,18 +831,38 @@ class supplieractivity extends React.Component {
         this.setParams(Supplier);
         break;
     }
-
-
     this.validateBtnEnable();
   };
 
   setParams = (object) => {
-    this.setState({ Customer: object });
+    this.setState({ Supplier: object });
   };
 
-  validateBtnEnable=()=>{
-    this.setState({DisableCreatebtn:false});
-  }
+  validateBtnEnable = () => {
+    let Validations = this.state.Validations;
+    if (
+      Validations["Name"].errorState === true ||
+      Validations["Address"].errorState === true ||
+      Validations["Address2"].errorState === true ||
+      Validations["Address3"].errorState === true ||
+      Validations["City"].errorState === true ||
+      Validations["PostCode"].errorState === true ||
+      Validations["Website"].errorState === true ||
+      Validations["PhoneNo"].errorState === true ||
+      Validations["FaxNo"].errorState === true ||
+      Validations["DueDays"].errorState === true ||
+      Validations["Reason"].errorState === true ||
+      Validations["GSTNo"].errorState === true ||
+      Validations["PANNo"].errorState === true ||
+      Validations["VATNo"].errorState === true ||
+      Validations["ContactPerson"].errorState === true ||
+      Validations["EmailID"].errorState === true
+    ) {
+      this.setState({ DisableCreatebtn: true, DisableUpdatebtn: true });
+    } else {
+      this.setState({ DisableCreatebtn: false, DisableUpdatebtn: false });
+    }
+  };
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -592,9 +1020,6 @@ class supplieractivity extends React.Component {
                           size="small"
                           onChange={(e) => this.updateFormValue("No", e)}
                           value={this.state.Supplier.No}
-                        
-                          error={this.state.Validations.No.errorState}
-                          helperText={this.state.Validations.No.errorMssg}
                           disabled={true}
                         />
                         <TextboxInput
@@ -762,6 +1187,8 @@ class supplieractivity extends React.Component {
                           size="small"
                           onChange={(e) => this.updateFormValue("DueDays", e)}
                           value={this.state.Supplier.DueDays}
+                          error={this.state.Validations.DueDays.errorState}
+                          helperText={this.state.Validations.DueDays.errorMssg}
                         />
 
                         <SwitchInput
