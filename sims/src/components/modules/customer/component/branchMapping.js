@@ -37,6 +37,7 @@ import Dualtabcomponent from "../../../compo/dualtabcomponent";
 import Accordioncomponent from "../../../compo/accordioncomponent";
 import Sectiontitle from "../../../compo/sectiontitle";
 import Inputcustom from "../../../compo/inputcustom";
+ 
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
@@ -58,22 +59,127 @@ class branchMapping extends React.Component {
       initialCss: "",
       listBranchMapping: null,
       updateBranchMapping: {},
+      BranchMappingDataList:[],
+      BranchMappingDataHistory:[],
       BranchMappingData: [],
       GeneralDetailsExpanded: true,
       createNewBtn: false,
       updateBtn: false,
+      CustomerPostingGroupList:[],
+      GeneralPostingGroupList:[],
+      branchData:[],
+      selectedOldItem:null,
+      selectedOldItemIndex:null,
       BranchMapping: {
-        CustID: 0,
-        BranchID: 0,
-        GeneralPostingGroupID: 0,
-        CustomerPostingGroupID: 0,
+        ID:0,
+        CustID: this.props.CustID,
+        BranchID: "-1",
+        GeneralPostingGroupID: "-1",
+        CustomerPostingGroupID: "-1",
+        IsTaxExempt:false,
+        Reason:""
       },
     };
   }
 
-  componentDidMount() {
+  getDropdownValues=()=>{
+    this.getBranches();
+    this.getAllCustomerPostingGroup();
+    this.getAllGeneralPostingGroup();       
+  }
+
+  componentDidMount() {    
+    this.getDropdownValues();
     this.getBranchMapping();
   }
+
+  getAllCustomerPostingGroup = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllCustomerPostingGroup;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code + "-" + data[i].Description,
+            value: data[i].CustomerPostingGroupID,
+          };
+          newD.push(o);
+        }
+        this.setState({ CustomerPostingGroupList: newD });
+      })
+      .catch((error) => {});
+  };
+
+  getBranches() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+
+    axios
+      .post(GetBrachesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].name,
+            value: data[i].branchId,
+          };
+          newD.push(o);
+        }
+        this.setState({ branchData: newD, ProgressLoader: true }, () => {
+          this.setState({
+            listBranchMapping: this.listBranchMapping(),
+          });
+        });
+      })
+      .catch((error) => {
+        this.setState({ branchData: [], ProgressLoader: true });
+      });
+  }
+
+  getAllGeneralPostingGroup = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllGeneralPostingGroup;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code,
+            value: data[i].GeneralPostingGroupID,
+          };
+          newD.push(o);
+        }
+        this.setState({ GeneralPostingGroupList: newD }, () => {
+          this.setState({
+            listBranchMapping: this.listBranchMapping(),
+          });
+        });
+      })
+      .catch((error) => {});
+  };
 
   getBranchMapping = () => {
     let ValidUser = APIURLS.ValidUser;
@@ -82,15 +188,18 @@ class branchMapping extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.GetAllCustomerCategory;
+    let Url = APIURLS.APIURL.GetCustomerBranchMappingByCustID;
     let data = {
       ValidUser: ValidUser,
+      CustomerBranchMapping:{
+        CustID:this.props.CustID
+      }
     };
     axios
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-        this.setState({ BranchMappingData: data, ProgressLoader: true }, () => {
+        this.setState({ BranchMappingData: data,BranchMappingDataList: data, ProgressLoader: true }, () => {
           this.setState({
             listBranchMapping: this.listBranchMapping(),
           });
@@ -105,15 +214,17 @@ class branchMapping extends React.Component {
       });
   };
 
-  handleRowClick = (e, item, id) => {
+  handleRowClick = (e, item, id,i) => {
     try {
       this.setState({
         BranchMapping: item,
         FullSmallBtnArea: true,
-        mainframeW: 8,
+        mainframeW: 7,
         hideSidePanel: false,
         updateBtn: true,
         createNewBtn: false,
+        selectedOldItem:item,
+        selectedOldItemIndex:i
       });
 
       this.removeIsSelectedRowClasses();
@@ -132,16 +243,19 @@ class branchMapping extends React.Component {
   showAddNewPanel = (e) => {
     this.removeIsSelectedRowClasses();
     let BranchMappingTemplate = {
-      CustID: 0,
-      BranchID: 0,
-      GeneralPostingGroupID: 0,
-      CustomerPostingGroupID: 0,
+      ID:0,
+        CustID: this.props.CustID,
+        BranchID: "-1",
+        GeneralPostingGroupID: "-1",
+        CustomerPostingGroupID: "-1",
+        IsTaxExempt:false,
+        Reason:""
     };
 
     this.setState({
       BranchMapping: BranchMappingTemplate,
       FullSmallBtnArea: true,
-      mainframeW: 8,
+      mainframeW: 7,
       hideSidePanel: false,
       createNewBtn: true,
       updateBtn: false,
@@ -195,7 +309,23 @@ class branchMapping extends React.Component {
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody className="tableBody"></TableBody>
+                <TableBody className="tableBody">
+                  {this.state.BranchMappingDataList.map((item, i) => (
+                    <TableRow
+                      id={"row_" + i}
+                      key={i}
+                      onClick={(event) =>
+                        this.handleRowClick(event, item, "row_" + i, i)
+                      }
+                    >
+                      <TableCell align="left">{i+1}</TableCell>
+                      <TableCell align="left">{this.getNameByID("Branch", item.BranchID)}</TableCell>
+                      <TableCell align="left">{this.getNameByID("GeneralPostingGroup", item.GeneralPostingGroupID)}</TableCell>
+                      <TableCell align="left">{this.getNameByID("CustomerPostingGroup", item.CustomerPostingGroupID)}</TableCell>
+                    </TableRow>
+                  ))}
+                  
+                </TableBody>
               </Table>
             </Grid>
           </Grid>
@@ -207,55 +337,138 @@ class branchMapping extends React.Component {
 
   updateFormValue = (param, e) => {
     let BranchMapping = this.state.BranchMapping;
-
-    switch (param) {
+    switch(param){
+      case"IsTaxExempt":
+      BranchMapping[param]=e.target.checked;
+      this.setParams(BranchMapping); 
+      break;
+      case"Reason":
+      BranchMapping[param]=e.target.value;
+      this.setParams(BranchMapping); 
+      break;
+      default:
+        BranchMapping[param]=CF.toInt(e.target.value);
+        this.setParams(BranchMapping); 
+        break;
     }
+   
   };
-
-  createBranchMapping = () => {
+   
+  createBranchMapping = (param) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json",
     };
-    //  let Url = APIURLS.APIURL.;
-    // let reqData = {
-    //   ValidUser: ValidUser,
-    //   BranchMapping: [this.state.BranchMapping],
-    // };
-    // axios
-    //   .post(Url, reqData, { headers })
-    //   .then((response) => {
-    //     if (response.status === 200 || response.status === 201) {
-    //       let BranchMappingTemplate = {
-    // CustID: 0,
-    // BranchID: 0,
-    // GeneralPostingGroupID: 0,
-    // CustomerPostingGroupID: 0,
-    //       };
-    //       this.setState(
-    //         {
-    //           BranchMapping: BranchMappingTemplate,
-    //           SuccessPrompt: true,
-    //         },
-    //         () => {
-    //           this.getBranchMapping();
-    //           this.expandFull();
-    //           this.removeIsSelectedRowClasses();
-    //         }
-    //       );
-    //     } else {
-    //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ ErrorPrompt: true });
-    //   });
+    let Url = APIURLS.APIURL.CreateCustomerBranchMapping;
+    let BranchMappingDataList=this.state.BranchMappingDataList;
+    let BranchMappingDataHistory=this.state.BranchMappingDataHistory;
+    switch (param) {
+      case "NEW":
+        BranchMappingDataList.push(this.state.BranchMapping);
+        BranchMappingDataHistory=[];
+        break;
+      case "UPDATE":     
+        let selectedOldItem=this.state.selectedOldItem;
+        let index=this.state.selectedOldItemIndex;        
+        BranchMappingDataList[index]=this.state.BranchMapping;
+        BranchMappingDataHistory.push(selectedOldItem);
+        break;  
+      default:
+        break;
+    }
+
+    let reqData = {
+      ValidUser: ValidUser,
+      CustomerBranchMappingList: BranchMappingDataList,
+      
+    };
+
+    
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          let  BranchMapping={
+            ID:0,
+            CustID: this.props.CustID,
+            BranchID: "-1",
+            GeneralPostingGroupID: "-1",
+            CustomerPostingGroupID: "-1",
+            IsTaxExempt:false,
+            Reason:""
+          };
+          this.setState(
+            {
+              BranchMapping: BranchMapping,
+              SuccessPrompt: true,
+              CustomerPriceHistory:[]
+            },
+            () => {
+              this.getBranchMapping();
+              this.expandFull();
+              this.removeIsSelectedRowClasses();
+            }
+          );
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+
+
+    
   };
 
   setParams = (object) => {
     this.setState({ CustomerCategory: object });
+  };
+
+  getNameByID = (type, id) => {
+    console.log("getNameByID > type > ",type);
+    console.log("getNameByID > id > ",id);
+    let name="";
+    let array=[];
+    switch (type) {      
+      case "Branch":
+         array=this.state.branchData;
+         console.log("In Branch > array > ",array);
+        for(let i=0;i<array.length;i++){
+          if(array[i].value===CF.toInt(id)){
+            name=array[i].name; 
+            break;
+          }
+        }
+        break;
+        case "CustomerPostingGroup":
+           array=this.state.CustomerPostingGroupList;
+           console.log("In CustomerPostingGroup > array > ",array);
+          for(let i=0;i<array.length;i++){
+            if(array[i].value===CF.toInt(id)){
+              name=array[i].name;
+              break;
+            }
+          }
+        break;
+        case "GeneralPostingGroup":
+           array=this.state.GeneralPostingGroupList;  
+           console.log("In GeneralPostingGroup > array > ",array);        
+          for(let i=0;i<array.length;i++){
+            if(array[i].value===CF.toInt(id)){
+              name=array[i].name;
+              break;
+            }
+          }
+        break;
+      default:
+        break;
+
+    }
+    console.log("getNameByID > name > ",name);
+    return name;
   };
 
   expandFull = (e) => {
@@ -267,7 +480,7 @@ class branchMapping extends React.Component {
 
   closeExpandFull = (e) => {
     this.setState({
-      mainframeW: 8,
+      mainframeW: 7,
       hideSidePanel: false,
     });
   };
@@ -355,7 +568,9 @@ class branchMapping extends React.Component {
           </Grid>
 
           {this.state.hideSidePanel === false ? (
-            <Grid item xs={12} sm={12} md={4} lg={4}>
+            <Grid item xs={12} sm={12} md={5} lg={5}>
+              <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
               <div
               // style={{ marginLeft: 10, marginTop: 45 }}
               >
@@ -371,7 +586,7 @@ class branchMapping extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          // onClick={(e) => }
+                          onClick={(e) => this.createBranchMapping("NEW")}
                         >
                           {APIURLS.buttonTitle.save}
                         </Button>
@@ -379,7 +594,7 @@ class branchMapping extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          // onClick={(e) => }
+                          onClick={(e) => this.createBranchMapping("UPDATE")}
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>
@@ -389,6 +604,7 @@ class branchMapping extends React.Component {
                 </Grid>
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
+                 
                     <div
                       style={{
                         height: 300,
@@ -400,54 +616,84 @@ class branchMapping extends React.Component {
                       }}
                     >
                       <div style={{ height: 20 }}>&nbsp;</div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
                       <Table
                         stickyHeader
                         size="small"
                         className="accordion-table"
-                        aria-label="Customercategory  table"
+                        aria-label="Branch Mapping Form  table"
                       >
                         <TableBody className="tableBody">
                           <DropdownInput
                             id="BranchID"
-                            label="BranchID"
+                            label="Branch"
                             onChange={(e) =>
                               this.updateFormValue("BranchID", e)
                             }
                             value={this.state.BranchMapping.BranchID}
-                            //   options={}
+                            options={this.state.branchData}
                             isMandatory={true}
                           />
                           <DropdownInput
                             id="GeneralPostingGroupID"
-                            label="GeneralPostingGroupID"
+                            label="Gen Post Group"
                             onChange={(e) =>
                               this.updateFormValue("GeneralPostingGroupID", e)
                             }
                             value={
                               this.state.BranchMapping.GeneralPostingGroupID
                             }
-                            //   options={}
+                            options={this.state.GeneralPostingGroupList}
                             isMandatory={true}
                           />
                           <DropdownInput
                             id="CustomerPostingGroupID"
-                            label="CustomerPostingGroupID"
+                            label="Cust Post"
                             onChange={(e) =>
                               this.updateFormValue("CustomerPostingGroupID", e)
                             }
                             value={
                               this.state.BranchMapping.CustomerPostingGroupID
                             }
-                            //   options={}
+                            options={this.state.CustomerPostingGroupList}
                             isMandatory={true}
                           />
+
+                                  <SwitchInput
+                                    key="IsTaxExempt"
+                                    id="IsTaxExempt"
+                                    label="Tax Exempt"
+                                    param={this.state.BranchMapping.IsTaxExempt}
+                                    onChange={(e) =>
+                                      this.updateFormValue("IsTaxExempt", e)
+                                    }
+                                  />
+
+                                  <TextboxInput
+                                    id="Reason"
+                                    label="Reason"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) => this.updateFormValue("Reason", e)}
+                                    value={this.state.BranchMapping.Reason}
+                                    
+                                  />
+
+
                         </TableBody>
                       </Table>
+                      </Grid>
+                      </Grid>
+                      
                       <div style={{ height: 20 }}>&nbsp;</div>
                     </div>
                   </Grid>
                 </Grid>
               </div>
+              </Grid>
+              </Grid>
+              
             </Grid>
           ) : null}
         </Grid>

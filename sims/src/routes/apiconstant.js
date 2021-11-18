@@ -127,9 +127,11 @@ export const APIURL = {
   GetAllUOM:domain+"api/Common/GetAllUOM",
   Add_UpdateCustomerPrice:domain+"api/Customer/Add_UpdateCustomerPrice",
   GetCustomerPriceByCustID:domain+"api/Customer/GetCustomerPriceByCustID",
+  CreateCustomerBranchMapping:domain+"api/Customer/CreateCustomerBranchMapping",
+  GetCustomerBranchMappingByCustID:domain+"api/Customer/GetCustomerBranchMappingByCustID",
 
   GetAllSupplier:domain+"api/Supplier/GetAllSupplier",
-  UpdateSupplier:domain+"api/Customer/UpdateSupplier",
+  UpdateSupplier:domain+"api/Supplier/UpdateSupplier",
   CreateSupplier:domain+"api/Supplier/CreateSupplier",
   GetSupplier:domain+"api/Supplier/GetSupplier",
   GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
