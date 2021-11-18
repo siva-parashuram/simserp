@@ -151,7 +151,7 @@ class supplieractivity extends React.Component {
   componentDidMount() {
     console.log("-----------------supplieractivity--------------");
     this.loadDropdowns();
-    this.getSupplierList();
+    // this.getSupplierList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -188,6 +188,7 @@ class supplieractivity extends React.Component {
     console.log("On load state > ", this.state);
   }
 
+  /*
   getSupplierList = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -210,6 +211,7 @@ class supplieractivity extends React.Component {
         this.setState({ SupplierData: [], ProgressLoader: true });
       });
   };
+  */
 
   getAllSupplierPostingGroup = () => {
     console.log("getAllSupplierPostingGroup > ");
@@ -401,6 +403,7 @@ class supplieractivity extends React.Component {
       .then((response) => {
         let data = response.data;
         if (response.status === 200 || response.status === 201) {
+          console.log("getCustomerDetails > Supplier >", data);
           this.setState({ Supplier: data, ProgressLoader: true });
         } else {
           this.setState({
@@ -969,33 +972,26 @@ class supplieractivity extends React.Component {
       const headers = {
         "Content-Type": "application/json",
       };
-      // let Url = APIURLS.APIURL.UpdateCustomer;
-      // let Customer = this.state.Customer;
-      // Customer.BranchID = CF.toInt(this.state.BranchID);
-      // Customer.UserID = CF.toInt(getCookie(COOKIE.USERID));
-
-      // delete Customer["CustomerAddress"];
-      // delete Customer["CustomerBranchMapping"];
-      // delete Customer["CustomerContact"];
-
-      // let reqData = {
-      //   ValidUser: ValidUser,
-      //   Customer: Customer,
-      // };
-      // console.log("updateCustomer > reqData >", reqData);
-      // axios
-      //   .post(Url, reqData, { headers })
-      //   .then((response) => {
-      //     let data = response.data;
-      //     if (response.status === 200 || response.status === 201) {
-      //       this.setState({ ErrorPrompt: false, SuccessPrompt: true });
-      //     } else {
-      //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     this.setState({ ErrorPrompt: true });
-      //   });
+      let Url = APIURLS.APIURL.UpdateSupplier;
+      let Supplier = this.state.Supplier;
+      let reqData = {
+        ValidUser: ValidUser,
+        Supplier: Supplier,
+      };
+      console.log("updateSupplier > reqData >", reqData);
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201) {
+            this.setState({ ErrorPrompt: false, SuccessPrompt: true });
+          } else {
+            this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ErrorPrompt: true });
+        });
     };
 
     const generalform = (

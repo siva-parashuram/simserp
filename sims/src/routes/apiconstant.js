@@ -131,7 +131,7 @@ export const APIURL = {
   GetCustomerBranchMappingByCustID:domain+"api/Customer/GetCustomerBranchMappingByCustID",
 
   GetAllSupplier:domain+"api/Supplier/GetAllSupplier",
-  UpdateSupplier:domain+"api/Customer/UpdateSupplier",
+  UpdateSupplier:domain+"api/Supplier/UpdateSupplier",
   CreateSupplier:domain+"api/Supplier/CreateSupplier",
   GetSupplier:domain+"api/Supplier/GetSupplier",
   GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
