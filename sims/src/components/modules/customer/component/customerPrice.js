@@ -66,6 +66,8 @@ class customerPrice extends React.Component {
       GeneralDetailsExpanded: true,
       createNewBtn: false,
       updateBtn: false,
+      selectedOldItemIndex:null,
+      selectedOldItem:null,
       currencyList:[],
       itemDataList:[],
       UOMList:[],
@@ -223,15 +225,34 @@ class customerPrice extends React.Component {
       });
   };
 
-  handleRowClick = (e, item, id) => {
+  handleRowClick = (e, item, id,i) => {
+
+    let CustomerPrice={
+      CustID: item.CustID,
+      StartDate: item.StartDate,
+      EndDate: item.EndDate,
+      ItemID: item.ItemID,
+      UOM: item.UOM,
+      CurrID: item.CurrID,
+      MinQty: item.MinQty,
+      MaxQty: item.MaxQty,
+      UnitPrice: item.UnitPrice,
+      EmailID: item.EmailID,
+    }
+
+    console.log("item > ",item);
+    console.log("CustomerPrice > ",CustomerPrice);
+
     try {
       this.setState({
-        CustomerPrice: item,
+        CustomerPrice: CustomerPrice,
         FullSmallBtnArea: true,
         mainframeW: 8,
         hideSidePanel: false,
         updateBtn: true,
         createNewBtn: false,
+        selectedOldItem:item,
+        selectedOldItemIndex:i
       });
 
       this.removeIsSelectedRowClasses();
@@ -251,8 +272,8 @@ class customerPrice extends React.Component {
     this.removeIsSelectedRowClasses();
     let CustomerPriceTemplate = {
       CustID: this.props.CustID,
-      StartDate: "",
-      EndDate: "",
+      StartDate: moment(),
+      EndDate: moment(),
       ItemID: 0,
       UOM: 0,
       CurrID: 0,
@@ -263,7 +284,7 @@ class customerPrice extends React.Component {
     };
 
     this.setState({
-      customerPrice: CustomerPriceTemplate,
+      CustomerPrice: CustomerPriceTemplate,
       FullSmallBtnArea: true,
       mainframeW: 8,
       hideSidePanel: false,
@@ -318,23 +339,28 @@ class customerPrice extends React.Component {
                       Item
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                    UOMCode
+                      UOM
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                    CurrCode
+                    Currency
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                    Min Qty
+                     Min Qty
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                    Max Qty
-                    </TableCell>
-                    
+                     Max Qty
+                    </TableCell>                    
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
                   {this.state.CustomerPriceList.map((item, i) => (
-                    <TableRow>
+                    <TableRow
+                    id={"row_" + i}
+                    key={i}
+                    onClick={(event) =>
+                      this.handleRowClick(event, item, "row_" + i,i)
+                    }
+                    >
                       <TableCell>{i+1}</TableCell>
                       <TableCell align="left">
                         {moment(item.StartDate).format("MM/DD/YYYY")}
@@ -343,7 +369,7 @@ class customerPrice extends React.Component {
                       {moment(item.EndDate).format("MM/DD/YYYY")}
                       </TableCell>
                       <TableCell align="left">
-                      {item.ItemID}
+                      {item.No}
                       </TableCell>
                       <TableCell align="left">
                       {item.UOMCode}
@@ -417,6 +443,29 @@ class customerPrice extends React.Component {
     return array;
   }
 
+  processCustomerPriceList = (CustomerPriceList) => {
+    console.log("processCustomerPriceList > CustomerPriceList > ",CustomerPriceList);
+    let newCPL=[];
+    for (let i = 0; i < CustomerPriceList.length; i++) {
+      let item=CustomerPriceList[i];
+      let CustomerPrice={
+        CustID: item.CustID,
+        StartDate: item.StartDate,
+        EndDate: item.EndDate,
+        ItemID: item.ItemID,
+        UOM: item.UOM,
+        CurrID: item.CurrID,
+        MinQty: item.MinQty,
+        MaxQty: item.MaxQty,
+        UnitPrice: item.UnitPrice,
+        EmailID: item.EmailID,
+        UserID:CF.toInt(getCookie(COOKIE.USERID))
+      }
+      newCPL.push(CustomerPrice);
+    }
+    return newCPL;
+  }
+
   createCustomerPrice = (param) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -433,12 +482,22 @@ class customerPrice extends React.Component {
         CustomerPriceList.push(this.state.CustomerPrice);
         CustomerPriceHistory=[];
         break;
+      case "UPDATE":     
+        let selectedOldItem=this.state.selectedOldItem;
+        let index=this.state.selectedOldItemIndex;
+        console.log("IN UPDATE > selectedOldItem > ",selectedOldItem); 
+        console.log("IN UPDATE > index > ",index); 
+        CustomerPriceList[index]=this.state.CustomerPrice;
+        CustomerPriceHistory.push(selectedOldItem);
+        break;  
       default:
         break;
     }
 
     CustomerPriceList=this.formatDate(CustomerPriceList);
+    CustomerPriceList=this.processCustomerPriceList(CustomerPriceList);
     CustomerPriceHistory=this.formatDate(CustomerPriceHistory);
+    CustomerPriceHistory=this.processCustomerPriceList(CustomerPriceHistory);
 
     let reqData = {
       ValidUser: ValidUser,
@@ -452,7 +511,7 @@ class customerPrice extends React.Component {
       .then((response) => {
         if (response.status === 200 || response.status === 201) {
           let CustomerPriceTemplate = {
-            CustID: 0,
+            CustID: this.props.CustID,
             StartDate: null,
             EndDate: null,
             ItemID: 0,
@@ -467,6 +526,7 @@ class customerPrice extends React.Component {
             {
               CustomerPrice: CustomerPriceTemplate,
               SuccessPrompt: true,
+              CustomerPriceHistory:[]
             },
             () => {
               this.getCustomerPrice();
@@ -645,15 +705,15 @@ class customerPrice extends React.Component {
                             onChange={(e) =>
                               this.updateFormValue("StartDate", e)
                             }
-                            value={this.state.CustomerPrice.StartDate}
+                            defaultValue={moment(this.state.CustomerPrice.StartDate).format("YYYY-MM-DD")}
                           />
                           <DateTextboxInput
                             id="EndDate"
                             label="EndDate"
                             variant="outlined"
                             size="small"
-                            onChange={(e) => this.updateFormValue("EndDate", e)}
-                            value={this.state.CustomerPrice.EndDate}
+                            onChange={(e) => this.updateFormValue("EndDate", e)}                             
+                            defaultValue={moment(this.state.CustomerPrice.EndDate).format("YYYY-MM-DD")}
                           />
                           <DropdownInput
                             id="ItemID"

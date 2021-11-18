@@ -29,7 +29,7 @@ class tablerowcelldropdown extends React.Component {
                 disabled={this.props.disabled}
                 
               >
-                <option value="-1" disabled>Select</option>
+                <option value="-1" >Select</option>
                 {this.props.options?this.props.options.map((item, i) => (
                    <option
                    value={parseInt(item.value)}
