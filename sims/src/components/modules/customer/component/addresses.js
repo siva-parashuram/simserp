@@ -39,7 +39,7 @@ import Sectiontitle from "../../../compo/sectiontitle";
 import Inputcustom from "../../../compo/inputcustom";
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
-import { Divider } from "@material-ui/core";
+import { Divider, Switch } from "@material-ui/core";
 
 class addresses extends React.Component {
   constructor(props) {
@@ -95,7 +95,7 @@ class addresses extends React.Component {
       CustomerAddress: {
         AddressID: 0,
         CustID: this.props.CustID,
-        AddressType: 0,
+        AddressType: -1,
         Code: "",
         Name: "",
         Address: "",
@@ -202,7 +202,7 @@ class addresses extends React.Component {
   };
 
   getCustomerAddress = () => {
-    console.log("Props >CustID > ",this.props.CustID);
+    console.log("Props >CustID > ", this.props.CustID);
     console.log("Refreshing");
     this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
@@ -213,11 +213,11 @@ class addresses extends React.Component {
     };
 
     let Url = APIURLS.APIURL.GetAllCustomerAddressByCustID;
-    let data={
-      ValidUser:ValidUser,
-      Customer:{
-        CustID:this.props.CustID
-      }
+    let data = {
+      ValidUser: ValidUser,
+      Customer: {
+        CustID: this.props.CustID,
+      },
     };
 
     axios
@@ -261,7 +261,12 @@ class addresses extends React.Component {
           };
           newData.push(d);
         }
-        this.setState({ countryData: newData, ProgressLoader: true });
+        this.setState({ countryData: newData, ProgressLoader: true }, () => {
+          this.setState({
+            listStateCustomerAddresses: this.listCustomerAddresses(),
+            stateForm: this.stateForm(),
+          });
+        });
       })
       .catch((error) => {});
   };
@@ -592,7 +597,6 @@ class addresses extends React.Component {
                                   }
                                 />
                                 <TextboxInput
-                                  type="number"
                                   id="PhoneNo"
                                   label="Phone No "
                                   onChange={(e) =>
@@ -876,24 +880,24 @@ class addresses extends React.Component {
     }
   };
 
-  checkCode = () => {
-    if (this.state.process === "EDIT") {
-      if (
-        this.state.UpdateCustomerAddress.Code === "" ||
-        this.state.UpdateCustomerAddress.Code.length > 10
-      ) {
-        this.setState({ updateBtnDisabled: true });
-      }
-    } else if (this.state.process === "ADD") {
-      if (
-        this.state.CustomerAddress.Code === "" ||
-        this.state.CustomerAddress.Code.length > 10
-      ) {
-        this.setState({ AddbtnDisable: true });
-      }
-    } else {
-    }
-  };
+  // checkCode = () => {
+  //   if (this.state.process === "EDIT") {
+  //     if (
+  //       this.state.UpdateCustomerAddress.Code === "" ||
+  //       this.state.UpdateCustomerAddress.Code.length > 10
+  //     ) {
+  //       this.setState({ updateBtnDisabled: true });
+  //     }
+  //   } else if (this.state.process === "ADD") {
+  //     if (
+  //       this.state.CustomerAddress.Code === "" ||
+  //       this.state.CustomerAddress.Code.length > 10
+  //     ) {
+  //       this.setState({ AddbtnDisable: true });
+  //     }
+  //   } else {
+  //   }
+  // };
 
   updateFormValue = (param, e, process) => {
     console.log("Display");
@@ -922,13 +926,13 @@ class addresses extends React.Component {
                 errorState: true,
                 errorMssg: "Cannot be blank",
               };
-              this.setState({ Validations: v1, updateBtnDisabled: true });
+              this.setState({ Validations: v1 });
             } else {
               v1.CustomerAddress.Code = {
                 errorState: true,
                 errorMssg: "Cannot be blank",
               };
-              this.setState({ Validations: v1, AddbtnDisable: true });
+              this.setState({ Validations: v1 });
             }
           }
           if (e.target.value.length > 10) {
@@ -937,13 +941,13 @@ class addresses extends React.Component {
                 errorState: true,
                 errorMssg: "Maximum 10 characters allowed",
               };
-              this.setState({ Validations: v1, updateBtnDisabled: true });
+              this.setState({ Validations: v1 });
             } else {
               v1.CustomerAddress.Code = {
                 errorState: true,
                 errorMssg: "Maximum 10 characters allowed",
               };
-              this.setState({ Validations: v1, AddbtnDisable: true });
+              this.setState({ Validations: v1 });
             }
           }
         } else {
@@ -953,10 +957,10 @@ class addresses extends React.Component {
               errorState: false,
               errorMssg: "",
             };
-            this.setState({ Validations: v1, updateBtnDisabled: false });
+            this.setState({ Validations: v1 });
           } else {
             v1.CustomerAddress.Code = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v1, AddbtnDisable: false });
+            this.setState({ Validations: v1 });
           }
         }
         this.setParams(CustomerAddress, process);
@@ -992,8 +996,7 @@ class addresses extends React.Component {
           }
           this.setParams(CustomerAddress, process);
         }
-       
-        this.checkCode();
+
         break;
       case "Address":
         CustomerAddress[param] = e.target.value;
@@ -1026,7 +1029,6 @@ class addresses extends React.Component {
         }
         this.setParams(CustomerAddress, process);
         break;
-        this.checkCode();
       case "Address2":
         CustomerAddress[param] = e.target.value;
         let v4 = this.state.Validations;
@@ -1058,7 +1060,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "Address3":
         CustomerAddress[param] = e.target.value;
@@ -1091,7 +1092,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "City":
         CustomerAddress[param] = e.target.value;
@@ -1125,7 +1125,6 @@ class addresses extends React.Component {
         }
         this.setParams(CustomerAddress, process);
         break;
-        this.checkCode();
       case "PostCode":
         CustomerAddress[param] = e.target.value;
         let v7 = this.state.Validations;
@@ -1158,16 +1157,13 @@ class addresses extends React.Component {
         }
         this.setParams(CustomerAddress, process);
         break;
-        this.checkCode();
       case "CountryID":
         CustomerAddress[param] = CF.toInt(e.target.value);
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "StateID":
         CustomerAddress[param] = CF.toInt(e.target.value);
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "ContactPerson":
         CustomerAddress[param] = e.target.value;
@@ -1203,40 +1199,68 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "PhoneNo":
-        CustomerAddress[param] = CF.toInt(e.target.value);
-        let v9 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          if (process === "EDIT") {
-            v9.UpdateCustomerAddress.PhoneNo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed",
-            };
-            this.setState({ Validations: v9 });
-          } else {
-            v9.CustomerAddress.PhoneNo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed",
-            };
-            this.setState({ Validations: v9 });
-          }
-        } else {
+        let num = CF.chkIfNumber(e.target.value);
+        if (num) {
           CustomerAddress[param] = e.target.value;
-          if (process === "EDIT") {
-            v9.UpdateCustomerAddress.PhoneNo = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({ Validations: v9 });
+          let v9 = this.state.Validations;
+          if (e.target.value.length > 20) {
+            CustomerAddress[param] = e.target.value;
+            if (process === "EDIT") {
+              v9.UpdateCustomerAddress.PhoneNo = {
+                errorState: true,
+                errorMssg: "Maximum 20 characters allowed",
+              };
+              this.setState({ Validations: v9 });
+            } else {
+              v9.CustomerAddress.PhoneNo = {
+                errorState: true,
+                errorMssg: "Maximum 20 characters allowed",
+              };
+              this.setState({ Validations: v9 });
+            }
           } else {
-            v9.CustomerAddress.PhoneNo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v9 });
+            CustomerAddress[param] = e.target.value;
+            if (process === "EDIT") {
+              v9.UpdateCustomerAddress.PhoneNo = {
+                errorState: false,
+                errorMssg: "",
+              };
+              this.setState({ Validations: v9 });
+            } else {
+              v9.CustomerAddress.PhoneNo = { errorState: false, errorMssg: "" };
+              this.setState({ Validations: v9 });
+              this.setParams(CustomerAddress, process);
+            }
+          }
+         
+        } 
+        else {
+         
+          switch (process) {
+            
+            case "ADD":
+              let addNum = this.state.Validations;
+              addNum.CustomerAddress.PhoneNo = {
+                errorState: true,
+                errorMssg: "Enter a number",
+              };
+              this.setState({ Validations: addNum });
+              break;
+            case "EDIT":
+              let editNum = this.state.Validations;
+              editNum.UpdateCustomerAddress.PhoneNo = {
+                errorState: true,
+                errorMssg: "Enter a number",
+              };
+              this.setState({ Validations: editNum });
+              break;
+            default:
+              break;
           }
         }
-        this.setParams(CustomerAddress, process);
-        this.checkCode();
+
         break;
       case "EmailID":
         CustomerAddress[param] = e.target.value;
@@ -1269,7 +1293,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "VATNo":
         CustomerAddress[param] = e.target.value;
@@ -1302,7 +1325,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "GSTNo":
         CustomerAddress[param] = e.target.value;
@@ -1335,7 +1357,7 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
+
         break;
       case "EORINo":
         CustomerAddress[param] = e.target.value;
@@ -1368,7 +1390,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "TSSNo":
         CustomerAddress[param] = e.target.value;
@@ -1401,22 +1422,18 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "IsBlock":
         CustomerAddress[param] = e.target.checked;
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "IncoID":
         CustomerAddress[param] = CF.toInt(e.target.value);
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "ShipmentModeID":
         CustomerAddress[param] = CF.toInt(e.target.value);
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "PostOfDischarge":
         CustomerAddress[param] = e.target.value;
@@ -1452,7 +1469,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "FinalDestination":
         CustomerAddress[param] = e.target.value;
@@ -1488,7 +1504,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
       case "SpecialInstruction":
         CustomerAddress[param] = e.target.value;
@@ -1524,11 +1539,67 @@ class addresses extends React.Component {
           }
         }
         this.setParams(CustomerAddress, process);
-        this.checkCode();
         break;
 
       default:
         break;
+    }
+    this.validateBtnEnable(process);
+  };
+
+  validateBtnEnable = (process) => {
+    switch (process) {
+      case "ADD":
+        let Validations = this.state.Validations.CustomerAddress;
+        if (
+          Validations["Code"].errorState === true ||
+          Validations["Name"].errorState === true ||
+          Validations["Address"].errorState === true ||
+          Validations["Address2"].errorState === true ||
+          Validations["Address3"].errorState === true ||
+          Validations["City"].errorState === true ||
+          Validations["PostCode"].errorState === true ||
+          Validations["PhoneNo"].errorState === true ||
+          Validations["GSTNo"].errorState === true ||
+          Validations["VATNo"].errorState === true ||
+          Validations["EORINo"].errorState === true ||
+          Validations["TSSNo"].errorState === true ||
+          Validations["ContactPerson"].errorState === true ||
+          Validations["EmailID"].errorState === true ||
+          Validations["PostOfDischarge"].errorState === true ||
+          Validations["FinalDestination"].errorState === true ||
+          Validations["SpecialInstruction"].errorState === true
+        ) {
+          this.setState({ AddbtnDisable: true });
+        } else {
+          this.setState({ AddbtnDisable: false });
+        }
+        break;
+      case "EDIT":
+        let V = this.state.Validations.UpdateCustomerAddress;
+        if (
+          V["Code"].errorState === true ||
+          V["Name"].errorState === true ||
+          V["Address"].errorState === true ||
+          V["Address2"].errorState === true ||
+          V["Address3"].errorState === true ||
+          V["City"].errorState === true ||
+          V["PostCode"].errorState === true ||
+          V["PhoneNo"].errorState === true ||
+          V["GSTNo"].errorState === true ||
+          V["VATNo"].errorState === true ||
+          V["EORINo"].errorState === true ||
+          V["TSSNo"].errorState === true ||
+          V["ContactPerson"].errorState === true ||
+          V["EmailID"].errorState === true ||
+          V["PostOfDischarge"].errorState === true ||
+          V["FinalDestination"].errorState === true ||
+          V["SpecialInstruction"].errorState === true
+        ) {
+          this.setState({ updateBtnDisabled: true });
+        } else {
+          this.setState({ updateBtnDisabled: false });
+        }
     }
   };
 
@@ -1610,8 +1681,6 @@ class addresses extends React.Component {
       });
   };
 
- 
-
   UpdateCustomerAddress = (e) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -1632,10 +1701,13 @@ class addresses extends React.Component {
       .then((response) => {
         let data = response.data;
         if (response.status === 200 || response.status === 201) {
-          this.setState({
-            ErrorPrompt: false,
-            SuccessPrompt: true,
-          },()=>this.getCustomerAddress());
+          this.setState(
+            {
+              ErrorPrompt: false,
+              SuccessPrompt: true,
+            },
+            () => this.getCustomerAddress()
+          );
         } else {
           this.setState({ ErrorPrompt: true, SuccessPrompt: false });
         }
@@ -1861,12 +1933,9 @@ class addresses extends React.Component {
                               isMandatory={true}
                               value={this.state.UpdateCustomerAddress.Code}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .Code.errorState
-                              }
+                                this.state.Validations.UpdateCustomerAddress.Code.errorState}
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .Code.errorMssg
+                                this.state.Validations.UpdateCustomerAddress.Code.errorMssg
                               }
                             />
                             <TextboxInput
@@ -2054,7 +2123,6 @@ class addresses extends React.Component {
                               }
                             />
                             <TextboxInput
-                              type="number"
                               id="PhoneNo"
                               label="Phone No "
                               onChange={(e) =>

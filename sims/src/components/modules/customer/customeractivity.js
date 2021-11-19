@@ -47,7 +47,6 @@ import Contact from "./component/contact";
 import CustomerCategory from "./component/customerCategory";
 import PaymentTerms from "./component/paymentTerms";
 import SalesPerson from "./component/salesPerson";
-
 import CustomerPrice from "./component/customerPrice";
 import BranchMapping from "./component/branchMapping";
 import Discount from "./component/discount";
@@ -98,7 +97,7 @@ class customeractivity extends React.Component {
         Address3: "",
         City: "",
         PostCode: "",
-        CountryID: 0,
+        CountryID: -1,
         StateID: 12,
         Website: "",
         PhoneNo: "",
@@ -109,7 +108,7 @@ class customeractivity extends React.Component {
         PaymentTermID: 0,
         CreditRating: 0,
         GraceDays: 0,
-        CurrID: 0,
+        CurrID: -1,
         IsGrowthBonanza: false,
         IsSlabDiscount: false,
         IsCarriage: false,
@@ -120,8 +119,8 @@ class customeractivity extends React.Component {
         IsEmailAlert: false,
         SalesPersonID: 0,
         CustomerCategoryID: 0,
-        GeneralPostingGroupID: 0,
-        CustomerPostingGroupID: 0,
+        GeneralPostingGroupID: -1,
+        CustomerPostingGroupID: -1,
         IsTaxExempt: false,
         Reason: "",
         IsEcommerce: false,
@@ -1490,7 +1489,7 @@ class customeractivity extends React.Component {
                           helperText={this.state.Validations.Website.errorMssg}
                         />
                         <TextboxInput
-                          type="number"
+                         
                           id="PhoneNo"
                           label="PhoneNo"
                           variant="outlined"
