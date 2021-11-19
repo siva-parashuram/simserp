@@ -187,37 +187,37 @@ class branchMapping extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    // let Url = APIURLS.APIURL.GetCustomerBranchMappingByCustID;
+    let Url = APIURLS.APIURL.GetSupplierBranchMappingBySuplID;
     let data = {
       ValidUser: ValidUser,
       SupplierBranchMapping: {
-        CustID: this.props.CustID,
+        SuplID: this.props.SuplID,
       },
     };
-    // axios
-    //   .post(Url, data, { headers })
-    //   .then((response) => {
-    //     let data = response.data;
-    //     this.setState(
-    //       {
-    //         BranchMappingData: data,
-    //         BranchMappingDataList: data,
-    //         ProgressLoader: true,
-    //       },
-    //       () => {
-    //         this.setState({
-    //           listBranchMapping: this.listBranchMapping(),
-    //         });
-    //       }
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ BranchMappingData: [], ProgressLoader: true }, () => {
-    //       this.setState({
-    //         listBranchMapping: this.listBranchMapping(),
-    //       });
-    //     });
-    //   });
+    axios
+      .post(Url, data, { headers })
+      .then((response) => {
+        let data = response.data;
+        this.setState(
+          {
+            BranchMappingData: data,
+            BranchMappingDataList: data,
+            ProgressLoader: true,
+          },
+          () => {
+            this.setState({
+              listBranchMapping: this.listBranchMapping(),
+            });
+          }
+        );
+      })
+      .catch((error) => {
+        this.setState({ BranchMappingData: [], ProgressLoader: true }, () => {
+          this.setState({
+            listBranchMapping: this.listBranchMapping(),
+          });
+        });
+      });
   };
 
   handleRowClick = (e, item, id, i) => {
@@ -355,11 +355,26 @@ class branchMapping extends React.Component {
   updateFormValue = (param, e) => {
     let BranchMapping = this.state.BranchMapping;
     switch (param) {
+      case"IsTaxExempt":
+      BranchMapping[param]=e.target.checked;
+      this.setParams(BranchMapping); 
+      break;
+      case"Reason":
+      BranchMapping[param]=e.target.value;
+      this.setParams(BranchMapping); 
+      break;
       default:
+        BranchMapping[param]=CF.toInt(e.target.value);
+        this.setParams(BranchMapping); 
         break;
+      
     }
   };
+  setParams = (object) => {
+    this.setState({ BranchMapping: object });
+  };
 
+  
   createBranchMapping = (param) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -367,7 +382,7 @@ class branchMapping extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    // let Url = APIURLS.APIURL.CreateCustomerBranchMapping;
+    let Url = APIURLS.APIURL.CreateSupplierBranchMapping;
     let BranchMappingDataList = this.state.BranchMappingDataList;
     let BranchMappingDataHistory = this.state.BranchMappingDataHistory;
     switch (param) {
@@ -390,38 +405,38 @@ class branchMapping extends React.Component {
       SupplierBranchMappingList: BranchMappingDataList,
     };
 
-    // axios
-    //   .post(Url, reqData, { headers })
-    //   .then((response) => {
-    //     if (response.status === 200 || response.status === 201) {
-    //       let BranchMapping = {
-    //         ID: 0,
-    //         SuplID: this.props.CustID,
-    //         BranchID: "-1",
-    //         GeneralPostingGroupID: "-1",
-    //         SupplierPostingGroupID: "-1",
-    //         IsTaxExempt: false,
-    //         Reason: "",
-    //       };
-    //       this.setState(
-    //         {
-    //           BranchMapping: BranchMapping,
-    //           SuccessPrompt: true,
-    //           SupplierPriceHistory: [],
-    //         },
-    //         () => {
-    //           this.getBranchMapping();
-    //           this.expandFull();
-    //           this.removeIsSelectedRowClasses();
-    //         }
-    //       );
-    //     } else {
-    //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ ErrorPrompt: true });
-    //   });
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          let BranchMapping = {
+            ID: 0,
+            SuplID: this.props.CustID,
+            BranchID: "-1",
+            GeneralPostingGroupID: "-1",
+            SupplierPostingGroupID: "-1",
+            IsTaxExempt: false,
+            Reason: "",
+          };
+          this.setState(
+            {
+              BranchMapping: BranchMapping,
+              SuccessPrompt: true,
+              SupplierPriceHistory: [],
+            },
+            () => {
+              this.getBranchMapping();
+              this.expandFull();
+              this.removeIsSelectedRowClasses();
+            }
+          );
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
   };
 
   getNameByID = (type, id) => {

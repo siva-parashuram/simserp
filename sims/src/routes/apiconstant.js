@@ -136,6 +136,8 @@ export const APIURL = {
   GetSupplier:domain+"api/Supplier/GetSupplier",
   GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
   GetMasterDocumentNumber:domain+"api/Common/GetMasterDocumentNumber",
+  CreateSupplierBranchMapping:domain+ "api/Supplier/CreateSupplierBranchMapping",
+  GetSupplierBranchMappingBySuplID:domain+"api/Supplier/GetSupplierBranchMappingBySuplID",
 };
 
 

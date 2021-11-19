@@ -424,7 +424,7 @@ class branchMapping extends React.Component {
   };
 
   setParams = (object) => {
-    this.setState({ CustomerCategory: object });
+    this.setState({ BranchMapping: object });
   };
 
   getNameByID = (type, id) => {
