@@ -57,18 +57,19 @@ class addresses extends React.Component {
       ProgressLoader: true,
       AddbtnDisable: true,
       GeneralDetailsExpanded: true,
+      SupplierData: [],
       countryData: [],
       stateData: [],
       AddressData: [],
       stateForm: null,
       process: "",
-      listStateCustomerAddresses: null,
+      listStateSupplierAddresses: null,
       type: "ADD",
 
-      UpdateCustomerAddress: {
+      UpdateSupplierAddress: {
         AddressID: 0,
-        CustID: this.props.CustID,
-        AddressType: 0,
+        SuplID: this.props.SuplID,
+
         Code: "",
         Name: "",
         Address: "",
@@ -83,19 +84,15 @@ class addresses extends React.Component {
         EmailID: "",
         VATNo: "",
         GSTNo: "",
-        EORINo: "",
-        TSSNo: "",
+
         IsBlock: false,
-        IncoID: 0,
-        ShipmentModeID: 0,
-        PostOfDischarge: "",
-        FinalDestination: "",
+
         SpecialInstruction: "",
       },
-      CustomerAddress: {
+      SupplierAddress: {
         AddressID: 0,
-        CustID: this.props.CustID,
-        AddressType: 0,
+        SuplID: 0,
+
         Code: "",
         Name: "",
         Address: "",
@@ -110,18 +107,14 @@ class addresses extends React.Component {
         EmailID: "",
         VATNo: "",
         GSTNo: "",
-        EORINo: "",
-        TSSNo: "",
+
         IsBlock: false,
-        IncoID: 0,
-        ShipmentModeID: 0,
-        PostOfDischarge: "",
-        FinalDestination: "",
+
         SpecialInstruction: "",
       },
       updateBtnDisabled: false,
       Validations: {
-        CustomerAddress: {
+        SupplierAddress: {
           Code: { errorState: false, errorMssg: "" },
           Name: { errorState: false, errorMssg: "" },
           Address: { errorState: false, errorMssg: "" },
@@ -135,14 +128,10 @@ class addresses extends React.Component {
           EmailID: { errorState: false, errorMssg: "" },
           VATNo: { errorState: false, errorMssg: "" },
           GSTNo: { errorState: false, errorMssg: "" },
-          EORINo: { errorState: false, errorMssg: "" },
-          TSSNo: { errorState: false, errorMssg: "" },
 
-          PostOfDischarge: { errorState: false, errorMssg: "" },
-          FinalDestination: { errorState: false, errorMssg: "" },
           SpecialInstruction: { errorState: false, errorMssg: "" },
         },
-        UpdateCustomerAddress: {
+        UpdateSupplierAddress: {
           Code: { errorState: false, errorMssg: "" },
           Name: { errorState: false, errorMssg: "" },
           Address: { errorState: false, errorMssg: "" },
@@ -156,11 +145,7 @@ class addresses extends React.Component {
           EmailID: { errorState: false, errorMssg: "" },
           VATNo: { errorState: false, errorMssg: "" },
           GSTNo: { errorState: false, errorMssg: "" },
-          EORINo: { errorState: false, errorMssg: "" },
-          TSSNo: { errorState: false, errorMssg: "" },
 
-          PostOfDischarge: { errorState: false, errorMssg: "" },
-          FinalDestination: { errorState: false, errorMssg: "" },
           SpecialInstruction: { errorState: false, errorMssg: "" },
         },
       },
@@ -170,39 +155,35 @@ class addresses extends React.Component {
   componentDidMount() {
     this.getCountryList();
     this.getStateList();
-    this.getCustomerAddress();
-    this.getCustomers();
+    this.getSupplierAddress();
+    this.getSupplierList();
   }
 
-  getCustomers = () => {
+  getSupplierList = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.GetAllCustomer;
+    let Url = APIURLS.APIURL.GetAllSupplier;
     axios
       .post(Url, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        let newD = [];
-        for (let i = 0; i < data.length; i++) {
-          let o = {
-            name: data[i].Name,
-            value: data[i].CustID,
-          };
-          newD.push(o);
+        if (data.length > 0) {
+          this.setState({ SupplierData: data, ProgressLoader: true });
+        } else {
+          this.setState({ SupplierData: data, ProgressLoader: true });
         }
-        this.setState({ customerData: newD, ProgressLoader: true });
       })
       .catch((error) => {
-        this.setState({ customerData: [], ProgressLoader: true });
+        this.setState({ SupplierData: [], ProgressLoader: true });
       });
   };
 
-  getCustomerAddress = () => {
-    console.log("Props >CustID > ",this.props.CustID);
+  getSupplierAddress = () => {
+    console.log("Props >CustID > ", this.props.CustID);
     console.log("Refreshing");
     this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
@@ -212,23 +193,23 @@ class addresses extends React.Component {
       "Content-Type": "application/json",
     };
 
-    let Url = APIURLS.APIURL.GetAllCustomerAddressByCustID;
-    let data={
-      ValidUser:ValidUser,
-      Customer:{
-        CustID:this.props.CustID
-      }
+    // let Url = APIURLS.APIURL.GetAllCustomerAddressByCustID;
+    let data = {
+      ValidUser: ValidUser,
+      Supplier: {
+        SuplID: this.props.SuplID,
+      },
     };
 
     axios
-      .post(Url, data, { headers })
+      .post( data, { headers })
       .then((response) => {
         let data = response.data;
         console.log("dataAddress>>", data);
 
         this.setState({ AddressData: data, ProgressLoader: true }, () => {
           this.setState({
-            listStateCustomerAddresses: this.listCustomerAddresses(),
+            listStateSupplierAddresses: this.listStateSupplierAddresses(),
             stateForm: this.stateForm(),
           });
         });
@@ -261,7 +242,12 @@ class addresses extends React.Component {
           };
           newData.push(d);
         }
-        this.setState({ countryData: newData, ProgressLoader: true });
+        this.setState({ countryData: newData, ProgressLoader: true },()=>{
+          this.setState({
+            listStateSupplierAddresses: this.listStateSupplierAddresses(),
+            stateForm: this.stateForm(),
+          });
+        });
       })
       .catch((error) => {});
   };
@@ -322,7 +308,7 @@ class addresses extends React.Component {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Accordion
-                    key="customerAddress-General-Details"
+                    key="SupplierAddress-General-Details"
                     expanded={this.state.GeneralDetailsExpanded}
                   >
                     <AccordionSummary
@@ -354,23 +340,9 @@ class addresses extends React.Component {
                               stickyHeader
                               size="small"
                               className="accordion-table"
-                              aria-label="customerAddress List table"
+                              aria-label="SupplierAddress List table"
                             >
                               <TableBody className="tableBody">
-                                <DropdownInput
-                                  id="AddressType"
-                                  label="AddressType"
-                                  onChange={(e) =>
-                                    this.updateFormValue(
-                                      "AddressType",
-                                      e,
-                                      "ADD"
-                                    )
-                                  }
-                                  value={this.state.CustomerAddress.AddressType}
-                                  options={APIURLS.AddressType}
-                                  isMandatory={true}
-                                />
                                 <TextboxInput
                                   id="Code"
                                   label="Code"
@@ -380,13 +352,13 @@ class addresses extends React.Component {
                                   variant="outlined"
                                   size="small"
                                   isMandatory={true}
-                                  value={this.state.CustomerAddress.Code}
+                                  value={this.state.SupplierAddress.Code}
                                   error={
-                                    this.state.Validations.CustomerAddress.Code
+                                    this.state.Validations.SupplierAddress.Code
                                       .errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress.Code
+                                    this.state.Validations.SupplierAddress.Code
                                       .errorMssg
                                   }
                                 />
@@ -398,13 +370,13 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.Name}
+                                  value={this.state.SupplierAddress.Name}
                                   error={
-                                    this.state.Validations.CustomerAddress.Name
+                                    this.state.Validations.SupplierAddress.Name
                                       .errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress.Name
+                                    this.state.Validations.SupplierAddress.Name
                                       .errorMssg
                                   }
                                 />
@@ -416,13 +388,13 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.Address}
+                                  value={this.state.SupplierAddress.Address}
                                   error={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .Address.errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .Address.errorMssg
                                   }
                                 />
@@ -434,13 +406,13 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.Address2}
+                                  value={this.state.SupplierAddress.Address2}
                                   error={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .Address2.errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .Address2.errorMssg
                                   }
                                 />
@@ -452,13 +424,13 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.Address3}
+                                  value={this.state.SupplierAddress.Address3}
                                   error={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .Address3.errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .Address3.errorMssg
                                   }
                                 />
@@ -470,13 +442,13 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.City}
+                                  value={this.state.SupplierAddress.City}
                                   error={
-                                    this.state.Validations.CustomerAddress.City
+                                    this.state.Validations.SupplierAddress.City
                                       .errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress.City
+                                    this.state.Validations.SupplierAddress.City
                                       .errorMssg
                                   }
                                 />
@@ -488,52 +460,26 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.PostCode}
+                                  value={this.state.SupplierAddress.PostCode}
                                   error={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .PostCode.errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .PostCode.errorMssg
                                   }
                                 />
-                                <TextboxInput
-                                  id="TSSNo"
-                                  label="TSSNo"
-                                  onChange={(e) =>
-                                    this.updateFormValue("TSSNo", e, "ADD")
-                                  }
-                                  variant="outlined"
-                                  size="small"
-                                  value={this.state.CustomerAddress.TSSNo}
-                                  error={
-                                    this.state.Validations.CustomerAddress.TSSNo
-                                      .errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.CustomerAddress.TSSNo
-                                      .errorMssg
-                                  }
-                                />
+
                                 <SwitchInput
                                   key="IsBlock"
                                   id="IsBlock"
                                   label="IsBlock"
-                                  param={this.state.CustomerAddress.IsBlock}
+                                  param={this.state.SupplierAddress.IsBlock}
                                   onChange={(e) =>
                                     this.updateFormValue("IsBlock", e, "ADD")
                                   }
-                                  value={this.state.CustomerAddress.IsBlock}
-                                />
-                                <DropdownInput
-                                  id="IncoID"
-                                  label="IncoID"
-                                  onChange={(e) =>
-                                    this.updateFormValue("IncoID", e, "ADD")
-                                  }
-                                  // options={}
-                                  value={this.state.CustomerAddress.IncoID}
+                                  value={this.state.SupplierAddress.IsBlock}
                                 />
                               </TableBody>
                             </Table>
@@ -545,7 +491,7 @@ class addresses extends React.Component {
                               stickyHeader
                               size="small"
                               className="accordion-table"
-                              aria-label="customerAddress List table"
+                              aria-label="SupplierAddress List table"
                             >
                               <TableBody className="tableBody">
                                 <DropdownInput
@@ -556,7 +502,7 @@ class addresses extends React.Component {
                                   }
                                   options={this.state.countryData}
                                   isMandatory={true}
-                                  value={this.state.CustomerAddress.CountryID}
+                                  value={this.state.SupplierAddress.CountryID}
                                 />
                                 <DropdownInput
                                   id="StateID"
@@ -565,7 +511,7 @@ class addresses extends React.Component {
                                     this.updateFormValue("StateID", e, "ADD")
                                   }
                                   options={this.state.stateData}
-                                  value={this.state.CustomerAddress.StateID}
+                                  value={this.state.SupplierAddress.StateID}
                                 />
                                 <TextboxInput
                                   id="ContactPerson"
@@ -580,19 +526,18 @@ class addresses extends React.Component {
                                   variant="outlined"
                                   size="small"
                                   value={
-                                    this.state.CustomerAddress.ContactPerson
+                                    this.state.SupplierAddress.ContactPerson
                                   }
                                   error={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .ContactPerson.errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .ContactPerson.errorMssg
                                   }
                                 />
                                 <TextboxInput
-                                  type="number"
                                   id="PhoneNo"
                                   label="Phone No "
                                   onChange={(e) =>
@@ -600,13 +545,13 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.PhoneNo}
+                                  value={this.state.SupplierAddress.PhoneNo}
                                   error={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .PhoneNo.errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .PhoneNo.errorMssg
                                   }
                                 />
@@ -619,13 +564,13 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.EmailID}
+                                  value={this.state.SupplierAddress.EmailID}
                                   error={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .EmailID.errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .EmailID.errorMssg
                                   }
                                 />
@@ -637,13 +582,13 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.VATNo}
+                                  value={this.state.SupplierAddress.VATNo}
                                   error={
-                                    this.state.Validations.CustomerAddress.VATNo
+                                    this.state.Validations.SupplierAddress.VATNo
                                       .errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress.VATNo
+                                    this.state.Validations.SupplierAddress.VATNo
                                       .errorMssg
                                   }
                                 />
@@ -655,97 +600,17 @@ class addresses extends React.Component {
                                   }
                                   variant="outlined"
                                   size="small"
-                                  value={this.state.CustomerAddress.GSTNo}
+                                  value={this.state.SupplierAddress.GSTNo}
                                   error={
-                                    this.state.Validations.CustomerAddress.GSTNo
+                                    this.state.Validations.SupplierAddress.GSTNo
                                       .errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress.GSTNo
+                                    this.state.Validations.SupplierAddress.GSTNo
                                       .errorMssg
                                   }
                                 />
-                                <TextboxInput
-                                  id="EORINo"
-                                  label="EORINo"
-                                  onChange={(e) =>
-                                    this.updateFormValue("EORINo", e, "ADD")
-                                  }
-                                  variant="outlined"
-                                  size="small"
-                                  value={this.state.CustomerAddress.EORINo}
-                                  error={
-                                    this.state.Validations.CustomerAddress
-                                      .EORINo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.CustomerAddress
-                                      .EORINo.errorMssg
-                                  }
-                                />
-                                <DropdownInput
-                                  id="ShipmentModeID"
-                                  label="ShipmentModeID"
-                                  onChange={(e) =>
-                                    this.updateFormValue(
-                                      "ShipmentModeID",
-                                      e,
-                                      "ADD"
-                                    )
-                                  }
-                                  // options={}
-                                  value={
-                                    this.state.CustomerAddress.ShipmentModeID
-                                  }
-                                />
-                                <TextboxInput
-                                  id="PostOfDischarge"
-                                  label="Post Of Discharge"
-                                  onChange={(e) =>
-                                    this.updateFormValue(
-                                      "PostOfDischarge",
-                                      e,
-                                      "ADD"
-                                    )
-                                  }
-                                  variant="outlined"
-                                  size="small"
-                                  value={
-                                    this.state.CustomerAddress.PostOfDischarge
-                                  }
-                                  error={
-                                    this.state.Validations.CustomerAddress
-                                      .PostOfDischarge.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.CustomerAddress
-                                      .PostOfDischarge.errorMssg
-                                  }
-                                />
-                                <TextboxInput
-                                  id="FinalDestination"
-                                  label="Final Destination"
-                                  onChange={(e) =>
-                                    this.updateFormValue(
-                                      "FinalDestination",
-                                      e,
-                                      "ADD"
-                                    )
-                                  }
-                                  variant="outlined"
-                                  size="small"
-                                  value={
-                                    this.state.CustomerAddress.FinalDestination
-                                  }
-                                  error={
-                                    this.state.Validations.CustomerAddress
-                                      .FinalDestination.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.CustomerAddress
-                                      .FinalDestination.errorMssg
-                                  }
-                                />
+
                                 <TextboxInput
                                   id="SpecialInstruction"
                                   label="Special Instruction"
@@ -759,15 +624,15 @@ class addresses extends React.Component {
                                   variant="outlined"
                                   size="small"
                                   value={
-                                    this.state.CustomerAddress
+                                    this.state.SupplierAddress
                                       .SpecialInstruction
                                   }
                                   error={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .SpecialInstruction.errorState
                                   }
                                   helperText={
-                                    this.state.Validations.CustomerAddress
+                                    this.state.Validations.SupplierAddress
                                       .SpecialInstruction.errorMssg
                                   }
                                 />
@@ -788,7 +653,7 @@ class addresses extends React.Component {
     return o;
   };
 
-  listCustomerAddresses = () => {
+  listStateSupplierAddresses = () => {
     let o = (
       <Fragment>
         <div
@@ -805,14 +670,12 @@ class addresses extends React.Component {
                 stickyHeader
                 size="small"
                 className=""
-                aria-label="CustomerAddress List table"
+                aria-label="SupplierAddress List table"
               >
                 <TableHead className="table-header-background">
                   <TableRow>
                     <TableCell className="table-header-font">#</TableCell>
-                    <TableCell className="table-header-font">
-                      Address Type
-                    </TableCell>
+
                     <TableCell className="table-header-font" align="left">
                       Name
                     </TableCell>
@@ -829,9 +692,7 @@ class addresses extends React.Component {
                       }
                     >
                       <TableCell> {i + 1}</TableCell>
-                      <TableCell align="left">
-                        {this.getAddressTypeName(item.AddressType)}
-                      </TableCell>
+
                       <TableCell> {item.Name}</TableCell>
 
                       <TableCell align="left">
@@ -876,55 +737,51 @@ class addresses extends React.Component {
     }
   };
 
-  checkCode = () => {
-    if (this.state.process === "EDIT") {
-      if (
-        this.state.UpdateCustomerAddress.Code === "" ||
-        this.state.UpdateCustomerAddress.Code.length > 10
-      ) {
-        this.setState({ updateBtnDisabled: true });
-      }
-    } else if (this.state.process === "ADD") {
-      if (
-        this.state.CustomerAddress.Code === "" ||
-        this.state.CustomerAddress.Code.length > 10
-      ) {
-        this.setState({ AddbtnDisable: true });
-      }
-    } else {
-    }
-  };
+  // checkCode = () => {
+  //   if (this.state.process === "EDIT") {
+  //     if (
+  //       this.state.UpdateSupplierAddress.Code === "" ||
+  //       this.state.UpdateSupplierAddress.Code.length > 10
+  //     ) {
+  //       this.setState({ updateBtnDisabled: true });
+  //     }
+  //   } else if (this.state.process === "ADD") {
+  //     if (
+  //       this.state.SupplierAddress.Code === "" ||
+  //       this.state.SupplierAddress.Code.length > 10
+  //     ) {
+  //       this.setState({ AddbtnDisable: true });
+  //     }
+  //   } else {
+  //   }
+  // };
 
   updateFormValue = (param, e, process) => {
     console.log("Display");
-    let CustomerAddress = {};
+    let SupplierAddress = {};
 
     if (process === "EDIT") {
-      CustomerAddress = this.state.UpdateCustomerAddress;
+      SupplierAddress = this.state.UpdateSupplierAddress;
       this.setState({ process: "EDIT" });
     } else {
-      CustomerAddress = this.state.CustomerAddress;
+      SupplierAddress = this.state.SupplierAddress;
       this.setState({ process: "ADD" });
     }
 
     switch (param) {
-      case "AddressType":
-        CustomerAddress[param] = CF.toInt(e.target.value);
-
-        break;
       case "Code":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v1 = this.state.Validations;
         if (e.target.value === "" || e.target.value.length > 10) {
           if (e.target.value === "") {
             if (process === "EDIT") {
-              v1.UpdateCustomerAddress.Code = {
+              v1.UpdateSupplierAddress.Code = {
                 errorState: true,
                 errorMssg: "Cannot be blank",
               };
               this.setState({ Validations: v1, updateBtnDisabled: true });
             } else {
-              v1.CustomerAddress.Code = {
+              v1.SupplierAddress.Code = {
                 errorState: true,
                 errorMssg: "Cannot be blank",
               };
@@ -933,13 +790,13 @@ class addresses extends React.Component {
           }
           if (e.target.value.length > 10) {
             if (process === "EDIT") {
-              v1.UpdateCustomerAddress.Code = {
+              v1.UpdateSupplierAddress.Code = {
                 errorState: true,
                 errorMssg: "Maximum 10 characters allowed",
               };
               this.setState({ Validations: v1, updateBtnDisabled: true });
             } else {
-              v1.CustomerAddress.Code = {
+              v1.SupplierAddress.Code = {
                 errorState: true,
                 errorMssg: "Maximum 10 characters allowed",
               };
@@ -947,33 +804,33 @@ class addresses extends React.Component {
             }
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v1.UpdateCustomerAddress.Code = {
+            v1.UpdateSupplierAddress.Code = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v1, updateBtnDisabled: false });
           } else {
-            v1.CustomerAddress.Code = { errorState: false, errorMssg: "" };
+            v1.SupplierAddress.Code = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v1, AddbtnDisable: false });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
 
         break;
       case "Name":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v2 = this.state.Validations;
         if (e.target.value.length > 100) {
           if (process === "EDIT") {
-            v2.UpdateCustomerAddress.Name = {
+            v2.UpdateSupplierAddress.Name = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
             this.setState({ Validations: v2 });
           } else {
-            v2.CustomerAddress.Name = {
+            v2.SupplierAddress.Name = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
@@ -981,32 +838,32 @@ class addresses extends React.Component {
           }
         } else {
           if (process === "EDIT") {
-            v2.UpdateCustomerAddress.Name = {
+            v2.UpdateSupplierAddress.Name = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v2 });
           } else {
-            v2.CustomerAddress.Name = { errorState: false, errorMssg: "" };
+            v2.SupplierAddress.Name = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v2 });
           }
-          this.setParams(CustomerAddress, process);
+          this.setParams(SupplierAddress, process);
         }
-       
+
         this.checkCode();
         break;
       case "Address":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v3 = this.state.Validations;
         if (e.target.value.length > 100) {
           if (process === "EDIT") {
-            v3.UpdateCustomerAddress.Address = {
+            v3.UpdateSupplierAddress.Address = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
             this.setState({ Validations: v3 });
           } else {
-            v3.CustomerAddress.Address = {
+            v3.SupplierAddress.Address = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
@@ -1014,516 +871,380 @@ class addresses extends React.Component {
           }
         } else {
           if (process === "EDIT") {
-            v3.UpdateCustomerAddress.Address = {
+            v3.UpdateSupplierAddress.Address = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v3 });
           } else {
-            v3.CustomerAddress.Address = { errorState: false, errorMssg: "" };
+            v3.SupplierAddress.Address = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v3 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         break;
         this.checkCode();
       case "Address2":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v4 = this.state.Validations;
         if (e.target.value.length > 100) {
           if (process === "EDIT") {
-            v4.UpdateCustomerAddress.Address2 = {
+            v4.UpdateSupplierAddress.Address2 = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
             this.setState({ Validations: v4 });
           } else {
-            v4.CustomerAddress.Address2 = {
+            v4.SupplierAddress.Address2 = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
             this.setState({ Validations: v4 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v4.UpdateCustomerAddress.Address2 = {
+            v4.UpdateSupplierAddress.Address2 = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v4 });
           } else {
-            v4.CustomerAddress.Address2 = { errorState: false, errorMssg: "" };
+            v4.SupplierAddress.Address2 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v4 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "Address3":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v5 = this.state.Validations;
         if (e.target.value.length > 100) {
           if (process === "EDIT") {
-            v5.UpdateCustomerAddress.Address3 = {
+            v5.UpdateSupplierAddress.Address3 = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
             this.setState({ Validations: v5 });
           } else {
-            v5.CustomerAddress.Address3 = {
+            v5.SupplierAddress.Address3 = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
             this.setState({ Validations: v5 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v5.UpdateCustomerAddress.Address3 = {
+            v5.UpdateSupplierAddress.Address3 = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v5 });
           } else {
-            v5.CustomerAddress.Address3 = { errorState: false, errorMssg: "" };
+            v5.SupplierAddress.Address3 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v5 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "City":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v6 = this.state.Validations;
         if (e.target.value.length > 50) {
           if (process === "EDIT") {
-            v6.UpdateCustomerAddress.City = {
+            v6.UpdateSupplierAddress.City = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
             this.setState({ Validations: v6 });
           } else {
-            v6.CustomerAddress.City = {
+            v6.SupplierAddress.City = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
             this.setState({ Validations: v6 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v6.UpdateCustomerAddress.City = {
+            v6.UpdateSupplierAddress.City = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v6 });
           } else {
-            v6.CustomerAddress.City = { errorState: false, errorMssg: "" };
+            v6.SupplierAddress.City = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v6 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         break;
         this.checkCode();
       case "PostCode":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v7 = this.state.Validations;
         if (e.target.value.length > 10) {
           if (process === "EDIT") {
-            v7.UpdateCustomerAddress.PostCode = {
+            v7.UpdateSupplierAddress.PostCode = {
               errorState: true,
               errorMssg: "Maximum 10 characters allowed",
             };
             this.setState({ Validations: v7 });
           } else {
-            v7.CustomerAddress.PostCode = {
+            v7.SupplierAddress.PostCode = {
               errorState: true,
               errorMssg: "Maximum 10 characters allowed",
             };
             this.setState({ Validations: v7 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v7.UpdateCustomerAddress.PostCode = {
+            v7.UpdateSupplierAddress.PostCode = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v7 });
           } else {
-            v7.CustomerAddress.PostCode = { errorState: false, errorMssg: "" };
+            v7.SupplierAddress.PostCode = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v7 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         break;
         this.checkCode();
       case "CountryID":
-        CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress, process);
+        SupplierAddress[param] = CF.toInt(e.target.value);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "StateID":
-        CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress, process);
+        SupplierAddress[param] = CF.toInt(e.target.value);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "ContactPerson":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v8 = this.state.Validations;
         if (e.target.value.length > 50) {
           if (process === "EDIT") {
-            v8.UpdateCustomerAddress.ContactPerson = {
+            v8.UpdateSupplierAddress.ContactPerson = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
             this.setState({ Validations: v8 });
           } else {
-            v8.CustomerAddress.ContactPerson = {
+            v8.SupplierAddress.ContactPerson = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
             this.setState({ Validations: v8 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v8.UpdateCustomerAddress.ContactPerson = {
+            v8.UpdateSupplierAddress.ContactPerson = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v8 });
           } else {
-            v8.CustomerAddress.ContactPerson = {
+            v8.SupplierAddress.ContactPerson = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v8 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "PhoneNo":
-        CustomerAddress[param] = CF.toInt(e.target.value);
+        SupplierAddress[param] = CF.toInt(e.target.value);
         let v9 = this.state.Validations;
         if (e.target.value.length > 20) {
           if (process === "EDIT") {
-            v9.UpdateCustomerAddress.PhoneNo = {
+            v9.UpdateSupplierAddress.PhoneNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
             this.setState({ Validations: v9 });
           } else {
-            v9.CustomerAddress.PhoneNo = {
+            v9.SupplierAddress.PhoneNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
             this.setState({ Validations: v9 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v9.UpdateCustomerAddress.PhoneNo = {
+            v9.UpdateSupplierAddress.PhoneNo = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v9 });
           } else {
-            v9.CustomerAddress.PhoneNo = { errorState: false, errorMssg: "" };
+            v9.SupplierAddress.PhoneNo = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v9 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "EmailID":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v10 = this.state.Validations;
         if (e.target.value.length > 50) {
           if (process === "EDIT") {
-            v10.UpdateCustomerAddress.EmailID = {
+            v10.UpdateSupplierAddress.EmailID = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
             this.setState({ Validations: v10 });
           } else {
-            v10.CustomerAddress.EmailID = {
+            v10.SupplierAddress.EmailID = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
             this.setState({ Validations: v10 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v10.UpdateCustomerAddress.EmailID = {
+            v10.UpdateSupplierAddress.EmailID = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v10 });
           } else {
-            v10.CustomerAddress.EmailID = { errorState: false, errorMssg: "" };
+            v10.SupplierAddress.EmailID = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v10 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "VATNo":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v11 = this.state.Validations;
         if (e.target.value.length > 20) {
           if (process === "EDIT") {
-            v11.UpdateCustomerAddress.VATNo = {
+            v11.UpdateSupplierAddress.VATNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
             this.setState({ Validations: v11 });
           } else {
-            v11.CustomerAddress.VATNo = {
+            v11.SupplierAddress.VATNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
             this.setState({ Validations: v11 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v11.UpdateCustomerAddress.VATNo = {
+            v11.UpdateSupplierAddress.VATNo = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v11 });
           } else {
-            v11.CustomerAddress.VATNo = { errorState: false, errorMssg: "" };
+            v11.SupplierAddress.VATNo = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v11 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "GSTNo":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v12 = this.state.Validations;
         if (e.target.value.length > 20) {
           if (process === "EDIT") {
-            v12.UpdateCustomerAddress.GSTNo = {
+            v12.UpdateSupplierAddress.GSTNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
             this.setState({ Validations: v12 });
           } else {
-            v12.CustomerAddress.GSTNo = {
+            v12.SupplierAddress.GSTNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
             this.setState({ Validations: v12 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v12.UpdateCustomerAddress.GSTNo = {
+            v12.UpdateSupplierAddress.GSTNo = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v12 });
           } else {
-            v12.CustomerAddress.GSTNo = { errorState: false, errorMssg: "" };
+            v12.SupplierAddress.GSTNo = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v12 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
-      case "EORINo":
-        CustomerAddress[param] = e.target.value;
-        let v13 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          if (process === "EDIT") {
-            v13.UpdateCustomerAddress.EORINo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed",
-            };
-            this.setState({ Validations: v13 });
-          } else {
-            v13.CustomerAddress.EORINo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed",
-            };
-            this.setState({ Validations: v13 });
-          }
-        } else {
-          CustomerAddress[param] = e.target.value;
-          if (process === "EDIT") {
-            v13.UpdateCustomerAddress.EORINo = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({ Validations: v13 });
-          } else {
-            v13.CustomerAddress.EORINo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v13 });
-          }
-        }
-        this.setParams(CustomerAddress, process);
-        this.checkCode();
-        break;
-      case "TSSNo":
-        CustomerAddress[param] = e.target.value;
-        let v14 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          if (process === "EDIT") {
-            v14.UpdateCustomerAddress.TSSNo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed",
-            };
-            this.setState({ Validations: v14 });
-          } else {
-            v14.CustomerAddress.TSSNo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed",
-            };
-            this.setState({ Validations: v14 });
-          }
-        } else {
-          CustomerAddress[param] = e.target.value;
-          if (process === "EDIT") {
-            v14.UpdateCustomerAddress.TSSNo = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({ Validations: v14 });
-          } else {
-            v14.CustomerAddress.TSSNo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v14 });
-          }
-        }
-        this.setParams(CustomerAddress, process);
-        this.checkCode();
-        break;
+
       case "IsBlock":
-        CustomerAddress[param] = e.target.checked;
-        this.setParams(CustomerAddress, process);
+        SupplierAddress[param] = e.target.checked;
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "IncoID":
-        CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress, process);
+        SupplierAddress[param] = CF.toInt(e.target.value);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
       case "ShipmentModeID":
-        CustomerAddress[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerAddress, process);
+        SupplierAddress[param] = CF.toInt(e.target.value);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
-      case "PostOfDischarge":
-        CustomerAddress[param] = e.target.value;
-        let v15 = this.state.Validations;
-        if (e.target.value.length > 50) {
-          if (process === "EDIT") {
-            v15.UpdateCustomerAddress.PostOfDischarge = {
-              errorState: true,
-              errorMssg: "Maximum 50 characters allowed",
-            };
-            this.setState({ Validations: v15 });
-          } else {
-            v15.CustomerAddress.PostOfDischarge = {
-              errorState: true,
-              errorMssg: "Maximum 50 characters allowed",
-            };
-            this.setState({ Validations: v15 });
-          }
-        } else {
-          CustomerAddress[param] = e.target.value;
-          if (process === "EDIT") {
-            v15.UpdateCustomerAddress.PostOfDischarge = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({ Validations: v15 });
-          } else {
-            v15.CustomerAddress.PostOfDischarge = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({ Validations: v15 });
-          }
-        }
-        this.setParams(CustomerAddress, process);
-        this.checkCode();
-        break;
-      case "FinalDestination":
-        CustomerAddress[param] = e.target.value;
-        let v16 = this.state.Validations;
-        if (e.target.value.length > 50) {
-          if (process === "EDIT") {
-            v16.UpdateCustomerAddress.FinalDestination = {
-              errorState: true,
-              errorMssg: "Maximum 50 characters allowed",
-            };
-            this.setState({ Validations: v16 });
-          } else {
-            v16.CustomerAddress.FinalDestination = {
-              errorState: true,
-              errorMssg: "Maximum 50 characters allowed",
-            };
-            this.setState({ Validations: v16 });
-          }
-        } else {
-          CustomerAddress[param] = e.target.value;
-          if (process === "EDIT") {
-            v16.UpdateCustomerAddress.FinalDestination = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({ Validations: v16 });
-          } else {
-            v16.CustomerAddress.FinalDestination = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({ Validations: v16 });
-          }
-        }
-        this.setParams(CustomerAddress, process);
-        this.checkCode();
-        break;
+
       case "SpecialInstruction":
-        CustomerAddress[param] = e.target.value;
+        SupplierAddress[param] = e.target.value;
         let v17 = this.state.Validations;
         if (e.target.value.length > 250) {
           if (process === "EDIT") {
-            v17.UpdateCustomerAddress.SpecialInstruction = {
+            v17.UpdateSupplierAddress.SpecialInstruction = {
               errorState: true,
               errorMssg: "Maximum 250 characters allowed",
             };
             this.setState({ Validations: v17 });
           } else {
-            v17.CustomerAddress.SpecialInstruction = {
+            v17.SupplierAddress.SpecialInstruction = {
               errorState: true,
               errorMssg: "Maximum 250 characters allowed",
             };
             this.setState({ Validations: v17 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
+          SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v17.UpdateCustomerAddress.SpecialInstruction = {
+            v17.UpdateSupplierAddress.SpecialInstruction = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v17 });
           } else {
-            v17.CustomerAddress.SpecialInstruction = {
+            v17.SupplierAddress.SpecialInstruction = {
               errorState: false,
               errorMssg: "",
             };
             this.setState({ Validations: v17 });
           }
         }
-        this.setParams(CustomerAddress, process);
+        this.setParams(SupplierAddress, process);
         this.checkCode();
         break;
 
@@ -1534,9 +1255,9 @@ class addresses extends React.Component {
 
   setParams = (object, process) => {
     if (process === "EDIT") {
-      this.setState({ UpdateCustomerAddress: object });
+      this.setState({ UpdateSupplierAddress: object });
     } else {
-      this.setState({ CustomerAddress: object }, () => {
+      this.setState({ SupplierAddress: object }, () => {
         this.setState({
           stateForm: this.stateForm(),
         });
@@ -1551,124 +1272,102 @@ class addresses extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.CreateCustomerAddress;
+    // let Url = APIURLS.APIURL.CreateSupplierAddress;
     let reqData = {
       ValidUser: ValidUser,
-      CustomerAddress: this.state.CustomerAddress,
+      SupplierAddress: this.state.SupplierAddress,
     };
 
     console.log("ReqData>>>", reqData);
 
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        let data = response.data;
-        if (response.status === 200 || response.status === 201) {
-          let CustomerAddress = {
-            AddressID: 0,
-            CustID: 0,
-            AddressType: 0,
-            Code: "",
-            Name: "",
-            Address: "",
-            Address2: "",
-            Address3: "",
-            City: "",
-            PostCode: "",
-            CountryID: 0,
-            StateID: 0,
-            ContactPerson: "",
-            PhoneNo: "",
-            EmailID: "",
-            VATNo: "",
-            GSTNo: "",
-            EORINo: "",
-            TSSNo: "",
-            IsBlock: false,
-            IncoID: 0,
-            ShipmentModeID: 0,
-            PostOfDischarge: "",
-            FinalDestination: "",
-            SpecialInstruction: "",
-          };
-          this.setState(
-            {
-              CustomerAddress: CustomerAddress,
-              ErrorPrompt: false,
-              SuccessPrompt: true,
-            },
-            () => {
-              this.getCustomerAddress();
-            }
-          );
-        } else {
-          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-        }
-      })
-      .catch((error) => {
-        this.setState({ ErrorPrompt: true });
-      });
+    // axios
+    //   .post(Url, reqData, { headers })
+    //   .then((response) => {
+    //     let data = response.data;
+    //     if (response.status === 200 || response.status === 201) {
+    //       let SupplierAddress = {
+    //         AddressID: 0,
+    //     SuplID: 0,
+
+    //     Code: "",
+    //     Name: "",
+    //     Address: "",
+    //     Address2: "",
+    //     Address3: "",
+    //     City: "",
+    //     PostCode: "",
+    //     CountryID: 0,
+    //     StateID: 0,
+    //     ContactPerson: "",
+    //     PhoneNo: "",
+    //     EmailID: "",
+    //     VATNo: "",
+    //     GSTNo: "",
+
+    //     IsBlock: false,
+
+    //     SpecialInstruction: "",
+    //       };
+    //       this.setState(
+    //         {
+    //           SupplierAddress: SupplierAddress,
+    //           ErrorPrompt: false,
+    //           SuccessPrompt: true,
+    //         },
+    //         () => {
+    //           this.getSupplierAddress();
+    //         }
+    //       );
+    //     } else {
+    //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ ErrorPrompt: true });
+    //   });
   };
 
-  //  setStateParam = (validations, key, value) => {
-  //   console.log("validations > ", validations);
-  //   console.log("key > ", key);
-  //   console.log("value > ", value);
-  //   if (
-  //     Object.keys(validations).length === 0 &&
-  //     validations.constructor === Object
-  //   ) {
-  //     console.log("validations is Empty ");
-  //     this.setState({ [key]: value });
-  //   } else {
-  //     if (validations.validate) {
-  //       !validations.isEmpty
-  //         ? validations.isNumber
-  //           ? this.setState({ [key]: value })
-  //           : this.setState({ [key]: 0 })
-  //         : this.setState({ [key]: 0 });
-  //     } else {
-  //       this.setState({ [key]: value });
-  //     }
-  //   }
-  // };
+  
 
-  UpdateCustomerAddress = (e) => {
+  UpdateSupplierAddress = (e) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.UpdateCustomerAddress;
+    // let Url = APIURLS.APIURL.UpdateSupplierAddress;
     let reqData = {
       ValidUser: ValidUser,
-      CustomerAddressList: [this.state.UpdateCustomerAddress],
+      SupplierAddressList: [this.state.UpdateSupplierAddress],
     };
 
     console.log("ReqData>>>", reqData);
 
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        let data = response.data;
-        if (response.status === 200 || response.status === 201) {
-          this.setState({
-            ErrorPrompt: false,
-            SuccessPrompt: true,
-          },()=>this.getCustomerAddress());
-        } else {
-          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-        }
-      })
-      .catch((error) => {
-        this.setState({ ErrorPrompt: true });
-      });
+    // axios
+    //   .post(Url, reqData, { headers })
+    //   .then((response) => {
+    //     let data = response.data;
+    //     if (response.status === 200 || response.status === 201) {
+    //       this.setState(
+    //         {
+    //           ErrorPrompt: false,
+    //           SuccessPrompt: true,
+    //         },
+    //         () => this.getSupplierAddress()
+    //       );
+    //     } else {
+    //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ ErrorPrompt: true });
+    //   });
   };
 
   InitialhandleRowClick(e, item, id) {
     this.setState({
-      UpdateCustomerAddress: item,
+      UpdateSupplierAddress: item,
     });
 
     this.removeIsSelectedRowClasses();
@@ -1679,7 +1378,7 @@ class addresses extends React.Component {
     try {
       this.setState(
         {
-          UpdateCustomerAddress: item,
+          UpdateSupplierAddress: item,
           FullSmallBtnArea: true,
           hideSidePanel: true,
         },
@@ -1687,7 +1386,7 @@ class addresses extends React.Component {
           this.closeExpandFull(null);
         }
       );
-      console.log("addressId>>", this.state.CustomerAddress.AddressID);
+      // console.log("addressId>>", this.state.SupplierAddress.AddressID);
       this.removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     } catch (ex) {}
@@ -1729,7 +1428,7 @@ class addresses extends React.Component {
     pagination.page = newPage;
     this.setState({ pagination: pagination }, () => {
       this.setState({
-        listStateCustomerAddresses: this.listCustomerAddresses(),
+        listStateSupplierAddresses: this.listStateSupplierAddresses(),
       });
     });
   };
@@ -1810,7 +1509,7 @@ class addresses extends React.Component {
                   <Dualtabcomponent
                     tab1name="List"
                     tab2name={this.state.type === "EDIT" ? "EDIT" : "ADD"}
-                    tab1Html={this.state.listStateCustomerAddresses}
+                    tab1Html={this.state.listStateSupplierAddresses}
                     tab2Html={this.state.stateForm}
                   />
                 </Grid>
@@ -1830,7 +1529,7 @@ class addresses extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          onClick={(e) => this.UpdateCustomerAddress(e)}
+                          onClick={(e) => this.UpdateSupplierAddress(e)}
                           disabled={this.state.updateBtnDisabled}
                         >
                           {APIURLS.buttonTitle.update}
@@ -1856,37 +1555,25 @@ class addresses extends React.Component {
                           stickyHeader
                           size="small"
                           className="accordion-table"
-                          aria-label="customerAddress List table"
+                          aria-label="SupplierAddress List table"
                         >
                           <TableBody className="tableBody">
-                            <DropdownInput
-                              id="AddressType"
-                              label="AddressType"
-                              onChange={(e) =>
-                                this.updateFormValue("AddressType", e, "EDIT")
-                              }
-                              value={
-                                this.state.UpdateCustomerAddress.AddressType
-                              }
-                              options={APIURLS.AddressType}
-                              isMandatory={true}
-                            />
                             <TextboxInput
                               id="Code"
                               label="Code"
                               onChange={(e) =>
-                                this.updateFormValue("Code", e, "EDIT")
+                                this.updateFormValue("Code", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
                               isMandatory={true}
-                              value={this.state.UpdateCustomerAddress.Code}
+                              value={this.state.UpdateSupplierAddress.Code}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Code.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Code.errorMssg
                               }
                             />
@@ -1894,17 +1581,17 @@ class addresses extends React.Component {
                               id="Name"
                               label="Name"
                               onChange={(e) =>
-                                this.updateFormValue("Name", e, "EDIT")
+                                this.updateFormValue("Name", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.Name}
+                              value={this.state.UpdateSupplierAddress.Name}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Name.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Name.errorMssg
                               }
                             />
@@ -1912,17 +1599,17 @@ class addresses extends React.Component {
                               id="Address"
                               label="Address"
                               onChange={(e) =>
-                                this.updateFormValue("Address", e, "EDIT")
+                                this.updateFormValue("Address", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.Address}
+                              value={this.state.UpdateSupplierAddress.Address}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Address.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Address.errorMssg
                               }
                             />
@@ -1930,17 +1617,17 @@ class addresses extends React.Component {
                               id="Address2"
                               label="Address2"
                               onChange={(e) =>
-                                this.updateFormValue("Address2", e, "EDIT")
+                                this.updateFormValue("Address2", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.Address2}
+                              value={this.state.UpdateSupplierAddress.Address2}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Address2.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Address2.errorMssg
                               }
                             />
@@ -1948,17 +1635,17 @@ class addresses extends React.Component {
                               id="Address3"
                               label="Address3"
                               onChange={(e) =>
-                                this.updateFormValue("Address3", e, "EDIT")
+                                this.updateFormValue("Address3", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.Address3}
+                              value={this.state.UpdateSupplierAddress.Address3}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Address3.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .Address3.errorMssg
                               }
                             />
@@ -1966,17 +1653,17 @@ class addresses extends React.Component {
                               id="City"
                               label="City"
                               onChange={(e) =>
-                                this.updateFormValue("City", e, "EDIT")
+                                this.updateFormValue("City", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.City}
+                              value={this.state.UpdateSupplierAddress.City}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .City.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .City.errorMssg
                               }
                             />
@@ -1984,112 +1671,86 @@ class addresses extends React.Component {
                               id="PostCode"
                               label="PostCode"
                               onChange={(e) =>
-                                this.updateFormValue("PostCode", e, "EDIT")
+                                this.updateFormValue("PostCode", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.PostCode}
+                              value={this.state.UpdateSupplierAddress.PostCode}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .PostCode.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .PostCode.errorMssg
                               }
                             />
-                            <TextboxInput
-                              id="TSSNo"
-                              label="TSSNo"
-                              onChange={(e) =>
-                                this.updateFormValue("TSSNo", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.UpdateCustomerAddress.TSSNo}
-                              error={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .TSSNo.errorState
-                              }
-                              helperText={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .TSSNo.errorMssg
-                              }
-                            />
+
                             <SwitchInput
                               key="IsBlock"
                               id="IsBlock"
                               label="IsBlock"
-                              param={this.state.UpdateCustomerAddress.IsBlock}
+                              param={this.state.UpdateSupplierAddress.IsBlock}
                               onChange={(e) =>
-                                this.updateFormValue("IsBlock", e, "EDIT")
+                                this.updateFormValue("IsBlock", e, "ADD")
                               }
-                              value={this.state.UpdateCustomerAddress.IsBlock}
+                              value={this.state.UpdateSupplierAddress.IsBlock}
                             />
-                            <DropdownInput
-                              id="IncoID"
-                              label="IncoID"
-                              onChange={(e) =>
-                                this.updateFormValue("IncoID", e, "EDIT")
-                              }
-                              // options={}
-                              value={this.state.UpdateCustomerAddress.IncoID}
-                            />
+
                             <DropdownInput
                               id="CountryID"
                               label="Country"
                               onChange={(e) =>
-                                this.updateFormValue("CountryID", e, "EDIT")
+                                this.updateFormValue("CountryID", e, "ADD")
                               }
                               options={this.state.countryData}
                               isMandatory={true}
-                              value={this.state.UpdateCustomerAddress.CountryID}
+                              value={this.state.UpdateSupplierAddress.CountryID}
                             />
                             <DropdownInput
                               id="StateID"
                               label="State"
                               onChange={(e) =>
-                                this.updateFormValue("StateID", e, "EDIT")
+                                this.updateFormValue("StateID", e, "ADD")
                               }
                               options={this.state.stateData}
-                              value={this.state.UpdateCustomerAddress.StateID}
+                              value={this.state.UpdateSupplierAddress.StateID}
                             />
                             <TextboxInput
                               id="ContactPerson"
                               label="Contact Person"
                               onChange={(e) =>
-                                this.updateFormValue("ContactPerson", e, "EDIT")
+                                this.updateFormValue("ContactPerson", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
                               value={
-                                this.state.UpdateCustomerAddress.ContactPerson
+                                this.state.UpdateSupplierAddress.ContactPerson
                               }
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .ContactPerson.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .ContactPerson.errorMssg
                               }
                             />
                             <TextboxInput
-                              type="number"
                               id="PhoneNo"
                               label="Phone No "
                               onChange={(e) =>
-                                this.updateFormValue("PhoneNo", e, "EDIT")
+                                this.updateFormValue("PhoneNo", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.PhoneNo}
+                              value={this.state.UpdateSupplierAddress.PhoneNo}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .PhoneNo.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .PhoneNo.errorMssg
                               }
                             />
@@ -2098,17 +1759,17 @@ class addresses extends React.Component {
                               id="EmailID"
                               label="Email ID"
                               onChange={(e) =>
-                                this.updateFormValue("EmailID", e, "EDIT")
+                                this.updateFormValue("EmailID", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.EmailID}
+                              value={this.state.UpdateSupplierAddress.EmailID}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .EmailID.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .EmailID.errorMssg
                               }
                             />
@@ -2116,17 +1777,17 @@ class addresses extends React.Component {
                               id="VATNo"
                               label="VATNo"
                               onChange={(e) =>
-                                this.updateFormValue("VATNo", e, "EDIT")
+                                this.updateFormValue("VATNo", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.VATNo}
+                              value={this.state.UpdateSupplierAddress.VATNo}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .VATNo.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .VATNo.errorMssg
                               }
                             />
@@ -2134,102 +1795,21 @@ class addresses extends React.Component {
                               id="GSTNo"
                               label="GSTNo"
                               onChange={(e) =>
-                                this.updateFormValue("GSTNo", e, "EDIT")
+                                this.updateFormValue("GSTNo", e, "ADD")
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateCustomerAddress.GSTNo}
+                              value={this.state.UpdateSupplierAddress.GSTNo}
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .GSTNo.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .GSTNo.errorMssg
                               }
                             />
-                            <TextboxInput
-                              id="EORINo"
-                              label="EORINo"
-                              onChange={(e) =>
-                                this.updateFormValue("EORINo", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.UpdateCustomerAddress.EORINo}
-                              error={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .EORINo.errorState
-                              }
-                              helperText={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .EORINo.errorMssg
-                              }
-                            />
-                            <DropdownInput
-                              id="ShipmentModeID"
-                              label="ShipmentModeID"
-                              onChange={(e) =>
-                                this.updateFormValue(
-                                  "ShipmentModeID",
-                                  e,
-                                  "EDIT"
-                                )
-                              }
-                              // options={}
-                              value={
-                                this.state.UpdateCustomerAddress.ShipmentModeID
-                              }
-                            />
-                            <TextboxInput
-                              id="PostOfDischarge"
-                              label="Post Of Discharge"
-                              onChange={(e) =>
-                                this.updateFormValue(
-                                  "PostOfDischarge",
-                                  e,
-                                  "EDIT"
-                                )
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={
-                                this.state.UpdateCustomerAddress.PostOfDischarge
-                              }
-                              error={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .PostOfDischarge.errorState
-                              }
-                              helperText={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .PostOfDischarge.errorMssg
-                              }
-                            />
-                            <TextboxInput
-                              id="FinalDestination"
-                              label="Final Destination"
-                              onChange={(e) =>
-                                this.updateFormValue(
-                                  "FinalDestination",
-                                  e,
-                                  "EDIT"
-                                )
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={
-                                this.state.UpdateCustomerAddress
-                                  .FinalDestination
-                              }
-                              error={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .FinalDestination.errorState
-                              }
-                              helperText={
-                                this.state.Validations.UpdateCustomerAddress
-                                  .FinalDestination.errorMssg
-                              }
-                            />
+
                             <TextboxInput
                               id="SpecialInstruction"
                               label="Special Instruction"
@@ -2237,21 +1817,21 @@ class addresses extends React.Component {
                                 this.updateFormValue(
                                   "SpecialInstruction",
                                   e,
-                                  "EDIT"
+                                  "ADD"
                                 )
                               }
                               variant="outlined"
                               size="small"
                               value={
-                                this.state.UpdateCustomerAddress
+                                this.state.UpdateSupplierAddress
                                   .SpecialInstruction
                               }
                               error={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .SpecialInstruction.errorState
                               }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress
+                                this.state.Validations.UpdateSupplierAddress
                                   .SpecialInstruction.errorMssg
                               }
                             />

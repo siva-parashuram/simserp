@@ -43,10 +43,9 @@ import SwitchInput from "../../compo/tablerowcellswitchinput";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
 
 import Addresses from "./component/addresses";
-import Contact from "./component/contact";
-import CustomerCategory from "./component/customerCategory";
 import PaymentTerms from "./component/paymentTerms";
-import SalesPerson from "./component/salesPerson";
+import BranchMapping from "./component/branchMapping";
+import SupplierPrice from "./component/supplierPrice";
 
 class supplieractivity extends React.Component {
   constructor(props) {
@@ -189,7 +188,7 @@ class supplieractivity extends React.Component {
     console.log("On load state > ", this.state);
   }
 
-  /*
+  
   getSupplierList = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -212,7 +211,7 @@ class supplieractivity extends React.Component {
         this.setState({ SupplierData: [], ProgressLoader: true });
       });
   };
-  */
+  
 
   getAllSupplierPostingGroup = () => {
     console.log("getAllSupplierPostingGroup > ");
@@ -398,13 +397,13 @@ class supplieractivity extends React.Component {
       ValidUser: ValidUser,
       Supplier: Supplier,
     };
-    console.log("getCustomerDetails > getCustomerDetails >", reqData);
+    console.log("getSupplierDetails > getSupplierDetails >", reqData);
     axios
       .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
         if (response.status === 200 || response.status === 201) {
-          console.log("getCustomerDetails > Supplier >", data);
+          console.log("getSupplierDetails > Supplier >", data);
           this.setState({ Supplier: data, ProgressLoader: true });
         } else {
           this.setState({
@@ -429,7 +428,11 @@ class supplieractivity extends React.Component {
           if (e.target.value === "") {
             v2.Name = { errorState: true, errorMssg: "Cannot be blank!" };
 
-            this.setState({ Validations: v2 });
+            this.setState({
+              Validations: v2,
+              DisableCreatebtn: true,
+              DisableUpdatebtn: true,
+            });
           }
           if (e.target.value.length > 100) {
             v2.Name = {
@@ -568,25 +571,25 @@ class supplieractivity extends React.Component {
         break;
       case "PhoneNo":
         let v9 = this.state.Validations;
-
-        let numbers = /^[0-9\b]+$/;
-        if (numbers.test(e.target.value)) {
+        let number = CF.chkIfNumber(e.target.value);
+        if (number) {
           Supplier[param] = e.target.value;
           if (e.target.value.length > 20) {
             v9.PhoneNo = {
               errorState: true,
-              errorMssg: "Maximum 20 characters allowed!",
+              errorMssg: "Maximum 20 numbers allowed!",
             };
-
             this.setState({ Validations: v9 });
           } else {
             v9.PhoneNo = { errorState: false, errorMssg: "" };
-
             this.setState({ Validations: v9 });
-
             this.setParams(Supplier);
           }
+        } else {
+          v9.PhoneNo = { errorState: true, errorMssg: "Enter number" };
+          this.setState({ Validations: v9 });
         }
+
         break;
       case "FaxNo":
         let v10 = this.state.Validations;
@@ -792,7 +795,7 @@ class supplieractivity extends React.Component {
 
           this.setParams(Supplier);
         }
-        
+
         break;
       case "PANNo":
         let v18 = this.state.Validations;
@@ -1150,7 +1153,6 @@ class supplieractivity extends React.Component {
                           helperText={this.state.Validations.Website.errorMssg}
                         />
                         <TextboxInput
-                          type="number"
                           id="PhoneNo"
                           label="PhoneNo"
                           variant="outlined"
@@ -1231,7 +1233,6 @@ class supplieractivity extends React.Component {
                           value={this.state.Supplier.CurrID}
                           options={this.state.currencyList}
                           isMandatory={true}
-                         
                         />
                         <DropdownInput
                           id="GeneralPostingGroupID"
@@ -1759,15 +1760,11 @@ class supplieractivity extends React.Component {
     );
 
     const Address = <Addresses SuplID={this.state.SuplID} />;
-
-    const contact = <Contact SuplID={this.state.SuplID} />;
-
-    const customerCategory = <CustomerCategory SuplID={this.state.SuplID} />;
+    const branchMapping = <BranchMapping SuplID={this.state.SuplID} />;
 
     const paymentTerms = <PaymentTerms SuplID={this.state.SuplID} />;
-
-    const salesPerson = <SalesPerson SuplID={this.state.SuplID} />;
-
+    const supplierPrice = <SupplierPrice SuplID={this.state.SuplID} />;
+    
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -1778,22 +1775,21 @@ class supplieractivity extends React.Component {
           Dialog.DialogContent = Address;
           this.setState({ Dialog: Dialog });
           break;
-        case "Contact":
-          Dialog.DialogContent = contact;
-          this.setState({ Dialog: Dialog });
-          break;
-        case "CustomerCategory":
-          Dialog.DialogContent = customerCategory;
-          this.setState({ Dialog: Dialog });
-          break;
+
         case "PaymentTerms":
           Dialog.DialogContent = paymentTerms;
           this.setState({ Dialog: Dialog });
           break;
-        case "SalesPerson":
-          Dialog.DialogContent = salesPerson;
+
+          case "BranchMapping":
+          Dialog.DialogContent = branchMapping;
           this.setState({ Dialog: Dialog });
           break;
+          case "SupplierPrice":
+          Dialog.DialogContent = supplierPrice;
+          this.setState({ Dialog: Dialog });
+          break;
+
         default:
           break;
       }
@@ -1884,9 +1880,15 @@ class supplieractivity extends React.Component {
                         </Button>
                         <Button
                           className="action-btns"
-                          onClick={(e) => openDialog("Contact")}
+                          onClick={(e) => openDialog("BranchMapping")}
                         >
-                          Contact
+                          Branch Mapping
+                        </Button>
+                        <Button
+                          className="action-btns"
+                          onClick={(e) => openDialog("SupplierPrice")}
+                        >
+                          Supplier Price
                         </Button>
                       </div>
                     ) : null}
