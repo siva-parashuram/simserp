@@ -1489,7 +1489,7 @@ class customeractivity extends React.Component {
                           helperText={this.state.Validations.Website.errorMssg}
                         />
                         <TextboxInput
-                          type="number"
+                         
                           id="PhoneNo"
                           label="PhoneNo"
                           variant="outlined"
