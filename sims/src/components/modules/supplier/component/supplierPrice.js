@@ -211,38 +211,38 @@ class supplierPrice extends React.Component {
         SuplID: this.props.SuplID,
       },
     };
-    // let Url=APIURLS.APIURL.GetCustomerPriceByCustID;
-    // axios
-    //   .post(Url, data, { headers })
-    //   .then((response) => {
-    //     let data = response.data;
-    //     this.setState(
-    //       {
-    //         SupplierPriceList: data,
-    //         SupplierPriceData: data,
-    //         ProgressLoader: true,
-    //       },
-    //       () => {
-    //         this.setState({
-    //           listSupplierPrice: this.listSupplierPrice(),
-    //         });
-    //       }
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     this.setState(
-    //       {
-    //         SupplierPriceList: [],
-    //         SupplierPriceData: [],
-    //         ProgressLoader: true,
-    //       },
-    //       () => {
-    //         this.setState({
-    //             listSupplierPrice: this.listSupplierPrice(),
-    //         });
-    //       }
-    //     );
-    //   });
+    let Url=APIURLS.APIURL.GetSupplierPriceBySuplID;
+    axios
+      .post(Url, data, { headers })
+      .then((response) => {
+        let data = response.data;
+        this.setState(
+          {
+            SupplierPriceList: data,
+            SupplierPriceData: data,
+            ProgressLoader: true,
+          },
+          () => {
+            this.setState({
+              listSupplierPrice: this.listSupplierPrice(),
+            });
+          }
+        );
+      })
+      .catch((error) => {
+        this.setState(
+          {
+            SupplierPriceList: [],
+            SupplierPriceData: [],
+            ProgressLoader: true,
+          },
+          () => {
+            this.setState({
+                listSupplierPrice: this.listSupplierPrice(),
+            });
+          }
+        );
+      });
   };
 
   handleRowClick = (e, item, id, i) => {
@@ -481,7 +481,7 @@ class supplierPrice extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    // let Url = APIURLS.APIURL.Add_UpdateCustomerPrice;
+    let Url = APIURLS.APIURL.Add_UpdateSupplierPrice;
     let SupplierPriceList = this.state.SupplierPriceList;
     let SupplierPriceHistory = this.state.SupplierPriceHistory;
 
@@ -514,41 +514,41 @@ class supplierPrice extends React.Component {
     };
     console.log("createSupplierPrice > reqData > ", reqData);
 
-    // axios
-    //   .post(Url, reqData, { headers })
-    //   .then((response) => {
-    //     if (response.status === 200 || response.status === 201) {
-    //       let SupplierPriceTemplate = {
-    //         SuplID: this.props.SuplID,
-    //         StartDate: null,
-    //         EndDate: null,
-    //         ItemID: 0,
-    //         UOM: 0,
-    //         CurrID: 0,
-    //         MinQty: 0,
-    //         MaxQty: 0,
-    //         UnitPrice: 0,
-    //         EmailID: "",
-    //       };
-    //       this.setState(
-    //         {
-    //           SupplierPrice: SupplierPriceTemplate,
-    //           SuccessPrompt: true,
-    //          SupplierPriceHistory: [],
-    //         },
-    //         () => {
-    //           this.getSupplierPrice();
-    //           this.expandFull();
-    //           this.removeIsSelectedRowClasses();
-    //         }
-    //       );
-    //     } else {
-    //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ ErrorPrompt: true });
-    //   });
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          let SupplierPriceTemplate = {
+            SuplID: this.props.SuplID,
+            StartDate: null,
+            EndDate: null,
+            ItemID: 0,
+            UOM: 0,
+            CurrID: 0,
+            MinQty: 0,
+            MaxQty: 0,
+            UnitPrice: 0,
+            EmailID: "",
+          };
+          this.setState(
+            {
+              SupplierPrice: SupplierPriceTemplate,
+              SuccessPrompt: true,
+             SupplierPriceHistory: [],
+            },
+            () => {
+              this.getSupplierPrice();
+              this.expandFull();
+              this.removeIsSelectedRowClasses();
+            }
+          );
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
   };
 
   setParams = (object) => {

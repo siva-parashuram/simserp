@@ -138,6 +138,12 @@ export const APIURL = {
   GetMasterDocumentNumber:domain+"api/Common/GetMasterDocumentNumber",
   CreateSupplierBranchMapping:domain+ "api/Supplier/CreateSupplierBranchMapping",
   GetSupplierBranchMappingBySuplID:domain+"api/Supplier/GetSupplierBranchMappingBySuplID",
+  GetAllSupplierAddressBySuplID:domain+"api/Supplier/GetAllSupplierAddressBySuplID",
+  CreateSupplierAddress:domain+"api/Supplier/CreateSupplierAddress",
+  UpdateSupplierAddress:domain+"api/Supplier/UpdateSupplierAddress",
+  GetSupplierAddress:domain+"api/Supplier/GetSupplierAddress",
+  Add_UpdateSupplierPrice:domain+"api/Supplier/Add_UpdateSupplierPrice",
+  GetSupplierPriceBySuplID:domain+"api/Supplier/GetSupplierPriceBySuplID"
 };
 
 

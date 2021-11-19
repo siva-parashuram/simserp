@@ -69,7 +69,6 @@ class addresses extends React.Component {
       UpdateSupplierAddress: {
         AddressID: 0,
         SuplID: this.props.SuplID,
-
         Code: "",
         Name: "",
         Address: "",
@@ -91,8 +90,7 @@ class addresses extends React.Component {
       },
       SupplierAddress: {
         AddressID: 0,
-        SuplID: 0,
-
+        SuplID: this.props.SuplID,
         Code: "",
         Name: "",
         Address: "",
@@ -172,7 +170,14 @@ class addresses extends React.Component {
       .then((response) => {
         let data = response.data;
         if (data.length > 0) {
-          this.setState({ SupplierData: data, ProgressLoader: true });
+          this.setState({ SupplierData: data, ProgressLoader: true },
+            () => {
+              this.setState({
+                listStateSupplierAddresses: this.listStateSupplierAddresses(),
+                stateForm: this.stateForm(),
+              }
+              );
+            });
         } else {
           this.setState({ SupplierData: data, ProgressLoader: true });
         }
@@ -193,16 +198,16 @@ class addresses extends React.Component {
       "Content-Type": "application/json",
     };
 
-    // let Url = APIURLS.APIURL.GetAllCustomerAddressByCustID;
+    let Url = APIURLS.APIURL.GetAllSupplierAddressBySuplID;
     let data = {
       ValidUser: ValidUser,
-      Supplier: {
+      SupplierAddress: {
         SuplID: this.props.SuplID,
       },
     };
 
     axios
-      .post( data, { headers })
+      .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
         console.log("dataAddress>>", data);
@@ -213,7 +218,7 @@ class addresses extends React.Component {
             stateForm: this.stateForm(),
           });
         });
-        // this.InitialhandleRowClick(null, data[0], "row_0");
+       
       })
       .catch((error) => {
         this.setState({ AddressData: [], ProgressLoader: true });
@@ -242,12 +247,9 @@ class addresses extends React.Component {
           };
           newData.push(d);
         }
-        this.setState({ countryData: newData, ProgressLoader: true },()=>{
-          this.setState({
-            listStateSupplierAddresses: this.listStateSupplierAddresses(),
-            stateForm: this.stateForm(),
-          });
-        });
+        this.setState({ countryData: newData, ProgressLoader: true },
+           
+        );
       })
       .catch((error) => {});
   };
@@ -737,25 +739,6 @@ class addresses extends React.Component {
     }
   };
 
-  // checkCode = () => {
-  //   if (this.state.process === "EDIT") {
-  //     if (
-  //       this.state.UpdateSupplierAddress.Code === "" ||
-  //       this.state.UpdateSupplierAddress.Code.length > 10
-  //     ) {
-  //       this.setState({ updateBtnDisabled: true });
-  //     }
-  //   } else if (this.state.process === "ADD") {
-  //     if (
-  //       this.state.SupplierAddress.Code === "" ||
-  //       this.state.SupplierAddress.Code.length > 10
-  //     ) {
-  //       this.setState({ AddbtnDisable: true });
-  //     }
-  //   } else {
-  //   }
-  // };
-
   updateFormValue = (param, e, process) => {
     console.log("Display");
     let SupplierAddress = {};
@@ -850,7 +833,6 @@ class addresses extends React.Component {
           this.setParams(SupplierAddress, process);
         }
 
-        this.checkCode();
         break;
       case "Address":
         SupplierAddress[param] = e.target.value;
@@ -883,7 +865,6 @@ class addresses extends React.Component {
         }
         this.setParams(SupplierAddress, process);
         break;
-        this.checkCode();
       case "Address2":
         SupplierAddress[param] = e.target.value;
         let v4 = this.state.Validations;
@@ -915,7 +896,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "Address3":
         SupplierAddress[param] = e.target.value;
@@ -948,7 +928,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "City":
         SupplierAddress[param] = e.target.value;
@@ -982,7 +961,6 @@ class addresses extends React.Component {
         }
         this.setParams(SupplierAddress, process);
         break;
-        this.checkCode();
       case "PostCode":
         SupplierAddress[param] = e.target.value;
         let v7 = this.state.Validations;
@@ -1015,16 +993,13 @@ class addresses extends React.Component {
         }
         this.setParams(SupplierAddress, process);
         break;
-        this.checkCode();
       case "CountryID":
         SupplierAddress[param] = CF.toInt(e.target.value);
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "StateID":
         SupplierAddress[param] = CF.toInt(e.target.value);
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "ContactPerson":
         SupplierAddress[param] = e.target.value;
@@ -1060,7 +1035,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "PhoneNo":
         SupplierAddress[param] = CF.toInt(e.target.value);
@@ -1093,7 +1067,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "EmailID":
         SupplierAddress[param] = e.target.value;
@@ -1126,7 +1099,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "VATNo":
         SupplierAddress[param] = e.target.value;
@@ -1159,7 +1131,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "GSTNo":
         SupplierAddress[param] = e.target.value;
@@ -1192,23 +1163,19 @@ class addresses extends React.Component {
           }
         }
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
 
       case "IsBlock":
         SupplierAddress[param] = e.target.checked;
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "IncoID":
         SupplierAddress[param] = CF.toInt(e.target.value);
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
       case "ShipmentModeID":
         SupplierAddress[param] = CF.toInt(e.target.value);
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
 
       case "SpecialInstruction":
@@ -1245,7 +1212,6 @@ class addresses extends React.Component {
           }
         }
         this.setParams(SupplierAddress, process);
-        this.checkCode();
         break;
 
       default:
@@ -1272,7 +1238,7 @@ class addresses extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    // let Url = APIURLS.APIURL.CreateSupplierAddress;
+    let Url = APIURLS.APIURL.CreateSupplierAddress;
     let reqData = {
       ValidUser: ValidUser,
       SupplierAddress: this.state.SupplierAddress,
@@ -1280,54 +1246,52 @@ class addresses extends React.Component {
 
     console.log("ReqData>>>", reqData);
 
-    // axios
-    //   .post(Url, reqData, { headers })
-    //   .then((response) => {
-    //     let data = response.data;
-    //     if (response.status === 200 || response.status === 201) {
-    //       let SupplierAddress = {
-    //         AddressID: 0,
-    //     SuplID: 0,
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200 || response.status === 201) {
+          let SupplierAddress = {
+            AddressID: 0,
+            SuplID: 0,
 
-    //     Code: "",
-    //     Name: "",
-    //     Address: "",
-    //     Address2: "",
-    //     Address3: "",
-    //     City: "",
-    //     PostCode: "",
-    //     CountryID: 0,
-    //     StateID: 0,
-    //     ContactPerson: "",
-    //     PhoneNo: "",
-    //     EmailID: "",
-    //     VATNo: "",
-    //     GSTNo: "",
+            Code: "",
+            Name: "",
+            Address: "",
+            Address2: "",
+            Address3: "",
+            City: "",
+            PostCode: "",
+            CountryID: 0,
+            StateID: 0,
+            ContactPerson: "",
+            PhoneNo: "",
+            EmailID: "",
+            VATNo: "",
+            GSTNo: "",
 
-    //     IsBlock: false,
+            IsBlock: false,
 
-    //     SpecialInstruction: "",
-    //       };
-    //       this.setState(
-    //         {
-    //           SupplierAddress: SupplierAddress,
-    //           ErrorPrompt: false,
-    //           SuccessPrompt: true,
-    //         },
-    //         () => {
-    //           this.getSupplierAddress();
-    //         }
-    //       );
-    //     } else {
-    //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ ErrorPrompt: true });
-    //   });
+            SpecialInstruction: "",
+          };
+          this.setState(
+            {
+              SupplierAddress: SupplierAddress,
+              ErrorPrompt: false,
+              SuccessPrompt: true,
+            },
+            () => {
+              this.getSupplierAddress();
+            }
+          );
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
   };
-
-  
 
   UpdateSupplierAddress = (e) => {
     let ValidUser = APIURLS.ValidUser;
@@ -1336,7 +1300,7 @@ class addresses extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    // let Url = APIURLS.APIURL.UpdateSupplierAddress;
+    let Url = APIURLS.APIURL.UpdateSupplierAddress;
     let reqData = {
       ValidUser: ValidUser,
       SupplierAddressList: [this.state.UpdateSupplierAddress],
@@ -1344,25 +1308,25 @@ class addresses extends React.Component {
 
     console.log("ReqData>>>", reqData);
 
-    // axios
-    //   .post(Url, reqData, { headers })
-    //   .then((response) => {
-    //     let data = response.data;
-    //     if (response.status === 200 || response.status === 201) {
-    //       this.setState(
-    //         {
-    //           ErrorPrompt: false,
-    //           SuccessPrompt: true,
-    //         },
-    //         () => this.getSupplierAddress()
-    //       );
-    //     } else {
-    //       this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ ErrorPrompt: true });
-    //   });
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200 || response.status === 201) {
+          this.setState(
+            {
+              ErrorPrompt: false,
+              SuccessPrompt: true,
+            },
+            () => this.getSupplierAddress()
+          );
+        } else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
   };
 
   InitialhandleRowClick(e, item, id) {
@@ -1562,7 +1526,7 @@ class addresses extends React.Component {
                               id="Code"
                               label="Code"
                               onChange={(e) =>
-                                this.updateFormValue("Code", e, "ADD")
+                                this.updateFormValue("Code", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1581,7 +1545,7 @@ class addresses extends React.Component {
                               id="Name"
                               label="Name"
                               onChange={(e) =>
-                                this.updateFormValue("Name", e, "ADD")
+                                this.updateFormValue("Name", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1599,7 +1563,7 @@ class addresses extends React.Component {
                               id="Address"
                               label="Address"
                               onChange={(e) =>
-                                this.updateFormValue("Address", e, "ADD")
+                                this.updateFormValue("Address", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1617,7 +1581,7 @@ class addresses extends React.Component {
                               id="Address2"
                               label="Address2"
                               onChange={(e) =>
-                                this.updateFormValue("Address2", e, "ADD")
+                                this.updateFormValue("Address2", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1635,7 +1599,7 @@ class addresses extends React.Component {
                               id="Address3"
                               label="Address3"
                               onChange={(e) =>
-                                this.updateFormValue("Address3", e, "ADD")
+                                this.updateFormValue("Address3", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1653,7 +1617,7 @@ class addresses extends React.Component {
                               id="City"
                               label="City"
                               onChange={(e) =>
-                                this.updateFormValue("City", e, "ADD")
+                                this.updateFormValue("City", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1671,7 +1635,7 @@ class addresses extends React.Component {
                               id="PostCode"
                               label="PostCode"
                               onChange={(e) =>
-                                this.updateFormValue("PostCode", e, "ADD")
+                                this.updateFormValue("PostCode", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1692,7 +1656,7 @@ class addresses extends React.Component {
                               label="IsBlock"
                               param={this.state.UpdateSupplierAddress.IsBlock}
                               onChange={(e) =>
-                                this.updateFormValue("IsBlock", e, "ADD")
+                                this.updateFormValue("IsBlock", e, "EDIT")
                               }
                               value={this.state.UpdateSupplierAddress.IsBlock}
                             />
@@ -1701,7 +1665,7 @@ class addresses extends React.Component {
                               id="CountryID"
                               label="Country"
                               onChange={(e) =>
-                                this.updateFormValue("CountryID", e, "ADD")
+                                this.updateFormValue("CountryID", e, "EDIT")
                               }
                               options={this.state.countryData}
                               isMandatory={true}
@@ -1711,7 +1675,7 @@ class addresses extends React.Component {
                               id="StateID"
                               label="State"
                               onChange={(e) =>
-                                this.updateFormValue("StateID", e, "ADD")
+                                this.updateFormValue("StateID", e, "EDIT")
                               }
                               options={this.state.stateData}
                               value={this.state.UpdateSupplierAddress.StateID}
@@ -1720,7 +1684,7 @@ class addresses extends React.Component {
                               id="ContactPerson"
                               label="Contact Person"
                               onChange={(e) =>
-                                this.updateFormValue("ContactPerson", e, "ADD")
+                                this.updateFormValue("ContactPerson", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1740,7 +1704,7 @@ class addresses extends React.Component {
                               id="PhoneNo"
                               label="Phone No "
                               onChange={(e) =>
-                                this.updateFormValue("PhoneNo", e, "ADD")
+                                this.updateFormValue("PhoneNo", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1759,7 +1723,7 @@ class addresses extends React.Component {
                               id="EmailID"
                               label="Email ID"
                               onChange={(e) =>
-                                this.updateFormValue("EmailID", e, "ADD")
+                                this.updateFormValue("EmailID", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1777,7 +1741,7 @@ class addresses extends React.Component {
                               id="VATNo"
                               label="VATNo"
                               onChange={(e) =>
-                                this.updateFormValue("VATNo", e, "ADD")
+                                this.updateFormValue("VATNo", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1795,7 +1759,7 @@ class addresses extends React.Component {
                               id="GSTNo"
                               label="GSTNo"
                               onChange={(e) =>
-                                this.updateFormValue("GSTNo", e, "ADD")
+                                this.updateFormValue("GSTNo", e, "EDIT")
                               }
                               variant="outlined"
                               size="small"
@@ -1817,7 +1781,7 @@ class addresses extends React.Component {
                                 this.updateFormValue(
                                   "SpecialInstruction",
                                   e,
-                                  "ADD"
+                                  "EDIT"
                                 )
                               }
                               variant="outlined"
