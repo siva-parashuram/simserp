@@ -76,7 +76,7 @@ class addresses extends React.Component {
         Address3: "",
         City: "",
         PostCode: "",
-        CountryID: 0,
+        CountryID:0,
         StateID: 0,
         ContactPerson: "",
         PhoneNo: "",
@@ -98,7 +98,7 @@ class addresses extends React.Component {
         Address3: "",
         City: "",
         PostCode: "",
-        CountryID: 0,
+        CountryID:0,
         StateID: 0,
         ContactPerson: "",
         PhoneNo: "",
@@ -170,14 +170,12 @@ class addresses extends React.Component {
       .then((response) => {
         let data = response.data;
         if (data.length > 0) {
-          this.setState({ SupplierData: data, ProgressLoader: true },
-            () => {
-              this.setState({
-                listStateSupplierAddresses: this.listStateSupplierAddresses(),
-                stateForm: this.stateForm(),
-              }
-              );
+          this.setState({ SupplierData: data, ProgressLoader: true }, () => {
+            this.setState({
+              listStateSupplierAddresses: this.listStateSupplierAddresses(),
+              stateForm: this.stateForm(),
             });
+          });
         } else {
           this.setState({ SupplierData: data, ProgressLoader: true });
         }
@@ -218,7 +216,6 @@ class addresses extends React.Component {
             stateForm: this.stateForm(),
           });
         });
-       
       })
       .catch((error) => {
         this.setState({ AddressData: [], ProgressLoader: true });
@@ -247,9 +244,7 @@ class addresses extends React.Component {
           };
           newData.push(d);
         }
-        this.setState({ countryData: newData, ProgressLoader: true },
-           
-        );
+        this.setState({ countryData: newData, ProgressLoader: true });
       })
       .catch((error) => {});
   };
@@ -1037,36 +1032,61 @@ class addresses extends React.Component {
         this.setParams(SupplierAddress, process);
         break;
       case "PhoneNo":
-        SupplierAddress[param] = CF.toInt(e.target.value);
-        let v9 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          if (process === "EDIT") {
-            v9.UpdateSupplierAddress.PhoneNo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed",
-            };
-            this.setState({ Validations: v9 });
+        let num = CF.chkIfNumber(e.target.value);
+        if (num) {
+          SupplierAddress[param] = e.target.value;
+          let v9 = this.state.Validations;
+          if (e.target.value.length > 20) {
+            SupplierAddress[param] = e.target.value;
+            if (process === "EDIT") {
+              v9.UpdateSupplierAddress.PhoneNo = {
+                errorState: true,
+                errorMssg: "Maximum 20 characters allowed",
+              };
+              this.setState({ Validations: v9 });
+            } else {
+              v9.SupplierAddress.PhoneNo = {
+                errorState: true,
+                errorMssg: "Maximum 20 characters allowed",
+              };
+              this.setState({ Validations: v9 });
+            }
           } else {
-            v9.SupplierAddress.PhoneNo = {
-              errorState: true,
-              errorMssg: "Maximum 20 characters allowed",
-            };
-            this.setState({ Validations: v9 });
+            SupplierAddress[param] = e.target.value;
+            if (process === "EDIT") {
+              v9.UpdateSupplierAddress.PhoneNo = {
+                errorState: false,
+                errorMssg: "",
+              };
+              this.setState({ Validations: v9 });
+            } else {
+              v9.SupplierAddress.PhoneNo = { errorState: false, errorMssg: "" };
+              this.setState({ Validations: v9 });
+              this.setParams(SupplierAddress, process);
+            }
           }
         } else {
-          SupplierAddress[param] = e.target.value;
-          if (process === "EDIT") {
-            v9.UpdateSupplierAddress.PhoneNo = {
-              errorState: false,
-              errorMssg: "",
-            };
-            this.setState({ Validations: v9 });
-          } else {
-            v9.SupplierAddress.PhoneNo = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v9 });
+          switch (process) {
+            case "ADD":
+              let addNum = this.state.Validations;
+              addNum.SupplierAddress.PhoneNo = {
+                errorState: true,
+                errorMssg: "Enter a number",
+              };
+              this.setState({ Validations: addNum });
+              break;
+            case "EDIT":
+              let editNum = this.state.Validations;
+              editNum.UpdateSupplierAddress.PhoneNo = {
+                errorState: true,
+                errorMssg: "Enter a number",
+              };
+              this.setState({ Validations: editNum });
+              break;
+            default:
+              break;
           }
         }
-        this.setParams(SupplierAddress, process);
         break;
       case "EmailID":
         SupplierAddress[param] = e.target.value;
@@ -1216,6 +1236,55 @@ class addresses extends React.Component {
 
       default:
         break;
+    }
+    this.validateBtnEnable(process);
+  };
+
+  validateBtnEnable = (process) => {
+    switch (process) {
+      case "ADD":
+        let Validations = this.state.Validations.SupplierAddress;
+        if (
+          Validations["Code"].errorState === true ||
+          Validations["Name"].errorState === true ||
+          Validations["Address"].errorState === true ||
+          Validations["Address2"].errorState === true ||
+          Validations["Address3"].errorState === true ||
+          Validations["City"].errorState === true ||
+          Validations["PostCode"].errorState === true ||
+          Validations["PhoneNo"].errorState === true ||
+          Validations["GSTNo"].errorState === true ||
+          Validations["VATNo"].errorState === true ||
+          Validations["ContactPerson"].errorState === true ||
+          Validations["EmailID"].errorState === true ||
+          Validations["SpecialInstruction"].errorState === true
+        ) {
+          this.setState({ AddbtnDisable: true });
+        } else {
+          this.setState({ AddbtnDisable: false });
+        }
+        break;
+      case "EDIT":
+        let V = this.state.Validations.UpdateSupplierAddress;
+        if (
+          V["Code"].errorState === true ||
+          V["Name"].errorState === true ||
+          V["Address"].errorState === true ||
+          V["Address2"].errorState === true ||
+          V["Address3"].errorState === true ||
+          V["City"].errorState === true ||
+          V["PostCode"].errorState === true ||
+          V["PhoneNo"].errorState === true ||
+          V["GSTNo"].errorState === true ||
+          V["VATNo"].errorState === true ||
+          V["ContactPerson"].errorState === true ||
+          V["EmailID"].errorState === true ||
+          V["SpecialInstruction"].errorState === true
+        ) {
+          this.setState({ updateBtnDisabled: true });
+        } else {
+          this.setState({ updateBtnDisabled: false });
+        }
     }
   };
 
