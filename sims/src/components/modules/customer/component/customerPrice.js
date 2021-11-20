@@ -39,7 +39,6 @@ import Accordioncomponent from "../../../compo/accordioncomponent";
 import Sectiontitle from "../../../compo/sectiontitle";
 import Inputcustom from "../../../compo/inputcustom";
 
-
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import DateTextboxInput from "../../../compo/tablerowcelldateinput";
 
@@ -66,13 +65,13 @@ class customerPrice extends React.Component {
       GeneralDetailsExpanded: true,
       createNewBtn: false,
       updateBtn: false,
-      selectedOldItemIndex:null,
-      selectedOldItem:null,
-      currencyList:[],
-      itemDataList:[],
-      UOMList:[],
-      CustomerPriceList:[],
-      CustomerPriceHistory:[],
+      selectedOldItemIndex: null,
+      selectedOldItem: null,
+      currencyList: [],
+      itemDataList: [],
+      UOMList: [],
+      CustomerPriceList: [],
+      CustomerPriceHistory: [],
       CustomerPrice: {
         CustID: this.props.CustID,
         StartDate: "",
@@ -84,6 +83,12 @@ class customerPrice extends React.Component {
         MaxQty: 0,
         UnitPrice: 0,
         EmailID: "",
+      },
+      Validations: {
+        MinQty: { errorState: false, errorMssg: "" },
+        MaxQty: { errorState: false, errorMssg: "" },
+        UnitPrice: { errorState: false, errorMssg: "" },
+        EmailID: { errorState: false, errorMssg: "" },
       },
     };
   }
@@ -97,7 +102,7 @@ class customerPrice extends React.Component {
     this.getCurrencyList();
     this.getItems();
     this.getUOMList();
-  }
+  };
 
   getCurrencyList = () => {
     this.setState({ ProgressLoader: false });
@@ -128,7 +133,7 @@ class customerPrice extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   getItems() {
@@ -153,10 +158,10 @@ class customerPrice extends React.Component {
           };
           newD.push(o);
         }
-        this.setState({itemDataList:newD});
+        this.setState({ itemDataList: newD });
         this.setState({ ProgressLoader: true });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   getUOMList = () => {
@@ -188,7 +193,7 @@ class customerPrice extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   getCustomerPrice = () => {
@@ -201,33 +206,46 @@ class customerPrice extends React.Component {
     };
     let data = {
       ValidUser: ValidUser,
-      CustomerPrice:{
-        CustID: this.props.CustID
-      }
+      CustomerPrice: {
+        CustID: this.props.CustID,
+      },
     };
-    let Url=APIURLS.APIURL.GetCustomerPriceByCustID;
+    let Url = APIURLS.APIURL.GetCustomerPriceByCustID;
     axios
-      .post(Url,data, { headers })
+      .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-        this.setState({CustomerPriceList:data, CustomerPriceData: data, ProgressLoader: true }, () => {
-          this.setState({
-            listCustomerPrice: this.listCustomerPrice(),
-          });
-        });
+        this.setState(
+          {
+            CustomerPriceList: data,
+            CustomerPriceData: data,
+            ProgressLoader: true,
+          },
+          () => {
+            this.setState({
+              listCustomerPrice: this.listCustomerPrice(),
+            });
+          }
+        );
       })
       .catch((error) => {
-        this.setState({CustomerPriceList:[], CustomerPriceData: [], ProgressLoader: true }, () => {
-          this.setState({
-            listCustomerPrice: this.listCustomerPrice(),
-          });
-        });
+        this.setState(
+          {
+            CustomerPriceList: [],
+            CustomerPriceData: [],
+            ProgressLoader: true,
+          },
+          () => {
+            this.setState({
+              listCustomerPrice: this.listCustomerPrice(),
+            });
+          }
+        );
       });
   };
 
-  handleRowClick = (e, item, id,i) => {
-
-    let CustomerPrice={
+  handleRowClick = (e, item, id, i) => {
+    let CustomerPrice = {
       CustID: item.CustID,
       StartDate: item.StartDate,
       EndDate: item.EndDate,
@@ -238,10 +256,10 @@ class customerPrice extends React.Component {
       MaxQty: item.MaxQty,
       UnitPrice: item.UnitPrice,
       EmailID: item.EmailID,
-    }
+    };
 
-    console.log("item > ",item);
-    console.log("CustomerPrice > ",CustomerPrice);
+    console.log("item > ", item);
+    console.log("CustomerPrice > ", CustomerPrice);
 
     try {
       this.setState({
@@ -251,8 +269,8 @@ class customerPrice extends React.Component {
         hideSidePanel: false,
         updateBtn: true,
         createNewBtn: false,
-        selectedOldItem:item,
-        selectedOldItemIndex:i
+        selectedOldItem: item,
+        selectedOldItemIndex: i,
       });
 
       this.removeIsSelectedRowClasses();
@@ -342,52 +360,39 @@ class customerPrice extends React.Component {
                       UOM
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                    Currency
+                      Currency
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                     Min Qty
+                      Min Qty
                     </TableCell>
                     <TableCell className="table-header-font" align="left">
-                     Max Qty
-                    </TableCell>                    
+                      Max Qty
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
                   {this.state.CustomerPriceList.map((item, i) => (
                     <TableRow
-                    id={"row_" + i}
-                    key={i}
-                    onClick={(event) =>
-                      this.handleRowClick(event, item, "row_" + i,i)
-                    }
+                      id={"row_" + i}
+                      key={i}
+                      onClick={(event) =>
+                        this.handleRowClick(event, item, "row_" + i, i)
+                      }
                     >
-                      <TableCell>{i+1}</TableCell>
+                      <TableCell>{i + 1}</TableCell>
                       <TableCell align="left">
                         {moment(item.StartDate).format("MM/DD/YYYY")}
                       </TableCell>
                       <TableCell align="left">
-                      {moment(item.EndDate).format("MM/DD/YYYY")}
+                        {moment(item.EndDate).format("MM/DD/YYYY")}
                       </TableCell>
-                      <TableCell align="left">
-                      {item.No}
-                      </TableCell>
-                      <TableCell align="left">
-                      {item.UOMCode}
-                      </TableCell>
-                      <TableCell align="left">
-                      {item.CurrCode}
-                      </TableCell>
-                      <TableCell align="left">
-                      {item.MinQty}
-                      </TableCell>
-                      <TableCell align="left">
-                      {item.MaxQty}
-                      </TableCell>
-
-                      
+                      <TableCell align="left">{item.No}</TableCell>
+                      <TableCell align="left">{item.UOMCode}</TableCell>
+                      <TableCell align="left">{item.CurrCode}</TableCell>
+                      <TableCell align="left">{item.MinQty}</TableCell>
+                      <TableCell align="left">{item.MaxQty}</TableCell>
                     </TableRow>
                   ))}
-                 
                 </TableBody>
               </Table>
             </Grid>
@@ -411,44 +416,161 @@ class customerPrice extends React.Component {
         break;
       case "CurrID":
         CustomerPrice[param] = CF.toInt(e.target.value);
+
         this.setParams(CustomerPrice);
         break;
       case "MinQty":
         CustomerPrice[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerPrice);
+        let v1 = this.state.Validations;
+        if (e.target.value.length > 8) {
+          v1.MinQty = {
+            errorState: true,
+            errorMssg: "Maximum 8 numbers allowed!",
+          };
+          this.setState({ Validations: v1 });
+        } else {
+          v1.MinQty = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v1 });
+          this.setParams(CustomerPrice);
+        }
+
         break;
       case "MaxQty":
         CustomerPrice[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerPrice);
+        let v2 = this.state.Validations;
+        if (e.target.value.length > 8) {
+          v2.MaxQty = {
+            errorState: true,
+            errorMssg: "Maximum 8 numbers allowed!",
+          };
+          this.setState({ Validations: v2 });
+        } else {
+          v2.MaxQty = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v2 });
+          this.setParams(CustomerPrice);
+        }
+
         break;
       case "UnitPrice":
         CustomerPrice[param] = CF.toInt(e.target.value);
-        this.setParams(CustomerPrice);
+        let v3 = this.state.Validations;
+        if (e.target.value === "" || e.target.value.length > 8) {
+          if (e.target.value === "") {
+            v3.UnitPrice = {
+              errorState: true,
+              errorMssg: "Bank inputs not allowed!",
+            };
+            this.setState({ Validations: v3 });
+          }
+
+          if (e.target.value.length > 8) {
+            v3.UnitPrice = {
+              errorState: true,
+              errorMssg: "Maximum 8 numbers allowed!",
+            };
+            this.setState({ Validations: v3 });
+          }
+        } else {
+          v3.UnitPrice = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v3 });
+          this.setParams(CustomerPrice);
+        }
+
+        break;
+      case "EmailID":
+        CustomerPrice[param] = e.target.value;
+        let email = CF.validateEmail(e.target.value);
+        switch (email) {
+          case true:
+            let validn = this.state.Validations;
+            if (e.target.value.length > 50) {
+              validn.EmailID = {
+                errorState: true,
+                errorMssg: "Maximum 50 characters allowed",
+              };
+              this.setState({ Validations: validn });
+            } else {
+              validn.EmailID = {
+                errorState: false,
+                errorMssg: "",
+              };
+              this.setState({ Validations: validn });
+              this.setParams(CustomerPrice);
+            }
+            break;
+          case false:
+            let validtn = this.state.Validations;
+
+            validtn.EmailID = {
+              errorState: true,
+              errorMssg:"Invalid Email" ,
+            };
+            this.setState({ Validations: validtn });
+        }
+
         break;
       default:
         CustomerPrice[param] = e.target.value;
         this.setParams(CustomerPrice);
         break;
     }
-
+    //  this.validateBtn();
   };
 
-  formatDate=(array)=>{
-    for(let i=0;i<array.length;i++){
-      let StartDate=array[i].StartDate;
-      let EndDate=array[i].EndDate;
-      array[i].StartDate=moment(StartDate).format("MM/DD/YYYY");
-      array[i].EndDate=moment(EndDate).format("MM/DD/YYYY");
+  // validateBtn = () => {
+  //   let v = this.state.Validations;
+  //   let updateBtn = this.state.updateBtn;
+  //   let createNewBtn = this.state.createNewBtn;
+  //   if (
+  //     v["MinQty"].errorState === true ||
+  //     v["MaxQty"].errorState === true ||
+  //     v["UnitPrice"].errorState === true ||
+  //     v["EmailID"].errorState === true
+  //   ) {
+  //     if (updateBtn === false) {
+  //       this.setState({ createNewBtn: true });
+  //     } else if (createNewBtn === false) {
+  //       this.setState({ updateBtn: true });
+  //     } else {
+  //     }
+  //   } else {
+  //     if (updateBtn === false) {
+  //       this.setState({ createNewBtn: true });
+  //     } else if (createNewBtn === false) {
+  //       this.setState({ updateBtn: true });
+  //     } else {
+  //     }
+  //   }
+  // };
+
+  formatDate = (array) => {
+    for (let i = 0; i < array.length; i++) {
+      let StartDate = array[i].StartDate;
+      let EndDate = array[i].EndDate;
+      array[i].StartDate = moment(StartDate).format("MM/DD/YYYY");
+      array[i].EndDate = moment(EndDate).format("MM/DD/YYYY");
     }
     return array;
-  }
+  };
 
   processCustomerPriceList = (CustomerPriceList) => {
-    console.log("processCustomerPriceList > CustomerPriceList > ",CustomerPriceList);
-    let newCPL=[];
+    console.log(
+      "processCustomerPriceList > CustomerPriceList > ",
+      CustomerPriceList
+    );
+    let newCPL = [];
     for (let i = 0; i < CustomerPriceList.length; i++) {
-      let item=CustomerPriceList[i];
-      let CustomerPrice={
+      let item = CustomerPriceList[i];
+      let CustomerPrice = {
         CustID: item.CustID,
         StartDate: item.StartDate,
         EndDate: item.EndDate,
@@ -459,12 +581,12 @@ class customerPrice extends React.Component {
         MaxQty: item.MaxQty,
         UnitPrice: item.UnitPrice,
         EmailID: item.EmailID,
-        UserID:CF.toInt(getCookie(COOKIE.USERID))
-      }
+        UserID: CF.toInt(getCookie(COOKIE.USERID)),
+      };
       newCPL.push(CustomerPrice);
     }
     return newCPL;
-  }
+  };
 
   createCustomerPrice = (param) => {
     let ValidUser = APIURLS.ValidUser;
@@ -474,38 +596,38 @@ class customerPrice extends React.Component {
       "Content-Type": "application/json",
     };
     let Url = APIURLS.APIURL.Add_UpdateCustomerPrice;
-    let CustomerPriceList=this.state.CustomerPriceList;
-    let CustomerPriceHistory=this.state.CustomerPriceHistory;
+    let CustomerPriceList = this.state.CustomerPriceList;
+    let CustomerPriceHistory = this.state.CustomerPriceHistory;
 
     switch (param) {
       case "NEW":
         CustomerPriceList.push(this.state.CustomerPrice);
-        CustomerPriceHistory=[];
+        CustomerPriceHistory = [];
         break;
-      case "UPDATE":     
-        let selectedOldItem=this.state.selectedOldItem;
-        let index=this.state.selectedOldItemIndex;
-        console.log("IN UPDATE > selectedOldItem > ",selectedOldItem); 
-        console.log("IN UPDATE > index > ",index); 
-        CustomerPriceList[index]=this.state.CustomerPrice;
+      case "UPDATE":
+        let selectedOldItem = this.state.selectedOldItem;
+        let index = this.state.selectedOldItemIndex;
+        console.log("IN UPDATE > selectedOldItem > ", selectedOldItem);
+        console.log("IN UPDATE > index > ", index);
+        CustomerPriceList[index] = this.state.CustomerPrice;
         CustomerPriceHistory.push(selectedOldItem);
-        break;  
+        break;
       default:
         break;
     }
 
-    CustomerPriceList=this.formatDate(CustomerPriceList);
-    CustomerPriceList=this.processCustomerPriceList(CustomerPriceList);
-    CustomerPriceHistory=this.formatDate(CustomerPriceHistory);
-    CustomerPriceHistory=this.processCustomerPriceList(CustomerPriceHistory);
+    CustomerPriceList = this.formatDate(CustomerPriceList);
+    CustomerPriceList = this.processCustomerPriceList(CustomerPriceList);
+    CustomerPriceHistory = this.formatDate(CustomerPriceHistory);
+    CustomerPriceHistory = this.processCustomerPriceList(CustomerPriceHistory);
 
     let reqData = {
       ValidUser: ValidUser,
       CustomerPriceList: CustomerPriceList,
-      CustomerPriceHistoryList:CustomerPriceHistory
+      CustomerPriceHistoryList: CustomerPriceHistory,
     };
-  console.log("createCustomerPrice > reqData > ",reqData);
- 
+    console.log("createCustomerPrice > reqData > ", reqData);
+
     axios
       .post(Url, reqData, { headers })
       .then((response) => {
@@ -526,7 +648,7 @@ class customerPrice extends React.Component {
             {
               CustomerPrice: CustomerPriceTemplate,
               SuccessPrompt: true,
-              CustomerPriceHistory:[]
+              CustomerPriceHistory: [],
             },
             () => {
               this.getCustomerPrice();
@@ -541,7 +663,6 @@ class customerPrice extends React.Component {
       .catch((error) => {
         this.setState({ ErrorPrompt: true });
       });
-      
   };
 
   setParams = (object) => {
@@ -661,7 +782,8 @@ class customerPrice extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                           onClick={(e) => this.createCustomerPrice("NEW")}
+                          onClick={(e) => this.createCustomerPrice("NEW")}
+                          // disabled={this.state.createNewBtn}
                         >
                           {APIURLS.buttonTitle.save}
                         </Button>
@@ -670,6 +792,7 @@ class customerPrice extends React.Component {
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.createCustomerPrice("UPDATE")}
+                          // disabled={this.state.updateBtn}
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>
@@ -705,25 +828,29 @@ class customerPrice extends React.Component {
                             onChange={(e) =>
                               this.updateFormValue("StartDate", e)
                             }
-                            defaultValue={moment(this.state.CustomerPrice.StartDate).format("YYYY-MM-DD")}
+                            defaultValue={moment(
+                              this.state.CustomerPrice.StartDate
+                            ).format("YYYY-MM-DD")}
                           />
                           <DateTextboxInput
                             id="EndDate"
                             label="EndDate"
                             variant="outlined"
                             size="small"
-                            onChange={(e) => this.updateFormValue("EndDate", e)}                             
-                            defaultValue={moment(this.state.CustomerPrice.EndDate).format("YYYY-MM-DD")}
+                            onChange={(e) => this.updateFormValue("EndDate", e)}
+                            defaultValue={moment(
+                              this.state.CustomerPrice.EndDate
+                            ).format("YYYY-MM-DD")}
                           />
                           <DropdownInput
                             id="ItemID"
                             label="ItemID"
                             onChange={(e) => this.updateFormValue("ItemID", e)}
                             value={this.state.CustomerPrice.ItemID}
-                             options={this.state.itemDataList}
+                            options={this.state.itemDataList}
                             isMandatory={true}
                           />
-                           <DropdownInput
+                          <DropdownInput
                             id="UOM"
                             label="UOM"
                             onChange={(e) => this.updateFormValue("UOM", e)}
@@ -738,8 +865,8 @@ class customerPrice extends React.Component {
                             value={this.state.CustomerPrice.CurrID}
                             options={this.state.currencyList}
                             isMandatory={true}
-                          />                        
-                          
+                          />
+
                           <TextboxInput
                             id="MinQty"
                             label="MinQty"
@@ -747,8 +874,8 @@ class customerPrice extends React.Component {
                             size="small"
                             onChange={(e) => this.updateFormValue("MinQty", e)}
                             value={this.state.CustomerPrice.MinQty}
-                            
-                            
+                            error={this.state.Validations.MinQty.errorState}
+                            helperText={this.state.Validations.MinQty.errorMssg}
                           />
                           <TextboxInput
                             id="MaxQty"
@@ -757,7 +884,8 @@ class customerPrice extends React.Component {
                             size="small"
                             onChange={(e) => this.updateFormValue("MaxQty", e)}
                             value={this.state.CustomerPrice.MaxQty}
-                            
+                            error={this.state.Validations.MaxQty.errorState}
+                            helperText={this.state.Validations.MaxQty.errorMssg}
                           />
                           <TextboxInput
                             id="UnitPrice"
@@ -768,6 +896,10 @@ class customerPrice extends React.Component {
                               this.updateFormValue("UnitPrice", e)
                             }
                             value={this.state.CustomerPrice.UnitPrice}
+                            error={this.state.Validations.UnitPrice.errorState}
+                            helperText={
+                              this.state.Validations.UnitPrice.errorMssg
+                            }
                           />
                           <TextboxInput
                             id="EmailID"
@@ -776,6 +908,10 @@ class customerPrice extends React.Component {
                             size="small"
                             onChange={(e) => this.updateFormValue("EmailID", e)}
                             value={this.state.CustomerPrice.EmailID}
+                            error={this.state.Validations.EmailID.errorState}
+                            helperText={
+                              this.state.Validations.EmailID.errorMssg
+                            }
                           />
                         </TableBody>
                       </Table>

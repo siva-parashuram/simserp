@@ -84,12 +84,18 @@ class supplierPrice extends React.Component {
         UnitPrice: 0,
         EmailID: "",
       },
+      Validations: {
+        MinQty: { errorState: false, errorMssg: "" },
+        MaxQty: { errorState: false, errorMssg: "" },
+        UnitPrice: { errorState: false, errorMssg: "" },
+        EmailID: { errorState: false, errorMssg: "" },
+      },
     };
   }
 
   componentDidMount() {
     this.getSupplierPrice();
-    
+
     this.getAllDropdowns();
   }
 
@@ -123,15 +129,16 @@ class supplierPrice extends React.Component {
           newD.push(o);
         }
 
-        this.setState({
-          currencyList: newD,
-          ProgressLoader: true,
-        },
-        () => {
-          this.setState({
-            listSupplierPrice: this.listSupplierPrice(),
-          });
-        }
+        this.setState(
+          {
+            currencyList: newD,
+            ProgressLoader: true,
+          },
+          () => {
+            this.setState({
+              listSupplierPrice: this.listSupplierPrice(),
+            });
+          }
         );
       })
       .catch((error) => {});
@@ -211,7 +218,7 @@ class supplierPrice extends React.Component {
         SuplID: this.props.SuplID,
       },
     };
-    let Url=APIURLS.APIURL.GetSupplierPriceBySuplID;
+    let Url = APIURLS.APIURL.GetSupplierPriceBySuplID;
     axios
       .post(Url, data, { headers })
       .then((response) => {
@@ -238,7 +245,7 @@ class supplierPrice extends React.Component {
           },
           () => {
             this.setState({
-                listSupplierPrice: this.listSupplierPrice(),
+              listSupplierPrice: this.listSupplierPrice(),
             });
           }
         );
@@ -421,16 +428,99 @@ class supplierPrice extends React.Component {
         break;
       case "MinQty":
         SupplierPrice[param] = CF.toInt(e.target.value);
-        this.setParams(SupplierPrice);
+        let v1 = this.state.Validations;
+        if (e.target.value.length > 8) {
+          v1.MinQty = {
+            errorState: true,
+            errorMssg: "Maximum 8 numbers allowed!",
+          };
+          this.setState({ Validations: v1 });
+        } else {
+          v1.MinQty = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v1 });
+          this.setParams(SupplierPrice);
+        }
         break;
       case "MaxQty":
         SupplierPrice[param] = CF.toInt(e.target.value);
-        this.setParams(SupplierPrice);
+        let v2 = this.state.Validations;
+        if (e.target.value.length > 8) {
+          v2.MaxQty = {
+            errorState: true,
+            errorMssg: "Maximum 8 numbers allowed!",
+          };
+          this.setState({ Validations: v2 });
+        } else {
+          v2.MaxQty = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v2 });
+          this.setParams(SupplierPrice);
+        }
+
         break;
       case "UnitPrice":
         SupplierPrice[param] = CF.toInt(e.target.value);
-        this.setParams(SupplierPrice);
+        let v3 = this.state.Validations;
+        if (e.target.value === "" || e.target.value.length > 8) {
+          if (e.target.value === "") {
+            v3.UnitPrice = {
+              errorState: true,
+              errorMssg: "Bank inputs not allowed!",
+            };
+            this.setState({ Validations: v3 });
+          }
+
+          if (e.target.value.length > 8) {
+            v3.UnitPrice = {
+              errorState: true,
+              errorMssg: "Maximum 8 numbers allowed!",
+            };
+            this.setState({ Validations: v3 });
+          }
+        } else {
+          v3.UnitPrice = {
+            errorState: false,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v3 });
+          this.setParams(SupplierPrice);
+        }
         break;
+      case "EmailID":
+        SupplierPrice[param] = e.target.value;
+        let email = CF.validateEmail(e.target.value);
+        switch (email) {
+          case true:
+            let validn = this.state.Validations;
+            if (e.target.value.length > 50) {
+              validn.EmailID = {
+                errorState: true,
+                errorMssg: "Maximum 50 characters allowed",
+              };
+              this.setState({ Validations: validn });
+            } else {
+              validn.EmailID = {
+                errorState: false,
+                errorMssg: "",
+              };
+              this.setState({ Validations: validn });
+              this.setParams(SupplierPrice);
+            }
+            break;
+          case false:
+            let validtn = this.state.Validations;
+
+            validtn.EmailID = {
+              errorState: true,
+              errorMssg: "Invalid Email",
+            };
+            this.setState({ Validations: validtn });
+        }
       default:
         SupplierPrice[param] = e.target.value;
         this.setParams(SupplierPrice);
@@ -534,7 +624,7 @@ class supplierPrice extends React.Component {
             {
               SupplierPrice: SupplierPriceTemplate,
               SuccessPrompt: true,
-             SupplierPriceHistory: [],
+              SupplierPriceHistory: [],
             },
             () => {
               this.getSupplierPrice();
@@ -758,6 +848,8 @@ class supplierPrice extends React.Component {
                             size="small"
                             onChange={(e) => this.updateFormValue("MinQty", e)}
                             value={this.state.SupplierPrice.MinQty}
+                            error={this.state.Validations.MinQty.errorState}
+                            helperText={this.state.Validations.MinQty.errorMssg}
                           />
                           <TextboxInput
                             id="MaxQty"
@@ -766,6 +858,8 @@ class supplierPrice extends React.Component {
                             size="small"
                             onChange={(e) => this.updateFormValue("MaxQty", e)}
                             value={this.state.SupplierPrice.MaxQty}
+                            error={this.state.Validations.MaxQty.errorState}
+                            helperText={this.state.Validations.MaxQty.errorMssg}
                           />
                           <TextboxInput
                             id="UnitPrice"
@@ -776,6 +870,8 @@ class supplierPrice extends React.Component {
                               this.updateFormValue("UnitPrice", e)
                             }
                             value={this.state.SupplierPrice.UnitPrice}
+                            error={this.state.Validations.UnitPrice.errorState}
+                            helperText={this.state.Validations.UnitPrice.errorMssg}
                           />
                           <TextboxInput
                             id="EmailID"
@@ -784,6 +880,8 @@ class supplierPrice extends React.Component {
                             size="small"
                             onChange={(e) => this.updateFormValue("EmailID", e)}
                             value={this.state.SupplierPrice.EmailID}
+                            error={this.state.Validations.EmailID.errorState}
+                            helperText={this.state.Validations.EmailID.errorMssg}
                           />
                         </TableBody>
                       </Table>

@@ -56,6 +56,7 @@ class addnewcompany extends React.Component {
       phoneno: "",
       website: "",
       countryData: [],
+      stateData:[],
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: true,
@@ -78,6 +79,7 @@ class addnewcompany extends React.Component {
   componentDidMount() {
     this.getCompanyList();
     this.getCountryList();
+    this.getStateList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -146,6 +148,32 @@ class addnewcompany extends React.Component {
       })
       .catch((error) => {});
   }
+
+  getStateList = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetStatesUrl = APIURLS.APIURL.GetStates;
+
+    axios
+      .post(GetStatesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newData = [];
+        for (let i = 0; i < data.length; i++) {
+          let d = {
+            name: data[i].name,
+            value: data[i].stateId,
+          };
+          newData.push(d);
+        }
+        this.setState({ stateData: newData, ProgressLoader: true });
+      })
+      .catch((error) => {});
+  };
 
   processCountryData(data) {
     let newData = [];
@@ -433,7 +461,10 @@ class addnewcompany extends React.Component {
         Checktrue();
       }
       if (id === "Country") {
-        this.setState({ country: e.target.value });
+        this.setState({ country: CF.toInt(e.target.value) });
+      }
+      if (id === "State") {
+        this.setState({ state: CF.toInt(e.target.value) });
       }
     };
 
@@ -703,9 +734,16 @@ class addnewcompany extends React.Component {
                             options={this.state.countryData}
                             value={this.state.country}
                           />
+                          <DropdownInput
+                            id="stateSelect"
+                            label="State"
+                            onChange={(e) => updateFormValue("State", e)}
+                            options={this.state.stateData}
+                            value={this.state.state}
+                          />
 
                           
-                          <TableRow>
+                          {/* <TableRow>
                             <TableCell align="left" className="no-border-table">
                               State
                             </TableCell>
@@ -722,7 +760,7 @@ class addnewcompany extends React.Component {
                                 <option value={30}>Delhi</option>
                               </select>
                             </TableCell>
-                          </TableRow>
+                          </TableRow> */}
                           <Tablerowcelltextboxinput
                             id="City"
                             label="City"

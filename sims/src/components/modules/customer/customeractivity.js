@@ -648,8 +648,8 @@ class customeractivity extends React.Component {
       case "PhoneNo":
         let v9 = this.state.Validations;
 
-        let numbers = /^[0-9\b]+$/;
-        if (numbers.test(e.target.value)) {
+        let number = CF.chkIfNumber(e.target.value)
+        if (number) {
           Customer[param] = e.target.value;
           if (e.target.value.length > 20) {
             v9.PhoneNo = {
@@ -665,6 +665,13 @@ class customeractivity extends React.Component {
 
             this.setParams(Customer);
           }
+        }else{
+          v9.PhoneNo = {
+            errorState: true,
+            errorMssg: "Enter Number!",
+          };
+
+          this.setState({ Validations: v9 });
         }
         break;
       case "FaxNo":
@@ -1168,7 +1175,9 @@ class customeractivity extends React.Component {
 
       let Customer = this.state.Customer;
       let reqData = {
-        ValidUser: ValidUser,
+
+
+
         DocumentNumber: {
           NoSeriesID: 1,
           TransDate: moment().format("MM-DD-YYYY"),

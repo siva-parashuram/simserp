@@ -914,7 +914,7 @@ class addresses extends React.Component {
     switch (param) {
       case "AddressType":
         CustomerAddress[param] = CF.toInt(e.target.value);
-
+        this.setParams(CustomerAddress, process);
         break;
       case "Code":
         CustomerAddress[param] = e.target.value;
@@ -1234,12 +1234,8 @@ class addresses extends React.Component {
               this.setParams(CustomerAddress, process);
             }
           }
-         
-        } 
-        else {
-         
+        } else {
           switch (process) {
-            
             case "ADD":
               let addNum = this.state.Validations;
               addNum.CustomerAddress.PhoneNo = {
@@ -1264,6 +1260,7 @@ class addresses extends React.Component {
         break;
       case "EmailID":
         CustomerAddress[param] = e.target.value;
+
         let v10 = this.state.Validations;
         if (e.target.value.length > 50) {
           if (process === "EDIT") {
@@ -1271,6 +1268,7 @@ class addresses extends React.Component {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
+
             this.setState({ Validations: v10 });
           } else {
             v10.CustomerAddress.EmailID = {
@@ -1280,7 +1278,6 @@ class addresses extends React.Component {
             this.setState({ Validations: v10 });
           }
         } else {
-          CustomerAddress[param] = e.target.value;
           if (process === "EDIT") {
             v10.UpdateCustomerAddress.EmailID = {
               errorState: false,
@@ -1288,11 +1285,17 @@ class addresses extends React.Component {
             };
             this.setState({ Validations: v10 });
           } else {
-            v10.CustomerAddress.EmailID = { errorState: false, errorMssg: "" };
+            v10.CustomerAddress.EmailID = {
+              errorState: false,
+              errorMssg: "",
+            };
             this.setState({ Validations: v10 });
           }
+          this.setParams(CustomerAddress, process);
         }
-        this.setParams(CustomerAddress, process);
+
+        
+
         break;
       case "VATNo":
         CustomerAddress[param] = e.target.value;
@@ -1933,9 +1936,12 @@ class addresses extends React.Component {
                               isMandatory={true}
                               value={this.state.UpdateCustomerAddress.Code}
                               error={
-                                this.state.Validations.UpdateCustomerAddress.Code.errorState}
+                                this.state.Validations.UpdateCustomerAddress
+                                  .Code.errorState
+                              }
                               helperText={
-                                this.state.Validations.UpdateCustomerAddress.Code.errorMssg
+                                this.state.Validations.UpdateCustomerAddress
+                                  .Code.errorMssg
                               }
                             />
                             <TextboxInput

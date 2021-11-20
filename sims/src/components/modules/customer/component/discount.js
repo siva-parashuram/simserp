@@ -353,7 +353,7 @@ class discount extends React.Component {
     // const headers = {
     //   "Content-Type": "application/json",
     // };
-    //    let Url = APIURLS.APIURL.;
+      //  let Url = APIURLS.APIURL.;
     // let reqData = {
     //   ValidUser: ValidUser,
     // };

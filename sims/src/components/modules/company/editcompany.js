@@ -10,7 +10,6 @@ import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Typography from "@material-ui/core/Typography";
 
-
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -24,7 +23,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 
 import ButtonGroup from "@mui/material/ButtonGroup";
-
 
 import UpdateIcon from "@material-ui/icons/Update";
 import Button from "@material-ui/core/Button";
@@ -60,6 +58,7 @@ class editcompany extends React.Component {
       PhoneNo: "",
       Website: "",
       countryData: [],
+      stateData: [],
       selectedCountry: "",
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
@@ -88,6 +87,7 @@ class editcompany extends React.Component {
   componentDidMount() {
     this.getCountryList();
     this.getCompanyList();
+    this.getStateList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -163,6 +163,31 @@ class editcompany extends React.Component {
       .catch((error) => {});
   }
 
+  getStateList = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetStatesUrl = APIURLS.APIURL.GetStates;
+
+    axios
+      .post(GetStatesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newData = [];
+        for (let i = 0; i < data.length; i++) {
+          let d = {
+            name: data[i].name,
+            value: data[i].stateId,
+          };
+          newData.push(d);
+        }
+        this.setState({ stateData: newData, ProgressLoader: true });
+      })
+      .catch((error) => {});
+  };
   processCountryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
@@ -213,7 +238,7 @@ class editcompany extends React.Component {
               Address2: response.data.address2,
               Address3: response.data.address3,
               CountryID: response.data.countryId,
-              state: response.data.stateId,
+              StateID: response.data.stateId,
               City: response.data.city,
               PostCode: response.data.postcode,
               PhoneNo: response.data.phoneNo,
@@ -237,22 +262,22 @@ class editcompany extends React.Component {
         this.state.CompanyName.length > 50 ||
         this.state.duplicate === true
       ) {
-        if( this.state.Address === "" ||
-        this.state.Address === null ||
-        this.state.Address.length > 50){
-          this.setState({updateBtnDisabled:true})
-        }else {
-          this.setState({updateBtnDisabled:true})
+        if (
+          this.state.Address === "" ||
+          this.state.Address === null ||
+          this.state.Address.length > 50
+        ) {
+          this.setState({ updateBtnDisabled: true });
+        } else {
+          this.setState({ updateBtnDisabled: true });
         }
+      } else if (
+        this.state.Address === "" ||
+        this.state.Address === null ||
+        this.state.Address.length > 50
+      ) {
+        this.setState({ updateBtnDisabled: true });
       }
-      else if(this.state.Address === "" ||
-      this.state.Address === null ||
-      this.state.Address.length > 50){
-        this.setState({updateBtnDisabled:true})
-      }
-      
-
-      
     };
 
     const updateFormValue = (id, e) => {
@@ -527,10 +552,10 @@ class editcompany extends React.Component {
         CheckTrue();
       }
       if (id === "country") {
-        this.setState({ CountryID: e.target.value });
+        this.setState({ CountryID: CF.toInt(e.target.value) });
       }
 
-      if (id === "state") this.setState({ state: e.target.value });
+      if (id === "State") this.setState({ StateID: CF.toInt(e.target.value) });
     };
 
     const updateCompanyDetails = () => {
@@ -689,7 +714,7 @@ class editcompany extends React.Component {
                       onClick={(e) => updateCompanyDetails()}
                       disabled={this.state.updateBtnDisabled}
                     >
-                       {APIURLS.buttonTitle.update}
+                      {APIURLS.buttonTitle.update}
                     </Button>
                   </ButtonGroup>
                 </div>
@@ -827,15 +852,23 @@ class editcompany extends React.Component {
                           aria-label="company List table"
                         >
                           <TableBody className="tableBody">
-                          <DropdownInput
-                          id="countrySelect"
-                          label="Country"
-                          onChange={(e) => updateFormValue("Country", e)}
-                          options={this.state.countryData}
-                          value={this.state.CountryID}
-                        />
-                           
-                            <TableRow>
+                            <DropdownInput
+                              id="countrySelect"
+                              label="Country"
+                              onChange={(e) => updateFormValue("Country", e)}
+                              options={this.state.countryData}
+                              value={this.state.CountryID}
+                            />
+
+                            <DropdownInput
+                              id="stateSelect"
+                              label="State"
+                              onChange={(e) => updateFormValue("State", e)}
+                              options={this.state.stateData}
+                              value={this.state.StateID}
+                            />
+
+                            {/* <TableRow>
                               <TableCell
                                 align="left"
                                 className="no-border-table"
@@ -858,7 +891,7 @@ class editcompany extends React.Component {
                                   <option value={30}>Delhi</option>
                                 </select>
                               </TableCell>
-                            </TableRow>
+                            </TableRow> */}
                             <Tablerowcelltextboxinput
                               id="City"
                               label="City"

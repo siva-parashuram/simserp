@@ -355,26 +355,24 @@ class branchMapping extends React.Component {
   updateFormValue = (param, e) => {
     let BranchMapping = this.state.BranchMapping;
     switch (param) {
-      case"IsTaxExempt":
-      BranchMapping[param]=e.target.checked;
-      this.setParams(BranchMapping); 
-      break;
-      case"Reason":
-      BranchMapping[param]=e.target.value;
-      this.setParams(BranchMapping); 
-      break;
-      default:
-        BranchMapping[param]=CF.toInt(e.target.value);
-        this.setParams(BranchMapping); 
+      case "IsTaxExempt":
+        BranchMapping[param] = e.target.checked;
+        this.setParams(BranchMapping);
         break;
-      
+      case "Reason":
+        BranchMapping[param] = e.target.value;
+        this.setParams(BranchMapping);
+        break;
+      default:
+        BranchMapping[param] = CF.toInt(e.target.value);
+        this.setParams(BranchMapping);
+        break;
     }
   };
   setParams = (object) => {
     this.setState({ BranchMapping: object });
   };
 
-  
   createBranchMapping = (param) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));

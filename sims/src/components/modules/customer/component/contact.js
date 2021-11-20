@@ -383,7 +383,7 @@ class contact extends React.Component {
             errorMssg: "maximum 50 characters allowed",
           };
           this.setState({ Validations: v1 });
-        }else{
+        } else {
           v1.Name = {
             errorState: false,
             errorMssg: "",
@@ -391,54 +391,65 @@ class contact extends React.Component {
           this.setState({ Validations: v1 });
           this.setParams(CustomerContact);
         }
-        
+
         break;
       case "PhoneNo":
-       let num = CF.chkIfNumber(e.target.value);
-       if(num){
-        CustomerContact[param] = e.target.value;
-        let v2 = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v2.PhoneNo = {
-            errorState: true,
-            errorMssg: "Maximum 20 numbers allowed",
-          };
-          this.setState({ Validations: v2 });
-        }else{
-          v2.PhoneNo = {
-            errorState: false,
-            errorMssg: "",
-          };
-          this.setState({ Validations: v2 });
-          this.setParams(CustomerContact);
+        let num = CF.chkIfNumber(e.target.value);
+        if (num) {
+          CustomerContact[param] = e.target.value;
+          let v2 = this.state.Validations;
+          if (e.target.value.length > 20) {
+            v2.PhoneNo = {
+              errorState: true,
+              errorMssg: "Maximum 20 numbers allowed",
+            };
+            this.setState({ Validations: v2 });
+          } else {
+            v2.PhoneNo = {
+              errorState: false,
+              errorMssg: "",
+            };
+            this.setState({ Validations: v2 });
+            this.setParams(CustomerContact);
+          }
+        } else {
+          let v = this.state.Validations;
+          v.PhoneNo = { errorState: true, errorMssg: "Enter Number" };
+          this.setState({ Validations: v });
         }
 
-       }else{
-         
-         let v=this.state.Validations
-         v.PhoneNo={ errorState: true,errorMssg: "Enter Number",}
-         this.setState({Validations:v})
-       }
-        
-        
         break;
       case "EmailID":
         CustomerContact[param] = e.target.value;
-        let v3 = this.state.Validations;
-        if (e.target.value.length > 50) {
-          v3.EmailID = {
-            errorState: true,
-            errorMssg: "Maximum 50 characters allowed",
-          };
-          this.setState({ Validations: v3 });
-        }else{
-          v3.EmailID = {
-            errorState: false,
-            errorMssg: "",
-          };
-          this.setState({ Validations: v3 });
-          this.setParams(CustomerContact);
+        let email = CF.validateEmail(e.target.value);
+        switch (email) {
+          case true:
+            let validn = this.state.Validations;
+            if (e.target.value.length > 50) {
+              validn.EmailID = {
+                errorState: true,
+                errorMssg: "Maximum 50 characters allowed",
+              };
+              this.setState({ Validations: validn });
+            } else {
+              validn.EmailID = {
+                errorState: false,
+                errorMssg: "",
+              };
+              this.setState({ Validations: validn });
+              this.setParams(CustomerContact);
+            }
+            break;
+          case false:
+            let validtn = this.state.Validations;
+
+            validtn.EmailID = {
+              errorState: true,
+              errorMssg:"Invalid Email" ,
+            };
+            this.setState({ Validations: validtn });
         }
+
         break;
       case "IsBlock":
         CustomerContact[param] = e.target.checked;
@@ -447,19 +458,21 @@ class contact extends React.Component {
       default:
         break;
     }
-    this.validateBtn()
+    this.validateBtn();
   };
 
-  validateBtn=()=>{
-let v=this.state.Validations
-if(v.Name.errorState===true||v.PhoneNo.errorState===true||v.EmailID.errorState===true){
-  this.setState({ createNewBtn: true,updateBtn: true,
-    })
-}else{
-  this.setState({ createNewBtn: false,updateBtn: false,})
-}
-  }
-
+  validateBtn = () => {
+    let v = this.state.Validations;
+    if (
+      v.Name.errorState === true ||
+      v.PhoneNo.errorState === true ||
+      v.EmailID.errorState === true
+    ) {
+      this.setState({ createNewBtn: true, updateBtn: true });
+    } else {
+      this.setState({ createNewBtn: false, updateBtn: false });
+    }
+  };
 
   setParams = (object) => {
     this.setState({ CustomerContact: object });
@@ -660,7 +673,9 @@ if(v.Name.errorState===true||v.PhoneNo.errorState===true||v.EmailID.errorState==
                             onChange={(e) => this.updateFormValue("PhoneNo", e)}
                             value={this.state.CustomerContact.PhoneNo}
                             error={this.state.Validations.PhoneNo.errorState}
-                            helperText={this.state.Validations.PhoneNo.errorMssg}
+                            helperText={
+                              this.state.Validations.PhoneNo.errorMssg
+                            }
                           />
                           <TextboxInput
                             id="EmailID"
@@ -670,7 +685,9 @@ if(v.Name.errorState===true||v.PhoneNo.errorState===true||v.EmailID.errorState==
                             onChange={(e) => this.updateFormValue("EmailID", e)}
                             value={this.state.CustomerContact.EmailID}
                             error={this.state.Validations.EmailID.errorState}
-                            helperText={this.state.Validations.EmailID.errorMssg}
+                            helperText={
+                              this.state.Validations.EmailID.errorMssg
+                            }
                           />
                           <SwitchInput
                             key="IsBlock"

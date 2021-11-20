@@ -76,7 +76,7 @@ class addresses extends React.Component {
         Address3: "",
         City: "",
         PostCode: "",
-        CountryID:0,
+        CountryID: 0,
         StateID: 0,
         ContactPerson: "",
         PhoneNo: "",
@@ -98,7 +98,7 @@ class addresses extends React.Component {
         Address3: "",
         City: "",
         PostCode: "",
-        CountryID:0,
+        CountryID: 0,
         StateID: 0,
         ContactPerson: "",
         PhoneNo: "",
@@ -991,6 +991,7 @@ class addresses extends React.Component {
       case "CountryID":
         SupplierAddress[param] = CF.toInt(e.target.value);
         this.setParams(SupplierAddress, process);
+
         break;
       case "StateID":
         SupplierAddress[param] = CF.toInt(e.target.value);
