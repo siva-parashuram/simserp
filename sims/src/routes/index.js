@@ -62,7 +62,8 @@ import customerMaster from "../components/modules/customer/customerMaster";
 import customeractivity from "../components/modules/customer/customeractivity";
 import supplierMaster from "../components/modules/supplier/supplierMaster";
 import supplieractivity from "../components/modules/supplier/supplieractivity";
-
+import poMaster from "../components/modules/po/poMaster";
+import poactivity from "../components/modules/po/poactivity";
 
 import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
@@ -169,7 +170,11 @@ let routes = ({ location, ...rest }) => {
         <Route path={URLS.URLS.supplierMaster} component={supplierMaster} />
         <Route path={URLS.URLS.addSupplier} component={supplieractivity} />
         <Route path={URLS.URLS.editSupplier} component={supplieractivity} />
-        
+
+
+         {/* Purchase Order */}
+         <Route path={URLS.URLS.poMaster} component={poMaster} />
+         <Route path={URLS.URLS.addPO} component={poactivity} />
         
 
 

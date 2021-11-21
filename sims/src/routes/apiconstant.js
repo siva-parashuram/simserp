@@ -156,6 +156,14 @@ export const buttonTitle={
 };
 
 
+export const POItemType=[
+  { name: "Item", value: 0 },
+  { name: "G/L Account", value: 1 },
+  { name: "Fixed Asset", value: 2 },
+  { name: "Charge", value: 3 },
+];
+
+
 export const TypeOfEnterprise = [
   { name: "A-Micro(M)", value: 1 },
   { name: "B-Small(M)", value: 2 },
