@@ -7,7 +7,12 @@ import * as CF from "../../../services/functions/customfunctions";
 
 import Grid from "@material-ui/core/Grid";
 import DropdownInput from "../../compo/Tablerowcelldropdown";
+import Dialog from "@mui/material/Dialog";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import IconButton from "@mui/material/IconButton";
+import DialogContent from "@mui/material/DialogContent";
 
+import DialogTitle from "@mui/material/DialogTitle";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -61,6 +66,11 @@ class addnewcompany extends React.Component {
       GeneralDetailsExpanded: true,
       AddressDetailsExpanded: true,
       duplicate: false,
+      Dialog: {
+        DialogTitle: "",
+        DialogStatus: false,
+        DialogContent: null,
+      },
       Validations: {
         companyName: { errorState: false, errorMsg: "" },
         address: { errorState: false, errorMsg: "" },
@@ -528,6 +538,83 @@ class addnewcompany extends React.Component {
       }
     };
 
+    const dialog = (
+      <Fragment>
+        <Dialog
+          fullWidth={true}
+          maxWidth="lg"
+          open={this.state.Dialog.DialogStatus}
+          aria-labelledby="dialog-title"
+          aria-describedby="dialog-description"
+          className="dialog-prompt-activity"
+        >
+          <DialogTitle
+            id="dialog-title"
+            className="dialog-area"
+            style={{ maxHeight: 50 }}
+          >
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}>
+                <IconButton
+                  aria-label="ArrowBackIcon"
+                  // style={{ textAlign: 'left', marginTop: 8 }}
+                >
+                  <ArrowBackIcon onClick={(e) => handleClose()} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2} lg={2}>
+                <div style={{ marginLeft: -50 }}>
+                  {" "}
+                  <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
+                    {" "}
+                    {this.state.Dialog.DialogTitle}{" "}
+                  </span>{" "}
+                </div>
+              </Grid>
+            </Grid>
+          </DialogTitle>
+          <DialogContent className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                {this.state.Dialog.DialogContent}
+              </Grid>
+            </Grid>
+            <div style={{ height: 50 }}>&nbsp;</div>
+          </DialogContent>
+        </Dialog>
+      </Fragment>
+    );
+
+    const openDialog = (param) => {
+      let Dialog = this.state.Dialog;
+      Dialog.DialogStatus = true;
+      Dialog.DialogTitle = param;
+
+      switch (param) {
+        case "Country":
+          // Dialog.DialogContent = Address;
+          this.setState({ Dialog: Dialog });
+          break;
+        case "State":
+          // Dialog.DialogContent = contact;
+          this.setState({ Dialog: Dialog });
+          break;
+       
+          break;
+        default:
+          break;
+      }
+
+      this.setState({ Dialog: Dialog });
+    };
+
+    const handleClose = () => {
+      let Dialog = this.state.Dialog;
+      Dialog.DialogStatus = false;
+      this.setState({ Dialog: Dialog });
+    
+    };
+
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -775,20 +862,95 @@ class addnewcompany extends React.Component {
                                 this.state.Validations.postcode.errorMsg
                               }
                             />
-                            <DropdownInput
+                             <TableRow>
+                          <TableCell align="left" className="no-border-table">
+                            Country
+                          </TableCell>
+                          <TableCell align="left" className="no-border-table">
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={10} lg={10}>
+                                <select
+                                  className="dropdown-css"
+                                  id="countrySelect"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Country", e)
+                                  }
+                                  value={this.state.country}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
+
+                                  {this.state.countryData.map((item, i) => (
+                                    <option value={parseInt(item.value)}>
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={2} lg={2}>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) => openDialog("Country")}
+                                >
+                                  ...
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                        </TableRow>
+                            {/* <DropdownInput
                               id="countrySelect"
                               label="Country"
                               onChange={(e) => updateFormValue("Country", e)}
                               options={this.state.countryData}
                               value={this.state.country}
-                            />
-                            <DropdownInput
+                            /> */}
+                             <TableRow>
+                          <TableCell align="left" className="no-border-table">
+                          State
+                          </TableCell>
+                          <TableCell align="left" className="no-border-table">
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={10} lg={10}>
+                                <select
+                                  className="dropdown-css"
+                                  id="stateSelect"
+                                  onChange={(e) =>
+                                    this.updateFormValue("State", e)
+                                  }
+                                  value={this.state.state}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
+
+                                  {this.state.stateData.map((item, i) => (
+                                    <option value={parseInt(item.value)}>
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={2} lg={2}>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) => openDialog("State")}
+                                >
+                                  ...
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                        </TableRow>
+
+                            {/* <DropdownInput
                               id="stateSelect"
                               label="State"
                               onChange={(e) => updateFormValue("State", e)}
                               options={this.state.stateData}
                               value={this.state.state}
-                            />
+                            /> */}
                           </TableBody>
                         </Table>
                       </Grid>
@@ -801,6 +963,7 @@ class addnewcompany extends React.Component {
           </Grid>
           <Grid item xs={4}></Grid>
         </Grid>
+        {dialog}
       </Fragment>
     );
   }

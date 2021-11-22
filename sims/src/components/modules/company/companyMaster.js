@@ -276,6 +276,7 @@ class companyMaster extends React.Component {
       try {
         for (let i = 0; i < this.state.companyData.length; i++) {
           document.getElementById("row_" + i).className = "";
+          
         }
       } catch (e) {
         console.log("Error : ", e);
@@ -350,6 +351,7 @@ class companyMaster extends React.Component {
     };
 
     const handlePageChange = (event, newPage) => {
+      this.InitialremoveIsSelectedRowClasses()
       console.log("handlePageChange > event > ", event);
       console.log("handlePageChange > newPage > ", newPage);
       let pagination = this.state.pagination;
