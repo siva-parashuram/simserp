@@ -29,6 +29,7 @@ export const URLS = {
   branchMaster:"/branchMaster",
   editBranch:"/editBranch",
   addBranch:"/addBranch",
+  
   moduleMaster:"/moduleMaster",
   addModule:"/addModule",
   editModule:"/editModule",

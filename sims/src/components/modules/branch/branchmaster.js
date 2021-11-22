@@ -99,7 +99,7 @@ class branchMaster extends React.Component {
       URLS.URLS.editBranch +
       this.state.urlparams +
       "&editbranchId=" +
-      item.branchId;
+      item.branchId+ "&type=edit";
     this.setState({
       branchItem: item,
       editUrl: editUrl,
@@ -152,7 +152,7 @@ class branchMaster extends React.Component {
         URLS.URLS.editBranch +
         this.state.urlparams +
         "&editbranchId=" +
-        item.branchId;
+        item.branchId+ "&type=edit";
       this.setState({
         branchItem: item,
         editUrl: editUrl,
@@ -242,16 +242,14 @@ class branchMaster extends React.Component {
                 >
                   <Button
                     className="action-btns"
-                    startIcon={<AddIcon />}
                     onClick={(e) =>
-                      openPage(URLS.URLS.addBranch + this.state.urlparams)
+                      openPage(URLS.URLS.addBranch + this.state.urlparams + "&type=add")
                     }
                   >
                     {APIURLS.buttonTitle.add}
                   </Button>
                   <Button
                     className="action-btns"
-                    startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editUrl)}
                   >
                     {APIURLS.buttonTitle.edit}
@@ -312,7 +310,7 @@ class branchMaster extends React.Component {
                                     URLS.URLS.editBranch +
                                     this.state.urlparams +
                                     "&editbranchId=" +
-                                    item.branchId
+                                    item.branchId+ "&type=edit"
                                   }
                                 >
                                   {URLS.PREFIX.branchId + item.branchId}

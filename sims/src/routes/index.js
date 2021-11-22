@@ -28,8 +28,9 @@ import addUser from "../components/modules/user/adduser";
 import editUser from "../components/modules/user/edituser";
 import branchMaster from "../components/modules/branch/branchmaster";
 import editBranch from "../components/modules/branch/editbranch";
-import salesPerson from "../components/modules/customer/component/salesPerson";
 import addBranch from "../components/modules/branch/addbranch";
+import branchactivity from "../components/modules/branch/branchactivity";
+import salesPerson from "../components/modules/customer/component/salesPerson";
 import loginExpired from "../components/user/loginexpired";
 import moduleMaster from "../components/modules/modules/modulemaster";
 import addModule from "../components/modules/modules/addmodule";
@@ -115,8 +116,12 @@ let routes = ({ location, ...rest }) => {
 
           {/* branch Routes*/}
           <Route path={URLS.URLS.branchMaster} component={branchMaster} />
-          <Route path={URLS.URLS.editBranch} component={editBranch} />
-          <Route path={URLS.URLS.addBranch} component={addBranch} />
+          <Route path={URLS.URLS.addBranch} component={branchactivity} />
+          <Route path={URLS.URLS.editBranch} component={branchactivity} />
+          {/* <Route path={URLS.URLS.editBranch} component={editBranch} />
+          <Route path={URLS.URLS.addBranch} component={addBranch} /> */}
+
+          
 
           {/* Module Routes*/}
           <Route path={URLS.URLS.moduleMaster} component={moduleMaster} />

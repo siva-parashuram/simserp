@@ -195,6 +195,7 @@ class customeractivity extends React.Component {
 
     let Customer = this.state.Customer;
     Customer.BranchID = CF.toInt(branchId);
+    
     if (type === "edit") {
       Customer.CustID = CF.toInt(CustID);
       this.getCustomerDetails(Customer);
