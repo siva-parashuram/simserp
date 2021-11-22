@@ -547,6 +547,7 @@ cursor: pointer;
   font-weight: 400;
   /* min-width: 50% !important; */
   box-sizing:border-box;
+  
   /* border-width: 100%; */
   /* font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important; */
   
@@ -556,9 +557,9 @@ cursor: pointer;
  
 }
 
-.textFieldCss:focus{
+/* .textFieldCss:focus{
   border-radius: 0px !important;
-}
+} */
 
 .textFieldCss .MuiOutlinedInput-input {
   padding: 5px 5px !important;
