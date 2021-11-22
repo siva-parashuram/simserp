@@ -5,6 +5,10 @@ body{
   overflow-x: hidden;
 }
 
+.MuiDataGrid-root{
+  border-radius: 0px !important;
+}
+
 .MuiTableBody-root{
   font-family: Calibri !important;
 }
