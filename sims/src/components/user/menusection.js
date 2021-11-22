@@ -219,7 +219,7 @@ class menusection extends React.Component {
 
         return (
             <Fragment>
-                <div style={{ marginLeft: 13, marginTop: 8 }}>
+                <div style={{ marginLeft:-25, marginTop: 8 }}>
                     <Grid container spacing={1}>
                         <Grid xs={12} sm={12} md={1} lg={1} >
                             <div className="menusection-div1">

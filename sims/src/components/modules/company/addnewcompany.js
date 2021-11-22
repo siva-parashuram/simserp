@@ -663,7 +663,7 @@ class addnewcompany extends React.Component {
 
                           <Tablerowcelltextboxinput
                             id="PhoneNo"
-                            type="number"
+                           
                             label="Phone No"
                             variant="outlined"
                             size="small"

@@ -414,7 +414,7 @@ class addbranch extends React.Component {
         }
         ValidateName();
       }
-      if (id === "Country") {
+      if (id === "CountryID") {
         let branch = this.state.branch;
         branch.countryId = e.target.value;
         this.setState({ branch: branch, countryId: e.target.value });

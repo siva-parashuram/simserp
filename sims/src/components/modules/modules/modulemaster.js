@@ -304,10 +304,10 @@ class modulemasters extends React.Component {
                           <TableRow>
                             <TableCell className="table-header-font">#</TableCell>
                             <TableCell className="table-header-font" align="left">
-                              Module Name
+                               Name
                             </TableCell>
                             <TableCell className="table-header-font" align="left">
-                              Module Description
+                               Description
                             </TableCell>
                           </TableRow>
                         </TableHead>
