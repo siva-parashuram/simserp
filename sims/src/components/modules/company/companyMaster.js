@@ -424,7 +424,6 @@ class companyMaster extends React.Component {
                 >
                   <Button
                     className="action-btns"
-                    startIcon={<AddIcon />}
                     onClick={(e) =>
                       openPage(URLS.URLS.addNewCompany + this.state.urlparams)
                     }
@@ -433,22 +432,20 @@ class companyMaster extends React.Component {
                   </Button>
                   <Button
                     className="action-btns"
-                    startIcon={<EditIcon />}
                     onClick={(e) => openPage(this.state.editUrl)}
                   >
                      {APIURLS.buttonTitle.edit}
                   </Button>
 
-                  <Button
+                  {/* <Button
                     className="action-btns"
-                    startIcon={<FileDownloadIcon />}
                   >
                     <Csvexport
                       data={this.state.companyData}
                       filename="companieslist.csv"
                       buttonName="CSV"
                     />
-                  </Button>
+                  </Button> */}
                 </ButtonGroup>
               </div>
             </Grid>
