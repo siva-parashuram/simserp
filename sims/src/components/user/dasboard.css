@@ -548,7 +548,8 @@ cursor: pointer;
   font-weight: 400;
   border-color: rgba(224, 224, 224, 1) !important;
   /* min-width: 50% !important; */
-  /* box-sizing:border-box; */
+  box-sizing:border-box;
+  
   /* border-width: 100%; */
   /* font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important; */
   
@@ -558,11 +559,7 @@ cursor: pointer;
  
 }
 
-.textFieldCss .MuiOutlinedInput-root {   
-  border-radius: 0px  !important;
-}
-
-.textFieldCss:focus{
+ .textFieldCss:focus{
   border-radius: 0px !important;
   -webkit-border-radius: 0px;
   border-color: rgba(224, 224, 224, 1) !important;
