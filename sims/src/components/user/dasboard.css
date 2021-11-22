@@ -544,9 +544,11 @@ cursor: pointer;
   height: 30px !important;
   font-size: 13px !important;
   border-radius: 0px !important;
+  -webkit-border-radius: 0px;
   font-weight: 400;
+  border-color: rgba(224, 224, 224, 1) !important;
   /* min-width: 50% !important; */
-  box-sizing:border-box;
+  /* box-sizing:border-box; */
   /* border-width: 100%; */
   /* font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important; */
   
@@ -556,14 +558,28 @@ cursor: pointer;
  
 }
 
+.textFieldCss .MuiOutlinedInput-root {   
+  border-radius: 0px  !important;
+}
+
 .textFieldCss:focus{
   border-radius: 0px !important;
-  border-radius: 0px !important;
+  -webkit-border-radius: 0px;
+  border-color: rgba(224, 224, 224, 1) !important;
 }
 
 .textFieldCss .MuiOutlinedInput-input {
   padding: 5px 5px !important;
   border-radius: 0px !important;
+  -webkit-border-radius: 0px;
+  border-color: rgba(224, 224, 224, 1) !important; 
+}
+
+.textFieldCss .MuiOutlinedInput-input:focus {
+  padding: 5px 5px !important;
+  border-radius: 0px !important;
+  -webkit-border-radius: 0px;
+  border-color: rgba(224, 224, 224, 1) !important; 
 }
 
 .dropdown-css{

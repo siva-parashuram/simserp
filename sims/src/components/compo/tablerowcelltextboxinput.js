@@ -21,7 +21,7 @@ class tablerowcelltextboxinput extends React.Component {
         </TableCell>
         <TableCell align="left" className="no-border-table">
           <TextField
-             style={{ minWidth: "80%" }}
+             style={{ minWidth: "80%"}}
             className="textFieldCss"
             // style={this.props.style}
             type={this.props.type}
@@ -34,9 +34,7 @@ class tablerowcelltextboxinput extends React.Component {
             error={this.props.error}
             helperText={this.props.helperText}
             disabled={this.props.disabled}
-            inputProps={{
-              autoComplete: 'off'
-           }}
+           
             maxlength={this.props.maxlength}
           />
         </TableCell>
