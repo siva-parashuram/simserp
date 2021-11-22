@@ -12,7 +12,13 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Dialog from "@mui/material/Dialog";
 
+import DialogContent from "@mui/material/DialogContent";
+
+import DialogTitle from "@mui/material/DialogTitle";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import IconButton from "@mui/material/IconButton";
 import Button from "@material-ui/core/Button";
 
 import Switch from "@mui/material/Switch";
@@ -44,6 +50,11 @@ class edituser extends React.Component {
       duplicateExist: false,
       users: [],
       oldEMAILID: "",
+      Dialog: {
+        DialogTitle: "",
+        DialogStatus: false,
+        DialogContent: null,
+      },
       user: {
         UserID: 0,
         LoginID: null,
@@ -180,25 +191,30 @@ class edituser extends React.Component {
       }
     };
     const CheckFirstName = () => {
-    //  if(this.state.duplicateExist===true||this.state.EmailID.length>50){
-    //    if(this.state.FirstName.length>20){
-    //      this.setState({DisableUpdatebtn:true})
-    //    }else{
-    //     this.setState({DisableUpdatebtn:true})
-    //    }
-    //  }else if(this.state.FirstName.length>20){
-    //   this.setState({DisableUpdatebtn:true})
-    // }
-    if(this.state.FirstName.length>20) {
-      if(this.state.duplicateExist===true||this.state.EmailID.length>50){
-        this.setState({DisableUpdatebtn:true})
+      //  if(this.state.duplicateExist===true||this.state.EmailID.length>50){
+      //    if(this.state.FirstName.length>20){
+      //      this.setState({DisableUpdatebtn:true})
+      //    }else{
+      //     this.setState({DisableUpdatebtn:true})
+      //    }
+      //  }else if(this.state.FirstName.length>20){
+      //   this.setState({DisableUpdatebtn:true})
+      // }
+      if (this.state.FirstName.length > 20) {
+        if (
+          this.state.duplicateExist === true ||
+          this.state.EmailID.length > 50
+        ) {
+          this.setState({ DisableUpdatebtn: true });
+        }
+      } else if (
+        this.state.duplicateExist === true ||
+        this.state.EmailID.length > 50
+      ) {
+        this.setState({ DisableUpdatebtn: true });
+      } else {
+        this.setState({ DisableUpdatebtn: false });
       }
-    }else if(this.state.duplicateExist===true||this.state.EmailID.length>50){
-      this.setState({DisableUpdatebtn:true})
-    }else{
-      this.setState({DisableUpdatebtn:false})
-    }
-    
     };
 
     const updateFormValue = (id, e) => {
@@ -236,7 +252,8 @@ class edituser extends React.Component {
             FirstName: e.target.value,
             user: user,
           });
-        }CheckFirstName();
+        }
+        CheckFirstName();
       }
       if (id === "LastName") {
         let user = this.state.user;
@@ -394,6 +411,84 @@ class edituser extends React.Component {
         .catch((error) => {});
     };
 
+
+    const dialog = (
+      <Fragment>
+        <Dialog
+          fullWidth={true}
+          maxWidth="lg"
+          open={this.state.Dialog.DialogStatus}
+          aria-labelledby="dialog-title"
+          aria-describedby="dialog-description"
+          className="dialog-prompt-activity"
+        >
+          <DialogTitle
+            id="dialog-title"
+            className="dialog-area"
+            style={{ maxHeight: 50 }}
+          >
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}>
+                <IconButton
+                  aria-label="ArrowBackIcon"
+                  // style={{ textAlign: 'left', marginTop: 8 }}
+                >
+                  <ArrowBackIcon onClick={(e) => handleClose()} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2} lg={2}>
+                <div style={{ marginLeft: -50 }}>
+                  {" "}
+                  <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
+                    {" "}
+                    {this.state.Dialog.DialogTitle}{" "}
+                  </span>{" "}
+                </div>
+              </Grid>
+            </Grid>
+          </DialogTitle>
+          <DialogContent className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                {this.state.Dialog.DialogContent}
+              </Grid>
+            </Grid>
+            <div style={{ height: 50 }}>&nbsp;</div>
+          </DialogContent>
+        </Dialog>
+      </Fragment>
+    );
+
+    const openDialog = (param) => {
+      let Dialog = this.state.Dialog;
+      Dialog.DialogStatus = true;
+      Dialog.DialogTitle = param;
+
+      switch (param) {
+        case "AssignBranch":
+          // Dialog.DialogContent = ;
+          this.setState({ Dialog: Dialog });
+          break;
+        case "AssignRole":
+          // Dialog.DialogContent = ;
+          this.setState({ Dialog: Dialog });
+          break;
+       
+        default:
+          break;
+      }
+
+      this.setState({ Dialog: Dialog });
+    };
+
+    const handleClose = () => {
+      let Dialog = this.state.Dialog;
+      Dialog.DialogStatus = false;
+      this.setState({ Dialog: Dialog });
+    
+    };
+
+
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
         return;
@@ -454,11 +549,24 @@ class edituser extends React.Component {
                 >
                   <Button
                     className="action-btns"
-                    startIcon={<UpdateIcon />}
                     onClick={handleUpdate}
                     disabled={this.state.DisableUpdatebtn}
                   >
                     {APIURLS.buttonTitle.update}
+                  </Button>
+                  <Button
+                    className="action-btns"
+
+                    onClick={(e)=>openDialog("AssignBranch")}
+                  >
+                    ASSIGN BRANCH
+                  </Button>
+                  <Button
+                    className="action-btns"
+
+                    onClick={(e)=>openDialog("AssignRole")}
+                  >
+                    ASSIGN ROLE
                   </Button>
                 </ButtonGroup>
               </div>
@@ -629,6 +737,7 @@ class edituser extends React.Component {
             </Grid>
           </Grid>
         </div>
+        {dialog}
       </Fragment>
     );
   }
