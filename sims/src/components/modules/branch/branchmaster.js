@@ -20,21 +20,27 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import BranchQuickDetails from "./branchquickdetails";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import TablePagination from "@mui/material/TablePagination";
 
 import Loader from "../../compo/loader";
 
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
+ 
 
 class branchMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
+      initialCss:"",
       isLoggedIn: false,
       ProgressLoader: false,
       urlparams: null,
       branchData: [],
-
       branchItem: {},
       editUrl: null,
       filelist: [],
@@ -95,7 +101,8 @@ class branchMaster extends React.Component {
   }
 
   InitialhandleRowClick(e, item, id) {
-    let editUrl =
+    try{
+      let editUrl =
       URLS.URLS.editBranch +
       this.state.urlparams +
       "&editbranchId=" +
@@ -108,12 +115,17 @@ class branchMaster extends React.Component {
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
     this.getAttachments(item.companyId, item.branchId);
+    }catch(e){}
+    
   }
 
   InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.branchData.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
+    try{
+      for (let i = 0; i < this.state.branchData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    }catch(e){}
+    
   }
 
   getAttachments(companyId, branchId) {
@@ -146,7 +158,8 @@ class branchMaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      this.setState({ selectedRow: id });
+      try{
+        this.setState({ selectedRow: id });
 
       let editUrl =
         URLS.URLS.editBranch +
@@ -161,12 +174,17 @@ class branchMaster extends React.Component {
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
       getAttachments(item.companyId, item.branchId);
+      }catch(e){}
+      
     };
 
     const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.branchData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
+      try{
+        for (let i = 0; i < this.state.branchData.length; i++) {
+          document.getElementById("row_" + i).className = "";
+        }
+      }catch(e){}
+     
     };
 
     const getAttachments = (companyId, branchId) => {
@@ -204,6 +222,20 @@ class branchMaster extends React.Component {
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
+    };
+
+    const getPageData = (data) => {
+      let rows = data;
+      let page = parseInt(this.state.pagination.page);
+      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
+      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    };
+
+    const handlePageChange = (event, newPage) => {
+      removeIsSelectedRowClasses();
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
     };
 
     return (
@@ -293,7 +325,7 @@ class branchMaster extends React.Component {
                           </TableRow>
                         </TableHead>
                         <TableBody className="tableBody">
-                          {this.state.branchData.map((item, i) => (
+                          {getPageData(this.state.branchData).map((item, i) => (
                             <TableRow
                               id={"row_" + i}
                               className={this.state.initialCss}
@@ -328,6 +360,14 @@ class branchMaster extends React.Component {
                           ))}
                         </TableBody>
                       </Table>
+                      <TablePagination
+                        rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                        component="div"
+                        count={this.state.branchData.length}
+                        rowsPerPage={this.state.pagination.rowsPerPage}
+                        page={this.state.pagination.page}
+                        onPageChange={handlePageChange}
+                      />
                     </Fragment>
                   ) : (
                     <Tableskeleton />
