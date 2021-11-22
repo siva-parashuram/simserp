@@ -261,22 +261,43 @@ class paymentTerms extends React.Component {
   };
 
 
-  // UpdatePaymentTerms = () => {
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   //  let Url = APIURLS.APIURL.CreateCustomerContact;
-  //   let reqData = {
-  //     ValidUser: ValidUser,
-  //     paymentTermsData: this.state.paymentTermsData,
-  //   };
+  UpdatePaymentTerms = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+     let Url = APIURLS.APIURL.UpdatePaymentTerms;
+    let reqData = {
+      ValidUser: ValidUser,
+      PaymentTermsList: [this.state.PaymentTerms],
+    };
 
-  //   console.log("reqData > ", reqData);
+    console.log("reqData > ", reqData);
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+        
+          this.setState({
+            SuccessPrompt: true,
+            ErrorPrompt: false,
+          },()=>{
+            this.getPaymentTerms();           
+            
+          });
+        }else {
+          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ErrorPrompt: true });
+      });
+    
 
-  // }
+
+  }
 
   createPaymentTerms = () => {
     let ValidUser = APIURLS.ValidUser;
@@ -285,11 +306,13 @@ class paymentTerms extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.UpdatePaymentTerms;
+    let Url = APIURLS.APIURL.CreatePaymentTerms;
     let reqData = {
       ValidUser: ValidUser,
-      PaymentTermsList: [this.state.PaymentTerms],
+      PaymentTerms: this.state.PaymentTerms,
+
     };
+    console.log("ReqData>>",reqData)
     axios
       .post(Url, reqData, { headers })
       .then((response) => {
@@ -430,7 +453,7 @@ class paymentTerms extends React.Component {
                         <Button
                           className="action-btns"
                           style={{ marginLeft: 10 }}
-                          onClick={(e) => this.createPaymentTerms(e)}
+                          onClick={(e) => this.UpdatePaymentTerms(e)}
                         >
                           {APIURLS.buttonTitle.update}
                         </Button>

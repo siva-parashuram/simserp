@@ -121,6 +121,7 @@ export const APIURL = {
   CreatePaymentTerms:domain+"api/Customer/CreatePaymentTerms",
   UpdatePaymentTerms:domain+"api/Customer/UpdatePaymentTerms",
   GetAllCustomerCategory:domain+"api/Customer/GetAllCustomerCategory",
+  CreateCustomerCategory:domain+"api/Customer/CreateCustomerCategory",
   UpdateCustomerCategory:domain+"api/Customer/UpdateCustomerCategory",
   GetAllSalesPerson:domain+"api/Customer/GetAllSalesPerson",
   UpdateSalesPerson:domain+"api/Customer/UpdateSalesPerson",

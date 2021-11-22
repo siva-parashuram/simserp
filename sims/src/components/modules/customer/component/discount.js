@@ -67,7 +67,7 @@ class discount extends React.Component {
       Discount: {
         ID: 0,
         CustID: 0,
-        BranchID: 0,
+        BranchID: "-1",
         LowerLimit1: 0,
         LowerLimit2: 0,
         LowerLimit3: 0,

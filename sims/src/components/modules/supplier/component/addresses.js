@@ -1332,7 +1332,7 @@ class addresses extends React.Component {
             Address3: "",
             City: "",
             PostCode: "",
-            CountryID: 0,
+            CountryID: "-1",
             StateID: 0,
             ContactPerson: "",
             PhoneNo: "",

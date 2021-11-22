@@ -536,19 +536,9 @@ class customerPrice extends React.Component {
   //     v["UnitPrice"].errorState === true ||
   //     v["EmailID"].errorState === true
   //   ) {
-  //     if (updateBtn === false) {
-  //       this.setState({ createNewBtn: true });
-  //     } else if (createNewBtn === false) {
-  //       this.setState({ updateBtn: true });
-  //     } else {
-  //     }
-  //   } else {
-  //     if (updateBtn === false) {
-  //       this.setState({ createNewBtn: true });
-  //     } else if (createNewBtn === false) {
-  //       this.setState({ updateBtn: true });
-  //     } else {
-  //     }
+  //     this.setState({updateBtn:true,createNewBtn:true})
+  //   }else{
+  //     this.setState({updateBtn:false,createNewBtn:false})
   //   }
   // };
 

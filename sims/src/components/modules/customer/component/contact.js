@@ -68,7 +68,7 @@ class contact extends React.Component {
       CustomerContact: {
         ContactID: 0,
         CustID: this.props.CustID,
-        ContactType: -1,
+        ContactType:"-1",
         Name: "",
         PhoneNo: "",
         EmailID: "",

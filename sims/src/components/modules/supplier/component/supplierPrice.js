@@ -78,7 +78,7 @@ class supplierPrice extends React.Component {
         EndDate: "",
         ItemID: 0,
         UOM: 0,
-        CurrID: 0,
+        CurrID: "-1",
         MinQty: 0,
         MaxQty: 0,
         UnitPrice: 0,
