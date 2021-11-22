@@ -16,17 +16,19 @@ class tablerowcelltextboxinput extends React.Component {
                 <TableCell align="left" className="no-border-table">{this.props.label}</TableCell>
                 <TableCell align="left" className="no-border-table">
                 <TextField
+                className="textFieldCss"
+                    style={{minWidth:"80%"}}
                     type="date"
                     id={this.props.id}
                     variant={this.props.variant}
-                    size={this.props.size}
+                    // size={this.props.size}
                     onChange={this.props.onChange}
-                    fullWidth
+                   
                     value={this.props.value}
                     defaultValue={this.props.defaultValue}
-                    InputProps={{
-                        className: "textFieldCss",
-                      }} 
+                    // InputProps={{
+                    //     className: "textFieldCss",
+                    //   }} 
                     error={this.props.error}
                     helperText={this.props.helperText}
                     />

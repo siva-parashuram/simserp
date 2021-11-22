@@ -1455,7 +1455,7 @@ class editbranch extends React.Component {
                                 />
 
                                 <Tablerowcelltextboxinput
-                                  type="number"
+                                
                                   id="phoneNo"
                                   label="Phone No"
                                   variant="outlined"

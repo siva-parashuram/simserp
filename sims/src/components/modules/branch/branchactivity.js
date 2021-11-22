@@ -47,19 +47,19 @@ class editbranch extends React.Component {
       TaxationDetailsExpanded: false,
       NumberingExpanded: false,
       disabledUpdatebtn: false,
-      disabledCreatebtn:true,
+      disabledCreatebtn: true,
       numberSeries: [],
       companyData: [],
       countryData: [],
       stateData: [],
       branchData: [],
-      currencyList:[],
+      currencyList: [],
       oldName: "",
       duplicate: false,
-      typoTitle:"",
-      type:null,
+      typoTitle: "",
+      type: null,
       branch: {
-        IsTrading:false, 
+        IsTrading: false,
         address: null,
         address2: null,
         address3: null,
@@ -109,7 +109,7 @@ class editbranch extends React.Component {
         VATPercentage: null,
         IsGST: false,
         GSTNo: null,
-        RVNo:null,
+        RVNo: null,
         PANNo: null,
         TANNo: null,
         CINNo: null,
@@ -119,7 +119,7 @@ class editbranch extends React.Component {
         IsExportUnit: false,
         CurrID: 0,
       },
-      IsTrading:false, 
+      IsTrading: false,
       address: null,
       address2: null,
       address3: null,
@@ -239,11 +239,11 @@ class editbranch extends React.Component {
       let branchName = url.searchParams.get("branchName");
       let compName = url.searchParams.get("compName");
       let type = url.searchParams.get("type");
-      let editbranchId =  type === "edit" ? url.searchParams.get("editbranchId") : 0;
-     
+      let editbranchId =
+        type === "edit" ? url.searchParams.get("editbranchId") : 0;
+
       let typoTitle = "";
       type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
-
 
       let urlparams =
         "?branchId=" +
@@ -254,7 +254,6 @@ class editbranch extends React.Component {
         branchName;
 
       let branch = this.state.branch;
-     
 
       if (type === "edit") {
         branch.branchId = CF.toInt(editbranchId);
@@ -268,17 +267,11 @@ class editbranch extends React.Component {
         urlparams: urlparams,
         type: type,
         typoTitle: typoTitle,
-        ProgressLoader: type === "add" ? true : false,        
+        ProgressLoader: type === "add" ? true : false,
       });
-   
-
- 
-      
     } else {
       this.setState({ isLoggedIn: false });
     }
- 
-
   }
 
   getCurrencyList = () => {
@@ -312,7 +305,6 @@ class editbranch extends React.Component {
       })
       .catch((error) => {});
   };
-
 
   getBranches() {
     let ValidUser = APIURLS.ValidUser;
@@ -352,7 +344,7 @@ class editbranch extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({ companyData: rows, ProgressLoader: true });
+        this.processCompanyData(data)
       })
       .catch((error) => {});
   }
@@ -373,7 +365,7 @@ class editbranch extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.processStateData(data)
+        this.processStateData(data);
       })
       .catch((error) => {});
   }
@@ -409,6 +401,18 @@ class editbranch extends React.Component {
       newData.push(d);
     }
     this.setState({ countryData: newData, ProgressLoader: true });
+  }
+
+  processCompanyData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].companyName,
+        value: data[i].companyId,
+      };
+      newData.push(d);
+    }
+    this.setState({ companyData: newData, ProgressLoader: true });
   }
 
   processStateData(data) {
@@ -505,7 +509,7 @@ class editbranch extends React.Component {
       VATPercentage: data.vatpercentage,
       IsGST: data.isGst === null ? false : data.isGst,
       GSTNo: data.gstno,
-      IsTrading:data.isTrading=== null ? false : data.isTrading,
+      IsTrading: data.isTrading === null ? false : data.isTrading,
       PANNo: data.panno,
       TANNo: data.tanno,
       CINNo: data.cinno,
@@ -619,7 +623,7 @@ class editbranch extends React.Component {
             this.setState({
               Validations: v,
               disabledUpdatebtn: true,
-              disabledCreatebtn:true
+              disabledCreatebtn: true,
             });
           }
           if (e.target.value === "" || e.target.value === null) {
@@ -630,18 +634,17 @@ class editbranch extends React.Component {
             this.setState({
               Validations: v,
               disabledUpdatebtn: true,
-              disabledCreatebtn:true,
+              disabledCreatebtn: true,
               shortName: e.target.value,
             });
           }
-          
         } else {
           let v = this.state.Validations;
           v.shortName = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
             disabledUpdatebtn: false,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             branch: branch,
             shortName: e.target.value,
           });
@@ -681,7 +684,7 @@ class editbranch extends React.Component {
             this.setState({
               Validations: v,
               disabledUpdatebtn: true,
-              disabledCreatebtn:true,
+              disabledCreatebtn: true,
               name: e.target.value,
             });
           }
@@ -694,7 +697,7 @@ class editbranch extends React.Component {
             this.setState({
               Validations: v,
               disabledUpdatebtn: true,
-              disabledCreatebtn:true,
+              disabledCreatebtn: true,
             });
           }
           if (e.target.value === "" || e.target.value === null) {
@@ -706,7 +709,7 @@ class editbranch extends React.Component {
             this.setState({
               Validations: v,
               disabledUpdatebtn: true,
-              disabledCreatebtn:true,
+              disabledCreatebtn: true,
               name: e.target.value,
             });
           }
@@ -717,7 +720,7 @@ class editbranch extends React.Component {
             Validations: v,
             name: e.target.value,
             branch: branch,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             disabledUpdatebtn: false,
           });
         }
@@ -735,7 +738,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
-            disabledCreatebtn:true,
+            disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
@@ -743,7 +746,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: false,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             branch: branch,
             phoneNo: e.target.value,
           });
@@ -763,7 +766,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
-            disabledCreatebtn:true,
+            disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
@@ -771,7 +774,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: false,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             branch: branch,
             website: e.target.value,
           });
@@ -786,10 +789,10 @@ class editbranch extends React.Component {
       if (id === "State") {
         let branch = this.state.branch;
         branch.stateId = CF.toInt(e.target.value);
-        this.setState({ branch: branch, stateId: CF.toInt(e.target.value)});
+        this.setState({ branch: branch, stateId: CF.toInt(e.target.value) });
       }
 
-      if(id==="CurrID"){
+      if (id === "CurrID") {
         let branch = this.state.branch;
         branch.CurrID = CF.toInt(e.target.value);
         this.setState({ branch: branch, CurrID: CF.toInt(e.target.value) });
@@ -807,7 +810,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
-            disabledCreatebtn:true,
+            disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
@@ -815,7 +818,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: false,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             branch: branch,
             city: e.target.value,
           });
@@ -835,7 +838,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
-            disabledCreatebtn:true,
+            disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
@@ -843,7 +846,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: false,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             branch: branch,
             postcode: e.target.value,
           });
@@ -863,7 +866,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
-            disabledCreatebtn:true,
+            disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
@@ -871,7 +874,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: false,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             branch: branch,
             address: e.target.value,
           });
@@ -890,7 +893,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
-            disabledCreatebtn:true,
+            disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
@@ -898,7 +901,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: false,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             branch: branch,
             address2: e.target.value,
           });
@@ -917,7 +920,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: true,
-            disabledCreatebtn:true,
+            disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
@@ -925,7 +928,7 @@ class editbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledUpdatebtn: false,
-            disabledCreatebtn:false,
+            disabledCreatebtn: false,
             branch: branch,
             address3: e.target.value,
           });
@@ -933,7 +936,7 @@ class editbranch extends React.Component {
         ValidateName();
       }
 
-      if(id==="IsTrading"){
+      if (id === "IsTrading") {
         console.log("In is trading");
         let branch = this.state.branch;
         branch.IsTrading = e.target.checked;
@@ -1171,7 +1174,7 @@ class editbranch extends React.Component {
       }
       if (id === "CNNo") {
         let branch = this.state.branch;
-        branch.CNNo =CF.toInt(e.target.value);
+        branch.CNNo = CF.toInt(e.target.value);
 
         this.setState({ branch: branch, CNNo: e.target.value });
       }
@@ -1319,8 +1322,7 @@ class editbranch extends React.Component {
       ValidateName();
       this.setState({ ProgressLoader: false });
       let branch = this.state.branch;
-      branch.EffectiveDate=moment(branch.EffectiveDate).format("MM/DD/YYYY");
-      
+      branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
 
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -1352,14 +1354,14 @@ class editbranch extends React.Component {
     const handleupdate = () => {
       ValidateName();
       this.setState({ ProgressLoader: false });
-     
+
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
 
       let branch = this.state.branch;
-      branch.EffectiveDate=branch.EffectiveDate.format("MM/DD/YYYY");
-      let dup="isTrading";
+      branch.EffectiveDate = branch.EffectiveDate.format("MM/DD/YYYY");
+      let dup = "isTrading";
       delete branch[dup];
 
       const data = {
@@ -1441,7 +1443,7 @@ class editbranch extends React.Component {
                   variant="text"
                   aria-label="Action Menu Button group"
                 >
-                  {this.state.type === 'edit' ? (
+                  {this.state.type === "edit" ? (
                     <Button
                       className="action-btns"
                       onClick={handleupdate}
@@ -1451,16 +1453,15 @@ class editbranch extends React.Component {
                     </Button>
                   ) : null}
 
-                  {this.state.type === 'add' ? (
-                     <Button
-                     className="action-btns"                    
-                     onClick={handleCreate}
-                     disabled={this.state.disabledCreatebtn}
-                   >
-                     {APIURLS.buttonTitle.save}
-                   </Button>
+                  {this.state.type === "add" ? (
+                    <Button
+                      className="action-btns"
+                      onClick={handleCreate}
+                      disabled={this.state.disabledCreatebtn}
+                    >
+                      {APIURLS.buttonTitle.save}
+                    </Button>
                   ) : null}
-                  
                 </ButtonGroup>
               </div>
             </Grid>
@@ -1507,7 +1508,7 @@ class editbranch extends React.Component {
                               aria-label="company List table"
                             >
                               <TableBody className="tableBody">
-                                <TableRow>
+                                 {/* <TableRow>
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -1540,7 +1541,18 @@ class editbranch extends React.Component {
                                       ))}
                                     </select>
                                   </TableCell>
-                                </TableRow>
+                                </TableRow>  */}
+
+                                <DropdownInput
+                                  id="companySelect"
+                                  label="Company"
+                                  onChange={(e) =>
+                                    updateFormValue("Company", e)
+                                  }
+                                  options={this.state.companyData}
+                                  value={this.state.companyId}
+                                />
+                               
                                 <Tablerowcelltextboxinput
                                   id="Name"
                                   label="Name"
@@ -1582,7 +1594,6 @@ class editbranch extends React.Component {
                                 />
 
                                 <Tablerowcelltextboxinput
-                                  
                                   id="phoneNo"
                                   label="Phone No"
                                   variant="outlined"
@@ -1632,10 +1643,10 @@ class editbranch extends React.Component {
                                   onChange={(e) =>
                                     updateFormValue("EffectiveDate", e)
                                   }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
+                                  // InputProps={{
+                                  //   className: "textFieldCss",
+                                  //   maxlength: 50,
+                                  // }}
                                   value={this.state.EffectiveDate}
                                   error={null}
                                   helperText={null}
@@ -1749,7 +1760,7 @@ class editbranch extends React.Component {
                                     this.state.Validations.address2.errorMsg
                                   }
                                 />
-                           
+
                                 <Tablerowcelltextboxinput
                                   id="Address3"
                                   label="Address Line 3"
@@ -1776,9 +1787,10 @@ class editbranch extends React.Component {
                                   id="IsTrading"
                                   label="IsTrading"
                                   param={this.state.branch.IsTrading}
-                                  onChange={(e) => updateFormValue("IsTrading", e)}
+                                  onChange={(e) =>
+                                    updateFormValue("IsTrading", e)
+                                  }
                                 />
-                              
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -1821,8 +1833,7 @@ class editbranch extends React.Component {
                               aria-label="Taxation table"
                             >
                               <TableBody className="tableBody">
-
-                              <DropdownInput
+                                <DropdownInput
                                   id="CurrID"
                                   label="Currency"
                                   onChange={(e) => updateFormValue("CurrID", e)}

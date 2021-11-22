@@ -26,7 +26,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TableContainer from "@material-ui/core/TableContainer";
 import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 
-
 import TableRow from "@material-ui/core/TableRow";
 
 import Loader from "../../compo/loader";
@@ -114,7 +113,7 @@ class addbranch extends React.Component {
 
   componentDidMount() {
     this.getBranches();
-    
+
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
@@ -291,7 +290,6 @@ class addbranch extends React.Component {
           this.setState({
             Validations: v,
             disabledCreatebtn: true,
-            
           });
         } else {
           let v = this.state.Validations;
@@ -428,14 +426,14 @@ class addbranch extends React.Component {
         ValidateName();
       }
       if (id === "CountryID") {
-        console.log("state",e.target.value)
+        console.log("state", e.target.value);
 
         let branch = this.state.branch;
         branch.countryId = e.target.value;
         this.setState({ branch: branch, countryId: e.target.value });
       }
       if (id === "StateID") {
-        console.log("state",e.target.value)
+        console.log("state", e.target.value);
         let branch = this.state.branch;
         branch.stateId = e.target.value;
         this.setState({ branch: branch, stateId: e.target.value });
@@ -718,7 +716,7 @@ class addbranch extends React.Component {
                               aria-label="company List table"
                             >
                               <TableBody className="tableBody">
-                                <TableRow>
+                                {/* <TableRow>
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -750,7 +748,17 @@ class addbranch extends React.Component {
                                       ))}
                                     </select>
                                   </TableCell>
-                                </TableRow>
+                                </TableRow> */}
+
+                                <DropdownInput
+                                  id="stateSelect"
+                                  label="State"
+                                  onChange={(e) =>
+                                    updateFormValue("StateID", e)
+                                  }
+                                  options={this.state.stateData}
+                                  value={this.state.stateId}
+                                />
 
                                 <Tablerowcelltextboxinput
                                   id="Name"
@@ -769,7 +777,7 @@ class addbranch extends React.Component {
                                   }
                                   isMandatory={true}
                                 />
-                                
+
                                 <Tablerowcelltextboxinput
                                   id="shortName"
                                   label="Short Name"
@@ -791,7 +799,7 @@ class addbranch extends React.Component {
                                   }
                                   isMandatory={true}
                                 />
-                                
+
                                 <Tablerowcelltextboxinput
                                   type="number"
                                   id="phoneNo"
@@ -814,7 +822,6 @@ class addbranch extends React.Component {
                                   }
                                 />
 
-                                
                                 <Tablerowcelltextboxinput
                                   id="website"
                                   label="Website"
@@ -851,8 +858,6 @@ class addbranch extends React.Component {
                                   error={null}
                                   helperText={null}
                                 />
-                                
-                                
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -878,33 +883,30 @@ class addbranch extends React.Component {
                                 <DropdownInput
                                   id="stateSelect"
                                   label="State"
-                                  onChange={(e) =>  updateFormValue("StateID", e)}
+                                  onChange={(e) =>
+                                    updateFormValue("StateID", e)
+                                  }
                                   options={this.state.stateData}
                                   value={this.state.stateId}
                                 />
 
-                               
                                 <Tablerowcelltextboxinput
                                   id="City"
                                   label="City"
                                   variant="outlined"
                                   size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("City", e)
-                                  }
+                                  onChange={(e) => updateFormValue("City", e)}
                                   InputProps={{
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
                                   value={this.state.city}
-                                  error={
-                                    this.state.Validations.city.errorState
-                                  }
+                                  error={this.state.Validations.city.errorState}
                                   helperText={
                                     this.state.Validations.city.errorMsg
                                   }
                                 />
-                                
+
                                 <Tablerowcelltextboxinput
                                   id="Postcode"
                                   label="Postcode"
@@ -919,14 +921,13 @@ class addbranch extends React.Component {
                                   }}
                                   value={this.state.postcode}
                                   error={
-                                    this.state.Validations.postcode
-                                          .errorState
+                                    this.state.Validations.postcode.errorState
                                   }
                                   helperText={
                                     this.state.Validations.postcode.errorMsg
                                   }
                                 />
-                                
+
                                 <Tablerowcelltextboxinput
                                   id="Address"
                                   label="Address Line 1"
@@ -941,15 +942,13 @@ class addbranch extends React.Component {
                                   }}
                                   value={this.state.address}
                                   error={
-                                    this.state.Validations.address
-                                          .errorState
+                                    this.state.Validations.address.errorState
                                   }
                                   helperText={
                                     this.state.Validations.address.errorMsg
-
                                   }
                                 />
-                                
+
                                 <Tablerowcelltextboxinput
                                   id="Address2"
                                   label=" Address Line 2"
@@ -964,16 +963,14 @@ class addbranch extends React.Component {
                                   }}
                                   value={this.state.address2}
                                   error={
-                                    this.state.Validations.address2
-                                    .errorState
+                                    this.state.Validations.address2.errorState
                                   }
                                   helperText={
                                     this.state.Validations.address2.errorMsg
-
                                   }
                                 />
-                                
-                                 <Tablerowcelltextboxinput
+
+                                <Tablerowcelltextboxinput
                                   id="Address3"
                                   label="  Address Line 3"
                                   variant="outlined"
@@ -987,15 +984,12 @@ class addbranch extends React.Component {
                                   }}
                                   value={this.state.address3}
                                   error={
-                                    this.state.Validations.address3
-                                    .errorState
+                                    this.state.Validations.address3.errorState
                                   }
                                   helperText={
                                     this.state.Validations.address3.errorMsg
-
                                   }
                                 />
-                                
                               </TableBody>
                             </Table>
                           </TableContainer>

@@ -541,15 +541,23 @@ cursor: pointer;
 }
 
 .textFieldCss{
-  height: 25px !important;
+  /* height: 25px !important; */
   font-size: 13px !important;
   border-radius: 0px !important;
-  /* font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important; */
   font-weight: 400;
+  /* min-width: 50% !important; */
+  box-sizing:border-box;
+  /* border-width: 100%; */
+  /* font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important; */
+  
   /* min-width: 100% !important; */
-  width: 100% !important;
+  /* width: 100% !important; */
  
  
+}
+
+.textFieldCss:focus{
+  border-radius: 0px !important;
 }
 
 .textFieldCss .MuiOutlinedInput-input {
@@ -557,30 +565,33 @@ cursor: pointer;
 }
 
 .dropdown-css{
-  border-style: solid !important;
-  height: 25px !important;
+  /* height: 25px !important; */
   font-size: 13px !important;
   border-radius: 0px !important;
+  /* min-width: 100% !important; */
+  box-sizing:border-box;
   border-color: rgba(224, 224, 224, 1) !important;
   /* min-width: 100% !important; */
-  width: 100% !important;
-  
+  /* border-style: solid !important;
+   */
   border-width: 1px !important;
   border-radius: 0px !important;   
   -webkit-border-radius: 0px;
  
 }
+
 .dropdown-css:focus{
   outline: none !important;
-  border-style: solid !important;
-  height: 25px !important;
+  /* border-style: solid !important; */
+  /* height: 25px !important; */
   font-size: 13px !important;
   border-radius: 0px !important;
   border-color: rgba(224, 224, 224, 1) !important;
-  min-width: 100% !important;
-  /* border-width: 1px !important;
-  border-radius: 0px !important;   
-  -webkit-border-radius: 0px; */
+  box-sizing:border-box;
+  /* min-width: 100% !important; */
+  border-width: 1px !important;
+  border-radius: 0px !important;    
+   -webkit-border-radius: 0px;
 }
  
 .texbox-font-css{
@@ -592,6 +603,7 @@ cursor: pointer;
   border-style:none !important;
   display:inline;
   font-weight: bold !important;
+ 
 }
 
 

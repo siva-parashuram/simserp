@@ -632,6 +632,8 @@ class addnewcompany extends React.Component {
                   </AccordionSummary>
                   {/* <Divider  className="accordion-Header-underline"/> */}
                   <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
                     <TableContainer>
                       <Table
                         stickyHeader
@@ -646,10 +648,7 @@ class addnewcompany extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => updateFormValue("companyName", e)}
-                            InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 50,
-                            }}
+                          
                             value={this.state.companyName}
                             error={
                               this.state.Validations.companyName.errorState
@@ -665,11 +664,9 @@ class addnewcompany extends React.Component {
                             label="Phone No"
                             variant="outlined"
                             size="small"
-                            onChange={(e) => updateFormValue("PhoneNo", e)}
-                            InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 20,
-                            }}
+                            // onChange={(e) => updateFormValue("PhoneNo", e)}
+                            // InputProps={{
+                            
                             value={this.state.phoneno}
                             error={this.state.Validations.phoneno.errorState}
                             helperText={this.state.Validations.phoneno.errorMsg}
@@ -681,10 +678,7 @@ class addnewcompany extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => updateFormValue("Website", e)}
-                            InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 50,
-                            }}
+                           
                             value={this.state.website}
                             error={this.state.Validations.website.errorState}
                             helperText={this.state.Validations.website.errorMsg}
@@ -692,6 +686,8 @@ class addnewcompany extends React.Component {
                         </TableBody>
                       </Table>
                     </TableContainer>
+                    </Grid>
+                    </Grid>
                   </AccordionDetails>
                 </Accordion>
                 <Accordion

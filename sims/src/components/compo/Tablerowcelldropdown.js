@@ -20,7 +20,8 @@ class tablerowcelldropdown extends React.Component {
               </TableCell>
             <TableCell align="left" className="no-border-table">
               <select
-                className="dropdown-css"
+                 className="dropdown-css"
+                style={{minWidth:"80%",height:"30px"}}
                 id={this.props.id}
                 label={this.props.label}
                 defaultValue={isNaN(this.props.value) ? this.props.value : parseInt(this.props.value)}
@@ -29,6 +30,10 @@ class tablerowcelldropdown extends React.Component {
                 disabled={this.props.disabled}
                 error={this.props.error}
                 helperText={this.props.helperText}
+                // InputProps={{
+                //   className: "dropdown-css",
+                // }} 
+                
               >
                 <option value="-1" >Select</option>
                 {this.props.options?this.props.options.map((item, i) => (
