@@ -318,7 +318,7 @@ class editbranch extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({ stateData: rows, ProgressLoader: true });
+        this.processStateData(data)
       })
       .catch((error) => {});
   }
@@ -354,6 +354,18 @@ class editbranch extends React.Component {
       newData.push(d);
     }
     this.setState({ countryData: newData, ProgressLoader: true });
+  }
+
+  processStateData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].name,
+        value: data[i].stateId,
+      };
+      newData.push(d);
+    }
+    this.setState({ stateData: newData, ProgressLoader: true });
   }
 
   getBranchDetail() {

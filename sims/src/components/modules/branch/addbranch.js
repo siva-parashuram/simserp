@@ -61,7 +61,7 @@ class addbranch extends React.Component {
         company: null,
         companyId: 0,
         country: null,
-        countryId: null,
+        countryId: 0,
         emailId: null,
         financialYears: [],
         logoName: null,
@@ -72,7 +72,7 @@ class addbranch extends React.Component {
         postcode: null,
         shortName: null,
         state: null,
-        stateId: null,
+        stateId: 0,
         wareHouses: [],
         website: null,
       },
@@ -84,7 +84,7 @@ class addbranch extends React.Component {
       company: null,
       companyId: 0,
       country: null,
-      countryId: null,
+      countryId: 0,
       emailId: null,
       financialYears: [],
       logoName: null,
@@ -94,7 +94,7 @@ class addbranch extends React.Component {
       postcode: null,
       shortName: null,
       state: null,
-      stateId: null,
+      stateId: 0,
       wareHouses: [],
       website: null,
       Validations: {
@@ -114,6 +114,7 @@ class addbranch extends React.Component {
 
   componentDidMount() {
     this.getBranches();
+    
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
@@ -202,7 +203,7 @@ class addbranch extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({ stateData: rows, ProgressLoader: true });
+        this.processStateData(data);
       })
       .catch((error) => {});
   }
@@ -238,6 +239,18 @@ class addbranch extends React.Component {
       newData.push(d);
     }
     this.setState({ countryData: newData, ProgressLoader: true });
+  }
+
+  processStateData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].name,
+        value: data[i].stateId,
+      };
+      newData.push(d);
+    }
+    this.setState({ stateData: newData, ProgressLoader: true });
   }
 
   render() {
@@ -414,12 +427,15 @@ class addbranch extends React.Component {
         }
         ValidateName();
       }
-      if (id === "Country") {
+      if (id === "CountryID") {
+        console.log("state",e.target.value)
+
         let branch = this.state.branch;
         branch.countryId = e.target.value;
         this.setState({ branch: branch, countryId: e.target.value });
       }
-      if (id === "State") {
+      if (id === "StateID") {
+        console.log("state",e.target.value)
         let branch = this.state.branch;
         branch.stateId = e.target.value;
         this.setState({ branch: branch, stateId: e.target.value });
@@ -862,7 +878,7 @@ class addbranch extends React.Component {
                                 <DropdownInput
                                   id="stateSelect"
                                   label="State"
-                                  onChange={(e) => updateFormValue("State", e)}
+                                  onChange={(e) =>  updateFormValue("StateID", e)}
                                   options={this.state.stateData}
                                   value={this.state.stateId}
                                 />
