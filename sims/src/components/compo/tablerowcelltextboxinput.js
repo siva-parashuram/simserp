@@ -34,9 +34,9 @@ class tablerowcelltextboxinput extends React.Component {
             error={this.props.error}
             helperText={this.props.helperText}
             disabled={this.props.disabled}
-            InputProps={{
-                className: "textFieldCss",
-              }}
+            inputProps={{
+              autoComplete: 'off'
+           }}
             maxlength={this.props.maxlength}
           />
         </TableCell>

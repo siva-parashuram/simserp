@@ -557,12 +557,14 @@ cursor: pointer;
  
 }
 
-/* .textFieldCss:focus{
+ .textFieldCss:focus{
   border-radius: 0px !important;
-} */
+  border-radius: 0px !important;
+}
 
 .textFieldCss .MuiOutlinedInput-input {
   padding: 5px 5px !important;
+  border-radius: 0px !important;
 }
 
 .dropdown-css{
