@@ -43,7 +43,7 @@ class editItem extends React.Component {
       itemDepartmentMasterData: [],
       ItemTypeMaster: APIURLS.ItemType,
       ItemId: 0,
-      ItemNo: "",
+      No: "",
       ItemType: 0,
       Code: "",
       Alias: "",
@@ -241,7 +241,7 @@ class editItem extends React.Component {
         this.setState({
           Item: data,
           ItemId: data.itemId,
-          ItemNo: data.itemNo,
+          No: data.no,
           ItemType: parseInt(data.itemType),
           Code: data.code,
           Alias: data.alias,
@@ -1164,7 +1164,7 @@ class editItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("ItemNo", e)}
-                              value={this.state.ItemNo}
+                              value={this.state.No}
                               disabled={true}
                               isMandatory={true}
                             />

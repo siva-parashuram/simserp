@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import axios from "axios";
+import moment from "moment";
 import "../../user/dasboard.css";
 import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -40,7 +41,7 @@ class addItem extends React.Component {
       ItemTypeMaster: APIURLS.ItemType,
 
       ItemType: APIURLS.ItemType[0].value,
-      ItemNo: "ITM0001",
+      No: "",
       Code: "",
       Alias: "",
       Description1: "",
@@ -99,6 +100,7 @@ class addItem extends React.Component {
       BarcodeNo: "",
       itemDepartmentMasterData: [],
       ItemCategoryData: [],
+      UOMList:[],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
@@ -116,7 +118,7 @@ class addItem extends React.Component {
   componentDidMount() {
     this.getitemDepartmentMasterData();
     this.getItemCategoryData();
-   
+    this.getUOMList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -134,6 +136,38 @@ class addItem extends React.Component {
       urlparams: urlparams,
     });
   }
+
+  getUOMList = () => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllUOM;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].name,
+            value: data[i].uomid,
+          };
+          newD.push(o);
+        }
+
+        this.setState({
+          UOMList: newD,
+          ProgressLoader: true,
+        });
+      })
+      .catch((error) => {});
+  };
 
   getItemCategoryData() {
     let ValidUser = APIURLS.ValidUser;
@@ -220,6 +254,10 @@ class addItem extends React.Component {
     });
   }
 
+   openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
   
   render() {
     const handleAccordionClick = (val, e) => {
@@ -836,94 +874,131 @@ class addItem extends React.Component {
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
-      let Item = {
-        ItemNo: CF.toString(this.state.ItemNo),
-        ItemType: CF.toInt(this.state.ItemType),
-        Code: CF.toString(this.state.Code),
-        Alias: CF.toString(this.state.Alias),
-        Description1: CF.toString(this.state.Description1),
-        Description2: CF.toString(this.state.Description2),
-        PackingDesc1: CF.toString(this.state.PackingDesc1),
-        PackingDesc2: CF.toString(this.state.PackingDesc2),
-        ItemDeptId: CF.toInt(this.state.ItemDeptId),
-        CatId: CF.toInt(this.state.CatId),
-        IsActive: this.state.IsActive,
-        IsTrading: this.state.IsTrading,
-        IsNonStockValuation: this.state.IsNonStockValuation,
-        IsCustomized: this.state.IsCustomized,
-        IsCertified: this.state.IsCertified,
-        CertificateNo: this.state.CertificateNo,
-        IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
-        Location: CF.toString(this.state.Location),
-        BarcodeNo: CF.toString(this.state.BarcodeNo),
-        CartonHeight: CF.toFloat(this.state.CartonHeight),
-        CartonLength: CF.toFloat(this.state.CartonLength),
-        CartonWidth: CF.toFloat(this.state.CartonWidth),
-        NetWeight: CF.toFloat(this.state.NetWeight),
-        GrossWeight: CF.toFloat(this.state.GrossWeight),
-        WarningLevel: CF.toFloat(this.state.WarningLevel),
-        MinStockLevel: CF.toFloat(this.state.MinStockLevel),
-        Amsf: CF.toFloat(this.state.Amsf),
-        Msf: CF.toFloat(this.state.Msf),
-        Bsf: CF.toFloat(this.state.Bsf),
-        Moq: CF.toFloat(this.state.Moq),
-        ShipperQuantiry: CF.toFloat(this.state.ShipperQuantiry),
-        CbmperShipper: CF.toFloat(this.state.CbmperShipper),
-        IsDiscontine: this.state.IsDiscontine,
-        Reason: CF.toString(this.state.Reason),
-        UserId: CF.toInt(getCookie(COOKIE.USERID)),
-        ModifyDate: this.state.ModifyDate,
-        TolerancePercentage: CF.toFloat(this.state.TolerancePercentage),
-        IsQuality: this.state.IsQuality,
-        SpecId: CF.toInt(this.state.SpecId),
-        AllowNegativeStock: this.state.AllowNegativeStock,
-        ItemPostingGroupID: CF.toInt(this.state.ItemPostingGroupID),
-        CostingMethod: CF.toInt(this.state.CostingMethod),
-        StandardCost: CF.toFloat(this.state.StandardCost),
-        IndirectCostPercentage: CF.toFloat(this.state.IndirectCostPercentage),
-        ProfitPercentage: CF.toFloat(this.state.ProfitPercentage),
-        GstgroupId: CF.toInt(this.state.GstgroupId),
-        Hsncode: this.state.Hsncode,
-        BaseUom: CF.toInt(this.state.BaseUom),
-        SalesUom: CF.toInt(this.state.SalesUom),
-        PurchaseUom: CF.toInt(this.state.PurchaseUom),
-        PackingUom: CF.toInt(this.state.PackingUom),
-        Replenishment: CF.toInt(this.state.Replenishment),
-        LeadTime: CF.toFloat(this.state.LeadTime),
-        IsLot: this.state.IsLot,
-        ManufacturingPolicy: CF.toInt(this.state.ManufacturingPolicy),
-        RoutingId: CF.toInt(this.state.RoutingId),
-        Bomid: CF.toInt(this.state.Bomid),
-      };
+
+      let ItemType=CF.toInt(this.state.ItemType);
+      let NoSeriesID=0;
+      if(ItemType===0){
+        NoSeriesID=4;
+      }
+      if(ItemType===1){
+        NoSeriesID=5;
+      }
+      if(ItemType===2){
+        NoSeriesID=6;
+      }
 
       const headers = {
         "Content-Type": "application/json",
       };
-      let Url = APIURLS.APIURL.CreateItem;
-      let ReqData = {
-        validUser: ValidUser,
-        Item: Item,
+      let reqData = {
+        ValidUser: ValidUser,
+        DocumentNumber: {
+          NoSeriesID: NoSeriesID,
+          TransDate: moment().format("MM-DD-YYYY"),
+        },
       };
-
-      console.log("ReqData > ", ReqData);
+      let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
 
       axios
-        .post(Url, ReqData, { headers })
+        .post(Url1, reqData, { headers })
         .then((response) => {
-          let data = response.data;
-          if (
-            response.status === 200 ||
-            response.status === 201 ||
-            response.status === true ||
-            response.status === "true"
-          ) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
+          let NoData = response.data;
+          console.log("---> No Series DATA > ", NoData);
+
+          let Item = {
+            No: CF.toString(NoData),
+            ItemType: CF.toInt(this.state.ItemType),
+            Code: CF.toString(this.state.Code),
+            Alias: CF.toString(this.state.Alias),
+            Description1: CF.toString(this.state.Description1),
+            Description2: CF.toString(this.state.Description2),
+            PackingDesc1: CF.toString(this.state.PackingDesc1),
+            PackingDesc2: CF.toString(this.state.PackingDesc2),
+            ItemDeptId: CF.toInt(this.state.ItemDeptId),
+            CatId: CF.toInt(this.state.CatId),
+            IsActive: this.state.IsActive,
+            IsTrading: this.state.IsTrading,
+            IsNonStockValuation: this.state.IsNonStockValuation,
+            IsCustomized: this.state.IsCustomized,
+            IsCertified: this.state.IsCertified,
+            CertificateNo: this.state.CertificateNo,
+            IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
+            Location: CF.toString(this.state.Location),
+            BarcodeNo: CF.toString(this.state.BarcodeNo),
+            CartonHeight: CF.toFloat(this.state.CartonHeight),
+            CartonLength: CF.toFloat(this.state.CartonLength),
+            CartonWidth: CF.toFloat(this.state.CartonWidth),
+            NetWeight: CF.toFloat(this.state.NetWeight),
+            GrossWeight: CF.toFloat(this.state.GrossWeight),
+            WarningLevel: CF.toFloat(this.state.WarningLevel),
+            MinStockLevel: CF.toFloat(this.state.MinStockLevel),
+            Amsf: CF.toFloat(this.state.Amsf),
+            Msf: CF.toFloat(this.state.Msf),
+            Bsf: CF.toFloat(this.state.Bsf),
+            Moq: CF.toFloat(this.state.Moq),
+            ShipperQuantiry: CF.toFloat(this.state.ShipperQuantiry),
+            CbmperShipper: CF.toFloat(this.state.CbmperShipper),
+            IsDiscontine: this.state.IsDiscontine,
+            Reason: CF.toString(this.state.Reason),
+            UserId: CF.toInt(getCookie(COOKIE.USERID)),
+            ModifyDate: this.state.ModifyDate,
+            TolerancePercentage: CF.toFloat(this.state.TolerancePercentage),
+            IsQuality: this.state.IsQuality,
+            SpecId: CF.toInt(this.state.SpecId),
+            AllowNegativeStock: this.state.AllowNegativeStock,
+            ItemPostingGroupID: CF.toInt(this.state.ItemPostingGroupID),
+            CostingMethod: CF.toInt(this.state.CostingMethod),
+            StandardCost: CF.toFloat(this.state.StandardCost),
+            IndirectCostPercentage: CF.toFloat(this.state.IndirectCostPercentage),
+            ProfitPercentage: CF.toFloat(this.state.ProfitPercentage),
+            GstgroupId: CF.toInt(this.state.GstgroupId),
+            Hsncode: this.state.Hsncode,
+            BaseUom: CF.toInt(this.state.BaseUom),
+            SalesUom: CF.toInt(this.state.SalesUom),
+            PurchaseUom: CF.toInt(this.state.PurchaseUom),
+            PackingUom: CF.toInt(this.state.PackingUom),
+            Replenishment: CF.toInt(this.state.Replenishment),
+            LeadTime: CF.toFloat(this.state.LeadTime),
+            IsLot: this.state.IsLot,
+            ManufacturingPolicy: CF.toInt(this.state.ManufacturingPolicy),
+            RoutingId: CF.toInt(this.state.RoutingId),
+            Bomid: CF.toInt(this.state.Bomid),
+          };
+         
+          let Url = APIURLS.APIURL.CreateItem;
+          let ReqData = {
+            validUser: ValidUser,
+            Item: Item,
+          };    
+          console.log("ReqData > ", ReqData);    
+          axios
+            .post(Url, ReqData, { headers })
+            .then((response) => {
+              let data = response.data;
+              if (
+                response.status === 200 ||
+                response.status === 201 ||
+                response.status === true ||
+                response.status === "true"
+              ) {
+                this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                this.openPage(URLS.URLS.itemMaster + this.state.urlparams);
+              } else {
+                this.setState({ ProgressLoader: true, ErrorPrompt: true });
+              }
+            })
+            .catch((error) => {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+            });
         })
-        .catch((error) => {});
+        .catch((error) => {
+          this.setState({ ErrorPrompt: true, Loader: true });
+        });
+     
     };
+
+   
+    
 
     return (
       <Fragment>
@@ -1056,7 +1131,7 @@ class addItem extends React.Component {
                               variant="outlined"
                               size="small"
                               onChange={(e) => updateFormValue("ItemNo", e)}
-                              value={this.state.ItemNo}
+                              value={this.state.No}
                               disabled={true}
                               isMandatory={true}
                             />
@@ -1569,15 +1644,17 @@ class addItem extends React.Component {
                               value={this.state.TolerancePercentage}
                             />
 
-                            <TextboxInput
-                              type="number"
+                            <DropdownInput
                               id="GSTGroupID"
                               label="GST GroupID"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("GstgroupId", e)}
+                              onChange={(e) =>
+                                updateFormValue("GstgroupId", e)
+                              }
+                              options={[]}
                               value={this.state.GstgroupId}
                             />
+
+                            
                             <TextboxInput
                               id="HSNCode"
                               label="HSN Code"
@@ -1590,15 +1667,18 @@ class addItem extends React.Component {
                                 this.state.Validations.Hsncode.errorMssg
                               }
                             />
-                            <TextboxInput
-                              type="number"
-                              id="BaseUOM"
-                              label="Base UOM "
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("BaseUom", e)}
+
+                            <DropdownInput
+                             id="BaseUOM"
+                             label="Base UOM "
+                              onChange={(e) =>
+                                updateFormValue("BaseUom", e)
+                              }
+                              options={this.state.UOMList}
                               value={this.state.BaseUom}
                             />
+
+                          
                           </TableBody>
                         </Table>
                       </Grid>
@@ -1610,35 +1690,38 @@ class addItem extends React.Component {
                           aria-label="Item List table"
                         >
                           <TableBody className="tableBody">
-                            <TextboxInput
-                              type="number"
-                              id="SalesUOM"
-                              label="Sales UOM"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("SalesUom", e)}
+
+                          <DropdownInput
+                             id="SalesUOM"
+                             label="Sales UOM"
+                              onChange={(e) =>
+                                updateFormValue("SalesUom", e)
+                              }
+                              options={this.state.UOMList}
                               value={this.state.SalesUom}
                             />
-                            <TextboxInput
-                              type="number"
-                              id="PurchaseUOM"
-                              label="Purchase UOM"
-                              variant="outlined"
-                              size="small"
+
+                            <DropdownInput
+                               id="PurchaseUOM"
+                               label="Purchase UOM"
                               onChange={(e) =>
                                 updateFormValue("PurchaseUom", e)
                               }
+                              options={this.state.UOMList}
                               value={this.state.PurchaseUom}
                             />
-                            <TextboxInput
-                              type="number"
+
+                            <DropdownInput
                               id="PackingUOM"
                               label="Packing UOM"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("PackingUom", e)}
+                              onChange={(e) =>
+                                updateFormValue("PackingUom", e)
+                              }
+                              options={this.state.UOMList}
                               value={this.state.PackingUom}
                             />
+
+ 
                           </TableBody>
                         </Table>
                       </Grid>

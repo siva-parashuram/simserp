@@ -219,7 +219,7 @@ class itemMaster extends React.Component {
                                 this.state.urlparams +
                                 "&edititemId=" +
                                 item.itemId}>
-                              {item.itemNo}
+                              {item.no}
                             </a>
                           </TableCell>
                           <TableCell align="left">
