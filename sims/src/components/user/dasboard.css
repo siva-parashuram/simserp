@@ -546,20 +546,23 @@ cursor: pointer;
   border-radius: 0px !important;
   -webkit-border-radius: 0px;
   font-weight: 400;
-  border-color: rgba(224, 224, 224, 1) !important;
-  /* min-width: 50% !important; */
-  box-sizing:border-box;
-  
-  /* border-width: 100%; */
-  /* font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important; */
-  
-  /* min-width: 100% !important; */
-  /* width: 100% !important; */
- 
- 
+  border-color: rgba(224, 224, 224, 1) !important; 
+  box-sizing:border-box; 
 }
 
-.textFieldCss:focus{
+.MuiOutlinedInput-root {   
+  border-radius: 0px !important;  
+}
+
+.MuiOutlinedInput-input {
+  padding: 5px 5px !important;
+  border-radius: 0px !important;
+  -webkit-border-radius: 0px;
+  border-color: rgba(224, 224, 224, 1) !important; 
+}
+
+
+ .textFieldCss:focus{
   border-radius: 0px !important;
   -webkit-border-radius: 0px;
   border-color: rgba(224, 224, 224, 1) !important;

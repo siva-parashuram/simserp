@@ -23,7 +23,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 
 import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import Tablerowcelldropdowninput from "../../compo/tablerowcelldropdowninput";
+ 
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 import UpdateIcon from "@material-ui/icons/Update";
@@ -59,7 +59,8 @@ class editbranch extends React.Component {
       typoTitle: "",
       type: null,
       branch: {
-        IsTrading: false,
+        IsTrading: true,
+        AllowRounding:true,
         address: null,
         address2: null,
         address3: null,
@@ -81,9 +82,18 @@ class editbranch extends React.Component {
         stateId: null,
         wareHouses: [],
         website: null,
-        PINo: 0,
-        SONo: 0,
-        SINo: 0,
+        LPINo:null,
+        EPINo:null,
+        SPINo:null,
+        TPINo:null,
+        LSONo:null,
+        ESONo:null,
+        SSONo:null,
+        TSONo:null,
+        LSINo:null,
+        ESINo:null,
+        SSINo:null,
+        TSINo:null,
         PSNo: 0,
         CPSNo:0,
         CNNo: 0,
@@ -102,6 +112,8 @@ class editbranch extends React.Component {
         FGQCNo: 0,
         RMQCNo: 0,
         IJCNo: 0,
+        LPONo:0,
+IPONo:0,
         EffectiveDate: "",
         IsVat: false,
         VATNo: null,
@@ -109,6 +121,8 @@ class editbranch extends React.Component {
         VATPercentage: null,
         IsGST: false,
         GSTNo: null,
+        GSTRegistationDate:null,
+        VATRegistationDate:null,
         RVNo: 0,
         PANNo: "",
         TANNo: "",
@@ -119,7 +133,9 @@ class editbranch extends React.Component {
         IsExportUnit: false,
         CurrID: 0,
       },
-      IsTrading: false,
+     /*
+      IsTrading: true,
+      AllowRounding:true,
       address: null,
       address2: null,
       address3: null,
@@ -182,7 +198,7 @@ class editbranch extends React.Component {
       VATNoDisabled: true,
       VATPercentageDisabled: true,
       GSTNoDisabled: true,
-
+*/
       Validations: {
         name: { errorState: false, errorMsg: "" },
         shortName: { errorState: false, errorMsg: "" },
@@ -428,30 +444,37 @@ class editbranch extends React.Component {
   }
 
   getBranchDetail(branch) {
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-
-    const data = {
-      validUser: ValidUser,
-      branch: branch,
-    };
-
-    let GetBranchUrl = APIURLS.APIURL.GetBranch;
-
-    axios
-      .post(GetBranchUrl, data, { headers })
-      .then((response) => {
-        let data = response.data;
-
-        this.setStateParams(data);
-      })
-      .catch((error) => {
-        this.setState({ branch: null, ProgressLoader: true });
-      });
+    try{
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+  
+      const data = {
+        validUser: ValidUser,
+        branch: {
+          branchId:branch.branchId
+        },
+      };
+  
+      let GetBranchUrl = APIURLS.APIURL.GetBranch;
+  
+      axios
+        .post(GetBranchUrl, data, { headers })
+        .then((response) => {
+          let data = response.data;
+  
+          this.setStateParams(data);
+        })
+        .catch((error) => {
+          this.setState({ branch: null, ProgressLoader: true });
+        });
+    }catch(ex){
+      console.log("ex");
+    }
+    
   }
 
   setStateParams(data) {
@@ -1279,8 +1302,7 @@ class editbranch extends React.Component {
       }
     };
 
-    // VATNoDisabled:true,
-    //   VATPercentageDisabled:true,
+     
 
     const VAT_GST_Checkbox_Click = (e, param) => {
       if (param === "isvat") {
@@ -1360,7 +1382,7 @@ class editbranch extends React.Component {
       ValidUser.Token = getCookie(COOKIE.TOKEN);
 
       let branch = this.state.branch;
-      branch.EffectiveDate = branch.EffectiveDate.format("MM/DD/YYYY");
+      branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
       let dup = "isTrading";
       delete branch[dup];
 
@@ -1508,40 +1530,7 @@ class editbranch extends React.Component {
                               aria-label="company List table"
                             >
                               <TableBody className="tableBody">
-                                 {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                    
-                                  >
-                                    Company
-                                  </TableCell>
-
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <select
-                                      className="dropdown-css"
-                                      id="companySelect"
-                                      label="Company"
-                                      fullWidth
-                                      value={parseInt(this.state.companyId)}
-                                      onChange={(e) =>
-                                        updateFormValue("Company", e)
-                                      }
-                                    >
-                                      <option value="-">None</option>
-                                      {this.state.companyData.map((item, i) => (
-                                        <option
-                                          value={parseInt(item.companyId)}
-                                        >
-                                          {item.companyName}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                </TableRow>  */}
+                           
 
                                 <DropdownInput
                                   id="companySelect"
@@ -1550,7 +1539,7 @@ class editbranch extends React.Component {
                                     updateFormValue("Company", e)
                                   }
                                   options={this.state.companyData}
-                                  value={this.state.companyId}
+                                  value={this.state.branch.companyId}
                                 />
                                
                                 <Tablerowcelltextboxinput
@@ -1563,7 +1552,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.name}
+                                  value={this.state.branch.name}
                                   error={this.state.Validations.name.errorState}
                                   helperText={
                                     this.state.Validations.name.errorMsg
@@ -1583,7 +1572,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.shortName}
+                                  value={this.state.branch.shortName}
                                   error={
                                     this.state.Validations.shortName.errorState
                                   }
@@ -1605,7 +1594,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.phoneNo}
+                                  value={this.state.branch.phoneNo}
                                   error={
                                     this.state.Validations.phoneNo.errorState
                                   }
@@ -1626,7 +1615,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.website}
+                                  value={this.state.branch.website}
                                   error={
                                     this.state.Validations.website.errorState
                                   }
@@ -1643,11 +1632,8 @@ class editbranch extends React.Component {
                                   onChange={(e) =>
                                     updateFormValue("EffectiveDate", e)
                                   }
-                                  // InputProps={{
-                                  //   className: "textFieldCss",
-                                  //   maxlength: 50,
-                                  // }}
-                                  value={this.state.EffectiveDate}
+                                 
+                                  value={this.state.branch.EffectiveDate}
                                   error={null}
                                   helperText={null}
                                 />
@@ -1671,14 +1657,14 @@ class editbranch extends React.Component {
                                     updateFormValue("CountryID", e)
                                   }
                                   options={this.state.countryData}
-                                  value={this.state.countryId}
+                                  value={this.state.branch.countryId}
                                 />
                                 <DropdownInput
                                   id="stateSelect"
                                   label="State"
                                   onChange={(e) => updateFormValue("State", e)}
                                   options={this.state.stateData}
-                                  value={this.state.stateId}
+                                  value={this.state.branch.stateId}
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -1691,7 +1677,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.city}
+                                  value={this.state.branch.city}
                                   error={this.state.Validations.city.errorState}
                                   helperText={
                                     this.state.Validations.city.errorMsg
@@ -1710,7 +1696,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.postcode}
+                                  value={this.state.branch.postcode}
                                   error={
                                     this.state.Validations.postcode.errorState
                                   }
@@ -1731,7 +1717,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.address}
+                                  value={this.state.branch.address}
                                   error={
                                     this.state.Validations.address.errorState
                                   }
@@ -1752,7 +1738,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.address2}
+                                  value={this.state.branch.address2}
                                   error={
                                     this.state.Validations.address2.errorState
                                   }
@@ -1773,7 +1759,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.address3}
+                                  value={this.state.branch.address3}
                                   error={
                                     this.state.Validations.address3.errorState
                                   }
@@ -1791,6 +1777,17 @@ class editbranch extends React.Component {
                                     updateFormValue("IsTrading", e)
                                   }
                                 />
+
+                                <SwitchInput
+                                  key="AllowRounding"
+                                  id="AllowRounding"
+                                  label="Allow Rounding"
+                                  param={this.state.branch.AllowRounding}
+                                  onChange={(e) =>
+                                    updateFormValue("AllowRounding", e)
+                                  }
+                                />
+
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -1838,7 +1835,7 @@ class editbranch extends React.Component {
                                   label="Currency"
                                   onChange={(e) => updateFormValue("CurrID", e)}
                                   options={this.state.currencyList}
-                                  value={this.state.CurrID}
+                                  value={this.state.branch.CurrID}
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -1851,7 +1848,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 20,
                                   }}
-                                  value={this.state.PANNo}
+                                  value={this.state.branch.PANNo}
                                   error={
                                     this.state.Validations.PANNo.errorState
                                   }
@@ -1869,7 +1866,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 20,
                                   }}
-                                  value={this.state.TANNo}
+                                  value={this.state.branch.TANNo}
                                   error={
                                     this.state.Validations.TANNo.errorState
                                   }
@@ -1887,7 +1884,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 20,
                                   }}
-                                  value={this.state.CINNo}
+                                  value={this.state.branch.CINNo}
                                   error={
                                     this.state.Validations.CINNo.errorState
                                   }
@@ -1905,7 +1902,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 20,
                                   }}
-                                  value={this.state.IECNo}
+                                  value={this.state.branch.IECNo}
                                   error={
                                     this.state.Validations.IECNo.errorState
                                   }
@@ -1923,7 +1920,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 20,
                                   }}
-                                  value={this.state.ARNNo}
+                                  value={this.state.branch.ARNNo}
                                   error={
                                     this.state.Validations.ARNNo.errorState
                                   }
@@ -1932,46 +1929,26 @@ class editbranch extends React.Component {
                                   }
                                 />
 
-                                <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Is SEZ?
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      onChange={(e) =>
-                                        updateFormValue("IsSEZ", e)
-                                      }
-                                      checked={this.state.IsSEZ}
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Is Export Unit?
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      onChange={(e) =>
-                                        updateFormValue("IsExportUnit", e)
-                                      }
-                                      checked={this.state.IsExportUnit}
-                                    />
-                                  </TableCell>
-                                </TableRow>
+                                <SwitchInput
+                                  key="IsSEZ"
+                                  id="IsSEZ"
+                                  label="Is SEZ?"
+                                  param={this.state.branch.IsSEZ}
+                                  onChange={(e) =>
+                                    updateFormValue("IsSEZ", e)
+                                  }
+                                />
+
+                               <SwitchInput
+                                  key="IsExportUnit"
+                                  id="IsExportUnit"
+                                  label="Is Export Unit?"
+                                  param={this.state.branch.IsExportUnit}
+                                  onChange={(e) =>
+                                    updateFormValue("IsExportUnit", e)
+                                  }
+                                />
+
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -1985,26 +1962,34 @@ class editbranch extends React.Component {
                               aria-label="Taxation table"
                             >
                               <TableBody className="tableBody">
-                                <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Is VAT?
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      onClick={(e) =>
-                                        VAT_GST_Checkbox_Click(e, "isvat")
-                                      }
-                                      checked={this.state.IsVat}
-                                    />
-                                  </TableCell>
-                                </TableRow>
+                              <SwitchInput
+                                  key="IsVat"
+                                  id="IsVat"
+                                  label="Is VAT?"
+                                  param={this.state.branch.IsVat}
+                                  onChange={(e) =>
+                                    updateFormValue("isvat", e)
+                                  }
+                                />
+
+
+{/* Addd this -> above   VAT_GST_Checkbox_Click(e, "isvat") */}
+
+                                <Tablerowcelldateinput
+                                  id="VATRegistationDate"
+                                  label="VAT Registation Date"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("VATRegistationDate", e)
+                                  }
+
+                                  value={this.state.branch.GSTRegistationDate}
+                                  error={null}
+                                  helperText={null}
+                                />
+
+                               
 
                                 <Tablerowcelltextboxinput
                                   id="VATNo"
@@ -2016,7 +2001,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 20,
                                   }}
-                                  value={this.state.VATNo}
+                                  value={this.state.branch.VATNo}
                                   disabled={this.state.VATNoDisabled}
                                   error={
                                     this.state.Validations.VATNo.errorState
@@ -2038,7 +2023,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 8,
                                   }}
-                                  value={this.state.VATPercentage}
+                                  value={this.state.branch.VATPercentage}
                                   disabled={this.state.VATPercentageDisabled}
                                   error={
                                     this.state.Validations.VATPercentage
@@ -2050,26 +2035,19 @@ class editbranch extends React.Component {
                                   }
                                 />
 
-                                <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Is GST?
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      onClick={(e) =>
-                                        VAT_GST_Checkbox_Click(e, "isgst")
-                                      }
-                                      checked={this.state.IsGST}
-                                    />
-                                  </TableCell>
-                                </TableRow>
+
+                                <SwitchInput
+                                  key="isgst"
+                                  id="isgst"
+                                  label="Is GST?"
+                                  param={this.state.branch.IsGST}
+                                  onChange={(e) =>
+                                    updateFormValue("isgst", e)
+                                  }
+                                />
+                                 {/*  Add this criteria above  ->   VAT_GST_Checkbox_Click(e, "isgst") */}
+
+                                 
 
                                 <Tablerowcelltextboxinput
                                   id="GSTNo"
@@ -2081,7 +2059,7 @@ class editbranch extends React.Component {
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.GSTNo}
+                                  value={this.state.branch.GSTNo}
                                   disabled={this.state.GSTNoDisabled}
                                   error={
                                     this.state.Validations.GSTNo.errorState
@@ -2090,6 +2068,25 @@ class editbranch extends React.Component {
                                     this.state.Validations.GSTNo.errorMsg
                                   }
                                 />
+
+                                <Tablerowcelldateinput
+                                  id="GSTRegistationDate"
+                                  label="GST Registation Date"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("GSTRegistationDate", e)
+                                  }
+
+                                  value={this.state.branch.GSTRegistationDate}
+                                  error={null}
+                                  helperText={null}
+                                />
+
+
+
+
+
                               </TableBody>
                             </Table>
                           </TableContainer>
@@ -2132,82 +2129,167 @@ class editbranch extends React.Component {
                               aria-label="Numbering table"
                             >
                               <TableBody className="tableBody">
-                                <Tablerowcelldropdowninput
-                                  id="PINo"
-                                  label="Proforma Invoice"
-                                  value={this.state.PINo}
-                                  onChange={(e) => updateFormValue("PINo", e)}
+                               
+                                <DropdownInput
+                                  id="LPINo"
+                                  label="Local Proforma Invoice"
+                                  value={this.state.branch.LPINo}
+                                  onChange={(e) => updateFormValue("LPINo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
-                                  id="SONo"
-                                  label="Sales Order"
-                                  value={this.state.SONo}
-                                  onChange={(e) => updateFormValue("SONo", e)}
+                                <DropdownInput
+                                  id="EPINo"
+                                  label="Export Proforma Invoice"
+                                  value={this.state.branch.EPINo}
+                                  onChange={(e) => updateFormValue("EPINo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
-                                  id="SINo"
-                                  label="Sales Invoice"
-                                  value={this.state.SINo}
-                                  onChange={(e) => updateFormValue("SINo", e)}
+                                 <DropdownInput
+                                  id="SPINo"
+                                  label="Sample Proforma Invoice"
+                                  value={this.state.branch.SPINo}
+                                  onChange={(e) => updateFormValue("SPINo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                 <DropdownInput
+                                  id="TPINo"
+                                  label="Trading Proforma Invoice"
+                                  value={this.state.branch.TPINo}
+                                  onChange={(e) => updateFormValue("TPINo", e)}
+                                  options={this.state.numberSeries}
+                                />
+
+
+                                <DropdownInput
+                                  id="LSONo"
+                                  label="Local Sales Order"
+                                  value={this.state.branch.LSONo}
+                                  onChange={(e) => updateFormValue("LSONo", e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <DropdownInput
+                                  id="ESONo"
+                                  label="Export Sales Order"
+                                  value={this.state.branch.ESONo}
+                                  onChange={(e) => updateFormValue("ESONo", e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <DropdownInput
+                                  id="SSONo"
+                                  label="Sample Sales Order"
+                                  value={this.state.branch.SSONo}
+                                  onChange={(e) => updateFormValue("SSONo", e)}
+                                  options={this.state.numberSeries}
+                                />
+                                 <DropdownInput
+                                  id="TSONo"
+                                  label="Trading Sales Order"
+                                  value={this.state.branch.TSONo}
+                                  onChange={(e) => updateFormValue("TSONo", e)}
+                                  options={this.state.numberSeries}
+                                />
+
+
+
+
+                                <DropdownInput
+                                  id="LSINo"
+                                  label="Local Sales Invoice"
+                                  value={this.state.LSINo}
+                                  onChange={(e) => updateFormValue("LSINo", e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <DropdownInput
+                                  id="ESINo"
+                                  label="Export Sales Invoice"
+                                  value={this.state.branch.ESINo}
+                                  onChange={(e) => updateFormValue("ESINo", e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <DropdownInput
+                                  id="SSINo"
+                                  label="Sample Sales Invoice"
+                                  value={this.state.branch.SSINo}
+                                  onChange={(e) => updateFormValue("SSINo", e)}
+                                  options={this.state.numberSeries}
+                                />
+                                <DropdownInput
+                                  id="TSINo"
+                                  label="Trading Sales Invoice"
+                                  value={this.state.branch.TSINo}
+                                  onChange={(e) => updateFormValue("TSINo", e)}
+                                  options={this.state.numberSeries}
+                                />
+
+
+
+                                <DropdownInput
                                   id="PSNo"
                                   label="Pack slip"
-                                  value={this.state.PSNo}
+                                  value={this.state.branch.PSNo}
                                   onChange={(e) => updateFormValue("PSNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="CPSNo"
                                   label="Combine Pack Slip"
-                                  value={this.state.CPSNo}
+                                  value={this.state.branch.CPSNo}
                                   onChange={(e) => updateFormValue("CPSNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="CNNo"
                                   label="Credit Note"
-                                  value={this.state.CNNo}
+                                  value={this.state.branch.CNNo}
                                   onChange={(e) => updateFormValue("CNNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="DNNo"
                                   label="Debit Note"
-                                  value={this.state.DNNo}
+                                  value={this.state.branch.DNNo}
                                   onChange={(e) => updateFormValue("DNNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="PRNo"
                                   label="Purchase Request"
-                                  value={this.state.PRNo}
+                                  value={this.state.branch.PRNo}
                                   onChange={(e) => updateFormValue("PRNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
-                                  id="PONo"
-                                  label="Purchase Order"
-                                  value={this.state.PONo}
-                                  onChange={(e) => updateFormValue("PONo", e)}
+                                <DropdownInput
+                                  id="LPONo"
+                                  label="Local Purchase Order"
+                                  value={this.state.branch.LPONo}
+                                  onChange={(e) => updateFormValue("LPONo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+
+<DropdownInput
+                                  id="IPONo"
+                                  label="Import Purchase Order"
+                                  value={this.state.branch.IPONo}
+                                  onChange={(e) => updateFormValue("IPONo", e)}
+                                  options={this.state.numberSeries}
+                                />
+
+
+
+
+                                <DropdownInput
                                   id="PurInvNo"
                                   label="Purchase Invoice"
-                                  value={this.state.PurInvNo}
+                                  value={this.state.branch.PurInvNo}
                                   onChange={(e) =>
                                     updateFormValue("PurInvNo", e)
                                   }
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="GITNo"
                                   label="GIT"
-                                  value={this.state.GITNo}
+                                  value={this.state.branch.GITNo}
                                   onChange={(e) => updateFormValue("GITNo", e)}
                                   options={this.state.numberSeries}
                                 />
@@ -2224,82 +2306,82 @@ class editbranch extends React.Component {
                               aria-label="Numbering table"
                             >
                               <TableBody className="tableBody">
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="SRNo"
                                   label="Store Requisition"
-                                  value={this.state.SRNo}
+                                  value={this.state.branch.SRNo}
                                   onChange={(e) => updateFormValue("SRNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="SIssueNo"
                                   label="Store Issue"
-                                  value={this.state.SIssueNo}
+                                  value={this.state.branch.SIssueNo}
                                   onChange={(e) =>
                                     updateFormValue("SIssueNo", e)
                                   }
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="JVNo"
                                   label="Journal Voucher"
-                                  value={this.state.JVNo}
+                                  value={this.state.branch.JVNo}
                                   onChange={(e) => updateFormValue("JVNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="PVNo"
                                   label="Payment Voucher"
-                                  value={this.state.PVNo}
+                                  value={this.state.branch.PVNo}
                                   onChange={(e) => updateFormValue("PVNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="RVNo"
                                   label="Receipt Voucher"
-                                  value={this.state.RVNo}
+                                  value={this.state.branch.RVNo}
                                   onChange={(e) => updateFormValue("RVNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="CENo"
                                   label="Contra Entry"
-                                  value={this.state.CENo}
+                                  value={this.state.branch.CENo}
                                   onChange={(e) => updateFormValue("CENo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="BankNo"
                                   label="Bank"
-                                  value={this.state.BankNo}
+                                  value={this.state.branch.BankNo}
                                   onChange={(e) => updateFormValue("BankNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="CashNo"
                                   label="Cash"
-                                  value={this.state.CashNo}
+                                  value={this.state.branch.CashNo}
                                   onChange={(e) => updateFormValue("CashNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="FGQCNo"
                                   label="FG QC No"
-                                  value={this.state.FGQCNo}
+                                  value={this.state.branch.FGQCNo}
                                   onChange={(e) => updateFormValue("FGQCNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="RMQCNo"
                                   label="RM QC No"
-                                  value={this.state.RMQCNo}
+                                  value={this.state.branch.RMQCNo}
                                   onChange={(e) => updateFormValue("RMQCNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                <Tablerowcelldropdowninput
+                                <DropdownInput
                                   id="IJCNo"
                                   label="IJC"
-                                  value={this.state.IJCNo}
+                                  value={this.state.branch.IJCNo}
                                   onChange={(e) => updateFormValue("IJCNo", e)}
                                   options={this.state.numberSeries}
                                 />
