@@ -1,7 +1,11 @@
 import React from "react";
-import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  BrowserRouter as Router,
+  Redirect,
+} from "react-router-dom";
 import * as URLS from "./constants";
-
 
 import LoginPage from "../components/login";
 
@@ -64,129 +68,161 @@ import supplierMaster from "../components/modules/supplier/supplierMaster";
 import supplieractivity from "../components/modules/supplier/supplieractivity";
 import poMaster from "../components/modules/po/poMaster";
 import poactivity from "../components/modules/po/poactivity";
+import gstMaster from "../components/modules/gst/gstmaster";
+import gstactivity from "../components/modules/gst/gstactivity";
+
 
 import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
 import Ftptest from "../components/ftp/ftptest";
 import Header from "../components/user/userheaderconstants";
- 
-
-
 
 let routes = ({ location, ...rest }) => {
   return (
-
     <Router>
-      {(window.location.pathname === "/" || window.location.pathname=== "/loginExpired")  ? null : <Header />}
-     <div style={{marginLeft:10}}>
-     <Switch>
-        <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
-        <Route path={URLS.URLS.userDashboard} component={userDashboard} />
-        <Route path={URLS.URLS.testReport} component={testReport} />
+      {window.location.pathname === "/" ||
+      window.location.pathname === "/loginExpired" ? null : (
+        <Header />
+      )}
+      <div style={{ marginLeft: 10 }}>
+        <Switch>
+          <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
+          <Route path={URLS.URLS.userDashboard} component={userDashboard} />
+          <Route path={URLS.URLS.testReport} component={testReport} />
 
-        {/*  Company Routes  */}
-        <Route path={URLS.URLS.companyMaster} component={companyMaster} />
-        <Route path={URLS.URLS.addNewCompany} component={addNewCompany} />
-        <Route path={URLS.URLS.editCompany} component={editCompany} />
+          {/*  Company Routes  */}
+          <Route path={URLS.URLS.companyMaster} component={companyMaster} />
+          <Route path={URLS.URLS.addNewCompany} component={addNewCompany} />
+          <Route path={URLS.URLS.editCompany} component={editCompany} />
 
-        {/*  Country Routes  */}
-        <Route path={URLS.URLS.countryMaster} component={countryMaster} />
-        <Route path={URLS.URLS.addCountry} component={addCountry} />
-        <Route path={URLS.URLS.editCountry} component={editCountry} />
+          {/*  Country Routes  */}
+          <Route path={URLS.URLS.countryMaster} component={countryMaster} />
+          <Route path={URLS.URLS.addCountry} component={addCountry} />
+          <Route path={URLS.URLS.editCountry} component={editCountry} />
 
-        {/*  State Routes  */}
-        <Route path={URLS.URLS.stateMaster} component={stateMaster} />
-        <Route path={URLS.URLS.addState} component={addState} />
-        <Route path={URLS.URLS.editState} component={editState} />
+          {/*  State Routes  */}
+          <Route path={URLS.URLS.stateMaster} component={stateMaster} />
+          <Route path={URLS.URLS.addState} component={addState} />
+          <Route path={URLS.URLS.editState} component={editState} />
 
-        <Route path={URLS.URLS.addDestination} component={adddestination} />
-        <Route path={URLS.URLS.editDestination} component={editDestination} />
+          <Route path={URLS.URLS.addDestination} component={adddestination} />
+          <Route path={URLS.URLS.editDestination} component={editDestination} />
 
+          {/*  User Master Routes  */}
+          <Route path={URLS.URLS.userMaster} component={userMaster} />
+          <Route path={URLS.URLS.addUser} component={addUser} />
+          <Route path={URLS.URLS.editUser} component={editUser} />
 
-        {/*  User Master Routes  */}
-        <Route path={URLS.URLS.userMaster} component={userMaster} />
-        <Route path={URLS.URLS.addUser} component={addUser} />
-        <Route path={URLS.URLS.editUser} component={editUser} />
+          {/* branch Routes*/}
+          <Route path={URLS.URLS.branchMaster} component={branchMaster} />
+          <Route path={URLS.URLS.editBranch} component={editBranch} />
+          <Route path={URLS.URLS.addBranch} component={addBranch} />
 
+          {/* Module Routes*/}
+          <Route path={URLS.URLS.moduleMaster} component={moduleMaster} />
+          <Route path={URLS.URLS.addModule} component={addModule} />
+          <Route path={URLS.URLS.editModule} component={editModule} />
+          <Route path={URLS.URLS.roleMaster} component={rolemaster} />
+          <Route path={URLS.URLS.addRole} component={addRole} />
 
-        {/* branch Routes*/}
-        <Route path={URLS.URLS.branchMaster} component={branchMaster} />
-        <Route path={URLS.URLS.editBranch} component={editBranch} />
-        <Route path={URLS.URLS.addBranch} component={addBranch} />
+          {/* Warehouse Routes*/}
+          <Route path={URLS.URLS.warehouseMaster} component={warehousemaster} />
+          <Route path={URLS.URLS.addWarehouse} component={addWarehouse} />
+          <Route path={URLS.URLS.editWarehouse} component={editWarehouse} />
+          <Route path={URLS.URLS.loginExpired} component={loginExpired} />
+          <Route path={URLS.URLS.numberingMaster} component={numberingMaster} />
+          <Route path={URLS.URLS.addNumbering} component={addNumbering} />
+          <Route path={URLS.URLS.editNumbering} component={editNumbering} />
 
-        {/* Module Routes*/}
-        <Route path={URLS.URLS.moduleMaster} component={moduleMaster} />
-        <Route path={URLS.URLS.addModule} component={addModule} />
-        <Route path={URLS.URLS.editModule} component={editModule} />
-        <Route path={URLS.URLS.roleMaster} component={rolemaster} />
-        <Route path={URLS.URLS.addRole} component={addRole} />
+          <Route path={URLS.URLS.currencyMaster} component={currencyMaster} />
+          <Route path={URLS.URLS.addCurrency} component={addCurrency} />
 
-        {/* Warehouse Routes*/}
-        <Route path={URLS.URLS.warehouseMaster} component={warehousemaster} />
-        <Route path={URLS.URLS.addWarehouse} component={addWarehouse} />
-        <Route path={URLS.URLS.editWarehouse} component={editWarehouse} />
-        <Route path={URLS.URLS.loginExpired} component={loginExpired} />
-        <Route path={URLS.URLS.numberingMaster} component={numberingMaster} />
-        <Route path={URLS.URLS.addNumbering} component={addNumbering} />
-        <Route path={URLS.URLS.editNumbering} component={editNumbering} />
+          {/* Chart of Account */}
+          <Route path={URLS.URLS.itemMaster} component={itemMaster} />
+          <Route path={URLS.URLS.addItem} component={addItem} />
+          <Route path={URLS.URLS.editItem} component={editItem} />
+          <Route
+            path={URLS.URLS.itemCategoryMaster}
+            component={itemCategoryMaster}
+          />
+          <Route path={URLS.URLS.addItemCategory} component={addItemCategory} />
+          <Route
+            path={URLS.URLS.editItemCategory}
+            component={editItemCategory}
+          />
+          <Route
+            path={URLS.URLS.itemMainCategoryMaster}
+            component={itemMainCategoryMaster}
+          />
+          <Route
+            path={URLS.URLS.addItemMainCategory}
+            component={addItemMainCategory}
+          />
+          <Route
+            path={URLS.URLS.editItemMainCategory}
+            component={editItemMainCategory}
+          />
+          <Route
+            path={URLS.URLS.itemSuperCategoryMaster}
+            component={itemSuperCategoryMaster}
+          />
+          <Route
+            path={URLS.URLS.addItemSuperCategory}
+            component={addItemSuperCategory}
+          />
+          <Route
+            path={URLS.URLS.editItemSuperCategory}
+            component={editItemSuperCategory}
+          />
+          <Route
+            path={URLS.URLS.itemDepartmentMaster}
+            component={itemDepartmentMaster}
+          />
+          <Route
+            path={URLS.URLS.addItemDepartment}
+            component={addItemDepartment}
+          />
+          <Route
+            path={URLS.URLS.editItemDepartment}
+            component={editItemDepartment}
+          />
+          <Route
+            path={URLS.URLS.postingGroupMaster}
+            component={postingGroupMaster}
+          />
 
+          {/* Chart of Account */}
+          <Route path={URLS.URLS.coa} component={coaMaster} />
+          <Route path={URLS.URLS.addCoa} component={coaactivity} />
+          <Route path={URLS.URLS.editCoa} component={coaactivity} />
 
-        <Route path={URLS.URLS.currencyMaster} component={currencyMaster} />
-        <Route path={URLS.URLS.addCurrency} component={addCurrency} />
-
-
-        {/* Chart of Account */}
-        <Route path={URLS.URLS.itemMaster} component={itemMaster} />
-        <Route path={URLS.URLS.addItem} component={addItem} />
-        <Route path={URLS.URLS.editItem} component={editItem} />
-        <Route path={URLS.URLS.itemCategoryMaster} component={itemCategoryMaster} />
-        <Route path={URLS.URLS.addItemCategory} component={addItemCategory} />
-        <Route path={URLS.URLS.editItemCategory} component={editItemCategory} />
-        <Route path={URLS.URLS.itemMainCategoryMaster} component={itemMainCategoryMaster} />
-        <Route path={URLS.URLS.addItemMainCategory} component={addItemMainCategory} />
-        <Route path={URLS.URLS.editItemMainCategory} component={editItemMainCategory} />
-        <Route path={URLS.URLS.itemSuperCategoryMaster} component={itemSuperCategoryMaster} />
-        <Route path={URLS.URLS.addItemSuperCategory} component={addItemSuperCategory} />
-        <Route path={URLS.URLS.editItemSuperCategory} component={editItemSuperCategory} />
-        <Route path={URLS.URLS.itemDepartmentMaster} component={itemDepartmentMaster} />
-        <Route path={URLS.URLS.addItemDepartment} component={addItemDepartment} />
-        <Route path={URLS.URLS.editItemDepartment} component={editItemDepartment} />
-        <Route path={URLS.URLS.postingGroupMaster} component={postingGroupMaster} />
-
-
-
-        {/* Chart of Account */}
-        <Route path={URLS.URLS.coa} component={coaMaster} />
-        <Route path={URLS.URLS.addCoa} component={coaactivity} />
-        <Route path={URLS.URLS.editCoa} component={coaactivity} />
-
-
-        {/* Customers */}
-        <Route path={URLS.URLS.customerMaster} component={customerMaster} />
-        <Route path={URLS.URLS.addCustomer} component={customeractivity} />
-        <Route path={URLS.URLS.editCustomer} component={customeractivity} />
+          {/* Customers */}
+          <Route path={URLS.URLS.customerMaster} component={customerMaster} />
+          <Route path={URLS.URLS.addCustomer} component={customeractivity} />
+          <Route path={URLS.URLS.editCustomer} component={customeractivity} />
 
           {/* Supplier */}
-        <Route path={URLS.URLS.supplierMaster} component={supplierMaster} />
-        <Route path={URLS.URLS.addSupplier} component={supplieractivity} />
-        <Route path={URLS.URLS.editSupplier} component={supplieractivity} />
+          <Route path={URLS.URLS.supplierMaster} component={supplierMaster} />
+          <Route path={URLS.URLS.addSupplier} component={supplieractivity} />
+          <Route path={URLS.URLS.editSupplier} component={supplieractivity} />
+
+          {/* Purchase Order */}
+          <Route path={URLS.URLS.poMaster} component={poMaster} />
+          <Route path={URLS.URLS.addPO} component={poactivity} />
+
+          {/* Gst */}
+          <Route path={URLS.URLS.gstMaster} component={gstMaster} />
+          <Route path={URLS.URLS.addGst} component={gstactivity} />
+          <Route path={URLS.URLS.editGst} component={gstactivity} />
 
 
-         {/* Purchase Order */}
-         <Route path={URLS.URLS.poMaster} component={poMaster} />
-         <Route path={URLS.URLS.addPO} component={poactivity} />
-        
+          <Route path={URLS.URLS.testformat} component={testformat} />
+          <Route path={URLS.URLS.Ftptest} component={Ftptest} />
 
-
-        <Route path={URLS.URLS.testformat} component={testformat} />
-        <Route path={URLS.URLS.Ftptest} component={Ftptest} />
-
-
-        <Route component={pageNotFound} />
-      </Switch>
-     </div>    
+          <Route component={pageNotFound} />
+        </Switch>
+      </div>
     </Router>
-
   );
 };
 export default routes;

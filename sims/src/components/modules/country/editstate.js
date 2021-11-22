@@ -39,25 +39,25 @@ class editstate extends React.Component {
       GeneralDetailsExpanded: true,
 
       state: {
-        StateId: null,
+        StateId: 0,
         CountryId: 0,
-        CreationDate: null,
-        Name: null,
-        Code: null,
-        Gstcode: null,
-        UserId: null,
+        CreationDate: "",
+        Name: "",
+        Code: "",
+        Gstcode: "",
+        UserId: 0,
       },
-      code: null,
-      country: null,
-      countryId: null,
-      creationDate: null,
-      gstcode: null,
-      name: null,
+      code: "",
+      country: "",
+      countryId: "",
+      creationDate: "",
+      gstcode: "",
+      name: "",
       stateData: [],
       oldName: "",
-      StateId: null,
+      StateId: 0,
       countryData: [],
-      CountryID: null,
+      CountryID: 0,
       ErrorPrompt: false,
       SuccessPrompt: false,
       disableUpdateBtn: true,
@@ -131,13 +131,13 @@ class editstate extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let GetSateUrl = APIURLS.APIURL.GetSate;
+    let GetSateUrl = APIURLS.APIURL.GetState;
 
     axios
       .post(GetSateUrl, getStateDetailsData, { headers })
       .then((response) => {
         let data = response.data;
-
+console.log("StateData>>",data)
         this.setState({
           oldName: data.name,
           state: data,

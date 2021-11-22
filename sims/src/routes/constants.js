@@ -70,6 +70,9 @@ export const URLS = {
   poMaster:"/poMaster",
   addPO:"/addPO",
   editPO:"/editPO",
+  gstMaster:"/gstMaster",
+  addGst:"/addGst",
+  editGst:"/editGst"
 };
 
 
