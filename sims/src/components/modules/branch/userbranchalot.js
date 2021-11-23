@@ -292,9 +292,9 @@ class userbranchalot extends React.Component {
               <Grid container spacing={1}>
                 <Grid xs={6} sm={6} md={6} lg={6}>
                   <Button
-                    style={{ marginLeft: 5 }}
-                    className="action-btns"
-                    onClick={(e) => handleBranchAdd(this.state.userId)}
+                    style={{ marginLeft: 5, }}
+                     className="action-btns"
+                    onClick={(e) => handleBranchAdd(this.state.UserID)}
                   >
                     Alot
                   </Button>
