@@ -11,6 +11,7 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Button from "@material-ui/core/Button";
 
@@ -165,11 +166,23 @@ class editcountry extends React.Component {
       .then((response) => {
         let data = response.data;
 
-        this.setState({ zones: data, ProgressLoader: true });
+        this.processZones(data);
+        this.initializeZone();
       })
       .catch((error) => {});
   }
 
+  processZones(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].description,
+        value: data[i].zoneId,
+      };
+      newData.push(d);
+    }
+    this.setState({ zones: newData, ProgressLoader: true });
+  }
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -565,7 +578,7 @@ class editcountry extends React.Component {
                                                         />
                                                     </TableCell>
                                                 </TableRow> */}
-                        <TableRow>
+                        {/* <TableRow>
                           <TableCell align="left" className="no-border-table">
                             <b>Zone</b>
                           </TableCell>
@@ -588,7 +601,14 @@ class editcountry extends React.Component {
                               ))}
                             </select>
                           </TableCell>
-                        </TableRow>
+                        </TableRow> */}
+                        <DropdownInput
+                          id="ZoneID"
+                          label="Zone"
+                          onChange={(e) => updateFormValue("ZoneID", e)}
+                          options={this.state.zones}
+                          value={this.state.selectedZone}
+                        />
                       </TableBody>
                     </Table>
                   </TableContainer>

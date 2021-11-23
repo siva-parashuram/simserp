@@ -65,7 +65,7 @@ class addnewcompany extends React.Component {
       stateData: [],
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
-     
+
       duplicate: false,
       Dialog: {
         DialogTitle: "",
@@ -256,21 +256,9 @@ class addnewcompany extends React.Component {
     //     this.state.companyName.length > 50 ||
     //     this.state.duplicate === true
     //   ) {
-    //     if (
-    //       this.state.address === "" ||
-    //       this.state.address === null ||
-    //       this.state.address.length > 50
-    //     ) {
-    //       this.setState({ createBtnDisabled: true });
-    //     } else {
-    //       this.setState({ createBtnDisabled: true });
-    //     }
-    //   } else if (
-    //     this.state.address === "" ||
-    //     this.state.address === null ||
-    //     this.state.address.length > 50
-    //   ) {
     //     this.setState({ createBtnDisabled: true });
+    //   }else{
+    //     this.setState({ createBtnDisabled: false })
     //   }
     // };
 
@@ -548,11 +536,13 @@ class addnewcompany extends React.Component {
         this.setState({ state: CF.toInt(e.target.value) });
       }
       validate();
+      // Checktrue();
     };
 
     const validate = () => {
       let v = this.state.Validations;
       if (
+        this.state.companyName === "" ||
         v["companyName"].errorState === true ||
         v["address"].errorState === true ||
         v["address2"].errorState === true ||
@@ -945,9 +935,7 @@ class addnewcompany extends React.Component {
                                   }
                                   value={this.state.country}
                                 >
-                                  <option value="-" >
-                                    Select
-                                  </option>
+                                  <option value="-">Select</option>
 
                                   {this.state.countryData.map((item, i) => (
                                     <option value={parseInt(item.value)}>
@@ -988,9 +976,7 @@ class addnewcompany extends React.Component {
                                   onChange={(e) => updateFormValue("State", e)}
                                   value={this.state.state}
                                 >
-                                  <option value="-">
-                                    Select
-                                  </option>
+                                  <option value="-">Select</option>
 
                                   {this.state.stateData.map((item, i) => (
                                     <option value={parseInt(item.value)}>

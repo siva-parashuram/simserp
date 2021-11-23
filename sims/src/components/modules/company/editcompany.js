@@ -322,7 +322,7 @@ class editcompany extends React.Component {
 
   setInitialParamsForEdit = () => {
     let CountryID = this.state.CountryID;
-    console.log("unitialCountryID",CountryID)
+    console.log("unitialCountryID", CountryID);
     this.getStateByCountry(CountryID);
   };
 
@@ -636,13 +636,16 @@ class editcompany extends React.Component {
       }
       if (id === "Country") {
         this.getStateByCountry(CF.toInt(e.target.value));
-        company.CountryID=CF.toInt(e.target.value)
-        this.setState({ CountryID: CF.toInt(e.target.value),company:company });
+        company.CountryID = CF.toInt(e.target.value);
+        this.setState({
+          CountryID: CF.toInt(e.target.value),
+          company: company,
+        });
       }
 
       if (id === "State") {
-        company.StateID=CF.toInt(e.target.value)
-        this.setState({ StateID: CF.toInt(e.target.value),company:company });
+        company.StateID = CF.toInt(e.target.value);
+        this.setState({ StateID: CF.toInt(e.target.value), company: company });
       }
       validate();
     };
@@ -650,6 +653,7 @@ class editcompany extends React.Component {
     const validate = () => {
       let v = this.state.Validations;
       if (
+        this.state.CompanyName === "" ||
         v["companyName"].errorState === true ||
         v["address"].errorState === true ||
         v["address2"].errorState === true ||
@@ -673,7 +677,7 @@ class editcompany extends React.Component {
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
-      
+
       const data = {
         validUser: ValidUser,
         company: company,

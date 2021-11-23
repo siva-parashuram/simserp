@@ -179,8 +179,8 @@ console.log("StateData>>",data)
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].name,
-        value: data[i].countryId,
+        name: data[i].Name,
+        value: data[i].CountryID,
       };
       newData.push(d);
     }

@@ -76,6 +76,7 @@ class customeractivity extends React.Component {
       type: "",
       CreditRating: APIURLS.CreditRating,
       GSTCutomerType: APIURLS.GSTCutomerType,
+      MasterCountryData: [],
       customerData: [],
       SalesPersonData: [],
       CustomerCategoryData: [],
@@ -175,7 +176,7 @@ class customeractivity extends React.Component {
     this.getAllCustomerPostingGroup();
     this.getCurrencyList();
     this.getCountryList();
-    this.getStateList();
+    // this.getStateList();
     this.getPaymentTerms();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -195,7 +196,7 @@ class customeractivity extends React.Component {
 
     let Customer = this.state.Customer;
     Customer.BranchID = CF.toInt(branchId);
-    
+
     if (type === "edit") {
       Customer.CustID = CF.toInt(CustID);
       this.getCustomerDetails(Customer);
@@ -287,34 +288,61 @@ class customeractivity extends React.Component {
       .catch((error) => {});
   };
 
-  getStateList = () => {
-    let rows = [];
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetStatesUrl = APIURLS.APIURL.GetStates;
+  // getStateList = () => {
+  //   let rows = [];
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let GetStatesUrl = APIURLS.APIURL.GetStates;
 
-    axios
-      .post(GetStatesUrl, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-        let newData = [];
-        for (let i = 0; i < data.length; i++) {
-          let d = {
-            name: data[i].name,
-            value: data[i].stateId,
-          };
-          newData.push(d);
-        }
-        this.setState({ stateData: newData, ProgressLoader: true });
-      })
-      .catch((error) => {});
-  };
+  //   axios
+  //     .post(GetStatesUrl, ValidUser, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
+  //       let newData = [];
+  //       for (let i = 0; i < data.length; i++) {
+  //         let d = {
+  //           name: data[i].name,
+  //           value: data[i].stateId,
+  //         };
+  //         newData.push(d);
+  //       }
+  //       this.setState({ stateData: newData, ProgressLoader: true });
+  //     })
+  //     .catch((error) => {});
+  // };
 
-  getCountryList = () => {
+  // getCountryList = () => {
+  //   let rows = [];
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let GetCountryUrl = APIURLS.APIURL.GetCountries;
+
+  //   axios
+  //     .post(GetCountryUrl, ValidUser, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
+  //       let newData = [];
+  //       for (let i = 0; i < data.length; i++) {
+  //         let d = {
+  //           name: data[i].name,
+  //           value: data[i].countryId,
+  //         };
+  //         newData.push(d);
+  //       }
+  //       this.setState({ countryData: newData, ProgressLoader: true });
+  //     })
+  //     .catch((error) => {});
+  // };
+
+  getCountryList() {
     let rows = [];
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -328,18 +356,52 @@ class customeractivity extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        let newData = [];
-        for (let i = 0; i < data.length; i++) {
-          let d = {
-            name: data[i].name,
-            value: data[i].countryId,
-          };
-          newData.push(d);
-        }
-        this.setState({ countryData: newData, ProgressLoader: true });
+
+        rows = data;
+        this.setState({ MasterCountryData: data });
+        this.processCountryData(data);
       })
       .catch((error) => {});
+  }
+
+  getStateByCountry = (CountryID) => {
+    console.log("getStateByCountry > CountryID > ", CountryID);
+    let MasterCountryData = this.state.MasterCountryData;
+    console.log("getStateByCountry > MasterCountryData > ", MasterCountryData);
+    let stateData = [];
+    for (let i = 0; i < MasterCountryData.length; i++) {
+      if (MasterCountryData[i].CountryID === CountryID) {
+        if (MasterCountryData[i].State) {
+          stateData = MasterCountryData[i].State;
+        }
+        break;
+      }
+    }
+    console.log("getStateByCountry > stateData > ", stateData);
+    let newData = [];
+    for (let i = 0; i < stateData.length; i++) {
+      let d = {
+        name: stateData[i].Name,
+        value: stateData[i].StateID,
+      };
+      newData.push(d);
+    }
+    console.log("getStateByCountry > stateData > newData > ", newData);
+
+    this.setState({ stateData: newData, ProgressLoader: true });
   };
+
+  processCountryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].Name,
+        value: data[i].CountryID,
+      };
+      newData.push(d);
+    }
+    this.setState({ countryData: newData, ProgressLoader: true });
+  }
 
   getCurrencyList = () => {
     this.setState({ ProgressLoader: false });
@@ -479,6 +541,7 @@ class customeractivity extends React.Component {
         let data = response.data;
         if (response.status === 200 || response.status === 201) {
           this.setState({ Customer: data, ProgressLoader: true });
+          this.setInitialParamsForEdit()
         } else {
           this.setState({
             ErrorPrompt: true,
@@ -490,6 +553,11 @@ class customeractivity extends React.Component {
       .catch((error) => {
         this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
+  };
+
+  setInitialParamsForEdit = () => {
+    let CountryID =this.state.Customer.CountryID;
+    this.getStateByCountry(CountryID);
   };
 
   updateFormValue = (param, e) => {
@@ -621,6 +689,7 @@ class customeractivity extends React.Component {
         }
         break;
       case "CountryID":
+        this.getStateByCountry(CF.toInt(e.target.value));
         Customer[param] = CF.toInt(e.target.value);
         this.setParams(Customer);
         break;
@@ -649,7 +718,7 @@ class customeractivity extends React.Component {
       case "PhoneNo":
         let v9 = this.state.Validations;
 
-        let number = CF.chkIfNumber(e.target.value)
+        let number = CF.chkIfNumber(e.target.value);
         if (number) {
           Customer[param] = e.target.value;
           if (e.target.value.length > 20) {
@@ -666,7 +735,7 @@ class customeractivity extends React.Component {
 
             this.setParams(Customer);
           }
-        }else{
+        } else {
           v9.PhoneNo = {
             errorState: true,
             errorMssg: "Enter Number!",
@@ -1176,9 +1245,6 @@ class customeractivity extends React.Component {
 
       let Customer = this.state.Customer;
       let reqData = {
-
-
-
         DocumentNumber: {
           NoSeriesID: 1,
           TransDate: moment().format("MM-DD-YYYY"),
@@ -1499,7 +1565,6 @@ class customeractivity extends React.Component {
                           helperText={this.state.Validations.Website.errorMssg}
                         />
                         <TextboxInput
-                         
                           id="PhoneNo"
                           label="PhoneNo"
                           variant="outlined"
@@ -2317,11 +2382,11 @@ class customeractivity extends React.Component {
           Dialog.DialogContent = customerPrice;
           this.setState({ Dialog: Dialog });
           break;
-          case "BranchMapping":
+        case "BranchMapping":
           Dialog.DialogContent = branchMapping;
           this.setState({ Dialog: Dialog });
           break;
-          case "SlabDiscount":
+        case "SlabDiscount":
           Dialog.DialogContent = discount;
           this.setState({ Dialog: Dialog });
           break;

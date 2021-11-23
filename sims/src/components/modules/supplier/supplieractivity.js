@@ -72,6 +72,7 @@ class supplieractivity extends React.Component {
       type: "",
       TypeOfEnterprise: APIURLS.TypeOfEnterprise,
       GSTSupplierType: APIURLS.GSTSupplierType,
+      MasterCountryData: [],
       SupplierData: [],
       SalesPersonData: [],
       paymentTermsData: [],
@@ -144,7 +145,7 @@ class supplieractivity extends React.Component {
     this.getAllSupplierPostingGroup();
     this.getCurrencyList();
     this.getCountryList();
-    this.getStateList();
+    // this.getStateList();
     this.getPaymentTerms();
   };
 
@@ -188,7 +189,6 @@ class supplieractivity extends React.Component {
     console.log("On load state > ", this.state);
   }
 
-  
   getSupplierList = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -211,7 +211,6 @@ class supplieractivity extends React.Component {
         this.setState({ SupplierData: [], ProgressLoader: true });
       });
   };
-  
 
   getAllSupplierPostingGroup = () => {
     console.log("getAllSupplierPostingGroup > ");
@@ -271,34 +270,61 @@ class supplieractivity extends React.Component {
       });
   };
 
-  getStateList = () => {
-    let rows = [];
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetStatesUrl = APIURLS.APIURL.GetStates;
+  // getStateList = () => {
+  //   let rows = [];
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let GetStatesUrl = APIURLS.APIURL.GetStates;
 
-    axios
-      .post(GetStatesUrl, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-        let newData = [];
-        for (let i = 0; i < data.length; i++) {
-          let d = {
-            name: data[i].name,
-            value: data[i].stateId,
-          };
-          newData.push(d);
-        }
-        this.setState({ stateData: newData, ProgressLoader: true });
-      })
-      .catch((error) => {});
-  };
+  //   axios
+  //     .post(GetStatesUrl, ValidUser, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
+  //       let newData = [];
+  //       for (let i = 0; i < data.length; i++) {
+  //         let d = {
+  //           name: data[i].name,
+  //           value: data[i].stateId,
+  //         };
+  //         newData.push(d);
+  //       }
+  //       this.setState({ stateData: newData, ProgressLoader: true });
+  //     })
+  //     .catch((error) => {});
+  // };
 
-  getCountryList = () => {
+  // getCountryList = () => {
+  //   let rows = [];
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let GetCountryUrl = APIURLS.APIURL.GetCountries;
+
+  //   axios
+  //     .post(GetCountryUrl, ValidUser, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
+  //       let newData = [];
+  //       for (let i = 0; i < data.length; i++) {
+  //         let d = {
+  //           name: data[i].name,
+  //           value: data[i].countryId,
+  //         };
+  //         newData.push(d);
+  //       }
+  //       this.setState({ countryData: newData, ProgressLoader: true });
+  //     })
+  //     .catch((error) => {});
+  // };
+
+  getCountryList() {
     let rows = [];
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -312,18 +338,52 @@ class supplieractivity extends React.Component {
       .post(GetCountryUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        let newData = [];
-        for (let i = 0; i < data.length; i++) {
-          let d = {
-            name: data[i].name,
-            value: data[i].countryId,
-          };
-          newData.push(d);
-        }
-        this.setState({ countryData: newData, ProgressLoader: true });
+
+        rows = data;
+        this.setState({ MasterCountryData: data });
+        this.processCountryData(data);
       })
       .catch((error) => {});
+  }
+
+  getStateByCountry = (CountryID) => {
+    console.log("getStateByCountry > CountryID > ", CountryID);
+    let MasterCountryData = this.state.MasterCountryData;
+    console.log("getStateByCountry > MasterCountryData > ", MasterCountryData);
+    let stateData = [];
+    for (let i = 0; i < MasterCountryData.length; i++) {
+      if (MasterCountryData[i].CountryID === CountryID) {
+        if (MasterCountryData[i].State) {
+          stateData = MasterCountryData[i].State;
+        }
+        break;
+      }
+    }
+    console.log("getStateByCountry > stateData > ", stateData);
+    let newData = [];
+    for (let i = 0; i < stateData.length; i++) {
+      let d = {
+        name: stateData[i].Name,
+        value: stateData[i].StateID,
+      };
+      newData.push(d);
+    }
+    console.log("getStateByCountry > stateData > newData > ", newData);
+
+    this.setState({ stateData: newData, ProgressLoader: true });
   };
+
+  processCountryData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].Name,
+        value: data[i].CountryID,
+      };
+      newData.push(d);
+    }
+    this.setState({ countryData: newData, ProgressLoader: true });
+  }
 
   getCurrencyList = () => {
     this.setState({ ProgressLoader: false });
@@ -405,6 +465,7 @@ class supplieractivity extends React.Component {
         if (response.status === 200 || response.status === 201) {
           console.log("getSupplierDetails > Supplier >", data);
           this.setState({ Supplier: data, ProgressLoader: true });
+          this.setInitialParamsForEdit();
         } else {
           this.setState({
             ErrorPrompt: true,
@@ -417,6 +478,13 @@ class supplieractivity extends React.Component {
         this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
   };
+
+
+  setInitialParamsForEdit = () => {
+    let CountryID =this.state.Supplier.CountryID;
+    this.getStateByCountry(CountryID);
+  };
+
 
   updateFormValue = (param, e) => {
     let Supplier = this.state.Supplier;
@@ -544,6 +612,7 @@ class supplieractivity extends React.Component {
         }
         break;
       case "CountryID":
+        this.getStateByCountry(CF.toInt(e.target.value));
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);
         break;
@@ -1764,7 +1833,7 @@ class supplieractivity extends React.Component {
 
     const paymentTerms = <PaymentTerms SuplID={this.state.SuplID} />;
     const supplierPrice = <SupplierPrice SuplID={this.state.SuplID} />;
-    
+
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -1781,11 +1850,11 @@ class supplieractivity extends React.Component {
           this.setState({ Dialog: Dialog });
           break;
 
-          case "BranchMapping":
+        case "BranchMapping":
           Dialog.DialogContent = branchMapping;
           this.setState({ Dialog: Dialog });
           break;
-          case "SupplierPrice":
+        case "SupplierPrice":
           Dialog.DialogContent = supplierPrice;
           this.setState({ Dialog: Dialog });
           break;
