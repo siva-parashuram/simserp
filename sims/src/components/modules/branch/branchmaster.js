@@ -106,7 +106,7 @@ class branchMaster extends React.Component {
       URLS.URLS.editBranch +
       this.state.urlparams +
       "&editbranchId=" +
-      item.branchId+ "&type=edit";
+      item.BranchID+ "&type=edit";
     this.setState({
       branchItem: item,
       editUrl: editUrl,
@@ -114,7 +114,7 @@ class branchMaster extends React.Component {
     });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
-    this.getAttachments(item.companyId, item.branchId);
+    this.getAttachments(item.CompanyID, item.BranchID);
     }catch(e){}
     
   }
@@ -320,8 +320,9 @@ class branchMaster extends React.Component {
                               className="table-header-font"
                               align="left"
                             >
-                              Company
+                              Short Name
                             </TableCell>
+                            
                           </TableRow>
                         </TableHead>
                         <TableBody className="tableBody">
@@ -342,20 +343,19 @@ class branchMaster extends React.Component {
                                     URLS.URLS.editBranch +
                                     this.state.urlparams +
                                     "&editbranchId=" +
-                                    item.branchId+ "&type=edit"
+                                    item.BranchID+ "&type=edit"
                                   }
                                 >
-                                  {URLS.PREFIX.branchId + item.branchId}
+                                  {URLS.PREFIX.branchId + item.BranchID}
                                 </a>
-                              </TableCell>
-                              <TableCell align="left">{item.name}</TableCell>
+                              </TableCell>                               
                               <TableCell align="left">
-                                {item.company
-                                  ? item.company.companyName
-                                    ? item.company.companyName
-                                    : "-"
-                                  : "-"}
+                                {item.Name}
                               </TableCell>
+                              <TableCell align="left">
+                                {item.ShortName}
+                              </TableCell>
+                              
                             </TableRow>
                           ))}
                         </TableBody>

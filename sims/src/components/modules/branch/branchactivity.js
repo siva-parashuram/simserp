@@ -23,7 +23,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 
 import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
- 
+
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 import UpdateIcon from "@material-ui/icons/Update";
@@ -47,7 +47,7 @@ class editbranch extends React.Component {
       TaxationDetailsExpanded: false,
       NumberingExpanded: false,
       disabledUpdatebtn: false,
-      disabledCreatebtn: true,
+      disabledCreatebtn: false,
       numberSeries: [],
       companyData: [],
       countryData: [],
@@ -59,146 +59,74 @@ class editbranch extends React.Component {
       typoTitle: "",
       type: null,
       branch: {
+        BranchID: 0,
+        CompanyID: 0,
+        Name: "",
+        ShortName: "",
+        Address: "",
+        Address2: "",
+        Address3: "",
+        City: "",
+        Postcode: "",
+        CountryID: 0,
+        StateID: 0,
+        PhoneNo: "",
+        FAXNo: "",
+        Website: "",
+        EmailID: "",
+        LogoName: "",
+        EffectiveDate: "",
+        ContactPerson: "",
         IsTrading: true,
-        AllowRounding:true,
-        address: null,
-        address2: null,
-        address3: null,
-        branchId: 0,
-        city: null,
-        company: null,
-        companyId: 0,
-        country: null,
-        countryId: null,
-        emailId: null,
-        financialYears: [],
-        logoName: null,
-        name: null,
-        noSeries: [],
-        phoneNo: null,
-        postcode: null,
-        shortName: null,
-        state: null,
-        stateId: null,
-        wareHouses: [],
-        website: null,
-        LPINo:null,
-        EPINo:null,
-        SPINo:null,
-        TPINo:null,
-        LSONo:null,
-        ESONo:null,
-        SSONo:null,
-        TSONo:null,
-        LSINo:null,
-        ESINo:null,
-        SSINo:null,
-        TSINo:null,
+        IsVAT: false,
+        VATNo: "",
+        VATRegistationDate: "",
+        VATPercentage: 0,
+        IsGST: false,
+        GSTNo: "",
+        GSTRegistationDate: "",
+        PANNo: "",
+        TANNo: "",
+        CINNo: "",
+        IECNo: "",
+        ARNNo: "",
+        IsSEZ: true,
+        IsExportUnit: true,
+        CurrID: 0,
+        AllowRounding: true,
+        LPINo: 0,
+        EPINo: 0,
+        SPINo: 0,
+        TPINo: 0,
+        LSONo: 0,
+        ESONo: 0,
+        SSONo: 0,
+        TSONo: 0,
+        LSINo: 0,
+        ESINo: 0,
+        SSINo: 0,
+        TSINo: 0,
         PSNo: 0,
-        CPSNo:0,
+        CPSNo: 0,
         CNNo: 0,
         DNNo: 0,
         PRNo: 0,
-        PONo: 0,
+        LPONo: 0,
+        IPONo: 0,
         PurInvNo: 0,
         GITNo: 0,
         SRNo: 0,
         SIssueNo: 0,
         JVNo: 0,
         PVNo: 0,
+        RVNo: 0,
         CENo: 0,
         BankNo: 0,
         CashNo: 0,
         FGQCNo: 0,
         RMQCNo: 0,
         IJCNo: 0,
-        LPONo:0,
-IPONo:0,
-        EffectiveDate: "",
-        IsVat: false,
-        VATNo: null,
-        VATRegistrationNo: null,
-        VATPercentage: null,
-        IsGST: false,
-        GSTNo: null,
-        GSTRegistationDate:null,
-        VATRegistationDate:null,
-        RVNo: 0,
-        PANNo: "",
-        TANNo: "",
-        CINNo: null,
-        IECNo: null,
-        ARNNo: null,
-        IsSEZ: false,
-        IsExportUnit: false,
-        CurrID: 0,
       },
-     /*
-      IsTrading: true,
-      AllowRounding:true,
-      address: null,
-      address2: null,
-      address3: null,
-      branchId: 0,
-      city: null,
-      company: null,
-      companyId: 0,
-      country: null,
-      countryId: null,
-      emailId: null,
-      financialYears: [],
-      logoName: null,
-      name: null,
-      noSeries: [],
-      phoneNo: null,
-      postcode: null,
-      shortName: null,
-      state: null,
-      stateId: null,
-      wareHouses: [],
-      website: null,
-      PINo: 0,
-      SONo: 0,
-      SINo: 0,
-      PSNo: 0,
-      CPSNo: 0,
-      CNNo: 0,
-      DNNo: 0,
-      PRNo: 0,
-      PONo: 0,
-      PurInvNo: 0,
-      GITNo: 0,
-      SRNo: 0,
-      SIssueNo: 0,
-      JVNo: 0,
-      PVNo: 0,
-      CENo: 0,
-      BankNo: 0,
-      CashNo: 0,
-      FGQCNo: 0,
-      RMQCNo: 0,
-      IJCNo: 0,
-      EffectiveDate: null,
-      IsVat: false,
-      VATNo: null,
-      VATRegistrationNo: null,
-      VATPercentage: null,
-      IsGST: false,
-      GSTNo: null,
-
-      PANNo: null,
-      TANNo: null,
-      CINNo: null,
-      IECNo: null,
-      ARNNo: null,
-      IsSEZ: false,
-      IsExportUnit: false,
-      CurrID: 0,
-
-      VATNoDisabled: true,
-      VATPercentageDisabled: true,
-      GSTNoDisabled: true,
-*/
       Validations: {
         name: { errorState: false, errorMsg: "" },
         shortName: { errorState: false, errorMsg: "" },
@@ -319,7 +247,7 @@ IPONo:0,
           ProgressLoader: true,
         });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   getBranches() {
@@ -362,7 +290,7 @@ IPONo:0,
         rows = data;
         this.processCompanyData(data)
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   getStateList() {
@@ -383,7 +311,7 @@ IPONo:0,
         rows = data;
         this.processStateData(data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   getCountryList() {
@@ -404,7 +332,7 @@ IPONo:0,
         rows = data;
         this.processCountryData(data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   processCountryData(data) {
@@ -444,37 +372,37 @@ IPONo:0,
   }
 
   getBranchDetail(branch) {
-    try{
+    try {
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       const headers = {
         "Content-Type": "application/json",
       };
-  
+
       const data = {
         validUser: ValidUser,
         branch: {
-          branchId:branch.branchId
+          branchId: branch.branchId
         },
       };
-  
+
       let GetBranchUrl = APIURLS.APIURL.GetBranch;
-  
+
       axios
         .post(GetBranchUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-  
+
           this.setStateParams(data);
         })
         .catch((error) => {
           this.setState({ branch: null, ProgressLoader: true });
         });
-    }catch(ex){
+    } catch (ex) {
       console.log("ex");
     }
-    
+
   }
 
   setStateParams(data) {
@@ -628,681 +556,268 @@ IPONo:0,
       }
     };
 
-    const updateFormValue = (id, e) => {
-      if (id === "shortName") {
-        let branch = this.state.branch;
-        branch.shortName = e.target.value;
-        if (
-          e.target.value === "" ||
-          e.target.value === null ||
-          e.target.value.length > 10
-        ) {
-          let v = this.state.Validations;
-          if (e.target.value.length > 10) {
-            v.shortName = {
-              errorState: true,
-              errorMsg: "Only 10 Characters are Allowed!",
-            };
-            this.setState({
-              Validations: v,
-              disabledUpdatebtn: true,
-              disabledCreatebtn: true,
-            });
-          }
-          if (e.target.value === "" || e.target.value === null) {
-            v.shortName = {
-              errorState: true,
-              errorMsg: "Shortname cannot be blank",
-            };
-            this.setState({
-              Validations: v,
-              disabledUpdatebtn: true,
-              disabledCreatebtn: true,
-              shortName: e.target.value,
-            });
-          }
-        } else {
-          let v = this.state.Validations;
-          v.shortName = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: false,
-            disabledCreatebtn: false,
-            branch: branch,
-            shortName: e.target.value,
-          });
-        }
-        ValidateName();
+
+    const updateFormValue = (param, e) => {
+      let branch = this.state.branch;
+      switch (param) {
+        case "CompanyID":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "Name":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "ShortName":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "Address":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "Address2":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "Address3":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "City":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "Postcode":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "CountryID":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "StateID":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "PhoneNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "FAXNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "Website":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "EmailID":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "EffectiveDate":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "ContactPerson":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "VATNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "VATRegistationDate":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "VATPercentage":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "GSTNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "GSTRegistationDate":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "PANNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "TANNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "CINNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "IECNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "ARNNo":
+          branch[param] = e.target.value;
+          setParams(branch);
+          break;
+        case "CurrID":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "LPINo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "EPINo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "SPINo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "TPINo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "LSONo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "ESONo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "SSONo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "TSONo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "LSINo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "ESINo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "SSINo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "TSINo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "PSNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "CPSNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+
+        case "CNNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+
+        case "DNNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+
+        case "PRNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+
+        case "LPONo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "IPONo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "PurInvNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "GITNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "SRNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "SIssueNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "JVNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "PVNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "RVNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "CENo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "BankNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "CashNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "FGQCNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "RMQCNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        case "IJCNo":
+          branch[param] = CF.toInt(e.target.value);
+          setParams(branch);
+          break;
+        default:
+          branch[param] = e.target.checked;
+          setParams(branch);
+          break;
+
       }
 
-      if (id === "Company") {
-        let branch = this.state.branch;
-        branch.companyId = CF.toInt(e.target.value);
-        this.setState({ branch: branch, companyId: e.target.value });
-      }
-
-      if (id === "Name") {
-        let duplicateExist = CF.chkDuplicateButExcludeName(
-          this.state.branchData,
-          "name",
-          this.state.oldName,
-          e.target.value
-        );
-        this.setState({ duplicate: duplicateExist });
-
-        let branch = this.state.branch;
-        branch.name = e.target.value;
-        if (
-          e.target.value === "" ||
-          e.target.value === null ||
-          e.target.value.length > 50 ||
-          duplicateExist === true
-        ) {
-          if (duplicateExist === true) {
-            let v = this.state.Validations;
-            v.name = {
-              errorState: true,
-              errorMsg: "Branch Name Exists",
-            };
-            this.setState({
-              Validations: v,
-              disabledUpdatebtn: true,
-              disabledCreatebtn: true,
-              name: e.target.value,
-            });
-          }
-          if (e.target.value.length > 50) {
-            let v = this.state.Validations;
-            v.name = {
-              errorState: true,
-              errorMsg: "Only 50 Characters are Allowed!",
-            };
-            this.setState({
-              Validations: v,
-              disabledUpdatebtn: true,
-              disabledCreatebtn: true,
-            });
-          }
-          if (e.target.value === "" || e.target.value === null) {
-            let v = this.state.Validations;
-            v.name = {
-              errorState: true,
-              errorMsg: "Branch name cannot be blank",
-            };
-            this.setState({
-              Validations: v,
-              disabledUpdatebtn: true,
-              disabledCreatebtn: true,
-              name: e.target.value,
-            });
-          }
-        } else {
-          let v = this.state.Validations;
-          v.name = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            name: e.target.value,
-            branch: branch,
-            disabledCreatebtn: false,
-            disabledUpdatebtn: false,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "phoneNo") {
-        let branch = this.state.branch;
-        branch.phoneNo = e.target.value;
-        if (e.target.value.length > 20) {
-          let v = this.state.Validations;
-          v.phoneNo = {
-            errorState: true,
-            errorMsg: "Only 20 numbers are allowed",
-          };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: true,
-            disabledCreatebtn: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.phoneNo = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: false,
-            disabledCreatebtn: false,
-            branch: branch,
-            phoneNo: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-
-      if (id === "website") {
-        let branch = this.state.branch;
-        branch.website = e.target.value;
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.website = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: true,
-            disabledCreatebtn: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.website = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: false,
-            disabledCreatebtn: false,
-            branch: branch,
-            website: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "CountryID") {
-        let branch = this.state.branch;
-        branch.countryId = CF.toInt(e.target.value);
-        this.setState({ branch: branch, countryId: e.target.value });
-      }
-      if (id === "State") {
-        let branch = this.state.branch;
-        branch.stateId = CF.toInt(e.target.value);
-        this.setState({ branch: branch, stateId: CF.toInt(e.target.value) });
-      }
-
-      if (id === "CurrID") {
-        let branch = this.state.branch;
-        branch.CurrID = CF.toInt(e.target.value);
-        this.setState({ branch: branch, CurrID: CF.toInt(e.target.value) });
-      }
-
-      if (id === "City") {
-        let branch = this.state.branch;
-        branch.city = e.target.value;
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.city = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: true,
-            disabledCreatebtn: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.city = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: false,
-            disabledCreatebtn: false,
-            branch: branch,
-            city: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-
-      if (id === "Postcode") {
-        let branch = this.state.branch;
-        branch.postcode = e.target.value;
-        if (e.target.value.length > 10) {
-          let v = this.state.Validations;
-          v.postcode = {
-            errorState: true,
-            errorMsg: "Only 10 numbers are allowed",
-          };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: true,
-            disabledCreatebtn: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.postcode = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: false,
-            disabledCreatebtn: false,
-            branch: branch,
-            postcode: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-
-      if (id === "Address") {
-        let branch = this.state.branch;
-        branch.address = e.target.value;
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.address = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: true,
-            disabledCreatebtn: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.address = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: false,
-            disabledCreatebtn: false,
-            branch: branch,
-            address: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "Address2") {
-        let branch = this.state.branch;
-        branch.address2 = e.target.value;
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.address2 = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: true,
-            disabledCreatebtn: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.address2 = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: false,
-            disabledCreatebtn: false,
-            branch: branch,
-            address2: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "Address3") {
-        let branch = this.state.branch;
-        branch.address3 = e.target.value;
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.address3 = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: true,
-            disabledCreatebtn: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.address3 = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            disabledUpdatebtn: false,
-            disabledCreatebtn: false,
-            branch: branch,
-            address3: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-
-      if (id === "IsTrading") {
-        console.log("In is trading");
-        let branch = this.state.branch;
-        branch.IsTrading = e.target.checked;
-        this.setState({
-          branch: branch,
-          IsTrading: e.target.checked,
-        });
-      }
-
-      //----------------TAXATION------------
-
-      if (id === "VATNo") {
-        let branch = this.state.branch;
-        branch.VATNo = e.target.value;
-        let v = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v.VATNo = {
-            errorState: true,
-            errorMsg: "Only 20 chatracters are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          v.VATNo = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-
-            branch: branch,
-            VATNo: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "VATPercentage") {
-        let branch = this.state.branch;
-        branch.VATPercentage = e.target.value;
-        let v = this.state.Validations;
-        if (e.target.value.length > 8) {
-          v.VATPercentage = {
-            errorState: true,
-            errorMsg: "Only 8 numbers are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          v.VATPercentage = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-
-            branch: branch,
-            VATPercentage: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "GSTNo") {
-        let branch = this.state.branch;
-        branch.GSTNo = e.target.value;
-        let v = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v.GSTNo = {
-            errorState: true,
-            errorMsg: "Only 20 characters are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          v.GSTNo = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-
-            branch: branch,
-            GSTNo: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "PANNo") {
-        let branch = this.state.branch;
-        branch.PANNo = e.target.value;
-        let v = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v.PANNo = {
-            errorState: true,
-            errorMsg: "Only 20 numbers are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          v.PANNo = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-
-            branch: branch,
-            PANNo: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "TANNo") {
-        let branch = this.state.branch;
-        branch.TANNo = e.target.value;
-        let v = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v.TANNo = {
-            errorState: true,
-            errorMsg: "Only 20 numbers are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          v.TANNo = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-
-            branch: branch,
-            TANNo: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "CINNo") {
-        let branch = this.state.branch;
-        branch.CINNo = e.target.value;
-        let v = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v.CINNo = {
-            errorState: true,
-            errorMsg: "Only 20 numbers are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          v.CINNo = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-
-            branch: branch,
-            CINNo: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "IECNo") {
-        let branch = this.state.branch;
-        branch.IECNo = e.target.value;
-        let v = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v.IECNo = {
-            errorState: true,
-            errorMsg: "Only 20 numbers are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          v.IECNo = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-
-            branch: branch,
-            IECNo: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "ARNNo") {
-        let branch = this.state.branch;
-        branch.ARNNo = e.target.value;
-        let v = this.state.Validations;
-        if (e.target.value.length > 20) {
-          v.ARNNo = {
-            errorState: true,
-            errorMsg: "Only 20 numbers are allowed",
-          };
-          this.setState({
-            Validations: v,
-          });
-        } else {
-          v.ARNNo = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-
-            branch: branch,
-            ARNNo: e.target.value,
-          });
-        }
-        ValidateName();
-      }
-      if (id === "IsSEZ") {
-        let branch = this.state.branch;
-
-        branch.IsSEZ = e.target.checked;
-        this.setState({ branch: branch, IsSEZ: e.target.checked });
-      }
-      if (id === "IsExportUnit") {
-        let branch = this.state.branch;
-        branch.IsExportUnit = e.target.checked;
-        this.setState({ branch: branch, IsExportUnit: e.target.checked });
-      }
-
-      //---------------Numbering-----------
-      if (id === "PINo") {
-        let branch = this.state.branch;
-        branch.PINo = CF.toInt(e.target.value);
-        this.setState({ branch: branch, PINo: e.target.value });
-      }
-      if (id === "SONo") {
-        let branch = this.state.branch;
-        branch.SONo = CF.toInt(e.target.value);
-        this.setState({ branch: branch, SONo: e.target.value });
-      }
-      if (id === "SINo") {
-        let branch = this.state.branch;
-        branch.SINo = CF.toInt(e.target.value);
-        this.setState({ branch: branch, SINo: e.target.value });
-      }
-      if (id === "PSNo") {
-        let branch = this.state.branch;
-        branch.PSNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, PSNo: e.target.value });
-      }
-      if (id === "CPSNo") {
-        let branch = this.state.branch;
-        branch.CPSNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, CPSNo: e.target.value });
-      }
-      if (id === "CNNo") {
-        let branch = this.state.branch;
-        branch.CNNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, CNNo: e.target.value });
-      }
-      if (id === "DNNo") {
-        let branch = this.state.branch;
-        branch.DNNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, DNNo: e.target.value });
-      }
-      if (id === "PRNo") {
-        let branch = this.state.branch;
-        branch.PRNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, PRNo: e.target.value });
-      }
-      if (id === "PONo") {
-        let branch = this.state.branch;
-        branch.PONo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, PONo: e.target.value });
-      }
-      if (id === "PurInvNo") {
-        let branch = this.state.branch;
-        branch.PurInvNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, PurInvNo: e.target.value });
-      }
-      if (id === "GITNo") {
-        let branch = this.state.branch;
-        branch.GITNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, GITNo: e.target.value });
-      }
-      if (id === "SRNo") {
-        let branch = this.state.branch;
-        branch.SRNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, SRNo: e.target.value });
-      }
-      if (id === "SIssueNo") {
-        let branch = this.state.branch;
-        branch.SIssueNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, SIssueNo: e.target.value });
-      }
-      if (id === "JVNo") {
-        let branch = this.state.branch;
-        branch.JVNo = CF.toInt(e.target.value);
-        this.setState({ branch: branch, JVNo: e.target.value });
-      }
-      if (id === "PVNo") {
-        let branch = this.state.branch;
-        branch.PVNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, PVNo: e.target.value });
-      }
-      if (id === "CENo") {
-        let branch = this.state.branch;
-        branch.CENo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, CENo: e.target.value });
-      }
-      if (id === "BankNo") {
-        let branch = this.state.branch;
-        branch.BankNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, BankNo: e.target.value });
-      }
-      if (id === "CashNo") {
-        let branch = this.state.branch;
-        branch.CashNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, CashNo: e.target.value });
-      }
-      if (id === "FGQCNo") {
-        let branch = this.state.branch;
-        branch.FGQCNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, FGQCNo: e.target.value });
-      }
-      if (id === "RMQCNo") {
-        let branch = this.state.branch;
-        branch.RMQCNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, RMQCNo: e.target.value });
-      }
-      if (id === "IJCNo") {
-        let branch = this.state.branch;
-        branch.IJCNo = CF.toInt(e.target.value);
-
-        this.setState({ branch: branch, IJCNo: e.target.value });
-      }
-      if (id === "RVNo") {
-        let branch = this.state.branch;
-        branch.RVNo = CF.toInt(e.target.value);
-      }
-      if (id === "EffectiveDate") {
-        // moment().format("YYYY-MM-DD")
-        let branch = this.state.branch;
-        branch.EffectiveDate = e.target.value;
-        this.setState({ branch: branch, EffectiveDate: e.target.value });
-      }
     };
 
-     
+    const setParams = (object) => {
+      this.setState({ Customer: object });
+    };
+
+
 
     const VAT_GST_Checkbox_Click = (e, param) => {
       if (param === "isvat") {
@@ -1341,17 +856,20 @@ IPONo:0,
     };
 
     const handleCreate = () => {
-      ValidateName();
+     
       this.setState({ ProgressLoader: false });
       let branch = this.state.branch;
       branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
+      branch.VATRegistationDate = moment(branch.VATRegistationDate).format("MM/DD/YYYY");
+      branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("MM/DD/YYYY");
+      
 
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       const data = {
         validUser: ValidUser,
-        branch: branch,
+        Branch: branch,
       };
 
       const headers = {
@@ -1370,7 +888,7 @@ IPONo:0,
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     const handleupdate = () => {
@@ -1383,12 +901,13 @@ IPONo:0,
 
       let branch = this.state.branch;
       branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
-      let dup = "isTrading";
-      delete branch[dup];
+      branch.VATRegistationDate = moment(branch.VATRegistationDate).format("MM/DD/YYYY");
+      branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("MM/DD/YYYY");
+      
 
       const data = {
         validUser: ValidUser,
-        branch: branch,
+        Branch: branch,
       };
 
       const headers = {
@@ -1404,7 +923,7 @@ IPONo:0,
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -1467,7 +986,7 @@ IPONo:0,
                 >
                   {this.state.type === "edit" ? (
                     <Button
-                      className="action-btns"
+                    className="action-btns"
                       onClick={handleupdate}
                       disabled={this.state.disabledUpdatebtn}
                     >
@@ -1477,7 +996,7 @@ IPONo:0,
 
                   {this.state.type === "add" ? (
                     <Button
-                      className="action-btns"
+                    className="action-btns"
                       onClick={handleCreate}
                       disabled={this.state.disabledCreatebtn}
                     >
@@ -1530,18 +1049,17 @@ IPONo:0,
                               aria-label="company List table"
                             >
                               <TableBody className="tableBody">
-                           
-
                                 <DropdownInput
-                                  id="companySelect"
+                                  isMandatory={true}
+                                  id="CompanyID"
                                   label="Company"
                                   onChange={(e) =>
-                                    updateFormValue("Company", e)
+                                    updateFormValue("CompanyID", e)
                                   }
                                   options={this.state.companyData}
-                                  value={this.state.branch.companyId}
+                                  value={this.state.branch.CompanyID}
                                 />
-                               
+
                                 <Tablerowcelltextboxinput
                                   id="Name"
                                   label="Name"
@@ -1552,7 +1070,7 @@ IPONo:0,
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.name}
+                                  value={this.state.branch.Name}
                                   error={this.state.Validations.name.errorState}
                                   helperText={
                                     this.state.Validations.name.errorMsg
@@ -1561,18 +1079,18 @@ IPONo:0,
                                 />
 
                                 <Tablerowcelltextboxinput
-                                  id="shortName"
+                                  id="ShortName"
                                   label="ShortName"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
-                                    updateFormValue("shortName", e)
+                                    updateFormValue("ShortName", e)
                                   }
                                   InputProps={{
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.shortName}
+                                  value={this.state.branch.ShortName}
                                   error={
                                     this.state.Validations.shortName.errorState
                                   }
@@ -1583,18 +1101,18 @@ IPONo:0,
                                 />
 
                                 <Tablerowcelltextboxinput
-                                  id="phoneNo"
+                                  id="PhoneNo"
                                   label="Phone No"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
-                                    updateFormValue("phoneNo", e)
+                                    updateFormValue("PhoneNo", e)
                                   }
                                   InputProps={{
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.phoneNo}
+                                  value={this.state.branch.PhoneNo}
                                   error={
                                     this.state.Validations.phoneNo.errorState
                                   }
@@ -1604,18 +1122,18 @@ IPONo:0,
                                 />
 
                                 <Tablerowcelltextboxinput
-                                  id="website"
+                                  id="Website"
                                   label="Website"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
-                                    updateFormValue("website", e)
+                                    updateFormValue("Website", e)
                                   }
                                   InputProps={{
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.website}
+                                  value={this.state.branch.Website}
                                   error={
                                     this.state.Validations.website.errorState
                                   }
@@ -1625,6 +1143,7 @@ IPONo:0,
                                 />
 
                                 <Tablerowcelldateinput
+                                  isMandatory={true}
                                   id="EffectiveDate"
                                   label="Effective Date"
                                   variant="outlined"
@@ -1632,10 +1151,29 @@ IPONo:0,
                                   onChange={(e) =>
                                     updateFormValue("EffectiveDate", e)
                                   }
-                                 
+
                                   value={this.state.branch.EffectiveDate}
                                   error={null}
                                   helperText={null}
+                                />
+                                <SwitchInput
+                                  key="IsTrading"
+                                  id="IsTrading"
+                                  label="Is Trading?"
+                                  param={this.state.branch.IsTrading}
+                                  onChange={(e) =>
+                                    updateFormValue("IsTrading", e)
+                                  }
+                                />
+
+                                <SwitchInput
+                                  key="AllowRounding"
+                                  id="AllowRounding"
+                                  label="Allow Rounding?"
+                                  param={this.state.branch.AllowRounding}
+                                  onChange={(e) =>
+                                    updateFormValue("AllowRounding", e)
+                                  }
                                 />
                               </TableBody>
                             </Table>
@@ -1651,20 +1189,21 @@ IPONo:0,
                             >
                               <TableBody className="tableBody">
                                 <DropdownInput
+                                  isMandatory={true}
                                   id="CountryID"
                                   label="Country"
                                   onChange={(e) =>
                                     updateFormValue("CountryID", e)
                                   }
                                   options={this.state.countryData}
-                                  value={this.state.branch.countryId}
+                                  value={this.state.branch.CountryID}
                                 />
                                 <DropdownInput
-                                  id="stateSelect"
+                                  id="StateID"
                                   label="State"
-                                  onChange={(e) => updateFormValue("State", e)}
+                                  onChange={(e) => updateFormValue("StateID", e)}
                                   options={this.state.stateData}
-                                  value={this.state.branch.stateId}
+                                  value={this.state.branch.StateID}
                                 />
 
                                 <Tablerowcelltextboxinput
@@ -1677,7 +1216,7 @@ IPONo:0,
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.city}
+                                  value={this.state.branch.City}
                                   error={this.state.Validations.city.errorState}
                                   helperText={
                                     this.state.Validations.city.errorMsg
@@ -1696,7 +1235,7 @@ IPONo:0,
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.postcode}
+                                  value={this.state.branch.Postcode}
                                   error={
                                     this.state.Validations.postcode.errorState
                                   }
@@ -1706,6 +1245,7 @@ IPONo:0,
                                 />
 
                                 <Tablerowcelltextboxinput
+                                  isMandatory={true}
                                   id="Address"
                                   label="Address Line 1"
                                   variant="outlined"
@@ -1717,7 +1257,7 @@ IPONo:0,
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.address}
+                                  value={this.state.branch.Address}
                                   error={
                                     this.state.Validations.address.errorState
                                   }
@@ -1738,7 +1278,7 @@ IPONo:0,
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.address2}
+                                  value={this.state.branch.Address2}
                                   error={
                                     this.state.Validations.address2.errorState
                                   }
@@ -1759,7 +1299,7 @@ IPONo:0,
                                     className: "textFieldCss",
                                     maxlength: 50,
                                   }}
-                                  value={this.state.branch.address3}
+                                  value={this.state.branch.Address3}
                                   error={
                                     this.state.Validations.address3.errorState
                                   }
@@ -1768,25 +1308,7 @@ IPONo:0,
                                   }
                                 />
 
-                                <SwitchInput
-                                  key="IsTrading"
-                                  id="IsTrading"
-                                  label="IsTrading"
-                                  param={this.state.branch.IsTrading}
-                                  onChange={(e) =>
-                                    updateFormValue("IsTrading", e)
-                                  }
-                                />
 
-                                <SwitchInput
-                                  key="AllowRounding"
-                                  id="AllowRounding"
-                                  label="Allow Rounding"
-                                  param={this.state.branch.AllowRounding}
-                                  onChange={(e) =>
-                                    updateFormValue("AllowRounding", e)
-                                  }
-                                />
 
                               </TableBody>
                             </Table>
@@ -1831,6 +1353,7 @@ IPONo:0,
                             >
                               <TableBody className="tableBody">
                                 <DropdownInput
+                                  isMandatory={true}
                                   id="CurrID"
                                   label="Currency"
                                   onChange={(e) => updateFormValue("CurrID", e)}
@@ -1939,7 +1462,7 @@ IPONo:0,
                                   }
                                 />
 
-                               <SwitchInput
+                                <SwitchInput
                                   key="IsExportUnit"
                                   id="IsExportUnit"
                                   label="Is Export Unit?"
@@ -1962,18 +1485,18 @@ IPONo:0,
                               aria-label="Taxation table"
                             >
                               <TableBody className="tableBody">
-                              <SwitchInput
-                                  key="IsVat"
-                                  id="IsVat"
+                                <SwitchInput
+                                  key="IsVAT"
+                                  id="IsVAT"
                                   label="Is VAT?"
-                                  param={this.state.branch.IsVat}
+                                  param={this.state.branch.IsVAT}
                                   onChange={(e) =>
-                                    updateFormValue("isvat", e)
+                                    updateFormValue("IsVAT", e)
                                   }
                                 />
 
 
-{/* Addd this -> above   VAT_GST_Checkbox_Click(e, "isvat") */}
+                                {/* Addd this -> above   VAT_GST_Checkbox_Click(e, "isvat") */}
 
                                 <Tablerowcelldateinput
                                   id="VATRegistationDate"
@@ -1984,12 +1507,12 @@ IPONo:0,
                                     updateFormValue("VATRegistationDate", e)
                                   }
 
-                                  value={this.state.branch.GSTRegistationDate}
+                                  value={this.state.branch.VATRegistationDate}
                                   error={null}
                                   helperText={null}
                                 />
 
-                               
+
 
                                 <Tablerowcelltextboxinput
                                   id="VATNo"
@@ -2037,17 +1560,17 @@ IPONo:0,
 
 
                                 <SwitchInput
-                                  key="isgst"
-                                  id="isgst"
+                                  key="IsGST"
+                                  id="IsGST"
                                   label="Is GST?"
                                   param={this.state.branch.IsGST}
                                   onChange={(e) =>
-                                    updateFormValue("isgst", e)
+                                    updateFormValue("IsGST", e)
                                   }
                                 />
-                                 {/*  Add this criteria above  ->   VAT_GST_Checkbox_Click(e, "isgst") */}
+                                {/*  Add this criteria above  ->   VAT_GST_Checkbox_Click(e, "isgst") */}
 
-                                 
+
 
                                 <Tablerowcelltextboxinput
                                   id="GSTNo"
@@ -2129,7 +1652,7 @@ IPONo:0,
                               aria-label="Numbering table"
                             >
                               <TableBody className="tableBody">
-                               
+
                                 <DropdownInput
                                   id="LPINo"
                                   label="Local Proforma Invoice"
@@ -2144,14 +1667,14 @@ IPONo:0,
                                   onChange={(e) => updateFormValue("EPINo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                 <DropdownInput
+                                <DropdownInput
                                   id="SPINo"
                                   label="Sample Proforma Invoice"
                                   value={this.state.branch.SPINo}
                                   onChange={(e) => updateFormValue("SPINo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                 <DropdownInput
+                                <DropdownInput
                                   id="TPINo"
                                   label="Trading Proforma Invoice"
                                   value={this.state.branch.TPINo}
@@ -2181,7 +1704,7 @@ IPONo:0,
                                   onChange={(e) => updateFormValue("SSONo", e)}
                                   options={this.state.numberSeries}
                                 />
-                                 <DropdownInput
+                                <DropdownInput
                                   id="TSONo"
                                   label="Trading Sales Order"
                                   value={this.state.branch.TSONo}
@@ -2251,6 +1774,20 @@ IPONo:0,
                                   onChange={(e) => updateFormValue("DNNo", e)}
                                   options={this.state.numberSeries}
                                 />
+
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Grid>
+                        <Grid xs={12} sm={12} md={6} lg={6}>
+                          <TableContainer>
+                            <Table
+                              stickyHeader
+                              size="small"
+                              className="accordion-table"
+                              aria-label="Numbering table"
+                            >
+                              <TableBody className="tableBody">
                                 <DropdownInput
                                   id="PRNo"
                                   label="Purchase Request"
@@ -2266,16 +1803,13 @@ IPONo:0,
                                   options={this.state.numberSeries}
                                 />
 
-<DropdownInput
+                                <DropdownInput
                                   id="IPONo"
                                   label="Import Purchase Order"
                                   value={this.state.branch.IPONo}
                                   onChange={(e) => updateFormValue("IPONo", e)}
                                   options={this.state.numberSeries}
                                 />
-
-
-
 
                                 <DropdownInput
                                   id="PurInvNo"
@@ -2293,19 +1827,6 @@ IPONo:0,
                                   onChange={(e) => updateFormValue("GITNo", e)}
                                   options={this.state.numberSeries}
                                 />
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="Numbering table"
-                            >
-                              <TableBody className="tableBody">
                                 <DropdownInput
                                   id="SRNo"
                                   label="Store Requisition"
