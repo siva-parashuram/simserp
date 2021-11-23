@@ -148,6 +148,12 @@ export const APIURL = {
 };
 
 
+export const pagination= {
+  page: 0,
+  rowsPerPage: 12,
+};
+
+
 export const buttonTitle={
   add:"Add",
   edit:"Edit",
@@ -179,10 +185,7 @@ export const TypeOfEnterprise = [
 
 export const CTimeOut = 10;
 export const DFormat = "MM/DD/YYYY";
-export let pagination= {
-  page: 0,
-  rowsPerPage: 10,
-};
+
 
 // 0-Sales, 1-Shipping, 2-Account, 3-Internal
 

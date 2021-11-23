@@ -220,9 +220,9 @@ class menusection extends React.Component {
 
         return (
             <Fragment>
-                <div style={{ marginLeft: 5, marginTop: 8 }}>
+                <div style={{ marginLeft: 5, marginTop: 8,backgroundColor:'#ffffff' }} >
 
-                    <Grid container spacing={1}>
+                    <Grid container spacing={1} >
                         {/* <Grid xs={12} sm={12} md={1} lg={1} >
                             <div className="menusection-div1">
                                 <div style={{ marginTop: 8 }}>
@@ -233,7 +233,7 @@ class menusection extends React.Component {
                             </div>
                         </Grid> */}
                         <Grid item xs={12} sm={12} md={11} lg={11}>
-                            <div style={{ marginTop: 5, marginLeft: 10 }}>
+                            <div style={{ marginTop: 10, marginLeft: 10 }}>
                                 <ButtonGroup
                                     size="small"
                                     variant="text"

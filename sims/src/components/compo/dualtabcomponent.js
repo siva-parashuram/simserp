@@ -32,19 +32,25 @@ class dualtabcomponent extends React.Component {
             <Fragment>
                 <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: '#fff' }}>
-                        <ButtonGroup variant="text" aria-label="text button group">
+                        <ButtonGroup className="" variant="text" aria-label="text button group">
                             <Button
+                                style={{
+                                    textTransform: 'initial'
+                                }}
                                 startIcon={<InfoIcon />}
                                 className={this.state.tab1UnderlineBtnCss}
                                 onClick={(e) => customTabButton(e, "tab1")}>{this.props.tab1name}</Button>
                             <Button
+                                style={{
+                                    textTransform: 'initial'
+                                }}
                                 startIcon={<AddIcon />}
                                 className={this.state.tab2UnderlineBtnCss}
                                 onClick={(e) => customTabButton(e, "tab2")}>{this.props.tab2name}</Button>
                         </ButtonGroup>
                     </Grid>
                 </Grid>
-                <div style={{height:10}}>&nbsp;</div>   
+                <div style={{ height: 10 }}>&nbsp;</div>
                 <Grid container spacing={0}>
                     {this.state.showTab1 === true ? (
                         <Fragment>

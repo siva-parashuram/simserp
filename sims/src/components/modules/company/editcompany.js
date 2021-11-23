@@ -805,7 +805,7 @@ class editcompany extends React.Component {
           this.setState({ Dialog: Dialog });
           break;
 
-          break;
+        
         default:
           break;
       }
@@ -850,16 +850,9 @@ class editcompany extends React.Component {
       <Fragment>
         <div>
           <Loader ProgressLoader={this.state.ProgressLoader} />
-          <ErrorSnackBar
-            ErrorPrompt={this.state.ErrorPrompt}
-            closeErrorPrompt={closeErrorPrompt}
-          />
-          <SuccessSnackBar
-            SuccessPrompt={this.state.SuccessPrompt}
-            closeSuccessPrompt={closeSuccessPrompt}
-          />
+         
 
-          <div className="breadcrumb-height">
+          <div className="breadcrumb-height"  style={{marginTop:-20}}>
             <Grid container spacing={1}>
               <Grid
                 xs={12}
@@ -906,7 +899,7 @@ class editcompany extends React.Component {
 
           <div className="breadcrumb-bottom"></div>
 
-          <div className="New-link-bottom"></div>
+          {/* <div className="New-link-bottom"></div> */}
 
           <Grid className="table-adjust" container spacing={0}>
             <Grid item xs={12} sm={12} md={8} lg={8}>
@@ -930,7 +923,7 @@ class editcompany extends React.Component {
                       style={{ minHeight: "40px", maxHeight: "40px" }}
                     >
                       <Typography key="" className="accordion-Header-Title">
-                        General Details
+                        General 
                       </Typography>
                     </AccordionSummary>
 
@@ -1204,6 +1197,16 @@ class editcompany extends React.Component {
           </Grid>
         </div>
         {dialog}
+
+
+        <ErrorSnackBar
+            ErrorPrompt={this.state.ErrorPrompt}
+            closeErrorPrompt={closeErrorPrompt}
+          />
+          <SuccessSnackBar
+            SuccessPrompt={this.state.SuccessPrompt}
+            closeSuccessPrompt={closeSuccessPrompt}
+          />
       </Fragment>
     );
   }
