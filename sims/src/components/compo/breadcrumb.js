@@ -15,53 +15,56 @@ class breadcrumb1 extends React.Component {
 
         return (
             <Fragment>
-                {this.props.level === 1 ? (
-                    <Breadcrumbs
-                        className="style-breadcrumb"
-                        aria-label="breadcrumb"
-                    >
-                        <Link
-                            color="inherit"
-                            className="backLink"
-                            onClick={this.props.backOnClick}
+                <div >
+                    {this.props.level === 1 ? (
+                        <Breadcrumbs
+                            className="style-breadcrumb"
+                            aria-label="breadcrumb"
                         >
-                            Back
-                        </Link>
-                        <Link
-                            color="inherit"
-                            href={this.props.linkHref}
+                            <Link
+                                color="inherit"
+                                className="backLink"
+                                onClick={this.props.backOnClick}
+                            >
+                                Back
+                            </Link>
+                            <Link
+                                color="inherit"
+                                href={this.props.linkHref}
+                            >
+                                {this.props.linkTitle}
+                            </Link>
+                            <Typography color="textPrimary">{this.props.typoTitle}</Typography>
+                        </Breadcrumbs>
+                    ) : (
+                        <Breadcrumbs
+                            className="style-breadcrumb"
+                            aria-label="breadcrumb"
                         >
-                            {this.props.linkTitle}
-                        </Link>
-                        <Typography color="textPrimary">{this.props.typoTitle}</Typography>
-                    </Breadcrumbs>
-                ) : (
-                    <Breadcrumbs
-                        className="style-breadcrumb"
-                        aria-label="breadcrumb"
-                    >
-                        <Link
-                            color="inherit"
-                            className="backLink"
-                            onClick={this.props.backOnClick}
-                        >
-                            Back
-                        </Link>
-                        <Link
-                            color="inherit"
-                            href={this.props.linkHref}
-                        >
-                            {this.props.linkTitle}
-                        </Link>
-                        <Link
-                            color="inherit"
-                            href={this.props.masterHref}
-                        >
-                            {this.props.masterLinkTitle}
-                        </Link>
-                        <Typography color="textPrimary">{this.props.typoTitle}</Typography>
-                    </Breadcrumbs>
-                )}
+                            <Link
+                                color="inherit"
+                                className="backLink"
+                                onClick={this.props.backOnClick}
+                            >
+                                Back
+                            </Link>
+                            <Link
+                                color="inherit"
+                                href={this.props.linkHref}
+                            >
+                                {this.props.linkTitle}
+                            </Link>
+                            <Link
+                                color="inherit"
+                                href={this.props.masterHref}
+                            >
+                                {this.props.masterLinkTitle}
+                            </Link>
+                            <Typography color="textPrimary">{this.props.typoTitle}</Typography>
+                        </Breadcrumbs>
+                    )}
+                </div>
+
 
             </Fragment>
         )

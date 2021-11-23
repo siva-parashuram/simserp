@@ -85,7 +85,9 @@ let routes = ({ location, ...rest }) => {
       window.location.pathname === "/loginExpired" ? null : (
         <Header />
       )}
-      <div style={{ marginLeft: 10 }}>
+      <div style={{
+        //  marginLeft:  
+         }}>
         <Switch>
           <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
           <Route path={URLS.URLS.userDashboard} component={userDashboard} />

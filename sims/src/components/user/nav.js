@@ -135,7 +135,6 @@ export default function ButtonAppBar() {
         <CssBaseline />
         <AppBar className="navDiv" position="static">
           <Toolbar>
-
             <Typography variant="h6" className={classes.title}>
               {branchName}
             </Typography>
