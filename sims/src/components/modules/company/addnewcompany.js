@@ -945,7 +945,7 @@ class addnewcompany extends React.Component {
                                   }
                                   value={this.state.country}
                                 >
-                                  <option value="-" disabled>
+                                  <option value="-" >
                                     Select
                                   </option>
 
@@ -988,7 +988,7 @@ class addnewcompany extends React.Component {
                                   onChange={(e) => updateFormValue("State", e)}
                                   value={this.state.state}
                                 >
-                                  <option value="-" disabled>
+                                  <option value="-">
                                     Select
                                   </option>
 
