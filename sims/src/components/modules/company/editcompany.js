@@ -856,18 +856,18 @@ class editcompany extends React.Component {
           <Loader ProgressLoader={this.state.ProgressLoader} />
          
 
-          <div className="breadcrumb-height"  style={{marginTop:-20}}>
+          <div className="breadcrumb-height"  style={{marginTop:-5}}>
             <Grid container spacing={1}>
               <Grid
                 xs={12}
                 sm={12}
                 md={4}
                 lg={4}
-                style={{
-                  borderRightStyle: "solid",
-                  borderRightColor: "#bdbdbd",
-                  borderRightWidth: 1,
-                }}
+                // style={{
+                //   borderRightStyle: "solid",
+                //   borderRightColor: "#bdbdbd",
+                //   borderRightWidth: 1,
+                // }}
               >
                 <div style={{ marginTop: 8 }}>
                   <Breadcrumb
