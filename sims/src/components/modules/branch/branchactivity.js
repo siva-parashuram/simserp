@@ -76,16 +76,16 @@ class editbranch extends React.Component {
         Website: "",
         EmailID: "",
         LogoName: "",
-        EffectiveDate: "",
+        EffectiveDate: null,
         ContactPerson: "",
         IsTrading: true,
         IsVAT: false,
         VATNo: "",
-        VATRegistationDate: "",
+        VATRegistationDate: null,
         VATPercentage: 0,
         IsGST: false,
         GSTNo: "",
-        GSTRegistationDate: "",
+        GSTRegistationDate: null,
         PANNo: "",
         TANNo: "",
         CINNo: "",
@@ -201,8 +201,7 @@ class editbranch extends React.Component {
       let branch = this.state.branch;
 
       if (type === "edit") {
-        branch.branchId = CF.toInt(editbranchId);
-        this.getBranchDetail(branch);
+        branch.BranchID = CF.toInt(editbranchId);       
         this.getNumberSeries(CF.toInt(editbranchId));
       }
 
@@ -213,6 +212,8 @@ class editbranch extends React.Component {
         type: type,
         typoTitle: typoTitle,
         ProgressLoader: type === "add" ? true : false,
+      },()=>{
+        this.getBranchDetail(branch);
       });
     } else {
       this.setState({ isLoggedIn: false });
@@ -414,7 +415,7 @@ class editbranch extends React.Component {
       const data = {
         validUser: ValidUser,
         branch: {
-          branchId: branch.branchId
+         BranchId: branch.BranchID
         },
       };
 
@@ -424,8 +425,10 @@ class editbranch extends React.Component {
         .post(GetBranchUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-
-          this.setStateParams(data);
+          this.setState({branch:data},()=>{
+            this.setInitialParamsForEdit();
+          }); 
+          
         })
         .catch((error) => {
           this.setState({ branch: null, ProgressLoader: true });
@@ -436,73 +439,16 @@ class editbranch extends React.Component {
 
   }
 
-  setStateParams(data) {
-    this.setState({
-      oldName: data.name,
-      branch: data,
-      address: data.address,
-      address2: data.address2,
-      address3: data.address3,
-      branchId: data.branchId,
-      city: data.city,
-      company: data.company,
-      companyId: data.companyId,
-      country: data.country,
-      countryId: data.countryId,
-      emailId: data.emailId,
-      financialYears: data.financialYears,
-      logoName: data.logoName,
-      name: data.name,
-      noSeries: data.noSeries,
-      phoneNo: data.phoneNo,
-      postcode: data.postcode,
-      shortName: data.shortName,
-      state: data.state,
-      stateId: data.stateId,
-      wareHouses: data.wareHouses,
-      website: data.website,
-      PINo: data.pino,
-      SONo: data.sono,
-      SINo: data.sino,
-      PSNo: data.psno,
-      CPSNo: data.cpsno,
-      CNNo: data.cnno,
-      DNNo: data.dnno,
-      PRNo: data.prno,
-      PONo: data.pono,
-      PurInvNo: data.purInvNo,
-      GITNo: data.gitno,
-      SRNo: data.srno,
-      SIssueNo: data.sissueno,
-      JVNo: data.jvno,
-      PVNo: data.pvno,
-      CENo: data.ceno,
-      BankNo: data.bankno,
-      CashNo: data.cashno,
-      FGQCNo: data.fgqcno,
-      RMQCNo: data.rmqcno,
-      IJCNo: data.ijcno,
-      RVNo: data.rvno,
-      EffectiveDate: moment(data.effectiveDate).format("YYYY-MM-DD"),
-      IsVat: data.isVat === null ? false : data.isVat,
-      isGst: data.isGst === null ? false : data.isGst,
-      VATNo: data.vatno,
-      VATRegistrationNo: null,
-      VATPercentage: data.vatpercentage,
-      IsGST: data.isGst === null ? false : data.isGst,
-      GSTNo: data.gstno,
-      IsTrading: data.isTrading === null ? false : data.isTrading,
-      PANNo: data.panno,
-      TANNo: data.tanno,
-      CINNo: data.cinno,
-      IECNo: data.iecno,
-      ARNNo: data.arnno,
-      IsSEZ: data.isSez === null ? false : data.isSez,
-      IsExportUnit: data.isExportUnit === null ? false : data.isExportUnit,
-      CurrID: data.currId,
-      ProgressLoader: true,
-    });
+  setInitialParamsForEdit=()=>{
+    let branch=this.state.branch;
+   let CountryID=branch.CountryID;
+   branch.EffectiveDate = moment(branch.EffectiveDate).format("YYYY-MM-DD");
+   branch.VATRegistationDate = moment(branch.VATRegistationDate).format("YYYY-MM-DD");
+   branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("YYYY-MM-DD");
+   this.setState({branch:branch});
+   this.getStateByCountry(CountryID);
   }
+
 
   getNumberSeries(branchId) {
     let numberSeries = [];
@@ -576,16 +522,7 @@ class editbranch extends React.Component {
       }
     };
 
-    const ValidateName = () => {
-      if (
-        this.state.name === "" ||
-        this.state.name === null ||
-        this.state.name.length > 50 ||
-        this.state.duplicate === true
-      ) {
-        this.setState({ disabledUpdatebtn: true });
-      }
-    };
+   
 
 
     const updateFormValue = (param, e) => {
@@ -649,7 +586,7 @@ class editbranch extends React.Component {
           setParams(branch);
           break;
         case "EffectiveDate":
-          branch[param] = e.target.value;
+          branch[param] = moment(e.target.value).format("YYYY-MM-DD");
           setParams(branch);
           break;
         case "ContactPerson":
@@ -661,7 +598,7 @@ class editbranch extends React.Component {
           setParams(branch);
           break;
         case "VATRegistationDate":
-          branch[param] = e.target.value;
+          branch[param] = moment(e.target.value).format("YYYY-MM-DD");
           setParams(branch);
           break;
         case "VATPercentage":
@@ -673,7 +610,7 @@ class editbranch extends React.Component {
           setParams(branch);
           break;
         case "GSTRegistationDate":
-          branch[param] = e.target.value;
+          branch[param] = moment(e.target.value).format("YYYY-MM-DD");
           setParams(branch);
           break;
         case "PANNo":
@@ -924,7 +861,7 @@ class editbranch extends React.Component {
     };
 
     const handleupdate = () => {
-      ValidateName();
+       
       this.setState({ ProgressLoader: false });
 
       let ValidUser = APIURLS.ValidUser;
@@ -932,10 +869,12 @@ class editbranch extends React.Component {
       ValidUser.Token = getCookie(COOKIE.TOKEN);
 
       let branch = this.state.branch;
+      
       branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
       branch.VATRegistationDate = moment(branch.VATRegistationDate).format("MM/DD/YYYY");
       branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("MM/DD/YYYY");
-      
+
+     
 
       const data = {
         validUser: ValidUser,
@@ -949,11 +888,19 @@ class editbranch extends React.Component {
       axios
         .post(UpdateBranchUrl, data, { headers })
         .then((response) => {
-          if (response.status === 200) {
+          if (response.status === 200 || response.data === true|| response.data === 'true') {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
+
+          branch.EffectiveDate = moment(branch.EffectiveDate).format("YYYY-MM-DD");
+          branch.VATRegistationDate = moment(branch.VATRegistationDate).format("YYYY-MM-DD");
+          branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("YYYY-MM-DD");
+
+          this.setState({branch:branch});
+
         })
         .catch((error) => { });
     };
@@ -1081,6 +1028,7 @@ class editbranch extends React.Component {
                               aria-label="company List table"
                             >
                               <TableBody className="tableBody">
+                                {console.log("this.state.branch > ",this.state.branch)}
                                 <DropdownInput
                                   isMandatory={true}
                                   id="CompanyID"

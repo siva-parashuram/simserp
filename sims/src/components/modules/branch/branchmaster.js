@@ -165,7 +165,7 @@ class branchMaster extends React.Component {
         URLS.URLS.editBranch +
         this.state.urlparams +
         "&editbranchId=" +
-        item.branchId+ "&type=edit";
+        item.BranchID+ "&type=edit";
       this.setState({
         branchItem: item,
         editUrl: editUrl,
@@ -173,7 +173,7 @@ class branchMaster extends React.Component {
       });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
-      getAttachments(item.companyId, item.branchId);
+      getAttachments(item.CompanyID, item.BranchID);
       }catch(e){}
       
     };

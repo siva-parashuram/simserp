@@ -65,7 +65,7 @@ class addnewcompany extends React.Component {
       stateData: [],
       createBtnDisabled: true,
       GeneralDetailsExpanded: true,
-      AddressDetailsExpanded: true,
+     
       duplicate: false,
       Dialog: {
         DialogTitle: "",
@@ -479,6 +479,8 @@ class addnewcompany extends React.Component {
       if (id === "PhoneNo") {
         let number = CF.chkIfNumber(e.target.value);
         if (number) {
+          //let v=CF.getInutLen("PhoneNo",e.target.value.length);
+          //if(v)
           if (e.target.value.length > 20) {
             let v = this.state.Validations;
             v.phoneno = {
@@ -801,7 +803,7 @@ class addnewcompany extends React.Component {
                     style={{ minHeight: "40px", maxHeight: "40px" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General
                     </Typography>
                   </AccordionSummary>
                   {/* <Divider  className="accordion-Header-underline"/> */}
