@@ -359,8 +359,8 @@ class login extends React.Component {
               :
               <div>               
                 <div>
-                  <TextField
-                  className=" "
+                  <TextField    
+                  className=""             
                     required
                     id="userID"
                     label="User ID"
@@ -372,7 +372,7 @@ class login extends React.Component {
                 <div>&nbsp;</div>
                 <div>
                   <TextField
-                    className=" "
+                    className=""
                     required
                     id="password"
                     label="Password"
@@ -380,6 +380,7 @@ class login extends React.Component {
                     variant="outlined"
                     size="small"
                     onChange={this.handleChange}
+                   
                   />
                 </div>
                 <div>&nbsp;</div>
