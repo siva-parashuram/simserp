@@ -34,6 +34,7 @@ import Csvexport from "../../compo/csvexport";
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 
 let columns = [];
@@ -399,55 +400,21 @@ class companyMaster extends React.Component {
       window.location = url;
     };
 
-    return (
+    const breadcrumbHtml=(
       <Fragment>
-        <CssBaseline />
-
-        <Loader ProgressLoader={this.state.ProgressLoader} />
-
-        <div className="breadcrumb-height" style={{ marginTop: -5 }}>
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-            // style={{
-            //   borderRightStyle: "solid",
-            //   borderRightColor: "#bdbdbd",
-            //   borderRightWidth: 1,
-            // }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
+         <Breadcrumb
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
                   typoTitle="Company Master"
                   level={1}
                 />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}
+      </Fragment>
+    );
 
-            >
-              <div style={{
-                marginLeft: 10,
-                marginTop: 1, paddingTop: 5,
-                // borderLeftStyle: "solid",
-                // borderLeftColor: "#bdbdbd",
-                // borderLeftWidth: 1, 
-
-              }}>
-
-                <div
-                  style={{
-                    borderLeftStyle: "solid",
-                    borderLeftColor: "#bdbdbd",
-                    borderLeftWidth: 1,
-                  }}
-                >
-                  <ButtonGroup
+    const buttongroupHtml=(
+      <Fragment>
+        <ButtonGroup
                     size="small"
                     variant="text"
                     aria-label="Action Menu Button group"
@@ -479,16 +446,16 @@ class companyMaster extends React.Component {
                     />
                   </Button> */}
                   </ButtonGroup>
-                </div>
+      </Fragment>
+    );
 
-              </div>
-            </Grid>
-          </Grid>
-        </div>
+    return (
+      <Fragment>
+        <CssBaseline />
 
-        <div className="breadcrumb-bottom"></div>
-
-        {/* <div className="New-link-bottom"></div> */}
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
+       
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             {this.state.companyData.length > 0 ? (

@@ -155,11 +155,11 @@ export const pagination= {
 
 
 export const buttonTitle={
-  add:"Add",
-  edit:"Edit",
-  update:"Update",
-  new:"New",
-  save:"Save"
+  add:"Add   ",
+  edit:"Edit   ",
+  update:"Update   ",
+  new:"New   ",
+  save:"Save   "
 };
 
 
