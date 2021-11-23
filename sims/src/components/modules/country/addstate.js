@@ -133,8 +133,8 @@ class addstate extends React.Component {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].name,
-        value: data[i].countryId,
+        name: data[i]. Name,
+        value: data[i].CountryID,
       };
       newData.push(d);
     }
@@ -292,7 +292,7 @@ class addstate extends React.Component {
     };
 
     const handleCreate = () => {
-      checkName();
+      // checkName();
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);

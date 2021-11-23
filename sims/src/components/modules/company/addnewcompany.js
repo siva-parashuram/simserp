@@ -256,21 +256,9 @@ class addnewcompany extends React.Component {
     //     this.state.companyName.length > 50 ||
     //     this.state.duplicate === true
     //   ) {
-    //     if (
-    //       this.state.address === "" ||
-    //       this.state.address === null ||
-    //       this.state.address.length > 50
-    //     ) {
-    //       this.setState({ createBtnDisabled: true });
-    //     } else {
-    //       this.setState({ createBtnDisabled: true });
-    //     }
-    //   } else if (
-    //     this.state.address === "" ||
-    //     this.state.address === null ||
-    //     this.state.address.length > 50
-    //   ) {
     //     this.setState({ createBtnDisabled: true });
+    //   }else{
+    //     this.setState({ createBtnDisabled: false })
     //   }
     // };
 
@@ -548,11 +536,13 @@ class addnewcompany extends React.Component {
         this.setState({ state: CF.toInt(e.target.value) });
       }
       validate();
+      // Checktrue();
     };
 
     const validate = () => {
       let v = this.state.Validations;
       if (
+        this.state.companyName === "" ||
         v["companyName"].errorState === true ||
         v["address"].errorState === true ||
         v["address2"].errorState === true ||

@@ -12,6 +12,7 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
@@ -129,11 +130,25 @@ class addcountry extends React.Component {
       .then((response) => {
         let data = response.data;
 
-        this.setState({ zones: data, ProgressLoader: true });
+        this.processZones(data)
         this.initializeZone();
       })
       .catch((error) => {});
   }
+
+
+  processZones(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i].description,
+        value: data[i].zoneId,
+      };
+      newData.push(d);
+    }
+    this.setState({ zones: newData, ProgressLoader: true });
+  }
+
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -471,8 +486,16 @@ class addcountry extends React.Component {
                             this.state.Validations.ThreeDitgitCode.errorMssg
                           }
                         />
+                        <DropdownInput
+                          
+                          id="ZoneID"
+                          label="Zone"
+                          onChange={(e) => updateFormValue("ZoneID", e)}
+                          options={this.state.zones}
+                          value={this.state.selectedZone}
+                        />
 
-                        <TableRow>
+                        {/* <TableRow>
                           <TableCell align="left" className="no-border-table">
                             Zone
                           </TableCell>
@@ -492,7 +515,7 @@ class addcountry extends React.Component {
                               ))}
                             </select>
                           </TableCell>
-                        </TableRow>
+                        </TableRow> */}
                       </TableBody>
                     </Table>
                   </TableContainer>
