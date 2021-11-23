@@ -566,7 +566,8 @@ cursor: pointer;
 
 .accordion-Header-Title{
   color: #009688 !important;
-  letter-spacing: 0.1rem !important;
+  font-family: Calibri !important;
+  /* letter-spacing: 0.1rem !important; */
   /* font-weight: bold !important; */
   /* text-decoration: underline !important; */
 

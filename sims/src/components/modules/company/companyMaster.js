@@ -453,6 +453,7 @@ class companyMaster extends React.Component {
                     aria-label="Action Menu Button group"
                   >
                     <Button
+                      startIcon={<AddIcon />}
                       className="action-btns"
                       onClick={(e) =>
                         openPage(URLS.URLS.addNewCompany + this.state.urlparams)
@@ -461,6 +462,7 @@ class companyMaster extends React.Component {
                       {APIURLS.buttonTitle.add}
                     </Button>
                     <Button
+                     startIcon={<EditIcon />}
                       className="action-btns"
                       onClick={(e) => openPage(this.state.editUrl)}
                     >
