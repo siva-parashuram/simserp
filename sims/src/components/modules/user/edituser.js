@@ -36,6 +36,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import Userbranchalot from "../branch/userbranchalot"
 
 class edituser extends React.Component {
   constructor(props) {
@@ -459,8 +460,8 @@ class edituser extends React.Component {
       </Fragment>
     );
 
-     
-
+    const userBranch=<Userbranchalot userId={this.state.user.UserID}/>
+    
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -468,7 +469,7 @@ class edituser extends React.Component {
 
       switch (param) {
         case "AssignBranch":
-          // Dialog.DialogContent = ;
+           Dialog.DialogContent =userBranch ;
           this.setState({ Dialog: Dialog });
           break;
         case "AssignRole":

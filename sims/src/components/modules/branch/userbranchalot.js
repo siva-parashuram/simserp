@@ -36,7 +36,7 @@ class userbranchalot extends React.Component {
             branchData: [],
             ErrorPrompt: false,
             SuccessPrompt: false,
-            userId: 0
+            userId: this.props.userId
 
         };
     }
@@ -254,7 +254,7 @@ class userbranchalot extends React.Component {
                                     <Button
                                         style={{ marginLeft: 5 }}
 
-                                        onClick={(e) => handleBranchAdd(this.props.data.userId)}
+                                        onClick={(e) => handleBranchAdd(this.state.userId)}
                                     >
                                         Alot
                                     </Button>
