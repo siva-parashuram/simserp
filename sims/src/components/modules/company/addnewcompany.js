@@ -11,6 +11,7 @@ import Dialog from "@mui/material/Dialog";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import IconButton from "@mui/material/IconButton";
 import DialogContent from "@mui/material/DialogContent";
+import SwitchInput from "../../compo/tablerowcellswitchinput";
 
 import DialogTitle from "@mui/material/DialogTitle";
 import Accordion from "@material-ui/core/Accordion";
@@ -60,6 +61,7 @@ class addnewcompany extends React.Component {
       postcode: "",
       phoneno: "",
       website: "",
+      IsActive:false,
       MasterCountryData: [],
       countryData: [],
       stateData: [],
@@ -535,6 +537,10 @@ class addnewcompany extends React.Component {
       if (id === "State") {
         this.setState({ state: CF.toInt(e.target.value) });
       }
+      if(id==="IsActive"){
+        this.setState({IsActive:e.target.checked})
+      }
+
       validate();
       // Checktrue();
     };
@@ -543,6 +549,7 @@ class addnewcompany extends React.Component {
       let v = this.state.Validations;
       if (
         this.state.companyName === "" ||
+        this.state.address === "" ||
         v["companyName"].errorState === true ||
         v["address"].errorState === true ||
         v["address2"].errorState === true ||
@@ -923,17 +930,6 @@ class addnewcompany extends React.Component {
                                       this.state.Validations.city.errorMsg
                                     }
                                   />
-                                </TableBody>
-                              </Table>
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                              <Table
-                                stickyHeader
-                                size="small"
-                                className="accordion-table"
-                                aria-label="company List table"
-                              >
-                                <TableBody className="tableBody">
                                   <Tablerowcelltextboxinput
                                     id="Postcode"
                                     label="Postcode"
@@ -954,6 +950,17 @@ class addnewcompany extends React.Component {
                                       this.state.Validations.postcode.errorMsg
                                     }
                                   />
+                                </TableBody>
+                              </Table>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                              <Table
+                                stickyHeader
+                                size="small"
+                                className="accordion-table"
+                                aria-label="company List table"
+                              >
+                                <TableBody className="tableBody">
                                   <TableRow>
                                     <TableCell
                                       align="left"
@@ -1070,6 +1077,16 @@ class addnewcompany extends React.Component {
                                     }
                                     helperText={
                                       this.state.Validations.website.errorMsg
+                                    }
+                                  />
+                                 
+                                  <SwitchInput
+                                    key="IsActive"
+                                    id="IsActive"
+                                    label="IsActive"
+                                    param={this.state.IsActive}
+                                    onChange={(e) =>
+                                      updateFormValue("IsActive", e)
                                     }
                                   />
 
