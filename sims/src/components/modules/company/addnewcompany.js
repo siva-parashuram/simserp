@@ -41,6 +41,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class addnewcompany extends React.Component {
   constructor(props) {
@@ -717,49 +718,23 @@ class addnewcompany extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    return (
+    const breadcrumbHtml = (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
-        <ErrorSnackBar
-          ErrorPrompt={this.state.ErrorPrompt}
-          closeErrorPrompt={closeErrorPrompt}
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.companyMaster + this.state.urlparams}
+          masterLinkTitle="Company Master"
+          typoTitle="Add Company"
+          level={2}
         />
-        <SuccessSnackBar
-          SuccessPrompt={this.state.SuccessPrompt}
-          closeSuccessPrompt={closeSuccessPrompt}
-        />
+      </Fragment>
+    );
 
-        <div className="breadcrumb-height" style={{ marginTop: -5 }}>
-          <Grid container spacing={1}>
-            <Grid xs={12} sm={12} md={4} lg={4}>
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.companyMaster + this.state.urlparams}
-                  masterLinkTitle="Company Master"
-                  typoTitle="Add Company"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div
-                style={{
-                  marginLeft: 10,
-                  marginTop: 1,
-                  paddingTop: 5,
-                }}
-              >
-                <div
-                  style={{
-                    borderLeftStyle: "solid",
-                    borderLeftColor: "#bdbdbd",
-                    borderLeftWidth: 1,
-                  }}
-                >
-                  <ButtonGroup
+    const buttongroupHtml=(
+      <Fragment>
+         <ButtonGroup
                     size="small"
                     variant="text"
                     aria-label="Action Menu Button group"
@@ -772,21 +747,22 @@ class addnewcompany extends React.Component {
                       {APIURLS.buttonTitle.add}
                     </Button>
                   </ButtonGroup>
-                </div>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
+      </Fragment>
+    );
 
-        {/* <div className="breadcrumb-bottom"></div> */}
+    return (
+      <Fragment>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
+          <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
 
-        <div
-          style={{
-            height: 15,
-          }}
-        >
-          &nbsp;
-        </div>
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
