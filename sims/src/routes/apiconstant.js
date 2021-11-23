@@ -360,7 +360,8 @@ export let company = {
   "StateID": null,
   "PhoneNo": null,
   "Website": null,
-  "CreationDate": null
+  "CreationDate": null,
+  "IsActive":false
 };
 
 

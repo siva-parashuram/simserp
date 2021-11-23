@@ -24,6 +24,7 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
+import SwitchInput from "../../compo/tablerowcellswitchinput";
 
 import TableRow from "@material-ui/core/TableRow";
 
@@ -62,6 +63,7 @@ class editcompany extends React.Component {
       PostCode: "",
       PhoneNo: "",
       Website: "",
+      IsActive: false,
       MasterCountryData: [],
       countryData: [],
       stateData: [],
@@ -292,6 +294,7 @@ class editcompany extends React.Component {
           company.StateID = response.data.stateId;
           company.PhoneNo = response.data.phoneNo;
           company.Website = response.data.website;
+          company.IsActive = response.data.IsActive;
           console.log("company>>", company);
           this.setState(
             {
@@ -307,6 +310,7 @@ class editcompany extends React.Component {
               PostCode: response.data.postcode,
               PhoneNo: response.data.phoneNo,
               Website: response.data.website,
+              IsActive: response.data.IsActive,
               selectedCountry: response.data.countryId,
               ProgressLoader: true,
             },
@@ -647,6 +651,10 @@ class editcompany extends React.Component {
         company.StateID = CF.toInt(e.target.value);
         this.setState({ StateID: CF.toInt(e.target.value), company: company });
       }
+      if (id === "IsActive") {
+        this.setState({ IsActive: e.target.checked });
+      }
+
       validate();
     };
 
@@ -654,6 +662,7 @@ class editcompany extends React.Component {
       let v = this.state.Validations;
       if (
         this.state.CompanyName === "" ||
+        this.state.Address === "" ||
         v["companyName"].errorState === true ||
         v["address"].errorState === true ||
         v["address2"].errorState === true ||
@@ -809,7 +818,6 @@ class editcompany extends React.Component {
           this.setState({ Dialog: Dialog });
           break;
 
-        
         default:
           break;
       }
@@ -854,20 +862,19 @@ class editcompany extends React.Component {
       <Fragment>
         <div>
           <Loader ProgressLoader={this.state.ProgressLoader} />
-         
 
-          <div className="breadcrumb-height"  style={{marginTop:-20}}>
+          <div className="breadcrumb-height" style={{ marginTop: -5 }}>
             <Grid container spacing={1}>
               <Grid
                 xs={12}
                 sm={12}
                 md={4}
                 lg={4}
-                style={{
-                  borderRightStyle: "solid",
-                  borderRightColor: "#bdbdbd",
-                  borderRightWidth: 1,
-                }}
+                // style={{
+                //   borderRightStyle: "solid",
+                //   borderRightColor: "#bdbdbd",
+                //   borderRightWidth: 1,
+                // }}
               >
                 <div style={{ marginTop: 8 }}>
                   <Breadcrumb
@@ -927,7 +934,7 @@ class editcompany extends React.Component {
                       style={{ minHeight: "40px", maxHeight: "40px" }}
                     >
                       <Typography key="" className="accordion-Header-Title">
-                        General 
+                        General
                       </Typography>
                     </AccordionSummary>
 
@@ -1029,17 +1036,6 @@ class editcompany extends React.Component {
                                   this.state.Validations.city.errorMsg
                                 }
                               />
-                            </TableBody>
-                          </Table>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="company List table"
-                          >
-                            <TableBody className="tableBody">
                               <Tablerowcelltextboxinput
                                 id="Postcode"
                                 label="Postcode"
@@ -1058,6 +1054,17 @@ class editcompany extends React.Component {
                                   this.state.Validations.postcode.errorMsg
                                 }
                               />
+                            </TableBody>
+                          </Table>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="company List table"
+                          >
+                            <TableBody className="tableBody">
                               <TableRow>
                                 <TableCell
                                   align="left"
@@ -1188,6 +1195,13 @@ class editcompany extends React.Component {
                                   this.state.Validations.website.errorMsg
                                 }
                               />
+                              <SwitchInput
+                                key="IsActive"
+                                id="IsActive"
+                                label="IsActive"
+                                param={this.state.IsActive}
+                                onChange={(e) => updateFormValue("IsActive", e)}
+                              />
                             </TableBody>
                           </Table>
                         </Grid>
@@ -1202,15 +1216,14 @@ class editcompany extends React.Component {
         </div>
         {dialog}
 
-
         <ErrorSnackBar
-            ErrorPrompt={this.state.ErrorPrompt}
-            closeErrorPrompt={closeErrorPrompt}
-          />
-          <SuccessSnackBar
-            SuccessPrompt={this.state.SuccessPrompt}
-            closeSuccessPrompt={closeSuccessPrompt}
-          />
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
       </Fragment>
     );
   }

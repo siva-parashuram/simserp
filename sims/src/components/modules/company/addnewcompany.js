@@ -11,6 +11,7 @@ import Dialog from "@mui/material/Dialog";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import IconButton from "@mui/material/IconButton";
 import DialogContent from "@mui/material/DialogContent";
+import SwitchInput from "../../compo/tablerowcellswitchinput";
 
 import DialogTitle from "@mui/material/DialogTitle";
 import Accordion from "@material-ui/core/Accordion";
@@ -60,6 +61,7 @@ class addnewcompany extends React.Component {
       postcode: "",
       phoneno: "",
       website: "",
+      IsActive:false,
       MasterCountryData: [],
       countryData: [],
       stateData: [],
@@ -180,7 +182,7 @@ class addnewcompany extends React.Component {
         this.setState({ MasterCountryData: data });
         this.processCountryData(data);
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   getStateByCountry = (CountryID) => {
@@ -535,6 +537,10 @@ class addnewcompany extends React.Component {
       if (id === "State") {
         this.setState({ state: CF.toInt(e.target.value) });
       }
+      if(id==="IsActive"){
+        this.setState({IsActive:e.target.checked})
+      }
+
       validate();
       // Checktrue();
     };
@@ -543,6 +549,7 @@ class addnewcompany extends React.Component {
       let v = this.state.Validations;
       if (
         this.state.companyName === "" ||
+        this.state.address === "" ||
         v["companyName"].errorState === true ||
         v["address"].errorState === true ||
         v["address2"].errorState === true ||
@@ -639,7 +646,7 @@ class addnewcompany extends React.Component {
               <Grid item xs={12} sm={12} md={1} lg={1}>
                 <IconButton
                   aria-label="ArrowBackIcon"
-                // style={{ textAlign: 'left', marginTop: 8 }}
+                  // style={{ textAlign: 'left', marginTop: 8 }}
                 >
                   <ArrowBackIcon onClick={(e) => handleClose()} />
                 </IconButton>
@@ -724,13 +731,7 @@ class addnewcompany extends React.Component {
 
         <div className="breadcrumb-height" style={{ marginTop: -5 }}>
           <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-
-            >
+            <Grid xs={12} sm={12} md={4} lg={4}>
               <div style={{ marginTop: 8 }}>
                 <Breadcrumb
                   backOnClick={this.props.history.goBack}
@@ -744,10 +745,13 @@ class addnewcompany extends React.Component {
               </div>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{
-                marginLeft: 10,
-                marginTop: 1, paddingTop: 5,
-              }}>
+              <div
+                style={{
+                  marginLeft: 10,
+                  marginTop: 1,
+                  paddingTop: 5,
+                }}
+              >
                 <div
                   style={{
                     borderLeftStyle: "solid",
@@ -769,7 +773,6 @@ class addnewcompany extends React.Component {
                     </Button>
                   </ButtonGroup>
                 </div>
-
               </div>
             </Grid>
           </Grid>
@@ -777,9 +780,13 @@ class addnewcompany extends React.Component {
 
         {/* <div className="breadcrumb-bottom"></div> */}
 
-        <div style={{
-          height: 15
-        }}>&nbsp;</div>
+        <div
+          style={{
+            height: 15,
+          }}
+        >
+          &nbsp;
+        </div>
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
@@ -805,7 +812,9 @@ class addnewcompany extends React.Component {
                   >
                     <Typography
                       // style={{marginLeft:-12}}
-                      key="" className="accordion-Header-Title">
+                      key=""
+                      className="accordion-Header-Title"
+                    >
                       General
                     </Typography>
                   </AccordionSummary>
@@ -813,9 +822,7 @@ class addnewcompany extends React.Component {
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <div
-                         style={{marginLeft:-14}}
-                        >
+                        <div style={{ marginLeft: -14 }}>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Table
@@ -835,10 +842,12 @@ class addnewcompany extends React.Component {
                                     }
                                     value={this.state.companyName}
                                     error={
-                                      this.state.Validations.companyName.errorState
+                                      this.state.Validations.companyName
+                                        .errorState
                                     }
                                     helperText={
-                                      this.state.Validations.companyName.errorMsg
+                                      this.state.Validations.companyName
+                                        .errorMsg
                                     }
                                   />
 
@@ -847,13 +856,17 @@ class addnewcompany extends React.Component {
                                     label="Address"
                                     variant="outlined"
                                     size="small"
-                                    onChange={(e) => updateFormValue("Address", e)}
+                                    onChange={(e) =>
+                                      updateFormValue("Address", e)
+                                    }
                                     InputProps={{
                                       className: "textFieldCss",
                                       maxlength: 50,
                                     }}
                                     value={this.state.address}
-                                    error={this.state.Validations.address.errorState}
+                                    error={
+                                      this.state.Validations.address.errorState
+                                    }
                                     helperText={
                                       this.state.Validations.address.errorMsg
                                     }
@@ -864,13 +877,17 @@ class addnewcompany extends React.Component {
                                     label="Address 2"
                                     variant="outlined"
                                     size="small"
-                                    onChange={(e) => updateFormValue("Address2", e)}
+                                    onChange={(e) =>
+                                      updateFormValue("Address2", e)
+                                    }
                                     InputProps={{
                                       className: "textFieldCss",
                                       maxlength: 50,
                                     }}
                                     value={this.state.address2}
-                                    error={this.state.Validations.address2.errorState}
+                                    error={
+                                      this.state.Validations.address2.errorState
+                                    }
                                     helperText={
                                       this.state.Validations.address2.errorMsg
                                     }
@@ -880,13 +897,17 @@ class addnewcompany extends React.Component {
                                     label="Address 3"
                                     variant="outlined"
                                     size="small"
-                                    onChange={(e) => updateFormValue("Address3", e)}
+                                    onChange={(e) =>
+                                      updateFormValue("Address3", e)
+                                    }
                                     InputProps={{
                                       className: "textFieldCss",
                                       maxlength: 50,
                                     }}
                                     value={this.state.address3}
-                                    error={this.state.Validations.address3.errorState}
+                                    error={
+                                      this.state.Validations.address3.errorState
+                                    }
                                     helperText={
                                       this.state.Validations.address3.errorMsg
                                     }
@@ -902,8 +923,32 @@ class addnewcompany extends React.Component {
                                       maxlength: 50,
                                     }}
                                     value={this.state.city}
-                                    error={this.state.Validations.city.errorState}
-                                    helperText={this.state.Validations.city.errorMsg}
+                                    error={
+                                      this.state.Validations.city.errorState
+                                    }
+                                    helperText={
+                                      this.state.Validations.city.errorMsg
+                                    }
+                                  />
+                                  <Tablerowcelltextboxinput
+                                    id="Postcode"
+                                    label="Postcode"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      updateFormValue("Postcode", e)
+                                    }
+                                    InputProps={{
+                                      className: "textFieldCss",
+                                      maxlength: 10,
+                                    }}
+                                    value={this.state.postcode}
+                                    error={
+                                      this.state.Validations.postcode.errorState
+                                    }
+                                    helperText={
+                                      this.state.Validations.postcode.errorMsg
+                                    }
                                   />
                                 </TableBody>
                               </Table>
@@ -916,22 +961,6 @@ class addnewcompany extends React.Component {
                                 aria-label="company List table"
                               >
                                 <TableBody className="tableBody">
-                                  <Tablerowcelltextboxinput
-                                    id="Postcode"
-                                    label="Postcode"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) => updateFormValue("Postcode", e)}
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 10,
-                                    }}
-                                    value={this.state.postcode}
-                                    error={this.state.Validations.postcode.errorState}
-                                    helperText={
-                                      this.state.Validations.postcode.errorMsg
-                                    }
-                                  />
                                   <TableRow>
                                     <TableCell
                                       align="left"
@@ -952,15 +981,17 @@ class addnewcompany extends React.Component {
                                         }
                                         value={this.state.country}
                                       >
-                                        <option value="-" >
-                                          Select
-                                        </option>
+                                        <option value="-">Select</option>
 
-                                        {this.state.countryData.map((item, i) => (
-                                          <option value={parseInt(item.value)}>
-                                            {item.name}
-                                          </option>
-                                        ))}
+                                        {this.state.countryData.map(
+                                          (item, i) => (
+                                            <option
+                                              value={parseInt(item.value)}
+                                            >
+                                              {item.name}
+                                            </option>
+                                          )
+                                        )}
                                       </select>
                                       <button
                                         className="dropdowninputbtn"
@@ -992,12 +1023,12 @@ class addnewcompany extends React.Component {
                                         style={{ width: "90%", height: 30 }}
                                         className="dropdown-css"
                                         id="stateSelect"
-                                        onChange={(e) => updateFormValue("State", e)}
+                                        onChange={(e) =>
+                                          updateFormValue("State", e)
+                                        }
                                         value={this.state.state}
                                       >
-                                        <option value="-">
-                                          Select
-                                        </option>
+                                        <option value="-">Select</option>
 
                                         {this.state.stateData.map((item, i) => (
                                           <option value={parseInt(item.value)}>
@@ -1018,11 +1049,15 @@ class addnewcompany extends React.Component {
                                     label="Phone No"
                                     variant="outlined"
                                     size="small"
-                                    onChange={(e) => updateFormValue("PhoneNo", e)}
+                                    onChange={(e) =>
+                                      updateFormValue("PhoneNo", e)
+                                    }
                                     // InputProps={{
 
                                     value={this.state.phoneno}
-                                    error={this.state.Validations.phoneno.errorState}
+                                    error={
+                                      this.state.Validations.phoneno.errorState
+                                    }
                                     helperText={
                                       this.state.Validations.phoneno.errorMsg
                                     }
@@ -1033,11 +1068,25 @@ class addnewcompany extends React.Component {
                                     label="Website"
                                     variant="outlined"
                                     size="small"
-                                    onChange={(e) => updateFormValue("Website", e)}
+                                    onChange={(e) =>
+                                      updateFormValue("Website", e)
+                                    }
                                     value={this.state.website}
-                                    error={this.state.Validations.website.errorState}
+                                    error={
+                                      this.state.Validations.website.errorState
+                                    }
                                     helperText={
                                       this.state.Validations.website.errorMsg
+                                    }
+                                  />
+                                 
+                                  <SwitchInput
+                                    key="IsActive"
+                                    id="IsActive"
+                                    label="IsActive"
+                                    param={this.state.IsActive}
+                                    onChange={(e) =>
+                                      updateFormValue("IsActive", e)
                                     }
                                   />
 
@@ -1055,8 +1104,6 @@ class addnewcompany extends React.Component {
                         </div>
                       </Grid>
                     </Grid>
-
-
                   </AccordionDetails>
                 </Accordion>
               </Grid>
