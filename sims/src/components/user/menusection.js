@@ -15,6 +15,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import axios from "axios";
 import { Divider } from '@material-ui/core';
@@ -175,12 +176,12 @@ class menusection extends React.Component {
 
         const menuList = (
             <Fragment>
-               
+
                 <List dense={true} style={{ backgroundColor: "#eceff1" }}>
                     <Grid container spacing={0}>
                         <Grid item xs={12} sm={12} md={2} lg={2}>
-                            <IconButton aria-label="delete"  style={{ textAlign: 'left', marginTop: 8 }}>
-                                <ArrowBackIcon onClick={(e) => closeDrawer(e)} /> 
+                            <IconButton aria-label="delete" style={{ textAlign: 'left', marginTop: 8 }}>
+                                <ArrowBackIcon onClick={(e) => closeDrawer(e)} />
                             </IconButton>
                             &nbsp;
                         </Grid>
@@ -194,24 +195,24 @@ class menusection extends React.Component {
                     </Grid>
                     <Grid container spacing={0}>
                         <Grid item xs={12} sm={12} md={12} lg={12}>
-                           
+
                             {this.state.pages.map((pages, j) => (
-                        <Fragment>
-                            <ListItem>                               
-                            <span
-                                key={"side-menu-LIL" + pages.pageId}
-                                className="menubar-link"
-                                onClick={(e) => openPage(pages.pageLink + this.state.urlparams)}
-                            >
-                                {pages.pageName}
-                            </span>
-                            </ListItem>
-                            <Divider />
-                        </Fragment>
-                    ))}
+                                <Fragment>
+                                    <ListItem>
+                                        <span
+                                            key={"side-menu-LIL" + pages.pageId}
+                                            className="menubar-link"
+                                            onClick={(e) => openPage(pages.pageLink + this.state.urlparams)}
+                                        >
+                                            {pages.pageName}
+                                        </span>
+                                    </ListItem>
+                                    <Divider />
+                                </Fragment>
+                            ))}
                         </Grid>
                     </Grid>
-                   
+
                 </List>
             </Fragment>
         );
@@ -219,9 +220,10 @@ class menusection extends React.Component {
 
         return (
             <Fragment>
-                <div style={{ marginLeft:-25, marginTop: 8 }}>
-                    <Grid container spacing={1}>
-                        <Grid xs={12} sm={12} md={1} lg={1} >
+                <div style={{ marginLeft: 5, marginTop: 8,backgroundColor:'#ffffff' }} >
+
+                    <Grid container spacing={1} >
+                        {/* <Grid xs={12} sm={12} md={1} lg={1} >
                             <div className="menusection-div1">
                                 <div style={{ marginTop: 8 }}>
                                     <span style={{ marginRight: 10 }}>
@@ -229,15 +231,23 @@ class menusection extends React.Component {
                                     </span>
                                 </div>
                             </div>
-                        </Grid>
-                        <Grid xs={12} sm={12} md={9} lg={9}>
-                            <div style={{ marginTop: 8, marginLeft: 10 }}>
+                        </Grid> */}
+                        <Grid item xs={12} sm={12} md={11} lg={11}>
+                            <div style={{ marginTop: 10, marginLeft: 10 }}>
                                 <ButtonGroup
                                     size="small"
                                     variant="text"
                                     aria-label="Action Menu Button group"
                                 >
-                                   
+
+                                    <Button
+                                        className="menusection-action-userFirstname"
+                                    >
+                                        <b>{getCookie(COOKIE.FIRSTNAME)} </b>
+                                    </Button>
+
+
+
 
                                     {this.state.moduleHeader.map((item, i) => (
                                         <Fragment>
@@ -247,7 +257,7 @@ class menusection extends React.Component {
                                                 disableElevation={true}
                                                 size="medium"
                                                 className="menusection-action-btns"
-                                                // endIcon={<KeyboardArrowDownIcon />}
+                                                // startIcon={<MenuOpenIcon />}
                                                 onClick={(e) => toggleDrawer(item)}
                                             >
                                                 {item.name}
@@ -260,6 +270,15 @@ class menusection extends React.Component {
                                 </ButtonGroup>
 
 
+
+
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={1} lg={1}>
+                            <div style={{ marginTop: 10 }}>
+                            <MenuIcon
+                            className="menuiconBtn"
+                            />
 
 
                             </div>
@@ -277,7 +296,7 @@ class menusection extends React.Component {
 
                 >
                     {menuList}
-                    
+
                 </Drawer>
 
             </Fragment>

@@ -5,6 +5,18 @@ body{
   overflow-x: hidden;
 }
 
+.MuiButton-root {
+  font-family: Calibri !important;
+}
+
+.MuiTypography-root {
+  font-family: Calibri !important;
+}
+
+.MuiTypography-body1 {
+  font-family: Calibri !important;
+}
+
 .MuiDataGrid-root{
   border-radius: 0px !important;
 }
@@ -187,29 +199,79 @@ input[type=number] {
 }
 
 .action-btns{
+  font-size: 16px !important;
   color: rgb(0, 126, 135) !important;
   border-right-style: none !important;
+  text-transform: initial!important;
+  background-color: inherit !important;
+  height:25px !important;
+  line-height:25px !important;
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  margin-left: 5px !important;
+  
+}
+.action-btns:hover{
+  color: rgb(0, 126, 135) !important;
+  border-right-style: none !important;
+  background-color: #e0f2f1 !important;
+  height:25px !important;
+  line-height:25px !important;
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  margin-left: 5px !important;
+}
+
+.menuiconBtn:hover{
+cursor: pointer;
+}
+
+.menusection-action-userFirstname{
+  color: #000 !important;
+  letter-spacing: 2px;
+  height:25px !important;
+  line-height:25px !important;
+  text-transform: initial !important;
+  font-size: 18px !important;
+  font-family: Calibri !important;
 }
 
 .menusection-action-btns{
   color: #505C6D !important;
   border-right-style: none !important;
+  height:25px !important;
+  line-height:25px !important;
+  text-transform: initial !important;
+  font-size: 18px !important;
+  font-family: Calibri !important;
+  /* border-right-style: solid !important;
+  border-right-width: 1px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  border-right-color: rgb(0, 126, 135) !important; */
 }
 
 .menusection-action-btns:hover{
   color: rgb(0, 126, 135) !important;
   text-decoration: underline !important;
+  height:25px !important;
+  line-height:25px !important;
 }
 
 .menusection-div1{
   height:40px !important;
   border-right-style: solid !important;
   border-right-width: 1px !important;
-  text-align: right !important;
+  text-align: left !important;
   letter-spacing: 2px;
   color: #000 !important;
-  font-size: 20px !important;  
+  font-size: 16px !important; 
   border-right-color:#505C6D !important;
+  
 }
 
 
@@ -362,7 +424,7 @@ input[type=number] {
 .navDiv{
     width: 100% !important;
     background-color: #0072bc !important;
-   
+    font-family: Calibri !important;
     /* height: 40px !important;
     line-height: 40px !important; */
     display: inline;
@@ -540,10 +602,10 @@ cursor: pointer;
 
 .textFieldCss{
   height: 30px !important;
-  font-size: 13px !important;
+  font-size: 14px !important;
   border-radius: 0px !important;
   -webkit-border-radius: 0px;
-  font-weight: 400;
+  /* font-weight: 400; */
   border-color: rgba(224, 224, 224, 1) !important; 
   /* box-sizing:border-box;  */
 }
@@ -557,6 +619,7 @@ cursor: pointer;
   border-radius: 0px !important;
   -webkit-border-radius: 0px;
   border-color: rgba(224, 224, 224, 1) !important; 
+  font-size: 14px !important;
 }
 
 
@@ -778,10 +841,13 @@ cursor: pointer;
  
  .style-breadcrumb{
    padding-left: 24px;
+    
  }
 
  .breadcrumb-height{
-   padding-top:20px;
+   padding-top:5px;
+   height: 20px !important;
+   padding-bottom:5px;
  }
 
  .breadcrumb-bottom{

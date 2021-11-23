@@ -48,7 +48,7 @@ class companyMaster extends React.Component {
     this.state = {
       pagination: {
         page: 0,
-        rowsPerPage: 10,
+        rowsPerPage: APIURLS.pagination.rowsPerPage,
       },
       page: 1,
       rowsPerPage: 10,
@@ -209,11 +209,11 @@ class companyMaster extends React.Component {
       this.InitialremoveIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
       this.getAttachments(item.companyId);
-    }catch (e) {
+    } catch (e) {
       console.log("Error : ", e);
 
     }
-    
+
   }
 
   InitialremoveIsSelectedRowClasses() {
@@ -255,10 +255,10 @@ class companyMaster extends React.Component {
   }
 
   render() {
-    
+
 
     const handleRowClick = (e, item, id) => {
-      try{
+      try {
         console.log("handleRowClick > e > ", e);
         console.log("handleRowClick > item > ", item);
         let branches = item.branches;
@@ -277,17 +277,17 @@ class companyMaster extends React.Component {
         removeIsSelectedRowClasses();
         document.getElementById(id).classList.add("selectedRow");
         getAttachments(item.companyId);
-      }catch(e){
+      } catch (e) {
         console.log("Error : ", e);
       }
-      
+
     };
 
     const removeIsSelectedRowClasses = () => {
       try {
         for (let i = 0; i < this.state.companyData.length; i++) {
           document.getElementById("row_" + i).className = "";
-          
+
         }
       } catch (e) {
         console.log("Error : ", e);
@@ -322,7 +322,7 @@ class companyMaster extends React.Component {
         });
     };
 
-    const getCompanyBranchList = (companyId) => {};
+    const getCompanyBranchList = (companyId) => { };
 
     const searchInput = (e) => {
       removeIsSelectedRowClasses();
@@ -346,13 +346,13 @@ class companyMaster extends React.Component {
             masterCompanyData[i].companyName != null
               ? masterCompanyData[i].companyName.toLowerCase().includes(key)
               : null || masterCompanyData[i].address != null
-              ? masterCompanyData[i].address.toLowerCase().includes(key)
-              : null || masterCompanyData[i].companyId != null
-              ? masterCompanyData[i].companyId
-                  .toString()
-                  .toLowerCase()
-                  .includes(key)
-              : null
+                ? masterCompanyData[i].address.toLowerCase().includes(key)
+                : null || masterCompanyData[i].companyId != null
+                  ? masterCompanyData[i].companyId
+                    .toString()
+                    .toLowerCase()
+                    .includes(key)
+                  : null
           ) {
             rows.push(masterCompanyData[i]);
           }
@@ -405,18 +405,18 @@ class companyMaster extends React.Component {
 
         <Loader ProgressLoader={this.state.ProgressLoader} />
 
-        <div className="breadcrumb-height">
+        <div className="breadcrumb-height" style={{ marginTop: -5 }}>
           <Grid container spacing={1}>
             <Grid
               xs={12}
               sm={12}
               md={4}
               lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
+            // style={{
+            //   borderRightStyle: "solid",
+            //   borderRightColor: "#bdbdbd",
+            //   borderRightWidth: 1,
+            // }}
             >
               <div style={{ marginTop: 8 }}>
                 <Breadcrumb
@@ -428,29 +428,46 @@ class companyMaster extends React.Component {
                 />
               </div>
             </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addNewCompany + this.state.urlparams)
-                    }
-                  >
-                   {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    onClick={(e) => openPage(this.state.editUrl)}
-                  >
-                     {APIURLS.buttonTitle.edit}
-                  </Button>
+            <Grid xs={12} sm={12} md={8} lg={8}
 
-                  {/* <Button
+            >
+              <div style={{
+                marginLeft: 10,
+                marginTop: 1, paddingTop: 5,
+                // borderLeftStyle: "solid",
+                // borderLeftColor: "#bdbdbd",
+                // borderLeftWidth: 1, 
+
+              }}>
+
+                <div
+                  style={{
+                    borderLeftStyle: "solid",
+                    borderLeftColor: "#bdbdbd",
+                    borderLeftWidth: 1,
+                  }}
+                >
+                  <ButtonGroup
+                    size="small"
+                    variant="text"
+                    aria-label="Action Menu Button group"
+                  >
+                    <Button
+                      className="action-btns"
+                      onClick={(e) =>
+                        openPage(URLS.URLS.addNewCompany + this.state.urlparams)
+                      }
+                    >
+                      {APIURLS.buttonTitle.add}
+                    </Button>
+                    <Button
+                      className="action-btns"
+                      onClick={(e) => openPage(this.state.editUrl)}
+                    >
+                      {APIURLS.buttonTitle.edit}
+                    </Button>
+
+                    {/* <Button
                     className="action-btns"
                   >
                     <Csvexport
@@ -459,7 +476,9 @@ class companyMaster extends React.Component {
                       buttonName="CSV"
                     />
                   </Button> */}
-                </ButtonGroup>
+                  </ButtonGroup>
+                </div>
+
               </div>
             </Grid>
           </Grid>
@@ -467,78 +486,78 @@ class companyMaster extends React.Component {
 
         <div className="breadcrumb-bottom"></div>
 
-        <div className="New-link-bottom"></div>
+        {/* <div className="New-link-bottom"></div> */}
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-             {this.state.companyData.length>0?(
-               <Fragment>
-                 <TableContainer style={{ maxHeight: 440 }}>
-              <Table
-                stickyHeader
-                size="small"
-                className=""
-                aria-label="company List table"
-              >
-                <TableHead className="table-header-background">
-                  <TableRow>
-                    <TableCell className="table-header-font">#</TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Company Name
-                    </TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Address
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody className="tableBody">
-                  {
-                    //this.state.companyData
-                    getPageData(this.state.companyData).map((item, i) => (
-                      <TableRow
-                        id={"row_" + i}
-                        className={this.state.initialCss}
-                        hover
-                        key={i}
-                        onClick={(event) =>
-                          handleRowClick(event, item, "row_" + i)
-                        }
-                      >
-                        <TableCell align="left">
-                          <a
-                            className="LINK tableLink"
-                            href={
-                              URLS.URLS.editCompany +
-                              this.state.urlparams +
-                              "&compID=" +
-                              item.companyId
-                            }
-                            onClick={(e) => openCompanyDetail(e, item)}
-                          >
-                            {URLS.PREFIX.companyID + item.companyId}
-                          </a>
+            {this.state.companyData.length > 0 ? (
+              <Fragment>
+                <TableContainer style={{ maxHeight: 450,minHeight:450 }}>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className=""
+                    aria-label="company List table"
+                  >
+                    <TableHead className="table-header-background">
+                      <TableRow>
+                        <TableCell className="table-header-font">#</TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Company Name
                         </TableCell>
-                        <TableCell align="left">{item.companyName}</TableCell>
-                        <TableCell align="left">{item.address}</TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Address
+                        </TableCell>
                       </TableRow>
-                    ))
-                  }
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    </TableHead>
+                    <TableBody className="tableBody">
+                      {
+                        //this.state.companyData
+                        getPageData(this.state.companyData).map((item, i) => (
+                          <TableRow
+                            id={"row_" + i}
+                            className={this.state.initialCss}
+                            hover
+                            key={i}
+                            onClick={(event) =>
+                              handleRowClick(event, item, "row_" + i)
+                            }
+                          >
+                            <TableCell align="left">
+                              <a
+                                className="LINK tableLink"
+                                href={
+                                  URLS.URLS.editCompany +
+                                  this.state.urlparams +
+                                  "&compID=" +
+                                  item.companyId
+                                }
+                                onClick={(e) => openCompanyDetail(e, item)}
+                              >
+                                {URLS.PREFIX.companyID + item.companyId}
+                              </a>
+                            </TableCell>
+                            <TableCell align="left">{item.companyName}</TableCell>
+                            <TableCell align="left">{item.address}</TableCell>
+                          </TableRow>
+                        ))
+                      }
+                    </TableBody>
+                  </Table>
+                </TableContainer>
 
-            <TablePagination
-              rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-              component="div"
-              count={this.state.companyData.length}
-              rowsPerPage={this.state.pagination.rowsPerPage}
-              page={this.state.pagination.page}
-              onPageChange={handlePageChange}
-            />
-               </Fragment>
-             ):(
-               <Tableskeleton/>
-             )}
-            
+                <TablePagination
+                  rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                  component="div"
+                  count={this.state.companyData.length}
+                  rowsPerPage={this.state.pagination.rowsPerPage}
+                  page={this.state.pagination.page}
+                  onPageChange={handlePageChange}
+                />
+              </Fragment>
+            ) : (
+              <Tableskeleton />
+            )}
+
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>

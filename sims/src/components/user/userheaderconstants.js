@@ -13,7 +13,7 @@ class userheaderconstatnts extends React.Component {
         <div className="fixedElement">
           <Nav />
         </div>
-        <div style={{ marginTop: 56 }}></div>
+        <div style={{ marginTop: 48 }}></div>
         <Menusection />
       </Fragment>
     );
