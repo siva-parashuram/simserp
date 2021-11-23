@@ -50,6 +50,7 @@ class editbranch extends React.Component {
       disabledCreatebtn: false,
       numberSeries: [],
       companyData: [],
+      MasterCountryData: [],
       countryData: [],
       stateData: [],
       branchData: [],
@@ -174,7 +175,7 @@ class editbranch extends React.Component {
     this.getBranches();
     this.getCompanyList();
     this.getCountryList();
-    this.getStateList();
+    // this.getStateList();
     this.getCurrencyList();
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
@@ -243,6 +244,7 @@ class editbranch extends React.Component {
         }
 
         this.setState({
+
           currencyList: newD,
           ProgressLoader: true,
         });
@@ -330,17 +332,46 @@ class editbranch extends React.Component {
         let data = response.data;
 
         rows = data;
+        this.setState({MasterCountryData:data});
         this.processCountryData(data);
       })
       .catch((error) => { });
+  }
+
+  getStateByCountry = (CountryID) => {
+    console.log("getStateByCountry > CountryID > ",CountryID);
+    let MasterCountryData = this.state.MasterCountryData;
+    console.log("getStateByCountry > MasterCountryData > ",MasterCountryData);
+    let stateData = [];
+    for (let i=0; i < MasterCountryData.length; i++) {
+      if (MasterCountryData[i].CountryID === CountryID) {
+        if( MasterCountryData[i].State){
+          stateData = MasterCountryData[i].State;
+        }        
+        break;
+      }
+    }
+    console.log("getStateByCountry > stateData > ",stateData);
+    let newData = [];
+    for (let i = 0; i < stateData.length; i++) {
+      let d = {
+        name: stateData[i].Name,
+        value: stateData[i].StateID,
+      };
+      newData.push(d);
+    }
+    console.log("getStateByCountry > stateData > newData > ",newData);
+
+    this.setState({ stateData: newData, ProgressLoader: true });
+
   }
 
   processCountryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].name,
-        value: data[i].countryId,
+        name: data[i].Name,
+        value: data[i].CountryID,
       };
       newData.push(d);
     }
@@ -593,6 +624,7 @@ class editbranch extends React.Component {
           setParams(branch);
           break;
         case "CountryID":
+          this.getStateByCountry(CF.toInt(e.target.value));
           branch[param] = CF.toInt(e.target.value);
           setParams(branch);
           break;

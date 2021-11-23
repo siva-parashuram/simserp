@@ -146,7 +146,7 @@ class countryMaster extends React.Component {
       URLS.URLS.editCountry +
       this.state.urlparams +
       "&countryID=" +
-      item.countryId;
+      item.CountryID;
     this.setState({ editurl: editUrl, destinations: item.destinations });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
@@ -167,7 +167,7 @@ class countryMaster extends React.Component {
         URLS.URLS.editCountry +
         this.state.urlparams +
         "&countryID=" +
-        item.countryId;
+        item.CountryID;
       this.setState({ editurl: editUrl, destinations: item.destinations });
       getStatesByCountry(item);
       removeIsSelectedRowClasses();
@@ -375,13 +375,13 @@ class countryMaster extends React.Component {
                                       URLS.URLS.editCountry +
                                       this.state.urlparams +
                                       "&countryID=" +
-                                      item.countryId
+                                      item.CountryID
                                     }
                                   >
-                                    {URLS.PREFIX.countryID + item.countryId}
+                                    {URLS.PREFIX.countryID + item.CountryID}
                                   </a>
                                 </TableCell>
-                                <TableCell align="left">{item.name}</TableCell>
+                                <TableCell align="left">{item.Name}</TableCell>
                               </TableRow>
                             )
                           )}

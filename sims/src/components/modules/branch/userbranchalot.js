@@ -42,6 +42,7 @@ class userbranchalot extends React.Component {
     }
 
     componentDidMount() {
+         
         if (
             getCookie(COOKIE.USERID) != null
         ) {
@@ -62,6 +63,33 @@ class userbranchalot extends React.Component {
 
 
     }
+
+    getUserBranches(userId) {
+        let userBranches = [];
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let data = {
+          ValidUser: ValidUser,
+          UserID: userId,
+          userBranchMappingList: null,
+        };
+        let GetUserBranchMappedByUserIDUrl =
+          APIURLS.APIURL.GetUserBranchMappedByUserID;
+    
+        axios
+          .post(GetUserBranchMappedByUserIDUrl, data, { headers })
+          .then((response) => {
+            let data = response.data;
+            this.setState({ userBranchMappingList: data.userBranchMappingList });
+            this.processData(data.userBranchMappingList, userId);
+          })
+          .catch((error) => {});
+        return userBranches;
+      }
 
 
     getBranches() {

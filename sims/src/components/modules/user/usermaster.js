@@ -468,7 +468,8 @@ class usermaster extends React.Component {
                     <AccordionDetails key="">
                       <Grid container spacing={1}>
                         <Grid xs={12} sm={12} md={11} lg={11}>
-                          <Userbranchalot data={this.state.passData} />
+                          <Userbranchalot data={this.state.passData} />  
+                          {/* User Branch Allotment section */}
                         </Grid>
                       </Grid>
                     </AccordionDetails>
