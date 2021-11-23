@@ -190,32 +190,32 @@ class edituser extends React.Component {
           : this.setState({ AddressDetailsExpanded: true });
       }
     };
-    const CheckFirstName = () => {
-      //  if(this.state.duplicateExist===true||this.state.EmailID.length>50){
-      //    if(this.state.FirstName.length>20){
-      //      this.setState({DisableUpdatebtn:true})
-      //    }else{
-      //     this.setState({DisableUpdatebtn:true})
-      //    }
-      //  }else if(this.state.FirstName.length>20){
-      //   this.setState({DisableUpdatebtn:true})
-      // }
-      if (this.state.FirstName.length > 20) {
-        if (
-          this.state.duplicateExist === true ||
-          this.state.EmailID.length > 50
-        ) {
-          this.setState({ DisableUpdatebtn: true });
-        }
-      } else if (
-        this.state.duplicateExist === true ||
-        this.state.EmailID.length > 50
-      ) {
-        this.setState({ DisableUpdatebtn: true });
-      } else {
-        this.setState({ DisableUpdatebtn: false });
-      }
-    };
+    // const CheckFirstName = () => {
+    //   //  if(this.state.duplicateExist===true||this.state.EmailID.length>50){
+    //   //    if(this.state.FirstName.length>20){
+    //   //      this.setState({DisableUpdatebtn:true})
+    //   //    }else{
+    //   //     this.setState({DisableUpdatebtn:true})
+    //   //    }
+    //   //  }else if(this.state.FirstName.length>20){
+    //   //   this.setState({DisableUpdatebtn:true})
+    //   // }
+    //   if (this.state.FirstName.length > 20) {
+    //     if (
+    //       this.state.duplicateExist === true ||
+    //       this.state.EmailID.length > 50
+    //     ) {
+    //       this.setState({ DisableUpdatebtn: true });
+    //     }
+    //   } else if (
+    //     this.state.duplicateExist === true ||
+    //     this.state.EmailID.length > 50
+    //   ) {
+    //     this.setState({ DisableUpdatebtn: true });
+    //   } else {
+    //     this.setState({ DisableUpdatebtn: false });
+    //   }
+    // };
 
     const updateFormValue = (id, e) => {
       if (id === "isActive") {
@@ -253,7 +253,7 @@ class edituser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
+        // CheckFirstName();
       }
       if (id === "LastName") {
         let user = this.state.user;
@@ -277,7 +277,7 @@ class edituser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
+        // CheckFirstName();
       }
       if (id === "EmailID") {
         let duplicateExist = CF.chkDuplicateButExcludeName(
@@ -323,7 +323,7 @@ class edituser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
+        // CheckFirstName();
       }
       if (id === "LoginID") {
         let user = this.state.user;
@@ -348,7 +348,7 @@ class edituser extends React.Component {
             user: user,
           });
         }
-        CheckFirstName();
+        // CheckFirstName();
       }
 
       if (id === "Password") {
@@ -375,14 +375,14 @@ class edituser extends React.Component {
           });
         }
       }
-      CheckFirstName();
+      // CheckFirstName();
       // this.state.duplicateExist === true
       //   ? this.setState({ DisableUpdatebtn: true })
       //   : this.setState({ DisableUpdatebtn: false });
     };
 
     const handleUpdate = () => {
-      CheckFirstName();
+      // CheckFirstName();
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));

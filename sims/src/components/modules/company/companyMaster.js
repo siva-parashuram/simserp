@@ -191,23 +191,29 @@ class companyMaster extends React.Component {
   }
 
   InitialhandleRowClick(e, item, id) {
-    console.log("handleRowClick > id > ", id);
-    console.log("handleRowClick > vitem > ", item);
-    let editUrl =
-      URLS.URLS.editCompany +
-      this.state.urlparams +
-      "&compID=" +
-      item.companyId;
-    let branches = item.branches;
-    this.setState({
-      item: item,
-      branch: branches,
-      editUrl: editUrl,
-      rowClicked: parseInt(this.state.rowClicked) + 1,
-    });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
-    this.getAttachments(item.companyId);
+    try {
+      console.log("handleRowClick > id > ", id);
+      console.log("handleRowClick > vitem > ", item);
+      let editUrl =
+        URLS.URLS.editCompany +
+        this.state.urlparams +
+        "&compID=" +
+        item.companyId;
+      let branches = item.branches;
+      this.setState({
+        item: item,
+        branch: branches,
+        editUrl: editUrl,
+        rowClicked: parseInt(this.state.rowClicked) + 1,
+      });
+      this.InitialremoveIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+      this.getAttachments(item.companyId);
+    }catch (e) {
+      console.log("Error : ", e);
+
+    }
+    
   }
 
   InitialremoveIsSelectedRowClasses() {
@@ -252,24 +258,29 @@ class companyMaster extends React.Component {
     
 
     const handleRowClick = (e, item, id) => {
-      console.log("handleRowClick > e > ", e);
-      console.log("handleRowClick > item > ", item);
-      let branches = item.branches;
-      let editUrl =
-        URLS.URLS.editCompany +
-        this.state.urlparams +
-        "&compID=" +
-        item.companyId;
-      // getCompanyBranchList(item.companyId);
-      this.setState({
-        item: item,
-        branch: branches,
-        editUrl: editUrl,
-        rowClicked: parseInt(this.state.rowClicked) + 1,
-      });
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-      getAttachments(item.companyId);
+      try{
+        console.log("handleRowClick > e > ", e);
+        console.log("handleRowClick > item > ", item);
+        let branches = item.branches;
+        let editUrl =
+          URLS.URLS.editCompany +
+          this.state.urlparams +
+          "&compID=" +
+          item.companyId;
+        // getCompanyBranchList(item.companyId);
+        this.setState({
+          item: item,
+          branch: branches,
+          editUrl: editUrl,
+          rowClicked: parseInt(this.state.rowClicked) + 1,
+        });
+        removeIsSelectedRowClasses();
+        document.getElementById(id).classList.add("selectedRow");
+        getAttachments(item.companyId);
+      }catch(e){
+        console.log("Error : ", e);
+      }
+      
     };
 
     const removeIsSelectedRowClasses = () => {

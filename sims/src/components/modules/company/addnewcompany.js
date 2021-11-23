@@ -198,30 +198,30 @@ class addnewcompany extends React.Component {
   }
 
   render() {
-    const Checktrue = () => {
-      if (
-        this.state.companyName === "" ||
-        this.state.companyName === null ||
-        this.state.companyName.length > 50 ||
-        this.state.duplicate === true
-      ) {
-        if (
-          this.state.address === "" ||
-          this.state.address === null ||
-          this.state.address.length > 50
-        ) {
-          this.setState({ createBtnDisabled: true });
-        } else {
-          this.setState({ createBtnDisabled: true });
-        }
-      } else if (
-        this.state.address === "" ||
-        this.state.address === null ||
-        this.state.address.length > 50
-      ) {
-        this.setState({ createBtnDisabled: true });
-      }
-    };
+    // const Checktrue = () => {
+    //   if (
+    //     this.state.companyName === "" ||
+    //     this.state.companyName === null ||
+    //     this.state.companyName.length > 50 ||
+    //     this.state.duplicate === true
+    //   ) {
+    //     if (
+    //       this.state.address === "" ||
+    //       this.state.address === null ||
+    //       this.state.address.length > 50
+    //     ) {
+    //       this.setState({ createBtnDisabled: true });
+    //     } else {
+    //       this.setState({ createBtnDisabled: true });
+    //     }
+    //   } else if (
+    //     this.state.address === "" ||
+    //     this.state.address === null ||
+    //     this.state.address.length > 50
+    //   ) {
+    //     this.setState({ createBtnDisabled: true });
+    //   }
+    // };
 
     const updateFormValue = (id, e) => {
       if (id === "companyName") {
@@ -247,7 +247,7 @@ class addnewcompany extends React.Component {
               Validations: v,
               companyName: e.target.value,
 
-              createBtnDisabled: true,
+              // createBtnDisabled: true,
               duplicate: true,
             });
           }
@@ -259,8 +259,8 @@ class addnewcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-
-              createBtnDisabled: true,
+              companyName: e.target.value,
+              // createBtnDisabled: true,
             });
           }
           if (e.target.value === "" || e.target.value == null) {
@@ -273,7 +273,7 @@ class addnewcompany extends React.Component {
               Validations: v,
               companyName: e.target.value,
 
-              createBtnDisabled: true,
+              // createBtnDisabled: true,
             });
           }
         } else {
@@ -282,7 +282,7 @@ class addnewcompany extends React.Component {
           this.setState({
             Validations: v,
             companyName: e.target.value,
-            createBtnDisabled: false,
+            // createBtnDisabled: false,
           });
         }
         // Checktrue();
@@ -301,8 +301,9 @@ class addnewcompany extends React.Component {
             };
             this.setState({
               Validations: v,
+              address: e.target.value,
 
-              createBtnDisabled: true,
+              // createBtnDisabled: true,
             });
           }
           if (e.target.value === "" || e.target.value == null) {
@@ -315,7 +316,7 @@ class addnewcompany extends React.Component {
               Validations: v,
               address: e.target.value,
 
-              createBtnDisabled: true,
+              // createBtnDisabled: true,
             });
           }
         } else {
@@ -324,10 +325,10 @@ class addnewcompany extends React.Component {
           this.setState({
             Validations: v,
             address: e.target.value,
-            createBtnDisabled: false,
+            // createBtnDisabled: false,
           });
         }
-        Checktrue();
+        // Checktrue();
       }
 
       if (id === "Address2") {
@@ -339,7 +340,8 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true,
+
+            address2: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -347,10 +349,9 @@ class addnewcompany extends React.Component {
           this.setState({
             Validations: v,
             address2: e.target.value,
-            createBtnDisabled: false,
           });
         }
-        Checktrue();
+        // Checktrue();
       }
 
       if (id === "Address3") {
@@ -362,7 +363,7 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true,
+            address3: e.target.value,
           });
         } else {
           let v = this.state.Validations;
@@ -370,10 +371,9 @@ class addnewcompany extends React.Component {
           this.setState({
             Validations: v,
             address3: e.target.value,
-            createBtnDisabled: false,
           });
         }
-        Checktrue();
+        // Checktrue();
       }
 
       if (id === "City") {
@@ -385,7 +385,9 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true,
+            city: e.target.value,
+
+            // createBtnDisabled: true,
           });
         } else {
           let v = this.state.Validations;
@@ -393,10 +395,10 @@ class addnewcompany extends React.Component {
           this.setState({
             Validations: v,
             city: e.target.value,
-            createBtnDisabled: false,
+            // createBtnDisabled: false,
           });
         }
-        Checktrue();
+        // Checktrue();
       }
 
       if (id === "Postcode") {
@@ -409,7 +411,7 @@ class addnewcompany extends React.Component {
           this.setState({
             Validations: v,
             postcode: e.target.value,
-            createBtnDisabled: true,
+            // createBtnDisabled: true,
           });
         } else {
           let v = this.state.Validations;
@@ -417,33 +419,47 @@ class addnewcompany extends React.Component {
           this.setState({
             Validations: v,
             postcode: e.target.value,
-            createBtnDisabled: false,
+            // createBtnDisabled: false,
           });
         }
-        Checktrue();
+        // Checktrue();
       }
 
       if (id === "PhoneNo") {
-        if (e.target.value.length > 20) {
+        let number = CF.chkIfNumber(e.target.value);
+        if (number) {
+          if (e.target.value.length > 20) {
+            let v = this.state.Validations;
+            v.phoneno = {
+              errorState: true,
+              errorMsg: "Only 20 digits are Allowed!",
+            };
+            this.setState({
+              Validations: v,
+              // createBtnDisabled: true,
+              phoneno: e.target.value,
+            });
+          } else {
+            let v = this.state.Validations;
+            v.phoneno = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v,
+              phoneno: e.target.value,
+              // createBtnDisabled: false,
+            });
+          }
+        } else {
           let v = this.state.Validations;
           v.phoneno = {
             errorState: true,
-            errorMsg: "Only 20 digits are Allowed!",
+            errorMsg: "Enter Number!",
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.phoneno = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            phoneno: e.target.value,
-            createBtnDisabled: false,
+            // createBtnDisabled: true,
           });
         }
-        Checktrue();
+        // Checktrue();
       }
 
       if (id === "Website") {
@@ -455,7 +471,9 @@ class addnewcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true,
+            website: e.target.value,
+
+            // createBtnDisabled: true,
           });
         } else {
           let v = this.state.Validations;
@@ -466,13 +484,32 @@ class addnewcompany extends React.Component {
             createBtnDisabled: false,
           });
         }
-        Checktrue();
+        // Checktrue();
       }
       if (id === "Country") {
         this.setState({ country: CF.toInt(e.target.value) });
       }
       if (id === "State") {
         this.setState({ state: CF.toInt(e.target.value) });
+      }
+      validate();
+    };
+
+    const validate = () => {
+      let v = this.state.Validations;
+      if (
+        v["companyName"].errorState === true ||
+        v["address"].errorState === true ||
+        v["address2"].errorState === true ||
+        v["address3"].errorState === true ||
+        v["city"].errorState === true ||
+        v["postcode"].errorState === true ||
+        v["phoneno"].errorState === true||
+        v["website"].errorState === true
+      ) {
+        this.setState({createBtnDisabled:true})
+      }else{
+        this.setState({createBtnDisabled:false})
       }
     };
 
@@ -599,7 +636,7 @@ class addnewcompany extends React.Component {
           // Dialog.DialogContent = contact;
           this.setState({ Dialog: Dialog });
           break;
-       
+
           break;
         default:
           break;
@@ -612,7 +649,6 @@ class addnewcompany extends React.Component {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = false;
       this.setState({ Dialog: Dialog });
-    
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -749,7 +785,7 @@ class addnewcompany extends React.Component {
                               label="Phone No"
                               variant="outlined"
                               size="small"
-                              // onChange={(e) => updateFormValue("PhoneNo", e)}
+                              onChange={(e) => updateFormValue("PhoneNo", e)}
                               // InputProps={{
 
                               value={this.state.phoneno}
@@ -862,43 +898,49 @@ class addnewcompany extends React.Component {
                                 this.state.Validations.postcode.errorMsg
                               }
                             />
-                             <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Country
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
-                                <select
-                                  className="dropdown-css"
-                                  id="countrySelect"
-                                  onChange={(e) =>
-                                    this.updateFormValue("Country", e)
-                                  }
-                                  value={this.state.country}
-                                >
-                                  <option value="-" disabled>
-                                    Select
-                                  </option>
+                            <TableRow>
+                              <TableCell
+                                align="left"
+                                className="no-border-table"
+                              >
+                                Country
+                              </TableCell>
+                              <TableCell
+                                align="left"
+                                className="no-border-table"
+                              >
+                                <Grid container spacing={0}>
+                                  <Grid item xs={12} sm={12} md={10} lg={10}>
+                                    <select
+                                      className="dropdown-css"
+                                      id="countrySelect"
+                                      onChange={(e) =>
+                                        this.updateFormValue("Country", e)
+                                      }
+                                      value={this.state.country}
+                                    >
+                                      <option value="-" disabled>
+                                        Select
+                                      </option>
 
-                                  {this.state.countryData.map((item, i) => (
-                                    <option value={parseInt(item.value)}>
-                                      {item.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <button
-                                  className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("Country")}
-                                >
-                                  ...
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow>
+                                      {this.state.countryData.map((item, i) => (
+                                        <option value={parseInt(item.value)}>
+                                          {item.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </Grid>
+                                  <Grid item xs={12} sm={12} md={2} lg={2}>
+                                    <button
+                                      className="dropdowninputbtn"
+                                      onClick={(e) => openDialog("Country")}
+                                    >
+                                      ...
+                                    </button>
+                                  </Grid>
+                                </Grid>
+                              </TableCell>
+                            </TableRow>
                             {/* <DropdownInput
                               id="countrySelect"
                               label="Country"
@@ -906,43 +948,49 @@ class addnewcompany extends React.Component {
                               options={this.state.countryData}
                               value={this.state.country}
                             /> */}
-                             <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                          State
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
-                                <select
-                                  className="dropdown-css"
-                                  id="stateSelect"
-                                  onChange={(e) =>
-                                    this.updateFormValue("State", e)
-                                  }
-                                  value={this.state.state}
-                                >
-                                  <option value="-" disabled>
-                                    Select
-                                  </option>
+                            <TableRow>
+                              <TableCell
+                                align="left"
+                                className="no-border-table"
+                              >
+                                State
+                              </TableCell>
+                              <TableCell
+                                align="left"
+                                className="no-border-table"
+                              >
+                                <Grid container spacing={0}>
+                                  <Grid item xs={12} sm={12} md={10} lg={10}>
+                                    <select
+                                      className="dropdown-css"
+                                      id="stateSelect"
+                                      onChange={(e) =>
+                                        this.updateFormValue("State", e)
+                                      }
+                                      value={this.state.state}
+                                    >
+                                      <option value="-" disabled>
+                                        Select
+                                      </option>
 
-                                  {this.state.stateData.map((item, i) => (
-                                    <option value={parseInt(item.value)}>
-                                      {item.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <button
-                                  className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("State")}
-                                >
-                                  ...
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow>
+                                      {this.state.stateData.map((item, i) => (
+                                        <option value={parseInt(item.value)}>
+                                          {item.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </Grid>
+                                  <Grid item xs={12} sm={12} md={2} lg={2}>
+                                    <button
+                                      className="dropdowninputbtn"
+                                      onClick={(e) => openDialog("State")}
+                                    >
+                                      ...
+                                    </button>
+                                  </Grid>
+                                </Grid>
+                              </TableCell>
+                            </TableRow>
 
                             {/* <DropdownInput
                               id="stateSelect"

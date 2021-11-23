@@ -547,7 +547,7 @@ cursor: pointer;
   -webkit-border-radius: 0px;
   font-weight: 400;
   border-color: rgba(224, 224, 224, 1) !important; 
-  box-sizing:border-box; 
+  /* box-sizing:border-box;  */
 }
 
 .MuiOutlinedInput-root {   
