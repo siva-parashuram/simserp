@@ -42,6 +42,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class editcompany extends React.Component {
   constructor(props) {
@@ -92,7 +93,20 @@ class editcompany extends React.Component {
       userIsTyping: false,
       isUserchangesUpdated: false,
       CompanyID: null,
-      company: APIURLS.company,
+      company: {
+        CompanyID: 0,
+        CompanyName: "",
+        Address: "",
+        Address2: "",
+        Address3: "",
+        City: "",
+        Postcode: "",
+        CountryID: 0,
+        StateID: 0,
+        PhoneNo: "",
+        Website: "",
+        IsActive: true
+      },
     };
     this.wrapper = React.createRef();
   }
@@ -284,6 +298,7 @@ class editcompany extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           console.log("CompanyState>>", response.data);
+          /*
           company.CompanyName = response.data.companyName;
           company.Address = response.data.address;
           company.Address2 = response.data.address2;
@@ -295,10 +310,12 @@ class editcompany extends React.Component {
           company.PhoneNo = response.data.phoneNo;
           company.Website = response.data.website;
           company.IsActive = response.data.IsActive;
+          */
           console.log("company>>", company);
           this.setState(
             {
-              oldName: response.data.companyName,
+              company:response.data,
+           /*   oldName: response.data.companyName,
               company: company,
               CompanyName: response.data.companyName,
               Address: response.data.address,
@@ -311,6 +328,7 @@ class editcompany extends React.Component {
               PhoneNo: response.data.phoneNo,
               Website: response.data.website,
               IsActive: response.data.IsActive,
+              */
               selectedCountry: response.data.countryId,
               ProgressLoader: true,
             },
@@ -844,73 +862,46 @@ class editcompany extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    // const StyledAccordionSummary = withStyles({
-    //   root: {
-    //       minHeight:"40px",
-    //       maxHeight: "40px",
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.companyMaster + this.state.urlparams}
+          masterLinkTitle="Company  Master"
+          typoTitle="Edit Company"
+          level={2}
+        />
+      </Fragment>
+    );
 
-    //       '&.Mui-expanded': {
-    //         minHeight: '50px',
-    //         maxHeight: '50px',
-
-    //       }
-    //   },
-
-    //   })(AccordionSummary);
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+           startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            onClick={(e) => updateCompanyDetails()}
+            disabled={this.state.updateBtnDisabled}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
 
     return (
       <Fragment>
         <div>
           <Loader ProgressLoader={this.state.ProgressLoader} />
 
-          <div className="breadcrumb-height" style={{ marginTop: -5 }}>
-            <Grid container spacing={1}>
-              <Grid
-                xs={12}
-                sm={12}
-                md={4}
-                lg={4}
-                // style={{
-                //   borderRightStyle: "solid",
-                //   borderRightColor: "#bdbdbd",
-                //   borderRightWidth: 1,
-                // }}
-              >
-                <div style={{ marginTop: 8 }}>
-                  <Breadcrumb
-                    backOnClick={this.props.history.goBack}
-                    linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                    linkTitle="Dashboard"
-                    masterHref={URLS.URLS.companyMaster + this.state.urlparams}
-                    masterLinkTitle="Company  Master"
-                    typoTitle="Edit Company"
-                    level={2}
-                  />
-                </div>
-              </Grid>
-              <Grid xs={12} sm={12} md={8} lg={8}>
-                <div style={{ marginLeft: 10, marginTop: 1 }}>
-                  <ButtonGroup
-                    size="small"
-                    variant="text"
-                    aria-label="Action Menu Button group"
-                  >
-                    <Button
-                      className="action-btns"
-                      onClick={(e) => updateCompanyDetails()}
-                      disabled={this.state.updateBtnDisabled}
-                    >
-                      {APIURLS.buttonTitle.update}
-                    </Button>
-                  </ButtonGroup>
-                </div>
-              </Grid>
-            </Grid>
-          </div>
+          <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
 
-          <div className="breadcrumb-bottom"></div>
-
-          {/* <div className="New-link-bottom"></div> */}
 
           <Grid className="table-adjust" container spacing={0}>
             <Grid item xs={12} sm={12} md={8} lg={8}>
@@ -956,7 +947,7 @@ class editcompany extends React.Component {
                                 onChange={(e) =>
                                   updateFormValue("companyName", e)
                                 }
-                                value={this.state.CompanyName}
+                                value={this.state.company.CompanyName}
                                 error={
                                   this.state.Validations.companyName.errorState
                                 }
@@ -975,7 +966,7 @@ class editcompany extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 50,
                                 }}
-                                value={this.state.Address}
+                                value={this.state.company.Address}
                                 error={
                                   this.state.Validations.address.errorState
                                 }
@@ -994,7 +985,7 @@ class editcompany extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 50,
                                 }}
-                                value={this.state.Address2}
+                                value={this.state.company.Address2}
                                 error={
                                   this.state.Validations.address2.errorState
                                 }
@@ -1012,7 +1003,7 @@ class editcompany extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 50,
                                 }}
-                                value={this.state.Address3}
+                                value={this.state.company.Address3}
                                 error={
                                   this.state.Validations.address3.errorState
                                 }
@@ -1030,7 +1021,7 @@ class editcompany extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 50,
                                 }}
-                                value={this.state.City}
+                                value={this.state.company.City}
                                 error={this.state.Validations.city.errorState}
                                 helperText={
                                   this.state.Validations.city.errorMsg
@@ -1046,7 +1037,7 @@ class editcompany extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 10,
                                 }}
-                                value={this.state.PostCode}
+                                value={this.state.company.PostCode}
                                 error={
                                   this.state.Validations.postcode.errorState
                                 }
@@ -1083,7 +1074,7 @@ class editcompany extends React.Component {
                                     onChange={(e) =>
                                       updateFormValue("Country", e)
                                     }
-                                    value={this.state.CountryID}
+                                    value={this.state.company.CountryID}
                                   >
                                     <option value="-" disabled>
                                       Select
@@ -1129,7 +1120,7 @@ class editcompany extends React.Component {
                                     onChange={(e) =>
                                       updateFormValue("State", e)
                                     }
-                                    value={this.state.StateID}
+                                    value={this.state.company.StateID}
                                   >
                                     <option value="-" disabled>
                                       Select
@@ -1172,7 +1163,7 @@ class editcompany extends React.Component {
                                 onChange={(e) => updateFormValue("PhoneNo", e)}
                                 // InputProps={{
 
-                                value={this.state.PhoneNo}
+                                value={this.state.company.PhoneNo}
                                 error={
                                   this.state.Validations.phoneno.errorState
                                 }
@@ -1187,7 +1178,7 @@ class editcompany extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("Website", e)}
-                                value={this.state.Website}
+                                value={this.state.company.Website}
                                 error={
                                   this.state.Validations.website.errorState
                                 }
@@ -1199,7 +1190,7 @@ class editcompany extends React.Component {
                                 key="IsActive"
                                 id="IsActive"
                                 label="IsActive"
-                                param={this.state.IsActive}
+                                param={this.state.company.IsActive}
                                 onChange={(e) => updateFormValue("IsActive", e)}
                               />
                             </TableBody>

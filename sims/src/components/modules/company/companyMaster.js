@@ -414,26 +414,27 @@ class companyMaster extends React.Component {
 
     const buttongroupHtml=(
       <Fragment>
+        {console.log("APIURLS.buttonTitle > ",APIURLS.buttonTitle)}
         <ButtonGroup
                     size="small"
                     variant="text"
                     aria-label="Action Menu Button group"
                   >
                     <Button
-                      startIcon={<AddIcon />}
+                      startIcon={APIURLS.buttonTitle.add.icon}
                       className="action-btns"
                       onClick={(e) =>
                         openPage(URLS.URLS.addNewCompany + this.state.urlparams)
                       }
                     >
-                      {APIURLS.buttonTitle.add}
+                      {APIURLS.buttonTitle.add.name}
                     </Button>
                     <Button
-                     startIcon={<EditIcon />}
+                     startIcon={APIURLS.buttonTitle.edit.icon}
                       className="action-btns"
                       onClick={(e) => openPage(this.state.editUrl)}
                     >
-                      {APIURLS.buttonTitle.edit}
+                      {APIURLS.buttonTitle.edit.name}
                     </Button>
 
                     {/* <Button

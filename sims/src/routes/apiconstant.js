@@ -1,3 +1,8 @@
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from '@mui/icons-material/Save';
+
+
 // const domain="http://192.168.10.106:44356/";
 const domain = "http://192.168.10.200:8080/";
 export const APIURL = {
@@ -92,78 +97,93 @@ export const APIURL = {
   GetAllItemPostingGroup: domain + "api/Posting/GetAllItemPostingGroup",
   UpdateItemPostingGroup: domain + "api/Posting/UpdateItemPostingGroup",
   GetAllGeneralPostingGroup: domain + "api/Posting/GetAllGeneralPostingGroup",
-  CreateGeneralPostingGroup: domain + "api/Posting/CreateGeneralPostingGroup",  
+  CreateGeneralPostingGroup: domain + "api/Posting/CreateGeneralPostingGroup",
   UpdateGeneralPostingGroup: domain + "api/Posting/UpdateGeneralPostingGroup",
-  CreateCustomerPostingGroup:domain+"api/Posting/CreateCustomerPostingGroup",
-  CreateSupplierPostingGroup:domain+"api/Posting/CreateSupplierPostingGroup",
-  GetAllSupplierPostingGroup:domain+"api/Posting/GetAllSupplierPostingGroup",
+  CreateCustomerPostingGroup: domain + "api/Posting/CreateCustomerPostingGroup",
+  CreateSupplierPostingGroup: domain + "api/Posting/CreateSupplierPostingGroup",
+  GetAllSupplierPostingGroup: domain + "api/Posting/GetAllSupplierPostingGroup",
 
-  GetAllCustomerPostingGroup:domain+"api/Posting/GetAllCustomerPostingGroup",
-  CreateChartOfAccount:domain+"api/ChartOfAccount/CreateChartOfAccount",
-  GetChartOfAccounts:domain+"api/ChartOfAccount/GetChartOfAccounts",
-  GetChartOfAccount:domain+"api/ChartOfAccount/GetChartOfAccount",
-  UpdateChartOfAccount:domain+"api/ChartOfAccount/UpdateChartOfAccount",
-  CreateCustomer:domain+"api/Customer/CreateCustomer",
-  GetAllCustomer:domain+"api/Customer/GetAllCustomer",
-  GetCustomer:domain+ "api/Customer/GetCustomer",
-  UpdateCustomer:domain+"api/Customer/UpdateCustomer",  
-  GetAllCustomerContact:domain+"api/Customer/GetAllCustomerContact",
-  CreateCustomerContact:domain+"api/Customer/CreateCustomerContact",
-  GetCustomerContact:domain+"api/Customer/GetCustomerContact",
-  CreateCustomerAddress:domain+"api/Customer/CreateCustomerAddress",
-  GetAllCustomerAddress:domain+"api/Customer/GetAllCustomerAddress",
-  GetCustomerAddress:domain+"api/Customer/GetCustomerAddress",
-  GetAllCustomerAddressByCustID:domain+"api/Customer/GetAllCustomerAddressByCustID",
-  GetAllCustomerContactByCustID:domain+"api/Customer/GetAllCustomerContactByCustID",
-  UpdateCustomerAddress:domain+"api/Customer/UpdateCustomerAddress",
-  UpdateCustomerContact:domain+"api/Customer/UpdateCustomerContact",
-  GetAllPaymentTerms:domain+"api/Customer/GetAllPaymentTerms",
-  CreatePaymentTerms:domain+"api/Customer/CreatePaymentTerms",
-  UpdatePaymentTerms:domain+"api/Customer/UpdatePaymentTerms",
-  GetAllCustomerCategory:domain+"api/Customer/GetAllCustomerCategory",
-  CreateCustomerCategory:domain+"api/Customer/CreateCustomerCategory",
-  UpdateCustomerCategory:domain+"api/Customer/UpdateCustomerCategory",
-  GetAllSalesPerson:domain+"api/Customer/GetAllSalesPerson",
-  UpdateSalesPerson:domain+"api/Customer/UpdateSalesPerson",
-  GetAllUOM:domain+"api/Common/GetAllUOM",
-  Add_UpdateCustomerPrice:domain+"api/Customer/Add_UpdateCustomerPrice",
-  GetCustomerPriceByCustID:domain+"api/Customer/GetCustomerPriceByCustID",
-  CreateCustomerBranchMapping:domain+"api/Customer/CreateCustomerBranchMapping",
-  GetCustomerBranchMappingByCustID:domain+"api/Customer/GetCustomerBranchMappingByCustID",
+  GetAllCustomerPostingGroup: domain + "api/Posting/GetAllCustomerPostingGroup",
+  CreateChartOfAccount: domain + "api/ChartOfAccount/CreateChartOfAccount",
+  GetChartOfAccounts: domain + "api/ChartOfAccount/GetChartOfAccounts",
+  GetChartOfAccount: domain + "api/ChartOfAccount/GetChartOfAccount",
+  UpdateChartOfAccount: domain + "api/ChartOfAccount/UpdateChartOfAccount",
+  CreateCustomer: domain + "api/Customer/CreateCustomer",
+  GetAllCustomer: domain + "api/Customer/GetAllCustomer",
+  GetCustomer: domain + "api/Customer/GetCustomer",
+  UpdateCustomer: domain + "api/Customer/UpdateCustomer",
+  GetAllCustomerContact: domain + "api/Customer/GetAllCustomerContact",
+  CreateCustomerContact: domain + "api/Customer/CreateCustomerContact",
+  GetCustomerContact: domain + "api/Customer/GetCustomerContact",
+  CreateCustomerAddress: domain + "api/Customer/CreateCustomerAddress",
+  GetAllCustomerAddress: domain + "api/Customer/GetAllCustomerAddress",
+  GetCustomerAddress: domain + "api/Customer/GetCustomerAddress",
+  GetAllCustomerAddressByCustID: domain + "api/Customer/GetAllCustomerAddressByCustID",
+  GetAllCustomerContactByCustID: domain + "api/Customer/GetAllCustomerContactByCustID",
+  UpdateCustomerAddress: domain + "api/Customer/UpdateCustomerAddress",
+  UpdateCustomerContact: domain + "api/Customer/UpdateCustomerContact",
+  GetAllPaymentTerms: domain + "api/Customer/GetAllPaymentTerms",
+  CreatePaymentTerms: domain + "api/Customer/CreatePaymentTerms",
+  UpdatePaymentTerms: domain + "api/Customer/UpdatePaymentTerms",
+  GetAllCustomerCategory: domain + "api/Customer/GetAllCustomerCategory",
+  CreateCustomerCategory: domain + "api/Customer/CreateCustomerCategory",
+  UpdateCustomerCategory: domain + "api/Customer/UpdateCustomerCategory",
+  GetAllSalesPerson: domain + "api/Customer/GetAllSalesPerson",
+  UpdateSalesPerson: domain + "api/Customer/UpdateSalesPerson",
+  GetAllUOM: domain + "api/Common/GetAllUOM",
+  Add_UpdateCustomerPrice: domain + "api/Customer/Add_UpdateCustomerPrice",
+  GetCustomerPriceByCustID: domain + "api/Customer/GetCustomerPriceByCustID",
+  CreateCustomerBranchMapping: domain + "api/Customer/CreateCustomerBranchMapping",
+  GetCustomerBranchMappingByCustID: domain + "api/Customer/GetCustomerBranchMappingByCustID",
 
-  GetAllSupplier:domain+"api/Supplier/GetAllSupplier",
-  UpdateSupplier:domain+"api/Supplier/UpdateSupplier",
-  CreateSupplier:domain+"api/Supplier/CreateSupplier",
-  GetSupplier:domain+"api/Supplier/GetSupplier",
-  GetAllNoSeriesByBranchId:domain+"api/NoSeriesDetails/GetAllNoSeriesByBranchId",
-  GetMasterDocumentNumber:domain+"api/Common/GetMasterDocumentNumber",
-  CreateSupplierBranchMapping:domain+ "api/Supplier/CreateSupplierBranchMapping",
-  GetSupplierBranchMappingBySuplID:domain+"api/Supplier/GetSupplierBranchMappingBySuplID",
-  GetAllSupplierAddressBySuplID:domain+"api/Supplier/GetAllSupplierAddressBySuplID",
-  CreateSupplierAddress:domain+"api/Supplier/CreateSupplierAddress",
-  UpdateSupplierAddress:domain+"api/Supplier/UpdateSupplierAddress",
-  GetSupplierAddress:domain+"api/Supplier/GetSupplierAddress",
-  Add_UpdateSupplierPrice:domain+"api/Supplier/Add_UpdateSupplierPrice",
-  GetSupplierPriceBySuplID:domain+"api/Supplier/GetSupplierPriceBySuplID"
+  GetAllSupplier: domain + "api/Supplier/GetAllSupplier",
+  UpdateSupplier: domain + "api/Supplier/UpdateSupplier",
+  CreateSupplier: domain + "api/Supplier/CreateSupplier",
+  GetSupplier: domain + "api/Supplier/GetSupplier",
+  GetAllNoSeriesByBranchId: domain + "api/NoSeriesDetails/GetAllNoSeriesByBranchId",
+  GetMasterDocumentNumber: domain + "api/Common/GetMasterDocumentNumber",
+  CreateSupplierBranchMapping: domain + "api/Supplier/CreateSupplierBranchMapping",
+  GetSupplierBranchMappingBySuplID: domain + "api/Supplier/GetSupplierBranchMappingBySuplID",
+  GetAllSupplierAddressBySuplID: domain + "api/Supplier/GetAllSupplierAddressBySuplID",
+  CreateSupplierAddress: domain + "api/Supplier/CreateSupplierAddress",
+  UpdateSupplierAddress: domain + "api/Supplier/UpdateSupplierAddress",
+  GetSupplierAddress: domain + "api/Supplier/GetSupplierAddress",
+  Add_UpdateSupplierPrice: domain + "api/Supplier/Add_UpdateSupplierPrice",
+  GetSupplierPriceBySuplID: domain + "api/Supplier/GetSupplierPriceBySuplID"
 };
 
 
-export const pagination= {
+export const pagination = {
   page: 0,
   rowsPerPage: 12,
 };
 
 
-export const buttonTitle={
-  add:"Add   ",
-  edit:"Edit   ",
-  update:"Update   ",
-  new:"New   ",
-  save:"Save   "
+export const buttonTitle = {
+  add: {
+    name: "Add",
+    icon: <AddIcon />,
+  },
+  edit: {
+    name: "Edit",
+    icon: <EditIcon />,
+  },
+  update: {
+    name: "Update",
+    icon: <EditIcon />,
+  },
+  new: {
+    name: "New",
+    icon: <EditIcon />,
+  },
+  save: {
+    name: "Save",
+    icon: <SaveIcon />,
+  }
 };
 
 
-export const POItemType=[
+export const POItemType = [
   { name: "Item", value: 0 },
   { name: "G/L Account", value: 1 },
   { name: "Fixed Asset", value: 2 },
@@ -178,7 +198,7 @@ export const TypeOfEnterprise = [
   { name: "D-Micro(S)", value: 4 },
   { name: "E-Small(S)", value: 5 },
   { name: "F-Medium(S)", value: 6 },
-  
+
 ];
 
 
@@ -190,24 +210,24 @@ export const DFormat = "MM/DD/YYYY";
 // 0-Sales, 1-Shipping, 2-Account, 3-Internal
 
 
-export const ContactType=[
-  {name:"Sales",value:0},
-  {name:"Shipping",value:1},
-  {name:"Account",value:2},
-  {name:"Internal",value:3},
+export const ContactType = [
+  { name: "Sales", value: 0 },
+  { name: "Shipping", value: 1 },
+  { name: "Account", value: 2 },
+  { name: "Internal", value: 3 },
 ];
 
-export const AddressType=[
-  {name:"Billing",value:0},
-  {name:"Shipping",value:1},
-  {name:"Notify",value:2},
+export const AddressType = [
+  { name: "Billing", value: 0 },
+  { name: "Shipping", value: 1 },
+  { name: "Notify", value: 2 },
 ];
 
-export const CreditRating=[
-  {name:"A",value:0},
-{name:"B",value:1},
-{name:"C",value:2},
-{name:"D",value:3}
+export const CreditRating = [
+  { name: "A", value: 0 },
+  { name: "B", value: 1 },
+  { name: "C", value: 2 },
+  { name: "D", value: 3 }
 ];
 
 
@@ -253,10 +273,10 @@ export const ACCategory = [
   { name: "Expense", value: 5 },
 ];
 
-export const DebitCredit=[
-  {name:"Both",value:0},
-   {name:"Debit",value:1},
-    {name:"Credit",value:2}
+export const DebitCredit = [
+  { name: "Both", value: 0 },
+  { name: "Debit", value: 1 },
+  { name: "Credit", value: 2 }
 ];
 
 export const ItemType = [
@@ -361,8 +381,10 @@ export let company = {
   "PhoneNo": null,
   "Website": null,
   "CreationDate": null,
-  "IsActive":false
+  "IsActive": false
 };
+
+
 
 
 export let page = {

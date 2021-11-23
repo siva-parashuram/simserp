@@ -740,11 +740,12 @@ class addnewcompany extends React.Component {
                     aria-label="Action Menu Button group"
                   >
                     <Button
+                    startIcon={APIURLS.buttonTitle.save.icon}
                       className="action-btns"
                       disabled={this.state.createBtnDisabled}
                       onClick={handleCreateCompanyClick}
                     >
-                      {APIURLS.buttonTitle.add}
+                      {APIURLS.buttonTitle.save.name}
                     </Button>
                   </ButtonGroup>
       </Fragment>
@@ -787,7 +788,7 @@ class addnewcompany extends React.Component {
                     style={{ minHeight: "40px", maxHeight: "40px" }}
                   >
                     <Typography
-                      // style={{marginLeft:-12}}
+                       
                       key=""
                       className="accordion-Header-Title"
                     >
@@ -977,13 +978,7 @@ class addnewcompany extends React.Component {
                                       </button>
                                     </TableCell>
                                   </TableRow>
-                                  {/* <DropdownInput
-                              id="countrySelect"
-                              label="Country"
-                              onChange={(e) => updateFormValue("Country", e)}
-                              options={this.state.countryData}
-                              value={this.state.country}
-                            /> */}
+                                 
                                   <TableRow>
                                     <TableCell
                                       align="left"
@@ -1066,13 +1061,7 @@ class addnewcompany extends React.Component {
                                     }
                                   />
 
-                                  {/* <DropdownInput
-                              id="stateSelect"
-                              label="State"
-                              onChange={(e) => updateFormValue("State", e)}
-                              options={this.state.stateData}
-                              value={this.state.state}
-                            /> */}
+                            
                                 </TableBody>
                               </Table>
                             </Grid>
