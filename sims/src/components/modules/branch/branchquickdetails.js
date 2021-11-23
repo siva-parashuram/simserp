@@ -57,23 +57,23 @@ class branchquickdetails extends React.Component {
                                 <TableBody className="tableBody">
                                     <TableRow>
                                         <TableCell align="left" className="no-border-table">Effective Date</TableCell>
-                                        <TableCell align="right" className="no-border-table"> {this.props.branchItem.effectiveDate ? moment(this.props.branchItem.effectiveDate).format("MM/DD/YYYY") : "-"}</TableCell>
+                                        <TableCell align="right" className="no-border-table"> {this.props.branchItem.EffectiveDate ? moment(this.props.branchItem.EffectiveDate).format("MM/DD/YYYY") : "-"}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell align="left" className="no-border-table">Name</TableCell>
-                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.name}</TableCell>
+                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.Name}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell align="left" className="no-border-table">Address</TableCell>
-                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.address} {this.props.branchItem.address2} {this.props.branchItem.address3}</TableCell>
+                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.Address} {this.props.branchItem.Address2} {this.props.branchItem.Address3}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell align="left" className="no-border-table">Phone No</TableCell>
-                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.phoneNo}</TableCell>
+                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.PhoneNo}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell align="left" className="no-border-table">Website</TableCell>
-                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.website}</TableCell>
+                                        <TableCell align="right" className="no-border-table">{this.props.branchItem.Website}</TableCell>
                                     </TableRow>
 
                                 </TableBody>
