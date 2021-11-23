@@ -44,6 +44,9 @@ body{
 }
 
 .dropdowninputbtn{
+  height: 25px;
+  line-height: 25px;
+  width:25px ;
   margin-top: 2px !important;
   margin-left: 2px !important;
   border-radius: 0px !important;

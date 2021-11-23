@@ -573,7 +573,7 @@ class editcompany extends React.Component {
         }
         // CheckTrue();
       }
-      if (id === "country") {
+      if (id === "Country") {
         this.setState({ CountryID: CF.toInt(e.target.value) });
       }
 
@@ -1016,14 +1016,19 @@ class editcompany extends React.Component {
                                 this.state.Validations.postcode.errorMsg
                               }
                             />
-                             <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Country
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
+                            <TableRow>
+                              <TableCell
+                                align="left"
+                                className="no-border-table"
+                              >
+                                Country
+                              </TableCell>
+                              <TableCell
+                                align="left"
+                                className="no-border-table"
+                              >
                                 <select
+                                  style={{ width: "80%", height: 30 }}
                                   className="dropdown-css"
                                   id="countrySelect"
                                   onChange={(e) =>
@@ -1041,18 +1046,15 @@ class editcompany extends React.Component {
                                     </option>
                                   ))}
                                 </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
                                 <button
                                   className="dropdowninputbtn"
                                   onClick={(e) => openDialog("Country")}
                                 >
                                   ...
                                 </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow>
+                               
+                              </TableCell>
+                            </TableRow>
                             {/* <DropdownInput
                               id="countrySelect"
                               label="Country"
@@ -1060,43 +1062,46 @@ class editcompany extends React.Component {
                               options={this.state.countryData}
                               value={this.state.country}
                             /> */}
-                             <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                          State
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
-                                <select
-                                  className="dropdown-css"
-                                  id="stateSelect"
-                                  onChange={(e) =>
-                                    this.updateFormValue("State", e)
-                                  }
-                                  value={this.state.StateID}
-                                >
-                                  <option value="-" disabled>
-                                    Select
-                                  </option>
 
-                                  {this.state.stateData.map((item, i) => (
-                                    <option value={parseInt(item.value)}>
-                                      {item.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <button
-                                  className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("State")}
-                                >
-                                  ...
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow>
+                              <TableRow>
+                              <TableCell
+                                align="left"
+                                className="no-border-table"
+                              >
+                                State
+                              </TableCell>
+                              <TableCell
+                                align="left"
+                                className="no-border-table"
+                              >
+                                 <select
+                                      style={{ width: "80%", height: 30 }}
+                                      className="dropdown-css"
+                                      id="stateSelect"
+                                      onChange={(e) =>
+                                        this.updateFormValue("State", e)
+                                      }
+                                      value={this.state.StateID}
+                                    >
+                                      <option value="-" disabled>
+                                        Select
+                                      </option>
+
+                                      {this.state.stateData.map((item, i) => (
+                                        <option value={parseInt(item.value)}>
+                                          {item.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                    <button
+                                      className="dropdowninputbtn"
+                                      onClick={(e) => openDialog("State")}
+                                    >
+                                      ...
+                                    </button>
+                               
+                              </TableCell>
+                            </TableRow>
                             {/* <DropdownInput
                               id="countrySelect"
                               label="Country"

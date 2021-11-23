@@ -504,12 +504,12 @@ class addnewcompany extends React.Component {
         v["address3"].errorState === true ||
         v["city"].errorState === true ||
         v["postcode"].errorState === true ||
-        v["phoneno"].errorState === true||
+        v["phoneno"].errorState === true ||
         v["website"].errorState === true
       ) {
-        this.setState({createBtnDisabled:true})
-      }else{
-        this.setState({createBtnDisabled:false})
+        this.setState({ createBtnDisabled: true });
+      } else {
+        this.setState({ createBtnDisabled: false });
       }
     };
 
@@ -909,36 +909,32 @@ class addnewcompany extends React.Component {
                                 align="left"
                                 className="no-border-table"
                               >
-                                <Grid container spacing={0}>
-                                  <Grid item xs={12} sm={12} md={10} lg={10}>
-                                    <select
-                                      className="dropdown-css"
-                                      id="countrySelect"
-                                      onChange={(e) =>
-                                        this.updateFormValue("Country", e)
-                                      }
-                                      value={this.state.country}
-                                    >
-                                      <option value="-" disabled>
-                                        Select
-                                      </option>
+                                <select
+                                  style={{ width: "80%", height: 30 }}
+                                  className="dropdown-css"
+                                  id="countrySelect"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Country", e)
+                                  }
+                                  value={this.state.country}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
 
-                                      {this.state.countryData.map((item, i) => (
-                                        <option value={parseInt(item.value)}>
-                                          {item.name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </Grid>
-                                  <Grid item xs={12} sm={12} md={2} lg={2}>
-                                    <button
-                                      className="dropdowninputbtn"
-                                      onClick={(e) => openDialog("Country")}
-                                    >
-                                      ...
-                                    </button>
-                                  </Grid>
-                                </Grid>
+                                  {this.state.countryData.map((item, i) => (
+                                    <option value={parseInt(item.value)}>
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) => openDialog("Country")}
+                                >
+                                  ...
+                                </button>
+                               
                               </TableCell>
                             </TableRow>
                             {/* <DropdownInput
@@ -959,9 +955,8 @@ class addnewcompany extends React.Component {
                                 align="left"
                                 className="no-border-table"
                               >
-                                <Grid container spacing={0}>
-                                  <Grid item xs={12} sm={12} md={10} lg={10}>
-                                    <select
+                                 <select
+                                      style={{ width: "80%", height: 30 }}
                                       className="dropdown-css"
                                       id="stateSelect"
                                       onChange={(e) =>
@@ -979,16 +974,13 @@ class addnewcompany extends React.Component {
                                         </option>
                                       ))}
                                     </select>
-                                  </Grid>
-                                  <Grid item xs={12} sm={12} md={2} lg={2}>
                                     <button
                                       className="dropdowninputbtn"
                                       onClick={(e) => openDialog("State")}
                                     >
                                       ...
                                     </button>
-                                  </Grid>
-                                </Grid>
+                               
                               </TableCell>
                             </TableRow>
 

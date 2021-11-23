@@ -104,17 +104,25 @@ class statemaster extends React.Component {
   // };
 
   InitialhandleRowClick(e, item, id) {
-    let editUrl =
-      URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
+    try {
+      let editUrl =
+        URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
 
-    this.setState({ editurl: editUrl });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
+      this.setState({ editurl: editUrl });
+      this.InitialremoveIsSelectedRowClasses();
+      document.getElementById(id).classList.add("selectedRow");
+    } catch (e) {
+      console.log("Error : ", e);
+    }
   }
 
   InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.stateData.length; i++) {
-      document.getElementById("row_" + i).className = "";
+    try {
+      for (let i = 0; i < this.state.stateData.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    } catch (e) {
+      console.log("Error : ", e);
     }
   }
 
@@ -293,7 +301,7 @@ class statemaster extends React.Component {
                                     item.stateId
                                   }
                                 >
-                                  {URLS.PREFIX.stateID + item.stateId} 
+                                  {URLS.PREFIX.stateID + item.stateId}
                                 </a>
                               </TableCell>
                               <TableCell align="left">{item.name}</TableCell>
