@@ -460,7 +460,7 @@ class edituser extends React.Component {
       </Fragment>
     );
 
-    const userBranch=<Userbranchalot userId={this.state.user.UserID}/>
+    const userBranch=<Userbranchalot UserID={this.state.user.UserID}/>
     
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
