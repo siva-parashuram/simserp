@@ -104,7 +104,7 @@ class userbranchalot extends React.Component {
       };
       company.push(c);
     }
-
+     
     let uniqueCompany = [];
     company.map((x) =>
       uniqueCompany.filter(
