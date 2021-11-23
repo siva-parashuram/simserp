@@ -62,7 +62,7 @@ class editcompany extends React.Component {
       PostCode: "",
       PhoneNo: "",
       Website: "",
-      MasterCountryData:[],
+      MasterCountryData: [],
       countryData: [],
       stateData: [],
       selectedCountry: "",
@@ -200,7 +200,7 @@ class editcompany extends React.Component {
   //     })
   //     .catch((error) => {});
   // };
-  
+
   getCountryList() {
     let rows = [];
     let ValidUser = APIURLS.ValidUser;
@@ -217,27 +217,26 @@ class editcompany extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({MasterCountryData:data});
+        this.setState({ MasterCountryData: data });
         this.processCountryData(data);
-       
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   getStateByCountry = (CountryID) => {
-    console.log("getStateByCountry > CountryID > ",CountryID);
+    console.log("getStateByCountry > CountryID > ", CountryID);
     let MasterCountryData = this.state.MasterCountryData;
-    console.log("getStateByCountry > MasterCountryData > ",MasterCountryData);
+    console.log("getStateByCountry > MasterCountryData > ", MasterCountryData);
     let stateData = [];
-    for (let i=0; i < MasterCountryData.length; i++) {
+    for (let i = 0; i < MasterCountryData.length; i++) {
       if (MasterCountryData[i].CountryID === CountryID) {
-        if( MasterCountryData[i].State){
+        if (MasterCountryData[i].State) {
           stateData = MasterCountryData[i].State;
-        }        
+        }
         break;
       }
     }
-    console.log("getStateByCountry > stateData > ",stateData);
+    console.log("getStateByCountry > stateData > ", stateData);
     let newData = [];
     for (let i = 0; i < stateData.length; i++) {
       let d = {
@@ -246,12 +245,11 @@ class editcompany extends React.Component {
       };
       newData.push(d);
     }
-    console.log("getStateByCountry > stateData > newData > ",newData);
+    console.log("getStateByCountry > stateData > newData > ", newData);
 
     this.setState({ stateData: newData, ProgressLoader: true });
+  };
 
-  }
-  
   processCountryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
@@ -283,7 +281,7 @@ class editcompany extends React.Component {
       .post(GetCompanyUrl, data, { headers })
       .then((response) => {
         if (response.status === 200) {
-          console.log("CompanyState>>",response.data)
+          console.log("CompanyState>>", response.data);
           company.CompanyName = response.data.companyName;
           company.Address = response.data.address;
           company.Address2 = response.data.address2;
@@ -294,6 +292,7 @@ class editcompany extends React.Component {
           company.StateID = response.data.stateId;
           company.PhoneNo = response.data.phoneNo;
           company.Website = response.data.website;
+          console.log("company>>", company);
           this.setState(
             {
               oldName: response.data.companyName,
@@ -311,17 +310,21 @@ class editcompany extends React.Component {
               selectedCountry: response.data.countryId,
               ProgressLoader: true,
             },
-            () => {}
-
-
-
-
+            () => {
+              this.setInitialParamsForEdit();
+            }
           );
         } else {
         }
       })
       .catch((error) => {});
   }
+
+  setInitialParamsForEdit = () => {
+    let CountryID = this.state.CountryID;
+    console.log("unitialCountryID",CountryID)
+    this.getStateByCountry(CountryID);
+  };
 
   render() {
     // const CheckTrue = () => {
@@ -633,11 +636,13 @@ class editcompany extends React.Component {
       }
       if (id === "Country") {
         this.getStateByCountry(CF.toInt(e.target.value));
-        this.setState({ CountryID: CF.toInt(e.target.value) });
+        company.CountryID=CF.toInt(e.target.value)
+        this.setState({ CountryID: CF.toInt(e.target.value),company:company });
       }
 
       if (id === "State") {
-        this.setState({ StateID: CF.toInt(e.target.value) });
+        company.StateID=CF.toInt(e.target.value)
+        this.setState({ StateID: CF.toInt(e.target.value),company:company });
       }
       validate();
     };
@@ -668,6 +673,7 @@ class editcompany extends React.Component {
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
+      
       const data = {
         validUser: ValidUser,
         company: company,
@@ -1037,8 +1043,6 @@ class editcompany extends React.Component {
                             aria-label="company List table"
                           >
                             <TableBody className="tableBody">
-                              
-
                               <Tablerowcelltextboxinput
                                 id="Postcode"
                                 label="Postcode"
