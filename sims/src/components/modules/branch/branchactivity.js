@@ -295,26 +295,26 @@ class editbranch extends React.Component {
       .catch((error) => { });
   }
 
-  getStateList() {
-    let rows = [];
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetStatesUrl = APIURLS.APIURL.GetStates;
+  // getStateList() {
+  //   let rows = [];
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let GetStatesUrl = APIURLS.APIURL.GetStates;
 
-    axios
-      .post(GetStatesUrl, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
+  //   axios
+  //     .post(GetStatesUrl, ValidUser, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
 
-        rows = data;
-        this.processStateData(data);
-      })
-      .catch((error) => { });
-  }
+  //       rows = data;
+  //       this.processStateData(data);
+  //     })
+  //     .catch((error) => { });
+  // }
 
   getCountryList() {
     let rows = [];
@@ -424,6 +424,7 @@ class editbranch extends React.Component {
         .post(GetBranchUrl, data, { headers })
         .then((response) => {
           let data = response.data;
+          console.log("branchState>>",response.data)
 
           this.setStateParams(data);
         })

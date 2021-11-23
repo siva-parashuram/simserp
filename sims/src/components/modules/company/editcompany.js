@@ -62,6 +62,7 @@ class editcompany extends React.Component {
       PostCode: "",
       PhoneNo: "",
       Website: "",
+      MasterCountryData:[],
       countryData: [],
       stateData: [],
       selectedCountry: "",
@@ -97,7 +98,7 @@ class editcompany extends React.Component {
   componentDidMount() {
     this.getCountryList();
     this.getCompanyList();
-    this.getStateList();
+    // this.getStateList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -152,6 +153,54 @@ class editcompany extends React.Component {
       });
   }
 
+  // getCountryList() {
+
+  //   let rows = [];
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let GetCountryUrl = APIURLS.APIURL.GetCountries;
+
+  //   axios
+  //     .post(GetCountryUrl, ValidUser, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
+
+  //       rows = data;
+  //       this.processCountryData(data);
+  //     })
+  //     .catch((error) => {});
+  // }
+
+  // getStateList = () => {
+  //   let ValidUser = APIURLS.ValidUser;
+  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+  //   const headers = {
+  //     "Content-Type": "application/json",
+  //   };
+  //   let GetStatesUrl = APIURLS.APIURL.GetStates;
+
+  //   axios
+  //     .post(GetStatesUrl, ValidUser, { headers })
+  //     .then((response) => {
+  //       let data = response.data;
+  //       let newData = [];
+  //       for (let i = 0; i < data.length; i++) {
+  //         let d = {
+  //           name: data[i].name,
+  //           value: data[i].stateId,
+  //         };
+  //         newData.push(d);
+  //       }
+  //       this.setState({ stateData: newData, ProgressLoader: true });
+  //     })
+  //     .catch((error) => {});
+  // };
+  
   getCountryList() {
     let rows = [];
     let ValidUser = APIURLS.ValidUser;
@@ -168,42 +217,47 @@ class editcompany extends React.Component {
         let data = response.data;
 
         rows = data;
+        this.setState({MasterCountryData:data});
         this.processCountryData(data);
+       
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
-  getStateList = () => {
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetStatesUrl = APIURLS.APIURL.GetStates;
+  getStateByCountry = (CountryID) => {
+    console.log("getStateByCountry > CountryID > ",CountryID);
+    let MasterCountryData = this.state.MasterCountryData;
+    console.log("getStateByCountry > MasterCountryData > ",MasterCountryData);
+    let stateData = [];
+    for (let i=0; i < MasterCountryData.length; i++) {
+      if (MasterCountryData[i].CountryID === CountryID) {
+        if( MasterCountryData[i].State){
+          stateData = MasterCountryData[i].State;
+        }        
+        break;
+      }
+    }
+    console.log("getStateByCountry > stateData > ",stateData);
+    let newData = [];
+    for (let i = 0; i < stateData.length; i++) {
+      let d = {
+        name: stateData[i].Name,
+        value: stateData[i].StateID,
+      };
+      newData.push(d);
+    }
+    console.log("getStateByCountry > stateData > newData > ",newData);
 
-    axios
-      .post(GetStatesUrl, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-        let newData = [];
-        for (let i = 0; i < data.length; i++) {
-          let d = {
-            name: data[i].name,
-            value: data[i].stateId,
-          };
-          newData.push(d);
-        }
-        this.setState({ stateData: newData, ProgressLoader: true });
-      })
-      .catch((error) => {});
-  };
+    this.setState({ stateData: newData, ProgressLoader: true });
+
+  }
+  
   processCountryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].name,
-        value: data[i].countryId,
+        name: data[i].Name,
+        value: data[i].CountryID,
       };
       newData.push(d);
     }
@@ -229,6 +283,7 @@ class editcompany extends React.Component {
       .post(GetCompanyUrl, data, { headers })
       .then((response) => {
         if (response.status === 200) {
+          console.log("CompanyState>>",response.data)
           company.CompanyName = response.data.companyName;
           company.Address = response.data.address;
           company.Address2 = response.data.address2;
@@ -257,6 +312,10 @@ class editcompany extends React.Component {
               ProgressLoader: true,
             },
             () => {}
+
+
+
+
           );
         } else {
         }
@@ -573,6 +632,7 @@ class editcompany extends React.Component {
         // CheckTrue();
       }
       if (id === "Country") {
+        this.getStateByCountry(CF.toInt(e.target.value));
         this.setState({ CountryID: CF.toInt(e.target.value) });
       }
 
@@ -1013,7 +1073,7 @@ class editcompany extends React.Component {
                                     className="dropdown-css"
                                     id="countrySelect"
                                     onChange={(e) =>
-                                      this.updateFormValue("Country", e)
+                                      updateFormValue("Country", e)
                                     }
                                     value={this.state.CountryID}
                                   >
@@ -1059,7 +1119,7 @@ class editcompany extends React.Component {
                                     className="dropdown-css"
                                     id="stateSelect"
                                     onChange={(e) =>
-                                      this.updateFormValue("State", e)
+                                      updateFormValue("State", e)
                                     }
                                     value={this.state.StateID}
                                   >

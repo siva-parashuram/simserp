@@ -60,7 +60,7 @@ class addnewcompany extends React.Component {
       postcode: "",
       phoneno: "",
       website: "",
-      MasterCountryData:[],
+      MasterCountryData: [],
       countryData: [],
       stateData: [],
       createBtnDisabled: true,
@@ -90,6 +90,7 @@ class addnewcompany extends React.Component {
   componentDidMount() {
     this.getCompanyList();
     this.getCountryList();
+
     // this.getStateList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -176,26 +177,26 @@ class addnewcompany extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({MasterCountryData:data});
+        this.setState({ MasterCountryData: data });
         this.processCountryData(data);
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   getStateByCountry = (CountryID) => {
-    console.log("getStateByCountry > CountryID > ",CountryID);
+    console.log("getStateByCountry > CountryID > ", CountryID);
     let MasterCountryData = this.state.MasterCountryData;
-    console.log("getStateByCountry > MasterCountryData > ",MasterCountryData);
+    console.log("getStateByCountry > MasterCountryData > ", MasterCountryData);
     let stateData = [];
-    for (let i=0; i < MasterCountryData.length; i++) {
+    for (let i = 0; i < MasterCountryData.length; i++) {
       if (MasterCountryData[i].CountryID === CountryID) {
-        if( MasterCountryData[i].State){
+        if (MasterCountryData[i].State) {
           stateData = MasterCountryData[i].State;
-        }        
+        }
         break;
       }
     }
-    console.log("getStateByCountry > stateData > ",stateData);
+    console.log("getStateByCountry > stateData > ", stateData);
     let newData = [];
     for (let i = 0; i < stateData.length; i++) {
       let d = {
@@ -204,11 +205,10 @@ class addnewcompany extends React.Component {
       };
       newData.push(d);
     }
-    console.log("getStateByCountry > stateData > newData > ",newData);
+    console.log("getStateByCountry > stateData > newData > ", newData);
 
     this.setState({ stateData: newData, ProgressLoader: true });
-
-  }
+  };
 
   // getStateList = () => {
   //   let ValidUser = APIURLS.ValidUser;
@@ -240,8 +240,8 @@ class addnewcompany extends React.Component {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].name,
-        value: data[i].countryId,
+        name: data[i].Name,
+        value: data[i].CountryID,
       };
       newData.push(d);
     }
@@ -539,6 +539,7 @@ class addnewcompany extends React.Component {
       }
       if (id === "Country") {
         this.getStateByCountry(CF.toInt(e.target.value));
+        console.log("countryID>>", e.target.value);
         this.setState({ country: CF.toInt(e.target.value) });
       }
       if (id === "State") {
@@ -832,7 +833,6 @@ class addnewcompany extends React.Component {
                               }
                             />
 
-                           
                             <Tablerowcelltextboxinput
                               id="Address"
                               label="Address"
@@ -907,8 +907,6 @@ class addnewcompany extends React.Component {
                           aria-label="company List table"
                         >
                           <TableBody className="tableBody">
-                            
-
                             <Tablerowcelltextboxinput
                               id="Postcode"
                               label="Postcode"
@@ -941,7 +939,7 @@ class addnewcompany extends React.Component {
                                   className="dropdown-css"
                                   id="countrySelect"
                                   onChange={(e) =>
-                                    this.updateFormValue("Country", e)
+                                    updateFormValue("Country", e)
                                   }
                                   value={this.state.country}
                                 >
@@ -961,7 +959,6 @@ class addnewcompany extends React.Component {
                                 >
                                   ...
                                 </button>
-                               
                               </TableCell>
                             </TableRow>
                             {/* <DropdownInput
@@ -982,32 +979,29 @@ class addnewcompany extends React.Component {
                                 align="left"
                                 className="no-border-table"
                               >
-                                 <select
-                                      style={{ width: "80%", height: 30 }}
-                                      className="dropdown-css"
-                                      id="stateSelect"
-                                      onChange={(e) =>
-                                        this.updateFormValue("State", e)
-                                      }
-                                      value={this.state.state}
-                                    >
-                                      <option value="-" disabled>
-                                        Select
-                                      </option>
+                                <select
+                                  style={{ width: "80%", height: 30 }}
+                                  className="dropdown-css"
+                                  id="stateSelect"
+                                  onChange={(e) => updateFormValue("State", e)}
+                                  value={this.state.state}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
 
-                                      {this.state.stateData.map((item, i) => (
-                                        <option value={parseInt(item.value)}>
-                                          {item.name}
-                                        </option>
-                                      ))}
-                                    </select>
-                                    <button
-                                      className="dropdowninputbtn"
-                                      onClick={(e) => openDialog("State")}
-                                    >
-                                      ...
-                                    </button>
-                               
+                                  {this.state.stateData.map((item, i) => (
+                                    <option value={parseInt(item.value)}>
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) => openDialog("State")}
+                                >
+                                  ...
+                                </button>
                               </TableCell>
                             </TableRow>
                             <Tablerowcelltextboxinput
