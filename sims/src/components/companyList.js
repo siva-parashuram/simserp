@@ -23,12 +23,50 @@ class CompanyList extends React.Component {
     render() {
       
         const openBranchDashboard=(url,branchId,compID,compName,branchName)=>{  
-            let branchBtnId=("branchBtn_"+compID+"_"+branchId).toString();    
-            disableBranchButton(branchBtnId);                 
-            url=url+"?branchBtnId="+branchBtnId+"&branchId="+branchId+"&compID="+compID+"&compName="+compName+"&branchName="+branchName;            
-            let randomnumber = Math.floor((Math.random()*100)+1); 
-           
-            window.open(url,"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0, toolbar=no,resizable=1,width=500,height=400');
+            let isPresent=false;
+            isPresent=checkIfBranchIsOpen(branchId);
+            if(isPresent===true){
+                alert("One instance is Already Running!");
+            }else{
+                let branchBtnId=("branchBtn_"+compID+"_"+branchId).toString();    
+                //disableBranchButton(branchBtnId);                 
+                url=url+"?branchBtnId="+branchBtnId+"&branchId="+branchId+"&compID="+compID+"&compName="+compName+"&branchName="+branchName;            
+                let randomnumber = Math.floor((Math.random()*100)+1); 
+                window.open(url,'','fullscreen=yes');
+               // window.open(url,"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0, toolbar=no,resizable=1,width=500,height=400');
+            }            
+        }
+
+        const checkIfBranchIsOpen=(branchId)=>{
+            let isPresent=false;
+            let BRANCH_OPEN=localStorage.getItem('BRANCH_OPEN');
+            console.log("checkIfBranchIsOpen > BRANCH_OPEN > ",BRANCH_OPEN);
+            if(BRANCH_OPEN===null || BRANCH_OPEN==="" || BRANCH_OPEN==="null"){
+                BRANCH_OPEN=[];
+                BRANCH_OPEN.push(branchId);
+                if(BRANCH_OPEN.toString()==="0"){}else{
+                    localStorage.setItem('BRANCH_OPEN', BRANCH_OPEN.toString());
+                }
+                
+            }else{
+                var existingBRANCH_OPEN = BRANCH_OPEN.split(",").map(Number);
+                console.log("checkIfBranchIsOpen > existingBRANCH_OPEN > ",existingBRANCH_OPEN);
+                
+                for(let i=0;i<existingBRANCH_OPEN.length;i++){
+                    if(existingBRANCH_OPEN[i]===parseInt(branchId)){
+                        isPresent=true;
+                        break;
+                    }
+                }
+                if(isPresent===true){
+                    // console.log("checkIfBranchIsOpen > branchId Already EXIST > ",branchId);
+                }else{
+                    existingBRANCH_OPEN.push(branchId);
+                    localStorage.setItem('BRANCH_OPEN', existingBRANCH_OPEN.toString());
+                    
+                }
+            }           
+           return isPresent;
         }
 
         const disableBranchButton=(branchBtnId)=>{
@@ -45,10 +83,7 @@ class CompanyList extends React.Component {
                 BRANCH_OPEN.push(branch);
                 createCookie(COOKIE.BRANCH_OPEN, BRANCH_OPEN,APIURLS.CTimeOut);
                 document.getElementById(branchBtnId).disabled = true;
-            }
-           
-           
-            
+            }            
         }
 
         return (

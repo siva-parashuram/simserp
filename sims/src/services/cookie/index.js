@@ -19,7 +19,8 @@ var cookie = {
   BRANCHID:'',
   BRANCHNAME:'' ,
   COMPANYLIST:[],
-  BRANCH_OPEN:[]
+  BRANCH_OPEN:[],
+  
 };
 
 // create cookie by name with specific path, domain and expiry time (if paased)
