@@ -36,7 +36,8 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
-import Userbranchalot from "../branch/userbranchalot"
+import Userbranchalot from "../branch/userbranchalot";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class edituser extends React.Component {
   constructor(props) {
@@ -412,7 +413,6 @@ class edituser extends React.Component {
         .catch((error) => {});
     };
 
-
     const dialog = (
       <Fragment>
         <Dialog
@@ -460,8 +460,8 @@ class edituser extends React.Component {
       </Fragment>
     );
 
-    const userBranch=<Userbranchalot UserID={this.state.user.UserID}/>
-    
+    const userBranch = <Userbranchalot UserID={this.state.user.UserID} />;
+
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -469,14 +469,14 @@ class edituser extends React.Component {
 
       switch (param) {
         case "AssignBranch":
-           Dialog.DialogContent =userBranch ;
+          Dialog.DialogContent = userBranch;
           this.setState({ Dialog: Dialog });
           break;
         case "AssignRole":
           // Dialog.DialogContent = ;
           this.setState({ Dialog: Dialog });
           break;
-       
+
         default:
           break;
       }
@@ -488,9 +488,7 @@ class edituser extends React.Component {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = false;
       this.setState({ Dialog: Dialog });
-    
     };
-
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -506,6 +504,51 @@ class edituser extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.userMaster + this.state.urlparams}
+          masterLinkTitle="User Master"
+          typoTitle="Edit User"
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            onClick={handleUpdate}
+            disabled={this.state.DisableUpdatebtn}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+          <Button
+            className="action-btns"
+            onClick={(e) => openDialog("AssignBranch")}
+          >
+            ASSIGN BRANCH
+          </Button>
+          <Button
+            className="action-btns"
+            onClick={(e) => openDialog("AssignRole")}
+          >
+            ASSIGN ROLE
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -518,228 +561,170 @@ class edituser extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={6} md={6} lg={6}>
+            <Accordion
+              key="country-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
             >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.userMaster + this.state.urlparams}
-                  masterLinkTitle="User Master"
-                  typoTitle="Edit User"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    onClick={handleUpdate}
-                    disabled={this.state.DisableUpdatebtn}
-                  >
-                    {APIURLS.buttonTitle.update}
-                  </Button>
-                  <Button
-                    className="action-btns"
-
-                    onClick={(e)=>openDialog("AssignBranch")}
-                  >
-                    ASSIGN BRANCH
-                  </Button>
-                  <Button
-                    className="action-btns"
-
-                    onClick={(e)=>openDialog("AssignRole")}
-                  >
-                    ASSIGN ROLE
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={6} md={6} lg={6}>
-              <Accordion
-                key="country-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    General Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="company List table"
-                    >
-                      <TableBody className="tableBody">
-                        <Tablerowcelltextboxinput
-                          id="FirstName"
-                          label="First Name"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("FirstName", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.FirstName}
-                          error={this.state.Validations.FirstName.errorState}
-                          helperText={
-                            this.state.Validations.FirstName.errorMssg
-                          }
-                        />
+                <Typography key="" className="accordion-Header-Title">
+                  General Details
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
+                <TableContainer>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label="company List table"
+                  >
+                    <TableBody className="tableBody">
+                      <Tablerowcelltextboxinput
+                        id="FirstName"
+                        label="First Name"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("FirstName", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 50,
+                        }}
+                        value={this.state.FirstName}
+                        error={this.state.Validations.FirstName.errorState}
+                        helperText={this.state.Validations.FirstName.errorMssg}
+                      />
 
-                        <Tablerowcelltextboxinput
-                          id="LastName"
-                          label="LastName"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("LastName", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.LastName}
-                          error={this.state.Validations.LastName.errorState}
-                          helperText={this.state.Validations.LastName.errorMssg}
-                        />
-                        <Tablerowcelltextboxinput
-                          id="EmailID"
-                          label="Email ID"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("EmailID", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.EmailID}
-                          error={this.state.Validations.EmailID.errorState}
-                          helperText={this.state.Validations.EmailID.errorMssg}
-                        />
+                      <Tablerowcelltextboxinput
+                        id="LastName"
+                        label="LastName"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("LastName", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 50,
+                        }}
+                        value={this.state.LastName}
+                        error={this.state.Validations.LastName.errorState}
+                        helperText={this.state.Validations.LastName.errorMssg}
+                      />
+                      <Tablerowcelltextboxinput
+                        id="EmailID"
+                        label="Email ID"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("EmailID", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 50,
+                        }}
+                        value={this.state.EmailID}
+                        error={this.state.Validations.EmailID.errorState}
+                        helperText={this.state.Validations.EmailID.errorMssg}
+                      />
 
-                        <Tablerowcelltextboxinput
-                          id="LoginID"
-                          label="Login ID"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("LoginID", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.LoginID}
-                          error={this.state.Validations.LoginID.errorState}
-                          helperText={this.state.Validations.LoginID.errorMssg}
-                        />
+                      <Tablerowcelltextboxinput
+                        id="LoginID"
+                        label="Login ID"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("LoginID", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 50,
+                        }}
+                        value={this.state.LoginID}
+                        error={this.state.Validations.LoginID.errorState}
+                        helperText={this.state.Validations.LoginID.errorMssg}
+                      />
 
-                        <Tablerowcelltextboxinput
-                          type="password"
-                          id="Password"
-                          label="Password"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Password", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.Password}
-                          error={this.state.Validations.Password.errorState}
-                          helperText={this.state.Validations.Password.errorMssg}
-                        />
+                      <Tablerowcelltextboxinput
+                        type="password"
+                        id="Password"
+                        label="Password"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Password", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 50,
+                        }}
+                        value={this.state.Password}
+                        error={this.state.Validations.Password.errorState}
+                        helperText={this.state.Validations.Password.errorMssg}
+                      />
 
-                        <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            is Admin?
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
+                      <TableRow>
+                        <TableCell align="left" className="no-border-table">
+                          is Admin?
+                        </TableCell>
+                        <TableCell align="left" className="no-border-table">
+                          <Switch
+                            key="isadminswitch"
+                            size="small"
+                            checked={
+                              this.state.IsAdmin
+                                ? this.state.IsAdmin === true
+                                  ? "checked"
+                                  : "unchecked"
+                                : null
+                            }
+                            onChange={(e) => updateFormValue("isAdmin", e)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell align="left" className="no-border-table">
+                          is Active?
+                        </TableCell>
+                        <TableCell align="left" className="no-border-table">
+                          {this.state.isActive === true ? (
                             <Switch
-                              key="isadminswitch"
+                              key="isactiuveswitch"
                               size="small"
                               checked={
-                                this.state.IsAdmin
-                                  ? this.state.IsAdmin === true
-                                    ? "checked"
-                                    : "unchecked"
-                                  : null
+                                this.state.IsActive === true
+                                  ? "checked"
+                                  : "unchecked"
                               }
-                              onChange={(e) => updateFormValue("isAdmin", e)}
+                              onChange={(e) => updateFormValue("isActive", e)}
                             />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            is Active?
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            {this.state.isActive === true ? (
-                              <Switch
-                                key="isactiuveswitch"
-                                size="small"
-                                checked={
-                                  this.state.IsActive === true
-                                    ? "checked"
-                                    : "unchecked"
-                                }
-                                onChange={(e) => updateFormValue("isActive", e)}
-                              />
-                            ) : (
-                              <Switch
-                                key="isactiuveswitch"
-                                size="small"
-                                checked={false}
-                                onChange={(e) => updateFormValue("isActive", e)}
-                              />
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
+                          ) : (
+                            <Switch
+                              key="isactiuveswitch"
+                              size="small"
+                              checked={false}
+                              onChange={(e) => updateFormValue("isActive", e)}
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-        </div>
+        </Grid>
         {dialog}
       </Fragment>
     );

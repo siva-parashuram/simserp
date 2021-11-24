@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import "../../user/dasboard.css";
 
-
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -22,6 +21,8 @@ import Addpage from "./addpage";
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+
 
 class modulemasters extends React.Component {
   constructor(props) {
@@ -107,7 +108,7 @@ class modulemasters extends React.Component {
     }
   }
 
-  InitialgetPageList(moduleId){
+  InitialgetPageList(moduleId) {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -135,10 +136,10 @@ class modulemasters extends React.Component {
         } else {
         }
       })
-      .catch((error) => { });
-  };
+      .catch((error) => {});
+  }
 
-  InitialresetDataList(data){
+  InitialresetDataList(data) {
     let rows = [];
     for (let i = 0; i < data.length; i++) {
       let r = {
@@ -153,7 +154,7 @@ class modulemasters extends React.Component {
     }
 
     this.setState({ pageLinkRow: rows });
-  };
+  }
 
   render() {
     const handleRowClick = (e, item, id) => {
@@ -204,7 +205,7 @@ class modulemasters extends React.Component {
           } else {
           }
         })
-        .catch((error) => { });
+        .catch((error) => {});
     };
 
     const resetDataList = (data) => {
@@ -224,70 +225,60 @@ class modulemasters extends React.Component {
       this.setState({ pageLinkRow: rows });
     };
 
-
-
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Module Master"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.add.icon}
+            onClick={(e) =>
+              openPage(URLS.URLS.addModule + this.state.urlparams)
+            }
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            onClick={(e) => openPage(this.state.editurl)}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
-
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Module Master"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addModule + this.state.urlparams)
-                    }
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<EditIcon />}
-                    onClick={(e) => openPage(this.state.editurl)}
-                  >
-                    {APIURLS.buttonTitle.edit}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+       
+          
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
@@ -302,53 +293,63 @@ class modulemasters extends React.Component {
                       >
                         <TableHead className="table-header-background">
                           <TableRow>
-                            <TableCell className="table-header-font">#</TableCell>
-                            <TableCell className="table-header-font" align="left">
-                               Name
+                            <TableCell className="table-header-font">
+                              #
                             </TableCell>
-                            <TableCell className="table-header-font" align="left">
-                               Description
+                            <TableCell
+                              className="table-header-font"
+                              align="left"
+                            >
+                              Name
+                            </TableCell>
+                            <TableCell
+                              className="table-header-font"
+                              align="left"
+                            >
+                              Description
                             </TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody className="tableBody">
-
                           {this.state.modules
                             ? this.state.modules.map((item, i) => (
-                              <TableRow
-                                id={"row_" + i}
-                                className={this.state.initialCss}
-                                hover
-                                key={i}
-                                onClick={(event) =>
-                                  handleRowClick(event, item, "row_" + i)
-                                }
-                              >
-                                <TableCell align="left">
-                                  <a
-                                    className="LINK tableLink"
-                                    href={
-                                      URLS.URLS.editModule +
-                                      this.state.urlparams +
-                                      "&moduleId=" +
-                                      item.moduleId
-                                    }
-                                  >
-                                    {URLS.PREFIX.moduleID + item.moduleId}
-                                  </a>
-                                </TableCell>
-                                <TableCell align="left">{item.name}</TableCell>
-                                <TableCell align="left">
-                                  {item.description}
-                                </TableCell>
-                              </TableRow>
-                            ))
+                                <TableRow
+                                  id={"row_" + i}
+                                  className={this.state.initialCss}
+                                  hover
+                                  key={i}
+                                  onClick={(event) =>
+                                    handleRowClick(event, item, "row_" + i)
+                                  }
+                                >
+                                  <TableCell align="left">
+                                    <a
+                                      className="LINK tableLink"
+                                      href={
+                                        URLS.URLS.editModule +
+                                        this.state.urlparams +
+                                        "&moduleId=" +
+                                        item.moduleId
+                                      }
+                                    >
+                                      {URLS.PREFIX.moduleID + item.moduleId}
+                                    </a>
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {item.name}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {item.description}
+                                  </TableCell>
+                                </TableRow>
+                              ))
                             : null}
                         </TableBody>
                       </Table>
                     </Fragment>
-                  ) : (<Tableskeleton />)}
-
+                  ) : (
+                    <Tableskeleton />
+                  )}
                 </Grid>
               </Grid>
             </Grid>
@@ -366,7 +367,6 @@ class modulemasters extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-        </div>
       </Fragment>
     );
   }

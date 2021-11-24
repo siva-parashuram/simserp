@@ -32,6 +32,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class addbranch extends React.Component {
   constructor(props) {
@@ -620,6 +621,39 @@ class addbranch extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.branchMaster + this.state.urlparams}
+          masterLinkTitle="Branch Master"
+          typoTitle="Add Branch"
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            onClick={handleCreate}
+            disabled={this.state.disabledCreatebtn}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -631,92 +665,48 @@ class addbranch extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.branchMaster + this.state.urlparams}
-                  masterLinkTitle="Branch Master"
-                  typoTitle="Add Branch"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={9} lg={9}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+                <Accordion
+                  key="company-General-Details"
+                  expanded={this.state.GeneralDetailsExpanded}
                 >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={handleCreate}
-                    disabled={this.state.disabledCreatebtn}
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("GeneralDetailsExpanded", e)
+                        }
+                      />
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 20, height: "100%" }}
                   >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={9} lg={9}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Accordion
-                    key="company-General-Details"
-                    expanded={this.state.GeneralDetailsExpanded}
-                  >
-                    <AccordionSummary
-                      className="accordion-Header-Design"
-                      expandIcon={
-                        <ExpandMoreIcon
-                          onClick={(e) =>
-                            handleAccordionClick("GeneralDetailsExpanded", e)
-                          }
-                        />
-                      }
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      style={{ minHeight: 20, height: "100%" }}
-                    >
-                      <Typography key="" className="accordion-Header-Title">
-                        General Details
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails key="" className="AccordionDetails-css">
-                      <Grid container spacing={0}>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="company List table"
-                            >
-                              <TableBody className="tableBody">
-                                {/* <TableRow>
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="company List table"
+                          >
+                            <TableBody className="tableBody">
+                              {/* <TableRow>
                                   <TableCell
                                     align="left"
                                     className="no-border-table"
@@ -750,285 +740,268 @@ class addbranch extends React.Component {
                                   </TableCell>
                                 </TableRow> */}
 
-                                <DropdownInput
-                                  id="stateSelect"
-                                  label="State"
-                                  onChange={(e) =>
-                                    updateFormValue("StateID", e)
-                                  }
-                                  options={this.state.stateData}
-                                  value={this.state.stateId}
-                                />
+                              <DropdownInput
+                                id="stateSelect"
+                                label="State"
+                                onChange={(e) => updateFormValue("StateID", e)}
+                                options={this.state.stateData}
+                                value={this.state.stateId}
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  id="Name"
-                                  label="Branch Name"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("Name", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.name}
-                                  error={this.state.Validations.name.errorState}
-                                  helperText={
-                                    this.state.Validations.name.errorMsg
-                                  }
-                                  isMandatory={true}
-                                />
+                              <Tablerowcelltextboxinput
+                                id="Name"
+                                label="Branch Name"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Name", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.name}
+                                error={this.state.Validations.name.errorState}
+                                helperText={
+                                  this.state.Validations.name.errorMsg
+                                }
+                                isMandatory={true}
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  id="shortName"
-                                  label="Short Name"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("shortName", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.shortName}
-                                  error={
-                                    this.state.Validations.shortName.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.shortName.errorMsg
-                                  }
-                                  isMandatory={true}
-                                />
+                              <Tablerowcelltextboxinput
+                                id="shortName"
+                                label="Short Name"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("shortName", e)
+                                }
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.shortName}
+                                error={
+                                  this.state.Validations.shortName.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.shortName.errorMsg
+                                }
+                                isMandatory={true}
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  type="number"
-                                  id="phoneNo"
-                                  label="Phone No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("phoneNo", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.phoneNo}
-                                  error={
-                                    this.state.Validations.phoneNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.phoneNo.errorMsg
-                                  }
-                                />
+                              <Tablerowcelltextboxinput
+                                type="number"
+                                id="phoneNo"
+                                label="Phone No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("phoneNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.phoneNo}
+                                error={
+                                  this.state.Validations.phoneNo.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.phoneNo.errorMsg
+                                }
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  id="website"
-                                  label="Website"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("website", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.website}
-                                  error={
-                                    this.state.Validations.website.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.website.errorMsg
-                                  }
-                                />
-                                <Tablerowcelldateinput
-                                  id="EffectiveDate"
-                                  label="Effective Date"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("EffectiveDate", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.EffectiveDate}
-                                  error={null}
-                                  helperText={null}
-                                />
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="company List table"
-                            >
-                              <TableBody className="tableBody">
-                                <DropdownInput
-                                  id="CountryID"
-                                  label="Country"
-                                  onChange={(e) =>
-                                    updateFormValue("CountryID", e)
-                                  }
-                                  options={this.state.countryData}
-                                  value={this.state.countryId}
-                                />
-                                <DropdownInput
-                                  id="stateSelect"
-                                  label="State"
-                                  onChange={(e) =>
-                                    updateFormValue("StateID", e)
-                                  }
-                                  options={this.state.stateData}
-                                  value={this.state.stateId}
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="City"
-                                  label="City"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("City", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.city}
-                                  error={this.state.Validations.city.errorState}
-                                  helperText={
-                                    this.state.Validations.city.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="Postcode"
-                                  label="Postcode"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Postcode", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.postcode}
-                                  error={
-                                    this.state.Validations.postcode.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.postcode.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="Address"
-                                  label="Address Line 1"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Address", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.address}
-                                  error={
-                                    this.state.Validations.address.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.address.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="Address2"
-                                  label=" Address Line 2"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Address2", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.address2}
-                                  error={
-                                    this.state.Validations.address2.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.address2.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="Address3"
-                                  label="  Address Line 3"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Address3", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.address3}
-                                  error={
-                                    this.state.Validations.address3.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.address3.errorMsg
-                                  }
-                                />
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
+                              <Tablerowcelltextboxinput
+                                id="website"
+                                label="Website"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("website", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.website}
+                                error={
+                                  this.state.Validations.website.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.website.errorMsg
+                                }
+                              />
+                              <Tablerowcelldateinput
+                                id="EffectiveDate"
+                                label="Effective Date"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("EffectiveDate", e)
+                                }
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.EffectiveDate}
+                                error={null}
+                                helperText={null}
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
                       </Grid>
-                    </AccordionDetails>
-                  </Accordion>
-                  <Accordion
-                    key="company-Address-Details"
-                    expanded={this.state.AddressDetailsExpanded}
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="company List table"
+                          >
+                            <TableBody className="tableBody">
+                              <DropdownInput
+                                id="CountryID"
+                                label="Country"
+                                onChange={(e) =>
+                                  updateFormValue("CountryID", e)
+                                }
+                                options={this.state.countryData}
+                                value={this.state.countryId}
+                              />
+                              <DropdownInput
+                                id="stateSelect"
+                                label="State"
+                                onChange={(e) => updateFormValue("StateID", e)}
+                                options={this.state.stateData}
+                                value={this.state.stateId}
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="City"
+                                label="City"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("City", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.city}
+                                error={this.state.Validations.city.errorState}
+                                helperText={
+                                  this.state.Validations.city.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="Postcode"
+                                label="Postcode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Postcode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.postcode.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="Address"
+                                label="Address Line 1"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.address}
+                                error={
+                                  this.state.Validations.address.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.address.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="Address2"
+                                label=" Address Line 2"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address2", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.address2}
+                                error={
+                                  this.state.Validations.address2.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.address2.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="Address3"
+                                label="  Address Line 3"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address3", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.address3}
+                                error={
+                                  this.state.Validations.address3.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.address3.errorMsg
+                                }
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion
+                  key="company-Address-Details"
+                  expanded={this.state.AddressDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("AddressDetailsExpanded", e)
+                        }
+                      />
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 20, height: "100%" }}
                   >
-                    <AccordionSummary
-                      className="accordion-Header-Design"
-                      expandIcon={
-                        <ExpandMoreIcon
-                          onClick={(e) =>
-                            handleAccordionClick("AddressDetailsExpanded", e)
-                          }
-                        />
-                      }
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      style={{ minHeight: 20, height: "100%" }}
-                    >
-                      <Typography key="" className="accordion-Header-Title">
-                        Taxation Details
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails
-                      key=""
-                      className="AccordionDetails-css"
-                    ></AccordionDetails>
-                  </Accordion>
-                </Grid>
+                    <Typography key="" className="accordion-Header-Title">
+                      Taxation Details
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    key=""
+                    className="AccordionDetails-css"
+                  ></AccordionDetails>
+                </Accordion>
               </Grid>
             </Grid>
-            <Grid xs={12} sm={12} md={3} lg={3}></Grid>
           </Grid>
-        </div>
+          <Grid xs={12} sm={12} md={3} lg={3}></Grid>
+        </Grid>
       </Fragment>
     );
   }

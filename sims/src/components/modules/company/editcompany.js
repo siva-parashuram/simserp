@@ -158,7 +158,7 @@ class editcompany extends React.Component {
           } else {
             let data = response.data;
 
-            this.setState({ companyData: data, ProgressLoader: true,updateBtnDisabled: false });
+            this.setState({ companyData: data, ProgressLoader: true, });
           }
         } else {
           this.setState({ ErrorPrompt: true, ProgressLoader: true });
@@ -378,6 +378,7 @@ class editcompany extends React.Component {
       let company = this.state.company;
 
       if (id === "companyName") {
+        company.CompanyName = e.target.value;
         let duplicateExist = CF.chkDuplicateButExcludeName(
           this.state.companyData,
           "companyName",
@@ -402,7 +403,7 @@ class editcompany extends React.Component {
             this.setState({
               Validations: v,
               CompanyName: e.target.value,
-              updateBtnDisabled: true,
+              // updateBtnDisabled: true,
             });
           }
 
@@ -414,7 +415,7 @@ class editcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-              updateBtnDisabled: true,
+              // updateBtnDisabled: true,
             });
           }
           if (e.target.value === "" || e.target.value == null) {
@@ -426,7 +427,7 @@ class editcompany extends React.Component {
             this.setState({
               Validations: v,
               CompanyName: e.target.value,
-              updateBtnDisabled: true,
+              // updateBtnDisabled: true,
             });
           }
         } else {
@@ -434,7 +435,7 @@ class editcompany extends React.Component {
           v.companyName = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            updateBtnDisabled: false,
+            // updateBtnDisabled: false,
             CompanyName: e.target.value,
             company: company,
           });
@@ -458,7 +459,7 @@ class editcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-              updateBtnDisabled: true,
+              // updateBtnDisabled: true,
             });
           } else {
             let v = this.state.Validations;
@@ -468,7 +469,7 @@ class editcompany extends React.Component {
             };
             this.setState({
               Validations: v,
-              updateBtnDisabled: true,
+              // updateBtnDisabled: true,
               Address: e.target.value,
             });
           }
@@ -477,7 +478,7 @@ class editcompany extends React.Component {
           v.address = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            updateBtnDisabled: false,
+            // updateBtnDisabled: false,
             Address: e.target.value,
             company: company,
           });
@@ -494,8 +495,8 @@ class editcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true,
-            updateBtnDisabled: true,
+            // createBtnDisabled: true,
+            // updateBtnDisabled: true,
           });
         } else {
           let v = this.state.Validations;
@@ -503,8 +504,8 @@ class editcompany extends React.Component {
           this.setState({
             Validations: v,
             Address2: e.target.value,
-            createBtnDisabled: false ,
-            updateBtnDisabled: false,
+            // createBtnDisabled: false ,
+            // updateBtnDisabled: false,
             company: company,
           });
         }
@@ -521,8 +522,8 @@ class editcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true ,
-            updateBtnDisabled: true,
+            // createBtnDisabled: true ,
+            // updateBtnDisabled: true,
           });
         } else {
           let v = this.state.Validations;
@@ -530,8 +531,8 @@ class editcompany extends React.Component {
           this.setState({
             Validations: v,
             Address3: e.target.value,
-            createBtnDisabled: false,
-            updateBtnDisabled: false,
+            // createBtnDisabled: false,
+            // updateBtnDisabled: false,
             company: company,
           });
         }
@@ -548,8 +549,8 @@ class editcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true,
-            updateBtnDisabled: true,
+            // createBtnDisabled: true,
+            // updateBtnDisabled: true,
           });
         } else {
           let v = this.state.Validations;
@@ -557,8 +558,8 @@ class editcompany extends React.Component {
           this.setState({
             Validations: v,
             City: e.target.value,
-            createBtnDisabled: false,
-            updateBtnDisabled: false,
+            // createBtnDisabled: false,
+            // updateBtnDisabled: false,
             company: company,
           });
         }
@@ -575,8 +576,8 @@ class editcompany extends React.Component {
           };
           this.setState({
             Validations: v,
-            createBtnDisabled: true,
-            updateBtnDisabled: true,
+            // createBtnDisabled: true,
+            // updateBtnDisabled: true,
           });
         } else {
           let v = this.state.Validations;
@@ -584,8 +585,8 @@ class editcompany extends React.Component {
           this.setState({
             Validations: v,
             PostCode: e.target.value,
-            createBtnDisabled: false,
-            updateBtnDisabled: false,
+            // createBtnDisabled: false,
+            // updateBtnDisabled: false,
             company: company,
           });
         }
@@ -595,7 +596,7 @@ class editcompany extends React.Component {
       if (id === "PhoneNo") {
         let number = CF.chkIfNumber(e.target.value);
         if (number) {
-          // company.PhoneNo = e.target.value;
+          company.PhoneNo = e.target.value;
           if (e.target.value.length > 20) {
             let v = this.state.Validations;
             v.phoneno = {
@@ -640,6 +641,8 @@ class editcompany extends React.Component {
           };
           this.setState({
             Validations: v,
+            Website: e.target.value,
+
             //createBtnDisabled: true,
             // updateBtnDisabled: true,
           });
@@ -679,8 +682,8 @@ class editcompany extends React.Component {
     const validate = () => {
       let v = this.state.Validations;
       if (
-        this.state.CompanyName === "" ||
-        this.state.Address === "" ||
+        this.state.company.CompanyName === "" ||
+        this.state.company.Address === "" ||
         v["companyName"].errorState === true ||
         v["address"].errorState === true ||
         v["address2"].errorState === true ||
