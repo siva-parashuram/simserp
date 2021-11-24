@@ -602,6 +602,7 @@ cursor: pointer;
 }
 
 .textFieldCss{
+  font-family: Calibri !important;
   height: 30px !important;
   font-size: 14px !important;
   border-radius: 0px !important;
@@ -615,12 +616,39 @@ cursor: pointer;
   border-radius: 0px !important;  
 }
 
+.texbox-font-css{
+  font-size: 15px !important;
+  /* font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important; */
+}
+
+
 .MuiOutlinedInput-input {
   padding: 5px 5px !important;
   border-radius: 0px !important;
   -webkit-border-radius: 0px;
   border-color: rgba(224, 224, 224, 1) !important; 
-  font-size: 14px !important;
+  font-size: 15px !important;
+  font-family: Calibri !important;
+}
+
+
+.MuiOutlinedInput-input:hover {
+  padding: 5px 5px !important;
+  border-radius: 0px !important;
+  -webkit-border-radius: 0px;
+  border-color: rgba(224, 224, 224, 1) !important; 
+  font-size: 15px !important;
+  font-family: Calibri !important;
+}
+
+
+.MuiOutlinedInput-input:focus {
+  padding: 5px 5px !important;
+  border-radius: 0px !important;
+  -webkit-border-radius: 0px;
+  border-color: rgba(224, 224, 224, 1) !important; 
+  font-size: 15px !important;
+  font-family: Calibri !important;
 }
 
 
@@ -645,6 +673,8 @@ cursor: pointer;
 }
 
 .dropdown-css{
+  height: 30px !important;
+  line-height: 30px !important;
   /* height: 25px !important; */
   font-size: 13px !important;
   border-radius: 0px !important;
@@ -673,11 +703,9 @@ cursor: pointer;
   border-radius: 0px !important;    
    -webkit-border-radius: 0px;
 }
+
+
  
-.texbox-font-css{
-  font-size: 13px !important;
-  /* font-family: 'Segoe UI',SegoeUI,'Segoe WP',Tahoma,Arial,sans-serif !important; */
-}
 
 .no-border-table{
   border-style:none !important;

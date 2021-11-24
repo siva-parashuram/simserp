@@ -62,7 +62,7 @@ class addnewcompany extends React.Component {
       postcode: "",
       phoneno: "",
       website: "",
-      IsActive:false,
+      IsActive:true,
       MasterCountryData: [],
       countryData: [],
       stateData: [],
@@ -906,7 +906,7 @@ class addnewcompany extends React.Component {
                                       className="no-border-table"
                                     >
                                       <select
-                                        style={{ width: "90%", height: 30 }}
+                                        style={{ width: "90%",  }}
                                         className="dropdown-css"
                                         id="countrySelect"
                                         onChange={(e) =>
