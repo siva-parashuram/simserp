@@ -26,7 +26,6 @@ import SwitchInput from "../../compo/tablerowcellswitchinput";
 import * as CF from "../../../services/functions/customfunctions";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
-
 class addItem extends React.Component {
   constructor(props) {
     super(props);
@@ -102,7 +101,7 @@ class addItem extends React.Component {
       BarcodeNo: "",
       itemDepartmentMasterData: [],
       ItemCategoryData: [],
-      UOMList:[],
+      UOMList: [],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
@@ -185,7 +184,7 @@ class addItem extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
-       
+
         // this.setState({ ItemCategoryData: data,ProgressLoader: true });
         this.processItemCategoryData(data);
       })
@@ -250,17 +249,16 @@ class addItem extends React.Component {
     this.setState({ itemDepartmentMasterData: newData }, () => {
       let target = document.querySelector("#ItemDeptID");
       let ItemDeptID = target.options[target.selectedIndex].value;
-      
+
       console.log("ItemDeptID>>", ItemDeptID);
-      
     });
   }
 
-   openPage = (url) => {
+  openPage = (url) => {
     this.setState({ ProgressLoader: false });
     window.location = url;
   };
-  
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -868,7 +866,7 @@ class addItem extends React.Component {
         .catch((error) => {
           this.setState({ ProgressLoader: true });
         });
-        console.log(this.state.ItemType)
+      console.log(this.state.ItemType);
     };
 
     const processCreateItem = () => {
@@ -877,16 +875,16 @@ class addItem extends React.Component {
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-      let ItemType=CF.toInt(this.state.ItemType);
-      let NoSeriesID=0;
-      if(ItemType===0){
-        NoSeriesID=4;
+      let ItemType = CF.toInt(this.state.ItemType);
+      let NoSeriesID = 0;
+      if (ItemType === 0) {
+        NoSeriesID = 4;
       }
-      if(ItemType===1){
-        NoSeriesID=5;
+      if (ItemType === 1) {
+        NoSeriesID = 5;
       }
-      if(ItemType===2){
-        NoSeriesID=6;
+      if (ItemType === 2) {
+        NoSeriesID = 6;
       }
 
       const headers = {
@@ -951,7 +949,9 @@ class addItem extends React.Component {
             ItemPostingGroupID: CF.toInt(this.state.ItemPostingGroupID),
             CostingMethod: CF.toInt(this.state.CostingMethod),
             StandardCost: CF.toFloat(this.state.StandardCost),
-            IndirectCostPercentage: CF.toFloat(this.state.IndirectCostPercentage),
+            IndirectCostPercentage: CF.toFloat(
+              this.state.IndirectCostPercentage
+            ),
             ProfitPercentage: CF.toFloat(this.state.ProfitPercentage),
             GstgroupId: CF.toInt(this.state.GstgroupId),
             Hsncode: this.state.Hsncode,
@@ -966,13 +966,13 @@ class addItem extends React.Component {
             RoutingId: CF.toInt(this.state.RoutingId),
             Bomid: CF.toInt(this.state.Bomid),
           };
-         
+
           let Url = APIURLS.APIURL.CreateItem;
           let ReqData = {
             validUser: ValidUser,
             Item: Item,
-          };    
-          console.log("ReqData > ", ReqData);    
+          };
+          console.log("ReqData > ", ReqData);
           axios
             .post(Url, ReqData, { headers })
             .then((response) => {
@@ -996,11 +996,39 @@ class addItem extends React.Component {
         .catch((error) => {
           this.setState({ ErrorPrompt: true, Loader: true });
         });
-     
     };
 
-   
-    
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.itemMaster + this.state.urlparams}
+          masterLinkTitle="Item Master"
+          typoTitle="Add Item"
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={<AddIcon />}
+            onClick={(e) => processCreateItem()}
+          >
+            {APIURLS.buttonTitle.add}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
 
     return (
       <Fragment>
@@ -1014,54 +1042,10 @@ class addItem extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.itemMaster + this.state.urlparams}
-                  masterLinkTitle="Item Master"
-                  typoTitle="Add Item"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) => processCreateItem()}
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-
-        <div className="breadcrumb-bottom"></div>
-
-        <div className="New-link-bottom"></div>
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={8}>
@@ -1649,14 +1633,11 @@ class addItem extends React.Component {
                             <DropdownInput
                               id="GSTGroupID"
                               label="GST GroupID"
-                              onChange={(e) =>
-                                updateFormValue("GstgroupId", e)
-                              }
+                              onChange={(e) => updateFormValue("GstgroupId", e)}
                               options={[]}
                               value={this.state.GstgroupId}
                             />
 
-                            
                             <TextboxInput
                               id="HSNCode"
                               label="HSN Code"
@@ -1671,16 +1652,12 @@ class addItem extends React.Component {
                             />
 
                             <DropdownInput
-                             id="BaseUOM"
-                             label="Base UOM "
-                              onChange={(e) =>
-                                updateFormValue("BaseUom", e)
-                              }
+                              id="BaseUOM"
+                              label="Base UOM "
+                              onChange={(e) => updateFormValue("BaseUom", e)}
                               options={this.state.UOMList}
                               value={this.state.BaseUom}
                             />
-
-                          
                           </TableBody>
                         </Table>
                       </Grid>
@@ -1692,20 +1669,17 @@ class addItem extends React.Component {
                           aria-label="Item List table"
                         >
                           <TableBody className="tableBody">
-
-                          <DropdownInput
-                             id="SalesUOM"
-                             label="Sales UOM"
-                              onChange={(e) =>
-                                updateFormValue("SalesUom", e)
-                              }
+                            <DropdownInput
+                              id="SalesUOM"
+                              label="Sales UOM"
+                              onChange={(e) => updateFormValue("SalesUom", e)}
                               options={this.state.UOMList}
                               value={this.state.SalesUom}
                             />
 
                             <DropdownInput
-                               id="PurchaseUOM"
-                               label="Purchase UOM"
+                              id="PurchaseUOM"
+                              label="Purchase UOM"
                               onChange={(e) =>
                                 updateFormValue("PurchaseUom", e)
                               }
@@ -1716,14 +1690,10 @@ class addItem extends React.Component {
                             <DropdownInput
                               id="PackingUOM"
                               label="Packing UOM"
-                              onChange={(e) =>
-                                updateFormValue("PackingUom", e)
-                              }
+                              onChange={(e) => updateFormValue("PackingUom", e)}
                               options={this.state.UOMList}
                               value={this.state.PackingUom}
                             />
-
- 
                           </TableBody>
                         </Table>
                       </Grid>

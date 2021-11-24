@@ -66,7 +66,7 @@ class addnewcompany extends React.Component {
       MasterCountryData: [],
       countryData: [],
       stateData: [],
-      createBtnDisabled: false,
+      createBtnDisabled: true,
       GeneralDetailsExpanded: true,
 
       duplicate: false,
@@ -773,10 +773,7 @@ class addnewcompany extends React.Component {
                                       this.state.Validations.companyName
                                         .errorState
                                     }
-                                    helperText={
-                                      this.state.Validations.companyName
-                                        .errorMsg
-                                    }
+                                   
                                     isMandatory={true}
                                   />
 
@@ -796,9 +793,7 @@ class addnewcompany extends React.Component {
                                     error={
                                       this.state.Validations.address.errorState
                                     }
-                                    helperText={
-                                      this.state.Validations.address.errorMsg
-                                    }
+                                   
                                     isMandatory={true}
                                   />
 
@@ -818,9 +813,7 @@ class addnewcompany extends React.Component {
                                     error={
                                       this.state.Validations.address2.errorState
                                     }
-                                    helperText={
-                                      this.state.Validations.address2.errorMsg
-                                    }
+                                  
                                   />
                                   <Tablerowcelltextboxinput
                                     id="Address3"
@@ -838,9 +831,7 @@ class addnewcompany extends React.Component {
                                     error={
                                       this.state.Validations.address3.errorState
                                     }
-                                    helperText={
-                                      this.state.Validations.address3.errorMsg
-                                    }
+                                    
                                   />
                                   <Tablerowcelltextboxinput
                                     id="City"
@@ -856,9 +847,7 @@ class addnewcompany extends React.Component {
                                     error={
                                       this.state.Validations.city.errorState
                                     }
-                                    helperText={
-                                      this.state.Validations.city.errorMsg
-                                    }
+                                   
                                   />
                                   <Tablerowcelltextboxinput
                                     id="Postcode"
@@ -876,9 +865,7 @@ class addnewcompany extends React.Component {
                                     error={
                                       this.state.Validations.postcode.errorState
                                     }
-                                    helperText={
-                                      this.state.Validations.postcode.errorMsg
-                                    }
+                                  
                                   />
                                 </TableBody>
                               </Table>
@@ -982,9 +969,7 @@ class addnewcompany extends React.Component {
                                     error={
                                       this.state.Validations.phoneno.errorState
                                     }
-                                    helperText={
-                                      this.state.Validations.phoneno.errorMsg
-                                    }
+                                   
                                   />
 
                                   <Tablerowcelltextboxinput
@@ -999,9 +984,7 @@ class addnewcompany extends React.Component {
                                     error={
                                       this.state.Validations.website.errorState
                                     }
-                                    helperText={
-                                      this.state.Validations.website.errorMsg
-                                    }
+                                   
                                   />
                                  
                                   <SwitchInput
