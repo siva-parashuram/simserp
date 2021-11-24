@@ -267,20 +267,20 @@ class addbranch extends React.Component {
       }
     };
 
-    const ValidateName = () => {
-      if (
-        this.state.name === "" ||
-        this.state.name === null ||
-        this.state.name.length > 50 ||
-        this.state.duplicate === true
-      ) {
-        this.setState({ disabledCreatebtn: true });
-      }
-    };
+    // const ValidateName = () => {
+    //   if (
+    //     this.state.name === "" ||
+    //     this.state.name === null ||
+    //     this.state.name.length > 50 ||
+    //     this.state.duplicate === true
+    //   ) {
+    //     this.setState({ disabledCreatebtn: true });
+    //   }
+    // };
 
     const updateFormValue = (id, e) => {
+      let branch = this.state.branch;
       if (id === "shortName") {
-        let branch = this.state.branch;
         branch.shortName = e.target.value;
         if (e.target.value.length > 10) {
           let v = this.state.Validations;
@@ -290,19 +290,19 @@ class addbranch extends React.Component {
           };
           this.setState({
             Validations: v,
-            disabledCreatebtn: true,
+            // disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.shortName = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             branch: branch,
             shortName: e.target.value,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
 
       if (id === "Company") {
@@ -317,7 +317,7 @@ class addbranch extends React.Component {
           "name",
           e.target.value
         );
-        this.setState({ duplicate: duplicateExist });
+        // this.setState({ duplicate: duplicateExist });
         let branch = this.state.branch;
         branch.name = e.target.value;
         if (
@@ -334,7 +334,7 @@ class addbranch extends React.Component {
             };
             this.setState({
               Validations: v,
-              disabledCreatebtn: true,
+              // disabledCreatebtn: true,
               name: e.target.value,
             });
           }
@@ -347,7 +347,7 @@ class addbranch extends React.Component {
             };
             this.setState({
               Validations: v,
-              disabledCreatebtn: true,
+              // disabledCreatebtn: true,
             });
           }
           if (e.target.value === "" || e.target.value === null) {
@@ -358,7 +358,7 @@ class addbranch extends React.Component {
             };
             this.setState({
               Validations: v,
-              disabledCreatebtn: true,
+              // disabledCreatebtn: true,
               name: e.target.value,
             });
           }
@@ -367,12 +367,12 @@ class addbranch extends React.Component {
           v.name = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             name: e.target.value,
             branch: branch,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
 
       if (id === "phoneNo") {
@@ -386,19 +386,19 @@ class addbranch extends React.Component {
           };
           this.setState({
             Validations: v,
-            disabledCreatebtn: true,
+            // disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.phoneNo = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             branch: branch,
             phoneNo: e.target.value,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
 
       if (id === "website") {
@@ -412,19 +412,19 @@ class addbranch extends React.Component {
           };
           this.setState({
             Validations: v,
-            disabledCreatebtn: true,
+            // disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.website = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             branch: branch,
             website: e.target.value,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
       if (id === "CountryID") {
         console.log("state", e.target.value);
@@ -451,19 +451,19 @@ class addbranch extends React.Component {
           };
           this.setState({
             Validations: v,
-            disabledCreatebtn: true,
+            // disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.city = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             branch: branch,
             city: e.target.value,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
 
       if (id === "Postcode") {
@@ -477,19 +477,19 @@ class addbranch extends React.Component {
           };
           this.setState({
             Validations: v,
-            disabledCreatebtn: true,
+            // disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.postcode = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             branch: branch,
             postcode: e.target.value,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
 
       if (id === "Address") {
@@ -503,19 +503,19 @@ class addbranch extends React.Component {
           };
           this.setState({
             Validations: v,
-            disabledCreatebtn: true,
+            // disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.address = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             branch: branch,
             address: e.target.value,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
       if (id === "Address2") {
         let branch = this.state.branch;
@@ -528,19 +528,19 @@ class addbranch extends React.Component {
           };
           this.setState({
             Validations: v,
-            disabledCreatebtn: true,
+            // disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.address2 = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             branch: branch,
             address2: e.target.value,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
       if (id === "Address3") {
         let branch = this.state.branch;
@@ -553,19 +553,19 @@ class addbranch extends React.Component {
           };
           this.setState({
             Validations: v,
-            disabledCreatebtn: true,
+            // disabledCreatebtn: true,
           });
         } else {
           let v = this.state.Validations;
           v.address3 = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
-            disabledCreatebtn: false,
+            // disabledCreatebtn: false,
             branch: branch,
             address3: e.target.value,
           });
         }
-        ValidateName();
+        // ValidateName();
       }
       if (id === "EffectiveDate") {
         // moment().format("YYYY-MM-DD")
@@ -577,7 +577,7 @@ class addbranch extends React.Component {
     };
 
     const handleCreate = () => {
-      ValidateName();
+      // ValidateName();
       this.setState({ ProgressLoader: false });
       let branch = this.state.branch;
       let ValidUser = APIURLS.ValidUser;

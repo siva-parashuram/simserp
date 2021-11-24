@@ -48,7 +48,7 @@ class editbranch extends React.Component {
       TaxationDetailsExpanded: false,
       NumberingExpanded: false,
       disabledUpdatebtn: false,
-      disabledCreatebtn: false,
+      disabledCreatebtn: true,
       numberSeries: [],
       companyData: [],
       MasterCountryData: [],
@@ -139,7 +139,11 @@ class editbranch extends React.Component {
         city: { errorState: false, errorMsg: "" },
         postcode: { errorState: false, errorMsg: "" },
         phoneNo: { errorState: false, errorMsg: "" },
+        FAXNo: { errorState: false, errorMsg: "" },
         website: { errorState: false, errorMsg: "" },
+        EmailID: { errorState: false, errorMsg: "" },
+        LogoName: { errorState: false, errorMsg: "" },
+        ContactPerson: { errorState: false, errorMsg: "" },
         PANNo: { errorState: false, errorMsg: "" },
         TANNo: { errorState: false, errorMsg: "" },
         CINNo: { errorState: false, errorMsg: "" },
@@ -385,8 +389,8 @@ class editbranch extends React.Component {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].companyName,
-        value: data[i].companyId,
+        name: data[i].CompanyName,
+        value: data[i].CompanyID,
       };
       newData.push(d);
     }
@@ -530,35 +534,212 @@ class editbranch extends React.Component {
       switch (param) {
         case "CompanyID":
           branch[param] = CF.toInt(e.target.value);
+
           setParams(branch);
           break;
         case "Name":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v1 = this.state.Validations;
+          let duplicateExist = CF.chkDuplicateName(
+            this.state.branchData,
+            "Name",
+            e.target.value.trim().toLowerCase()
+          );
+          // this.setState({ duplicate: duplicateExist });
+          if (
+            e.target.value === "" ||
+            e.target.value === null ||
+            e.target.value.length > 50 ||
+            duplicateExist === true
+          ) {
+            if (duplicateExist === true) {
+              v1.name = {
+                errorState: true,
+                errorMsg: "Branch Name Exists",
+              };
+              this.setState({
+                Validations: v1,
+                // disabledCreatebtn: true,
+                name: e.target.value,
+              });
+            }
+
+            if (e.target.value.length > 50) {
+              let v1 = this.state.Validations;
+              v1.name = {
+                errorState: true,
+                errorMsg: "Only 50 Characters are Allowed!",
+              };
+              this.setState({
+                Validations: v1,
+                // disabledCreatebtn: true,
+              });
+            }
+            if (e.target.value === "" || e.target.value === null) {
+              v1.name = {
+                errorState: true,
+                errorMsg: "Branch name cannot be blank",
+              };
+              this.setState({
+                Validations: v1,
+                // disabledCreatebtn: true,
+                name: e.target.value,
+              });
+            }
+          } else {
+            v1.name = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v1,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+
           break;
         case "ShortName":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v2 = this.state.Validations;
+          if(e.target.value===""||e.target.value.length > 10){
+            if (e.target.value.length > 10) {
+              v2.shortName = {
+                errorState: true,
+                errorMsg: "Only 10 Characters are Allowed!",
+              };
+              this.setState({
+                Validations: v2,
+                // disabledCreatebtn: true,
+              });
+              if(e.target.value===""){
+                v2.shortName={
+                  errorState: true,
+                errorMsg: "Input cannot be blank!",
+                }
+                this.setState({
+                  Validations: v2,
+                })
+              }
+            }
+          }
+           else {
+            v2.shortName = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v2,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "Address":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v3 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v3.address = {
+              errorState: true,
+              errorMsg: "Only 50 Characters are Allowed!",
+            };
+            this.setState({
+              Validations: v3,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            let v3 = this.state.Validations;
+            v3.address = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v3,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+
           break;
         case "Address2":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v6 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v6.address2 = {
+              errorState: true,
+              errorMsg: "Only 50 Characters are Allowed!",
+            };
+            this.setState({
+              Validations: v6,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v6.address2 = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v6,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+
           break;
         case "Address3":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v4 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v4.address3 = {
+              errorState: true,
+              errorMsg: "Only 50 Characters are Allowed!",
+            };
+            this.setState({
+              Validations: v4,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v4.address3 = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v4,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+
           break;
         case "City":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v5 = this.state.Validations;
+          if (e.target.value.length > 50) {
+            v5.city = {
+              errorState: true,
+              errorMsg: "Only 50 Characters are Allowed!",
+            };
+            this.setState({
+              Validations: v5,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v5.city = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v5,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+
           break;
         case "Postcode":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v7 = this.state.Validations;
+
+          if (e.target.value.length > 10) {
+            v7.postcode = {
+              errorState: true,
+              errorMsg: "Only 10 numbers are allowed",
+            };
+            this.setState({
+              Validations: v7,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v7.postcode = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v7,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+
           break;
         case "CountryID":
           this.getStateByCountry(CF.toInt(e.target.value));
@@ -570,44 +751,239 @@ class editbranch extends React.Component {
           setParams(branch);
           break;
         case "PhoneNo":
-          branch[param] = e.target.value;
-          setParams(branch);
+          let v8 = this.state.Validations;
+          let number = CF.chkIfNumber(e.target.value);
+          if (number) {
+            branch[param] = e.target.value;
+            if (e.target.value.length > 20) {
+              v8.phoneNo = {
+                errorState: true,
+                errorMsg: "Only 20 digits are Allowed!",
+              };
+              this.setState({
+                Validations: v8,
+                // createBtnDisabled: true,
+              });
+            } else {
+              v8.phoneNo = { errorState: false, errorMsg: "" };
+              this.setState({
+                Validations: v8,
+
+                // createBtnDisabled: false,
+              });
+              setParams(branch);
+            }
+          } else {
+            v8.phoneNo = {
+              errorState: true,
+              errorMsg: "Enter Number!",
+            };
+            this.setState({
+              Validations: v8,
+              // createBtnDisabled: true,
+            });
+          }
+
           break;
         case "FAXNo":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v9 = this.state.Validations;
+
+          if (e.target.value.length > 20) {
+            v9.FAXNo = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v9,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v9.FAXNo = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v9,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+
           break;
         case "Website":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v10 = this.state.Validations;
+
+          if (e.target.value.length > 50) {
+            v10.website = {
+              errorState: true,
+              errorMsg: "Only 50 characters  allowed",
+            };
+            this.setState({
+              Validations: v10,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v10.website = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v10,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "EmailID":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v11 = this.state.Validations;
+
+          let email = CF.validateEmail(e.target.value);
+
+          if (email === true) {
+            if (e.target.value.length > 50) {
+              v11.EmailID = {
+                errorState: true,
+                errorMssg: "Maximum 50 Characters allowed!",
+              };
+
+              this.setState({ Validations: v11 });
+            } else {
+              v11.EmailID = { errorState: false, errorMssg: "" };
+
+              this.setState({
+                Validations: v11,
+              });
+
+              setParams(branch);
+            }
+          } else {
+            v11.EmailID = {
+              errorState: true,
+              errorMssg: "Incorrect EmailID",
+            };
+
+            this.setState({
+              Validations: v11,
+            });
+          }
           break;
+        case "LogoName":
+          branch[param] = e.target.value;
+          let v12 = this.state.Validations;
+
+          if (e.target.value.length > 50) {
+            v12.LogoName = {
+              errorState: true,
+              errorMsg: "Only 50 characters  allowed",
+            };
+            this.setState({
+              Validations: v12,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v12.LogoName = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v12,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+          break;
+
         case "EffectiveDate":
           branch[param] = moment(e.target.value).format("YYYY-MM-DD");
           setParams(branch);
           break;
         case "ContactPerson":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v13 = this.state.Validations;
+
+          if (e.target.value.length > 50) {
+            v13.ContactPerson = {
+              errorState: true,
+              errorMsg: "Only 50 characters  allowed",
+            };
+            this.setState({
+              Validations: v13,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v13.LogoName = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v13,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "VATNo":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v14 = this.state.Validations;
+
+          if (e.target.value.length > 20) {
+            v14.VATNo = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v14,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v14.VATNo = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v14,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "VATRegistationDate":
           branch[param] = moment(e.target.value).format("YYYY-MM-DD");
           setParams(branch);
           break;
         case "VATPercentage":
-          branch[param] = e.target.value;
+          branch[param] = CF.toFloat(e.target.value);
+          let v15 = this.state.Validations;
+
+          if (e.target.value.length > 8) {
+            v15.VATPercentage = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v15,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v15.VATPercentage = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v15,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
+
           setParams(branch);
           break;
         case "GSTNo":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v16 = this.state.Validations;
+
+          if (e.target.value.length > 20) {
+            v16.GSTNo = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v16,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v16.GSTNo = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v16,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "GSTRegistationDate":
           branch[param] = moment(e.target.value).format("YYYY-MM-DD");
@@ -615,23 +991,113 @@ class editbranch extends React.Component {
           break;
         case "PANNo":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v17 = this.state.Validations;
+
+          if (e.target.value.length > 20) {
+            v17.PANNo = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v17,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v17.PANNo = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v17,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "TANNo":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v18 = this.state.Validations;
+
+          if (e.target.value.length > 20) {
+            v18.TANNo = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v18,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v18.TANNo = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v18,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "CINNo":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v19 = this.state.Validations;
+
+          if (e.target.value.length > 20) {
+            v19.CINNo = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v19,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v19.CINNo = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v19,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "IECNo":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v20 = this.state.Validations;
+
+          if (e.target.value.length > 20) {
+            v20.IECNo = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v20,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v20.IECNo = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v20,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "ARNNo":
           branch[param] = e.target.value;
-          setParams(branch);
+          let v21 = this.state.Validations;
+
+          if (e.target.value.length > 20) {
+            v21.ARNNo = {
+              errorState: true,
+              errorMsg: "Only 20 characters  allowed",
+            };
+            this.setState({
+              Validations: v21,
+              // disabledCreatebtn: true,
+            });
+          } else {
+            v21.ARNNo = { errorState: false, errorMsg: "" };
+            this.setState({
+              Validations: v21,
+              // disabledCreatebtn: false,
+            });
+            setParams(branch);
+          }
           break;
         case "CurrID":
           branch[param] = CF.toInt(e.target.value);
@@ -778,7 +1244,38 @@ class editbranch extends React.Component {
           setParams(branch);
           break;
       }
+      Validate();
     };
+
+    const Validate=()=>{
+      let v=this.state.Validations
+if(this.state.branch.Name===""||
+this.state.branch.ShortName===""||
+v["name"].errorState===true||
+v["shortName"].errorState===true||
+v["address"].errorState===true||
+v["address2"].errorState===true||
+v["address3"].errorState===true||
+v["city"].errorState===true||
+v["postcode"].errorState===true||
+v["phoneNo"].errorState===true||
+v["FAXNo"].errorState===true||
+v["website"].errorState===true||
+v["EmailID"].errorState===true||
+v["LogoName"].errorState===true||
+v["ContactPerson"].errorState===true||
+v["PANNo"].errorState===true||
+v["TANNo"].errorState===true||
+v["CINNo"].errorState===true||
+v["IECNo"].errorState===true||
+v["ARNNo"].errorState===true||
+v["VATNo"].errorState===true||
+v["VATPercentage"].errorState===true||
+v["GSTNo"].errorState===true
+){this.setState({disabledUpdatebtn: true,disabledCreatebtn: true,})}else{
+  this.setState({disabledUpdatebtn: false,disabledCreatebtn: false,})
+}
+    }
 
     const setParams = (object) => {
       this.setState({ Customer: object });
@@ -954,7 +1451,7 @@ class editbranch extends React.Component {
               onClick={handleupdate}
               disabled={this.state.disabledUpdatebtn}
             >
-            {APIURLS.buttonTitle.save.name}
+              {APIURLS.buttonTitle.save.name}
             </Button>
           ) : null}
 
@@ -988,8 +1485,6 @@ class editbranch extends React.Component {
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
         />
-
-       
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={9} lg={9}>
@@ -1071,10 +1566,10 @@ class editbranch extends React.Component {
                                 onChange={(e) =>
                                   updateFormValue("ShortName", e)
                                 }
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
+                                // InputProps={{
+                                //   className: "textFieldCss",
+                                //   maxlength: 50,
+                                // }}
                                 value={this.state.branch.ShortName}
                                 error={
                                   this.state.Validations.shortName.errorState
@@ -1103,6 +1598,22 @@ class editbranch extends React.Component {
                                   this.state.Validations.phoneNo.errorMsg
                                 }
                               />
+                              <Tablerowcelltextboxinput
+                                id="FAXNo"
+                                label="FAXNo "
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("FAXNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.FAXNo}
+                                error={this.state.Validations.FAXNo.errorState}
+                                helperText={
+                                  this.state.Validations.FAXNo.errorMsg
+                                }
+                              />
 
                               <Tablerowcelltextboxinput
                                 id="Website"
@@ -1123,6 +1634,61 @@ class editbranch extends React.Component {
                                 }
                               />
 
+                              <Tablerowcelltextboxinput
+                                id="EmailID"
+                                label="EmailID"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("EmailID", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.EmailID}
+                                error={
+                                  this.state.Validations.EmailID.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.EmailID.errorMsg
+                                }
+                              />
+                              <Tablerowcelltextboxinput
+                                id="LogoName"
+                                label="LogoName"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("LogoName", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.LogoName}
+                                error={
+                                  this.state.Validations.LogoName.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.LogoName.errorMsg
+                                }
+                              />
+                              <Tablerowcelltextboxinput
+                                id="ContactPerson"
+                                label="ContactPerson"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("ContactPerson", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.ContactPerson}
+                                error={
+                                  this.state.Validations.ContactPerson.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.ContactPerson.errorMsg
+                                }
+                              />
+
                               <Tablerowcelldateinput
                                 isMandatory={true}
                                 id="EffectiveDate"
@@ -1136,7 +1702,21 @@ class editbranch extends React.Component {
                                 error={null}
                                 helperText={null}
                               />
-                              <SwitchInput
+                              
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="company List table"
+                          >
+                            <TableBody className="tableBody">
+                            <SwitchInput
                                 key="IsTrading"
                                 id="IsTrading"
                                 label="Is Trading?"
@@ -1155,19 +1735,6 @@ class editbranch extends React.Component {
                                   updateFormValue("AllowRounding", e)
                                 }
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="company List table"
-                          >
-                            <TableBody className="tableBody">
                               <DropdownInput
                                 isMandatory={true}
                                 id="CountryID"

@@ -361,7 +361,7 @@ class editcompany extends React.Component {
           this.state.companyData,
           "CompanyName",
           this.state.oldName,
-          e.target.value
+          e.target.value.trim().toLowerCase()
         );
         this.state.duplicate = duplicateExist;
         company.CompanyName = e.target.value;
