@@ -263,6 +263,7 @@ class branchMaster extends React.Component {
               openPage(URLS.URLS.addBranch + this.state.urlparams + "&type=add")
             }
           >
+            
             {APIURLS.buttonTitle.add.name}
           </Button>
           <Button
