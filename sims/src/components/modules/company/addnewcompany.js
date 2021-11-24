@@ -208,27 +208,20 @@ class addnewcompany extends React.Component {
   }
 
   render() {
-    // const Checktrue = () => {
-    //   if (
-    //     this.state.companyName === "" ||
-    //     this.state.companyName === null ||
-    //     this.state.companyName.length > 50 ||
-    //     this.state.duplicate === true
-    //   ) {
-    //     this.setState({ createBtnDisabled: true });
-    //   }else{
-    //     this.setState({ createBtnDisabled: false })
-    //   }
-    // };
+   
 
     const updateFormValue = (id, e) => {
       if (id === "companyName") {
-        let duplicateExist = CF.chkDuplicateName(
-          this.state.companyData,
-          "CompanyName",
-          e.target.value
-        );
-        console.log("Duplicate",duplicateExist)
+        let duplicateExist=false;
+         if(e.target.value){
+           duplicateExist = CF.chkDuplicateName(
+            this.state.companyData,
+            "CompanyName",
+            e.target.value.trim().toLowerCase()
+          );
+          console.log("Duplicate",duplicateExist)
+         }
+       
 
         if (
           e.target.value === "" ||
@@ -555,6 +548,7 @@ class addnewcompany extends React.Component {
       company.StateID = this.state.state;
       company.PhoneNo = this.state.phoneno;
       company.Website = this.state.website;
+      company.IsActive = this.state.IsActive;
 
       let chkFields = true;
       if (chkFields === false) {
