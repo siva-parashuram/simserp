@@ -62,12 +62,12 @@ class branchlistbycompany extends React.Component {
                                              
                                             >
                                                 <TableCell align="left">
-                                                <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >
-                                                B{item.branchId}
+                                                <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.BranchID} >
+                                                B{item.BranchID}
                                                 </a>
                                                 </TableCell>
                                                 <TableCell align="left">
-                                                <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.branchId} >{item.name}</a>
+                                                <a className="LINK tableLink" href={URLS.URLS.editBranch + this.state.urlparams + "&editbranchId=" + item.BranchID} >{item.Name}</a>
                                                 </TableCell>
 
                                             </TableRow>

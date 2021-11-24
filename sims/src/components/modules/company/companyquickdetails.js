@@ -51,9 +51,9 @@ class companyquickdetails extends React.Component {
                 <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
 
-                        {this.props.data.length > 0 ? (
+                        {this.props.data?this.props.data.length > 0 ? (
                             <Branchlistbycompany data={this.props.data} />
-                        ) : "No Branches"}
+                        ) : "No Branches": "No Branches"}
 
                     </Grid>
                 </Grid>

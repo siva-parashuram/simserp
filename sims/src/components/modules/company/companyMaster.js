@@ -199,8 +199,8 @@ class companyMaster extends React.Component {
         URLS.URLS.editCompany +
         this.state.urlparams +
         "&compID=" +
-        item.companyId;
-      let branches = item.branches;
+        item.CompanyID;
+      let branches = item.Branch;
       this.setState({
         item: item,
         branch: branches,
@@ -209,7 +209,7 @@ class companyMaster extends React.Component {
       });
       this.InitialremoveIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
-      this.getAttachments(item.companyId);
+      this.getAttachments(item.CompanyID);
     } catch (e) {
       console.log("Error : ", e);
 
@@ -262,12 +262,12 @@ class companyMaster extends React.Component {
       try {
         console.log("handleRowClick > e > ", e);
         console.log("handleRowClick > item > ", item);
-        let branches = item.branches;
+        let branches = item.Branch;
         let editUrl =
           URLS.URLS.editCompany +
           this.state.urlparams +
           "&compID=" +
-          item.companyId;
+          item.CompanyID;
         // getCompanyBranchList(item.companyId);
         this.setState({
           item: item,
@@ -277,7 +277,7 @@ class companyMaster extends React.Component {
         });
         removeIsSelectedRowClasses();
         document.getElementById(id).classList.add("selectedRow");
-        getAttachments(item.companyId);
+        getAttachments(item.CompanyID);
       } catch (e) {
         console.log("Error : ", e);
       }
@@ -499,15 +499,15 @@ class companyMaster extends React.Component {
                                   URLS.URLS.editCompany +
                                   this.state.urlparams +
                                   "&compID=" +
-                                  item.companyId
+                                  item.CompanyID
                                 }
                                 onClick={(e) => openCompanyDetail(e, item)}
                               >
-                                {URLS.PREFIX.companyID + item.companyId}
+                                {URLS.PREFIX.companyID + item.CompanyID}
                               </a>
                             </TableCell>
-                            <TableCell align="left">{item.companyName}</TableCell>
-                            <TableCell align="left">{item.address}</TableCell>
+                            <TableCell align="left">{item.CompanyName}</TableCell>
+                            <TableCell align="left">{item.Address}</TableCell>
                           </TableRow>
                         ))
                       }
