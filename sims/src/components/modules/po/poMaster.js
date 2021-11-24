@@ -132,21 +132,21 @@ class poMaster extends React.Component {
                                 >
                                     <Button
                                         className="action-btns"
-                                        startIcon={<AddIcon />}
+                                        startIcon={APIURLS.buttonTitle.add.icon}
                                         onClick={(e) =>
                                             openPage(URLS.URLS.addPO + this.state.urlparams + "&type=add")
                                         }
                                     >
-                                        {APIURLS.buttonTitle.add}
+                                        {APIURLS.buttonTitle.add.name}
                                     </Button>
                                     <Button className="action-btns"
-                                        startIcon={<EditIcon />}
+                                        startIcon={APIURLS.buttonTitle.edit.icon}
                                         onClick={(e) =>
                                             openPage(this.state.editUrl)
                                         }
                                         disabled={this.state.editBtnDisable}
                                     >
-                                        {APIURLS.buttonTitle.edit}
+                                        {APIURLS.buttonTitle.edit.name}
                                     </Button>
                                 </ButtonGroup>
                             </div>
