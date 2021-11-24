@@ -9,6 +9,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import TablePagination from "@mui/material/TablePagination";
 
 import ButtonGroup from "@mui/material/ButtonGroup";
 
@@ -31,6 +32,12 @@ class statemaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: APIURLS.pagination.rowsPerPage,
+      },
+      page: 1,
+      rowsPerPage: 10,
       urlparams: "",
       ProgressLoader: false,
       stateData: [],
@@ -186,6 +193,23 @@ class statemaster extends React.Component {
       window.location = url;
     };
 
+    const handlePageChange = (event, newPage) => {
+      this.InitialremoveIsSelectedRowClasses();
+      console.log("handlePageChange > event > ", event);
+      console.log("handlePageChange > newPage > ", newPage);
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
+    };
+
+    const getPageData = (data) => {
+      let rows = data;
+      let page = parseInt(this.state.pagination.page);
+      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
+
+      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    };
+
     const breadcrumbHtml = (
       <Fragment>
         <Breadcrumb
@@ -260,7 +284,7 @@ class statemaster extends React.Component {
                         </TableRow>
                       </TableHead>
                       <TableBody className="tableBody">
-                        {this.state.stateData.map((item, i) => (
+                        {getPageData(this.state.stateData).map((item, i) => (
                           <TableRow
                             id={"row_" + i}
                             className={this.state.initialCss}
@@ -290,6 +314,14 @@ class statemaster extends React.Component {
                         ))}
                       </TableBody>
                     </Table>
+                    <TablePagination
+                  rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                  component="div"
+                  count={this.state.stateData.length}
+                  rowsPerPage={this.state.pagination.rowsPerPage}
+                  page={this.state.pagination.page}
+                  onPageChange={handlePageChange}
+                />
                   </Fragment>
                 ) : (
                   <Tableskeleton />

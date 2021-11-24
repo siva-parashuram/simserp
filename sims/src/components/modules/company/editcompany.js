@@ -359,7 +359,7 @@ class editcompany extends React.Component {
         company.CompanyName = e.target.value;
         let duplicateExist = CF.chkDuplicateButExcludeName(
           this.state.companyData,
-          "companyName",
+          "CompanyName",
           this.state.oldName,
           e.target.value
         );
@@ -655,7 +655,7 @@ class editcompany extends React.Component {
         this.setState({ IsActive: e.target.checked,company:company });
       }
 
-      // validate();
+      validate();
     };
 
     const validate = () => {
@@ -936,6 +936,7 @@ class editcompany extends React.Component {
                                 helperText={
                                   this.state.Validations.companyName.errorMsg
                                 }
+                                isMandatory={true}
                               />
 
                               <Tablerowcelltextboxinput
@@ -955,6 +956,7 @@ class editcompany extends React.Component {
                                 helperText={
                                   this.state.Validations.address.errorMsg
                                 }
+                                isMandatory={true}
                               />
 
                               <Tablerowcelltextboxinput
@@ -1042,8 +1044,9 @@ class editcompany extends React.Component {
                                 <TableCell
                                   align="left"
                                   className="no-border-table"
+                                  isMandatory={true}
                                 >
-                                  Country
+                                  Country<span style={{ color: "red" }}> *</span>
                                 </TableCell>
                                 <TableCell
                                   align="left"
@@ -1057,6 +1060,7 @@ class editcompany extends React.Component {
                                       updateFormValue("Country", e)
                                     }
                                     value={this.state.company.CountryID}
+                                   
                                   >
                                     <option value="-" disabled>
                                       Select

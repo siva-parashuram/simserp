@@ -418,7 +418,6 @@ class addpage extends React.Component {
               Validations: Validations,
             });
           }
-          
         } else {
           let Validations = this.state.Validations;
           Validations.pageName = { errorState: false, errorMsg: "" };
@@ -437,7 +436,10 @@ class addpage extends React.Component {
               errorState: true,
               errorMsg: "Blank inputs not allowed!",
             };
-            this.setState({ pageLink: e.target.value, Validations: Validations });
+            this.setState({
+              pageLink: e.target.value,
+              Validations: Validations,
+            });
           }
           if (e.target.value.length > 100) {
             Validations.pageLink = {
@@ -446,7 +448,6 @@ class addpage extends React.Component {
             };
             this.setState({ Validations: Validations });
           }
-         
         } else {
           let Validations = this.state.Validations;
           Validations.pageLink = { errorState: false, errorMsg: "" };
@@ -463,7 +464,6 @@ class addpage extends React.Component {
           };
           this.setState({
             Validations: Validations,
-            
           });
         } else {
           let Validations = this.state.Validations;
@@ -646,11 +646,13 @@ class addpage extends React.Component {
           <Grid container spacing={3}>
             <Grid xs={12} sm={12} md={8} lg={8}>
               <Button
+                className="action-btns"
+                startIcon={APIURLS.buttonTitle.save.icon}
                 style={{ marginLeft: 10, marginTop: 20 }}
                 disabled={this.state.updateBtnDisable}
                 onClick={handleUpdate}
               >
-                {APIURLS.buttonTitle.update}
+                {APIURLS.buttonTitle.save.name}
               </Button>
             </Grid>
           </Grid>

@@ -21,6 +21,8 @@ import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 
 import Itemquickdetails from "./itemquickdetails";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+
 
 class itemMaster extends React.Component {
   constructor(props) {
@@ -28,15 +30,14 @@ class itemMaster extends React.Component {
     this.state = {
       ProgressLoader: false,
       isLoggedIn: false,
-      editBtnDisable:true,
+      editBtnDisable: true,
       initialCss: "",
       urlparams: "",
-      editUrl:"",
+      editUrl: "",
       itemData: [],
-      selectedItem:{},
+      selectedItem: {},
     };
   }
-
 
   componentDidMount() {
     if (getCookie(COOKIE.USERID) != null) {
@@ -73,20 +74,24 @@ class itemMaster extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
-        this.setState({itemData:data},()=>{this.InitialhandleRowClick(null, data[0], "row_0");});
+        this.setState({ itemData: data }, () => {
+          this.InitialhandleRowClick(null, data[0], "row_0");
+        });
         this.setState({ ProgressLoader: true });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   InitialhandleRowClick(e, item, id) {
     let editUrl =
-    URLS.URLS.editItem +
-    this.state.urlparams +
-    "&edititemId=" +
-    item.itemId;
-    this.setState({ moduleId: item.moduleId, editurl: editUrl,selectedItem:item,editBtnDisable:false });
-    this.InitialremoveIsSelectedRowClasses(); 
+      URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + item.itemId;
+    this.setState({
+      moduleId: item.moduleId,
+      editurl: editUrl,
+      selectedItem: item,
+      editBtnDisable: false,
+    });
+    this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
   InitialremoveIsSelectedRowClasses() {
@@ -96,14 +101,18 @@ class itemMaster extends React.Component {
   }
 
   render() {
-
     const handleRowClick = (e, item, id) => {
       let editUrl =
-      URLS.URLS.editItem +
-      this.state.urlparams +
-      "&edititemId=" +
-      item.itemId;
-      this.setState({ moduleId: item.moduleId, editurl: editUrl,editBtnDisable:false,selectedItem:item });
+        URLS.URLS.editItem +
+        this.state.urlparams +
+        "&edititemId=" +
+        item.itemId;
+      this.setState({
+        moduleId: item.moduleId,
+        editurl: editUrl,
+        editBtnDisable: false,
+        selectedItem: item,
+      });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     };
@@ -114,73 +123,58 @@ class itemMaster extends React.Component {
       }
     };
 
-
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Item Master"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.add.icon}
+            onClick={(e) => openPage(URLS.URLS.addItem + this.state.urlparams)}
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            onClick={(e) => openPage(this.state.editurl)}
+            disabled={this.state.editBtnDisable}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
-
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Item Master"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addItem + this.state.urlparams)
-                    }
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button className="action-btns"
-                    startIcon={<EditIcon />}
-                    onClick={(e) =>
-                      openPage(this.state.editurl)
-                    }
-                    disabled={this.state.editBtnDisable}
-                  >
-                    {APIURLS.buttonTitle.edit}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-
-        <div className="breadcrumb-bottom"></div>
-
-        <div className="New-link-bottom"></div>
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+       
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             {this.state.itemData.length > 0 ? (
@@ -215,22 +209,22 @@ class itemMaster extends React.Component {
                           }
                         >
                           <TableCell align="left">
-                            <a className="LINK tableLink" href={ URLS.URLS.editItem +
+                            <a
+                              className="LINK tableLink"
+                              href={
+                                URLS.URLS.editItem +
                                 this.state.urlparams +
                                 "&edititemId=" +
-                                item.itemId}>
+                                item.itemId
+                              }
+                            >
                               {item.no}
                             </a>
                           </TableCell>
-                          <TableCell align="left">
-                            {item.code}
-                          </TableCell>
-                          <TableCell align="left">
-                            {item.alias}
-                          </TableCell>
+                          <TableCell align="left">{item.code}</TableCell>
+                          <TableCell align="left">{item.alias}</TableCell>
                         </TableRow>
                       ))}
-
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -238,7 +232,6 @@ class itemMaster extends React.Component {
             ) : (
               <Tableskeleton />
             )}
-
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
@@ -246,7 +239,7 @@ class itemMaster extends React.Component {
                 &nbsp;
               </Grid>
               <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Itemquickdetails item={this.state.selectedItem}/>
+                <Itemquickdetails item={this.state.selectedItem} />
               </Grid>
             </Grid>
           </Grid>

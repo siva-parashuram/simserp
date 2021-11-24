@@ -4,7 +4,6 @@ import Grid from "@material-ui/core/Grid";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 
-
 import Button from "@material-ui/core/Button";
 
 import Typography from "@material-ui/core/Typography";
@@ -29,6 +28,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class editdestination extends React.Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class editdestination extends React.Component {
 
       countryData: [],
       stateData: [],
-      DisabledUpdatebtn: true,
+      DisabledUpdatebtn: false,
       Validations: {
         destinationName: { errorState: false, errorMssg: "" },
         postcode: { errorState: false, errorMssg: "" },
@@ -372,6 +372,37 @@ class editdestination extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Edit Destination"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.save.icon}
+            disabled={this.state.DisabledUpdatebtn}
+            onClick={updateDestination}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -383,172 +414,116 @@ class editdestination extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Edit Destination"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={7} lg={7}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={9} lg={9}>
+                <Accordion
+                  key="country-General-Details"
+                  expanded={this.state.GeneralDetailsExpanded}
                 >
-                  <Button
-                    className="action-btns"
-                    startIcon={<UpdateIcon />}
-                    disabled={this.state.DisabledUpdatebtn}
-                    onClick={updateDestination}
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("GeneralDetailsExpanded", e)
+                        }
+                      />
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 20, height: "100%" }}
                   >
-                    {APIURLS.buttonTitle.update}
-                  </Button>
-                </ButtonGroup>
-              </div>
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid xs={12} sm={12} md={12} lg={12}>
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className="accordion-table"
+                          aria-label="destination add table"
+                        >
+                          <TableBody className="tableBody">
+                            <Tablerowcelltextboxinput
+                              id="Name"
+                              label="Destination"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("Name", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                              value={this.state.destinationName}
+                              error={
+                                this.state.Validations.destinationName
+                                  .errorState
+                              }
+                              helperText={
+                                this.state.Validations.destinationName.errorMssg
+                              }
+                            />
+
+                            <Tablerowcelltextboxinput
+                              id="PostCode"
+                              label="Post Code"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) => updateFormValue("PostCode", e)}
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                              value={this.state.postcode}
+                              error={this.state.Validations.postcode.errorState}
+                              helperText={
+                                this.state.Validations.postcode.errorMssg
+                              }
+                            />
+
+                            <DropdownInput
+                              id="CountryID"
+                              label="Country"
+                              onChange={(e) => updateFormValue("CountryID", e)}
+                              options={this.state.countryData}
+                              value={this.state.countryId}
+                            />
+
+                            <DropdownInput
+                              id="stateID"
+                              label="State"
+                              onChange={(e) => updateFormValue("stateID", e)}
+                              options={this.state.stateData}
+                              value={this.state.stateId}
+                            />
+                          </TableBody>
+                        </Table>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+              </Grid>
             </Grid>
           </Grid>
-          <div className="breadcrumb-bottom"></div>
-         
-          <div className="New-link-bottom"></div>
 
-          <div style={{ marginLeft: 10 }}>
-            <Grid className="table-adjust" container spacing={0}>
-              <Grid xs={12} sm={12} md={7} lg={7}>
-                <Grid container spacing={0}>
-                  <Grid xs={12} sm={12} md={9} lg={9}>
-                    <Accordion
-                      key="country-General-Details"
-                      expanded={this.state.GeneralDetailsExpanded}
-                    >
-                      <AccordionSummary
-                        className="accordion-Header-Design"
-                        expandIcon={
-                          <ExpandMoreIcon
-                            onClick={(e) =>
-                              handleAccordionClick("GeneralDetailsExpanded", e)
-                            }
-                          />
-                        }
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                        style={{ minHeight: 20, height: "100%" }}
-                      >
-                        <Typography key="" className="accordion-Header-Title">
-                          General Details
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails key="" className="AccordionDetails-css">
-                        <Grid container spacing={0}>
-                          <Grid xs={12} sm={12} md={12} lg={12}>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="destination add table"
-                            >
-                              <TableBody className="tableBody">
-                                <Tablerowcelltextboxinput
-                                  id="Name"
-                                  label="Destination"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("Name", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.destinationName}
-                                  error={
-                                    this.state.Validations.destinationName
-                                      .errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.destinationName
-                                      .errorMssg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="PostCode"
-                                  label="Post Code"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("PostCode", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.postcode}
-                                  error={
-                                    this.state.Validations.postcode.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.postcode.errorMssg
-                                  }
-                                />
-
-                                <DropdownInput
-                                  id="CountryID"
-                                  label="Country"
-                                  onChange={(e) =>
-                                    updateFormValue("CountryID", e)
-                                  }
-                                  options={this.state.countryData}
-                                  value={this.state.countryId}
-                                />
-
-                                <DropdownInput
-                                  id="stateID"
-                                  label="State"
-                                  onChange={(e) =>
-                                    updateFormValue("stateID", e)
-                                  }
-                                  options={this.state.stateData}
-                                  value={this.state.stateId}
-                                />
-
-                                
-                              </TableBody>
-                            </Table>
-                          </Grid>
-                        </Grid>
-                      </AccordionDetails>
-                    </Accordion>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid xs={12} sm={12} md={5} lg={5}>
-                <Grid container spacing={0}>
-                  <Grid xs={12} sm={12} md={10} lg={10}>
-                    <Destination destinations={this.state.destinations} />
-                  </Grid>
-                </Grid>
+          <Grid xs={12} sm={12} md={5} lg={5}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={10} lg={10}>
+                <Destination destinations={this.state.destinations} />
               </Grid>
             </Grid>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </Fragment>
     );
   }
