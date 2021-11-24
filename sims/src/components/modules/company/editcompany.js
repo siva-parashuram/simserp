@@ -298,42 +298,18 @@ class editcompany extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           console.log("CompanyState>>", response.data);
-          /*
-          company.CompanyName = response.data.companyName;
-          company.Address = response.data.address;
-          company.Address2 = response.data.address2;
-          company.Address3 = response.data.address3;
-          company.City = response.data.city;
-          company.Postcode = response.data.postcode;
-          company.CountryID = response.data.countryId;
-          company.StateID = response.data.stateId;
-          company.PhoneNo = response.data.phoneNo;
-          company.Website = response.data.website;
-          company.IsActive = response.data.IsActive;
-          */
+          
           console.log("company>>", company);
           this.setState(
             {
               company:response.data,
-           /*   oldName: response.data.companyName,
-              company: company,
-              CompanyName: response.data.companyName,
-              Address: response.data.address,
-              Address2: response.data.address2,
-              Address3: response.data.address3,
-              CountryID: response.data.countryId,
-              StateID: response.data.stateId,
-              City: response.data.city,
-              PostCode: response.data.postcode,
-              PhoneNo: response.data.phoneNo,
-              Website: response.data.website,
-              IsActive: response.data.IsActive,
-              */
+          
               selectedCountry: response.data.countryId,
               ProgressLoader: true,
             },
             () => {
               this.setInitialParamsForEdit();
+              this.getStateByCountry(this.state.company.CountryID);
             }
           );
         } else {
@@ -375,6 +351,8 @@ class editcompany extends React.Component {
     // };
 
     const updateFormValue = (id, e) => {
+      console.log("updateFormValue > id > ",id);
+      console.log("updateFormValue > e.target.checked > ",e.target.checked);
       let company = this.state.company;
 
       if (id === "companyName") {
@@ -670,10 +648,11 @@ class editcompany extends React.Component {
         this.setState({ StateID: CF.toInt(e.target.value), company: company });
       }
       if (id === "IsActive") {
-        this.setState({ IsActive: e.target.checked });
+        company.IsActive=e.target.checked; 
+        this.setState({ IsActive: e.target.checked,company:company });
       }
 
-      validate();
+      // validate();
     };
 
     const validate = () => {
@@ -1037,7 +1016,7 @@ class editcompany extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 10,
                                 }}
-                                value={this.state.company.PostCode}
+                                value={this.state.company.Postcode}
                                 error={
                                   this.state.Validations.postcode.errorState
                                 }
@@ -1140,20 +1119,7 @@ class editcompany extends React.Component {
                                   </button>
                                 </TableCell>
                               </TableRow>
-                              {/* <DropdownInput
-                              id="countrySelect"
-                              label="Country"
-                              onChange={(e) => updateFormValue("Country", e)}
-                              options={this.state.countryData}
-                              value={this.state.country}
-                            />
-                            <DropdownInput
-                              id="stateSelect"
-                              label="State"
-                              onChange={(e) => updateFormValue("State", e)}
-                              options={this.state.stateData}
-                              value={this.state.state}
-                            /> */}
+                              
 
                               <Tablerowcelltextboxinput
                                 id="PhoneNo"

@@ -66,7 +66,7 @@ class addnewcompany extends React.Component {
       MasterCountryData: [],
       countryData: [],
       stateData: [],
-      createBtnDisabled: true,
+      createBtnDisabled: false,
       GeneralDetailsExpanded: true,
 
       duplicate: false,
@@ -143,26 +143,7 @@ class addnewcompany extends React.Component {
       });
   }
 
-  // getCountryList() {
-  //   let rows = [];
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   let GetCountryUrl = APIURLS.APIURL.GetCountries;
 
-  //   axios
-  //     .post(GetCountryUrl, ValidUser, { headers })
-  //     .then((response) => {
-  //       let data = response.data;
-
-  //       rows = data;
-  //       this.processCountryData(data);
-  //     })
-  //     .catch((error) => {});
-  // }
 
   getCountryList() {
     let rows = [];
@@ -213,32 +194,7 @@ class addnewcompany extends React.Component {
     this.setState({ stateData: newData, ProgressLoader: true });
   };
 
-  // getStateList = () => {
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   let GetStatesUrl = APIURLS.APIURL.GetStates;
-
-  //   axios
-  //     .post(GetStatesUrl, ValidUser, { headers })
-  //     .then((response) => {
-  //       let data = response.data;
-  //       let newData = [];
-  //       for (let i = 0; i < data.length; i++) {
-  //         let d = {
-  //           name: data[i].name,
-  //           value: data[i].stateId,
-  //         };
-  //         newData.push(d);
-  //       }
-  //       this.setState({ stateData: newData, ProgressLoader: true });
-  //     })
-  //     .catch((error) => {});
-  // };
-
+   
   processCountryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
