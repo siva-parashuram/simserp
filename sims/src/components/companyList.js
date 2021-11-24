@@ -22,7 +22,9 @@ class CompanyList extends React.Component {
 
     render() {
       
-        const openBranchDashboard=(url,branchId,compID,compName,branchName)=>{  
+        const openBranchDashboard=(url,branchId,compID,compName,branchName)=>{ 
+            // branchItem.branchID,item.compID,item.compName,branchItem.branchName
+            
             let isPresent=false;
             isPresent=checkIfBranchIsOpen(branchId);
             if(isPresent===true){

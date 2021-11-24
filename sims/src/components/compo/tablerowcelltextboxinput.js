@@ -13,7 +13,7 @@ class tablerowcelltextboxinput extends React.Component {
   render() {
     return (
       <TableRow>
-        <TableCell align="left" className="no-border-table">
+        <TableCell align="left" className="no-border-table" style={{maxWidth:100}} >
           {this.props.label}
           {this.props.isMandatory ? (
             <span style={{ color: "red" }}> *</span>
@@ -21,7 +21,7 @@ class tablerowcelltextboxinput extends React.Component {
         </TableCell>
         <TableCell align="left" className="no-border-table">
           <TextField
-             style={{ minWidth: "100%",fontSize:14}}
+             style={{ minWidth: '100%', maxWidth:'100%',width:'100%', fontSize:14}}
             className="textFieldCss"
             // style={this.props.style}
             type={this.props.type}

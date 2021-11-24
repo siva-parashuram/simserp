@@ -42,6 +42,7 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import { maxWidth } from "@mui/system";
 
 class addnewcompany extends React.Component {
   constructor(props) {
@@ -62,11 +63,11 @@ class addnewcompany extends React.Component {
       postcode: "",
       phoneno: "",
       website: "",
-      IsActive:true,
+      IsActive: true,
       MasterCountryData: [],
       countryData: [],
       stateData: [],
-      createBtnDisabled: false,
+      BtnDisable: true,
       GeneralDetailsExpanded: true,
 
       duplicate: false,
@@ -74,6 +75,20 @@ class addnewcompany extends React.Component {
         DialogTitle: "",
         DialogStatus: false,
         DialogContent: null,
+      },
+      company: {
+        CompanyID: 0,
+        CompanyName: "",
+        Address: "",
+        Address2: "",
+        Address3: "",
+        City: "",
+        Postcode: "",
+        CountryID: 0,
+        StateID: 0,
+        PhoneNo: "",
+        Website: "",
+        IsActive: true
       },
       Validations: {
         companyName: { errorState: false, errorMsg: "" },
@@ -94,7 +109,7 @@ class addnewcompany extends React.Component {
     this.getCompanyList();
     this.getCountryList();
 
-    // this.getStateList();
+    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -164,7 +179,7 @@ class addnewcompany extends React.Component {
         this.setState({ MasterCountryData: data });
         this.processCountryData(data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   getStateByCountry = (CountryID) => {
@@ -194,7 +209,7 @@ class addnewcompany extends React.Component {
     this.setState({ stateData: newData, ProgressLoader: true });
   };
 
-   
+
   processCountryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
@@ -207,313 +222,232 @@ class addnewcompany extends React.Component {
     this.setState({ countryData: newData, ProgressLoader: true });
   }
 
+  setParams = (object) => {
+    this.setState({ company: object });
+  };
+
   render() {
-   
 
-    const updateFormValue = (id, e) => {
-      if (id === "companyName") {
-        let duplicateExist=false;
-         if(e.target.value){
-           duplicateExist = CF.chkDuplicateName(
-            this.state.companyData,
-            "CompanyName",
-            e.target.value.trim().toLowerCase()
-          );
-          console.log("Duplicate",duplicateExist)
-         }
-       
 
-        if (
-          e.target.value === "" ||
-          e.target.value == null ||
-          e.target.value.length > 50 ||
-          duplicateExist === true
-        ) {
-          if (duplicateExist === true) {
-            let v = this.state.Validations;
+    const updateFormValue = (param, e) => {
+      let company = this.state.company;
+      let v = this.state.Validations;
+      switch (param) {
+        case "CompanyName":
+          let duplicateExist = false;
+          if (e.target.value && e.target.value.trim()!="") {
+            duplicateExist = CF.chkDuplicateName(
+              this.state.companyData,
+              "CompanyName",
+              e.target.value.trim().toLowerCase()
+            );
+          }
+          if (duplicateExist === true) {              
             v.companyName = {
               errorState: true,
               errorMsg: "Company with same name already exist!",
             };
-            this.setState({
-              Validations: v,
-              companyName: e.target.value,
-
-              // createBtnDisabled: true,
-              duplicate: true,
-            });
-          }
-          if (e.target.value.length > 50) {
-            let v = this.state.Validations;
+            company[param] = e.target.value;
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            if(e.target.value === "" ||
+            e.target.value == null ||
+            e.target.value.length > 50){
+              v.companyName = {
+                errorState: true,
+                errorMsg: "Inproper data",
+              };
+              company[param] = e.target.value;
+              this.setParams(company);
+              this.setState({Validations:v});
+            }else{
+              v.companyName = {
+                errorState: false,
+                errorMsg: "",
+              };
+              company[param] = e.target.value.trim();
+              this.setParams(company);
+              this.setState({Validations:v});
+            }            
+          }         
+          break;
+        case "Address":
+          if (
+            e.target.value === "" ||
+            e.target.value == null ||
+            e.target.value.length > 50
+          ) {
             v.companyName = {
               errorState: true,
-              errorMsg: "Only 50 Characters are Allowed!",
+              errorMsg: "Inproper data",
             };
-            this.setState({
-              Validations: v,
-              companyName: e.target.value,
-              // createBtnDisabled: true,
-            });
+            company[param] = e.target.value;
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            v.companyName = {
+              errorState: false,
+              errorMsg: "",
+            };
+            company[param] = e.target.value.trim();
+          this.setParams(company);
+          this.setState({Validations:v});
           }
-          if (e.target.value === "" || e.target.value == null) {
-            let v = this.state.Validations;
+          
+          break;
+        case "Address2":
+          if (e.target.value.length > 50) {
             v.companyName = {
               errorState: true,
-              errorMsg: "Company Name Cannot be blank!",
+              errorMsg: "Inproper data",
             };
-            this.setState({
-              Validations: v,
-              companyName: e.target.value,
-
-              // createBtnDisabled: true,
-            });
-          }
-        } else {
-          let v = this.state.Validations;
-          v.companyName = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            companyName: e.target.value,
-            // createBtnDisabled: false,
-          });
-        }
-        // Checktrue();
-      }
-      if (id === "Address") {
-        if (
-          e.target.value === "" ||
-          e.target.value == null ||
-          e.target.value.length > 50
-        ) {
+            company[param] = e.target.value;
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            v.companyName = {
+              errorState: false,
+              errorMsg: "",
+            };
+            company[param] = e.target.value.trim();
+            this.setParams(company);
+            this.setState({Validations:v});
+          }         
+          break;
+        case "Address3":
           if (e.target.value.length > 50) {
-            let v = this.state.Validations;
-            v.address = {
+            v.companyName = {
               errorState: true,
-              errorMsg: "Only 50 Characters are Allowed!",
+              errorMsg: "Inproper data",
             };
-            this.setState({
-              Validations: v,
-              address: e.target.value,
-
-              // createBtnDisabled: true,
-            });
-          }
-          if (e.target.value === "" || e.target.value == null) {
-            let v = this.state.Validations;
-            v.address = {
+            company[param] = e.target.value;
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            v.companyName = {
+              errorState: false,
+              errorMsg: "",
+            };
+            company[param] = e.target.value.trim();
+            this.setParams(company);
+            this.setState({Validations:v});
+          } 
+          break;
+        case "City":
+          if (e.target.value.length > 50) {
+            v.companyName = {
               errorState: true,
-              errorMsg: "Address Cannot be blank!",
+              errorMsg: "Inproper data",
             };
-            this.setState({
-              Validations: v,
-              address: e.target.value,
-
-              // createBtnDisabled: true,
-            });
-          }
-        } else {
-          let v = this.state.Validations;
-          v.address = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            address: e.target.value,
-            // createBtnDisabled: false,
-          });
-        }
-        // Checktrue();
-      }
-
-      if (id === "Address2") {
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.address2 = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-
-            address2: e.target.value,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.address2 = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            address2: e.target.value,
-          });
-        }
-        // Checktrue();
-      }
-
-      if (id === "Address3") {
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.address3 = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            address3: e.target.value,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.address3 = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            address3: e.target.value,
-          });
-        }
-        // Checktrue();
-      }
-
-      if (id === "City") {
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.city = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            city: e.target.value,
-
-            // createBtnDisabled: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.city = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            city: e.target.value,
-            // createBtnDisabled: false,
-          });
-        }
-        // Checktrue();
-      }
-
-      if (id === "Postcode") {
-        if (e.target.value.length > 10) {
-          let v = this.state.Validations;
-          v.postcode = {
-            errorState: true,
-            errorMsg: "Only 10 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            postcode: e.target.value,
-            // createBtnDisabled: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.postcode = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            postcode: e.target.value,
-            // createBtnDisabled: false,
-          });
-        }
-        // Checktrue();
-      }
-
-      if (id === "PhoneNo") {
-        let number = CF.chkIfNumber(e.target.value);
-        if (number) {
-          //let v=CF.getInutLen("PhoneNo",e.target.value.length);
-          //if(v)
+            company[param] = e.target.value;
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            v.companyName = {
+              errorState: false,
+              errorMsg: "",
+            };
+            company[param] = e.target.value.trim();
+            this.setParams(company);
+            this.setState({Validations:v});
+          } 
+          break;
+        case "Postcode":
+          if (e.target.value.length > 10) {
+            v.companyName = {
+              errorState: true,
+              errorMsg: "Inproper data",
+            };
+            company[param] = e.target.value;
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            v.companyName = {
+              errorState: false,
+              errorMsg: "",
+            };
+            company[param] = e.target.value.trim();
+            this.setParams(company);
+            this.setState({Validations:v});
+          } 
+          break;
+        case "CountryID":
+          this.getStateByCountry(CF.toInt(e.target.value));
+          company[param] = CF.toInt(e.target.value);
+          this.setParams(company);
+          break;
+        case "StateID":
+          company[param] = CF.toInt(e.target.value);
+          this.setParams(company);
+          break;
+        case "PhoneNo":
           if (e.target.value.length > 20) {
-            let v = this.state.Validations;
-            v.phoneno = {
+            v.companyName = {
               errorState: true,
-              errorMsg: "Only 20 digits are Allowed!",
+              errorMsg: "Inproper data",
             };
-            this.setState({
-              Validations: v,
-              // createBtnDisabled: true,
-              phoneno: e.target.value,
-            });
-          } else {
-            let v = this.state.Validations;
-            v.phoneno = { errorState: false, errorMsg: "" };
-            this.setState({
-              Validations: v,
-              phoneno: e.target.value,
-              // createBtnDisabled: false,
-            });
-          }
-        } else {
-          let v = this.state.Validations;
-          v.phoneno = {
-            errorState: true,
-            errorMsg: "Enter Number!",
-          };
-          this.setState({
-            Validations: v,
-            // createBtnDisabled: true,
-          });
-        }
-        // Checktrue();
-      }
+            company[param] = e.target.value;
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            v.companyName = {
+              errorState: false,
+              errorMsg: "",
+            };
+            company[param] = e.target.value.trim();
+            this.setParams(company);
+            this.setState({Validations:v});
+          } 
+          break;
+        case "Website":
+          if (e.target.value.length > 50) {
+            v.companyName = {
+              errorState: true,
+              errorMsg: "Inproper data",
+            };
+            company[param] = e.target.value;
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            v.companyName = {
+              errorState: false,
+              errorMsg: "",
+            };
+            company[param] = e.target.value.trim();
+            this.setParams(company);
+            this.setState({Validations:v});
+          } 
+          break;
 
-      if (id === "Website") {
-        if (e.target.value.length > 50) {
-          let v = this.state.Validations;
-          v.website = {
-            errorState: true,
-            errorMsg: "Only 50 Characters are Allowed!",
-          };
-          this.setState({
-            Validations: v,
-            website: e.target.value,
-
-            // createBtnDisabled: true,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.website = { errorState: false, errorMsg: "" };
-          this.setState({
-            Validations: v,
-            website: e.target.value,
-            createBtnDisabled: false,
-          });
-        }
-        // Checktrue();
-      }
-      if (id === "Country") {
-        this.getStateByCountry(CF.toInt(e.target.value));
-        console.log("countryID>>", e.target.value);
-        this.setState({ country: CF.toInt(e.target.value) });
-      }
-      if (id === "State") {
-        this.setState({ state: CF.toInt(e.target.value) });
-      }
-      if(id==="IsActive"){
-        this.setState({IsActive:e.target.checked})
+        default:
+          company[param]  = e.target.checked;
+          this.setParams(company);
+          break;
       }
 
       validate();
-      // Checktrue();
     };
+
+    
 
     const validate = () => {
       let v = this.state.Validations;
-      if (
-        this.state.companyName === "" ||
-        this.state.address === "" ||
-        v["companyName"].errorState === true ||
-        v["address"].errorState === true ||
-        v["address2"].errorState === true ||
-        v["address3"].errorState === true ||
-        v["city"].errorState === true ||
-        v["postcode"].errorState === true ||
-        v["phoneno"].errorState === true ||
-        v["website"].errorState === true
-      ) {
-        this.setState({ createBtnDisabled: true });
-      } else {
-        this.setState({ createBtnDisabled: false });
+      console.log("validate > v > ",v);
+      if(v.companyName.errorState===true ||
+        v.address.errorState===true ||
+        v.country.errorState===true ||
+        v.address2.errorState===true ||
+        v.address3.errorState===true ||
+        v.city.errorState===true ||
+        v.postcode.errorState===true ||
+        v.phoneno.errorState===true ||
+        v.website.errorState===true){
+        this.setState({ BtnDisable: true });
+      }else{
+        this.setState({ BtnDisable: false });
       }
+      
     };
 
     const handleAccordionClick = (val, e) => {
@@ -537,25 +471,25 @@ class addnewcompany extends React.Component {
 
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
-      company.CompanyID = 0;
-      company.CompanyName = this.state.companyName;
-      company.Address = this.state.address;
-      company.Address2 = this.state.address2;
-      company.Address3 = this.state.address3;
-      company.City = this.state.city;
-      company.Postcode = this.state.postcode;
-      company.CountryID = this.state.country;
-      company.StateID = this.state.state;
-      company.PhoneNo = this.state.phoneno;
-      company.Website = this.state.website;
-      company.IsActive = this.state.IsActive;
+      // company.CompanyID = 0;
+      // company.CompanyName = this.state.companyName;
+      // company.Address = this.state.address;
+      // company.Address2 = this.state.address2;
+      // company.Address3 = this.state.address3;
+      // company.City = this.state.city;
+      // company.Postcode = this.state.postcode;
+      // company.CountryID = this.state.country;
+      // company.StateID = this.state.state;
+      // company.PhoneNo = this.state.phoneno;
+      // company.Website = this.state.website;
+      // company.IsActive = this.state.IsActive;
 
       let chkFields = true;
       if (chkFields === false) {
       } else {
         const data = {
           validUser: ValidUser,
-          company: company,
+          company: this.state.company,
         };
         const headers = {
           "Content-Type": "application/json",
@@ -598,7 +532,7 @@ class addnewcompany extends React.Component {
               <Grid item xs={12} sm={12} md={1} lg={1}>
                 <IconButton
                   aria-label="ArrowBackIcon"
-                  // style={{ textAlign: 'left', marginTop: 8 }}
+                // style={{ textAlign: 'left', marginTop: 8 }}
                 >
                   <ArrowBackIcon onClick={(e) => handleClose()} />
                 </IconButton>
@@ -683,22 +617,22 @@ class addnewcompany extends React.Component {
       </Fragment>
     );
 
-    const buttongroupHtml=(
+    const buttongroupHtml = (
       <Fragment>
-         <ButtonGroup
-                    size="small"
-                    variant="text"
-                    aria-label="Action Menu Button group"
-                  >
-                    <Button
-                    startIcon={APIURLS.buttonTitle.save.icon}
-                      className="action-btns"
-                      disabled={this.state.createBtnDisabled}
-                      onClick={handleCreateCompanyClick}
-                    >
-                      {APIURLS.buttonTitle.save.name}
-                    </Button>
-                  </ButtonGroup>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            disabled={this.state.BtnDisable}
+            onClick={handleCreateCompanyClick}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
       </Fragment>
     );
 
@@ -713,7 +647,7 @@ class addnewcompany extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
-          <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
+        <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
 
 
         <Grid className="table-adjust" container spacing={0}>
@@ -739,284 +673,310 @@ class addnewcompany extends React.Component {
                     style={{ minHeight: "40px", maxHeight: "40px" }}
                   >
                     <Typography
-                       
+
                       key=""
                       className="accordion-Header-Title"
                     >
                       General
                     </Typography>
                   </AccordionSummary>
-                  {/* <Divider  className="accordion-Header-underline"/> */}
+
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <div style={{ marginLeft: -14 }}>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
-                              <Table
-                                stickyHeader
-                                size="small"
-                                className="accordion-table"
-                                aria-label="company List table"
-                              >
-                                <TableBody className="tableBody">
-                                  <Tablerowcelltextboxinput
-                                    id="companyName"
-                                    label="Company Name"
-                                    variant="outlined"
+                              <Grid container spacing={0}>
+                                <Grid item xs={12} sm={12} md={12} lg={12}>
+                                  <Table
+                                    stickyHeader
                                     size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("companyName", e)
-                                    }
-                                    value={this.state.companyName}
-                                    error={
-                                      this.state.Validations.companyName
-                                        .errorState
-                                    }
-                                    helperText={
-                                      this.state.Validations.companyName
-                                        .errorMsg
-                                    }
-                                    isMandatory={true}
-                                  />
+                                    className="accordion-table"
+                                    aria-label="company List table"
+                                  >
+                                    <TableBody className="tableBody">
+                                      <Tablerowcelltextboxinput
+                                        id="companyName"
+                                        label="Name"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          updateFormValue("CompanyName", e)
+                                        }
+                                        value={this.state.company.CompanyName}
+                                        error={
+                                          this.state.Validations.companyName
+                                            .errorState
+                                        }
+                                        // helperText={
+                                        //   this.state.Validations.companyName
+                                        //     .errorMsg
+                                        // }
+                                        isMandatory={true}
+                                      />
 
-                                  <Tablerowcelltextboxinput
-                                    id="Address"
-                                    label="Address"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("Address", e)
-                                    }
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50,
-                                    }}
-                                    value={this.state.address}
-                                    error={
-                                      this.state.Validations.address.errorState
-                                    }
-                                    helperText={
-                                      this.state.Validations.address.errorMsg
-                                    }
-                                    isMandatory={true}
-                                  />
+                                      <Tablerowcelltextboxinput
+                                        id="Address"
+                                        label="Address"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          updateFormValue("Address", e)
+                                        }
+                                        InputProps={{
+                                          className: "textFieldCss",
+                                          maxlength: 50,
+                                        }}
+                                        value={this.state.company.Address}
+                                        error={
+                                          this.state.Validations.address.errorState
+                                        }
+                                        // helperText={
+                                        //   this.state.Validations.address.errorMsg
+                                        // }
+                                        isMandatory={true}
+                                      />
 
-                                  <Tablerowcelltextboxinput
-                                    id="Address2"
-                                    label="Address 2"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("Address2", e)
-                                    }
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50,
-                                    }}
-                                    value={this.state.address2}
-                                    error={
-                                      this.state.Validations.address2.errorState
-                                    }
-                                    helperText={
-                                      this.state.Validations.address2.errorMsg
-                                    }
-                                  />
-                                  <Tablerowcelltextboxinput
-                                    id="Address3"
-                                    label="Address 3"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("Address3", e)
-                                    }
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50,
-                                    }}
-                                    value={this.state.address3}
-                                    error={
-                                      this.state.Validations.address3.errorState
-                                    }
-                                    helperText={
-                                      this.state.Validations.address3.errorMsg
-                                    }
-                                  />
-                                  <Tablerowcelltextboxinput
-                                    id="City"
-                                    label="City"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) => updateFormValue("City", e)}
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 50,
-                                    }}
-                                    value={this.state.city}
-                                    error={
-                                      this.state.Validations.city.errorState
-                                    }
-                                    helperText={
-                                      this.state.Validations.city.errorMsg
-                                    }
-                                  />
-                                  <Tablerowcelltextboxinput
-                                    id="Postcode"
-                                    label="Postcode"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("Postcode", e)
-                                    }
-                                    InputProps={{
-                                      className: "textFieldCss",
-                                      maxlength: 10,
-                                    }}
-                                    value={this.state.postcode}
-                                    error={
-                                      this.state.Validations.postcode.errorState
-                                    }
-                                    helperText={
-                                      this.state.Validations.postcode.errorMsg
-                                    }
-                                  />
-                                </TableBody>
-                              </Table>
+                                      <Tablerowcelltextboxinput
+                                        id="Address2"
+                                        label="Address 2"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          updateFormValue("Address2", e)
+                                        }
+                                        InputProps={{
+                                          className: "textFieldCss",
+                                          maxlength: 50,
+                                        }}
+                                        value={this.state.company.Address2}
+                                        error={
+                                          this.state.Validations.address2.errorState
+                                        }
+                                        // helperText={
+                                        //   this.state.Validations.address2.errorMsg
+                                        // }
+                                      />
+                                      <Tablerowcelltextboxinput
+                                        id="Address3"
+                                        label="Address 3"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          updateFormValue("Address3", e)
+                                        }
+                                        InputProps={{
+                                          className: "textFieldCss",
+                                          maxlength: 50,
+                                        }}
+                                        value={this.state.company.Address3}
+                                        error={
+                                          this.state.Validations.address3.errorState
+                                        }
+                                        // helperText={
+                                        //   this.state.Validations.address3.errorMsg
+                                        // }
+                                      />
+                                      <Tablerowcelltextboxinput
+                                        id="City"
+                                        label="City"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) => updateFormValue("City", e)}
+                                        InputProps={{
+                                          className: "textFieldCss",
+                                          maxlength: 50,
+                                        }}
+                                        value={this.state.company.City}
+                                        error={
+                                          this.state.Validations.city.errorState
+                                        }
+                                        helperText={
+                                          this.state.Validations.city.errorMsg
+                                        }
+                                      />
+                                      <Tablerowcelltextboxinput
+                                        id="Postcode"
+                                        label="Postcode"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          updateFormValue("Postcode", e)
+                                        }
+                                        InputProps={{
+                                          className: "textFieldCss",
+                                          maxlength: 10,
+                                        }}
+                                        value={this.state.company.Postcode}
+                                        error={
+                                          this.state.Validations.postcode.errorState
+                                        }
+                                        // helperText={
+                                        //   this.state.Validations.postcode.errorMsg
+                                        // }
+                                      />
+                                    </TableBody>
+                                  </Table>
+                                </Grid>
+                              </Grid>
+
+
                             </Grid>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
-                              <Table
-                                stickyHeader
-                                size="small"
-                                className="accordion-table"
-                                aria-label="company List table"
-                              >
-                                <TableBody className="tableBody">
-                                  <TableRow>
-                                    <TableCell
-                                      align="left"
-                                      className="no-border-table"
-                                    >
-                                      Country<span style={{ color: "red" }}> *</span>
-                                    </TableCell>
-                                    <TableCell
-                                      align="left"
-                                      className="no-border-table"
-                                    >
-                                      <select
-                                        style={{ width: "90%",  }}
-                                        className="dropdown-css"
-                                        id="countrySelect"
-                                        onChange={(e) =>
-                                          updateFormValue("Country", e)
-                                        }
-                                        value={this.state.country}
-                                      >
-                                        <option value="-">Select</option>
-
-                                        {this.state.countryData.map(
-                                          (item, i) => (
-                                            <option
-                                              value={parseInt(item.value)}
-                                            >
-                                              {item.name}
-                                            </option>
-                                          )
-                                        )}
-                                      </select>
-                                      <button
-                                        className="dropdowninputbtn"
-                                        onClick={(e) => openDialog("Country")}
-                                      >
-                                        ...
-                                      </button>
-                                    </TableCell>
-                                  </TableRow>
-                                 
-                                  <TableRow>
-                                    <TableCell
-                                      align="left"
-                                      className="no-border-table"
-                                    >
-                                      State
-                                    </TableCell>
-                                    <TableCell
-                                      align="left"
-                                      className="no-border-table"
-                                    >
-                                      <select
-                                        style={{ width: "90%", height: 30 }}
-                                        className="dropdown-css"
-                                        id="stateSelect"
-                                        onChange={(e) =>
-                                          updateFormValue("State", e)
-                                        }
-                                        value={this.state.state}
-                                      >
-                                        <option value="-">Select</option>
-
-                                        {this.state.stateData.map((item, i) => (
-                                          <option value={parseInt(item.value)}>
-                                            {item.name}
-                                          </option>
-                                        ))}
-                                      </select>
-                                      <button
-                                        className="dropdowninputbtn"
-                                        onClick={(e) => openDialog("State")}
-                                      >
-                                        ...
-                                      </button>
-                                    </TableCell>
-                                  </TableRow>
-                                  <Tablerowcelltextboxinput
-                                    id="PhoneNo"
-                                    label="Phone No"
-                                    variant="outlined"
+                              <Grid container spacing={0}>
+                                <Grid item xs={12} sm={12} md={12} lg={12}>
+                                  <Table
+                                    stickyHeader
                                     size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("PhoneNo", e)
-                                    }
-                                    // InputProps={{
+                                    className="accordion-table"
+                                    aria-label="company List table"
+                                  >
+                                    <TableBody className="tableBody">
+                                      <TableRow>
+                                        <TableCell
+                                          style={{ maxWidth: 100 }}
+                                          align="left"
+                                          className="no-border-table"
+                                        >
+                                          Country<span style={{ color: "red" }}> *</span>
+                                        </TableCell>
+                                        <TableCell
+                                          align="left"
+                                          className="no-border-table"
+                                        >
 
-                                    value={this.state.phoneno}
-                                    error={
-                                      this.state.Validations.phoneno.errorState
-                                    }
-                                    helperText={
-                                      this.state.Validations.phoneno.errorMsg
-                                    }
-                                  />
+                                          <select
+                                            style={{ width: "90%"}}
+                                            className="dropdown-css"
+                                            id="countrySelect"
+                                            onChange={(e) =>
+                                              updateFormValue("CountryID", e)
+                                            }
+                                            value={this.state.company.CountryID}
+                                          >
+                                            <option value="-">Select</option>
 
-                                  <Tablerowcelltextboxinput
-                                    id="Website"
-                                    label="Website"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("Website", e)
-                                    }
-                                    value={this.state.website}
-                                    error={
-                                      this.state.Validations.website.errorState
-                                    }
-                                    helperText={
-                                      this.state.Validations.website.errorMsg
-                                    }
-                                  />
-                                 
-                                  <SwitchInput
-                                    key="IsActive"
-                                    id="IsActive"
-                                    label="IsActive"
-                                    param={this.state.IsActive}
-                                    onChange={(e) =>
-                                      updateFormValue("IsActive", e)
-                                    }
-                                  />
+                                            {this.state.countryData.map(
+                                              (item, i) => (
+                                                <option
+                                                  value={parseInt(item.value)}
+                                                >
+                                                  {item.name}
+                                                </option>
+                                              )
+                                            )}
+                                          </select>
+                                          <button
+                                            className="dropdowninputbtn"
+                                            onClick={(e) => openDialog("Country")}
+                                          >
+                                            ...
+                                          </button>
 
-                            
-                                </TableBody>
-                              </Table>
+
+
+                                        </TableCell>
+                                      </TableRow>
+
+                                      <TableRow>
+                                        <TableCell
+                                          style={{ maxWidth: 100 }}
+                                          align="left"
+                                          className="no-border-table"
+                                        >
+                                          State
+                                        </TableCell>
+                                        <TableCell
+                                          align="left"
+                                          className="no-border-table"
+                                        >
+                                          <select
+                                            style={{ width: "90%", height: 30}}
+                                            className="dropdown-css"
+                                            id="stateSelect"
+                                            onChange={(e) =>
+                                              updateFormValue("StateID", e)
+                                            }
+                                            value={this.state.company.StateID}
+                                          >
+                                            <option value="-">Select</option>
+
+                                            {this.state.stateData.map((item, i) => (
+                                              <option value={parseInt(item.value)}>
+                                                {item.name}
+                                              </option>
+                                            ))}
+                                          </select>
+                                          <button
+                                            className="dropdowninputbtn"
+                                            onClick={(e) => openDialog("State")}
+                                          >
+                                            ...
+                                          </button>
+                                        </TableCell>
+                                      </TableRow>  
+
+
+                                      <Tablerowcelltextboxinput
+                                        id="PhoneNo"
+                                        label="Phone No"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          updateFormValue("PhoneNo", e)
+                                        }
+                                        InputProps={{
+                                          className: "textFieldCss",
+                                          maxlength: 10,
+                                        }}
+
+                                        value={this.state.company.PhoneNo}
+                                        error={
+                                          this.state.Validations.phoneno.errorState
+                                        }
+                                        // helperText={
+                                        //   this.state.Validations.phoneno.errorMsg
+                                        // }
+                                      />
+
+                                      <Tablerowcelltextboxinput
+                                        id="Website"
+                                        label="Website"
+                                        variant="outlined"
+                                        size="small"
+                                        onChange={(e) =>
+                                          updateFormValue("Website", e)
+                                        }
+                                        InputProps={{
+                                          className: "textFieldCss",
+                                          maxlength: 10,
+                                        }}
+                                        value={this.state.company.Website}
+                                        error={
+                                          this.state.Validations.website.errorState
+                                        }
+                                        // helperText={
+                                        //   this.state.Validations.website.errorMsg
+                                        // }
+                                      />
+
+                                      <SwitchInput
+                                        key="IsActive"
+                                        id="IsActive"
+                                        label="IsActive"
+                                        param={this.state.company.IsActive}
+                                        onChange={(e) =>
+                                          updateFormValue("IsActive", e)
+                                        }
+                                      />
+
+
+                                    </TableBody>
+                                  </Table>
+                                </Grid>
+                              </Grid>
+
                             </Grid>
                           </Grid>
                         </div>

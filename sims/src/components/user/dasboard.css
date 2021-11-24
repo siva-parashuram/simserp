@@ -614,6 +614,7 @@ cursor: pointer;
 
 .MuiOutlinedInput-root {   
   border-radius: 0px !important;  
+  min-width: 100% !important;
 }
 
 .texbox-font-css{
@@ -629,6 +630,7 @@ cursor: pointer;
   border-color: rgba(224, 224, 224, 1) !important; 
   font-size: 15px !important;
   font-family: Calibri !important;
+  width: 100% !important;
 }
 
 
