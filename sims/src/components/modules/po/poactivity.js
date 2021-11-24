@@ -399,7 +399,7 @@ class poactivity extends React.Component {
     };
 
 
-
+ 
 
 
 
@@ -449,7 +449,7 @@ class poactivity extends React.Component {
                     // onClick={(e) => AddNew(e)}
                     disabled={this.state.DisableCreatebtn}
                   >
-                    {APIURLS.buttonTitle.add}
+                    {APIURLS.buttonTitle.add.name}
                   </Button>
                 ) : null}
               </div>
