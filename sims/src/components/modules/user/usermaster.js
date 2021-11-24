@@ -332,19 +332,19 @@ class usermaster extends React.Component {
                 >
                   <Button
                     className="action-btns"
-                    startIcon={<AddIcon />}
+                    startIcon={APIURLS.buttonTitle.add.icon}
                     onClick={(e) =>
                       openPage(URLS.URLS.addUser + this.state.urlparams)
                     }
                   >
-                    {APIURLS.buttonTitle.add}
+                    {APIURLS.buttonTitle.add.name}
                   </Button>
                   <Button
                     className="action-btns"
-                    startIcon={<EditIcon />}
+                    startIcon={APIURLS.buttonTitle.edit.icon}
                     onClick={(e) => openPage(this.state.editurl)}
                   >
-                    {APIURLS.buttonTitle.edit}
+                    {APIURLS.buttonTitle.edit.name}
                   </Button>
                 </ButtonGroup>
               </div>

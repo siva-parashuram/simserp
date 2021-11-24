@@ -3,8 +3,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from '@mui/icons-material/Save';
 
 
-// const domain="http://192.168.10.106:44356/";
 const domain = "http://192.168.10.200:8080/";
+
 export const APIURL = {
   FileDownloadTEST: domain + "api/Common/FileDownload",
   FTPUPLOAD: domain + "api/Common/FileUpload",
@@ -152,6 +152,8 @@ export const APIURL = {
   GetSupplierPriceBySuplID: domain + "api/Supplier/GetSupplierPriceBySuplID"
 };
 
+export const CTimeOut = 10;
+export const DFormat = "MM/DD/YYYY";
 
 export const pagination = {
   page: 0,
@@ -201,13 +203,6 @@ export const TypeOfEnterprise = [
 
 ];
 
-
-
-export const CTimeOut = 10;
-export const DFormat = "MM/DD/YYYY";
-
-
-// 0-Sales, 1-Shipping, 2-Account, 3-Internal
 
 
 export const ContactType = [
