@@ -74,6 +74,7 @@ export default function ButtonAppBar() {
 
 
   useEffect(() => {
+   
     if (getCookie(COOKIE.USERID) != null) {
       let token = getCookie(COOKIE.TOKEN);
       let FIRSTNAME = getCookie(COOKIE.FIRSTNAME);
@@ -126,8 +127,26 @@ export default function ButtonAppBar() {
 
 
   const closeWindow = (e) => {
+    updateBRANCH_OPEN();
     window.close();
   };
+
+  const updateBRANCH_OPEN = () => {
+    
+    let BRANCH_OPEN = localStorage.getItem('BRANCH_OPEN');
+    if (BRANCH_OPEN) {
+      var BRANCH_OPENArray = BRANCH_OPEN.split(",").map(Number);
+      var newBRANCH_OPEN = [];
+      for (let i = 0; i < BRANCH_OPENArray.length; i++) {
+        if (BRANCH_OPENArray[i] === parseInt(branchId)) {
+
+        } else {
+          newBRANCH_OPEN.push(BRANCH_OPENArray[i]);
+        }
+      }
+      localStorage.setItem('BRANCH_OPEN', newBRANCH_OPEN.toString());
+    }
+  }
 
   return (
     <Fragment>

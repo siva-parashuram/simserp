@@ -19,12 +19,13 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
+
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Tooltip from '@mui/material/Tooltip';
- 
+import Paper from '@mui/material/Paper';
+
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import Typography from '@mui/material/Typography';
 import axios from "axios";
@@ -57,8 +58,8 @@ class login extends React.Component {
       anchorEl: null,
       open: false,
       clientlog: "",
-      status:'',
-      disableLoginBtn:false
+      status: '',
+      disableLoginBtn: false
     };
     this.handleChange = this.handleChange.bind(this);
 
@@ -111,11 +112,11 @@ class login extends React.Component {
     let token = getCookie(COOKIE.TOKEN);
     if (token === "null" || token == null) {
       this.setState({ isLoggedIn: false });
-     this.props.history.push(URLS.URLS.LoginPage);
-    }else{
+      this.props.history.push(URLS.URLS.LoginPage);
+    } else {
       try {
         let loginState = this.loadState();
-        
+
         this.setState({
           ErrorPrompt: loginState.ErrorPrompt,
           isLoggedIn: true,
@@ -130,7 +131,7 @@ class login extends React.Component {
           open: loginState.open,
           clientlog: loginState.clientlog
         });
-        
+
 
       } catch (ex) {
         // this.logoutUser();
@@ -141,8 +142,8 @@ class login extends React.Component {
       let token = getCookie(COOKIE.USERID);
       if (token === "null" || token == null) {
         if (this.state.isLoggedIn === false) { } else {
-          this.setState({ isLoggedIn: false,disableLoginBtn:false });
-        
+          this.setState({ isLoggedIn: false, disableLoginBtn: false });
+
           this.props.history.push(URLS.URLS.LoginPage);
         }
       }
@@ -154,7 +155,7 @@ class login extends React.Component {
     clearInterval(this.interval);
   }
 
- 
+
 
   getLocalIP() {
     let D = "";
@@ -184,13 +185,13 @@ class login extends React.Component {
   render() {
     const handleClick = (e) => {
       if (this.state.userID === "" || this.state.password === "") { } else {
-        this.setState({ loader: 'showLoginScreenLoader',disableLoginBtn:true });
+        this.setState({ loader: 'showLoginScreenLoader', disableLoginBtn: true });
         const data = {
           loginId: this.state.userID,
           password: this.state.password,
           ClientInfo: clientlog
         };
-        
+
         const headers = {
           "Content-Type": "application/json"
         };
@@ -198,32 +199,32 @@ class login extends React.Component {
 
         axios.post(loginUrl, data, { headers })
           .then(response => {
-                   
+
 
             if (response.status === 200) {
               if (response.data.head.userID === 0) {
-                this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true,disableLoginBtn:false });
+                this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true, disableLoginBtn: false });
                 document.getElementById("password").value = null;
               } else {
-                
+
                 let data = response.data;
                 setAllCookiesAndParams(data);
               }
             } else {
-              this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true,disableLoginBtn:false });
+              this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true, disableLoginBtn: false });
               document.getElementById("password").value = null;
               this.setState({ loader: 'hideLoginScreenLoader' });
             }
           }
           ).catch(error => {
-            this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true,disableLoginBtn:false });
+            this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true, disableLoginBtn: false });
           });
 
       }
     };
     const logoutUser = (e) => {
       processLogout(getCookie(COOKIE.USERID), this.state.token);
-      this.setState({ anchorEl: null, isLoggedIn: false,userID:"",password:""  }, () => {
+      this.setState({ anchorEl: null, isLoggedIn: false, userID: "", password: "" }, () => {
         deleteCookie(COOKIE.USERID, null);
         deleteCookie(COOKIE.TOKEN, null);
         deleteCookie(COOKIE.USERID, null);
@@ -248,7 +249,7 @@ class login extends React.Component {
       let logoutUrl = APIURLS.APIURL.Logout;
       axios.post(logoutUrl, data, { headers })
         .then(response => {
-          this.setState({ disableLoginBtn:false });
+          this.setState({ disableLoginBtn: false });
         }
         ).catch(error => {
 
@@ -284,21 +285,23 @@ class login extends React.Component {
       let name = data.head.firstName;
       let initialName = data.head.firstName.charAt(0).toUpperCase();
 
-      createCookie(COOKIE.TOKEN, data.head.token,APIURLS.CTimeOut);
-      createCookie(COOKIE.USERID, data.head.userID,APIURLS.CTimeOut);
-      createCookie(COOKIE.ISADMIN, data.head.isAdmin,APIURLS.CTimeOut);
-      createCookie(COOKIE.FIRSTNAME, data.head.firstName,APIURLS.CTimeOut);
+      createCookie(COOKIE.TOKEN, data.head.token, APIURLS.CTimeOut);
+      createCookie(COOKIE.USERID, data.head.userID, APIURLS.CTimeOut);
+      createCookie(COOKIE.ISADMIN, data.head.isAdmin, APIURLS.CTimeOut);
+      createCookie(COOKIE.FIRSTNAME, data.head.firstName, APIURLS.CTimeOut);
+      
 
       let companyList = data.companies.companyList;
       this.setState({ userCompanyList: companyList }, function () {
-        this.setState({ token: data.head.token, 
-          loader: 'hideLoginScreenLoader', 
-          data: data, 
-          userInitial: initialName, 
-          name: name, 
-          status:data.head.status,
+        this.setState({
+          token: data.head.token,
+          loader: 'hideLoginScreenLoader',
+          data: data,
+          userInitial: initialName,
+          name: name,
+          status: data.head.status,
           isLoggedIn: true
-         }, () => {
+        }, () => {
           this.saveState(this.state);
         });
 
@@ -309,163 +312,138 @@ class login extends React.Component {
     return (
       <Fragment>
         <Grid container spacing={0} >
-          <Grid item xs={12} sm={3}>
-          <Container style={{ textAlign: 'center', marginTop: 120 }} maxWidth="sm">
-          <center>
-          <div style={{height:50}}></div>
-            <div>
-            <img src={logo} className="App-logo" alt="logo" />
-            </div>
-            <div>&nbsp;</div>
-            {this.state.isLoggedIn ?
-              <div>
-                <Paper>
-                  <Card variant="outlined" className="card-companyList">
-                    <CardHeader
-                      style={{ textAlign: 'left', color: '#01579b' }}
-                      avatar={
-                        <Avatar 
-                        aria-label="recipe" 
-                        style={{ backgroundColor: '#0072bc' }}
-                         >
-                          {this.state.userInitial}
-                        </Avatar>
-                      }
-                      action={
-                        <Tooltip title="Log Out" placement="right">
-                           <IconButton key="action-btn" 
-                           aria-label="settings" 
-                           aria-controls="logout-menu" 
-                           aria-haspopup="true" 
-                           onClick={logoutUser}
-                           >
-                          <LogoutIcon />
-                        </IconButton>
-                        </Tooltip>
-                      }
-                      title={"Hi " + this.state.name}
-                      subheader="Welcome to SIMS"
-                    />
-                    <Divider />
-                    <CardContent style={{ textAlign: 'center', marginTop: 5, }}>
-                    {this.state.status==="DL"?(
-                      <span>You are already logged in. Kindly loggout and login again</span>
-                    ):(<CompanyList state={this.state} />)}
-                      
-                    </CardContent>
-                  </Card>
-                </Paper>
-              </div>
-              :
-              <div>               
-                <div>
-                  <TextField    
-                  className=""             
-                    required
-                    id="userID"
-                    label="User ID"
-                    variant="outlined"
-                    size="small"
-                    onChange={this.handleChange}
-                  />
-                </div>
-                <div>&nbsp;</div>
-                <div>
-                  <TextField
-                    className=""
-                    required
-                    id="password"
-                    label="Password"
-                    type="password"
-                    variant="outlined"
-                    size="small"
-                    onChange={this.handleChange}
-                   
-                  />
-                </div>
-                <div>&nbsp;</div>
-                <div>
-                  <Button
-                    variant="contained"
-                    endIcon={<ArrowForward />}
-                    style={{ background: '#0072bc', color: '#fff' }}
-                    onClick={handleClick}
-                    disabled={this.state.disableLoginBtn}
-                  >
-                    LOGIN
-                  </Button>
-                </div>
+          <Grid item xs={12} sm={12} md={3} lg={3} >
+            <Grid container spacing={0} >
+              <Grid item xs={12} sm={12} md={12} lg={12} >
+                <Container style={{ textAlign: 'center', marginTop: this.state.isLoggedIn ? 50 : 140 }} maxWidth="sm">
+                  <center>
+                    <div style={{ height: 50 }}></div>
+                    <div>
+                      <img src={logo} className="App-logo" alt="logo" />
+                    </div>
+                    <div>&nbsp;</div>
+                    {this.state.isLoggedIn ?
+                      <div>
+                        <Paper>
+                          <Card variant="outlined" className="card-companyList">
+                            <CardHeader
+                              style={{ textAlign: 'left', color: '#01579b' }}
+                              avatar={
+                                <Avatar
+                                  aria-label="recipe"
+                                  style={{ backgroundColor: '#0072bc' }}
+                                >
+                                  {this.state.userInitial}
+                                </Avatar>
+                              }
+                              action={
+                                <Tooltip title="Log Out" placement="right">
+                                  <IconButton key="action-btn"
+                                    aria-label="settings"
+                                    aria-controls="logout-menu"
+                                    aria-haspopup="true"
+                                    onClick={logoutUser}
+                                  >
+                                    <LogoutIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              }
+                              title={"Hi " + this.state.name}
+                              subheader="Welcome to SIMS"
+                            />
+                            <Divider />
+                            <CardContent style={{ textAlign: 'center', marginTop: 5, }}>
+                              {this.state.status === "DL" ? (
+                                <span>You are already logged in. Kindly loggout and login again</span>
+                              ) : (<CompanyList state={this.state} />)}
 
-               
-  
-              </div>
-            }
-            <div>&nbsp;</div>
-            <Divider />
-            <div className={this.state.loader}>
-              <LinearProgress />
-            </div>
-             <div className="spacing-div"></div>
-            <div style={{textAlign:'left'}}>
-                  <Typography  variant="h6" className="login-thought">
-                    <span className="login-thought">
-                       
-                      <span>
-                        Life is like a camera......
-                        Focus on what's important,
-                        Capture the good times,
-                        Develop from the negatives,
-                        And if things don't work out,
-                        Take another Shot
-                      </span>
-                                            
-                    </span>
-                     <div  style={{textAlign:'right'}}  className="login-thought">
-                     <span style={{textAlign:'right',color:'#0072bc'}}>-Team HR</span>
-                     </div>
-                    
-                  </Typography>
-            </div>
-  
-            <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
-                <Alert onClose={closeErrorPrompt} severity="error">Login Failed!</Alert>
-              </Snackbar>
-  
-            <Menu
-              key="u-l-m"
-              id="logout-menu"
-              anchorEl={this.state.anchorEl}
-              keepMounted
-              open={Boolean(this.state.anchorEl)}
-              onClose={menuClose}
-              PaperProps={{
-                style: {
-                  width: '15ch',
-                  marginLeft: 50
-                },
-              }}
-            >
-              <MenuItem key="logout" onClick={logoutUser}>Log out</MenuItem>
-            </Menu>
-            </center>
-          </Container>
-        
-        
+                            </CardContent>
+                          </Card>
+                        </Paper>
+                      </div>
+                      :
+                      <div>
+                        <div>
+                          <TextField
+                            className=""
+                            required
+                            id="userID"
+                            // label="User ID"
+                            variant="outlined"
+                            size="small"
+                            placeholder="User ID"
+                            onChange={this.handleChange}
+                          />
+                        </div>
+                        <div>&nbsp;</div>
+                        <div>
+                          <TextField
+                            className=""
+                            required
+                            id="password"
+                            // label="Password"
+                            type="password"
+                            variant="outlined"
+                            size="small"
+                            placeholder="Password"
+                            onChange={this.handleChange}
+                          />
+                        </div>
+                        <div>&nbsp;</div>
+                        <div>
+                          <Button
+                            variant="contained"
+                            endIcon={<ArrowForward />}
+                            style={{ background: '#0072bc', color: '#fff' }}
+                            onClick={handleClick}
+                            disabled={this.state.disableLoginBtn}
+                          >
+                            LOGIN
+                          </Button>
+                        </div>
+                      </div>
+                    }
+                    <div>&nbsp;</div>
+                    <div className={this.state.loader}>
+                      <LinearProgress />
+                    </div>
+
+                    <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
+                      <Alert onClose={closeErrorPrompt} severity="error">Login Failed!</Alert>
+                    </Snackbar>
+
+                    <Menu
+                      key="u-l-m"
+                      id="logout-menu"
+                      anchorEl={this.state.anchorEl}
+                      keepMounted
+                      open={Boolean(this.state.anchorEl)}
+                      onClose={menuClose}
+                      PaperProps={{
+                        style: {
+                          width: '15ch',
+                          marginLeft: 50
+                        },
+                      }}
+                    >
+                      <MenuItem key="logout" onClick={logoutUser}>Log out</MenuItem>
+                    </Menu>
+                  </center>
+                </Container>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={9}  >
+          <Grid item xs={12} sm={12} md={9} lg={9}>
             <Grid container>
-              <Grid item xs={12} sm={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Box>
                   <img src={Sivamap} className="siva-map-img" alt="logo" />
                 </Box>
               </Grid>
-            </Grid>            
+            </Grid>
           </Grid>
         </Grid>
-      
-        
-      
-        </Fragment>
+      </Fragment>
     );
   }
 }

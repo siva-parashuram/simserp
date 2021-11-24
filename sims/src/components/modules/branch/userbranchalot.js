@@ -184,8 +184,7 @@ class userbranchalot extends React.Component {
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       let data = {
-        validUser: ValidUser,
-        UserID: userId,
+        validUser: ValidUser,      
         BranchID: branch,
       };
       const headers = {
