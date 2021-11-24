@@ -783,6 +783,7 @@ class addnewcompany extends React.Component {
                                       this.state.Validations.companyName
                                         .errorMsg
                                     }
+                                    isMandatory={true}
                                   />
 
                                   <Tablerowcelltextboxinput
@@ -804,6 +805,7 @@ class addnewcompany extends React.Component {
                                     helperText={
                                       this.state.Validations.address.errorMsg
                                     }
+                                    isMandatory={true}
                                   />
 
                                   <Tablerowcelltextboxinput
@@ -900,7 +902,7 @@ class addnewcompany extends React.Component {
                                       align="left"
                                       className="no-border-table"
                                     >
-                                      Country
+                                      Country<span style={{ color: "red" }}> *</span>
                                     </TableCell>
                                     <TableCell
                                       align="left"

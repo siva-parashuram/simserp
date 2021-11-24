@@ -936,6 +936,7 @@ class editcompany extends React.Component {
                                 helperText={
                                   this.state.Validations.companyName.errorMsg
                                 }
+                                isMandatory={true}
                               />
 
                               <Tablerowcelltextboxinput
@@ -955,6 +956,7 @@ class editcompany extends React.Component {
                                 helperText={
                                   this.state.Validations.address.errorMsg
                                 }
+                                isMandatory={true}
                               />
 
                               <Tablerowcelltextboxinput
@@ -1042,8 +1044,9 @@ class editcompany extends React.Component {
                                 <TableCell
                                   align="left"
                                   className="no-border-table"
+                                  isMandatory={true}
                                 >
-                                  Country
+                                  Country<span style={{ color: "red" }}> *</span>
                                 </TableCell>
                                 <TableCell
                                   align="left"
@@ -1057,6 +1060,7 @@ class editcompany extends React.Component {
                                       updateFormValue("Country", e)
                                     }
                                     value={this.state.company.CountryID}
+                                   
                                   >
                                     <option value="-" disabled>
                                       Select
