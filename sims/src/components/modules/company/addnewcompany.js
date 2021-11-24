@@ -225,9 +225,10 @@ class addnewcompany extends React.Component {
       if (id === "companyName") {
         let duplicateExist = CF.chkDuplicateName(
           this.state.companyData,
-          "companyName",
+          "CompanyName",
           e.target.value
         );
+        console.log("Duplicate",duplicateExist)
 
         if (
           e.target.value === "" ||

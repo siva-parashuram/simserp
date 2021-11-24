@@ -359,7 +359,7 @@ class editcompany extends React.Component {
         company.CompanyName = e.target.value;
         let duplicateExist = CF.chkDuplicateButExcludeName(
           this.state.companyData,
-          "companyName",
+          "CompanyName",
           this.state.oldName,
           e.target.value
         );
@@ -655,7 +655,7 @@ class editcompany extends React.Component {
         this.setState({ IsActive: e.target.checked,company:company });
       }
 
-      // validate();
+      validate();
     };
 
     const validate = () => {

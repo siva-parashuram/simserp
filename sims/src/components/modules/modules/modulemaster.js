@@ -16,13 +16,11 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 
-import EditIcon from "@mui/icons-material/Edit";
 import Addpage from "./addpage";
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
-
 
 class modulemasters extends React.Component {
   constructor(props) {
@@ -30,8 +28,10 @@ class modulemasters extends React.Component {
     this.state = {
       pagination: {
         page: 0,
-        rowsPerPage: 10,
+        rowsPerPage: APIURLS.pagination.rowsPerPage,
       },
+      page: 1,
+      rowsPerPage: 10,
       initialCss: "",
       urlparams: "",
       ProgressLoader: false,
@@ -91,7 +91,8 @@ class modulemasters extends React.Component {
   }
 
   InitialhandleRowClick(e, item, id) {
-    let editUrl =
+    try{
+      let editUrl =
       URLS.URLS.editModule +
       this.state.urlparams +
       "&moduleId=" +
@@ -100,12 +101,17 @@ class modulemasters extends React.Component {
     this.InitialremoveIsSelectedRowClasses();
     this.InitialgetPageList(item.moduleId);
     document.getElementById(id).classList.add("selectedRow");
+    }catch(err){}
+   
   }
 
   InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.modules.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
+    try{
+      for (let i = 0; i < this.state.modules.length; i++) {
+        document.getElementById("row_" + i).className = "";
+      }
+    }catch(err){}
+   
   }
 
   InitialgetPageList(moduleId) {
@@ -158,7 +164,8 @@ class modulemasters extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      let editUrl =
+      try{
+        let editUrl =
         URLS.URLS.editModule +
         this.state.urlparams +
         "&moduleId=" +
@@ -169,12 +176,17 @@ class modulemasters extends React.Component {
 
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
+      }catch(err){}
+     
     };
 
     const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.modules.length; i++) {
-        document.getElementById("row_" + i).className = "";
+      try{
+        for (let i = 0; i < this.state.modules.length; i++) {
+          document.getElementById("row_" + i).className = "";
       }
+     
+      }catch(err){}
     };
 
     const getPageList = (moduleId) => {
@@ -230,6 +242,23 @@ class modulemasters extends React.Component {
       window.location = url;
     };
 
+    const handlePageChange = (event, newPage) => {
+      this.InitialremoveIsSelectedRowClasses();
+      console.log("handlePageChange > event > ", event);
+      console.log("handlePageChange > newPage > ", newPage);
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
+    };
+
+    const getPageData = (data) => {
+      let rows = data;
+      let page = parseInt(this.state.pagination.page);
+      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
+
+      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    };
+
     const breadcrumbHtml = (
       <Fragment>
         <Breadcrumb
@@ -244,7 +273,6 @@ class modulemasters extends React.Component {
 
     const buttongroupHtml = (
       <Fragment>
-        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
         <ButtonGroup
           size="small"
           variant="text"
@@ -277,96 +305,93 @@ class modulemasters extends React.Component {
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
         />
-       
-          
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={4} lg={4}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={10} lg={10}>
-                  {this.state.modules.length > 0 ? (
-                    <Fragment>
-                      <Table
-                        stickyHeader
-                        size="small"
-                        className=""
-                        aria-label="Country List table"
-                      >
-                        <TableHead className="table-header-background">
-                          <TableRow>
-                            <TableCell className="table-header-font">
-                              #
-                            </TableCell>
-                            <TableCell
-                              className="table-header-font"
-                              align="left"
-                            >
-                              Name
-                            </TableCell>
-                            <TableCell
-                              className="table-header-font"
-                              align="left"
-                            >
-                              Description
-                            </TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody className="tableBody">
-                          {this.state.modules
-                            ? this.state.modules.map((item, i) => (
-                                <TableRow
-                                  id={"row_" + i}
-                                  className={this.state.initialCss}
-                                  hover
-                                  key={i}
-                                  onClick={(event) =>
-                                    handleRowClick(event, item, "row_" + i)
-                                  }
-                                >
-                                  <TableCell align="left">
-                                    <a
-                                      className="LINK tableLink"
-                                      href={
-                                        URLS.URLS.editModule +
-                                        this.state.urlparams +
-                                        "&moduleId=" +
-                                        item.moduleId
-                                      }
-                                    >
-                                      {URLS.PREFIX.moduleID + item.moduleId}
-                                    </a>
-                                  </TableCell>
-                                  <TableCell align="left">
-                                    {item.name}
-                                  </TableCell>
-                                  <TableCell align="left">
-                                    {item.description}
-                                  </TableCell>
-                                </TableRow>
-                              ))
-                            : null}
-                        </TableBody>
-                      </Table>
-                    </Fragment>
-                  ) : (
-                    <Tableskeleton />
-                  )}
-                </Grid>
-              </Grid>
-            </Grid>
 
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <Grid style={{ marginTop: "20px" }} container spacing={1}>
-                <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Addpage
-                    data={{
-                      moduleId: this.state.moduleId,
-                      rows: this.state.pageLinkRow,
-                    }}
-                  />
-                </Grid>
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={4} lg={4}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={10} lg={10}>
+                {this.state.modules.length > 0 ? (
+                  <Fragment>
+                    <Table
+                      stickyHeader
+                      size="small"
+                      className=""
+                      aria-label="Country List table"
+                    >
+                      <TableHead className="table-header-background">
+                        <TableRow>
+                          <TableCell className="table-header-font">#</TableCell>
+                          <TableCell className="table-header-font" align="left">
+                            Name
+                          </TableCell>
+                          <TableCell className="table-header-font" align="left">
+                            Description
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody className="tableBody">
+                        {this.state.modules
+                          ? getPageData(this.state.modules).map((item, i) => (
+                              <TableRow
+                                id={"row_" + i}
+                                className={this.state.initialCss}
+                                hover
+                                key={i}
+                                onClick={(event) =>
+                                  handleRowClick(event, item, "row_" + i)
+                                }
+                              >
+                                <TableCell align="left">
+                                  <a
+                                    className="LINK tableLink"
+                                    href={
+                                      URLS.URLS.editModule +
+                                      this.state.urlparams +
+                                      "&moduleId=" +
+                                      item.moduleId
+                                    }
+                                  >
+                                    {URLS.PREFIX.moduleID + item.moduleId}
+                                  </a>
+                                </TableCell>
+                                <TableCell align="left">{item.name}</TableCell>
+                                <TableCell align="left">
+                                  {item.description}
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          : null}
+                      </TableBody>
+                    </Table>
+                    <TablePagination
+                      rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                      component="div"
+                      count={this.state.modules.length}
+                      rowsPerPage={this.state.pagination.rowsPerPage}
+                      page={this.state.pagination.page}
+                      onPageChange={handlePageChange}
+                    />
+                  </Fragment>
+                ) : (
+                  <Tableskeleton />
+                )}
               </Grid>
             </Grid>
           </Grid>
+
+          <Grid xs={12} sm={12} md={8} lg={8}>
+            <Grid style={{ marginTop: "20px" }} container spacing={1}>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Addpage
+                  data={{
+                    moduleId: this.state.moduleId,
+                    rows: this.state.pageLinkRow,
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Fragment>
     );
   }

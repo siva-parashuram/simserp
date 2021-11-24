@@ -541,7 +541,7 @@ class customeractivity extends React.Component {
         let data = response.data;
         if (response.status === 200 || response.status === 201) {
           this.setState({ Customer: data, ProgressLoader: true });
-          this.setInitialParamsForEdit()
+          this.setInitialParamsForEdit();
         } else {
           this.setState({
             ErrorPrompt: true,
@@ -556,7 +556,7 @@ class customeractivity extends React.Component {
   };
 
   setInitialParamsForEdit = () => {
-    let CountryID =this.state.Customer.CountryID;
+    let CountryID = this.state.Customer.CountryID;
     this.getStateByCountry(CountryID);
   };
 
@@ -1465,6 +1465,7 @@ class customeractivity extends React.Component {
                             <Grid container spacing={0}>
                               <Grid item xs={12} sm={12} md={10} lg={10}>
                                 <select
+                                  style={{ width: "90%", height: 30 }}
                                   className="dropdown-css"
                                   id="SalesPersonID"
                                   onChange={(e) =>
@@ -1503,6 +1504,7 @@ class customeractivity extends React.Component {
                             <Grid container spacing={0}>
                               <Grid item xs={12} sm={12} md={10} lg={10}>
                                 <select
+                                  style={{ width: "90%", height: 30 }}
                                   className="dropdown-css"
                                   id="CustomerCategoryID"
                                   onChange={(e) =>
@@ -2451,21 +2453,23 @@ class customeractivity extends React.Component {
                   >
                     {this.state.type === "add" ? (
                       <Button
+                        startIcon={APIURLS.buttonTitle.save.icon}
                         className="action-btns"
                         onClick={(e) => AddNew(e)}
                         disabled={this.state.DisableCreatebtn}
                       >
-                        {APIURLS.buttonTitle.add}
+                        {APIURLS.buttonTitle.save.name}
                       </Button>
                     ) : null}
                     {this.state.type === "edit" ? (
                       <div>
                         <Button
+                          startIcon={APIURLS.buttonTitle.save.icon}
                           className="action-btns"
                           onClick={(e) => updateCustomer(e)}
                           disabled={this.state.DisableUpdatebtn}
                         >
-                          {APIURLS.buttonTitle.update}
+                          {APIURLS.buttonTitle.save.name}
                         </Button>
                         <Button
                           className="action-btns"

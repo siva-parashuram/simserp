@@ -21,7 +21,7 @@ class tablerowcelldropdown extends React.Component {
             <TableCell align="left" className="no-border-table">
               <select
                  className="dropdown-css"
-                style={{minWidth:"80%",height:"30px"}}
+                style={{minWidth: "100%",height:"30px"}}
                 id={this.props.id}
                 label={this.props.label}
                 defaultValue={isNaN(this.props.value) ? this.props.value : parseInt(this.props.value)}

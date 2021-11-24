@@ -26,6 +26,8 @@ import Assignpagestorole from "./assignpagestorole";
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+
 
 let rows = [];
 
@@ -133,7 +135,7 @@ class rolemaster extends React.Component {
       .catch((error) => {
         this.setState({ pages: [], ProgressLoader: true });
       });
-  };
+  }
   InitialprocessPageData(data) {
     let rows = [];
     var i = 0,
@@ -170,7 +172,7 @@ class rolemaster extends React.Component {
       i++;
     }
     this.setState({ pages: rows });
-  };
+  }
 
   render() {
     const handleRowClick = (e, item, id) => {
@@ -256,69 +258,57 @@ class rolemaster extends React.Component {
       }
     };
 
-
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Role Master"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.add.icon}
+            onClick={(e) => openPage(URLS.URLS.addRole + this.state.urlparams)}
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            onClick={(e) => openPage(this.state.editurl)}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
-
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Role Master"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addRole + this.state.urlparams)
-                    }
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<EditIcon />}
-                    onClick={(e) => openPage(this.state.editurl)}
-                  >
-                    {APIURLS.buttonTitle.edit}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+      
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={4} lg={4}>
               <Grid container spacing={0}>
@@ -333,8 +323,13 @@ class rolemaster extends React.Component {
                       >
                         <TableHead className="table-header-background">
                           <TableRow>
-                            <TableCell className="table-header-font">#</TableCell>
-                            <TableCell className="table-header-font" align="left">
+                            <TableCell className="table-header-font">
+                              #
+                            </TableCell>
+                            <TableCell
+                              className="table-header-font"
+                              align="left"
+                            >
                               Role Name
                             </TableCell>
                           </TableRow>
@@ -342,31 +337,33 @@ class rolemaster extends React.Component {
                         <TableBody className="tableBody">
                           {this.state.roles
                             ? this.state.roles.map((item, i) => (
-                              <TableRow
-                                id={"row_" + i}
-                                className={this.state.initialCss}
-                                hover
-                                key={i}
-                                onClick={(event) =>
-                                  handleRowClick(event, item, "row_" + i)
-                                }
-                              >
-                                <TableCell align="left">
-                                  <a
-                                    className="LINK tableLink"
-                                    href={
-                                      URLS.URLS.editModule +
-                                      this.state.urlparams +
-                                      "&roleID=" +
-                                      item.moduleId
-                                    }
-                                  >
-                                    {URLS.PREFIX.roleID + item.roleId}
-                                  </a>
-                                </TableCell>
-                                <TableCell align="left">{item.name}</TableCell>
-                              </TableRow>
-                            ))
+                                <TableRow
+                                  id={"row_" + i}
+                                  className={this.state.initialCss}
+                                  hover
+                                  key={i}
+                                  onClick={(event) =>
+                                    handleRowClick(event, item, "row_" + i)
+                                  }
+                                >
+                                  <TableCell align="left">
+                                    <a
+                                      className="LINK tableLink"
+                                      href={
+                                        URLS.URLS.editModule +
+                                        this.state.urlparams +
+                                        "&roleID=" +
+                                        item.moduleId
+                                      }
+                                    >
+                                      {URLS.PREFIX.roleID + item.roleId}
+                                    </a>
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {item.name}
+                                  </TableCell>
+                                </TableRow>
+                              ))
                             : null}
                         </TableBody>
                       </Table>
@@ -374,30 +371,26 @@ class rolemaster extends React.Component {
                   ) : (
                     <Tableskeleton />
                   )}
-
                 </Grid>
               </Grid>
             </Grid>
             <Grid xs={12} sm={12} md={8} lg={8}>
-              <Grid style={{ marginTop: "40px" }} container spacing={0}>
+              <Grid style={{ marginTop: 40 }} container spacing={0}>
                 <Grid xs={12} sm={12} md={12} lg={12}>
                   <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11}>
                       <Assignrole
                         roleId={this.state.roleId}
                         rows={this.state.pages}
-
                       />
                     </Grid>
                   </Grid>
 
                   <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11}>
-                      <div style={{ height: 100 }}>&nbsp;
-                      </div>
+                      <div style={{ height: 100 }}>&nbsp;</div>
                     </Grid>
                   </Grid>
-
 
                   {/* <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11}>
@@ -413,7 +406,6 @@ class rolemaster extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-        </div>
       </Fragment>
     );
   }

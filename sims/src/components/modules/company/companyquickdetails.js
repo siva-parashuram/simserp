@@ -26,7 +26,8 @@ class companyquickdetails extends React.Component {
             showDetails: true,
             showAttachments: false,
             detailsUnderlineBtnCss: "btn-bottom-border-color",  //btn-bottom-border-color
-            attachmentUnderlineBtnCss: ""
+            attachmentUnderlineBtnCss: "",
+            data:this.props.data
         };
     }
     render() {
@@ -51,7 +52,7 @@ class companyquickdetails extends React.Component {
                 <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
 
-                        {this.props.data.length > 0 ? (
+                        {(this.state.data.length) > 0 ? (
                             <Branchlistbycompany data={this.props.data} />
                         ) : "No Branches"}
 

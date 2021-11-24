@@ -61,7 +61,7 @@ class editstate extends React.Component {
       CountryID: 0,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      disableUpdateBtn: true,
+      disableUpdateBtn: false,
       duplicate: false,
       Validations: {
         name: { errorState: false, errorMsg: "" },
@@ -452,67 +452,80 @@ class editstate extends React.Component {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="company List table"
-                  >
-                    <TableBody className="tableBody">
-                      <Tablerowcelltextboxinput
-                        id="Name"
-                        label="State Name"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Name", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.name}
-                        error={this.state.Validations.name.errorState}
-                        helperText={this.state.Validations.name.errorMsg}
-                      />
-                      <Tablerowcelltextboxinput
-                        id="Code"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Code", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 5,
-                        }}
-                        value={this.state.code}
-                        error={this.state.Validations.code.errorState}
-                        helperText={this.state.Validations.code.errorMsg}
-                      />
-                      <Tablerowcelltextboxinput
-                        id="GSTCode"
-                        label="GST Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("GSTCode", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 2,
-                        }}
-                        value={this.state.gstcode}
-                        error={this.state.Validations.gstcode.errorState}
-                        helperText={this.state.Validations.gstcode.errorMsg}
-                      />
+              <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <Table
+                      stickyHeader
+                      size="small"
+                      className="accordion-table"
+                      aria-label="company List table"
+                    >
+                      <TableBody className="tableBody">
+                        <Tablerowcelltextboxinput
+                          id="Name"
+                          label="State Name"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Name", e)}
+                          // InputProps={{
+                          //   className: "textFieldCss",
+                          //   maxlength: 50,
+                          // }}
+                          value={this.state.name}
+                          error={this.state.Validations.name.errorState}
+                          helperText={this.state.Validations.name.errorMsg}
+                        />
 
-                      <DropdownInput
-                        id="CountryID"
-                        label="Country"
-                        onChange={(e) => updateFormValue("CountryID", e)}
-                        options={this.state.countryData}
-                        value={this.state.countryId}
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                        <Tablerowcelltextboxinput
+                          id="Code"
+                          label="Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Code", e)}
+                          // InputProps={{
+                          //   className: "textFieldCss",
+                          //   maxlength: 5,
+                          // }}
+                          value={this.state.code}
+                          error={this.state.Validations.code.errorState}
+                          helperText={this.state.Validations.code.errorMsg}
+                        />
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <Table
+                      stickyHeader
+                      size="small"
+                      className="accordion-table"
+                      aria-label="company List table"
+                    >
+                      <TableBody className="tableBody">
+                        <Tablerowcelltextboxinput
+                          id="GSTCode"
+                          label="GST Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("GSTCode", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 20,
+                          }}
+                          value={this.state.gstcode}
+                          error={this.state.Validations.gstcode.errorState}
+                          helperText={this.state.Validations.gstcode.errorMsg}
+                        />
+                        <DropdownInput
+                          id="CountryID"
+                          label="Country"
+                          onChange={(e) => updateFormValue("CountryID", e)}
+                          options={this.state.countryData}
+                          value={this.state.countryId}
+                        />
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Grid>

@@ -16,7 +16,6 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 
-
 class assignrole extends React.Component {
   constructor(props) {
     super(props);
@@ -29,12 +28,11 @@ class assignrole extends React.Component {
       ProgressLoader: true,
       updateBtnDisable: false,
       rows: [],
-      roleId:0,
+      roleId: 0,
     };
   }
 
   componentDidMount() {
-
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -52,15 +50,14 @@ class assignrole extends React.Component {
     });
   }
 
-
-
   render() {
-
     const performCheckAll = (item, e, bool) => {
-     this.setState({roleId:this.props.roleId});
+      this.setState({ roleId: this.props.roleId });
       console.log("performCheckAll > item > ", item);
-      let rows=[];
-      this.state.rows.length>0?rows=this.state.rows:rows=this.props.rows;
+      let rows = [];
+      this.state.rows.length > 0
+        ? (rows = this.state.rows)
+        : (rows = this.props.rows);
       console.log("performCheckAll > rows > ", rows);
       let newRows = [];
       for (let i = 0; i < rows.length; i++) {
@@ -73,9 +70,9 @@ class assignrole extends React.Component {
             row.IsPrint = true;
             row.IsUpdate = true;
             row.IsView = true;
-            row.isChecked=bool;
+            row.isChecked = bool;
           } else {
-            row.isChecked=bool;
+            row.isChecked = bool;
             row.chkAll = bool;
             row.IsCreate = false;
             row.IsDelete = false;
@@ -89,15 +86,17 @@ class assignrole extends React.Component {
         }
       }
       this.setState({ rows: newRows });
-    }
+    };
 
     const chkPermission = (e, item, col, bool) => {
-      this.setState({roleId:this.props.roleId});
+      this.setState({ roleId: this.props.roleId });
       console.log("chkPermission > item > ", item);
       console.log("chkPermission > col > ", col);
       console.log("chkPermission > bool > ", bool);
       let rows = [];
-      this.state.rows.length > 0 ? rows = this.state.rows : rows = this.props.rows;
+      this.state.rows.length > 0
+        ? (rows = this.state.rows)
+        : (rows = this.props.rows);
       console.log("chkPermission > rows > ", rows);
       let newRows = [];
       for (let i = 0; i < rows.length; i++) {
@@ -130,9 +129,7 @@ class assignrole extends React.Component {
         }
       }
       this.setState({ rows: newRows });
-    }
-
-    
+    };
 
     const getProcessedRoleDetailList = (selectedRows) => {
       let rows = selectedRows;
@@ -153,22 +150,23 @@ class assignrole extends React.Component {
       return ROWS;
     };
 
-    const getSelectedRows=()=>{
-      let newRows=[];  
+    const getSelectedRows = () => {
+      let newRows = [];
       let rows = [];
-      this.state.rows.length > 0 ? rows = this.state.rows : rows = this.props.rows;
+      this.state.rows.length > 0
+        ? (rows = this.state.rows)
+        : (rows = this.props.rows);
       for (let i = 0; i < rows.length; i++) {
-        if(rows[i].isChecked === true){
+        if (rows[i].isChecked === true) {
           newRows.push(rows[i]);
         }
       }
       return newRows;
-    }
-
+    };
 
     const handleUpdate = () => {
-      this.setState({roleId:this.props.roleId});
-      let selectedRows=getSelectedRows();
+      this.setState({ roleId: this.props.roleId });
+      let selectedRows = getSelectedRows();
       this.setState({ ProgressLoader: false });
       let RoleDetailList = getProcessedRoleDetailList(selectedRows);
 
@@ -179,10 +177,8 @@ class assignrole extends React.Component {
       data.validUser = ValidUser;
       data.RoleId = this.props.roleId;
       data.RoleDetailLists = RoleDetailList;
-      console.log("handleUpdate > data > ",data);
- 
+      console.log("handleUpdate > data > ", data);
 
-     
       const headers = {
         "Content-Type": "application/json",
       };
@@ -201,7 +197,6 @@ class assignrole extends React.Component {
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -233,8 +228,7 @@ class assignrole extends React.Component {
     };
 
     return (
-      <Fragment>   
-
+      <Fragment>
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
@@ -242,26 +236,32 @@ class assignrole extends React.Component {
         <SuccessSnackBar
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
-        />     
+        />
 
         {this.props.rows ? (
-          <div style={{ marginTop: -50 }}>
+          <div style={{ marginTop: -30 }}>
             <Grid container spacing={3}>
               <Grid xs={12} sm={12} md={3} lg={3}>
                 <Button
+                  className="action-btns"
+                  startIcon={APIURLS.buttonTitle.save.icon}
                   style={{ marginLeft: 10 }}
-                  disabled={this.props.rows.length>0 || this.state.rows.length>0?false:true}
+                  disabled={
+                    this.props.rows.length > 0 || this.state.rows.length > 0
+                      ? false
+                      : true
+                  }
                   onClick={handleUpdate}
                 >
-                  Update
+                  {APIURLS.buttonTitle.save.name}
                 </Button>
               </Grid>
             </Grid>
             <div style={{ height: 20 }}></div>
-            <div style={{marginLeft:10}}>
-            <Loader ProgressLoader={this.state.ProgressLoader} />
+            <div style={{ marginLeft: 10 }}>
+              <Loader ProgressLoader={this.state.ProgressLoader} />
             </div>
-            
+
             <div style={{ height: 20 }}></div>
             <Table
               stickyHeader
@@ -299,287 +299,353 @@ class assignrole extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody className="tableBody">
-                {this.props.roleId ===this.state.roleId && this.state.rows.length > 0 ? (<Fragment>
-                  {getPageData(this.state.rows).map((item, i) => (
-                  <TableRow
-                    id={"row_" + i}
-                    hover
-                    key={i}
-                  >
-                    <TableCell align="left">
-                    {item.isChecked === true || item.chkAll === true || (item.IsCreate === true || item.IsUpdate === true || item.IsDelete === true || item.IsView === true || item.IsPrint === true)  ? (
-                        <input
-                          id={"chkRow_" + item.id}
-                          type="checkbox"
-                          checked={true}
-                          onClick={(e) => performCheckAll(item, e, false)}
-                        />
-                      ) : (
-                        <input
-                          id={"chkRow_" + item.id}
-                          type="checkbox"
-                          checked={false}
-                          onClick={(e) => performCheckAll(item, e, true)}
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell align="left">{item.moduleName}</TableCell>
-                    <TableCell align="left">{item.pageName}</TableCell>
-                    <TableCell  className="chk-all-cell-css" align="left">
-                      {item.chkAll === true ? (
-                        <input
-                          id={"chkAll_" + item.id}
-                          type="checkbox"
-                          checked={true}
-                          onClick={(e) => performCheckAll(item, e, false)}
-                        />
-                      ) : (
-                        <input
-                          id={"chkAll_" + item.id}
-                          type="checkbox"
-                          checked={false}
-                        onClick={(e) => performCheckAll(item, e, true)}
-                        />
-                      )}
-                    </TableCell>
-                      <TableCell  className="chk-all-cell-css" align="left">
-                        {item.IsCreate === true ? (
-                          <input
-                            id={"IsCreate_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => chkPermission(e, item, "IsCreate", false)}
-                          />
-                        ) : (
-                          <input
-                            id={"IsCreate_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={false}
-                            onClick={(e) => chkPermission(e, item, "IsCreate", true)}
-                          />
-                        )}
-                      </TableCell>
-                    <TableCell className="chk-all-cell-css" align="left">
-                      {item.IsUpdate === true ? (
-                        <input
-                          id={"IsUpdate_checkbox_" + item.id}
-                          type="checkbox"
-                          checked={true}
-                        onClick={(e) => chkPermission(e, item, "IsUpdate", false)}
-                        />
-                      ) : (
-                        <input
-                          id={"IsUpdate_checkbox_" + item.id}
-                          type="checkbox"
-                          checked={false}
-                        onClick={(e) =>
-                          chkPermission(e, item, "IsUpdate", true)
-                        }
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell className="chk-all-cell-css" align="left">
-                      {item.IsDelete === true ? (
-                        <input
-                          id={"IsDelete_checkbox_" + item.id}
-                          type="checkbox"
-                          checked={true}
-                        onClick={(e) => chkPermission(e, item, "IsDelete", false)}
-                        />
-                      ) : (
-                        <input
-                          id={"IsDelete_checkbox_" + item.id}
-                          type="checkbox"
-                          checked={false}
-                        onClick={(e) =>
-                          chkPermission(e, item, "IsDelete", true)
-                        }
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell className="chk-all-cell-css" align="left">
-                      {item.IsView === true ? (
-                        <input
-                          id={"IsView_checkbox_" + item.id}
-                          type="checkbox"
-                          checked={true}
-                         onClick={(e) => chkPermission(e, item, "IsView", false)}
-                        />
-                      ) : (
-                        <input
-                          id={"IsView_checkbox_" + item.id}
-                          type="checkbox"
-                          checked={false}
-                        onClick={(e) => chkPermission(e, item, "IsView", true)}
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell className="chk-all-cell-css" align="left">
-                      {item.IsPrint === true ? (
-                        <input
-                          id={"IsPrint_checkbox_" + item.id}
-                          type="checkbox"
-                          checked={true}
-                        onClick={(e) => chkPermission(e, item, "IsPrint", false)}
-                        />
-                      ) : (
-                        <input
-                          id={"IsPrint_checkbox_" + item.id}
-                          type="checkbox"
-                          checked={false}
-                        onClick={(e) =>
-                          chkPermission(e, item, "IsPrint", true)
-                        }
-                        />
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                </Fragment>) : (
+                {this.props.roleId === this.state.roleId &&
+                this.state.rows.length > 0 ? (
                   <Fragment>
-                    {this.props.rows ? this.state.roleId===0 && this.props.rows.length > 0 ? getPageData(this.props.rows).map((item, i) => (
-                      <TableRow
-                      id={"row_" + i}
-                      hover
-                      key={i}
-                    >
-                      <TableCell align="left">
-                      {item.isChecked === true || item.chkAll === true || (item.IsCreate === true || item.IsUpdate === true || item.IsDelete === true || item.IsView === true || item.IsPrint === true)  ? (
-                          <input
-                            id={"chkRow_" + item.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => performCheckAll(item, e, false)}
-                          />
-                        ) : (
-                          <input
-                            id={"chkRow_" + item.id}
-                            type="checkbox"
-                            checked={false}
-                            onClick={(e) => performCheckAll(item, e, true)}
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell align="left">{item.moduleName}</TableCell>
-                      <TableCell align="left">{item.pageName}</TableCell>
-                      <TableCell className="chk-all-cell-css" align="left">
-                        {item.chkAll === true ? (
-                          <input
-                            id={"chkAll_" + item.id}
-                            type="checkbox"
-                            checked={true}
-                            onClick={(e) => performCheckAll(item, e, false)}
-                          />
-                        ) : (
-                          <input
-                            id={"chkAll_" + item.id}
-                            type="checkbox"
-                            checked={false}
-                          onClick={(e) => performCheckAll(item, e, true)}
-                          />
-                        )}
-                      </TableCell>
+                    {getPageData(this.state.rows).map((item, i) => (
+                      <TableRow id={"row_" + i} hover key={i}>
+                        <TableCell align="left">
+                          {item.isChecked === true ||
+                          item.chkAll === true ||
+                          item.IsCreate === true ||
+                          item.IsUpdate === true ||
+                          item.IsDelete === true ||
+                          item.IsView === true ||
+                          item.IsPrint === true ? (
+                            <input
+                              id={"chkRow_" + item.id}
+                              type="checkbox"
+                              checked={true}
+                              onClick={(e) => performCheckAll(item, e, false)}
+                            />
+                          ) : (
+                            <input
+                              id={"chkRow_" + item.id}
+                              type="checkbox"
+                              checked={false}
+                              onClick={(e) => performCheckAll(item, e, true)}
+                            />
+                          )}
+                        </TableCell>
+                        <TableCell align="left">{item.moduleName}</TableCell>
+                        <TableCell align="left">{item.pageName}</TableCell>
+                        <TableCell className="chk-all-cell-css" align="left">
+                          {item.chkAll === true ? (
+                            <input
+                              id={"chkAll_" + item.id}
+                              type="checkbox"
+                              checked={true}
+                              onClick={(e) => performCheckAll(item, e, false)}
+                            />
+                          ) : (
+                            <input
+                              id={"chkAll_" + item.id}
+                              type="checkbox"
+                              checked={false}
+                              onClick={(e) => performCheckAll(item, e, true)}
+                            />
+                          )}
+                        </TableCell>
                         <TableCell className="chk-all-cell-css" align="left">
                           {item.IsCreate === true ? (
                             <input
                               id={"IsCreate_checkbox_" + item.id}
                               type="checkbox"
                               checked={true}
-                              onClick={(e) => chkPermission(e, item, "IsCreate", false)}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsCreate", false)
+                              }
                             />
                           ) : (
                             <input
                               id={"IsCreate_checkbox_" + item.id}
                               type="checkbox"
                               checked={false}
-                              onClick={(e) => chkPermission(e, item, "IsCreate", true)}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsCreate", true)
+                              }
                             />
                           )}
                         </TableCell>
-                      <TableCell className="chk-all-cell-css" align="left">
-                        {item.IsUpdate === true ? (
-                          <input
-                            id={"IsUpdate_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={true}
-                          onClick={(e) => chkPermission(e, item, "IsUpdate", false)}
-                          />
-                        ) : (
-                          <input
-                            id={"IsUpdate_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={false}
-                          onClick={(e) =>
-                            chkPermission(e, item, "IsUpdate", true)
-                          }
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell className="chk-all-cell-css" align="left">
-                        {item.IsDelete === true ? (
-                          <input
-                            id={"IsDelete_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={true}
-                          onClick={(e) => chkPermission(e, item, "IsDelete", false)}
-                          />
-                        ) : (
-                          <input
-                            id={"IsDelete_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={false}
-                          onClick={(e) =>
-                            chkPermission(e, item, "IsDelete", true)
-                          }
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell className="chk-all-cell-css" align="left">
-                        {item.IsView === true ? (
-                          <input
-                            id={"IsView_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={true}
-                           onClick={(e) => chkPermission(e, item, "IsView", false)}
-                          />
-                        ) : (
-                          <input
-                            id={"IsView_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={false}
-                          onClick={(e) => chkPermission(e, item, "IsView", true)}
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell className="chk-all-cell-css" align="left">
-                        {item.IsPrint === true ? (
-                          <input
-                            id={"IsPrint_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={true}
-                          onClick={(e) => chkPermission(e, item, "IsPrint", false)}
-                          />
-                        ) : (
-                          <input
-                            id={"IsPrint_checkbox_" + item.id}
-                            type="checkbox"
-                            checked={false}
-                          onClick={(e) =>
-                            chkPermission(e, item, "IsPrint", true)
-                          }
-                          />
-                        )}
-                      </TableCell>
-                    </TableRow>
-                    )) : null : null}
+                        <TableCell className="chk-all-cell-css" align="left">
+                          {item.IsUpdate === true ? (
+                            <input
+                              id={"IsUpdate_checkbox_" + item.id}
+                              type="checkbox"
+                              checked={true}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsUpdate", false)
+                              }
+                            />
+                          ) : (
+                            <input
+                              id={"IsUpdate_checkbox_" + item.id}
+                              type="checkbox"
+                              checked={false}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsUpdate", true)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                        <TableCell className="chk-all-cell-css" align="left">
+                          {item.IsDelete === true ? (
+                            <input
+                              id={"IsDelete_checkbox_" + item.id}
+                              type="checkbox"
+                              checked={true}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsDelete", false)
+                              }
+                            />
+                          ) : (
+                            <input
+                              id={"IsDelete_checkbox_" + item.id}
+                              type="checkbox"
+                              checked={false}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsDelete", true)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                        <TableCell className="chk-all-cell-css" align="left">
+                          {item.IsView === true ? (
+                            <input
+                              id={"IsView_checkbox_" + item.id}
+                              type="checkbox"
+                              checked={true}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsView", false)
+                              }
+                            />
+                          ) : (
+                            <input
+                              id={"IsView_checkbox_" + item.id}
+                              type="checkbox"
+                              checked={false}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsView", true)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                        <TableCell className="chk-all-cell-css" align="left">
+                          {item.IsPrint === true ? (
+                            <input
+                              id={"IsPrint_checkbox_" + item.id}
+                              type="checkbox"
+                              checked={true}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsPrint", false)
+                              }
+                            />
+                          ) : (
+                            <input
+                              id={"IsPrint_checkbox_" + item.id}
+                              type="checkbox"
+                              checked={false}
+                              onClick={(e) =>
+                                chkPermission(e, item, "IsPrint", true)
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    {this.props.rows
+                      ? this.state.roleId === 0 && this.props.rows.length > 0
+                        ? getPageData(this.props.rows).map((item, i) => (
+                            <TableRow id={"row_" + i} hover key={i}>
+                              <TableCell align="left">
+                                {item.isChecked === true ||
+                                item.chkAll === true ||
+                                item.IsCreate === true ||
+                                item.IsUpdate === true ||
+                                item.IsDelete === true ||
+                                item.IsView === true ||
+                                item.IsPrint === true ? (
+                                  <input
+                                    id={"chkRow_" + item.id}
+                                    type="checkbox"
+                                    checked={true}
+                                    onClick={(e) =>
+                                      performCheckAll(item, e, false)
+                                    }
+                                  />
+                                ) : (
+                                  <input
+                                    id={"chkRow_" + item.id}
+                                    type="checkbox"
+                                    checked={false}
+                                    onClick={(e) =>
+                                      performCheckAll(item, e, true)
+                                    }
+                                  />
+                                )}
+                              </TableCell>
+                              <TableCell align="left">
+                                {item.moduleName}
+                              </TableCell>
+                              <TableCell align="left">
+                                {item.pageName}
+                              </TableCell>
+                              <TableCell
+                                className="chk-all-cell-css"
+                                align="left"
+                              >
+                                {item.chkAll === true ? (
+                                  <input
+                                    id={"chkAll_" + item.id}
+                                    type="checkbox"
+                                    checked={true}
+                                    onClick={(e) =>
+                                      performCheckAll(item, e, false)
+                                    }
+                                  />
+                                ) : (
+                                  <input
+                                    id={"chkAll_" + item.id}
+                                    type="checkbox"
+                                    checked={false}
+                                    onClick={(e) =>
+                                      performCheckAll(item, e, true)
+                                    }
+                                  />
+                                )}
+                              </TableCell>
+                              <TableCell
+                                className="chk-all-cell-css"
+                                align="left"
+                              >
+                                {item.IsCreate === true ? (
+                                  <input
+                                    id={"IsCreate_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={true}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsCreate", false)
+                                    }
+                                  />
+                                ) : (
+                                  <input
+                                    id={"IsCreate_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={false}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsCreate", true)
+                                    }
+                                  />
+                                )}
+                              </TableCell>
+                              <TableCell
+                                className="chk-all-cell-css"
+                                align="left"
+                              >
+                                {item.IsUpdate === true ? (
+                                  <input
+                                    id={"IsUpdate_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={true}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsUpdate", false)
+                                    }
+                                  />
+                                ) : (
+                                  <input
+                                    id={"IsUpdate_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={false}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsUpdate", true)
+                                    }
+                                  />
+                                )}
+                              </TableCell>
+                              <TableCell
+                                className="chk-all-cell-css"
+                                align="left"
+                              >
+                                {item.IsDelete === true ? (
+                                  <input
+                                    id={"IsDelete_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={true}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsDelete", false)
+                                    }
+                                  />
+                                ) : (
+                                  <input
+                                    id={"IsDelete_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={false}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsDelete", true)
+                                    }
+                                  />
+                                )}
+                              </TableCell>
+                              <TableCell
+                                className="chk-all-cell-css"
+                                align="left"
+                              >
+                                {item.IsView === true ? (
+                                  <input
+                                    id={"IsView_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={true}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsView", false)
+                                    }
+                                  />
+                                ) : (
+                                  <input
+                                    id={"IsView_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={false}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsView", true)
+                                    }
+                                  />
+                                )}
+                              </TableCell>
+                              <TableCell
+                                className="chk-all-cell-css"
+                                align="left"
+                              >
+                                {item.IsPrint === true ? (
+                                  <input
+                                    id={"IsPrint_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={true}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsPrint", false)
+                                    }
+                                  />
+                                ) : (
+                                  <input
+                                    id={"IsPrint_checkbox_" + item.id}
+                                    type="checkbox"
+                                    checked={false}
+                                    onClick={(e) =>
+                                      chkPermission(e, item, "IsPrint", true)
+                                    }
+                                  />
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        : null
+                      : null}
                   </Fragment>
                 )}
-
-
-
               </TableBody>
             </Table>
-            
+
             <TablePagination
               rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
               component="div"
@@ -588,7 +654,6 @@ class assignrole extends React.Component {
               page={this.state.pagination.page}
               onPageChange={handlePageChange}
             />
-
           </div>
         ) : null}
       </Fragment>

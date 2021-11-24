@@ -19,6 +19,7 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
@@ -219,6 +220,39 @@ class addrole extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.roleMaster + this.state.urlparams}
+          masterLinkTitle="Role Master"
+          typoTitle="Add Role"
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.save.icon}
+            onClick={(e) => handleCreate(e)}
+            disabled={this.state.CreateBtnDisable}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -230,112 +264,59 @@ class addrole extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={6} lg={6}>
+            <Accordion
+              key="country-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
             >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.roleMaster + this.state.urlparams}
-                  masterLinkTitle="Role Master"
-                  typoTitle="Add Role"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) => handleCreate(e)}
-                    disabled={this.state.CreateBtnDisable}
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
+              >
+                <Typography key="" className="accordion-Header-Title">
+                  Create New Role
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
+                <TableContainer>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label="company List table"
                   >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-          {/* <Grid container spacing={3}>
-            <Grid className="style-buttons" xs={1}>
-              <Button
-                style={{ marginLeft: 5 }}
-                onClick={(e) => handleCreate(e)}
-                disabled={this.state.CreateBtnDisable}
-              >
-                Create
-              </Button>
-            </Grid>
-          </Grid> */}
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={6} lg={6}>
-              <Accordion
-                key="country-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
-              >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    Create New Role
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="company List table"
-                    >
-                      <TableBody className="tableBody">
-                        <Tablerowcelltextboxinput
-                          id="name"
-                          label="Name"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("name", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.Name}
-                          error={this.state.Validations.Name.errorState}
-                          helperText={this.state.Validations.Name.errorMssg}
-                        />
+                    <TableBody className="tableBody">
+                      <Tablerowcelltextboxinput
+                        id="name"
+                        label="Name"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("name", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 50,
+                        }}
+                        value={this.state.Name}
+                        error={this.state.Validations.Name.errorState}
+                        helperText={this.state.Validations.Name.errorMssg}
+                      />
 
-                        {/* <TableRow>
+                      {/* <TableRow>
                                                     <TableCell align="left" className="no-border-table">
                                                         Name
                                                     </TableCell>
@@ -353,15 +334,14 @@ class addrole extends React.Component {
                                                         />
                                                     </TableCell>
                                                 </TableRow> */}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
-            <Grid xs={12} sm={12} md={6} lg={6}></Grid>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-        </div>
+          <Grid xs={12} sm={12} md={6} lg={6}></Grid>
+        </Grid>
       </Fragment>
     );
   }
