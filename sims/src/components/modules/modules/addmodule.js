@@ -21,7 +21,6 @@ import * as CF from "../../../services/functions/customfunctions";
 
 import "../../user/dasboard.css";
 
-
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -30,6 +29,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class addmodule extends React.Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class addmodule extends React.Component {
       CreateBtnDisable: true,
       ModuleId: 0,
       modules: [],
-      duplicate:false,
+      duplicate: false,
       Name: null,
       Description: null,
       IconName: null,
@@ -62,7 +62,7 @@ class addmodule extends React.Component {
   }
 
   componentDidMount() {
-    this.getModules()
+    this.getModules();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -95,7 +95,7 @@ class addmodule extends React.Component {
         if (response.status === 200) {
           let data = response.data;
           rows = data;
-          this.setState({ modules: rows, ProgressLoader: true })
+          this.setState({ modules: rows, ProgressLoader: true });
         } else {
         }
       })
@@ -122,28 +122,39 @@ class addmodule extends React.Component {
       if (
         this.state.Name === "" ||
         this.state.Name === null ||
-        this.state.Name.length > 20||this.state.duplicate===true
+        this.state.Name.length > 20 ||
+        this.state.duplicate === true
       ) {
         this.setState({ CreateBtnDisable: true });
-      } 
+      }
     };
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
-        let duplicateExist= CF.chkDuplicateName(this.state.modules,"name",e.target.value);
-        this.setState({duplicate:duplicateExist})
-if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) {
+        let duplicateExist = CF.chkDuplicateName(
+          this.state.modules,
+          "name",
+          e.target.value
+        );
+        this.setState({ duplicate: duplicateExist });
+        if (
+          e.target.value === "" ||
+          e.target.value.length > 20 ||
+          duplicateExist === true
+        ) {
           let Module = this.state.Module;
           Module.Name = e.target.value;
           let Validations = this.state.Validations;
-          if(duplicateExist===true){
-            Validations.Name={errorState:true,errorMsg:'Module already exists'}
+          if (duplicateExist === true) {
+            Validations.Name = {
+              errorState: true,
+              errorMsg: "Module already exists",
+            };
             this.setState({
-              Validations:Validations,
+              Validations: Validations,
               CreateBtnDisable: true,
               Name: e.target.value,
-             
-            })
+            });
           }
           if (e.target.value === "") {
             Validations.Name = {
@@ -166,7 +177,6 @@ if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) 
               Validations: Validations,
             });
           }
-          
         } else {
           let Module = this.state.Module;
           Module.Name = e.target.value;
@@ -178,7 +188,8 @@ if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) 
             Validations: Validations,
             Name: e.target.value,
           });
-        }CheckName();
+        }
+        CheckName();
       }
       if (id === "Description") {
         if (e.target.value === "" || e.target.value.length > 50) {
@@ -203,11 +214,10 @@ if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) 
             };
             this.setState({
               Validations: Validations,
-             
+
               CreateBtnDisable: true,
             });
           }
-         
         } else {
           let Module = this.state.Module;
           Module.Description = e.target.value;
@@ -304,6 +314,39 @@ if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) 
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.moduleMaster + this.state.urlparams}
+          masterLinkTitle="Module Master"
+          typoTitle="Add Module"
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.save.icon}
+            onClick={handleCreate}
+            disabled={this.state.CreateBtnDisable}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -316,135 +359,90 @@ if (e.target.value === "" || e.target.value.length > 20||duplicateExist===true) 
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.moduleMaster + this.state.urlparams}
-                  masterLinkTitle="Module Master"
-                  typoTitle="Add Module"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={handleCreate}
-                    disabled={this.state.CreateBtnDisable}
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={6} md={6} lg={6}>
-              <Accordion
-                key="country-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={6} md={6} lg={6}>
+            <Accordion
+              key="country-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
+            >
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    General Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="company List table"
-                    >
-                      <TableBody className="tableBody">
-                        <Tablerowcelltextboxinput
-                          id="Name"
-                          label="Module Name"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Name", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 20,
-                          }}
-                          value={this.state.Name}
-                          error={this.state.Validations.Name.errorState}
-                          helperText={this.state.Validations.Name.errorMsg}
-                        />
-                        <Tablerowcelltextboxinput
-                          id="Description"
-                          label="Description"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Description", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                          }}
-                          value={this.state.Description}
-                          error={this.state.Validations.Description.errorState}
-                          helperText={
-                            this.state.Validations.Description.errorMsg
-                          }
-                        />
-                        <Tablerowcelltextboxinput
-                          id="IconName"
-                          label="IconName"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("IconName", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                          }}
-                          value={this.state.IconName}
-                          error={this.state.Validations.IconName.errorState}
-                          helperText={this.state.Validations.IconName.errorMsg}
-                        />
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
+                <Typography key="" className="accordion-Header-Title">
+                  General Details
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
+                <TableContainer>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label="company List table"
+                  >
+                    <TableBody className="tableBody">
+                      <Tablerowcelltextboxinput
+                        id="Name"
+                        label="Module Name"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Name", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 20,
+                        }}
+                        value={this.state.Name}
+                        error={this.state.Validations.Name.errorState}
+                        helperText={this.state.Validations.Name.errorMsg}
+                      />
+                      <Tablerowcelltextboxinput
+                        id="Description"
+                        label="Description"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Description", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                        }}
+                        value={this.state.Description}
+                        error={this.state.Validations.Description.errorState}
+                        helperText={this.state.Validations.Description.errorMsg}
+                      />
+                      <Tablerowcelltextboxinput
+                        id="IconName"
+                        label="IconName"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("IconName", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                        }}
+                        value={this.state.IconName}
+                        error={this.state.Validations.IconName.errorState}
+                        helperText={this.state.Validations.IconName.errorMsg}
+                      />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-        </div>
+        </Grid>
       </Fragment>
     );
   }

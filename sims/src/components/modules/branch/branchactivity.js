@@ -33,6 +33,7 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class editbranch extends React.Component {
   constructor(props) {
@@ -201,20 +202,23 @@ class editbranch extends React.Component {
       let branch = this.state.branch;
 
       if (type === "edit") {
-        branch.BranchID = CF.toInt(editbranchId);       
+        branch.BranchID = CF.toInt(editbranchId);
         this.getNumberSeries(CF.toInt(editbranchId));
       }
 
-      this.setState({
-        branch: branch,
-        branchId: editbranchId,
-        urlparams: urlparams,
-        type: type,
-        typoTitle: typoTitle,
-        ProgressLoader: type === "add" ? true : false,
-      },()=>{
-        this.getBranchDetail(branch);
-      });
+      this.setState(
+        {
+          branch: branch,
+          branchId: editbranchId,
+          urlparams: urlparams,
+          type: type,
+          typoTitle: typoTitle,
+          ProgressLoader: type === "add" ? true : false,
+        },
+        () => {
+          this.getBranchDetail(branch);
+        }
+      );
     } else {
       this.setState({ isLoggedIn: false });
     }
@@ -245,12 +249,11 @@ class editbranch extends React.Component {
         }
 
         this.setState({
-
           currencyList: newD,
           ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   };
 
   getBranches() {
@@ -291,9 +294,9 @@ class editbranch extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.processCompanyData(data)
+        this.processCompanyData(data);
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   // getStateList() {
@@ -333,26 +336,26 @@ class editbranch extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({MasterCountryData:data});
+        this.setState({ MasterCountryData: data });
         this.processCountryData(data);
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   getStateByCountry = (CountryID) => {
-    console.log("getStateByCountry > CountryID > ",CountryID);
+    console.log("getStateByCountry > CountryID > ", CountryID);
     let MasterCountryData = this.state.MasterCountryData;
-    console.log("getStateByCountry > MasterCountryData > ",MasterCountryData);
+    console.log("getStateByCountry > MasterCountryData > ", MasterCountryData);
     let stateData = [];
-    for (let i=0; i < MasterCountryData.length; i++) {
+    for (let i = 0; i < MasterCountryData.length; i++) {
       if (MasterCountryData[i].CountryID === CountryID) {
-        if( MasterCountryData[i].State){
+        if (MasterCountryData[i].State) {
           stateData = MasterCountryData[i].State;
-        }        
+        }
         break;
       }
     }
-    console.log("getStateByCountry > stateData > ",stateData);
+    console.log("getStateByCountry > stateData > ", stateData);
     let newData = [];
     for (let i = 0; i < stateData.length; i++) {
       let d = {
@@ -361,11 +364,10 @@ class editbranch extends React.Component {
       };
       newData.push(d);
     }
-    console.log("getStateByCountry > stateData > newData > ",newData);
+    console.log("getStateByCountry > stateData > newData > ", newData);
 
     this.setState({ stateData: newData, ProgressLoader: true });
-
-  }
+  };
 
   processCountryData(data) {
     let newData = [];
@@ -415,7 +417,7 @@ class editbranch extends React.Component {
       const data = {
         validUser: ValidUser,
         branch: {
-         BranchId: branch.BranchID
+          BranchId: branch.BranchID,
         },
       };
 
@@ -425,10 +427,9 @@ class editbranch extends React.Component {
         .post(GetBranchUrl, data, { headers })
         .then((response) => {
           let data = response.data;
-          this.setState({branch:data},()=>{
+          this.setState({ branch: data }, () => {
             this.setInitialParamsForEdit();
-          }); 
-          
+          });
         })
         .catch((error) => {
           this.setState({ branch: null, ProgressLoader: true });
@@ -436,19 +437,21 @@ class editbranch extends React.Component {
     } catch (ex) {
       console.log("ex");
     }
-
   }
 
-  setInitialParamsForEdit=()=>{
-    let branch=this.state.branch;
-   let CountryID=branch.CountryID;
-   branch.EffectiveDate = moment(branch.EffectiveDate).format("YYYY-MM-DD");
-   branch.VATRegistationDate = moment(branch.VATRegistationDate).format("YYYY-MM-DD");
-   branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("YYYY-MM-DD");
-   this.setState({branch:branch});
-   this.getStateByCountry(CountryID);
-  }
-
+  setInitialParamsForEdit = () => {
+    let branch = this.state.branch;
+    let CountryID = branch.CountryID;
+    branch.EffectiveDate = moment(branch.EffectiveDate).format("YYYY-MM-DD");
+    branch.VATRegistationDate = moment(branch.VATRegistationDate).format(
+      "YYYY-MM-DD"
+    );
+    branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format(
+      "YYYY-MM-DD"
+    );
+    this.setState({ branch: branch });
+    this.getStateByCountry(CountryID);
+  };
 
   getNumberSeries(branchId) {
     let numberSeries = [];
@@ -521,9 +524,6 @@ class editbranch extends React.Component {
           : this.setState({ NumberingExpanded: true });
       }
     };
-
-   
-
 
     const updateFormValue = (param, e) => {
       let branch = this.state.branch;
@@ -777,16 +777,12 @@ class editbranch extends React.Component {
           branch[param] = e.target.checked;
           setParams(branch);
           break;
-
       }
-
     };
 
     const setParams = (object) => {
       this.setState({ Customer: object });
     };
-
-
 
     const VAT_GST_Checkbox_Click = (e, param) => {
       if (param === "isvat") {
@@ -825,13 +821,15 @@ class editbranch extends React.Component {
     };
 
     const handleCreate = () => {
-     
       this.setState({ ProgressLoader: false });
       let branch = this.state.branch;
       branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
-      branch.VATRegistationDate = moment(branch.VATRegistationDate).format("MM/DD/YYYY");
-      branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("MM/DD/YYYY");
-      
+      branch.VATRegistationDate = moment(branch.VATRegistationDate).format(
+        "MM/DD/YYYY"
+      );
+      branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format(
+        "MM/DD/YYYY"
+      );
 
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -857,11 +855,10 @@ class editbranch extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => { });
+        .catch((error) => {});
     };
 
     const handleupdate = () => {
-       
       this.setState({ ProgressLoader: false });
 
       let ValidUser = APIURLS.ValidUser;
@@ -869,12 +866,14 @@ class editbranch extends React.Component {
       ValidUser.Token = getCookie(COOKIE.TOKEN);
 
       let branch = this.state.branch;
-      
-      branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
-      branch.VATRegistationDate = moment(branch.VATRegistationDate).format("MM/DD/YYYY");
-      branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("MM/DD/YYYY");
 
-     
+      branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
+      branch.VATRegistationDate = moment(branch.VATRegistationDate).format(
+        "MM/DD/YYYY"
+      );
+      branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format(
+        "MM/DD/YYYY"
+      );
 
       const data = {
         validUser: ValidUser,
@@ -888,21 +887,29 @@ class editbranch extends React.Component {
       axios
         .post(UpdateBranchUrl, data, { headers })
         .then((response) => {
-          if (response.status === 200 || response.data === true|| response.data === 'true') {
+          if (
+            response.status === 200 ||
+            response.data === true ||
+            response.data === "true"
+          ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
-            
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
 
-          branch.EffectiveDate = moment(branch.EffectiveDate).format("YYYY-MM-DD");
-          branch.VATRegistationDate = moment(branch.VATRegistationDate).format("YYYY-MM-DD");
-          branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format("YYYY-MM-DD");
+          branch.EffectiveDate = moment(branch.EffectiveDate).format(
+            "YYYY-MM-DD"
+          );
+          branch.VATRegistationDate = moment(branch.VATRegistationDate).format(
+            "YYYY-MM-DD"
+          );
+          branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format(
+            "YYYY-MM-DD"
+          );
 
-          this.setState({branch:branch});
-
+          this.setState({ branch: branch });
         })
-        .catch((error) => { });
+        .catch((error) => {});
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -919,6 +926,52 @@ class editbranch extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.branchMaster + this.state.urlparams}
+          masterLinkTitle="Branch Master"
+          typoTitle={this.state.type === "edit" ? "EDIT" : "ADD"}
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          {this.state.type === "edit" ? (
+            <Button
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.save.icon}
+              onClick={handleupdate}
+              disabled={this.state.disabledUpdatebtn}
+            >
+            {APIURLS.buttonTitle.save.name}
+            </Button>
+          ) : null}
+
+          {this.state.type === "add" ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.save.icon}
+              className="action-btns"
+              onClick={handleCreate}
+              disabled={this.state.disabledCreatebtn}
+            >
+              {APIURLS.buttonTitle.save.name}
+            </Button>
+          ) : null}
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -931,974 +984,862 @@ class editbranch extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.branchMaster + this.state.urlparams}
-                  masterLinkTitle="Branch Master"
-                  typoTitle="Edit Branch"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+
+       
+
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={9} lg={9}>
+            <Grid container spacing={1}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+                <Accordion
+                  key="company-General-Details"
+                  expanded={this.state.GeneralDetailsExpanded}
                 >
-                  {this.state.type === "edit" ? (
-                    <Button
-                    className="action-btns"
-                      onClick={handleupdate}
-                      disabled={this.state.disabledUpdatebtn}
-                    >
-                      {APIURLS.buttonTitle.update}
-                    </Button>
-                  ) : null}
-
-                  {this.state.type === "add" ? (
-                    <Button
-                    className="action-btns"
-                      onClick={handleCreate}
-                      disabled={this.state.disabledCreatebtn}
-                    >
-                      {APIURLS.buttonTitle.save}
-                    </Button>
-                  ) : null}
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={9} lg={9}>
-              <Grid container spacing={1}>
-                <Grid xs={12} sm={12} md={12} lg={12}>
-                  <Accordion
-                    key="company-General-Details"
-                    expanded={this.state.GeneralDetailsExpanded}
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("GeneralDetailsExpanded", e)
+                        }
+                      />
+                    }
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
                   >
-                    <AccordionSummary
-                      className="accordion-Header-Design"
-                      expandIcon={
-                        <ExpandMoreIcon
-                          onClick={(e) =>
-                            handleAccordionClick("GeneralDetailsExpanded", e)
-                          }
-                        />
-                      }
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
-                    >
-                      <Typography key="" className="accordion-Header-Title">
-                        General Details
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails key="" className="AccordionDetails-css">
-                      <Grid container spacing={1}>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="company List table"
-                            >
-                              <TableBody className="tableBody">
-                                {console.log("this.state.branch > ",this.state.branch)}
-                                <DropdownInput
-                                  isMandatory={true}
-                                  id="CompanyID"
-                                  label="Company"
-                                  onChange={(e) =>
-                                    updateFormValue("CompanyID", e)
-                                  }
-                                  options={this.state.companyData}
-                                  value={this.state.branch.CompanyID}
-                                />
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={1}>
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="company List table"
+                          >
+                            <TableBody className="tableBody">
+                              {console.log(
+                                "this.state.branch > ",
+                                this.state.branch
+                              )}
+                              <DropdownInput
+                                isMandatory={true}
+                                id="CompanyID"
+                                label="Company"
+                                onChange={(e) =>
+                                  updateFormValue("CompanyID", e)
+                                }
+                                options={this.state.companyData}
+                                value={this.state.branch.CompanyID}
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  id="Name"
-                                  label="Name"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("Name", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.Name}
-                                  error={this.state.Validations.name.errorState}
-                                  helperText={
-                                    this.state.Validations.name.errorMsg
-                                  }
-                                  isMandatory={true}
-                                />
+                              <Tablerowcelltextboxinput
+                                id="Name"
+                                label="Name"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Name", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.Name}
+                                error={this.state.Validations.name.errorState}
+                                helperText={
+                                  this.state.Validations.name.errorMsg
+                                }
+                                isMandatory={true}
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  id="ShortName"
-                                  label="ShortName"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("ShortName", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.ShortName}
-                                  error={
-                                    this.state.Validations.shortName.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.shortName.errorMsg
-                                  }
-                                  isMandatory={true}
-                                />
+                              <Tablerowcelltextboxinput
+                                id="ShortName"
+                                label="ShortName"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("ShortName", e)
+                                }
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.ShortName}
+                                error={
+                                  this.state.Validations.shortName.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.shortName.errorMsg
+                                }
+                                isMandatory={true}
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  id="PhoneNo"
-                                  label="Phone No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("PhoneNo", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.PhoneNo}
-                                  error={
-                                    this.state.Validations.phoneNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.phoneNo.errorMsg
-                                  }
-                                />
+                              <Tablerowcelltextboxinput
+                                id="PhoneNo"
+                                label="Phone No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("PhoneNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.PhoneNo}
+                                error={
+                                  this.state.Validations.phoneNo.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.phoneNo.errorMsg
+                                }
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  id="Website"
-                                  label="Website"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Website", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.Website}
-                                  error={
-                                    this.state.Validations.website.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.website.errorMsg
-                                  }
-                                />
+                              <Tablerowcelltextboxinput
+                                id="Website"
+                                label="Website"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Website", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.Website}
+                                error={
+                                  this.state.Validations.website.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.website.errorMsg
+                                }
+                              />
 
-                                <Tablerowcelldateinput
-                                  isMandatory={true}
-                                  id="EffectiveDate"
-                                  label="Effective Date"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("EffectiveDate", e)
-                                  }
+                              <Tablerowcelldateinput
+                                isMandatory={true}
+                                id="EffectiveDate"
+                                label="Effective Date"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("EffectiveDate", e)
+                                }
+                                value={this.state.branch.EffectiveDate}
+                                error={null}
+                                helperText={null}
+                              />
+                              <SwitchInput
+                                key="IsTrading"
+                                id="IsTrading"
+                                label="Is Trading?"
+                                param={this.state.branch.IsTrading}
+                                onChange={(e) =>
+                                  updateFormValue("IsTrading", e)
+                                }
+                              />
 
-                                  value={this.state.branch.EffectiveDate}
-                                  error={null}
-                                  helperText={null}
-                                />
-                                <SwitchInput
-                                  key="IsTrading"
-                                  id="IsTrading"
-                                  label="Is Trading?"
-                                  param={this.state.branch.IsTrading}
-                                  onChange={(e) =>
-                                    updateFormValue("IsTrading", e)
-                                  }
-                                />
-
-                                <SwitchInput
-                                  key="AllowRounding"
-                                  id="AllowRounding"
-                                  label="Allow Rounding?"
-                                  param={this.state.branch.AllowRounding}
-                                  onChange={(e) =>
-                                    updateFormValue("AllowRounding", e)
-                                  }
-                                />
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="company List table"
-                            >
-                              <TableBody className="tableBody">
-                                <DropdownInput
-                                  isMandatory={true}
-                                  id="CountryID"
-                                  label="Country"
-                                  onChange={(e) =>
-                                    updateFormValue("CountryID", e)
-                                  }
-                                  options={this.state.countryData}
-                                  value={this.state.branch.CountryID}
-                                />
-                                <DropdownInput
-                                  id="StateID"
-                                  label="State"
-                                  onChange={(e) => updateFormValue("StateID", e)}
-                                  options={this.state.stateData}
-                                  value={this.state.branch.StateID}
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="City"
-                                  label="City"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("City", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.City}
-                                  error={this.state.Validations.city.errorState}
-                                  helperText={
-                                    this.state.Validations.city.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="Postcode"
-                                  label="Postcode"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Postcode", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.Postcode}
-                                  error={
-                                    this.state.Validations.postcode.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.postcode.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  isMandatory={true}
-                                  id="Address"
-                                  label="Address Line 1"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Address", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.Address}
-                                  error={
-                                    this.state.Validations.address.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.address.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="Address2"
-                                  label="Address Line 2"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Address2", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.Address2}
-                                  error={
-                                    this.state.Validations.address2.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.address2.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelltextboxinput
-                                  id="Address3"
-                                  label="Address Line 3"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("Address3", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.Address3}
-                                  error={
-                                    this.state.Validations.address3.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.address3.errorMsg
-                                  }
-                                />
-
-
-
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
+                              <SwitchInput
+                                key="AllowRounding"
+                                id="AllowRounding"
+                                label="Allow Rounding?"
+                                param={this.state.branch.AllowRounding}
+                                onChange={(e) =>
+                                  updateFormValue("AllowRounding", e)
+                                }
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
                       </Grid>
-                    </AccordionDetails>
-                  </Accordion>
-                  <Accordion
-                    key="company-Taxation-Details"
-                    expanded={this.state.TaxationDetailsExpanded}
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="company List table"
+                          >
+                            <TableBody className="tableBody">
+                              <DropdownInput
+                                isMandatory={true}
+                                id="CountryID"
+                                label="Country"
+                                onChange={(e) =>
+                                  updateFormValue("CountryID", e)
+                                }
+                                options={this.state.countryData}
+                                value={this.state.branch.CountryID}
+                              />
+                              <DropdownInput
+                                id="StateID"
+                                label="State"
+                                onChange={(e) => updateFormValue("StateID", e)}
+                                options={this.state.stateData}
+                                value={this.state.branch.StateID}
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="City"
+                                label="City"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("City", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.City}
+                                error={this.state.Validations.city.errorState}
+                                helperText={
+                                  this.state.Validations.city.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="Postcode"
+                                label="Postcode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Postcode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.Postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.postcode.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelltextboxinput
+                                isMandatory={true}
+                                id="Address"
+                                label="Address Line 1"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.Address}
+                                error={
+                                  this.state.Validations.address.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.address.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="Address2"
+                                label="Address Line 2"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address2", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.Address2}
+                                error={
+                                  this.state.Validations.address2.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.address2.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="Address3"
+                                label="Address Line 3"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address3", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.Address3}
+                                error={
+                                  this.state.Validations.address3.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.address3.errorMsg
+                                }
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion
+                  key="company-Taxation-Details"
+                  expanded={this.state.TaxationDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("TaxationDetailsExpanded", e)
+                        }
+                      />
+                    }
+                    onClick={(e) =>
+                      handleAccordionClick("TaxationDetailsExpanded", e)
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 20, height: "100%" }}
                   >
-                    <AccordionSummary
-                      className="accordion-Header-Design"
-                      expandIcon={
-                        <ExpandMoreIcon
-                          onClick={(e) =>
-                            handleAccordionClick("TaxationDetailsExpanded", e)
-                          }
-                        />
-                      }
-                      onClick={(e) =>
-                        handleAccordionClick("TaxationDetailsExpanded", e)
-                      }
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      style={{ minHeight: 20, height: "100%" }}
-                    >
-                      <Typography key="" className="accordion-Header-Title">
-                        Taxation Details
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails key="" className="AccordionDetails-css">
-                      <Grid container spacing={2}>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="Taxation table"
-                            >
-                              <TableBody className="tableBody">
-                                <DropdownInput
-                                  isMandatory={true}
-                                  id="CurrID"
-                                  label="Currency"
-                                  onChange={(e) => updateFormValue("CurrID", e)}
-                                  options={this.state.currencyList}
-                                  value={this.state.branch.CurrID}
-                                />
+                    <Typography key="" className="accordion-Header-Title">
+                      Taxation Details
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={2}>
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="Taxation table"
+                          >
+                            <TableBody className="tableBody">
+                              <DropdownInput
+                                isMandatory={true}
+                                id="CurrID"
+                                label="Currency"
+                                onChange={(e) => updateFormValue("CurrID", e)}
+                                options={this.state.currencyList}
+                                value={this.state.branch.CurrID}
+                              />
 
-                                <Tablerowcelltextboxinput
-                                  id="PANNo"
-                                  label="PAN No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("PANNo", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 20,
-                                  }}
-                                  value={this.state.branch.PANNo}
-                                  error={
-                                    this.state.Validations.PANNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.PANNo.errorMsg
-                                  }
-                                />
-                                <Tablerowcelltextboxinput
-                                  id="TANNo"
-                                  label="TAN No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("TANNo", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 20,
-                                  }}
-                                  value={this.state.branch.TANNo}
-                                  error={
-                                    this.state.Validations.TANNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.TANNo.errorMsg
-                                  }
-                                />
-                                <Tablerowcelltextboxinput
-                                  id="CINNo"
-                                  label="CIN No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("CINNo", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 20,
-                                  }}
-                                  value={this.state.branch.CINNo}
-                                  error={
-                                    this.state.Validations.CINNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.CINNo.errorMsg
-                                  }
-                                />
-                                <Tablerowcelltextboxinput
-                                  id="IECNo"
-                                  label="IEC No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("IECNo", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 20,
-                                  }}
-                                  value={this.state.branch.IECNo}
-                                  error={
-                                    this.state.Validations.IECNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.IECNo.errorMsg
-                                  }
-                                />
-                                <Tablerowcelltextboxinput
-                                  id="ARNNo"
-                                  label="ARN No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("ARNNo", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 20,
-                                  }}
-                                  value={this.state.branch.ARNNo}
-                                  error={
-                                    this.state.Validations.ARNNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.ARNNo.errorMsg
-                                  }
-                                />
+                              <Tablerowcelltextboxinput
+                                id="PANNo"
+                                label="PAN No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("PANNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 20,
+                                }}
+                                value={this.state.branch.PANNo}
+                                error={this.state.Validations.PANNo.errorState}
+                                helperText={
+                                  this.state.Validations.PANNo.errorMsg
+                                }
+                              />
+                              <Tablerowcelltextboxinput
+                                id="TANNo"
+                                label="TAN No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("TANNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 20,
+                                }}
+                                value={this.state.branch.TANNo}
+                                error={this.state.Validations.TANNo.errorState}
+                                helperText={
+                                  this.state.Validations.TANNo.errorMsg
+                                }
+                              />
+                              <Tablerowcelltextboxinput
+                                id="CINNo"
+                                label="CIN No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("CINNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 20,
+                                }}
+                                value={this.state.branch.CINNo}
+                                error={this.state.Validations.CINNo.errorState}
+                                helperText={
+                                  this.state.Validations.CINNo.errorMsg
+                                }
+                              />
+                              <Tablerowcelltextboxinput
+                                id="IECNo"
+                                label="IEC No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("IECNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 20,
+                                }}
+                                value={this.state.branch.IECNo}
+                                error={this.state.Validations.IECNo.errorState}
+                                helperText={
+                                  this.state.Validations.IECNo.errorMsg
+                                }
+                              />
+                              <Tablerowcelltextboxinput
+                                id="ARNNo"
+                                label="ARN No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("ARNNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 20,
+                                }}
+                                value={this.state.branch.ARNNo}
+                                error={this.state.Validations.ARNNo.errorState}
+                                helperText={
+                                  this.state.Validations.ARNNo.errorMsg
+                                }
+                              />
 
-                                <SwitchInput
-                                  key="IsSEZ"
-                                  id="IsSEZ"
-                                  label="Is SEZ?"
-                                  param={this.state.branch.IsSEZ}
-                                  onChange={(e) =>
-                                    updateFormValue("IsSEZ", e)
-                                  }
-                                />
+                              <SwitchInput
+                                key="IsSEZ"
+                                id="IsSEZ"
+                                label="Is SEZ?"
+                                param={this.state.branch.IsSEZ}
+                                onChange={(e) => updateFormValue("IsSEZ", e)}
+                              />
 
-                                <SwitchInput
-                                  key="IsExportUnit"
-                                  id="IsExportUnit"
-                                  label="Is Export Unit?"
-                                  param={this.state.branch.IsExportUnit}
-                                  onChange={(e) =>
-                                    updateFormValue("IsExportUnit", e)
-                                  }
-                                />
-
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="Taxation table"
-                            >
-                              <TableBody className="tableBody">
-                                <SwitchInput
-                                  key="IsVAT"
-                                  id="IsVAT"
-                                  label="Is VAT?"
-                                  param={this.state.branch.IsVAT}
-                                  onChange={(e) =>
-                                    updateFormValue("IsVAT", e)
-                                  }
-                                />
-
-
-                                {/* Addd this -> above   VAT_GST_Checkbox_Click(e, "isvat") */}
-
-                                <Tablerowcelldateinput
-                                  id="VATRegistationDate"
-                                  label="VAT Registation Date"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("VATRegistationDate", e)
-                                  }
-
-                                  value={this.state.branch.VATRegistationDate}
-                                  error={null}
-                                  helperText={null}
-                                />
-
-
-
-                                <Tablerowcelltextboxinput
-                                  id="VATNo"
-                                  label="VAT No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("VATNo", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 20,
-                                  }}
-                                  value={this.state.branch.VATNo}
-                                  disabled={this.state.VATNoDisabled}
-                                  error={
-                                    this.state.Validations.VATNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.VATNo.errorMsg
-                                  }
-                                />
-                                <Tablerowcelltextboxinput
-                                  type="number"
-                                  id="VATPercentage"
-                                  label="VAT Percentage"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("VATPercentage", e)
-                                  }
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 8,
-                                  }}
-                                  value={this.state.branch.VATPercentage}
-                                  disabled={this.state.VATPercentageDisabled}
-                                  error={
-                                    this.state.Validations.VATPercentage
-                                      .errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.VATPercentage
-                                      .errorMsg
-                                  }
-                                />
-
-
-                                <SwitchInput
-                                  key="IsGST"
-                                  id="IsGST"
-                                  label="Is GST?"
-                                  param={this.state.branch.IsGST}
-                                  onChange={(e) =>
-                                    updateFormValue("IsGST", e)
-                                  }
-                                />
-                                {/*  Add this criteria above  ->   VAT_GST_Checkbox_Click(e, "isgst") */}
-
-
-
-                                <Tablerowcelltextboxinput
-                                  id="GSTNo"
-                                  label="GST No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) => updateFormValue("GSTNo", e)}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                    maxlength: 50,
-                                  }}
-                                  value={this.state.branch.GSTNo}
-                                  disabled={this.state.GSTNoDisabled}
-                                  error={
-                                    this.state.Validations.GSTNo.errorState
-                                  }
-                                  helperText={
-                                    this.state.Validations.GSTNo.errorMsg
-                                  }
-                                />
-
-                                <Tablerowcelldateinput
-                                  id="GSTRegistationDate"
-                                  label="GST Registation Date"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    updateFormValue("GSTRegistationDate", e)
-                                  }
-
-                                  value={this.state.branch.GSTRegistationDate}
-                                  error={null}
-                                  helperText={null}
-                                />
-
-
-
-
-
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
+                              <SwitchInput
+                                key="IsExportUnit"
+                                id="IsExportUnit"
+                                label="Is Export Unit?"
+                                param={this.state.branch.IsExportUnit}
+                                onChange={(e) =>
+                                  updateFormValue("IsExportUnit", e)
+                                }
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
                       </Grid>
-                    </AccordionDetails>
-                  </Accordion>
-                  <Accordion
-                    key="company-Numbering"
-                    expanded={this.state.NumberingExpanded}
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="Taxation table"
+                          >
+                            <TableBody className="tableBody">
+                              <SwitchInput
+                                key="IsVAT"
+                                id="IsVAT"
+                                label="Is VAT?"
+                                param={this.state.branch.IsVAT}
+                                onChange={(e) => updateFormValue("IsVAT", e)}
+                              />
+
+                              {/* Addd this -> above   VAT_GST_Checkbox_Click(e, "isvat") */}
+
+                              <Tablerowcelldateinput
+                                id="VATRegistationDate"
+                                label="VAT Registation Date"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("VATRegistationDate", e)
+                                }
+                                value={this.state.branch.VATRegistationDate}
+                                error={null}
+                                helperText={null}
+                              />
+
+                              <Tablerowcelltextboxinput
+                                id="VATNo"
+                                label="VAT No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("VATNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 20,
+                                }}
+                                value={this.state.branch.VATNo}
+                                disabled={this.state.VATNoDisabled}
+                                error={this.state.Validations.VATNo.errorState}
+                                helperText={
+                                  this.state.Validations.VATNo.errorMsg
+                                }
+                              />
+                              <Tablerowcelltextboxinput
+                                type="number"
+                                id="VATPercentage"
+                                label="VAT Percentage"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("VATPercentage", e)
+                                }
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 8,
+                                }}
+                                value={this.state.branch.VATPercentage}
+                                disabled={this.state.VATPercentageDisabled}
+                                error={
+                                  this.state.Validations.VATPercentage
+                                    .errorState
+                                }
+                                helperText={
+                                  this.state.Validations.VATPercentage.errorMsg
+                                }
+                              />
+
+                              <SwitchInput
+                                key="IsGST"
+                                id="IsGST"
+                                label="Is GST?"
+                                param={this.state.branch.IsGST}
+                                onChange={(e) => updateFormValue("IsGST", e)}
+                              />
+                              {/*  Add this criteria above  ->   VAT_GST_Checkbox_Click(e, "isgst") */}
+
+                              <Tablerowcelltextboxinput
+                                id="GSTNo"
+                                label="GST No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("GSTNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.GSTNo}
+                                disabled={this.state.GSTNoDisabled}
+                                error={this.state.Validations.GSTNo.errorState}
+                                helperText={
+                                  this.state.Validations.GSTNo.errorMsg
+                                }
+                              />
+
+                              <Tablerowcelldateinput
+                                id="GSTRegistationDate"
+                                label="GST Registation Date"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("GSTRegistationDate", e)
+                                }
+                                value={this.state.branch.GSTRegistationDate}
+                                error={null}
+                                helperText={null}
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion
+                  key="company-Numbering"
+                  expanded={this.state.NumberingExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("NumberingExpanded", e)
+                        }
+                      />
+                    }
+                    onClick={(e) =>
+                      handleAccordionClick("NumberingExpanded", e)
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 20, height: "100%" }}
                   >
-                    <AccordionSummary
-                      className="accordion-Header-Design"
-                      expandIcon={
-                        <ExpandMoreIcon
-                          onClick={(e) =>
-                            handleAccordionClick("NumberingExpanded", e)
-                          }
-                        />
-                      }
-                      onClick={(e) =>
-                        handleAccordionClick("NumberingExpanded", e)
-                      }
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      style={{ minHeight: 20, height: "100%" }}
-                    >
-                      <Typography key="" className="accordion-Header-Title">
-                        Numbering
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails key="" className="AccordionDetails-css">
-                      <Grid container spacing={1}>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="Numbering table"
-                            >
-                              <TableBody className="tableBody">
+                    <Typography key="" className="accordion-Header-Title">
+                      Numbering
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={1}>
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="Numbering table"
+                          >
+                            <TableBody className="tableBody">
+                              <DropdownInput
+                                id="LPINo"
+                                label="Local Proforma Invoice"
+                                value={this.state.branch.LPINo}
+                                onChange={(e) => updateFormValue("LPINo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="EPINo"
+                                label="Export Proforma Invoice"
+                                value={this.state.branch.EPINo}
+                                onChange={(e) => updateFormValue("EPINo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="SPINo"
+                                label="Sample Proforma Invoice"
+                                value={this.state.branch.SPINo}
+                                onChange={(e) => updateFormValue("SPINo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="TPINo"
+                                label="Trading Proforma Invoice"
+                                value={this.state.branch.TPINo}
+                                onChange={(e) => updateFormValue("TPINo", e)}
+                                options={this.state.numberSeries}
+                              />
 
-                                <DropdownInput
-                                  id="LPINo"
-                                  label="Local Proforma Invoice"
-                                  value={this.state.branch.LPINo}
-                                  onChange={(e) => updateFormValue("LPINo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="EPINo"
-                                  label="Export Proforma Invoice"
-                                  value={this.state.branch.EPINo}
-                                  onChange={(e) => updateFormValue("EPINo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="SPINo"
-                                  label="Sample Proforma Invoice"
-                                  value={this.state.branch.SPINo}
-                                  onChange={(e) => updateFormValue("SPINo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="TPINo"
-                                  label="Trading Proforma Invoice"
-                                  value={this.state.branch.TPINo}
-                                  onChange={(e) => updateFormValue("TPINo", e)}
-                                  options={this.state.numberSeries}
-                                />
+                              <DropdownInput
+                                id="LSONo"
+                                label="Local Sales Order"
+                                value={this.state.branch.LSONo}
+                                onChange={(e) => updateFormValue("LSONo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="ESONo"
+                                label="Export Sales Order"
+                                value={this.state.branch.ESONo}
+                                onChange={(e) => updateFormValue("ESONo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="SSONo"
+                                label="Sample Sales Order"
+                                value={this.state.branch.SSONo}
+                                onChange={(e) => updateFormValue("SSONo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="TSONo"
+                                label="Trading Sales Order"
+                                value={this.state.branch.TSONo}
+                                onChange={(e) => updateFormValue("TSONo", e)}
+                                options={this.state.numberSeries}
+                              />
 
+                              <DropdownInput
+                                id="LSINo"
+                                label="Local Sales Invoice"
+                                value={this.state.LSINo}
+                                onChange={(e) => updateFormValue("LSINo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="ESINo"
+                                label="Export Sales Invoice"
+                                value={this.state.branch.ESINo}
+                                onChange={(e) => updateFormValue("ESINo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="SSINo"
+                                label="Sample Sales Invoice"
+                                value={this.state.branch.SSINo}
+                                onChange={(e) => updateFormValue("SSINo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="TSINo"
+                                label="Trading Sales Invoice"
+                                value={this.state.branch.TSINo}
+                                onChange={(e) => updateFormValue("TSINo", e)}
+                                options={this.state.numberSeries}
+                              />
 
-                                <DropdownInput
-                                  id="LSONo"
-                                  label="Local Sales Order"
-                                  value={this.state.branch.LSONo}
-                                  onChange={(e) => updateFormValue("LSONo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="ESONo"
-                                  label="Export Sales Order"
-                                  value={this.state.branch.ESONo}
-                                  onChange={(e) => updateFormValue("ESONo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="SSONo"
-                                  label="Sample Sales Order"
-                                  value={this.state.branch.SSONo}
-                                  onChange={(e) => updateFormValue("SSONo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="TSONo"
-                                  label="Trading Sales Order"
-                                  value={this.state.branch.TSONo}
-                                  onChange={(e) => updateFormValue("TSONo", e)}
-                                  options={this.state.numberSeries}
-                                />
-
-
-
-
-                                <DropdownInput
-                                  id="LSINo"
-                                  label="Local Sales Invoice"
-                                  value={this.state.LSINo}
-                                  onChange={(e) => updateFormValue("LSINo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="ESINo"
-                                  label="Export Sales Invoice"
-                                  value={this.state.branch.ESINo}
-                                  onChange={(e) => updateFormValue("ESINo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="SSINo"
-                                  label="Sample Sales Invoice"
-                                  value={this.state.branch.SSINo}
-                                  onChange={(e) => updateFormValue("SSINo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="TSINo"
-                                  label="Trading Sales Invoice"
-                                  value={this.state.branch.TSINo}
-                                  onChange={(e) => updateFormValue("TSINo", e)}
-                                  options={this.state.numberSeries}
-                                />
-
-
-
-                                <DropdownInput
-                                  id="PSNo"
-                                  label="Pack slip"
-                                  value={this.state.branch.PSNo}
-                                  onChange={(e) => updateFormValue("PSNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="CPSNo"
-                                  label="Combine Pack Slip"
-                                  value={this.state.branch.CPSNo}
-                                  onChange={(e) => updateFormValue("CPSNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="CNNo"
-                                  label="Credit Note"
-                                  value={this.state.branch.CNNo}
-                                  onChange={(e) => updateFormValue("CNNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="DNNo"
-                                  label="Debit Note"
-                                  value={this.state.branch.DNNo}
-                                  onChange={(e) => updateFormValue("DNNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
-                        <Grid xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="Numbering table"
-                            >
-                              <TableBody className="tableBody">
-                                <DropdownInput
-                                  id="PRNo"
-                                  label="Purchase Request"
-                                  value={this.state.branch.PRNo}
-                                  onChange={(e) => updateFormValue("PRNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="LPONo"
-                                  label="Local Purchase Order"
-                                  value={this.state.branch.LPONo}
-                                  onChange={(e) => updateFormValue("LPONo", e)}
-                                  options={this.state.numberSeries}
-                                />
-
-                                <DropdownInput
-                                  id="IPONo"
-                                  label="Import Purchase Order"
-                                  value={this.state.branch.IPONo}
-                                  onChange={(e) => updateFormValue("IPONo", e)}
-                                  options={this.state.numberSeries}
-                                />
-
-                                <DropdownInput
-                                  id="PurInvNo"
-                                  label="Purchase Invoice"
-                                  value={this.state.branch.PurInvNo}
-                                  onChange={(e) =>
-                                    updateFormValue("PurInvNo", e)
-                                  }
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="GITNo"
-                                  label="GIT"
-                                  value={this.state.branch.GITNo}
-                                  onChange={(e) => updateFormValue("GITNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="SRNo"
-                                  label="Store Requisition"
-                                  value={this.state.branch.SRNo}
-                                  onChange={(e) => updateFormValue("SRNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="SIssueNo"
-                                  label="Store Issue"
-                                  value={this.state.branch.SIssueNo}
-                                  onChange={(e) =>
-                                    updateFormValue("SIssueNo", e)
-                                  }
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="JVNo"
-                                  label="Journal Voucher"
-                                  value={this.state.branch.JVNo}
-                                  onChange={(e) => updateFormValue("JVNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="PVNo"
-                                  label="Payment Voucher"
-                                  value={this.state.branch.PVNo}
-                                  onChange={(e) => updateFormValue("PVNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="RVNo"
-                                  label="Receipt Voucher"
-                                  value={this.state.branch.RVNo}
-                                  onChange={(e) => updateFormValue("RVNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="CENo"
-                                  label="Contra Entry"
-                                  value={this.state.branch.CENo}
-                                  onChange={(e) => updateFormValue("CENo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="BankNo"
-                                  label="Bank"
-                                  value={this.state.branch.BankNo}
-                                  onChange={(e) => updateFormValue("BankNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="CashNo"
-                                  label="Cash"
-                                  value={this.state.branch.CashNo}
-                                  onChange={(e) => updateFormValue("CashNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="FGQCNo"
-                                  label="FG QC No"
-                                  value={this.state.branch.FGQCNo}
-                                  onChange={(e) => updateFormValue("FGQCNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="RMQCNo"
-                                  label="RM QC No"
-                                  value={this.state.branch.RMQCNo}
-                                  onChange={(e) => updateFormValue("RMQCNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                                <DropdownInput
-                                  id="IJCNo"
-                                  label="IJC"
-                                  value={this.state.branch.IJCNo}
-                                  onChange={(e) => updateFormValue("IJCNo", e)}
-                                  options={this.state.numberSeries}
-                                />
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
+                              <DropdownInput
+                                id="PSNo"
+                                label="Pack slip"
+                                value={this.state.branch.PSNo}
+                                onChange={(e) => updateFormValue("PSNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="CPSNo"
+                                label="Combine Pack Slip"
+                                value={this.state.branch.CPSNo}
+                                onChange={(e) => updateFormValue("CPSNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="CNNo"
+                                label="Credit Note"
+                                value={this.state.branch.CNNo}
+                                onChange={(e) => updateFormValue("CNNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="DNNo"
+                                label="Debit Note"
+                                value={this.state.branch.DNNo}
+                                onChange={(e) => updateFormValue("DNNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
                       </Grid>
-                    </AccordionDetails>
-                  </Accordion>
-                </Grid>
+                      <Grid xs={12} sm={12} md={6} lg={6}>
+                        <TableContainer>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className="accordion-table"
+                            aria-label="Numbering table"
+                          >
+                            <TableBody className="tableBody">
+                              <DropdownInput
+                                id="PRNo"
+                                label="Purchase Request"
+                                value={this.state.branch.PRNo}
+                                onChange={(e) => updateFormValue("PRNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="LPONo"
+                                label="Local Purchase Order"
+                                value={this.state.branch.LPONo}
+                                onChange={(e) => updateFormValue("LPONo", e)}
+                                options={this.state.numberSeries}
+                              />
+
+                              <DropdownInput
+                                id="IPONo"
+                                label="Import Purchase Order"
+                                value={this.state.branch.IPONo}
+                                onChange={(e) => updateFormValue("IPONo", e)}
+                                options={this.state.numberSeries}
+                              />
+
+                              <DropdownInput
+                                id="PurInvNo"
+                                label="Purchase Invoice"
+                                value={this.state.branch.PurInvNo}
+                                onChange={(e) => updateFormValue("PurInvNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="GITNo"
+                                label="GIT"
+                                value={this.state.branch.GITNo}
+                                onChange={(e) => updateFormValue("GITNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="SRNo"
+                                label="Store Requisition"
+                                value={this.state.branch.SRNo}
+                                onChange={(e) => updateFormValue("SRNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="SIssueNo"
+                                label="Store Issue"
+                                value={this.state.branch.SIssueNo}
+                                onChange={(e) => updateFormValue("SIssueNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="JVNo"
+                                label="Journal Voucher"
+                                value={this.state.branch.JVNo}
+                                onChange={(e) => updateFormValue("JVNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="PVNo"
+                                label="Payment Voucher"
+                                value={this.state.branch.PVNo}
+                                onChange={(e) => updateFormValue("PVNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="RVNo"
+                                label="Receipt Voucher"
+                                value={this.state.branch.RVNo}
+                                onChange={(e) => updateFormValue("RVNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="CENo"
+                                label="Contra Entry"
+                                value={this.state.branch.CENo}
+                                onChange={(e) => updateFormValue("CENo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="BankNo"
+                                label="Bank"
+                                value={this.state.branch.BankNo}
+                                onChange={(e) => updateFormValue("BankNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="CashNo"
+                                label="Cash"
+                                value={this.state.branch.CashNo}
+                                onChange={(e) => updateFormValue("CashNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="FGQCNo"
+                                label="FG QC No"
+                                value={this.state.branch.FGQCNo}
+                                onChange={(e) => updateFormValue("FGQCNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="RMQCNo"
+                                label="RM QC No"
+                                value={this.state.branch.RMQCNo}
+                                onChange={(e) => updateFormValue("RMQCNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                              <DropdownInput
+                                id="IJCNo"
+                                label="IJC"
+                                value={this.state.branch.IJCNo}
+                                onChange={(e) => updateFormValue("IJCNo", e)}
+                                options={this.state.numberSeries}
+                              />
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
               </Grid>
             </Grid>
-            <Grid xs={12} sm={12} md={3} lg={3}></Grid>
           </Grid>
-        </div>
+          <Grid xs={12} sm={12} md={3} lg={3}></Grid>
+        </Grid>
       </Fragment>
     );
   }

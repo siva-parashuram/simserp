@@ -7,7 +7,6 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
-
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -35,7 +34,6 @@ import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
-
 
 let columns = [];
 
@@ -212,9 +210,7 @@ class companyMaster extends React.Component {
       this.getAttachments(item.CompanyID);
     } catch (e) {
       console.log("Error : ", e);
-
     }
-
   }
 
   InitialremoveIsSelectedRowClasses() {
@@ -256,8 +252,6 @@ class companyMaster extends React.Component {
   }
 
   render() {
-
-
     const handleRowClick = (e, item, id) => {
       try {
         console.log("handleRowClick > e > ", e);
@@ -281,14 +275,12 @@ class companyMaster extends React.Component {
       } catch (e) {
         console.log("Error : ", e);
       }
-
     };
 
     const removeIsSelectedRowClasses = () => {
       try {
         for (let i = 0; i < this.state.companyData.length; i++) {
           document.getElementById("row_" + i).className = "";
-
         }
       } catch (e) {
         console.log("Error : ", e);
@@ -323,7 +315,7 @@ class companyMaster extends React.Component {
         });
     };
 
-    const getCompanyBranchList = (companyId) => { };
+    const getCompanyBranchList = (companyId) => {};
 
     const searchInput = (e) => {
       removeIsSelectedRowClasses();
@@ -347,13 +339,13 @@ class companyMaster extends React.Component {
             masterCompanyData[i].companyName != null
               ? masterCompanyData[i].companyName.toLowerCase().includes(key)
               : null || masterCompanyData[i].address != null
-                ? masterCompanyData[i].address.toLowerCase().includes(key)
-                : null || masterCompanyData[i].companyId != null
-                  ? masterCompanyData[i].companyId
-                    .toString()
-                    .toLowerCase()
-                    .includes(key)
-                  : null
+              ? masterCompanyData[i].address.toLowerCase().includes(key)
+              : null || masterCompanyData[i].companyId != null
+              ? masterCompanyData[i].companyId
+                  .toString()
+                  .toLowerCase()
+                  .includes(key)
+              : null
           ) {
             rows.push(masterCompanyData[i]);
           }
@@ -363,7 +355,7 @@ class companyMaster extends React.Component {
     };
 
     const handlePageChange = (event, newPage) => {
-      this.InitialremoveIsSelectedRowClasses()
+      this.InitialremoveIsSelectedRowClasses();
       console.log("handlePageChange > event > ", event);
       console.log("handlePageChange > newPage > ", newPage);
       let pagination = this.state.pagination;
@@ -400,53 +392,43 @@ class companyMaster extends React.Component {
       window.location = url;
     };
 
-    const breadcrumbHtml=(
+    const breadcrumbHtml = (
       <Fragment>
-         <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Company Master"
-                  level={1}
-                />
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Company Master"
+          level={1}
+        />
       </Fragment>
     );
 
-    const buttongroupHtml=(
+    const buttongroupHtml = (
       <Fragment>
-        {console.log("APIURLS.buttonTitle > ",APIURLS.buttonTitle)}
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
         <ButtonGroup
-                    size="small"
-                    variant="text"
-                    aria-label="Action Menu Button group"
-                  >
-                    <Button
-                      startIcon={APIURLS.buttonTitle.add.icon}
-                      className="action-btns"
-                      onClick={(e) =>
-                        openPage(URLS.URLS.addNewCompany + this.state.urlparams)
-                      }
-                    >
-                      {APIURLS.buttonTitle.add.name}
-                    </Button>
-                    <Button
-                     startIcon={APIURLS.buttonTitle.edit.icon}
-                      className="action-btns"
-                      onClick={(e) => openPage(this.state.editUrl)}
-                    >
-                      {APIURLS.buttonTitle.edit.name}
-                    </Button>
-
-                    {/* <Button
-                    className="action-btns"
-                  >
-                    <Csvexport
-                      data={this.state.companyData}
-                      filename="companieslist.csv"
-                      buttonName="CSV"
-                    />
-                  </Button> */}
-                  </ButtonGroup>
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.add.icon}
+            className="action-btns"
+            onClick={(e) =>
+              openPage(URLS.URLS.addNewCompany + this.state.urlparams)
+            }
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            className="action-btns"
+            onClick={(e) => openPage(this.state.editUrl)}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
       </Fragment>
     );
 
@@ -455,13 +437,16 @@ class companyMaster extends React.Component {
         <CssBaseline />
 
         <Loader ProgressLoader={this.state.ProgressLoader} />
-        <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
-       
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             {this.state.companyData.length > 0 ? (
               <Fragment>
-                <TableContainer style={{ maxHeight: 450,minHeight:450 }}>
+                <TableContainer style={{ maxHeight: 450, minHeight: 450 }}>
                   <Table
                     stickyHeader
                     size="small"
@@ -506,7 +491,9 @@ class companyMaster extends React.Component {
                                 {URLS.PREFIX.companyID + item.CompanyID}
                               </a>
                             </TableCell>
-                            <TableCell align="left">{item.CompanyName}</TableCell>
+                            <TableCell align="left">
+                              {item.CompanyName}
+                            </TableCell>
                             <TableCell align="left">{item.Address}</TableCell>
                           </TableRow>
                         ))
@@ -527,7 +514,6 @@ class companyMaster extends React.Component {
             ) : (
               <Tableskeleton />
             )}
-
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>

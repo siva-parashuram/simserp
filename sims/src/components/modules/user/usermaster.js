@@ -2,13 +2,13 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
- 
+
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
- 
+
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -17,20 +17,19 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
- 
+
 import TablePagination from "@mui/material/TablePagination";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
- 
 
 import Userbranchalot from "../branch/userbranchalot";
 import Usermoduleassign from "../modules/usermoduleassign";
 import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
-
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 import Tableskeleton from "../../compo/tableskeleton";
 
@@ -296,223 +295,199 @@ class usermaster extends React.Component {
       this.setState({ userBranchMappingList: [], passData: [] });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="User Master"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.add.icon}
+            onClick={(e) => openPage(URLS.URLS.addUser + this.state.urlparams)}
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            onClick={(e) => openPage(this.state.editurl)}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="User Master"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={APIURLS.buttonTitle.add.icon}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addUser + this.state.urlparams)
-                    }
-                  >
-                    {APIURLS.buttonTitle.add.name}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={APIURLS.buttonTitle.edit.icon}
-                    onClick={(e) => openPage(this.state.editurl)}
-                  >
-                    {APIURLS.buttonTitle.edit.name}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={5} lg={5}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}>
-                  {this.state.users.length>0?(
-                    <Fragment>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className=""
-                    aria-label="Country List table"
-                  >
-                    <TableHead className="table-header-background">
-                      <TableRow>
-                        <TableCell className="table-header-font">#</TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Email Id
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          First Name
-                        </TableCell>
-
-                        <TableCell className="table-header-font" align="left">
-                          Login Id
-                        </TableCell>
-
-                        <TableCell className="table-header-font" align="left">
-                          Status
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody className="tableBody">
-                      {getPageData(this.state.users).map((item, i) => (
-                        <TableRow
-                          id={"row_" + i}
-                          className={this.state.initialCss}
-                          hover
-                          key={i}
-                          onClick={(event) =>
-                            handleRowClick(event, item, "row_" + i)
-                          }
-                        >
-                          <TableCell align="left">
-                            <a
-                              className="LINK tableLink"
-                              href={
-                                URLS.URLS.editUser +
-                                this.state.urlparams +
-                                "&userId=" +
-                                item.userId
-                              }
-                            >
-                              {URLS.PREFIX.userID + item.userId}
-                            </a>
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={5} lg={5}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                {this.state.users.length > 0 ? (
+                  <Fragment>
+                    <Table
+                      stickyHeader
+                      size="small"
+                      className=""
+                      aria-label="Country List table"
+                    >
+                      <TableHead className="table-header-background">
+                        <TableRow>
+                          <TableCell className="table-header-font">#</TableCell>
+                          <TableCell className="table-header-font" align="left">
+                            Email Id
                           </TableCell>
-                          <TableCell align="left">{item.emailId}</TableCell>
-                          <TableCell align="left">{item.firstName}</TableCell>
+                          <TableCell className="table-header-font" align="left">
+                            First Name
+                          </TableCell>
 
-                          <TableCell align="left">{item.loginId}</TableCell>
+                          <TableCell className="table-header-font" align="left">
+                            Login Id
+                          </TableCell>
 
-                          <TableCell align="left">
-                            {item.isActive === true ? (
-                              <span style={{ color: "green" }}>Active</span>
-                            ) : (
-                              <span style={{ color: "red" }}>In-Active</span>
-                            )}
+                          <TableCell className="table-header-font" align="left">
+                            Status
                           </TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  <TablePagination
-                    rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                    component="div"
-                    count={this.state.users.length}
-                    rowsPerPage={this.state.pagination.rowsPerPage}
-                    page={this.state.pagination.page}
-                    onPageChange={handlePageChange}
-                  />
-                    </Fragment>
-                  ):(
-                     <Tableskeleton/>
-                  )}
+                      </TableHead>
+                      <TableBody className="tableBody">
+                        {getPageData(this.state.users).map((item, i) => (
+                          <TableRow
+                            id={"row_" + i}
+                            className={this.state.initialCss}
+                            hover
+                            key={i}
+                            onClick={(event) =>
+                              handleRowClick(event, item, "row_" + i)
+                            }
+                          >
+                            <TableCell align="left">
+                              <a
+                                className="LINK tableLink"
+                                href={
+                                  URLS.URLS.editUser +
+                                  this.state.urlparams +
+                                  "&userId=" +
+                                  item.userId
+                                }
+                              >
+                                {URLS.PREFIX.userID + item.userId}
+                              </a>
+                            </TableCell>
+                            <TableCell align="left">{item.emailId}</TableCell>
+                            <TableCell align="left">{item.firstName}</TableCell>
 
-                 
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid xs={12} sm={12} md={7} lg={7}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}>
-                  <Accordion
-                    key="allotBranch"
-                    expanded={this.state.allotBranch}
-                  >
-                    <AccordionSummary
-                      className="side-display-accordion-Header-Design"
-                      expandIcon={
-                        <ExpandMoreIcon
-                          onClick={(e) =>
-                            handleAccordionClick("allotBranch", e)
-                          }
-                        />
-                      }
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      style={{ minHeight: 20, height: "100%" }}
-                    >
-                      <Typography key="" className="side-display-header-css">
-                        Assign Branch
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails key="">
-                      <Grid container spacing={1}>
-                        <Grid xs={12} sm={12} md={11} lg={11}>
-                          <Userbranchalot data={this.state.passData} />  
-                          {/* User Branch Allotment section */}
-                        </Grid>
-                      </Grid>
-                    </AccordionDetails>
-                  </Accordion>
-                  <Accordion
-                    key="allotModule"
-                    expanded={this.state.allotModule}
-                  >
-                    <AccordionSummary
-                      className="side-display-accordion-Header-Design"
-                      expandIcon={
-                        <ExpandMoreIcon
-                          onClick={(e) =>
-                            handleAccordionClick("allotModule", e)
-                          }
-                        />
-                      }
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      style={{ minHeight: 20, height: "100%" }}
-                    >
-                      <Typography key="" className="side-display-header-css">
-                        Assign Role
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails key="">
-                      <Grid container spacing={1}>
-                        <Grid xs={12} sm={12} md={12} lg={12}>
-                          <Usermoduleassign
-                            data={{
-                              userId: this.state.userId,
-                              List: this.state.userBranchMappingList,
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
-                    </AccordionDetails>
-                  </Accordion>
-                </Grid>
+                            <TableCell align="left">{item.loginId}</TableCell>
+
+                            <TableCell align="left">
+                              {item.isActive === true ? (
+                                <span style={{ color: "green" }}>Active</span>
+                              ) : (
+                                <span style={{ color: "red" }}>In-Active</span>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                    <TablePagination
+                      rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                      component="div"
+                      count={this.state.users.length}
+                      rowsPerPage={this.state.pagination.rowsPerPage}
+                      page={this.state.pagination.page}
+                      onPageChange={handlePageChange}
+                    />
+                  </Fragment>
+                ) : (
+                  <Tableskeleton />
+                )}
               </Grid>
             </Grid>
           </Grid>
-        </div>
+          <Grid xs={12} sm={12} md={7} lg={7}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Accordion key="allotBranch" expanded={this.state.allotBranch}>
+                  <AccordionSummary
+                    className="side-display-accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) => handleAccordionClick("allotBranch", e)}
+                      />
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 20, height: "100%" }}
+                  >
+                    <Typography key="" className="side-display-header-css">
+                      Assign Branch
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="">
+                    <Grid container spacing={1}>
+                      <Grid xs={12} sm={12} md={11} lg={11}>
+                        <Userbranchalot data={this.state.passData} />
+                        {/* User Branch Allotment section */}
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion key="allotModule" expanded={this.state.allotModule}>
+                  <AccordionSummary
+                    className="side-display-accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) => handleAccordionClick("allotModule", e)}
+                      />
+                    }
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 20, height: "100%" }}
+                  >
+                    <Typography key="" className="side-display-header-css">
+                      Assign Role
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="">
+                    <Grid container spacing={1}>
+                      <Grid xs={12} sm={12} md={12} lg={12}>
+                        <Usermoduleassign
+                          data={{
+                            userId: this.state.userId,
+                            List: this.state.userBranchMappingList,
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </AccordionDetails>
+                </Accordion>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Fragment>
     );
   }
