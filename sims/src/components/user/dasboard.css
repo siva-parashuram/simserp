@@ -5,6 +5,11 @@ body{
   overflow-x: hidden;
 }
 
+.themeFont{
+  font-family: Calibri !important;
+  font-size: 14px !important;
+}
+
 .MuiButton-root {
   font-family: Calibri !important;
 }
@@ -615,7 +620,12 @@ cursor: pointer;
 .MuiOutlinedInput-root {   
   border-radius: 0px !important;  
   min-width: 100% !important;
+  /* height: 30px !important; */
 }
+
+/* .MuiInputBase-input{
+  height: 30px !important;
+} */
 
 .texbox-font-css{
   font-size: 15px !important;
@@ -675,8 +685,8 @@ cursor: pointer;
 }
 
 .dropdown-css{
-  height: 30px !important;
-  line-height: 30px !important;
+  height: 27.81px !important;
+  line-height: 27.81px !important;
   /* height: 25px !important; */
   font-size: 13px !important;
   border-radius: 0px !important;

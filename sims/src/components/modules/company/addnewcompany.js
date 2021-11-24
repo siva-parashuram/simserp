@@ -42,7 +42,10 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
-import { maxWidth } from "@mui/system";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 class addnewcompany extends React.Component {
   constructor(props) {
@@ -652,7 +655,6 @@ class addnewcompany extends React.Component {
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
-            {/* <div style={{ minHeight: '100%', height: 500, overflowY: 'scroll', overflowX: 'hidden' }}> */}
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <Accordion
@@ -684,300 +686,198 @@ class addnewcompany extends React.Component {
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={12} lg={12}>
-                        <div style={{ marginLeft: -14 }}>
+                        <div>
                           <Grid container spacing={0}>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                              <Grid container spacing={0}>
-                                <Grid item xs={12} sm={12} md={12} lg={12}>
-                                  <Table
-                                    stickyHeader
-                                    size="small"
-                                    className="accordion-table"
-                                    aria-label="company List table"
-                                  >
-                                    <TableBody className="tableBody">
-                                      <Tablerowcelltextboxinput
-                                        id="companyName"
-                                        label="Name"
-                                        variant="outlined"
-                                        size="small"
-                                        onChange={(e) =>
-                                          updateFormValue("CompanyName", e)
-                                        }
-                                        value={this.state.company.CompanyName}
-                                        error={
-                                          this.state.Validations.companyName
-                                            .errorState
-                                        }
-                                        // helperText={
-                                        //   this.state.Validations.companyName
-                                        //     .errorMsg
-                                        // }
-                                        isMandatory={true}
-                                      />
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
 
-                                      <Tablerowcelltextboxinput
-                                        id="Address"
-                                        label="Address"
-                                        variant="outlined"
-                                        size="small"
-                                        onChange={(e) =>
-                                          updateFormValue("Address", e)
-                                        }
-                                        InputProps={{
-                                          className: "textFieldCss",
-                                          maxlength: 50,
-                                        }}
-                                        value={this.state.company.Address}
-                                        error={
-                                          this.state.Validations.address.errorState
-                                        }
-                                        // helperText={
-                                        //   this.state.Validations.address.errorMsg
-                                        // }
-                                        isMandatory={true}
-                                      />
 
-                                      <Tablerowcelltextboxinput
-                                        id="Address2"
-                                        label="Address 2"
-                                        variant="outlined"
-                                        size="small"
-                                        onChange={(e) =>
-                                          updateFormValue("Address2", e)
-                                        }
-                                        InputProps={{
-                                          className: "textFieldCss",
-                                          maxlength: 50,
-                                        }}
-                                        value={this.state.company.Address2}
-                                        error={
-                                          this.state.Validations.address2.errorState
-                                        }
-                                        // helperText={
-                                        //   this.state.Validations.address2.errorMsg
-                                        // }
-                                      />
-                                      <Tablerowcelltextboxinput
-                                        id="Address3"
-                                        label="Address 3"
-                                        variant="outlined"
-                                        size="small"
-                                        onChange={(e) =>
-                                          updateFormValue("Address3", e)
-                                        }
-                                        InputProps={{
-                                          className: "textFieldCss",
-                                          maxlength: 50,
-                                        }}
-                                        value={this.state.company.Address3}
-                                        error={
-                                          this.state.Validations.address3.errorState
-                                        }
-                                        // helperText={
-                                        //   this.state.Validations.address3.errorMsg
-                                        // }
-                                      />
-                                      <Tablerowcelltextboxinput
-                                        id="City"
-                                        label="City"
-                                        variant="outlined"
-                                        size="small"
-                                        onChange={(e) => updateFormValue("City", e)}
-                                        InputProps={{
-                                          className: "textFieldCss",
-                                          maxlength: 50,
-                                        }}
-                                        value={this.state.company.City}
-                                        error={
-                                          this.state.Validations.city.errorState
-                                        }
-                                        helperText={
-                                          this.state.Validations.city.errorMsg
-                                        }
-                                      />
-                                      <Tablerowcelltextboxinput
-                                        id="Postcode"
-                                        label="Postcode"
-                                        variant="outlined"
-                                        size="small"
-                                        onChange={(e) =>
-                                          updateFormValue("Postcode", e)
-                                        }
-                                        InputProps={{
-                                          className: "textFieldCss",
-                                          maxlength: 10,
-                                        }}
-                                        value={this.state.company.Postcode}
-                                        error={
-                                          this.state.Validations.postcode.errorState
-                                        }
-                                        // helperText={
-                                        //   this.state.Validations.postcode.errorMsg
-                                        // }
-                                      />
-                                    </TableBody>
-                                  </Table>
-                                </Grid>
-                              </Grid>
+                             <SIB
+                              isMandatory={true}
+                              id="companyName"
+                              label="Company Name"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("CompanyName", e)
+                              }
+                              value={this.state.company.CompanyName}
+                              error={
+                                this.state.Validations.companyName
+                                  .errorState
+                              }
+                             />
 
+                             <SIB
+                              isMandatory={true}
+                              id="Address"
+                              label="Address"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("Address", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 50,
+                              }}
+                              value={this.state.company.Address}
+                              error={
+                                this.state.Validations.address.errorState
+                              }
+                             />
+
+
+                             <SIB
+                             id="Address2"
+                             label="Address 2"
+                             variant="outlined"
+                             size="small"
+                             onChange={(e) =>
+                               updateFormValue("Address2", e)
+                             }
+                             InputProps={{
+                               className: "textFieldCss",
+                               maxlength: 50,
+                             }}
+                             value={this.state.company.Address2}
+                             error={
+                               this.state.Validations.address2.errorState
+                             }
+                             />
+                             <SIB
+                             id="Address3"
+                             label="Address 3"
+                             variant="outlined"
+                             size="small"
+                             onChange={(e) =>
+                               updateFormValue("Address3", e)
+                             }
+                             InputProps={{
+                               className: "textFieldCss",
+                               maxlength: 50,
+                             }}
+                             value={this.state.company.Address3}
+                             error={
+                               this.state.Validations.address3.errorState
+                             }
+                             />
+                             <SIB
+                             id="City"
+                             label="City"
+                             variant="outlined"
+                             size="small"
+                             onChange={(e) => updateFormValue("City", e)}
+                             InputProps={{
+                               className: "textFieldCss",
+                               maxlength: 50,
+                             }}
+                             value={this.state.company.City}
+                             error={
+                               this.state.Validations.city.errorState
+                             }
+                             helperText={
+                               this.state.Validations.city.errorMsg
+                             }
+                             />
+                             <SIB
+                              id="Postcode"
+                              label="Postcode"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("Postcode", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 10,
+                              }}
+                              value={this.state.company.Postcode}
+                              error={
+                                this.state.Validations.postcode.errorState
+                              }
+                             />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+
+                              <SDBIB
+                               isMandatory={true} 
+                               id="countrySelect"
+                               label="Country"
+                               onChange={(e) =>
+                                 updateFormValue("CountryID", e)
+                               }
+                               value={this.state.company.CountryID}
+                               param={this.state.countryData}
+                               onClick={(e) => openDialog("Country")}
+                              />
+
+                              <SDBIB
+                                id="stateSelect"
+                                label="State"
+                                onChange={(e) =>
+                                  updateFormValue("StateID", e)
+                                }
+                                value={this.state.company.StateID}
+                                param={this.state.stateData}
+                                onClick={(e) => openDialog("State")}
+                              />
+
+                             
+
+                              <SIB
+                              id="PhoneNo"
+                              label="Phone No"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("PhoneNo", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 10,
+                              }}
+
+                              value={this.state.company.PhoneNo}
+                              error={
+                                this.state.Validations.phoneno.errorState
+                              }
+                              />
+                              <SIB
+                              id="Website"
+                              label="Website"
+                              variant="outlined"
+                              size="small"
+                              onChange={(e) =>
+                                updateFormValue("Website", e)
+                              }
+                              InputProps={{
+                                className: "textFieldCss",
+                                maxlength: 10,
+                              }}
+                              value={this.state.company.Website}
+                              error={
+                                this.state.Validations.website.errorState
+                              }
+                              />
+
+                              <SSIB
+                               key="IsActive"
+                               id="IsActive"
+                               label="IsActive"
+                               param={this.state.company.IsActive}
+                               onChange={(e) =>
+                                 updateFormValue("IsActive", e)
+                               }
+                              />
+                              
+                            
+
+                              
 
                             </Grid>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                              <Grid container spacing={0}>
-                                <Grid item xs={12} sm={12} md={12} lg={12}>
-                                  <Table
-                                    stickyHeader
-                                    size="small"
-                                    className="accordion-table"
-                                    aria-label="company List table"
-                                  >
-                                    <TableBody className="tableBody">
-                                      <TableRow>
-                                        <TableCell
-                                          style={{ maxWidth: 100 }}
-                                          align="left"
-                                          className="no-border-table"
-                                        >
-                                          Country<span style={{ color: "red" }}> *</span>
-                                        </TableCell>
-                                        <TableCell
-                                          align="left"
-                                          className="no-border-table"
-                                        >
 
-                                          <select
-                                            style={{ width: "90%"}}
-                                            className="dropdown-css"
-                                            id="countrySelect"
-                                            onChange={(e) =>
-                                              updateFormValue("CountryID", e)
-                                            }
-                                            value={this.state.company.CountryID}
-                                          >
-                                            <option value="-">Select</option>
-
-                                            {this.state.countryData.map(
-                                              (item, i) => (
-                                                <option
-                                                  value={parseInt(item.value)}
-                                                >
-                                                  {item.name}
-                                                </option>
-                                              )
-                                            )}
-                                          </select>
-                                          <button
-                                            className="dropdowninputbtn"
-                                            onClick={(e) => openDialog("Country")}
-                                          >
-                                            ...
-                                          </button>
-
-
-
-                                        </TableCell>
-                                      </TableRow>
-
-                                      <TableRow>
-                                        <TableCell
-                                          style={{ maxWidth: 100 }}
-                                          align="left"
-                                          className="no-border-table"
-                                        >
-                                          State
-                                        </TableCell>
-                                        <TableCell
-                                          align="left"
-                                          className="no-border-table"
-                                        >
-                                          <select
-                                            style={{ width: "90%", height: 30}}
-                                            className="dropdown-css"
-                                            id="stateSelect"
-                                            onChange={(e) =>
-                                              updateFormValue("StateID", e)
-                                            }
-                                            value={this.state.company.StateID}
-                                          >
-                                            <option value="-">Select</option>
-
-                                            {this.state.stateData.map((item, i) => (
-                                              <option value={parseInt(item.value)}>
-                                                {item.name}
-                                              </option>
-                                            ))}
-                                          </select>
-                                          <button
-                                            className="dropdowninputbtn"
-                                            onClick={(e) => openDialog("State")}
-                                          >
-                                            ...
-                                          </button>
-                                        </TableCell>
-                                      </TableRow>  
-
-
-                                      <Tablerowcelltextboxinput
-                                        id="PhoneNo"
-                                        label="Phone No"
-                                        variant="outlined"
-                                        size="small"
-                                        onChange={(e) =>
-                                          updateFormValue("PhoneNo", e)
-                                        }
-                                        InputProps={{
-                                          className: "textFieldCss",
-                                          maxlength: 10,
-                                        }}
-
-                                        value={this.state.company.PhoneNo}
-                                        error={
-                                          this.state.Validations.phoneno.errorState
-                                        }
-                                        // helperText={
-                                        //   this.state.Validations.phoneno.errorMsg
-                                        // }
-                                      />
-
-                                      <Tablerowcelltextboxinput
-                                        id="Website"
-                                        label="Website"
-                                        variant="outlined"
-                                        size="small"
-                                        onChange={(e) =>
-                                          updateFormValue("Website", e)
-                                        }
-                                        InputProps={{
-                                          className: "textFieldCss",
-                                          maxlength: 10,
-                                        }}
-                                        value={this.state.company.Website}
-                                        error={
-                                          this.state.Validations.website.errorState
-                                        }
-                                        // helperText={
-                                        //   this.state.Validations.website.errorMsg
-                                        // }
-                                      />
-
-                                      <SwitchInput
-                                        key="IsActive"
-                                        id="IsActive"
-                                        label="IsActive"
-                                        param={this.state.company.IsActive}
-                                        onChange={(e) =>
-                                          updateFormValue("IsActive", e)
-                                        }
-                                      />
-
-
-                                    </TableBody>
-                                  </Table>
-                                </Grid>
-                              </Grid>
-
-                            </Grid>
+                            
                           </Grid>
                         </div>
                       </Grid>
