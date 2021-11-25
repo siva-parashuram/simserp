@@ -29,6 +29,10 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 class editdestination extends React.Component {
   constructor(props) {
@@ -112,8 +116,8 @@ class editdestination extends React.Component {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].name,
-        value: data[i].countryId,
+        name: data[i].Name,
+        value: data[i].CountryId,
       };
       newData.push(d);
     }
@@ -310,12 +314,12 @@ class editdestination extends React.Component {
       }
       if (id === "CountryID") {
         this.setState({
-          countryId: e.target.value,
+          countryId: CF.toInt(e.target.value),
         });
       }
       if (id === "stateID") {
         this.setState({
-          stateId: e.target.value,
+          stateId: CF.toInt(e.target.value),
         });
       }
     };
@@ -332,7 +336,7 @@ class editdestination extends React.Component {
           CountryId: parseInt(this.state.countryId),
           DestinationName: this.state.destinationName,
           Postcode: this.state.postcode,
-          StateID: this.state.stateId,
+          StateID: parseInt(this.state.stateId),
         },
         validUser: ValidUser,
       };
@@ -445,71 +449,60 @@ class editdestination extends React.Component {
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={0}>
-                      <Grid xs={12} sm={12} md={12} lg={12}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="destination add table"
-                        >
-                          <TableBody className="tableBody">
-                            <Tablerowcelltextboxinput
-                              id="Name"
-                              label="Destination"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Name", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
-                              value={this.state.destinationName}
-                              error={
-                                this.state.Validations.destinationName
-                                  .errorState
-                              }
-                              helperText={
-                                this.state.Validations.destinationName.errorMssg
-                              }
-                            />
-
-                            <Tablerowcelltextboxinput
-                              id="PostCode"
-                              label="Post Code"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("PostCode", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
-                              value={this.state.postcode}
-                              error={this.state.Validations.postcode.errorState}
-                              helperText={
-                                this.state.Validations.postcode.errorMssg
-                              }
-                            />
-
-                            <DropdownInput
-                              id="CountryID"
-                              label="Country"
-                              onChange={(e) => updateFormValue("CountryID", e)}
-                              options={this.state.countryData}
-                              value={this.state.countryId}
-                            />
-
-                            <DropdownInput
-                              id="stateID"
-                              label="State"
-                              onChange={(e) => updateFormValue("stateID", e)}
-                              options={this.state.stateData}
-                              value={this.state.stateId}
-                            />
-                          </TableBody>
-                        </Table>
+                  <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                isMandatory={true}
+                                id="Name"
+                                label="Destination"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Name", e)}
+                                value={this.state.destinationName}
+                                error={
+                                  this.state.Validations.destinationName
+                                    .errorState
+                                }
+                              />
+                              <SIB
+                                id="PostCode"
+                                label="PostCode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("PostCode", e)}
+                                value={this.state.postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                              />
+                               </Grid>
+                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                               <SDIB
+                            id="CountryID"
+                            label="Country"
+                            size="small"
+                            onChange={(e) => updateFormValue("CountryID", e)}
+                            value={this.state.countryId}
+                            param={this.state.countryData}
+                          />
+                               <SDIB
+                            id="stateID"
+                            label="state"
+                            size="small"
+                            onChange={(e) => updateFormValue("stateID", e)}
+                            value={this.state.stateId}
+                            param={this.state.stateData}
+                          />
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
+                   
                   </AccordionDetails>
                 </Accordion>
               </Grid>

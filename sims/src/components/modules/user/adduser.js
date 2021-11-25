@@ -27,6 +27,10 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 class adduser extends React.Component {
   constructor(props) {
@@ -49,7 +53,7 @@ class adduser extends React.Component {
         LastName: null,
         EmailID: null,
         IsAdmin: false,
-        isActive: true,
+        isActive: false,
       },
       UserID: 0,
       LoginID: null,
@@ -310,6 +314,16 @@ class adduser extends React.Component {
           });
         }
       }
+      if (id === "IsAdmin"){
+        let user = this.state.user;
+        user.IsAdmin=e.target.checked
+        this.setState({user:user,IsAdmin:e.target.checked})
+      }
+      if (id === "isActive"){
+        let user = this.state.user;
+        user.isActive=e.target.checked
+        this.setState({user:user,isActive:e.target.checked})
+      }
 
       this.state.duplicate === true
         ? this.setState({ DisabledCreatebtn: true })
@@ -433,7 +447,85 @@ class adduser extends React.Component {
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails key="" className="AccordionDetails-css">
-                  <TableContainer>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            isMandatory={true}
+                            id="FirstName"
+                            label="First Name"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("FirstName", e)}
+                            value={this.state.user.FirstName}
+                            error={this.state.Validations.FirstName.errorState}
+                          />
+                          <SIB
+                           
+                            id="LastName"
+                            label="LastName"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("LastName", e)}
+                            value={this.state.user.LastName}
+                            error={this.state.Validations.LastName.errorState}
+                          />
+                          <SIB
+                           
+                           id="EmailID"
+                           label="EmailID"
+                           variant="outlined"
+                           size="small"
+                           onChange={(e) => updateFormValue("EmailID", e)}
+                           value={this.state.user.EmailID}
+                           error={this.state.Validations.EmailID.errorState}
+                         />
+                         <SIB
+                           
+                           id="LoginID"
+                           label="LoginID"
+                           variant="outlined"
+                           size="small"
+                           onChange={(e) => updateFormValue("LoginID", e)}
+                           value={this.state.user.LoginID}
+                           error={this.state.Validations.LoginID.errorState}
+                         />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                           type="password"
+                            id="Password"
+                            label="Password"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Password", e)}
+                            value={this.state.user.Password}
+                            error={this.state.Validations.Password.errorState}
+                          />
+                          <SSIB
+                                key="isAdmin"
+                                id="isAdmin"
+                                label="isAdmin"
+                                param={this.state.user.IsAdmin}
+                                onChange={(e) => updateFormValue("IsAdmin", e)}
+                              />
+                               <SSIB
+                                key="isActive"
+                                id="isActive"
+                                label="isActive"
+                                param={this.state.user.isActive}
+                                onChange={(e) => updateFormValue("isActive", e)}
+                              />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
+
+                  {/* <TableContainer>
                     <Table
                       stickyHeader
                       size="small"
@@ -542,7 +634,7 @@ class adduser extends React.Component {
                         </TableRow>
                       </TableBody>
                     </Table>
-                  </TableContainer>
+                  </TableContainer> */}
                 </AccordionDetails>
               </Accordion>
             </Grid>

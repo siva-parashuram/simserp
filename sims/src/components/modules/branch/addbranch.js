@@ -33,6 +33,10 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 class addbranch extends React.Component {
   constructor(props) {
@@ -696,7 +700,221 @@ class addbranch extends React.Component {
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={0}>
+                  <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                            <SDIB
+                            id="companySelect"
+                            label="Company"
+                            size="small"
+                            onChange={(e) => updateFormValue("Company", e)}
+                            value={this.state.branch.companyId}
+                            param={this.state.companyData}
+                          />
+                              <SIB
+                                isMandatory={true}
+                                id="Name"
+                                label="Name"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Name", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.name}
+                                error={
+                                  this.state.Validations.name.errorState
+                                }
+                              />
+
+                              <SIB
+                                id="shortName"
+                                label="shortName "
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("shortName", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.shortName}
+                                error={
+                                  this.state.Validations.shortName.errorState
+                                }
+                              />
+                              <SIB
+                                id="phoneNo"
+                                label="Phone No "
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("phoneNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.phoneNo}
+                                error={
+                                  this.state.Validations.phoneNo.errorState
+                                }
+                              />
+                              <SIB
+                                id="website"
+                                label="Website"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("website", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.website}
+                                error={this.state.Validations.website.errorState}
+                                
+                              />
+                              <SIB
+                                id="EffectiveDate"
+                                label="EffectiveDate"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("EffectiveDate", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.branch.EffectiveDate}
+                               
+                              />
+                              <SIB
+                                id="Postcode"
+                                label="Postcode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Postcode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.Postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                              />
+                              <SIB
+                                id="Postcode"
+                                label="Postcode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Postcode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.Postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                              />
+                              <SIB
+                                id="Postcode"
+                                label="Postcode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Postcode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.Postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                              />
+                              <SIB
+                                id="Postcode"
+                                label="Postcode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Postcode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.Postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SDBIB
+                                isMandatory={true}
+                                id="countrySelect"
+                                label="Country"
+                                onChange={(e) =>
+                                  updateFormValue("CountryID", e)
+                                }
+                                value={this.state.company.CountryID}
+                                param={this.state.countryData}
+                               
+                              />
+
+                              <SDBIB
+                                id="stateSelect"
+                                label="State"
+                                onChange={(e) => updateFormValue("StateID", e)}
+                                value={this.state.company.StateID}
+                                param={this.state.stateData}
+                               
+                              />
+
+                              <SIB
+                                id="PhoneNo"
+                                label="Phone No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("PhoneNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.PhoneNo}
+                                error={
+                                  this.state.Validations.phoneno.errorState
+                                }
+                              />
+                              <SIB
+                                id="Website"
+                                label="Website"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Website", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.Website}
+                                error={
+                                  this.state.Validations.website.errorState
+                                }
+                              />
+
+                              <SSIB
+                                key="IsActive"
+                                id="IsActive"
+                                label="IsActive"
+                                param={this.state.company.IsActive}
+                                onChange={(e) => updateFormValue("IsActive", e)}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
+                      </Grid>
+                    </Grid>
+                    {/* <Grid container spacing={0}>
                       <Grid xs={12} sm={12} md={6} lg={6}>
                         <TableContainer>
                           <Table
@@ -706,39 +924,7 @@ class addbranch extends React.Component {
                             aria-label="company List table"
                           >
                             <TableBody className="tableBody">
-                              {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Company
-                                  </TableCell>
-
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <select
-                                      className="dropdown-css"
-                                      id="companySelect"
-                                      label="Company"
-                                      fullWidth
-                                      value={parseInt(this.state.companyId)}
-                                      onChange={(e) =>
-                                        updateFormValue("Company", e)
-                                      }
-                                    >
-                                      <option value="-">None</option>
-                                      {this.state.companyData.map((item, i) => (
-                                        <option
-                                          value={parseInt(item.companyId)}
-                                        >
-                                          {item.companyName}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                </TableRow> */}
+                              
 
                               <DropdownInput
                                 id="stateSelect"
@@ -968,7 +1154,7 @@ class addbranch extends React.Component {
                           </Table>
                         </TableContainer>
                       </Grid>
-                    </Grid>
+                    </Grid> */}
                   </AccordionDetails>
                 </Accordion>
                 <Accordion

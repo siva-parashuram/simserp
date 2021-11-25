@@ -26,6 +26,7 @@ import Breadcrumb from "../../compo/breadcrumb";
 import TextboxInput from "../../compo/tablerowcelltextboxinput";
 import DropdownInput from "../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class editItem extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class editItem extends React.Component {
       InvoicingDetailsExpanded: false,
       ReplenishmentDetailsExpanded: false,
       SuccessPrompt: false,
-      ErrorPrompt:false,
+      ErrorPrompt: false,
       ProgressLoader: true,
       urlparams: "",
       itemDepartmentMasterData: [],
@@ -1031,6 +1032,38 @@ class editItem extends React.Component {
         */
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.itemMaster + this.state.urlparams}
+          masterLinkTitle="Item Master"
+          typoTitle="Edit Item"
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            onClick={(e) => processUpdateItem()}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -1042,55 +1075,10 @@ class editItem extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
-
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.itemMaster + this.state.urlparams}
-                  masterLinkTitle="Item Master"
-                  typoTitle="Edit Item"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) => processUpdateItem()}
-                  >
-                    {APIURLS.buttonTitle.update}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-
-        <div className="breadcrumb-bottom"></div>
-
-        <div className="New-link-bottom"></div>
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
@@ -1693,9 +1681,7 @@ class editItem extends React.Component {
                               size="small"
                               onChange={(e) => updateFormValue("Hsncode", e)}
                               value={this.state.Hsncode}
-                              error={
-                                this.state.Validations.Hsncode.errorState
-                              }
+                              error={this.state.Validations.Hsncode.errorState}
                               helperText={
                                 this.state.Validations.Hsncode.errorMssg
                               }

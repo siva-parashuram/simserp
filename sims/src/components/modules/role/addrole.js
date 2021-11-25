@@ -28,6 +28,9 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
 
 class addrole extends React.Component {
   constructor(props) {

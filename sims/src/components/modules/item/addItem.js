@@ -1021,10 +1021,10 @@ class addItem extends React.Component {
         >
           <Button
             className="action-btns"
-            startIcon={<AddIcon />}
+            startIcon={APIURLS.buttonTitle.save.icon}
             onClick={(e) => processCreateItem()}
           >
-            {APIURLS.buttonTitle.add}
+            {APIURLS.buttonTitle.save.name}
           </Button>
         </ButtonGroup>
       </Fragment>
