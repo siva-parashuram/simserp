@@ -1,37 +1,4 @@
-import axios from "axios";
-
-import { COOKIE, getCookie } from "../../services/cookie";
-import * as APIURLS from "../../routes/apiconstant";
-import * as URLS from "../../routes/constants";
-//-------------------------------Axios API data fetching reusable function is below-----------------------------------------------
-
-export const getRoles = () => {
-  this.setState({ ProgressLoader: false });
-  let rows = [];
-  let ValidUser = APIURLS.ValidUser;
-  ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  ValidUser.Token = getCookie(COOKIE.TOKEN);
-  const headers = {
-    "Content-Type": "application/json",
-  };
-  let GetRolesUrl = APIURLS.APIURL.GetRoles;
-
-  axios
-    .post(GetRolesUrl, ValidUser, { headers })
-    .then((response) => {
-      if (response.status === 200) {
-        let data = response.data;
-        rows = data;
-        return rows;
-        //this.setState({ roles: rows, ProgressLoader: true });
-      } else {
-      }
-    })
-    .catch((error) => {
-      // this.setState({ modules: [], ProgressLoader: true });
-      return [];
-    });
-};
+ 
 
 //-------------------------------All reusable custom functions are below-----------------------------------------------
 
@@ -119,4 +86,36 @@ export const validateEmail = (input) => {
   }
 return valid;
 }
+
+
+
+
+
+
+
+
+
+/*-----------------------------------------------------ED---------------------------------------------------------- */
+
+export const encrypt=()=>{
+  let keys="a0b1c!2d3l_mno@pqre4$f5g*6h7i8j9ks-tuvw#xyz";
+  
+
+}
+
+getHash=(keys)=>{
+  var hash = 0, i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------- */
+
+
  

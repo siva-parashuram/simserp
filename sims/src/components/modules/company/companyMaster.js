@@ -464,7 +464,7 @@ class companyMaster extends React.Component {
                   >
                     <TableHead className="table-header-background">
                       <TableRow>
-                        <TableCell className="table-header-font">#</TableCell>
+                        {/* <TableCell className="table-header-font">#</TableCell> */}
                         <TableCell className="table-header-font" align="left">
                           Company Name
                         </TableCell>
@@ -475,7 +475,7 @@ class companyMaster extends React.Component {
                     </TableHead>
                     <TableBody className="tableBody">
                       {
-                        //this.state.companyData
+                        
                         getPageData(this.state.companyData).map((item, i) => (
                           <TableRow
                             id={"row_" + i}
@@ -486,7 +486,7 @@ class companyMaster extends React.Component {
                               handleRowClick(event, item, "row_" + i)
                             }
                           >
-                            <TableCell align="left">
+                            {/* <TableCell align="left">
                               <a
                                 className="LINK tableLink"
                                 href={
@@ -497,9 +497,9 @@ class companyMaster extends React.Component {
                                 }
                                 onClick={(e) => openCompanyDetail(e, item)}
                               >
-                                {URLS.PREFIX.companyID + item.CompanyID}
+                                {i+1}
                               </a>
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell align="left">
                               {item.CompanyName}
                             </TableCell>
