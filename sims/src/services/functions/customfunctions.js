@@ -99,11 +99,11 @@ return valid;
 
 export const encrypt=()=>{
   let keys="a0b1c!2d3l_mno@pqre4$f5g*6h7i8j9ks-tuvw#xyz";
-  
+
 
 }
 
-getHash=(keys)=>{
+const getHash=(keys)=>{
   var hash = 0, i, chr;
   if (this.length === 0) return hash;
   for (i = 0; i < this.length; i++) {
