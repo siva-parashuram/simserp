@@ -50,6 +50,7 @@ import SalesPerson from "./component/salesPerson";
 import CustomerPrice from "./component/customerPrice";
 import BranchMapping from "./component/branchMapping";
 import Discount from "./component/discount";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class customeractivity extends React.Component {
   constructor(props) {
@@ -1196,7 +1197,7 @@ class customeractivity extends React.Component {
     this.getAllCustomerPostingGroup();
     this.getCurrencyList();
     this.getCountryList();
-    this.getStateList();
+    // this.getStateList();
     this.getPaymentTerms();
   };
 
@@ -2406,6 +2407,83 @@ class customeractivity extends React.Component {
       this.refreshDropdownList();
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.customerMaster + this.state.urlparams}
+          masterLinkTitle="Customer Master"
+          typoTitle={this.state.typoTitle}
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          {this.state.type === "add" ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.save.icon}
+              className="action-btns"
+              onClick={(e) => AddNew(e)}
+              disabled={this.state.DisableCreatebtn}
+            >
+              {APIURLS.buttonTitle.save.name}
+            </Button>
+          ) : null}
+          {this.state.type === "edit" ? (
+            <div>
+              <Button
+                startIcon={APIURLS.buttonTitle.save.icon}
+                className="action-btns"
+                onClick={(e) => updateCustomer(e)}
+                disabled={this.state.DisableUpdatebtn}
+              >
+                {APIURLS.buttonTitle.save.name}
+              </Button>
+              <Button
+                className="action-btns"
+                onClick={(e) => openDialog("Address")}
+              >
+                Address
+              </Button>
+              <Button
+                className="action-btns"
+                onClick={(e) => openDialog("Contact")}
+              >
+                Contact
+              </Button>
+              <Button
+                className="action-btns"
+                onClick={(e) => openDialog("BranchMapping")}
+              >
+                Branch Mapping
+              </Button>
+              <Button
+                className="action-btns"
+                onClick={(e) => openDialog("customerPrice")}
+              >
+                Price
+              </Button>
+              <Button
+                className="action-btns"
+                onClick={(e) => openDialog("SlabDiscount")}
+              >
+                Discount
+              </Button>
+            </div>
+          ) : null}
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -2417,100 +2495,11 @@ class customeractivity extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.customerMaster + this.state.urlparams}
-                  masterLinkTitle="Customer Master"
-                  typoTitle={this.state.typoTitle}
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={7} lg={7}>
-              <div className="btn-area-div-row">
-                <div style={{ marginLeft: 10, marginTop: 1 }}>
-                  <ButtonGroup
-                    size="small"
-                    variant="text"
-                    aria-label="Action Menu Button group"
-                  >
-                    {this.state.type === "add" ? (
-                      <Button
-                        startIcon={APIURLS.buttonTitle.save.icon}
-                        className="action-btns"
-                        onClick={(e) => AddNew(e)}
-                        disabled={this.state.DisableCreatebtn}
-                      >
-                        {APIURLS.buttonTitle.save.name}
-                      </Button>
-                    ) : null}
-                    {this.state.type === "edit" ? (
-                      <div>
-                        <Button
-                          startIcon={APIURLS.buttonTitle.save.icon}
-                          className="action-btns"
-                          onClick={(e) => updateCustomer(e)}
-                          disabled={this.state.DisableUpdatebtn}
-                        >
-                          {APIURLS.buttonTitle.save.name}
-                        </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("Address")}
-                        >
-                          Address
-                        </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("Contact")}
-                        >
-                          Contact
-                        </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("BranchMapping")}
-                        >
-                          Branch Mapping
-                        </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("customerPrice")}
-                        >
-                          Price
-                        </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("SlabDiscount")}
-                        >
-                          Discount
-                        </Button>
-                      </div>
-                    ) : null}
-                  </ButtonGroup>
-                </div>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-        <div className="breadcrumb-bottom"></div>
-        <div className="breadcrumb-bottom"></div>
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
             <Accordioncomponent

@@ -311,12 +311,13 @@ class addresses extends React.Component {
           <Grid style={{ paddingTop: 10 }} container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>
               <Button
+              startIcon={APIURLS.buttonTitle.save.icon}
                 className="action-btns"
-                style={{ marginLeft: 10 }}
+                // style={{ marginLeft: 10 }}
                 onClick={(e) => this.AddNew(e)}
                 disabled={this.state.AddbtnDisable}
               >
-                {APIURLS.buttonTitle.add}
+                {APIURLS.buttonTitle.save.name}
               </Button>
             </Grid>
           </Grid>
@@ -1883,11 +1884,11 @@ class addresses extends React.Component {
                       <div>
                         <Button
                           className="action-btns"
-                          style={{ marginLeft: 10 }}
+                         startIcon={APIURLS.buttonTitle.update.icon}
                           onClick={(e) => this.UpdateCustomerAddress(e)}
                           disabled={this.state.updateBtnDisabled}
                         >
-                          {APIURLS.buttonTitle.update}
+                          {APIURLS.buttonTitle.update.name}
                         </Button>
                       </div>
                     </Grid>

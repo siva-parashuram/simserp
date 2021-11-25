@@ -2,22 +2,22 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
- 
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
- 
+
 import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
- 
+
 import Button from "@material-ui/core/Button";
- 
+
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import UpdateIcon from "@material-ui/icons/Update";
-import "../../../user/dasboard.css"; 
+import "../../../user/dasboard.css";
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -27,6 +27,7 @@ import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
 import Breadcrumb from "../../../compo/breadcrumb";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
+import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 
 class editItemCategory extends React.Component {
   constructor(props) {
@@ -48,13 +49,12 @@ class editItemCategory extends React.Component {
       IsPriceRange: false,
       MainCategoryData: [],
       MainCatID: 0,
-      IsCustomized:false,
+      IsCustomized: false,
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Description: { errorState: false, errorMssg: "" },
         HSNCode: { errorState: false, errorMssg: "" },
       },
-      
     };
   }
 
@@ -72,15 +72,17 @@ class editItemCategory extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    this.setState({
-      urlparams: urlparams,
-      CatID:CatID
-    },()=>{
-this.getItemCategory();
-    });
+    this.setState(
+      {
+        urlparams: urlparams,
+        CatID: CatID,
+      },
+      () => {
+        this.getItemCategory();
+      }
+    );
   }
 
-  
   getMainCategoryData() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -97,7 +99,6 @@ this.getItemCategory();
         console.log("data > ", data);
         this.setState({ ProgressLoader: true });
         this.processMainCategoryData(data);
-
       })
       .catch((error) => {
         this.setState({ ProgressLoader: true });
@@ -122,11 +123,11 @@ this.getItemCategory();
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
-    let Data={
-      validUser:ValidUser,
+    let Data = {
+      validUser: ValidUser,
       ItemCategory: {
-        CatID:this.state.CatID,
-      }
+        CatID: this.state.CatID,
+      },
     };
 
     let Url = APIURLS.APIURL.GetItemCategory;
@@ -139,21 +140,21 @@ this.getItemCategory();
         let data = response.data;
         console.log("data > ", data);
         this.setState({
-          ItemCategory:data,
-          IsActive:  data.isActive,
-          MainCatID:data.mainCatId,
+          ItemCategory: data,
+          IsActive: data.isActive,
+          MainCatID: data.mainCatId,
           Code: data.code,
           Description: data.description,
-          HSNCode: data.hsncode,          
+          HSNCode: data.hsncode,
           IsTrading: data.isTrading,
           IsNonStockValuation: data.isNonStockValuation,
           IsPriceRange: data.isPriceRange,
-          IsCustomized:data.isCustomized,
+          IsCustomized: data.isCustomized,
           DisableUpdatebtn: false,
-          ProgressLoader: true
+          ProgressLoader: true,
         });
       })
-      .catch((error) => { });
+      .catch((error) => {});
   }
 
   render() {
@@ -198,7 +199,7 @@ this.getItemCategory();
           break;
         case "MainCatID":
           this.setState({ MainCatID: e.target.value });
-          break
+          break;
         case "Description":
           let v2 = this.state.Validations;
           if (e.target.value.length > 50) {
@@ -254,7 +255,6 @@ this.getItemCategory();
       }
     };
 
-    
     const update = () => {
       this.setState({ ProgressLoader: false });
       let ValidUser = APIURLS.ValidUser;
@@ -267,23 +267,28 @@ this.getItemCategory();
       let ReqData = {
         validUser: ValidUser,
         ItemCategory: {
-          CatID:this.state.CatID,
-          IsActive:  this.state.IsActive,
-          mainCatId:this.state.MainCatID,
+          CatID: this.state.CatID,
+          IsActive: this.state.IsActive,
+          mainCatId: this.state.MainCatID,
           Code: this.state.Code,
           Description: this.state.Description,
-          HSNCode: this.state.HSNCode,          
+          HSNCode: this.state.HSNCode,
           IsTrading: this.state.IsTrading,
           IsNonStockValuation: this.state.IsNonStockValuation,
           IsPriceRange: this.state.IsPriceRange,
-          IsCustomized:this.state.IsCustomized
-        }
+          IsCustomized: this.state.IsCustomized,
+        },
       };
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
           let data = response.data;
-          if (response.status === 200 || response.status === 201 || response.status === true || response.status === "true") {
+          if (
+            response.status === 200 ||
+            response.status === 201 ||
+            response.status === true ||
+            response.status === "true"
+          ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -292,7 +297,7 @@ this.getItemCategory();
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
-    }
+    };
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -308,7 +313,38 @@ this.getItemCategory();
       this.setState({ SuccessPrompt: false });
     };
 
-    
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.itemCategoryMaster + this.state.urlparams}
+          masterLinkTitle="Item Category Master"
+          typoTitle="edit Item Category"
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            onClick={update}
+            disabled={this.state.DisableUpdatebtn}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
 
     return (
       <Fragment>
@@ -321,174 +357,134 @@ this.getItemCategory();
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={6} md={6} lg={6}>
+            <Accordion
+              key="itemCategory-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
             >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.itemCategoryMaster + this.state.urlparams}
-                  masterLinkTitle="Item Category Master"
-                  typoTitle="edit Item Category"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<UpdateIcon />}
-                    onClick={update}
-                    disabled={this.state.DisableUpdatebtn}
-                  >
-                    {APIURLS.buttonTitle.update}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={6} md={6} lg={6}>
-              <Accordion
-                key="itemCategory-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    General Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label=" Item-category List table"
-                    >
-                      <TableBody className="tableBody">
+                <Typography key="" className="accordion-Header-Title">
+                  General Details
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
+                <TableContainer>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label=" Item-category List table"
+                  >
+                    <TableBody className="tableBody">
                       <DropdownInput
-                          id="MainCatID"
-                          label="MainCatID"
-                          onChange={(e) => updateFormValue("MainCatID", e)}
-                          options={this.state.MainCategoryData}
-                          value={this.state.MainCatID}
-                          isMandatory={true}
-                        />
-                        <TextboxInput
-                          id="Code"
-                          label="Code"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Code", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 20,
-                          }}
-                          value={this.state.Code}
-                          error={this.state.Validations.Code.errorState}
-                          helperText={this.state.Validations.Code.errorMssg}
-                          isMandatory={true}
-                        />
-                        <TextboxInput
-                          id="Description"
-                          label="Description"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Description", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.Description}
-                          error={this.state.Validations.Description.errorState}
-                          helperText={this.state.Validations.Description.errorMssg}
-                        />
+                        id="MainCatID"
+                        label="MainCatID"
+                        onChange={(e) => updateFormValue("MainCatID", e)}
+                        options={this.state.MainCategoryData}
+                        value={this.state.MainCatID}
+                        isMandatory={true}
+                      />
+                      <TextboxInput
+                        id="Code"
+                        label="Code"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Code", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 20,
+                        }}
+                        value={this.state.Code}
+                        error={this.state.Validations.Code.errorState}
+                        helperText={this.state.Validations.Code.errorMssg}
+                        isMandatory={true}
+                      />
+                      <TextboxInput
+                        id="Description"
+                        label="Description"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Description", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 50,
+                        }}
+                        value={this.state.Description}
+                        error={this.state.Validations.Description.errorState}
+                        helperText={
+                          this.state.Validations.Description.errorMssg
+                        }
+                      />
 
-                        <TextboxInput
-                          id="HSNCode"
-                          label="HSN Code"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("HSNCode", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 10,
-                          }}
-                          value={this.state.HSNCode}
-                          error={this.state.Validations.HSNCode.errorState}
-                          helperText={this.state.Validations.HSNCode.errorMssg}
-                        />
-                        <SwitchInput
-                          key="IsActive"
-                          id="IsActive"
-                          label="IsActive"
-                          param={this.state.IsActive}
-                          onChange={(e) => updateFormValue("IsActive", e)}
-                        />
-                        <SwitchInput
-                          key="IsNonStockV"
-                          id="IsNonStockV"
-                          label="IsNonStockV"
-                          param={this.state.IsNonStockValuation}
-                          onChange={(e) => updateFormValue("IsNonStockValuation", e)}
-                        />
-                        <SwitchInput
-                          key="IsPriceRange"
-                          id="IsPriceRange"
-                          label="IsPriceRange"
-                          param={this.state.IsPriceRange}
-                          onChange={(e) => updateFormValue("IsPriceRange", e)}
-                        />
-                        <SwitchInput
-                          key="IsCustomized"
-                          id="IsCustomized"
-                          label="IsCustomized"
-                          param={this.state.IsCustomized}
-                          onChange={(e) => updateFormValue("IsCustomized", e)}
-                        />
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
+                      <TextboxInput
+                        id="HSNCode"
+                        label="HSN Code"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("HSNCode", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                          maxlength: 10,
+                        }}
+                        value={this.state.HSNCode}
+                        error={this.state.Validations.HSNCode.errorState}
+                        helperText={this.state.Validations.HSNCode.errorMssg}
+                      />
+                      <SwitchInput
+                        key="IsActive"
+                        id="IsActive"
+                        label="IsActive"
+                        param={this.state.IsActive}
+                        onChange={(e) => updateFormValue("IsActive", e)}
+                      />
+                      <SwitchInput
+                        key="IsNonStockV"
+                        id="IsNonStockV"
+                        label="IsNonStockV"
+                        param={this.state.IsNonStockValuation}
+                        onChange={(e) =>
+                          updateFormValue("IsNonStockValuation", e)
+                        }
+                      />
+                      <SwitchInput
+                        key="IsPriceRange"
+                        id="IsPriceRange"
+                        label="IsPriceRange"
+                        param={this.state.IsPriceRange}
+                        onChange={(e) => updateFormValue("IsPriceRange", e)}
+                      />
+                      <SwitchInput
+                        key="IsCustomized"
+                        id="IsCustomized"
+                        label="IsCustomized"
+                        param={this.state.IsCustomized}
+                        onChange={(e) => updateFormValue("IsCustomized", e)}
+                      />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-        </div>
+        </Grid>
       </Fragment>
     );
   }

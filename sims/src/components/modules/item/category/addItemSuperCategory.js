@@ -28,6 +28,7 @@ import Loader from "../../../compo/loader";
 import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
 import Breadcrumb from "../../../compo/breadcrumb";
+import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 
 class addItemSuperCategory extends React.Component {
   constructor(props) {
@@ -212,6 +213,39 @@ class addItemSuperCategory extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.itemSuperCategoryMaster + this.state.urlparams}
+          masterLinkTitle="Item Super-Category Master"
+          typoTitle="Add..."
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            onClick={createNew}
+            disabled={this.state.DisableCreatebtn}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -224,144 +258,99 @@ class addItemSuperCategory extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={6} md={6} lg={6}>
+            <Accordion
+              key="itemCategory-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
             >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={
-                    URLS.URLS.itemSuperCategoryMaster + this.state.urlparams
-                  }
-                  masterLinkTitle="Item Super-Category Master"
-                  typoTitle="Add..."
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={createNew}
-                    disabled={this.state.DisableCreatebtn}
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={6} md={6} lg={6}>
-              <Accordion
-                key="itemCategory-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    General Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label=" Item-category List table"
-                    >
-                      <TableBody className="tableBody">
-                        <DropdownInput
-                          id="ItemType"
-                          label="Item Type"
-                          onChange={(e) => updateFormValue("ItemType", e)}
-                          options={this.state.ItemTypeMaster}
-                          value={this.state.ItemType}
-                          isMandatory={true}
-                        />
+                <Typography key="" className="accordion-Header-Title">
+                  General Details
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
+                <TableContainer>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label=" Item-category List table"
+                  >
+                    <TableBody className="tableBody">
+                      <DropdownInput
+                        id="ItemType"
+                        label="Item Type"
+                        onChange={(e) => updateFormValue("ItemType", e)}
+                        options={this.state.ItemTypeMaster}
+                        value={this.state.ItemType}
+                        isMandatory={true}
+                      />
 
-                        <TextboxInput
-                          id="Code"
-                          label="Code"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Code", e)}
-                          value={this.state.Code}
-                          error={this.state.Validations.Code.errorState}
-                          helperText={this.state.Validations.Code.errorMssg}
-                          isMandatory={true}
-                        />
-                        <TextboxInput
-                          id="Description"
-                          label="Description"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Description", e)}
-                          value={this.state.Description}
-                          error={this.state.Validations.Description.errorState}
-                          helperText={
-                            this.state.Validations.Description.errorMssg
-                          }
-                        />
-                        <TextboxInput
-                          id="HSNCode"
-                          label="HSN Code"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("HSNCode", e)}
-                          value={this.state.HSNCode}
-                          error={this.state.Validations.HSNCode.errorState}
-                          helperText={this.state.Validations.HSNCode.errorMssg}
-                        />
-                        <SwitchInput
-                          key="IsActive"
-                          id="IsActive"
-                          label="IsActive"
-                          param={this.state.IsActive}
-                          onChange={(e) => updateFormValue("IsActive", e)}
-                        />
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
+                      <TextboxInput
+                        id="Code"
+                        label="Code"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Code", e)}
+                        value={this.state.Code}
+                        error={this.state.Validations.Code.errorState}
+                        helperText={this.state.Validations.Code.errorMssg}
+                        isMandatory={true}
+                      />
+                      <TextboxInput
+                        id="Description"
+                        label="Description"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Description", e)}
+                        value={this.state.Description}
+                        error={this.state.Validations.Description.errorState}
+                        helperText={
+                          this.state.Validations.Description.errorMssg
+                        }
+                      />
+                      <TextboxInput
+                        id="HSNCode"
+                        label="HSN Code"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("HSNCode", e)}
+                        value={this.state.HSNCode}
+                        error={this.state.Validations.HSNCode.errorState}
+                        helperText={this.state.Validations.HSNCode.errorMssg}
+                      />
+                      <SwitchInput
+                        key="IsActive"
+                        id="IsActive"
+                        label="IsActive"
+                        param={this.state.IsActive}
+                        onChange={(e) => updateFormValue("IsActive", e)}
+                      />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-        </div>
+        </Grid>
       </Fragment>
     );
   }
