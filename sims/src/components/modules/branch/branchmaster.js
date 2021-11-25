@@ -27,6 +27,8 @@ import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import Pagination from "../../compo/paginationcomponent";
+import BackdropLoader from "../../compo/backdrop";
 
 class branchMaster extends React.Component {
   constructor(props) {
@@ -263,7 +265,6 @@ class branchMaster extends React.Component {
               openPage(URLS.URLS.addBranch + this.state.urlparams + "&type=add")
             }
           >
-            
             {APIURLS.buttonTitle.add.name}
           </Button>
           <Button
@@ -279,7 +280,7 @@ class branchMaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
@@ -339,12 +340,10 @@ class branchMaster extends React.Component {
                         ))}
                       </TableBody>
                     </Table>
-                    <TablePagination
-                      rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                      component="div"
-                      count={this.state.branchData.length}
-                      rowsPerPage={this.state.pagination.rowsPerPage}
-                      page={this.state.pagination.page}
+
+                    <Pagination
+                      data={this.state.branchData}
+                      pagination={this.state.pagination}
                       onPageChange={handlePageChange}
                     />
                   </Fragment>

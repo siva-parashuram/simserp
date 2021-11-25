@@ -37,6 +37,7 @@ import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 import SDBIB from "../../compo/griddropdowninputwithbutton";
+import BackdropLoader from "../../compo/backdrop";
 
 class addbranch extends React.Component {
   constructor(props) {
@@ -660,7 +661,7 @@ class addbranch extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}

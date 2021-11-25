@@ -31,7 +31,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Divider } from "@material-ui/core";
 
-import Loader from "../../compo/loader";
+import BackdropLoader from "../../compo/backdrop";
 import Breadcrumb from "../../compo/breadcrumb";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -41,6 +41,8 @@ import TablecustomInput from "../../compo/tablerowcellcustomhtml";
 import DropdownInput from "../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+
 
 import Addresses from "./component/addresses";
 import PaymentTerms from "./component/paymentTerms";
@@ -479,12 +481,10 @@ class supplieractivity extends React.Component {
       });
   };
 
-
   setInitialParamsForEdit = () => {
-    let CountryID =this.state.Supplier.CountryID;
+    let CountryID = this.state.Supplier.CountryID;
     this.getStateByCountry(CountryID);
   };
-
 
   updateFormValue = (param, e) => {
     let Supplier = this.state.Supplier;
@@ -1878,9 +1878,74 @@ class supplieractivity extends React.Component {
       //refresh dropdown list
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.supplierMaster + this.state.urlparams}
+          masterLinkTitle="Supplier Master"
+          typoTitle={this.state.typoTitle}
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          {this.state.type === "add" ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.save.icon}
+              className="action-btns"
+              onClick={(e) => AddNew(e)}
+              disabled={this.state.DisableCreatebtn}
+            >
+              {APIURLS.buttonTitle.save.name}
+            </Button>
+          ) : null}
+          {this.state.type === "edit" ? (
+            <div>
+              <Button
+                startIcon={APIURLS.buttonTitle.save.icon}
+                className="action-btns"
+                onClick={(e) => updateSupplier(e)}
+                disabled={this.state.DisableUpdatebtn}
+              >
+                {APIURLS.buttonTitle.save.name}
+              </Button>
+              <Button
+                className="action-btns"
+                onClick={(e) => openDialog("Address")}
+              >
+                Address
+              </Button>
+              <Button
+                className="action-btns"
+                onClick={(e) => openDialog("BranchMapping")}
+              >
+                Branch Mapping
+              </Button>
+              <Button
+                className="action-btns"
+                onClick={(e) => openDialog("SupplierPrice")}
+              >
+                Supplier Price
+              </Button>
+            </div>
+          ) : null}
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
@@ -1889,86 +1954,11 @@ class supplieractivity extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.supplierMaster + this.state.urlparams}
-                  masterLinkTitle="Supplier Master"
-                  typoTitle={this.state.typoTitle}
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={7} lg={7}>
-              <div className="btn-area-div-row">
-                <div style={{ marginLeft: 10, marginTop: 1 }}>
-                  <ButtonGroup
-                    size="small"
-                    variant="text"
-                    aria-label="Action Menu Button group"
-                  >
-                    {this.state.type === "add" ? (
-                      <Button
-                        className="action-btns"
-                        onClick={(e) => AddNew(e)}
-                        disabled={this.state.DisableCreatebtn}
-                      >
-                        {APIURLS.buttonTitle.add}
-                      </Button>
-                    ) : null}
-                    {this.state.type === "edit" ? (
-                      <div>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => updateSupplier(e)}
-                          disabled={this.state.DisableUpdatebtn}
-                        >
-                          {APIURLS.buttonTitle.update}
-                        </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("Address")}
-                        >
-                          Address
-                        </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("BranchMapping")}
-                        >
-                          Branch Mapping
-                        </Button>
-                        <Button
-                          className="action-btns"
-                          onClick={(e) => openDialog("SupplierPrice")}
-                        >
-                          Supplier Price
-                        </Button>
-                      </div>
-                    ) : null}
-                  </ButtonGroup>
-                </div>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-        <div className="breadcrumb-bottom"></div>
-        <div className="breadcrumb-bottom"></div>
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
             <Accordioncomponent

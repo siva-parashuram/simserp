@@ -27,11 +27,12 @@ import "../../user/dasboard.css";
 
 import Userbranchalot from "../branch/userbranchalot";
 import Usermoduleassign from "../modules/usermoduleassign";
-import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 import Tableskeleton from "../../compo/tableskeleton";
+import Pagination from "../../compo/paginationcomponent";
+import BackdropLoader from "../../compo/backdrop";
 
 class usermaster extends React.Component {
   constructor(props) {
@@ -335,7 +336,7 @@ class usermaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
@@ -412,12 +413,10 @@ class usermaster extends React.Component {
                         ))}
                       </TableBody>
                     </Table>
-                    <TablePagination
-                      rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                      component="div"
-                      count={this.state.users.length}
-                      rowsPerPage={this.state.pagination.rowsPerPage}
-                      page={this.state.pagination.page}
+
+                    <Pagination
+                      data={this.state.users}
+                      pagination={this.state.pagination}
                       onPageChange={handlePageChange}
                     />
                   </Fragment>

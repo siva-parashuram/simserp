@@ -28,6 +28,8 @@ import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import Pagination from "../../compo/pagination";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import BackdropLoader from "../../compo/backdrop";
+
 
 
 class coaMaster extends React.Component {
@@ -234,7 +236,7 @@ class coaMaster extends React.Component {
     );
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
 
         <Grid className="table-adjust" container spacing={0}>

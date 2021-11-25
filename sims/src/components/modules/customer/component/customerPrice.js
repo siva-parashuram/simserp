@@ -32,7 +32,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
-import Loader from "../../../compo/loader";
+import BackdropLoader from "../../../compo/backdrop";
 import Breadcrumb from "../../../compo/breadcrumb";
 import Dualtabcomponent from "../../../compo/dualtabcomponent";
 import Accordioncomponent from "../../../compo/accordioncomponent";
@@ -691,7 +691,7 @@ class customerPrice extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
 
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
@@ -734,7 +734,7 @@ class customerPrice extends React.Component {
         </Grid>
 
         <div style={{ height: 10 }}>&nbsp;</div>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <div style={{ height: 10 }}>&nbsp;</div>
 
         <Grid container spacing={0}>

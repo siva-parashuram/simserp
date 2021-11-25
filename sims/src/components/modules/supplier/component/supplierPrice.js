@@ -32,7 +32,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
-import Loader from "../../../compo/loader";
+import BackdropLoader from "../../../compo/backdrop";
 import Breadcrumb from "../../../compo/breadcrumb";
 import Dualtabcomponent from "../../../compo/dualtabcomponent";
 import Accordioncomponent from "../../../compo/accordioncomponent";
@@ -332,12 +332,13 @@ class supplierPrice extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={10} lg={10}>
             <Button
+             startIcon={APIURLS.buttonTitle.add.icon}
               className="action-btns"
               style={{ marginLeft: 5, marginBottom: 10 }}
               onClick={(e) => this.showAddNewPanel(e)}
             >
               <span style={{ paddingLeft: 7, paddingRight: 5 }}>
-                {APIURLS.buttonTitle.new}
+                {APIURLS.buttonTitle.add.name}
               </span>
             </Button>
           </Grid>
@@ -676,7 +677,7 @@ class supplierPrice extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
 
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
@@ -719,7 +720,7 @@ class supplierPrice extends React.Component {
         </Grid>
 
         <div style={{ height: 10 }}>&nbsp;</div>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <div style={{ height: 10 }}>&nbsp;</div>
 
         <Grid container spacing={0}>
@@ -756,19 +757,21 @@ class supplierPrice extends React.Component {
                     <div>
                       {this.state.createNewBtn === true ? (
                         <Button
+                        startIcon={APIURLS.buttonTitle.add.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.createSupplierPrice("NEW")}
                         >
-                          {APIURLS.buttonTitle.save}
+                          {APIURLS.buttonTitle.add.name}
                         </Button>
                       ) : (
                         <Button
+                        startIcon={APIURLS.buttonTitle.update.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.createSupplierPrice("UPDATE")}
                         >
-                          {APIURLS.buttonTitle.update}
+                          {APIURLS.buttonTitle.update.name}
                         </Button>
                       )}
                     </div>

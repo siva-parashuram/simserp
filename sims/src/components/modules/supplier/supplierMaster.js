@@ -21,10 +21,11 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Divider } from "@material-ui/core";
 
-import Loader from "../../compo/loader";
+import BackdropLoader from "../../compo/backdrop";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class supplierMaster extends React.Component {
   constructor(props) {
@@ -468,7 +469,7 @@ class supplierMaster extends React.Component {
             className="action-btns"
             onClick={(e) =>
               openPage(
-                URLS.URLS.addCustomer + this.state.urlparams + "&type=add"
+                URLS.URLS.addSupplier + this.state.urlparams + "&type=add"
               )
             }
           >
@@ -487,57 +488,12 @@ class supplierMaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}></div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(
-                        URLS.URLS.addSupplier +
-                          this.state.urlparams +
-                          "&type=add"
-                      )
-                    }
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<EditIcon />}
-                    onClick={(e) => openPage(this.state.editUrl)}
-                    disabled={this.state.editBtnDisable}
-                  >
-                    {APIURLS.buttonTitle.edit}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-        <div className="breadcrumb-bottom"></div>
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             {customerList}

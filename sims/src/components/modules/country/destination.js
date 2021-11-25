@@ -17,6 +17,8 @@ import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
 import Adddestination from "./adddestination";
+import Pagination from "../../compo/paginationcomponent";
+
 
 class destination extends React.Component {
   constructor(props) {
@@ -68,9 +70,9 @@ class destination extends React.Component {
     };
 
     const openPage = (url) => {
-        this.setState({ ProgressLoader: false });
-        window.location = url;
-      };
+      this.setState({ ProgressLoader: false });
+      window.location = url;
+    };
 
     return (
       <Fragment>
@@ -81,7 +83,12 @@ class destination extends React.Component {
         </Grid>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={6} lg={6}>
-            <a className="LINK tableLink" href={URLS.URLS.addDestination + this.state.urlparams} >+ Add New</a>
+            <a
+              className="LINK tableLink"
+              href={URLS.URLS.addDestination + this.state.urlparams}
+            >
+              + Add New
+            </a>
             {/* <Button
               startIcon={APIURLS.buttonTitle.add.icon}
               className="action-btns"
@@ -182,12 +189,10 @@ class destination extends React.Component {
                         </TableBody>
                       </Table>
                     </TableContainer>
-                    <TablePagination
-                      rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                      component="div"
-                      count={this.props.destinations.length}
-                      rowsPerPage={this.state.pagination.rowsPerPage}
-                      page={this.state.pagination.page}
+
+                    <Pagination
+                      data={this.props.destinations}
+                      pagination={this.state.pagination}
                       onPageChange={handlePageChange}
                     />
                   </Fragment>

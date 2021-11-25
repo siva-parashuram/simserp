@@ -20,7 +20,7 @@ import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
 
-import Loader from "../../../compo/loader";
+import BackdropLoader from "../../../compo/backdrop";
 
 import Breadcrumb from "../../../compo/breadcrumb";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
@@ -170,7 +170,7 @@ class itemDepartmentMaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}

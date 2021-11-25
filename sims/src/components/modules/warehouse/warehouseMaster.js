@@ -24,6 +24,9 @@ import Loader from "../../compo/loader";
 
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
+import BackdropLoader from "../../compo/backdrop";
+
+
 
 class warehouseMaster extends React.Component {
   constructor(props) {
@@ -173,7 +176,7 @@ class warehouseMaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}

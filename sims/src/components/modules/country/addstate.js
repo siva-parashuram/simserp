@@ -26,6 +26,7 @@ import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
+import BackdropLoader from "../../compo/backdrop";
 
 
 class addstate extends React.Component {
@@ -370,7 +371,7 @@ class addstate extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}

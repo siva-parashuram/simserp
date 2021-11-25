@@ -34,6 +34,8 @@ import Inputcustom from "../../../compo/inputcustom";
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
+import BackdropLoader from "../../../compo/backdrop";
+
 
 class postingGroupMaster extends React.Component {
   constructor(props) {
@@ -1808,7 +1810,7 @@ class postingGroupMaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
 
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}

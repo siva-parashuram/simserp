@@ -27,6 +27,8 @@ import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 import Tableskeleton from "../../compo/tableskeleton";
+import Pagination from "../../compo/paginationcomponent";
+import BackdropLoader from "../../compo/backdrop";
 
 class statemaster extends React.Component {
   constructor(props) {
@@ -136,26 +138,27 @@ class statemaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      try{
+      try {
         this.setState({ destinations: item.destinations });
         let editUrl =
-          URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
-  
+          URLS.URLS.editState +
+          this.state.urlparams +
+          "&StateId=" +
+          item.stateId;
+
         this.setState({ editurl: editUrl });
         removeIsSelectedRowClasses();
         document.getElementById(id).classList.add("selectedRow");
-      }catch(e){}
+      } catch (e) {}
       // getDestinationsByState(item);
-     
     };
 
     const removeIsSelectedRowClasses = () => {
-      try{
+      try {
         for (let i = 0; i < this.state.stateData.length; i++) {
           document.getElementById("row_" + i).className = "";
         }
-      }catch(e){};
-      
+      } catch (e) {}
     };
 
     const getDestinationsByState = (item) => {
@@ -256,7 +259,7 @@ class statemaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
@@ -320,14 +323,12 @@ class statemaster extends React.Component {
                         ))}
                       </TableBody>
                     </Table>
-                    <TablePagination
-                  rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                  component="div"
-                  count={this.state.stateData.length}
-                  rowsPerPage={this.state.pagination.rowsPerPage}
-                  page={this.state.pagination.page}
-                  onPageChange={handlePageChange}
-                />
+
+                    <Pagination
+                      data={this.state.stateData}
+                      pagination={this.state.pagination}
+                      onPageChange={handlePageChange}
+                    />
                   </Fragment>
                 ) : (
                   <Tableskeleton />

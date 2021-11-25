@@ -22,6 +22,8 @@ import Tableskeleton from "../../compo/tableskeleton";
 
 import Itemquickdetails from "./itemquickdetails";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import BackdropLoader from "../../compo/backdrop";
+
 
 
 class itemMaster extends React.Component {
@@ -169,7 +171,7 @@ class itemMaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
