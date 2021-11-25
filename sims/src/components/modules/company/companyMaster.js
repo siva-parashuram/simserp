@@ -513,8 +513,7 @@ class companyMaster extends React.Component {
 
                 <Pagination
                 data={this.state.companyData}
-                pagination={this.state.pagination}
-                rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                pagination={this.state.pagination}                
                 onPageChange={handlePageChange}
                 />
 

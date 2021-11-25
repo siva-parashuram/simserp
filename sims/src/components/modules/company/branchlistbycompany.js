@@ -128,8 +128,7 @@ class branchlistbycompany extends React.Component {
 
                 <Pagination
                 data={this.props.data}
-                pagination={this.state.pagination}
-                rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                pagination={this.state.pagination}                
                 onPageChange={handlePageChange}
                 />
                  

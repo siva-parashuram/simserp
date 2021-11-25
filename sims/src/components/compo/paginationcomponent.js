@@ -14,7 +14,7 @@ class paginationcomponent extends React.Component {
             <Fragment>
                  {this.props.data.length>this.props.pagination.rowsPerPage?(
                   <TablePagination
-                  rowsPerPageOptions={this.props.rowsPerPageOptions}
+                  rowsPerPageOptions={[this.props.pagination.rowsPerPage]}
                   component="div"
                   count={this.props.data.length}
                   rowsPerPage={this.props.pagination.rowsPerPage}
