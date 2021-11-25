@@ -33,6 +33,7 @@ import Inputcustom from "../../../compo/inputcustom";
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
+import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 
 class postingGroupMaster extends React.Component {
   constructor(props) {
@@ -745,10 +746,12 @@ class postingGroupMaster extends React.Component {
         <Grid container spacing={0} style={{ marginTop: 20 }}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Button
-              style={{ marginLeft: 5 }}
+              className="action-btns"
+              // style={{ marginLeft: 5 }}
+              startIcon={APIURLS.buttonTitle.update.icon}
               onClick={(e) => updateItemPostingGroup(e)}
             >
-              {APIURLS.buttonTitle.update}
+              {APIURLS.buttonTitle.update.name}
             </Button>
           </Grid>
         </Grid>
@@ -830,15 +833,18 @@ class postingGroupMaster extends React.Component {
         </Grid>
       </Fragment>
     );
+
     const tableGeneralPostingGroup = (
       <Fragment>
         <Grid container spacing={0} style={{ marginTop: 20 }}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Button
-              style={{ marginLeft: 5 }}
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.update.icon}
+              // style={{ marginLeft: 5 }}
               onClick={(e) => updateGeneralPostingGroup(e)}
             >
-              {APIURLS.buttonTitle.update}
+              {APIURLS.buttonTitle.update.name}
             </Button>
           </Grid>
         </Grid>
@@ -924,10 +930,12 @@ class postingGroupMaster extends React.Component {
         <Grid container spacing={0} style={{ marginTop: 20 }}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Button
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.update.icon}
               style={{ marginLeft: 5 }}
               onClick={(e) => updateGeneralPostingGroupSetup(e)}
             >
-              {APIURLS.buttonTitle.update}
+              {APIURLS.buttonTitle.update.name}
             </Button>
           </Grid>
         </Grid>
@@ -954,16 +962,17 @@ class postingGroupMaster extends React.Component {
       </Fragment>
     );
 
-    
     const tableSupplierPostingGroup = (
       <Fragment>
         <Grid container spacing={0} style={{ marginTop: 20 }}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Button
-              style={{ marginLeft: 5 }}
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.update.icon}
+              // style={{ marginLeft: 5 }}
               // onClick={(e) =>}
             >
-              {APIURLS.buttonTitle.update}
+              {APIURLS.buttonTitle.update.name}
             </Button>
           </Grid>
         </Grid>
@@ -987,13 +996,15 @@ class postingGroupMaster extends React.Component {
                 </TableRow>
               </TableHead>
               <TableBody className="tableBody">
-                {getIPGPageData(this.state.SupplierPostingGroupList).map((item, i) => (
-                  <TableRow id={"row_" + i} key={i}>
-                    <TableCell> {i + 1}</TableCell>
-                    <TableCell align="left">{item.Code}</TableCell>
-                    <TableCell> {item.Description}</TableCell>
-                  </TableRow>
-                ))}
+                {getIPGPageData(this.state.SupplierPostingGroupList).map(
+                  (item, i) => (
+                    <TableRow id={"row_" + i} key={i}>
+                      <TableCell> {i + 1}</TableCell>
+                      <TableCell align="left">{item.Code}</TableCell>
+                      <TableCell> {item.Description}</TableCell>
+                    </TableRow>
+                  )
+                )}
               </TableBody>
             </Table>
 
@@ -1113,10 +1124,11 @@ class postingGroupMaster extends React.Component {
       <Grid container spacing={0} style={{ marginTop: 20 }}>
         <Grid xs={12} sm={12} md={8} lg={8}>
           <Button
-            style={{ marginLeft: 5 }}
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.save.icon}
             onClick={(e) => createItemPostingGroup(e)}
           >
-            {APIURLS.buttonTitle.add}
+            {APIURLS.buttonTitle.save.name}
           </Button>
         </Grid>
 
@@ -1174,10 +1186,11 @@ class postingGroupMaster extends React.Component {
       <Grid container spacing={0}>
         <Grid xs={12} sm={12} md={8} lg={8}>
           <Button
-            style={{ marginLeft: 5 }}
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.save.icon}
             onClick={(e) => createGeneralPostingGroup(e)}
           >
-            {APIURLS.buttonTitle.add}
+            {APIURLS.buttonTitle.save.name}
           </Button>
         </Grid>
         <Grid item xs={12} sm={12} md={7} lg={7}>
@@ -1233,8 +1246,12 @@ class postingGroupMaster extends React.Component {
       <Grid container spacing={0}>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-              {APIURLS.buttonTitle.add}
+            <Button
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.save.icon}
+              onClick={(e) => {}}
+            >
+              {APIURLS.buttonTitle.save.name}
             </Button>
           </Grid>
         </Grid>
@@ -1332,10 +1349,11 @@ class postingGroupMaster extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Button
-              style={{ marginLeft: 5 }}
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.save.icon}
               onClick={(e) => createSupplierPostingGroup(e)}
             >
-              {APIURLS.buttonTitle.add}
+              {APIURLS.buttonTitle.save.name}
             </Button>
           </Grid>
         </Grid>
@@ -1411,8 +1429,12 @@ class postingGroupMaster extends React.Component {
       <Grid container spacing={0}>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-              {APIURLS.buttonTitle.add}
+            <Button
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.save.icon}
+              onClick={(e) => {}}
+            >
+              {APIURLS.buttonTitle.save.name}
             </Button>
           </Grid>
         </Grid>
@@ -1481,8 +1503,12 @@ class postingGroupMaster extends React.Component {
       <Grid container spacing={0}>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-              {APIURLS.buttonTitle.add}
+            <Button
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.save.icon}
+              onClick={(e) => {}}
+            >
+              {APIURLS.buttonTitle.save.name}
             </Button>
           </Grid>
         </Grid>
@@ -1557,8 +1583,12 @@ class postingGroupMaster extends React.Component {
       <Grid container spacing={0}>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            <Button style={{ marginLeft: 5 }} onClick={(e) => {}}>
-              {APIURLS.buttonTitle.add}
+            <Button
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.save.icon}
+              onClick={(e) => {}}
+            >
+              {APIURLS.buttonTitle.save.name}
             </Button>
           </Grid>
         </Grid>
@@ -1764,6 +1794,18 @@ class postingGroupMaster extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Posting Group Setup"
+          level={1}
+        />
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -1776,140 +1818,114 @@ class postingGroupMaster extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3 breadcrumb={breadcrumbHtml} />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Posting Group Setup"
-                  level={1}
-                />
-              </div>
+        <div style={{ marginLeft: 50, marginRight: 50 }}>
+          <Sectiontitle title="Item" />
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={11} lg={11}>
+              <Accordioncomponent
+                style={{ backgroundColor: "#fafafa" }}
+                accordionKey="a-1"
+                expanded={this.state.accordion1}
+                onClick={(e) => handleAccordionClick("accordion1", e)}
+                id="accordion1"
+                typographyKey="Item-Posting-Group"
+                typography="Item Posting Group"
+                accordiondetailsKey="accordion1"
+                html={section1}
+              />
+            </Grid>
+            <Grid xs={12} sm={12} md={11} lg={11}>
+              <Accordioncomponent
+                accordionKey="a-2"
+                expanded={this.state.accordion2}
+                onClick={(e) => handleAccordionClick("accordion2", e)}
+                id="accordion2"
+                typographyKey="General-Posting-Group"
+                typography="General Posting Group"
+                accordiondetailsKey="accordion2"
+                html={section2}
+              />
+            </Grid>
+            <Grid xs={12} sm={12} md={11} lg={11}>
+              <Accordioncomponent
+                accordionKey="a-3"
+                expanded={this.state.accordion3}
+                onClick={(e) => handleAccordionClick("accordion3", e)}
+                id="accordion3"
+                typographyKey="General-Posting-Group-Setup"
+                typography="General Posting Group Setup"
+                accordiondetailsKey="accordion3"
+                html={section3}
+              />
             </Grid>
           </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div style={{ marginLeft: 50, marginRight: 50 }}>
-            <Sectiontitle title="Item" />
-            <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={11} lg={11}>
-                <Accordioncomponent
-                  style={{ backgroundColor: "#fafafa" }}
-                  accordionKey="a-1"
-                  expanded={this.state.accordion1}
-                  onClick={(e) => handleAccordionClick("accordion1", e)}
-                  id="accordion1"
-                  typographyKey="Item-Posting-Group"
-                  typography="Item Posting Group"
-                  accordiondetailsKey="accordion1"
-                  html={section1}
-                />
-              </Grid>
-              <Grid xs={12} sm={12} md={11} lg={11}>
-                <Accordioncomponent
-                  accordionKey="a-2"
-                  expanded={this.state.accordion2}
-                  onClick={(e) => handleAccordionClick("accordion2", e)}
-                  id="accordion2"
-                  typographyKey="General-Posting-Group"
-                  typography="General Posting Group"
-                  accordiondetailsKey="accordion2"
-                  html={section2}
-                />
-              </Grid>
-              <Grid xs={12} sm={12} md={11} lg={11}>
-                <Accordioncomponent
-                  accordionKey="a-3"
-                  expanded={this.state.accordion3}
-                  onClick={(e) => handleAccordionClick("accordion3", e)}
-                  id="accordion3"
-                  typographyKey="General-Posting-Group-Setup"
-                  typography="General Posting Group Setup"
-                  accordiondetailsKey="accordion3"
-                  html={section3}
-                />
-              </Grid>
+          <Sectiontitle title="Supplier" />
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={11} lg={11}>
+              <Accordioncomponent
+                accordionKey="a-4"
+                expanded={this.state.accordion4}
+                onClick={(e) => handleAccordionClick("accordion4", e)}
+                id="accordion4"
+                typographyKey="Supplier-Posting-Group"
+                typography="Supplier-Posting-Group"
+                accordiondetailsKey="accordion4"
+                html={section4}
+              />
             </Grid>
-            <Sectiontitle title="Supplier" />
-            <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={11} lg={11}>
-                <Accordioncomponent
-                  accordionKey="a-4"
-                  expanded={this.state.accordion4}
-                  onClick={(e) => handleAccordionClick("accordion4", e)}
-                  id="accordion4"
-                  typographyKey="Supplier-Posting-Group"
-                  typography="Supplier-Posting-Group"
-                  accordiondetailsKey="accordion4"
-                  html={section4}
-                />
-              </Grid>
-              <Grid xs={12} sm={12} md={11} lg={11}>
-                <Accordioncomponent
-                  accordionKey="a-5"
-                  expanded={this.state.accordion5}
-                  onClick={(e) => handleAccordionClick("accordion5", e)}
-                  id="accordion5"
-                  typographyKey="SupplierBranchMapping"
-                  typography="Supplier Branch Mapping"
-                  accordiondetailsKey="accordion5"
-                  html={section5}
-                />
-              </Grid>
+            <Grid xs={12} sm={12} md={11} lg={11}>
+              <Accordioncomponent
+                accordionKey="a-5"
+                expanded={this.state.accordion5}
+                onClick={(e) => handleAccordionClick("accordion5", e)}
+                id="accordion5"
+                typographyKey="SupplierBranchMapping"
+                typography="Supplier Branch Mapping"
+                accordiondetailsKey="accordion5"
+                html={section5}
+              />
             </Grid>
+          </Grid>
 
-            <Sectiontitle title="Customer" />
-            <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={11} lg={11}>
-                <Accordioncomponent
-                  accordionKey="a-6"
-                  expanded={this.state.accordion6}
-                  onClick={(e) => handleAccordionClick("accordion6", e)}
-                  id="accordion6"
-                  typographyKey="Customer-Posting-Group"
-                  typography=" Customer Posting Group"
-                  accordiondetailsKey="accordion6"
-                  html={section6}
-                />
-              </Grid>
-              <Grid xs={12} sm={12} md={11} lg={11}>
-                <Accordioncomponent
-                  accordionKey="a-7"
-                  expanded={this.state.accordion7}
-                  onClick={(e) => handleAccordionClick("accordion7", e)}
-                  id="accordion7"
-                  typographyKey="Customer-Branch-Mapping"
-                  typography="Customer Branch Mapping"
-                  accordiondetailsKey="accordion7"
-                  html={section7}
-                />
-              </Grid>
+          <Sectiontitle title="Customer" />
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={11} lg={11}>
+              <Accordioncomponent
+                accordionKey="a-6"
+                expanded={this.state.accordion6}
+                onClick={(e) => handleAccordionClick("accordion6", e)}
+                id="accordion6"
+                typographyKey="Customer-Posting-Group"
+                typography=" Customer Posting Group"
+                accordiondetailsKey="accordion6"
+                html={section6}
+              />
             </Grid>
-          </div>
-
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={4} lg={4}></Grid>
-            <Grid xs={12} sm={12} md={4} lg={4}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}></Grid>
-              </Grid>
+            <Grid xs={12} sm={12} md={11} lg={11}>
+              <Accordioncomponent
+                accordionKey="a-7"
+                expanded={this.state.accordion7}
+                onClick={(e) => handleAccordionClick("accordion7", e)}
+                id="accordion7"
+                typographyKey="Customer-Branch-Mapping"
+                typography="Customer Branch Mapping"
+                accordiondetailsKey="accordion7"
+                html={section7}
+              />
             </Grid>
           </Grid>
         </div>
+
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={4} lg={4}></Grid>
+          <Grid xs={12} sm={12} md={4} lg={4}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={11} lg={11}></Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Fragment>
     );
   }

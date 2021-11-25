@@ -37,7 +37,6 @@ import Dualtabcomponent from "../../../compo/dualtabcomponent";
 import Accordioncomponent from "../../../compo/accordioncomponent";
 import Sectiontitle from "../../../compo/sectiontitle";
 import Inputcustom from "../../../compo/inputcustom";
- 
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
@@ -59,36 +58,36 @@ class branchMapping extends React.Component {
       initialCss: "",
       listBranchMapping: null,
       updateBranchMapping: {},
-      BranchMappingDataList:[],
-      BranchMappingDataHistory:[],
+      BranchMappingDataList: [],
+      BranchMappingDataHistory: [],
       BranchMappingData: [],
       GeneralDetailsExpanded: true,
       createNewBtn: false,
       updateBtn: false,
-      CustomerPostingGroupList:[],
-      GeneralPostingGroupList:[],
-      branchData:[],
-      selectedOldItem:null,
-      selectedOldItemIndex:null,
+      CustomerPostingGroupList: [],
+      GeneralPostingGroupList: [],
+      branchData: [],
+      selectedOldItem: null,
+      selectedOldItemIndex: null,
       BranchMapping: {
-        ID:0,
+        ID: 0,
         CustID: this.props.CustID,
         BranchID: "-1",
         GeneralPostingGroupID: "-1",
         CustomerPostingGroupID: "-1",
-        IsTaxExempt:false,
-        Reason:""
+        IsTaxExempt: false,
+        Reason: "",
       },
     };
   }
 
-  getDropdownValues=()=>{
+  getDropdownValues = () => {
     this.getBranches();
     this.getAllCustomerPostingGroup();
-    this.getAllGeneralPostingGroup();       
-  }
+    this.getAllGeneralPostingGroup();
+  };
 
-  componentDidMount() {    
+  componentDidMount() {
     this.getDropdownValues();
     this.getBranchMapping();
   }
@@ -191,19 +190,26 @@ class branchMapping extends React.Component {
     let Url = APIURLS.APIURL.GetCustomerBranchMappingByCustID;
     let data = {
       ValidUser: ValidUser,
-      CustomerBranchMapping:{
-        CustID:this.props.CustID
-      }
+      CustomerBranchMapping: {
+        CustID: this.props.CustID,
+      },
     };
     axios
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-        this.setState({ BranchMappingData: data,BranchMappingDataList: data, ProgressLoader: true }, () => {
-          this.setState({
-            listBranchMapping: this.listBranchMapping(),
-          });
-        });
+        this.setState(
+          {
+            BranchMappingData: data,
+            BranchMappingDataList: data,
+            ProgressLoader: true,
+          },
+          () => {
+            this.setState({
+              listBranchMapping: this.listBranchMapping(),
+            });
+          }
+        );
       })
       .catch((error) => {
         this.setState({ BranchMappingData: [], ProgressLoader: true }, () => {
@@ -214,7 +220,7 @@ class branchMapping extends React.Component {
       });
   };
 
-  handleRowClick = (e, item, id,i) => {
+  handleRowClick = (e, item, id, i) => {
     try {
       this.setState({
         BranchMapping: item,
@@ -223,8 +229,8 @@ class branchMapping extends React.Component {
         hideSidePanel: false,
         updateBtn: true,
         createNewBtn: false,
-        selectedOldItem:item,
-        selectedOldItemIndex:i
+        selectedOldItem: item,
+        selectedOldItemIndex: i,
       });
 
       this.removeIsSelectedRowClasses();
@@ -243,13 +249,13 @@ class branchMapping extends React.Component {
   showAddNewPanel = (e) => {
     this.removeIsSelectedRowClasses();
     let BranchMappingTemplate = {
-      ID:0,
-        CustID: this.props.CustID,
-        BranchID: "-1",
-        GeneralPostingGroupID: "-1",
-        CustomerPostingGroupID: "-1",
-        IsTaxExempt:false,
-        Reason:""
+      ID: 0,
+      CustID: this.props.CustID,
+      BranchID: "-1",
+      GeneralPostingGroupID: "-1",
+      CustomerPostingGroupID: "-1",
+      IsTaxExempt: false,
+      Reason: "",
     };
 
     this.setState({
@@ -275,12 +281,13 @@ class branchMapping extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={10} lg={10}>
             <Button
+              startIcon={APIURLS.buttonTitle.add.icon}
               className="action-btns"
-              style={{ marginLeft: 5, marginBottom: 10 }}
               onClick={(e) => this.showAddNewPanel(e)}
             >
               <span style={{ paddingLeft: 7, paddingRight: 5 }}>
-                {APIURLS.buttonTitle.new}
+              {" "}
+                {APIURLS.buttonTitle.add.name}
               </span>
             </Button>
           </Grid>
@@ -318,13 +325,24 @@ class branchMapping extends React.Component {
                         this.handleRowClick(event, item, "row_" + i, i)
                       }
                     >
-                      <TableCell align="left">{i+1}</TableCell>
-                      <TableCell align="left">{this.getNameByID("Branch", item.BranchID)}</TableCell>
-                      <TableCell align="left">{this.getNameByID("GeneralPostingGroup", item.GeneralPostingGroupID)}</TableCell>
-                      <TableCell align="left">{this.getNameByID("CustomerPostingGroup", item.CustomerPostingGroupID)}</TableCell>
+                      <TableCell align="left">{i + 1}</TableCell>
+                      <TableCell align="left">
+                        {this.getNameByID("Branch", item.BranchID)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {this.getNameByID(
+                          "GeneralPostingGroup",
+                          item.GeneralPostingGroupID
+                        )}
+                      </TableCell>
+                      <TableCell align="left">
+                        {this.getNameByID(
+                          "CustomerPostingGroup",
+                          item.CustomerPostingGroupID
+                        )}
+                      </TableCell>
                     </TableRow>
                   ))}
-                  
                 </TableBody>
               </Table>
             </Grid>
@@ -337,23 +355,22 @@ class branchMapping extends React.Component {
 
   updateFormValue = (param, e) => {
     let BranchMapping = this.state.BranchMapping;
-    switch(param){
-      case"IsTaxExempt":
-      BranchMapping[param]=e.target.checked;
-      this.setParams(BranchMapping); 
-      break;
-      case"Reason":
-      BranchMapping[param]=e.target.value;
-      this.setParams(BranchMapping); 
-      break;
+    switch (param) {
+      case "IsTaxExempt":
+        BranchMapping[param] = e.target.checked;
+        this.setParams(BranchMapping);
+        break;
+      case "Reason":
+        BranchMapping[param] = e.target.value;
+        this.setParams(BranchMapping);
+        break;
       default:
-        BranchMapping[param]=CF.toInt(e.target.value);
-        this.setParams(BranchMapping); 
+        BranchMapping[param] = CF.toInt(e.target.value);
+        this.setParams(BranchMapping);
         break;
     }
-   
   };
-   
+
   createBranchMapping = (param) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -362,19 +379,19 @@ class branchMapping extends React.Component {
       "Content-Type": "application/json",
     };
     let Url = APIURLS.APIURL.CreateCustomerBranchMapping;
-    let BranchMappingDataList=this.state.BranchMappingDataList;
-    let BranchMappingDataHistory=this.state.BranchMappingDataHistory;
+    let BranchMappingDataList = this.state.BranchMappingDataList;
+    let BranchMappingDataHistory = this.state.BranchMappingDataHistory;
     switch (param) {
       case "NEW":
         BranchMappingDataList.push(this.state.BranchMapping);
-        BranchMappingDataHistory=[];
+        BranchMappingDataHistory = [];
         break;
-      case "UPDATE":     
-        let selectedOldItem=this.state.selectedOldItem;
-        let index=this.state.selectedOldItemIndex;        
-        BranchMappingDataList[index]=this.state.BranchMapping;
+      case "UPDATE":
+        let selectedOldItem = this.state.selectedOldItem;
+        let index = this.state.selectedOldItemIndex;
+        BranchMappingDataList[index] = this.state.BranchMapping;
         BranchMappingDataHistory.push(selectedOldItem);
-        break;  
+        break;
       default:
         break;
     }
@@ -382,28 +399,26 @@ class branchMapping extends React.Component {
     let reqData = {
       ValidUser: ValidUser,
       CustomerBranchMappingList: BranchMappingDataList,
-      
     };
 
-    
     axios
       .post(Url, reqData, { headers })
       .then((response) => {
         if (response.status === 200 || response.status === 201) {
-          let  BranchMapping={
-            ID:0,
+          let BranchMapping = {
+            ID: 0,
             CustID: this.props.CustID,
             BranchID: "-1",
             GeneralPostingGroupID: "-1",
             CustomerPostingGroupID: "-1",
-            IsTaxExempt:false,
-            Reason:""
+            IsTaxExempt: false,
+            Reason: "",
           };
           this.setState(
             {
               BranchMapping: BranchMapping,
               SuccessPrompt: true,
-              CustomerPriceHistory:[]
+              CustomerPriceHistory: [],
             },
             () => {
               this.getBranchMapping();
@@ -418,9 +433,6 @@ class branchMapping extends React.Component {
       .catch((error) => {
         this.setState({ ErrorPrompt: true });
       });
-
-
-    
   };
 
   setParams = (object) => {
@@ -428,46 +440,45 @@ class branchMapping extends React.Component {
   };
 
   getNameByID = (type, id) => {
-    console.log("getNameByID > type > ",type);
-    console.log("getNameByID > id > ",id);
-    let name="";
-    let array=[];
-    switch (type) {      
+    console.log("getNameByID > type > ", type);
+    console.log("getNameByID > id > ", id);
+    let name = "";
+    let array = [];
+    switch (type) {
       case "Branch":
-         array=this.state.branchData;
-         console.log("In Branch > array > ",array);
-        for(let i=0;i<array.length;i++){
-          if(array[i].value===CF.toInt(id)){
-            name=array[i].name; 
+        array = this.state.branchData;
+        console.log("In Branch > array > ", array);
+        for (let i = 0; i < array.length; i++) {
+          if (array[i].value === CF.toInt(id)) {
+            name = array[i].name;
             break;
           }
         }
         break;
-        case "CustomerPostingGroup":
-           array=this.state.CustomerPostingGroupList;
-           console.log("In CustomerPostingGroup > array > ",array);
-          for(let i=0;i<array.length;i++){
-            if(array[i].value===CF.toInt(id)){
-              name=array[i].name;
-              break;
-            }
+      case "CustomerPostingGroup":
+        array = this.state.CustomerPostingGroupList;
+        console.log("In CustomerPostingGroup > array > ", array);
+        for (let i = 0; i < array.length; i++) {
+          if (array[i].value === CF.toInt(id)) {
+            name = array[i].name;
+            break;
           }
+        }
         break;
-        case "GeneralPostingGroup":
-           array=this.state.GeneralPostingGroupList;  
-           console.log("In GeneralPostingGroup > array > ",array);        
-          for(let i=0;i<array.length;i++){
-            if(array[i].value===CF.toInt(id)){
-              name=array[i].name;
-              break;
-            }
+      case "GeneralPostingGroup":
+        array = this.state.GeneralPostingGroupList;
+        console.log("In GeneralPostingGroup > array > ", array);
+        for (let i = 0; i < array.length; i++) {
+          if (array[i].value === CF.toInt(id)) {
+            name = array[i].name;
+            break;
           }
+        }
         break;
       default:
         break;
-
     }
-    console.log("getNameByID > name > ",name);
+    console.log("getNameByID > name > ", name);
     return name;
   };
 
@@ -570,95 +581,108 @@ class branchMapping extends React.Component {
           {this.state.hideSidePanel === false ? (
             <Grid item xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-              <div
-              // style={{ marginLeft: 10, marginTop: 45 }}
-              >
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <div style={{ marginTop: -12, marginLeft: 1 }}>
-                      <h4>Detail view</h4>
-                    </div>
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={4} lg={4}>
-                    <div>
-                      {this.state.createNewBtn === true ? (
-                        <Button
-                          className="action-btns"
-                          style={{ marginLeft: 10 }}
-                          onClick={(e) => this.createBranchMapping("NEW")}
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <div
+                  // style={{ marginLeft: 10, marginTop: 45 }}
+                  >
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <div style={{ marginTop: -12, marginLeft: 1 }}>
+                          <h4>Detail view</h4>
+                        </div>
+                      </Grid>
+                      <Grid item xs={12} sm={12} md={4} lg={4}>
+                        <div>
+                          {this.state.createNewBtn === true ? (
+                            <Button
+                              startIcon={APIURLS.buttonTitle.add.icon}
+                              className="action-btns"
+                              style={{ marginLeft: 10,paddingBottom:15 }}
+                              onClick={(e) => this.createBranchMapping("NEW")}
+                            >
+                              {APIURLS.buttonTitle.add.name}
+                            </Button>
+                          ) : (
+                            <Button
+                              startIcon={APIURLS.buttonTitle.update.icon}
+                              className="action-btns"
+                              style={{ marginLeft: 10 }}
+                              onClick={(e) =>
+                                this.createBranchMapping("UPDATE")
+                              }
+                            >
+                              {APIURLS.buttonTitle.update.name}
+                            </Button>
+                          )}
+                        </div>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div
+                          style={{
+                            height: 300,
+                            marginTop: 10,
+                            overflowX: "hidden",
+                            overflowY: "scroll",
+                            width: "100%",
+                            backgroundColor: "#ffffff",
+                          }}
                         >
-                          {APIURLS.buttonTitle.save}
-                        </Button>
-                      ) : (
-                        <Button
-                          className="action-btns"
-                          style={{ marginLeft: 10 }}
-                          onClick={(e) => this.createBranchMapping("UPDATE")}
-                        >
-                          {APIURLS.buttonTitle.update}
-                        </Button>
-                      )}
-                    </div>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                 
-                    <div
-                      style={{
-                        height: 300,
-                        marginTop: 10,
-                        overflowX: "hidden",
-                        overflowY: "scroll",
-                        width: "100%",
-                        backgroundColor: "#ffffff",
-                      }}
-                    >
-                      <div style={{ height: 20 }}>&nbsp;</div>
-                      <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <Table
-                        stickyHeader
-                        size="small"
-                        className="accordion-table"
-                        aria-label="Branch Mapping Form  table"
-                      >
-                        <TableBody className="tableBody">
-                          <DropdownInput
-                            id="BranchID"
-                            label="Branch"
-                            onChange={(e) =>
-                              this.updateFormValue("BranchID", e)
-                            }
-                            value={this.state.BranchMapping.BranchID}
-                            options={this.state.branchData}
-                            isMandatory={true}
-                          />
-                          <DropdownInput
-                            id="GeneralPostingGroupID"
-                            label="Gen Post Group"
-                            onChange={(e) =>
-                              this.updateFormValue("GeneralPostingGroupID", e)
-                            }
-                            value={
-                              this.state.BranchMapping.GeneralPostingGroupID
-                            }
-                            options={this.state.GeneralPostingGroupList}
-                            isMandatory={true}
-                          />
-                          <DropdownInput
-                            id="CustomerPostingGroupID"
-                            label="Cust Post"
-                            onChange={(e) =>
-                              this.updateFormValue("CustomerPostingGroupID", e)
-                            }
-                            value={
-                              this.state.BranchMapping.CustomerPostingGroupID
-                            }
-                            options={this.state.CustomerPostingGroupList}
-                            isMandatory={true}
-                          />
+                          <div style={{ height: 20 }}>&nbsp;</div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                              <Table
+                                stickyHeader
+                                size="small"
+                                className="accordion-table"
+                                aria-label="Branch Mapping Form  table"
+                              >
+                                <TableBody className="tableBody">
+                                  <DropdownInput
+                                    id="BranchID"
+                                    label="Branch"
+                                    onChange={(e) =>
+                                      this.updateFormValue("BranchID", e)
+                                    }
+                                    value={this.state.BranchMapping.BranchID}
+                                    options={this.state.branchData}
+                                    isMandatory={true}
+                                  />
+                                  <DropdownInput
+                                    id="GeneralPostingGroupID"
+                                    label="Gen Post Group"
+                                    onChange={(e) =>
+                                      this.updateFormValue(
+                                        "GeneralPostingGroupID",
+                                        e
+                                      )
+                                    }
+                                    value={
+                                      this.state.BranchMapping
+                                        .GeneralPostingGroupID
+                                    }
+                                    options={this.state.GeneralPostingGroupList}
+                                    isMandatory={true}
+                                  />
+                                  <DropdownInput
+                                    id="CustomerPostingGroupID"
+                                    label="Cust Post"
+                                    onChange={(e) =>
+                                      this.updateFormValue(
+                                        "CustomerPostingGroupID",
+                                        e
+                                      )
+                                    }
+                                    value={
+                                      this.state.BranchMapping
+                                        .CustomerPostingGroupID
+                                    }
+                                    options={
+                                      this.state.CustomerPostingGroupList
+                                    }
+                                    isMandatory={true}
+                                  />
 
                                   <SwitchInput
                                     key="IsTaxExempt"
@@ -675,25 +699,23 @@ class branchMapping extends React.Component {
                                     label="Reason"
                                     variant="outlined"
                                     size="small"
-                                    onChange={(e) => this.updateFormValue("Reason", e)}
+                                    onChange={(e) =>
+                                      this.updateFormValue("Reason", e)
+                                    }
                                     value={this.state.BranchMapping.Reason}
-                                    
                                   />
+                                </TableBody>
+                              </Table>
+                            </Grid>
+                          </Grid>
 
-
-                        </TableBody>
-                      </Table>
+                          <div style={{ height: 20 }}>&nbsp;</div>
+                        </div>
                       </Grid>
-                      </Grid>
-                      
-                      <div style={{ height: 20 }}>&nbsp;</div>
-                    </div>
-                  </Grid>
+                    </Grid>
+                  </div>
                 </Grid>
-              </div>
               </Grid>
-              </Grid>
-              
             </Grid>
           ) : null}
         </Grid>

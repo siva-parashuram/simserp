@@ -167,12 +167,13 @@ class customerCategory extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={10} lg={10}>
             <Button
+              startIcon={APIURLS.buttonTitle.add.icon}
               className="action-btns"
               style={{ marginLeft: 5, marginBottom: 10 }}
               onClick={(e) => this.showAddNewPanel(e)}
             >
               <span style={{ paddingLeft: 7, paddingRight: 5 }}>
-                {APIURLS.buttonTitle.new}
+                {APIURLS.buttonTitle.add.name}
               </span>
             </Button>
           </Grid>
@@ -318,11 +319,11 @@ class customerCategory extends React.Component {
           this.setState(
             {
               SuccessPrompt: true,
-              ErrorPrompt: false
+              ErrorPrompt: false,
             },
             () => {
               this.getCustomerCategory();
-              
+
               this.removeIsSelectedRowClasses();
             }
           );
@@ -450,19 +451,21 @@ class customerCategory extends React.Component {
                     <div>
                       {this.state.createNewBtn === true ? (
                         <Button
+                        startIcon={APIURLS.buttonTitle.add.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.createCustomerCategory(e)}
                         >
-                          {APIURLS.buttonTitle.save}
+                          {APIURLS.buttonTitle.add.name}
                         </Button>
                       ) : (
                         <Button
+                        startIcon={APIURLS.buttonTitle.update.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.UpdateCustomerCategory(e)}
                         >
-                          {APIURLS.buttonTitle.update}
+                          {APIURLS.buttonTitle.update.name}
                         </Button>
                       )}
                     </div>

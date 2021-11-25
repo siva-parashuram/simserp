@@ -25,6 +25,7 @@ import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class customerMaster extends React.Component {
   constructor(props) {
@@ -439,67 +440,56 @@ class customerMaster extends React.Component {
       </Fragment>
     );
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Customer Master"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.add.icon}
+            className="action-btns"
+            onClick={(e) =>
+              openPage(
+                URLS.URLS.addCustomer + this.state.urlparams + "&type=add"
+              )
+            }
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            className="action-btns"
+            onClick={(e) => openPage(this.state.editUrl)}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Customer Master"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={APIURLS.buttonTitle.add.icon}
-                    onClick={(e) =>
-                      openPage(
-                        URLS.URLS.addCustomer +
-                          this.state.urlparams +
-                          "&type=add"
-                      )
-                    }
-                  >
-                    {APIURLS.buttonTitle.add.name}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={APIURLS.buttonTitle.edit.icon}
-                    onClick={(e) => openPage(this.state.editUrl)}
-                    disabled={this.state.editBtnDisable}
-                  >
-                    {APIURLS.buttonTitle.edit.name}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-        <div className="breadcrumb-bottom"></div>
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             {customerList}
