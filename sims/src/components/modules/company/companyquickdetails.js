@@ -49,15 +49,16 @@ class companyquickdetails extends React.Component {
 
         const tab1Html = (
             <Fragment>
+                
                 <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-
                         {(this.state.data.length) > 0 ? (
                             <Branchlistbycompany data={this.props.data} />
                         ) : "No Branches"}
-
                     </Grid>
                 </Grid>
+                 
+                
                 <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
                         <div style={{ height: 20 }}></div>

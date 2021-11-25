@@ -21,7 +21,7 @@ import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import TablePagination from "@mui/material/TablePagination";
+ 
 
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
@@ -30,10 +30,16 @@ import Branchlistbycompany from "./branchlistbycompany";
 import CompanyQuickDetails from "./companyquickdetails";
 
 import Csvexport from "../../compo/csvexport";
-import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import Pagination from "../../compo/paginationcomponent";
+import BackdropLoader from "../../compo/backdrop";
+
+
+
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 let columns = [];
 
@@ -54,6 +60,7 @@ class companyMaster extends React.Component {
       item: null,
       editUrl: null,
       isLoggedIn: false,
+      BackdropLoader:true,
       ProgressLoader: false,
       branchName: "",
       branchId: "",
@@ -435,8 +442,10 @@ class companyMaster extends React.Component {
     return (
       <Fragment>
         <CssBaseline />
+        <BackdropLoader open={!this.state.ProgressLoader} />
 
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+       
+
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
@@ -502,14 +511,14 @@ class companyMaster extends React.Component {
                   </Table>
                 </TableContainer>
 
-                <TablePagination
-                  rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                  component="div"
-                  count={this.state.companyData.length}
-                  rowsPerPage={this.state.pagination.rowsPerPage}
-                  page={this.state.pagination.page}
-                  onPageChange={handlePageChange}
+                <Pagination
+                data={this.state.companyData}
+                pagination={this.state.pagination}
+                rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                onPageChange={handlePageChange}
                 />
+
+                 
               </Fragment>
             ) : (
               <Tableskeleton />

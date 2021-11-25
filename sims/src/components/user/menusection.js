@@ -9,15 +9,15 @@ import Link from '@mui/material/Link';
 import Grid from "@material-ui/core/Grid";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 import axios from "axios";
 import { Divider } from '@material-ui/core';
@@ -36,6 +36,8 @@ class menusection extends React.Component {
             moduleHeader: [],
             moduleLinks: [],
             userPermissionLists: [],
+            mobileMenuAnchor:null,
+            mobileMenuPopupOpen:false,
             DrawerAnchor: false,
             pages: [],
             selectedModuleName: null,
@@ -152,6 +154,11 @@ class menusection extends React.Component {
     };
 
 
+    mobileMenuPopupClose=()=>{
+        this.setState({mobileMenuPopupOpen:false});
+    }
+
+
     render() {
 
         const toggleDrawer = (item) => {
@@ -183,13 +190,13 @@ class menusection extends React.Component {
 
                 <List dense={true} style={{ backgroundColor: "#eceff1" }}>
                     <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={2} lg={2}>
+                        <Grid item xs={2} sm={2} md={2} lg={2}>
                             <IconButton aria-label="delete" style={{ textAlign: 'left', marginTop: 8 }}>
                                 <ArrowBackIcon onClick={(e) => closeDrawer(e)} />
                             </IconButton>
                             &nbsp;
                         </Grid>
-                        <Grid item xs={12} sm={12} md={10} lg={10}>
+                        <Grid item xs={10} sm={10} md={10} lg={10}>
                             <div style={{ height: 50 }}>
                                 <div style={{ textAlign: 'left', marginTop: 10 }}>
                                     <h3>{this.state.selectedModuleName}</h3>
@@ -222,6 +229,16 @@ class menusection extends React.Component {
         );
 
 
+        const handleMBClick = (event) => {
+            console.log("event.currentTarget > ",event.currentTarget);
+            this.setState({
+                mobileMenuAnchor:event.currentTarget,
+                mobileMenuPopupOpen:true
+            });
+            
+          };
+
+
         return (
             <Fragment>
                 <div style={{ marginLeft: 5, marginTop: 8, backgroundColor: '#ffffff' }} >
@@ -246,12 +263,17 @@ class menusection extends React.Component {
                                         </Button>
                                         {this.state.moduleHeader.map((item, i) => (
                                             <Fragment>
-                                                <div style={{ marginRight: 15 }} >
+                                                <div style={{ 
+                                                    marginRight: 15,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    flexWrap: 'wrap',
+                                                    }} >                                                     
                                                     <Link
                                                         className="topMenuLink"
                                                         onClick={(e) => toggleDrawer(item)}
                                                     >
-                                                        {item.name}
+                                                      {item.name}
                                                     </Link>
                                                 </div>
                                             </Fragment>
@@ -260,7 +282,7 @@ class menusection extends React.Component {
                                 </div>
                             </Grid>
                             <Grid item xs={1} sm={1} md={1} lg={1}>
-                                <div style={{ marginTop: 10 }}>
+                                <div style={{marginTop:14}}>
                                     <MenuIcon                                     
                                      className="menuiconBtn"
                                     />
@@ -293,13 +315,52 @@ class menusection extends React.Component {
                             <Grid item xs={1} sm={1} md={1} lg={1}>
                                 <div style={{ marginTop: 5 }}>
                                     <MenuIcon
+                                        id="mobile-menu-button"
                                         className="menuiconBtn"
+                                        aria-controls="mobile-sidemenu-popup"
+                                        aria-haspopup="true"
+                                        aria-expanded={this.state.mobileMenuPopupOpen ? 'true' : undefined}
+                                        onClick={handleMBClick}
                                     />
+                                    <Menu
+                                        id="mobile-sidemenu-popup"
+                                        anchorEl={this.state.mobileMenuAnchor}
+                                        open={this.state.mobileMenuPopupOpen}
+                                        onClose={() => this.mobileMenuPopupClose()}
+                                        MenuListProps={{
+                                            'aria-labelledby': 'mobile-menu-button',
+                                        }}
+                                        PaperProps={{
+                                            elevation:2,
+                                           
+                                          }}
+                                    >
+                                       
+                                        {this.state.moduleHeader.map((item, i) => (
+                                            <MenuItem>
+                                                <div style={{ 
+                                                    marginRight: 15,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    flexWrap: 'wrap',
+                                                    }} >                                                     
+                                                    <Link
+                                                        className="topMenuLink"
+                                                        onClick={(e) => toggleDrawer(item)}
+                                                    >
+                                                      {item.name}
+                                                    </Link>
+                                                </div>
+                                            </MenuItem>
+                                        ))}
+                                    </Menu>
                                 </div>
                             </Grid>
                         </Grid>
                     </div>
                 </div>
+
+                
 
                 <Drawer
                     open={this.state.DrawerAnchor}

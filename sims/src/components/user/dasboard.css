@@ -35,10 +35,10 @@
 @media (min-width:801px)  {
    /* tablet, landscape iPad, lo-res laptops ands desktops */ 
    .desktopOnly{
-    display :block !important;
+    display :none !important;
   }
   .mobileOnly{
-    display :none !important;
+    display :block !important;
   }
   }
 @media (min-width:1025px) { 
@@ -61,6 +61,7 @@
   }
 
    }
+ 
 
 
  

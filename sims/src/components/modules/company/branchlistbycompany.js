@@ -12,7 +12,7 @@ import TableCell from "@material-ui/core/TableCell";
 
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TablePagination from "@mui/material/TablePagination";
+import Pagination from "../../compo/paginationcomponent";
 
 const initialCss = "";
 class branchlistbycompany extends React.Component {
@@ -23,8 +23,8 @@ class branchlistbycompany extends React.Component {
         page: 0,
         rowsPerPage: APIURLS.pagination.rowsPerPage,
       },
-      page: 1,
-      rowsPerPage: 10,
+      // page: 1,
+      // rowsPerPage: 10,
       initialCss: initialCss,
       urlparams: "",
     };
@@ -70,7 +70,7 @@ class branchlistbycompany extends React.Component {
         {this.props.data ? (
           <div style={{ marginLeft: 10 }}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={11} xl={11}>
+              <Grid xs={11} sm={11} md={11} xl={11}>
                 <Table
                   stickyHeader
                   size="small"
@@ -125,14 +125,15 @@ class branchlistbycompany extends React.Component {
                     ))}
                   </TableBody>
                 </Table>
-                <TablePagination
-                  rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                  component="div"
-                  count={this.props.data.length}
-                  rowsPerPage={this.state.pagination.rowsPerPage}
-                  page={this.state.pagination.page}
-                  onPageChange={handlePageChange}
+
+                <Pagination
+                data={this.props.data}
+                pagination={this.state.pagination}
+                rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                onPageChange={handlePageChange}
                 />
+                 
+                
               </Grid>
             </Grid>
           </div>

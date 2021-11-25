@@ -31,7 +31,7 @@ class dualtabcomponent extends React.Component {
         return (
             <Fragment>
                 <Grid container spacing={0}>
-                    <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: '#fff' }}>
+                    <Grid xs={11} sm={11} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
                         <ButtonGroup className="" variant="text" aria-label="text button group">
                             <Button
                                 style={{
