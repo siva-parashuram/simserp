@@ -79,6 +79,12 @@ body{
   font-size: 14px !important;
 }
 
+.MuiDataGrid-cell {
+  line-height: 20px !important;
+  max-height: 20px !important;
+  min-height: 20px !important;
+}
+
 .MuiButton-root {
   font-family: Calibri !important;
 }
@@ -93,6 +99,7 @@ body{
 
 .MuiDataGrid-root{
   border-radius: 0px !important;
+  font-family: Calibri !important;
 }
 
 .MuiTableBody-root{
