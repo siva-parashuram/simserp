@@ -22,6 +22,7 @@ import Loader from "../../../compo/loader";
 
 import Breadcrumb from "../../../compo/breadcrumb";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
+import BackdropLoader from "../../../compo/backdrop";
 
 
 let rows = [];
@@ -172,7 +173,7 @@ class itemCategoryMaster extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}

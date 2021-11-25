@@ -3,7 +3,6 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -19,14 +18,13 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 
-import Loader from "../../compo/loader";
+import BackdropLoader from "../../compo/backdrop";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
-
 
 class editstate extends React.Component {
   constructor(props) {
@@ -336,7 +334,6 @@ class editstate extends React.Component {
     };
 
     const handleUpdate = () => {
-      
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -354,7 +351,7 @@ class editstate extends React.Component {
         .post(UpdateStateUrl, handleUpdateData, { headers })
         .then((response) => {
           let data = response.data;
-          console.log("dataState>>",data)
+          console.log("dataState>>", data);
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
@@ -413,7 +410,7 @@ class editstate extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
@@ -451,12 +448,12 @@ class editstate extends React.Component {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
-              <Grid container spacing={0}>
+                <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div>
                       <Grid container spacing={0}>
                         <Grid item xs={12} sm={12} md={5} lg={5}>
-                        <SIB
+                          <SIB
                             isMandatory={true}
                             id="Name"
                             label="State Name"
@@ -467,7 +464,6 @@ class editstate extends React.Component {
                             error={this.state.Validations.Name.errorState}
                           />
                           <SIB
-                           
                             id="Code"
                             label="Code"
                             variant="outlined"
@@ -480,7 +476,6 @@ class editstate extends React.Component {
                         <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                         <Grid item xs={12} sm={12} md={5} lg={5}>
                           <SIB
-                           
                             id="GSTCode"
                             label="GST Code"
                             variant="outlined"
@@ -502,8 +497,6 @@ class editstate extends React.Component {
                     </div>
                   </Grid>
                 </Grid>
-
-             
               </AccordionDetails>
             </Accordion>
           </Grid>

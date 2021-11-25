@@ -21,6 +21,8 @@ import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import Pagination from "../../compo/paginationcomponent";
+import BackdropLoader from "../../compo/backdrop";
 
 class modulemasters extends React.Component {
   constructor(props) {
@@ -91,27 +93,25 @@ class modulemasters extends React.Component {
   }
 
   InitialhandleRowClick(e, item, id) {
-    try{
+    try {
       let editUrl =
-      URLS.URLS.editModule +
-      this.state.urlparams +
-      "&moduleId=" +
-      item.moduleId;
-    this.setState({ moduleId: item.moduleId, editurl: editUrl });
-    this.InitialremoveIsSelectedRowClasses();
-    this.InitialgetPageList(item.moduleId);
-    document.getElementById(id).classList.add("selectedRow");
-    }catch(err){}
-   
+        URLS.URLS.editModule +
+        this.state.urlparams +
+        "&moduleId=" +
+        item.moduleId;
+      this.setState({ moduleId: item.moduleId, editurl: editUrl });
+      this.InitialremoveIsSelectedRowClasses();
+      this.InitialgetPageList(item.moduleId);
+      document.getElementById(id).classList.add("selectedRow");
+    } catch (err) {}
   }
 
   InitialremoveIsSelectedRowClasses() {
-    try{
+    try {
       for (let i = 0; i < this.state.modules.length; i++) {
         document.getElementById("row_" + i).className = "";
       }
-    }catch(err){}
-   
+    } catch (err) {}
   }
 
   InitialgetPageList(moduleId) {
@@ -164,29 +164,27 @@ class modulemasters extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
-      try{
+      try {
         let editUrl =
-        URLS.URLS.editModule +
-        this.state.urlparams +
-        "&moduleId=" +
-        item.moduleId;
+          URLS.URLS.editModule +
+          this.state.urlparams +
+          "&moduleId=" +
+          item.moduleId;
 
-      this.setState({ moduleId: item.moduleId, editurl: editUrl });
-      getPageList(item.moduleId);
+        this.setState({ moduleId: item.moduleId, editurl: editUrl });
+        getPageList(item.moduleId);
 
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-      }catch(err){}
-     
+        removeIsSelectedRowClasses();
+        document.getElementById(id).classList.add("selectedRow");
+      } catch (err) {}
     };
 
     const removeIsSelectedRowClasses = () => {
-      try{
+      try {
         for (let i = 0; i < this.state.modules.length; i++) {
           document.getElementById("row_" + i).className = "";
-      }
-     
-      }catch(err){}
+        }
+      } catch (err) {}
     };
 
     const getPageList = (moduleId) => {
@@ -300,7 +298,7 @@ class modulemasters extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
@@ -363,12 +361,10 @@ class modulemasters extends React.Component {
                           : null}
                       </TableBody>
                     </Table>
-                    <TablePagination
-                      rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
-                      component="div"
-                      count={this.state.modules.length}
-                      rowsPerPage={this.state.pagination.rowsPerPage}
-                      page={this.state.pagination.page}
+
+                    <Pagination
+                      data={this.state.modules}
+                      pagination={this.state.pagination}
                       onPageChange={handlePageChange}
                     />
                   </Fragment>

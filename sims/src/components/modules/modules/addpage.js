@@ -16,10 +16,11 @@ import TextboxInput from "../../compo/tablerowcelltextboxinput";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
-import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
+import BackdropLoader from "../../compo/backdrop";
+
 
 let columns = [
   {
@@ -701,13 +702,14 @@ class addpage extends React.Component {
             <Grid container spacing={3}>
               <Grid xs={12} sm={12} md={8} lg={8}>
                 <Button
+                  startIcon={APIURLS.buttonTitle.add.icon}
                   style={{ marginLeft: 5 }}
                   onClick={(e) => {
                     handlecreate(this.props.data.moduleId);
                   }}
                   disabled={this.state.createBtnDisable}
                 >
-                  {APIURLS.buttonTitle.add}
+                  {APIURLS.buttonTitle.add.name}
                 </Button>
               </Grid>
             </Grid>
@@ -766,7 +768,7 @@ class addpage extends React.Component {
       <Fragment>
         {this.props.data ? (
           <div style={{ marginTop: -50 }}>
-            <Loader ProgressLoader={this.state.ProgressLoader} />
+            <BackdropLoader open={!this.state.ProgressLoader} />
             <ErrorSnackBar
               ErrorPrompt={this.state.ErrorPrompt}
               closeErrorPrompt={closeErrorPrompt}

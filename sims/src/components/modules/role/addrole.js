@@ -31,6 +31,7 @@ import Breadcrumb from "../../compo/breadcrumb";
 import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
+import BackdropLoader from "../../compo/backdrop";
 
 class addrole extends React.Component {
   constructor(props) {
@@ -258,7 +259,7 @@ class addrole extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}

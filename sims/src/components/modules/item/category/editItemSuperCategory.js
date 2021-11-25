@@ -29,6 +29,8 @@ import SuccessSnackBar from "../../../compo/successSnackbar";
 import Breadcrumb from "../../../compo/breadcrumb";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
+import BackdropLoader from "../../../compo/backdrop";
+
 
 class editItemSuperCategory extends React.Component {
   constructor(props) {
@@ -288,7 +290,7 @@ class editItemSuperCategory extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
