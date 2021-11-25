@@ -51,7 +51,7 @@ class companyMaster extends React.Component {
     super(props);
     this.state = {
       pagination: {
-        page: 0,
+        page: 1,
         rowsPerPage: APIURLS.pagination.rowsPerPage,
       },
       page: 1,
@@ -178,7 +178,11 @@ class companyMaster extends React.Component {
             for(let i=0;i<data.length;i++){
               data[i].id=i+1;              
             }
-            this.setState({companyData:data,ProgressLoader: true});            
+            this.setState({companyData:data,ProgressLoader: true},()=>{
+              if(data.length>0){
+                this.InitialhandleRowClick([1]);
+              }
+            });            
           }
         } else {
           this.setState({ ErrorPrompt: true, ProgressLoader: true });
@@ -191,28 +195,26 @@ class companyMaster extends React.Component {
   }
 
 
-  InitialhandleRowClick(item, id) {
+  InitialhandleRowClick(e) {
     try {
-      console.log("handleRowClick > id > ", id);
-      console.log("handleRowClick > vitem > ", item);
+      console.log("handleRowClick > e > ", e);
+      let index = e[0];
+      let item = this.state.companyData[index - 1];     
+      let branches = item.Branch;
       let editUrl =
         URLS.URLS.editCompany +
         this.state.urlparams +
         "&compID=" +
         item.CompanyID;
-      let branches = item.Branch;
       this.setState({
         item: item,
         branch: branches,
         editUrl: editUrl,
-        // rowClicked: parseInt(this.state.rowClicked) + 1,
       });
-      // this.InitialremoveIsSelectedRowClasses();
-      // document.getElementById(id).classList.add("selectedRow");
-      this.getAttachments(item.CompanyID);
+      // getAttachments(item.CompanyID);
     } catch (e) {
       console.log("Error : ", e);
-    }
+    } 
   }
 
   InitialremoveIsSelectedRowClasses() {
@@ -450,10 +452,12 @@ class companyMaster extends React.Component {
             {this.state.companyData.length > 0  ? (
               <Fragment>               
                 <MasterDataGrid
+                 selectionModel={1}
                  rows={this.state.companyData}
                  columns={this.state.columns}
                  pagination={this.state.pagination}
                  onSelectionModelChange={(e) => handleRowClick(e)}
+                 onPageChange={handlePageChange}
                 />     
                             
               </Fragment>
@@ -470,7 +474,7 @@ class companyMaster extends React.Component {
                 {/*<Branchlistbycompany data={this.state.branch} />*/}
                 {this.state.item === null || this.state.item === {} ? null : (
                   <CompanyQuickDetails
-                    data={this.state.branch}
+                    data={this.state.branch===null?[]:this.state.branch}
                     item={this.state.item}
                     filelist={this.state.filelist}
                     rowClicked={this.state.rowClicked}

@@ -13,11 +13,11 @@ class masterdatagrid extends React.Component {
         return (
             <div style={{ height: 520, width: '100%' }}>
                 <DataGrid
-                    // density="compact"               
+                    // page={this.props.pagination}  
+                    selectionModel={this.props.selectionModel}            
                     rows={this.props.rows}
                     columns={this.props.columns}
-                    pageSize={12}
-                    rowsPerPageOptions={[12]}
+                    pageSize={10}                   
                     checkboxSelection={this.props.checkboxSelection}
                     disableSelectionOnClick={this.props.disableSelectionOnClick}
                     onSelectionModelChange={this.props.onSelectionModelChange}
@@ -25,7 +25,7 @@ class masterdatagrid extends React.Component {
                     components={{
                         Toolbar: GridToolbar,
                       }}
-                       
+                      onPageChange={this.props.onPageChange}   
                 />
             </div>
 
