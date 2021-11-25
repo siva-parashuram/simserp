@@ -3,19 +3,14 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
 
-import TableContainer from "@material-ui/core/TableContainer";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import DropdownInput from "../../compo/Tablerowcelldropdown";
 
 import Button from "@material-ui/core/Button";
 
-import UpdateIcon from "@material-ui/icons/Update";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import "../../user/dasboard.css";
 
@@ -23,13 +18,15 @@ import * as CF from "../../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
-import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+
 
 class editstate extends React.Component {
   constructor(props) {
@@ -64,9 +61,9 @@ class editstate extends React.Component {
       disableUpdateBtn: false,
       duplicate: false,
       Validations: {
-        name: { errorState: false, errorMsg: "" },
-        gstcode: { errorState: false, errorMsg: "" },
-        code: { errorState: false, errorMsg: "" },
+        Name: { errorState: false, errorMsg: "" },
+        Gstcode: { errorState: false, errorMsg: "" },
+        Code: { errorState: false, errorMsg: "" },
       },
     };
   }
@@ -233,7 +230,7 @@ class editstate extends React.Component {
         ) {
           if (duplicateExist === true) {
             let v = this.state.Validations;
-            v.name = { errorState: true, errorMsg: "State already exist" };
+            v.Name = { errorState: true, errorMsg: "State already exist" };
             this.setState({
               Validations: v,
               name: e.target.value,
@@ -242,7 +239,7 @@ class editstate extends React.Component {
           }
           if (e.target.value.length > 50) {
             let v = this.state.Validations;
-            v.name = {
+            v.Name = {
               errorState: true,
               errorMsg: "Only 50 Characters are Allowed!",
             };
@@ -253,7 +250,7 @@ class editstate extends React.Component {
           }
           if (e.target.value === "" || e.target.value == null) {
             let v = this.state.Validations;
-            v.name = {
+            v.Name = {
               errorState: true,
               errorMsg: "State Name Cannot be blank",
             };
@@ -265,7 +262,7 @@ class editstate extends React.Component {
           }
         } else {
           let v = this.state.Validations;
-          v.name = { errorState: false, errorMsg: "" };
+          v.Name = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
             disableUpdateBtn: false,
@@ -281,14 +278,14 @@ class editstate extends React.Component {
 
         if (e.target.value.length > 5) {
           let v = this.state.Validations;
-          v.code = { errorState: true, errorMsg: "Only 5 numbers are allowed" };
+          v.Code = { errorState: true, errorMsg: "Only 5 numbers are allowed" };
           this.setState({
             Validations: v,
             disableUpdateBtn: true,
           });
         } else {
           let v = this.state.Validations;
-          v.code = { errorState: false, errorMsg: "" };
+          v.Code = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
             disableUpdateBtn: false,
@@ -305,17 +302,18 @@ class editstate extends React.Component {
 
         if (e.target.value.length > 2) {
           let v = this.state.Validations;
-          v.gstcode = {
+          v.Gstcode = {
             errorState: true,
             errorMsg: "Only 2 numbers are allowed",
           };
           this.setState({
             Validations: v,
+            gstcode: e.target.value,
             disableCreateBtn: true,
           });
         } else {
           let v = this.state.Validations;
-          v.gstcode = { errorState: false, errorMsg: "" };
+          v.Gstcode = { errorState: false, errorMsg: "" };
           this.setState({
             Validations: v,
             disableCreateBtn: false,
@@ -338,7 +336,7 @@ class editstate extends React.Component {
     };
 
     const handleUpdate = () => {
-      checkName();
+      
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -356,6 +354,7 @@ class editstate extends React.Component {
         .post(UpdateStateUrl, handleUpdateData, { headers })
         .then((response) => {
           let data = response.data;
+          console.log("dataState>>",data)
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
@@ -453,79 +452,58 @@ class editstate extends React.Component {
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
               <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="company List table"
-                    >
-                      <TableBody className="tableBody">
-                        <Tablerowcelltextboxinput
-                          id="Name"
-                          label="State Name"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Name", e)}
-                          // InputProps={{
-                          //   className: "textFieldCss",
-                          //   maxlength: 50,
-                          // }}
-                          value={this.state.name}
-                          error={this.state.Validations.name.errorState}
-                          helperText={this.state.Validations.name.errorMsg}
-                        />
-
-                        <Tablerowcelltextboxinput
-                          id="Code"
-                          label="Code"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Code", e)}
-                          // InputProps={{
-                          //   className: "textFieldCss",
-                          //   maxlength: 5,
-                          // }}
-                          value={this.state.code}
-                          error={this.state.Validations.code.errorState}
-                          helperText={this.state.Validations.code.errorMsg}
-                        />
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                  <Grid item xs={12} sm={12} md={6} lg={6}>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="company List table"
-                    >
-                      <TableBody className="tableBody">
-                        <Tablerowcelltextboxinput
-                          id="GSTCode"
-                          label="GST Code"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("GSTCode", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 20,
-                          }}
-                          value={this.state.gstcode}
-                          error={this.state.Validations.gstcode.errorState}
-                          helperText={this.state.Validations.gstcode.errorMsg}
-                        />
-                        <DropdownInput
-                          id="CountryID"
-                          label="Country"
-                          onChange={(e) => updateFormValue("CountryID", e)}
-                          options={this.state.countryData}
-                          value={this.state.countryId}
-                        />
-                      </TableBody>
-                    </Table>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                        <SIB
+                            isMandatory={true}
+                            id="Name"
+                            label="State Name"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Name", e)}
+                            value={this.state.name}
+                            error={this.state.Validations.Name.errorState}
+                          />
+                          <SIB
+                           
+                            id="Code"
+                            label="Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Code", e)}
+                            value={this.state.code}
+                            error={this.state.Validations.Code.errorState}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                           
+                            id="GSTCode"
+                            label="GST Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("GSTCode", e)}
+                            value={this.state.gstcode}
+                            error={this.state.Validations.Gstcode.errorState}
+                          />
+                          <SDIB
+                            id="CountryID"
+                            label="Country"
+                            size="small"
+                            onChange={(e) => updateFormValue("CountryID", e)}
+                            value={this.state.countryId}
+                            param={this.state.countryData}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
                   </Grid>
                 </Grid>
+
+             
               </AccordionDetails>
             </Accordion>
           </Grid>

@@ -28,6 +28,7 @@ import Header from "../../user/userheaderconstants";
 import Loader from "../../compo/loader";
 
 import Breadcrumb from "../../compo/breadcrumb";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 class currencymaster extends React.Component {
   constructor(props) {
@@ -93,72 +94,59 @@ class currencymaster extends React.Component {
       }
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
-
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Currency Master"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.add.icon}
+            className="action-btns"
+            onClick={(e) =>
+              openPage(URLS.URLS.addCurrency + this.state.urlparams)
+            }
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            className="action-btns"
+            //onClick={(e) => openPage(this.state.editUrl)}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
-
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Currency Master"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addCurrency + this.state.urlparams)
-                    }
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<EditIcon />}
-                    //onClick={(e) => openPage(this.state.editUrl)}
-                  >
-                    {APIURLS.buttonTitle.edit}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+        
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
@@ -216,7 +204,6 @@ class currencymaster extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-        </div>
       </Fragment>
     );
   }

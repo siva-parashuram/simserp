@@ -27,6 +27,8 @@ import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import Pagination from "../../compo/pagination";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+
 
 class coaMaster extends React.Component {
   constructor(props) {
@@ -176,77 +178,65 @@ class coaMaster extends React.Component {
       this.setState({ pagination: pagination });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Chart Of Accounts"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.add.icon}
+            className="action-btns"
+            onClick={(e) =>
+              this.openPage(
+                URLS.URLS.addCoa + this.state.urlparams + "&type=add"
+              )
+            }
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            className="action-btns"
+            onClick={(e) => this.openPage(this.state.editurl)}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+          <Button
+            className="action-btns"
+            startIcon={<FormatIndentIncreaseIcon />}
+          >
+            Indent List
+          </Button>
+          <Button
+            className="action-btns"
+            startIcon={<PictureAsPdfIcon />}
+            onClick={(e) => this.exportToPdf()}
+          >
+            Export as Pdf
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Chart Of Accounts"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      this.openPage(
-                        URLS.URLS.addCoa + this.state.urlparams + "&type=add"
-                      )
-                    }
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<EditIcon />}
-                    onClick={(e) => this.openPage(this.state.editurl)}
-                  >
-                    {APIURLS.buttonTitle.edit}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<FormatIndentIncreaseIcon />}
-                  >
-                    Indent List
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<PictureAsPdfIcon />}
-                    onClick={(e) => this.exportToPdf()}
-                  >
-                    Export as Pdf
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-        <div className="breadcrumb-bottom"></div>
-        <div className="breadcrumb-bottom"></div>
+        <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
+
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>

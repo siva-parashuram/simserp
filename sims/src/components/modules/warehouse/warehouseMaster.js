@@ -16,6 +16,8 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import CheckIcon from "@mui/icons-material/Check";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+
 
 import axios from "axios";
 import Loader from "../../compo/loader";
@@ -129,63 +131,54 @@ class warehouseMaster extends React.Component {
       window.location = url;
     };
 
-    return (
+    const breadcrumbHtml = (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
-
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
+        <Breadcrumb
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
                   typoTitle="Warehouse Master"
                   level={1}
                 />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addWarehouse + this.state.urlparams)
-                    }
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<EditIcon />}
-                    onClick={(e) => openPage(this.state.editurl)}
-                  >
-                    {APIURLS.buttonTitle.edit}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
+      </Fragment>
+    );
 
-          <div className="New-link-bottom"></div>
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.add.icon}
+            className="action-btns"
+            onClick={(e) =>
+              openPage(URLS.URLS.addWarehouse + this.state.urlparams)
+            }
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            className="action-btns"
+            onClick={(e) => openPage(this.state.editurl)}
+            >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
+    return (
+      <Fragment>
+        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
+       
           <Grid className="table-adjust" container spacing={0}>
             <Grid xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
@@ -258,7 +251,6 @@ class warehouseMaster extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-        </div>
       </Fragment>
     );
   }

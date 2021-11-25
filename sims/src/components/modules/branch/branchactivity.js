@@ -34,6 +34,11 @@ import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
+import SDTI from "../../compo/griddateinput";
 
 class editbranch extends React.Component {
   constructor(props) {
@@ -599,7 +604,7 @@ class editbranch extends React.Component {
         case "ShortName":
           branch[param] = e.target.value;
           let v2 = this.state.Validations;
-          if(e.target.value===""||e.target.value.length > 10){
+          if (e.target.value === "" || e.target.value.length > 10) {
             if (e.target.value.length > 10) {
               v2.shortName = {
                 errorState: true,
@@ -609,18 +614,17 @@ class editbranch extends React.Component {
                 Validations: v2,
                 // disabledCreatebtn: true,
               });
-              if(e.target.value===""){
-                v2.shortName={
+              if (e.target.value === "") {
+                v2.shortName = {
                   errorState: true,
-                errorMsg: "Input cannot be blank!",
-                }
+                  errorMsg: "Input cannot be blank!",
+                };
                 this.setState({
                   Validations: v2,
-                })
+                });
               }
             }
-          }
-           else {
+          } else {
             v2.shortName = { errorState: false, errorMsg: "" };
             this.setState({
               Validations: v2,
@@ -1247,35 +1251,38 @@ class editbranch extends React.Component {
       Validate();
     };
 
-    const Validate=()=>{
-      let v=this.state.Validations
-if(this.state.branch.Name===""||
-this.state.branch.ShortName===""||
-v["name"].errorState===true||
-v["shortName"].errorState===true||
-v["address"].errorState===true||
-v["address2"].errorState===true||
-v["address3"].errorState===true||
-v["city"].errorState===true||
-v["postcode"].errorState===true||
-v["phoneNo"].errorState===true||
-v["FAXNo"].errorState===true||
-v["website"].errorState===true||
-v["EmailID"].errorState===true||
-v["LogoName"].errorState===true||
-v["ContactPerson"].errorState===true||
-v["PANNo"].errorState===true||
-v["TANNo"].errorState===true||
-v["CINNo"].errorState===true||
-v["IECNo"].errorState===true||
-v["ARNNo"].errorState===true||
-v["VATNo"].errorState===true||
-v["VATPercentage"].errorState===true||
-v["GSTNo"].errorState===true
-){this.setState({disabledUpdatebtn: true,disabledCreatebtn: true,})}else{
-  this.setState({disabledUpdatebtn: false,disabledCreatebtn: false,})
-}
-    }
+    const Validate = () => {
+      let v = this.state.Validations;
+      if (
+        this.state.branch.Name === "" ||
+        this.state.branch.ShortName === "" ||
+        v["name"].errorState === true ||
+        v["shortName"].errorState === true ||
+        v["address"].errorState === true ||
+        v["address2"].errorState === true ||
+        v["address3"].errorState === true ||
+        v["city"].errorState === true ||
+        v["postcode"].errorState === true ||
+        v["phoneNo"].errorState === true ||
+        v["FAXNo"].errorState === true ||
+        v["website"].errorState === true ||
+        v["EmailID"].errorState === true ||
+        v["LogoName"].errorState === true ||
+        v["ContactPerson"].errorState === true ||
+        v["PANNo"].errorState === true ||
+        v["TANNo"].errorState === true ||
+        v["CINNo"].errorState === true ||
+        v["IECNo"].errorState === true ||
+        v["ARNNo"].errorState === true ||
+        v["VATNo"].errorState === true ||
+        v["VATPercentage"].errorState === true ||
+        v["GSTNo"].errorState === true
+      ) {
+        this.setState({ disabledUpdatebtn: true, disabledCreatebtn: true });
+      } else {
+        this.setState({ disabledUpdatebtn: false, disabledCreatebtn: false });
+      }
+    };
 
     const setParams = (object) => {
       this.setState({ Customer: object });
@@ -1515,32 +1522,27 @@ v["GSTNo"].errorState===true
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={1}>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="company List table"
-                          >
-                            <TableBody className="tableBody">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
                               {console.log(
                                 "this.state.branch > ",
                                 this.state.branch
                               )}
-                              <DropdownInput
+                              <SDIB
                                 isMandatory={true}
                                 id="CompanyID"
                                 label="Company"
                                 onChange={(e) =>
                                   updateFormValue("CompanyID", e)
                                 }
-                                options={this.state.companyData}
+                                param={this.state.companyData}
                                 value={this.state.branch.CompanyID}
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="Name"
                                 label="Name"
                                 variant="outlined"
@@ -1558,7 +1560,7 @@ v["GSTNo"].errorState===true
                                 isMandatory={true}
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="ShortName"
                                 label="ShortName"
                                 variant="outlined"
@@ -1574,222 +1576,9 @@ v["GSTNo"].errorState===true
                                 error={
                                   this.state.Validations.shortName.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.shortName.errorMsg
-                                }
                                 isMandatory={true}
                               />
-
-                              <Tablerowcelltextboxinput
-                                id="PhoneNo"
-                                label="Phone No"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("PhoneNo", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.PhoneNo}
-                                error={
-                                  this.state.Validations.phoneNo.errorState
-                                }
-                                helperText={
-                                  this.state.Validations.phoneNo.errorMsg
-                                }
-                              />
-                              <Tablerowcelltextboxinput
-                                id="FAXNo"
-                                label="FAXNo "
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("FAXNo", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.FAXNo}
-                                error={this.state.Validations.FAXNo.errorState}
-                                helperText={
-                                  this.state.Validations.FAXNo.errorMsg
-                                }
-                              />
-
-                              <Tablerowcelltextboxinput
-                                id="Website"
-                                label="Website"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("Website", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.Website}
-                                error={
-                                  this.state.Validations.website.errorState
-                                }
-                                helperText={
-                                  this.state.Validations.website.errorMsg
-                                }
-                              />
-
-                              <Tablerowcelltextboxinput
-                                id="EmailID"
-                                label="EmailID"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("EmailID", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.EmailID}
-                                error={
-                                  this.state.Validations.EmailID.errorState
-                                }
-                                helperText={
-                                  this.state.Validations.EmailID.errorMsg
-                                }
-                              />
-                              <Tablerowcelltextboxinput
-                                id="LogoName"
-                                label="LogoName"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("LogoName", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.LogoName}
-                                error={
-                                  this.state.Validations.LogoName.errorState
-                                }
-                                helperText={
-                                  this.state.Validations.LogoName.errorMsg
-                                }
-                              />
-                              <Tablerowcelltextboxinput
-                                id="ContactPerson"
-                                label="ContactPerson"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("ContactPerson", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.ContactPerson}
-                                error={
-                                  this.state.Validations.ContactPerson.errorState
-                                }
-                                helperText={
-                                  this.state.Validations.ContactPerson.errorMsg
-                                }
-                              />
-
-                              <Tablerowcelldateinput
-                                isMandatory={true}
-                                id="EffectiveDate"
-                                label="Effective Date"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) =>
-                                  updateFormValue("EffectiveDate", e)
-                                }
-                                value={this.state.branch.EffectiveDate}
-                                error={null}
-                                helperText={null}
-                              />
-                              
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="company List table"
-                          >
-                            <TableBody className="tableBody">
-                            <SwitchInput
-                                key="IsTrading"
-                                id="IsTrading"
-                                label="Is Trading?"
-                                param={this.state.branch.IsTrading}
-                                onChange={(e) =>
-                                  updateFormValue("IsTrading", e)
-                                }
-                              />
-
-                              <SwitchInput
-                                key="AllowRounding"
-                                id="AllowRounding"
-                                label="Allow Rounding?"
-                                param={this.state.branch.AllowRounding}
-                                onChange={(e) =>
-                                  updateFormValue("AllowRounding", e)
-                                }
-                              />
-                              <DropdownInput
-                                isMandatory={true}
-                                id="CountryID"
-                                label="Country"
-                                onChange={(e) =>
-                                  updateFormValue("CountryID", e)
-                                }
-                                options={this.state.countryData}
-                                value={this.state.branch.CountryID}
-                              />
-                              <DropdownInput
-                                id="StateID"
-                                label="State"
-                                onChange={(e) => updateFormValue("StateID", e)}
-                                options={this.state.stateData}
-                                value={this.state.branch.StateID}
-                              />
-
-                              <Tablerowcelltextboxinput
-                                id="City"
-                                label="City"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("City", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.City}
-                                error={this.state.Validations.city.errorState}
-                                helperText={
-                                  this.state.Validations.city.errorMsg
-                                }
-                              />
-
-                              <Tablerowcelltextboxinput
-                                id="Postcode"
-                                label="Postcode"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("Postcode", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.Postcode}
-                                error={
-                                  this.state.Validations.postcode.errorState
-                                }
-                                helperText={
-                                  this.state.Validations.postcode.errorMsg
-                                }
-                              />
-
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 isMandatory={true}
                                 id="Address"
                                 label="Address Line 1"
@@ -1809,7 +1598,7 @@ v["GSTNo"].errorState===true
                                 }
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="Address2"
                                 label="Address Line 2"
                                 variant="outlined"
@@ -1828,7 +1617,7 @@ v["GSTNo"].errorState===true
                                 }
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="Address3"
                                 label="Address Line 3"
                                 variant="outlined"
@@ -1846,9 +1635,193 @@ v["GSTNo"].errorState===true
                                   this.state.Validations.address3.errorMsg
                                 }
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                              <SIB
+                                id="City"
+                                label="City"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("City", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.City}
+                                error={this.state.Validations.city.errorState}
+                                helperText={
+                                  this.state.Validations.city.errorMsg
+                                }
+                              />
+
+                              <SIB
+                                id="Postcode"
+                                label="Postcode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Postcode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.Postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                                helperText={
+                                  this.state.Validations.postcode.errorMsg
+                                }
+                              />
+                              <SDIB
+                                isMandatory={true}
+                                id="CountryID"
+                                label="Country"
+                                onChange={(e) =>
+                                  updateFormValue("CountryID", e)
+                                }
+                                param={this.state.countryData}
+                                value={this.state.branch.CountryID}
+                              />
+                              <SDIB
+                                id="StateID"
+                                label="State"
+                                onChange={(e) => updateFormValue("StateID", e)}
+                                param={this.state.stateData}
+                                value={this.state.branch.StateID}
+                              />
+                            </Grid>
+                            <Grid xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                id="PhoneNo"
+                                label="Phone No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("PhoneNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.PhoneNo}
+                                error={
+                                  this.state.Validations.phoneNo.errorState
+                                }
+                              />
+                              <SIB
+                                id="FAXNo"
+                                label="FAXNo "
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("FAXNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.FAXNo}
+                                error={this.state.Validations.FAXNo.errorState}
+                              />
+
+                              <SIB
+                                id="Website"
+                                label="Website"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Website", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.Website}
+                                error={
+                                  this.state.Validations.website.errorState
+                                }
+                              />
+
+                              <SIB
+                                id="EmailID"
+                                label="EmailID"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("EmailID", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.EmailID}
+                                error={
+                                  this.state.Validations.EmailID.errorState
+                                }
+                              />
+                              <SIB
+                                id="LogoName"
+                                label="LogoName"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("LogoName", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.LogoName}
+                                error={
+                                  this.state.Validations.LogoName.errorState
+                                }
+                              />
+
+                              <SDTI
+                                isMandatory={true}
+                                id="EffectiveDate"
+                                label="Effective Date"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("EffectiveDate", e)
+                                }
+                                value={this.state.branch.EffectiveDate}
+                                error={null}
+                                helperText={null}
+                              />
+                              <SIB
+                                id="ContactPerson"
+                                label="ContactPerson"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("ContactPerson", e)
+                                }
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.ContactPerson}
+                                error={
+                                  this.state.Validations.ContactPerson
+                                    .errorState
+                                }
+                                helperText={
+                                  this.state.Validations.ContactPerson.errorMsg
+                                }
+                              />
+                              <SSIB
+                                key="IsTrading"
+                                id="IsTrading"
+                                label="Is Trading?"
+                                param={this.state.branch.IsTrading}
+                                onChange={(e) =>
+                                  updateFormValue("IsTrading", e)
+                                }
+                              />
+
+                              <SSIB
+                                key="AllowRounding"
+                                id="AllowRounding"
+                                label="Allow Rounding?"
+                                param={this.state.branch.AllowRounding}
+                                onChange={(e) =>
+                                  updateFormValue("AllowRounding", e)
+                                }
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -1878,26 +1851,21 @@ v["GSTNo"].errorState===true
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={2}>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="Taxation table"
-                          >
-                            <TableBody className="tableBody">
-                              <DropdownInput
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SDIB
                                 isMandatory={true}
                                 id="CurrID"
                                 label="Currency"
                                 onChange={(e) => updateFormValue("CurrID", e)}
-                                options={this.state.currencyList}
+                                param={this.state.currencyList}
                                 value={this.state.branch.CurrID}
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="PANNo"
                                 label="PAN No"
                                 variant="outlined"
@@ -1909,11 +1877,8 @@ v["GSTNo"].errorState===true
                                 }}
                                 value={this.state.branch.PANNo}
                                 error={this.state.Validations.PANNo.errorState}
-                                helperText={
-                                  this.state.Validations.PANNo.errorMsg
-                                }
                               />
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="TANNo"
                                 label="TAN No"
                                 variant="outlined"
@@ -1925,11 +1890,8 @@ v["GSTNo"].errorState===true
                                 }}
                                 value={this.state.branch.TANNo}
                                 error={this.state.Validations.TANNo.errorState}
-                                helperText={
-                                  this.state.Validations.TANNo.errorMsg
-                                }
                               />
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="CINNo"
                                 label="CIN No"
                                 variant="outlined"
@@ -1945,7 +1907,7 @@ v["GSTNo"].errorState===true
                                   this.state.Validations.CINNo.errorMsg
                                 }
                               />
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="IECNo"
                                 label="IEC No"
                                 variant="outlined"
@@ -1957,11 +1919,8 @@ v["GSTNo"].errorState===true
                                 }}
                                 value={this.state.branch.IECNo}
                                 error={this.state.Validations.IECNo.errorState}
-                                helperText={
-                                  this.state.Validations.IECNo.errorMsg
-                                }
                               />
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="ARNNo"
                                 label="ARN No"
                                 variant="outlined"
@@ -1973,12 +1932,9 @@ v["GSTNo"].errorState===true
                                 }}
                                 value={this.state.branch.ARNNo}
                                 error={this.state.Validations.ARNNo.errorState}
-                                helperText={
-                                  this.state.Validations.ARNNo.errorMsg
-                                }
                               />
 
-                              <SwitchInput
+                              <SSIB
                                 key="IsSEZ"
                                 id="IsSEZ"
                                 label="Is SEZ?"
@@ -1986,7 +1942,7 @@ v["GSTNo"].errorState===true
                                 onChange={(e) => updateFormValue("IsSEZ", e)}
                               />
 
-                              <SwitchInput
+                              <SSIB
                                 key="IsExportUnit"
                                 id="IsExportUnit"
                                 label="Is Export Unit?"
@@ -1995,20 +1951,10 @@ v["GSTNo"].errorState===true
                                   updateFormValue("IsExportUnit", e)
                                 }
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="Taxation table"
-                          >
-                            <TableBody className="tableBody">
-                              <SwitchInput
+                            </Grid>
+                            <Grid xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid xs={12} sm={12} md={5} lg={5}>
+                              <SSIB
                                 key="IsVAT"
                                 id="IsVAT"
                                 label="Is VAT?"
@@ -2018,7 +1964,7 @@ v["GSTNo"].errorState===true
 
                               {/* Addd this -> above   VAT_GST_Checkbox_Click(e, "isvat") */}
 
-                              <Tablerowcelldateinput
+                              <SDTI
                                 id="VATRegistationDate"
                                 label="VAT Registation Date"
                                 variant="outlined"
@@ -2027,11 +1973,9 @@ v["GSTNo"].errorState===true
                                   updateFormValue("VATRegistationDate", e)
                                 }
                                 value={this.state.branch.VATRegistationDate}
-                                error={null}
-                                helperText={null}
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="VATNo"
                                 label="VAT No"
                                 variant="outlined"
@@ -2042,14 +1986,10 @@ v["GSTNo"].errorState===true
                                   maxlength: 20,
                                 }}
                                 value={this.state.branch.VATNo}
-                                disabled={this.state.VATNoDisabled}
+                                disabled={!this.state.branch.IsVAT}
                                 error={this.state.Validations.VATNo.errorState}
-                                helperText={
-                                  this.state.Validations.VATNo.errorMsg
-                                }
                               />
-                              <Tablerowcelltextboxinput
-                                type="number"
+                              <SIB
                                 id="VATPercentage"
                                 label="VAT Percentage"
                                 variant="outlined"
@@ -2067,12 +2007,9 @@ v["GSTNo"].errorState===true
                                   this.state.Validations.VATPercentage
                                     .errorState
                                 }
-                                helperText={
-                                  this.state.Validations.VATPercentage.errorMsg
-                                }
                               />
 
-                              <SwitchInput
+                              <SSIB
                                 key="IsGST"
                                 id="IsGST"
                                 label="Is GST?"
@@ -2081,7 +2018,7 @@ v["GSTNo"].errorState===true
                               />
                               {/*  Add this criteria above  ->   VAT_GST_Checkbox_Click(e, "isgst") */}
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="GSTNo"
                                 label="GST No"
                                 variant="outlined"
@@ -2092,14 +2029,11 @@ v["GSTNo"].errorState===true
                                   maxlength: 50,
                                 }}
                                 value={this.state.branch.GSTNo}
-                                disabled={this.state.GSTNoDisabled}
+                                disabled={!this.state.branch.IsGST}
                                 error={this.state.Validations.GSTNo.errorState}
-                                helperText={
-                                  this.state.Validations.GSTNo.errorMsg
-                                }
                               />
 
-                              <Tablerowcelldateinput
+                              <SDTI
                                 id="GSTRegistationDate"
                                 label="GST Registation Date"
                                 variant="outlined"
@@ -2111,9 +2045,9 @@ v["GSTNo"].errorState===true
                                 error={null}
                                 helperText={null}
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -2143,261 +2077,246 @@ v["GSTNo"].errorState===true
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
-                    <Grid container spacing={1}>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="Numbering table"
-                          >
-                            <TableBody className="tableBody">
-                              <DropdownInput
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SDIB
                                 id="LPINo"
                                 label="Local Proforma Invoice"
                                 value={this.state.branch.LPINo}
                                 onChange={(e) => updateFormValue("LPINo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="EPINo"
                                 label="Export Proforma Invoice"
                                 value={this.state.branch.EPINo}
                                 onChange={(e) => updateFormValue("EPINo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="SPINo"
                                 label="Sample Proforma Invoice"
                                 value={this.state.branch.SPINo}
                                 onChange={(e) => updateFormValue("SPINo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="TPINo"
                                 label="Trading Proforma Invoice"
                                 value={this.state.branch.TPINo}
                                 onChange={(e) => updateFormValue("TPINo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
 
-                              <DropdownInput
+                              <SDIB
                                 id="LSONo"
                                 label="Local Sales Order"
                                 value={this.state.branch.LSONo}
                                 onChange={(e) => updateFormValue("LSONo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="ESONo"
                                 label="Export Sales Order"
                                 value={this.state.branch.ESONo}
                                 onChange={(e) => updateFormValue("ESONo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="SSONo"
                                 label="Sample Sales Order"
                                 value={this.state.branch.SSONo}
                                 onChange={(e) => updateFormValue("SSONo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="TSONo"
                                 label="Trading Sales Order"
                                 value={this.state.branch.TSONo}
                                 onChange={(e) => updateFormValue("TSONo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
 
-                              <DropdownInput
+                              <SDIB
                                 id="LSINo"
                                 label="Local Sales Invoice"
                                 value={this.state.LSINo}
                                 onChange={(e) => updateFormValue("LSINo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="ESINo"
                                 label="Export Sales Invoice"
                                 value={this.state.branch.ESINo}
                                 onChange={(e) => updateFormValue("ESINo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="SSINo"
                                 label="Sample Sales Invoice"
                                 value={this.state.branch.SSINo}
                                 onChange={(e) => updateFormValue("SSINo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="TSINo"
                                 label="Trading Sales Invoice"
                                 value={this.state.branch.TSINo}
                                 onChange={(e) => updateFormValue("TSINo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
 
-                              <DropdownInput
+                              <SDIB
                                 id="PSNo"
                                 label="Pack slip"
                                 value={this.state.branch.PSNo}
                                 onChange={(e) => updateFormValue("PSNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="CPSNo"
                                 label="Combine Pack Slip"
                                 value={this.state.branch.CPSNo}
                                 onChange={(e) => updateFormValue("CPSNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="CNNo"
                                 label="Credit Note"
                                 value={this.state.branch.CNNo}
                                 onChange={(e) => updateFormValue("CNNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="DNNo"
                                 label="Debit Note"
                                 value={this.state.branch.DNNo}
                                 onChange={(e) => updateFormValue("DNNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="Numbering table"
-                          >
-                            <TableBody className="tableBody">
-                              <DropdownInput
+                            </Grid>
+                            <Grid xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid xs={12} sm={12} md={5} lg={5}>
+                              <SDIB
                                 id="PRNo"
                                 label="Purchase Request"
                                 value={this.state.branch.PRNo}
                                 onChange={(e) => updateFormValue("PRNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="LPONo"
                                 label="Local Purchase Order"
                                 value={this.state.branch.LPONo}
                                 onChange={(e) => updateFormValue("LPONo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
 
-                              <DropdownInput
+                              <SDIB
                                 id="IPONo"
                                 label="Import Purchase Order"
                                 value={this.state.branch.IPONo}
                                 onChange={(e) => updateFormValue("IPONo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
 
-                              <DropdownInput
+                              <SDIB
                                 id="PurInvNo"
                                 label="Purchase Invoice"
                                 value={this.state.branch.PurInvNo}
                                 onChange={(e) => updateFormValue("PurInvNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="GITNo"
                                 label="GIT"
                                 value={this.state.branch.GITNo}
                                 onChange={(e) => updateFormValue("GITNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="SRNo"
                                 label="Store Requisition"
                                 value={this.state.branch.SRNo}
                                 onChange={(e) => updateFormValue("SRNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="SIssueNo"
                                 label="Store Issue"
                                 value={this.state.branch.SIssueNo}
                                 onChange={(e) => updateFormValue("SIssueNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="JVNo"
                                 label="Journal Voucher"
                                 value={this.state.branch.JVNo}
                                 onChange={(e) => updateFormValue("JVNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="PVNo"
                                 label="Payment Voucher"
                                 value={this.state.branch.PVNo}
                                 onChange={(e) => updateFormValue("PVNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="RVNo"
                                 label="Receipt Voucher"
                                 value={this.state.branch.RVNo}
                                 onChange={(e) => updateFormValue("RVNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="CENo"
                                 label="Contra Entry"
                                 value={this.state.branch.CENo}
                                 onChange={(e) => updateFormValue("CENo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="BankNo"
                                 label="Bank"
                                 value={this.state.branch.BankNo}
                                 onChange={(e) => updateFormValue("BankNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="CashNo"
                                 label="Cash"
                                 value={this.state.branch.CashNo}
                                 onChange={(e) => updateFormValue("CashNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="FGQCNo"
                                 label="FG QC No"
                                 value={this.state.branch.FGQCNo}
                                 onChange={(e) => updateFormValue("FGQCNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="RMQCNo"
                                 label="RM QC No"
                                 value={this.state.branch.RMQCNo}
                                 onChange={(e) => updateFormValue("RMQCNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                              <DropdownInput
+                              <SDIB
                                 id="IJCNo"
                                 label="IJC"
                                 value={this.state.branch.IJCNo}
                                 onChange={(e) => updateFormValue("IJCNo", e)}
-                                options={this.state.numberSeries}
+                                param={this.state.numberSeries}
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>

@@ -1592,40 +1592,7 @@ class editbranch extends React.Component {
                                   this.state.Validations.address2.errorMsg
                                 }
                               />
-                              {/* <TableRow>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    Address Line 2
-                                  </TableCell>
-                                  <TableCell
-                                    align="left"
-                                    className="no-border-table"
-                                  >
-                                    <TextField
-                                      id="Address2"
-                                      variant="outlined"
-                                      size="small"
-                                      onChange={(e) =>
-                                        updateFormValue("Address2", e)
-                                      }
-                                      fullWidth
-                                      value={this.state.address2}
-                                      InputProps={{
-                                        className: "textFieldCss",
-                                        maxlength: 50,
-                                      }}
-                                      error={
-                                        this.state.Validations.address2
-                                          .errorState
-                                      }
-                                      helperText={
-                                        this.state.Validations.address2.errorMsg
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow> */}
+                              
                               <Tablerowcelltextboxinput
                                 id="Address3"
                                 label="Address Line 3"

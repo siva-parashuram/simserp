@@ -30,6 +30,7 @@ import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 const Dformat = APIURLS.DFormat;
 const viewDate = "yyyy-mm-dd";
@@ -290,6 +291,39 @@ class addcurrency extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.currencyMaster + this.state.urlparams}
+          masterLinkTitle="Currency Master"
+          typoTitle="Add Currency"
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            onClick={(e) => handleCreate(e)}
+            disabled={this.state.DisableCreatebtn}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -301,158 +335,114 @@ class addcurrency extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
+            <Accordion
+              key="numbering-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
             >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.currencyMaster + this.state.urlparams}
-                  masterLinkTitle="Currency Master"
-                  typoTitle="Add Currency"
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) => handleCreate(e)}
-                    disabled={this.state.DisableCreatebtn}
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <Accordion
-                key="numbering-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    General Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="company List table"
-                    >
-                      <TableBody className="tableBody">
-                        <Tablerowcelltextboxinput
-                          id="Code"
-                          label="Code"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Code", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                          }}
-                          value={this.state.Code}
-                          error={this.state.Validations.Code.errorState}
-                          helperText={this.state.Validations.Code.errorMssg}
-                        />
+                <Typography key="" className="accordion-Header-Title">
+                  General Details
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
+                <TableContainer>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className="accordion-table"
+                    aria-label="company List table"
+                  >
+                    <TableBody className="tableBody">
+                      <Tablerowcelltextboxinput
+                        id="Code"
+                        label="Code"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Code", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                        }}
+                        value={this.state.Code}
+                        error={this.state.Validations.Code.errorState}
+                        helperText={this.state.Validations.Code.errorMssg}
+                      />
 
-                        <Tablerowcelltextboxinput
-                          id="Description"
-                          label="Description"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Description", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                          }}
-                          value={this.state.Description}
-                          error={this.state.Validations.Description.errorState}
-                          helperText={
-                            this.state.Validations.Description.errorMssg
-                          }
-                        />
+                      <Tablerowcelltextboxinput
+                        id="Description"
+                        label="Description"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Description", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                        }}
+                        value={this.state.Description}
+                        error={this.state.Validations.Description.errorState}
+                        helperText={
+                          this.state.Validations.Description.errorMssg
+                        }
+                      />
 
-                        <Tablerowcelltextboxinput
-                          id="Symbol"
-                          label="Symbol"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Symbol", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                          }}
-                          value={this.state.Symbol}
-                          error={this.state.Validations.Symbol.errorState}
-                          helperText={this.state.Validations.Symbol.errorMssg}
-                        />
+                      <Tablerowcelltextboxinput
+                        id="Symbol"
+                        label="Symbol"
+                        variant="outlined"
+                        size="small"
+                        onChange={(e) => updateFormValue("Symbol", e)}
+                        InputProps={{
+                          className: "textFieldCss",
+                        }}
+                        value={this.state.Symbol}
+                        error={this.state.Validations.Symbol.errorState}
+                        helperText={this.state.Validations.Symbol.errorMssg}
+                      />
 
-                        <DropdownInput
-                          id="RealizedGainId"
-                          label="Realized Gain"
-                          onChange={(e) => updateFormValue("RealizedGainId", e)}
-                          value={this.state.Currency.RealizedGainId}
-                          options={this.state.COAList}
-                        />
+                      <DropdownInput
+                        id="RealizedGainId"
+                        label="Realized Gain"
+                        onChange={(e) => updateFormValue("RealizedGainId", e)}
+                        value={this.state.Currency.RealizedGainId}
+                        options={this.state.COAList}
+                      />
 
-                        <DropdownInput
-                          id="RealizedLossId"
-                          label="Realized Loss "
-                          onChange={(e) => updateFormValue("RealizedLossId", e)}
-                          value={this.state.Currency.RealizedLossId}
-                          options={this.state.COAList}
-                        />
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
-            <Grid xs={12} sm={12} md={7} lg={7}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}></Grid>
-              </Grid>
+                      <DropdownInput
+                        id="RealizedLossId"
+                        label="Realized Loss "
+                        onChange={(e) => updateFormValue("RealizedLossId", e)}
+                        value={this.state.Currency.RealizedLossId}
+                        options={this.state.COAList}
+                      />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+          <Grid xs={12} sm={12} md={7} lg={7}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={11} lg={11}></Grid>
             </Grid>
           </Grid>
-        </div>
+        </Grid>
       </Fragment>
     );
   }

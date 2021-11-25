@@ -136,20 +136,26 @@ class statemaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
+      try{
+        this.setState({ destinations: item.destinations });
+        let editUrl =
+          URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
+  
+        this.setState({ editurl: editUrl });
+        removeIsSelectedRowClasses();
+        document.getElementById(id).classList.add("selectedRow");
+      }catch(e){}
       // getDestinationsByState(item);
-      this.setState({ destinations: item.destinations });
-      let editUrl =
-        URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
-
-      this.setState({ editurl: editUrl });
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
+     
     };
 
     const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.stateData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
+      try{
+        for (let i = 0; i < this.state.stateData.length; i++) {
+          document.getElementById("row_" + i).className = "";
+        }
+      }catch(e){};
+      
     };
 
     const getDestinationsByState = (item) => {

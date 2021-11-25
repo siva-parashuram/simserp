@@ -22,6 +22,7 @@ import Accordioncomponent from "../../compo/accordioncomponent";
 import DropdownInput from "../../compo/Tablerowcelldropdown";
 import TextboxInput from "../../compo/tablerowcelltextboxinput";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 let today = moment().format("MM/DD/YYYY");
 
@@ -608,6 +609,51 @@ class coaactivity extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
+
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.coa + this.state.urlparams}
+          masterLinkTitle="Chart of Accounts"
+          typoTitle={this.state.typoTitle}
+          level={2}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          {this.state.type === "add" ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.save.icon}
+              className="action-btns"
+              onClick={(e) => createCoa(e)}
+              disabled={this.state.DisableCreatebtn}
+            >
+              {APIURLS.buttonTitle.save.name}
+            </Button>
+          ) : null}
+          {this.state.type === "edit" ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.save.icon}
+              className="action-btns"
+              onClick={(e) => updateCoa(e)}
+              disabled={this.state.DisableUpdatebtn}
+            >
+              {APIURLS.buttonTitle.save.name}
+            </Button>
+          ) : null}
+        </ButtonGroup>
+      </Fragment>
+    );
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
@@ -619,63 +665,11 @@ class coaactivity extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.coa + this.state.urlparams}
-                  masterLinkTitle="Chart of Accounts"
-                  typoTitle={this.state.typoTitle}
-                  level={2}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  {this.state.type === "add" ? (
-                    <Button
-                      className="action-btns"
-                      onClick={(e) => createCoa(e)}
-                      disabled={this.state.DisableCreatebtn}
-                    >
-                      {APIURLS.buttonTitle.add}
-                    </Button>
-                  ) : null}
-                  {this.state.type === "edit" ? (
-                    <Button
-                      className="action-btns"
-                      onClick={(e) => updateCoa(e)}
-                      disabled={this.state.DisableUpdatebtn}
-                    >
-                      {APIURLS.buttonTitle.update}
-                    </Button>
-                  ) : null}
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-        <div className="breadcrumb-bottom"></div>
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
             <Accordioncomponent

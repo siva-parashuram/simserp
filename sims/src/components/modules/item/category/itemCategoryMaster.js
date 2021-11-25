@@ -21,6 +21,8 @@ import "../../../user/dasboard.css";
 import Loader from "../../../compo/loader";
 
 import Breadcrumb from "../../../compo/breadcrumb";
+import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
+
 
 let rows = [];
 class itemCategoryMaster extends React.Component {
@@ -128,134 +130,124 @@ class itemCategoryMaster extends React.Component {
       window.location = url;
     };
 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          typoTitle="Item Category Master"
+          level={1}
+        />
+      </Fragment>
+    );
+
+    const buttongroupHtml = (
+      <Fragment>
+        {console.log("APIURLS.buttonTitle > ", APIURLS.buttonTitle)}
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            startIcon={APIURLS.buttonTitle.add.icon}
+            className="action-btns"
+            onClick={(e) =>
+              openPage(URLS.URLS.addItemCategory + this.state.urlparams)
+            }
+          >
+            {APIURLS.buttonTitle.add.name}
+          </Button>
+          <Button
+            startIcon={APIURLS.buttonTitle.edit.icon}
+            className="action-btns"
+            onClick={(e) => openPage(this.state.editurl)}
+          >
+            {APIURLS.buttonTitle.edit.name}
+          </Button>
+        </ButtonGroup>
+      </Fragment>
+    );
+
     return (
       <Fragment>
         <Loader ProgressLoader={this.state.ProgressLoader} />
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={3}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  typoTitle="Item Category Master"
-                  level={1}
-                />
-              </div>
-            </Grid>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <div style={{ marginLeft: 10, marginTop: 1 }}>
-                <ButtonGroup
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={10} lg={10}>
+                <Table
+                  stickyHeader
                   size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
+                  className=""
+                  aria-label="Item-catagory List table"
                 >
-                  <Button
-                    className="action-btns"
-                    startIcon={<AddIcon />}
-                    onClick={(e) =>
-                      openPage(URLS.URLS.addItemCategory + this.state.urlparams)
-                    }
-                  >
-                    {APIURLS.buttonTitle.add}
-                  </Button>
-                  <Button
-                    className="action-btns"
-                    startIcon={<EditIcon />}
-                    onClick={(e) => openPage(this.state.editurl)}
-                  >
-                    {APIURLS.buttonTitle.edit}
-                  </Button>
-                </ButtonGroup>
-              </div>
-            </Grid>
-          </Grid>
-          <div className="breadcrumb-bottom"></div>
-
-          <div className="New-link-bottom"></div>
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={10} lg={10}>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className=""
-                    aria-label="Item-catagory List table"
-                  >
-                    <TableHead className="table-header-background">
-                      <TableRow>
-                        <TableCell className="table-header-font">#</TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Code
+                  <TableHead className="table-header-background">
+                    <TableRow>
+                      <TableCell className="table-header-font">#</TableCell>
+                      <TableCell className="table-header-font" align="left">
+                        Code
+                      </TableCell>
+                      <TableCell className="table-header-font" align="left">
+                        Hsncode
+                      </TableCell>
+                      <TableCell className="table-header-font" align="left">
+                        description
+                      </TableCell>
+                      <TableCell className="table-header-font" align="left">
+                        Status
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody className="tableBody">
+                    {this.state.ItemCategoryData.map((item, i) => (
+                      <TableRow
+                        id={"row_" + i}
+                        className={this.state.initialCss}
+                        hover
+                        key={i}
+                        onClick={(event) =>
+                          handleRowClick(event, item, "row_" + i)
+                        }
+                      >
+                        <TableCell align="left">{i + 1}</TableCell>
+                        <TableCell align="left">
+                          <a
+                            className="LINK tableLink"
+                            href={
+                              URLS.URLS.editItemCategory +
+                              this.state.urlparams +
+                              "&editCatID=" +
+                              item.catId
+                            }
+                          >
+                            {item.code}
+                          </a>
                         </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Hsncode
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          description
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Status
+                        <TableCell align="left">{item.hsncode}</TableCell>
+                        <TableCell align="left">{item.description}</TableCell>
+                        <TableCell align="left">
+                          {item.isActive === true ? (
+                            <span style={{ color: "green" }}>Active</span>
+                          ) : (
+                            <span style={{ color: "red" }}>In-Active</span>
+                          )}
                         </TableCell>
                       </TableRow>
-                    </TableHead>
-                    <TableBody className="tableBody">
-                      {this.state.ItemCategoryData.map((item, i) => (
-                        <TableRow
-                          id={"row_" + i}
-                          className={this.state.initialCss}
-                          hover
-                          key={i}
-                          onClick={(event) =>
-                            handleRowClick(event, item, "row_" + i)
-                          }
-                        >
-                          <TableCell align="left">{i + 1}</TableCell>
-                          <TableCell align="left">
-                            <a
-                              className="LINK tableLink"
-                              href={
-                                URLS.URLS.editItemCategory +
-                                this.state.urlparams +
-                                "&editCatID=" +
-                                item.catId
-                              }
-                            >
-                              {item.code}
-                            </a>
-                          </TableCell>
-                          <TableCell align="left">{item.hsncode}</TableCell>
-                          <TableCell align="left">{item.description}</TableCell>
-                          <TableCell align="left">
-                            {item.isActive === true ? (
-                              <span style={{ color: "green" }}>Active</span>
-                            ) : (
-                              <span style={{ color: "red" }}>In-Active</span>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Grid>
+                    ))}
+                  </TableBody>
+                </Table>
               </Grid>
             </Grid>
-            <Grid xs={12} sm={12} md={4} lg={4}></Grid>
           </Grid>
-        </div>
+          <Grid xs={12} sm={12} md={4} lg={4}></Grid>
+        </Grid>
       </Fragment>
     );
   }
