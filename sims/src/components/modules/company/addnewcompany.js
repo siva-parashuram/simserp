@@ -235,6 +235,7 @@ class addnewcompany extends React.Component {
     const updateFormValue = (param, e) => {
       let company = this.state.company;
       let v = this.state.Validations;
+     
       switch (param) {
         case "CompanyName":
           let duplicateExist = false;
@@ -281,7 +282,7 @@ class addnewcompany extends React.Component {
             e.target.value == null ||
             e.target.value.length > 50
           ) {
-            v.companyName = {
+            v.address = {
               errorState: true,
               errorMsg: "Inproper data",
             };
@@ -289,7 +290,7 @@ class addnewcompany extends React.Component {
             this.setParams(company);
             this.setState({Validations:v});
           }else{
-            v.companyName = {
+            v.address = {
               errorState: false,
               errorMsg: "",
             };
@@ -301,7 +302,7 @@ class addnewcompany extends React.Component {
           break;
         case "Address2":
           if (e.target.value.length > 50) {
-            v.companyName = {
+            v.address2 = {
               errorState: true,
               errorMsg: "Inproper data",
             };
@@ -309,7 +310,7 @@ class addnewcompany extends React.Component {
             this.setParams(company);
             this.setState({Validations:v});
           }else{
-            v.companyName = {
+            v.address2 = {
               errorState: false,
               errorMsg: "",
             };
@@ -320,7 +321,7 @@ class addnewcompany extends React.Component {
           break;
         case "Address3":
           if (e.target.value.length > 50) {
-            v.companyName = {
+            v.address3 = {
               errorState: true,
               errorMsg: "Inproper data",
             };
@@ -328,7 +329,7 @@ class addnewcompany extends React.Component {
             this.setParams(company);
             this.setState({Validations:v});
           }else{
-            v.companyName = {
+            v.address3 = {
               errorState: false,
               errorMsg: "",
             };
@@ -339,7 +340,7 @@ class addnewcompany extends React.Component {
           break;
         case "City":
           if (e.target.value.length > 50) {
-            v.companyName = {
+            v.city = {
               errorState: true,
               errorMsg: "Inproper data",
             };
@@ -347,7 +348,7 @@ class addnewcompany extends React.Component {
             this.setParams(company);
             this.setState({Validations:v});
           }else{
-            v.companyName = {
+            v.city = {
               errorState: false,
               errorMsg: "",
             };
@@ -358,7 +359,7 @@ class addnewcompany extends React.Component {
           break;
         case "Postcode":
           if (e.target.value.length > 10) {
-            v.companyName = {
+            v.postcode = {
               errorState: true,
               errorMsg: "Inproper data",
             };
@@ -366,7 +367,7 @@ class addnewcompany extends React.Component {
             this.setParams(company);
             this.setState({Validations:v});
           }else{
-            v.companyName = {
+            v.postcode = {
               errorState: false,
               errorMsg: "",
             };
@@ -378,7 +379,15 @@ class addnewcompany extends React.Component {
         case "CountryID":
           this.getStateByCountry(CF.toInt(e.target.value));
           company[param] = CF.toInt(e.target.value);
+
+          v.country = {
+            errorState: false,
+            errorMsg: "",
+          };
+          
           this.setParams(company);
+          this.setState({Validations:v});
+
           break;
         case "StateID":
           company[param] = CF.toInt(e.target.value);
@@ -386,7 +395,7 @@ class addnewcompany extends React.Component {
           break;
         case "PhoneNo":
           if (e.target.value.length > 20) {
-            v.companyName = {
+            v.phoneno = {
               errorState: true,
               errorMsg: "Inproper data",
             };
@@ -394,7 +403,7 @@ class addnewcompany extends React.Component {
             this.setParams(company);
             this.setState({Validations:v});
           }else{
-            v.companyName = {
+            v.phoneno = {
               errorState: false,
               errorMsg: "",
             };
@@ -405,7 +414,7 @@ class addnewcompany extends React.Component {
           break;
         case "Website":
           if (e.target.value.length > 50) {
-            v.companyName = {
+            v.website = {
               errorState: true,
               errorMsg: "Inproper data",
             };
@@ -413,7 +422,7 @@ class addnewcompany extends React.Component {
             this.setParams(company);
             this.setState({Validations:v});
           }else{
-            v.companyName = {
+            v.website = {
               errorState: false,
               errorMsg: "",
             };
@@ -428,28 +437,62 @@ class addnewcompany extends React.Component {
           this.setParams(company);
           break;
       }
-
+      // console.log("validate > this.state.Validations > ",this.state.Validations);
       validate();
     };
 
+//     address: {errorState: false, errorMsg: ''}
+// address2: {errorState: false, errorMsg: ''}
+// address3: {errorState: false, errorMsg: ''}
+// city: {errorState: false, errorMsg: ''}
+// companyName: {errorState: true, errorMsg: 'Inproper data'}
+// country: {errorState: false, errorMsg: ''}
+// phoneno: {errorState: false, errorMsg: ''}
+// postcode: {errorState: false, errorMsg: ''}
+// website: {errorState: false, errorMsg: ''}
     
 
     const validate = () => {
-      let v = this.state.Validations;
-      console.log("validate > v > ",v);
-      if(v.companyName.errorState===true ||
+      let company = this.state.company;
+      let v=this.state.Validations;
+      console.log("v > ",this.state.Validations);
+      let chkerrorState=false;
+ 
+      if(
         v.address.errorState===true ||
-        v.country.errorState===true ||
         v.address2.errorState===true ||
         v.address3.errorState===true ||
         v.city.errorState===true ||
-        v.postcode.errorState===true ||
+        v.companyName.errorState===true ||
+        v.country.errorState===true ||
         v.phoneno.errorState===true ||
-        v.website.errorState===true){
-        this.setState({ BtnDisable: true });
-      }else{
-        this.setState({ BtnDisable: false });
+        v.postcode.errorState===true ||
+        v.website.errorState===true 
+
+      ){
+        chkerrorState=true;
       }
+
+      
+      if (company.CompanyName!="" && 
+          company.Address !=""   && 
+          company.CountryID!=0 && 
+          chkerrorState===false) {
+         this.setState({ BtnDisable: false });   
+       } else {
+         this.setState({ BtnDisable: true });
+       }
+ 
+      // if (
+      //  ( company.CompanyName!=""  && chkerrorState===false  ) &&
+      //  ( company.Address !=""  && chkerrorState===false ) &&
+      //   (company.CountryID!=0   && chkerrorState===false )
+      // ) {
+      //   this.setState({ BtnDisable: false });   
+      // } else {
+      //   this.setState({ BtnDisable: true });
+      // }
+       
       
     };
 
