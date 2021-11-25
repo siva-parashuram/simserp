@@ -7,6 +7,9 @@
 
 }
 
+.branchListButton{
+    text-transform: initial !important;
+}
 
 .loginFieldCss{
     height: 25px !important;

@@ -207,7 +207,7 @@ class usermaster extends React.Component {
 
   InitialhandleRowClick(e, item, id) {
     let editUrl =
-      URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.userId;
+      URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.UserID;
 
     this.setState({ editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
@@ -241,11 +241,11 @@ class usermaster extends React.Component {
         this.setState({ passData: [] });
 
         let editUrl =
-          URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.userId;
+          URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.UserID;
 
-        this.setState({ userId: item.userId, editurl: editUrl });
+        this.setState({ userId: item.UserID, editurl: editUrl });
         removeIsSelectedRowClasses();
-        this.getUserBranches(item.userId);
+        this.getUserBranches(item.UserID);
         document.getElementById(id).classList.add("selectedRow");
       } catch (e) {}
     };
@@ -390,19 +390,19 @@ class usermaster extends React.Component {
                                   URLS.URLS.editUser +
                                   this.state.urlparams +
                                   "&userId=" +
-                                  item.userId
+                                  item.UserID
                                 }
                               >
-                                {URLS.PREFIX.userID + item.userId}
+                                {URLS.PREFIX.userID + item.UserID}
                               </a>
                             </TableCell>
-                            <TableCell align="left">{item.emailId}</TableCell>
-                            <TableCell align="left">{item.firstName}</TableCell>
+                            <TableCell align="left">{item.EmailID}</TableCell>
+                            <TableCell align="left">{item.FirstName}</TableCell>
 
-                            <TableCell align="left">{item.loginId}</TableCell>
+                            <TableCell align="left">{item.LoginID}</TableCell>
 
                             <TableCell align="left">
-                              {item.isActive === true ? (
+                              {item.IsActive === true ? (
                                 <span style={{ color: "green" }}>Active</span>
                               ) : (
                                 <span style={{ color: "red" }}>In-Active</span>

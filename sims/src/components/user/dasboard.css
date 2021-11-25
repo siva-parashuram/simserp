@@ -1,3 +1,71 @@
+  .desktopOnly{
+     display :none !important;
+   }
+
+   .mobileOnly{
+    display :none !important;
+  }
+@media (min-width:320px)  { 
+  /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+  .desktopOnly{
+    display :none !important;
+  }
+  .mobileOnly{
+    display :block !important;
+  }
+ }
+@media (min-width:480px)  { 
+  /* smartphones, Android phones, landscape iPhone */ 
+  .desktopOnly{
+    display :none !important;
+  }
+  .mobileOnly{
+    display :block !important;
+  }
+}
+@media (min-width:600px)  { 
+  /* portrait tablets, portrait iPad, e-readers (Nook/Kindle), landscape 800x480 phones (Android) */ 
+  .desktopOnly{
+    display :none !important;
+  }
+  .mobileOnly{
+    display :block !important;
+  }
+}
+@media (min-width:801px)  {
+   /* tablet, landscape iPad, lo-res laptops ands desktops */ 
+   .desktopOnly{
+    display :block !important;
+  }
+  .mobileOnly{
+    display :none !important;
+  }
+  }
+@media (min-width:1025px) { 
+  /* big landscape tablets, laptops, and desktops */ 
+  .desktopOnly{
+    display :block !important;
+  }
+  .mobileOnly{
+    display :none !important;
+  }
+}
+@media (min-width:1281px) {
+   /* hi-res laptops and desktops */
+
+   .desktopOnly{
+    display :block !important;
+  }
+  .mobileOnly{
+    display :none !important;
+  }
+
+   }
+
+
+ 
+
+
 body{
   font-family: Calibri !important;
   color: #9e9e9e !important;
@@ -245,14 +313,31 @@ cursor: pointer;
   font-family: Calibri !important;
 }
 
+.topMenuLink{
+  text-decoration: none !important;
+  color: #505C6D !important;
+  font-size: 18px !important;
+  font-family: Calibri !important;
+  text-transform: initial !important;
+}
+
+.topMenuLink:hover{
+  color: rgb(0, 126, 135) !important;
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
 .menusection-action-btns{
   color: #505C6D !important;
   border-right-style: none !important;
   height:25px !important;
-  line-height:25px !important;
+  line-height:25px !important;  
   text-transform: initial !important;
   font-size: 18px !important;
   font-family: Calibri !important;
+  width:'100%' !important;
+  /* min-width:'100%' !important;
+  max-width:300px !important; */
   /* border-right-style: solid !important;
   border-right-width: 1px !important;
   border-top-right-radius: 0px !important;

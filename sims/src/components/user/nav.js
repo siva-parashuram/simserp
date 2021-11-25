@@ -181,7 +181,6 @@ export default function ButtonAppBar() {
             </IconButton>
 
             <IconButton><PowerSettingsNewSharpIcon style={{ color: "white" }} onClick={closeWindow} /></IconButton>
-            {/* <Avatar className='nav-avatar' sx={{ bgcolor: 'rgb(19, 163, 38)', fontSize: 18, color: 'white', width: 24, height: 24, marginLeft: 2 }}>{userInitial}</Avatar> */}
 
           </Toolbar>
         </AppBar>

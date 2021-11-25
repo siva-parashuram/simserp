@@ -22,7 +22,7 @@ class CompanyList extends React.Component {
 
     render() {
       
-        const openBranchDashboard=(url,branchId,compID,compName,branchName)=>{ 
+        const openBranchDashboard=(url,branchId,compID,compName,branchName,name)=>{ 
             // branchItem.branchID,item.compID,item.compName,branchItem.branchName
             
             let isPresent=false;
@@ -32,7 +32,7 @@ class CompanyList extends React.Component {
             }else{
                 let branchBtnId=("branchBtn_"+compID+"_"+branchId).toString();    
                 //disableBranchButton(branchBtnId);                 
-                url=url+"?branchBtnId="+branchBtnId+"&branchId="+branchId+"&compID="+compID+"&compName="+compName+"&branchName="+branchName;            
+                url=url+"?branchBtnId="+branchBtnId+"&branchId="+branchId+"&compID="+compID+"&compName="+compName+"&branchName="+name;            
                 let randomnumber = Math.floor((Math.random()*100)+1); 
                 window.open(url,'','fullscreen=yes');
                // window.open(url,"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0, toolbar=no,resizable=1,width=500,height=400');
@@ -114,7 +114,7 @@ class CompanyList extends React.Component {
                                         size="small"
                                         variant="outlined"
                                         className="branchListButton"
-                                        onClick={(e)=>openBranchDashboard(URLS.URLS.userDashboard,branchItem.branchID,item.compID,item.compName,branchItem.branchName)}
+                                        onClick={(e)=>openBranchDashboard(URLS.URLS.userDashboard,branchItem.branchID,item.compID,item.compName,branchItem.branchName,branchItem.name)}
                                     >                                        
                                         {branchItem.branchName}
                                     </Button> 

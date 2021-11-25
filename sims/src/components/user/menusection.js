@@ -3,7 +3,8 @@ import "./dasboard.css";
 import * as Customfunctions from "../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../services/cookie";
 import * as APIURLS from "../../routes/apiconstant";
-import { Link } from "react-router-dom";
+import Link from '@mui/material/Link';
+
 
 import Grid from "@material-ui/core/Grid";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -16,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import axios from "axios";
 import { Divider } from '@material-ui/core';
@@ -139,6 +141,8 @@ class menusection extends React.Component {
             return 0;
         })
 
+
+
         this.setState({
             moduleHeader: moduleHeader,
             moduleLinks: moduleHeader
@@ -220,70 +224,81 @@ class menusection extends React.Component {
 
         return (
             <Fragment>
-                <div style={{ marginLeft: 5, marginTop: 8,backgroundColor:'#ffffff' }} >
-
-                    <Grid container spacing={1} >
-                        {/* <Grid xs={12} sm={12} md={1} lg={1} >
-                            <div className="menusection-div1">
-                                <div style={{ marginTop: 8 }}>
-                                    <span style={{ marginRight: 10 }}>
-                                        <b>{getCookie(COOKIE.FIRSTNAME)} </b>
-                                    </span>
-                                </div>
-                            </div>
-                        </Grid> */}
-                        <Grid item xs={12} sm={12} md={11} lg={11}>
-                            <div style={{ marginTop: 10, marginLeft: 10 }}>
-                                <ButtonGroup
-                                    size="small"
-                                    variant="text"
-                                    aria-label="Action Menu Button group"
-                                >
-
-                                    <Button
-                                        className="menusection-action-userFirstname"
+                <div style={{ marginLeft: 5, marginTop: 8, backgroundColor: '#ffffff' }} >
+                    <div className="desktopOnly" >
+                        <Grid container spacing={0} >
+                            <Grid item xs={11} sm={11} md={11} lg={11}>
+                                <div style={{ marginTop: 10, marginLeft: 10 }}>
+                                    <ButtonGroup
+                                        size="small"
+                                        variant="text"
+                                        aria-label="Action Menu Button group"
                                     >
-                                        <b>{getCookie(COOKIE.FIRSTNAME)} </b>
-                                    </Button>
-
-
-
-
-                                    {this.state.moduleHeader.map((item, i) => (
-                                        <Fragment>
-                                            <Button
-                                                disableFocusRipple={true}
-                                                disableRipple={true}
-                                                disableElevation={true}
-                                                size="medium"
-                                                className="menusection-action-btns"
-                                                // startIcon={<MenuOpenIcon />}
-                                                onClick={(e) => toggleDrawer(item)}
-                                            >
-                                                {item.name}
-                                            </Button>
-
-                                        </Fragment>
-
-                                    ))}
-
-                                </ButtonGroup>
-
-
-
-
-                            </div>
+                                        <Button
+                                            className="menusection-action-userFirstname"
+                                        >
+                                            <b>{getCookie(COOKIE.FIRSTNAME)}&nbsp;&nbsp;&nbsp;</b>
+                                        </Button>
+                                        <Button
+                                            disabled={true}
+                                        >
+                                            &nbsp;
+                                        </Button>
+                                        {this.state.moduleHeader.map((item, i) => (
+                                            <Fragment>
+                                                <div style={{ marginRight: 15 }} >
+                                                    <Link
+                                                        className="topMenuLink"
+                                                        onClick={(e) => toggleDrawer(item)}
+                                                    >
+                                                        {item.name}
+                                                    </Link>
+                                                </div>
+                                            </Fragment>
+                                        ))}
+                                    </ButtonGroup>
+                                </div>
+                            </Grid>
+                            <Grid item xs={1} sm={1} md={1} lg={1}>
+                                <div style={{ marginTop: 10 }}>
+                                    <MenuIcon                                     
+                                     className="menuiconBtn"
+                                    />
+                                </div>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={1} lg={1}>
-                            <div style={{ marginTop: 10 }}>
-                            <MenuIcon
-                            className="menuiconBtn"
-                            />
-
-
-                            </div>
+                    </div>
+                    <div className="mobileOnly">
+                        <Grid container spacing={0} >
+                            <Grid item xs={11} sm={11} md={11} lg={11}>
+                            <div style={{ marginTop: 10, marginLeft: 10 }}>
+                                    <ButtonGroup
+                                        size="small"
+                                        variant="text"
+                                        aria-label="Action Menu Button group"
+                                    >
+                                        <Button
+                                            className="menusection-action-userFirstname"
+                                        >
+                                            <b>{getCookie(COOKIE.FIRSTNAME)} </b>
+                                        </Button>
+                                        <Button
+                                            disabled={true}
+                                        >
+                                            &nbsp;
+                                        </Button>                                      
+                                    </ButtonGroup>
+                                </div>
+                            </Grid>
+                            <Grid item xs={1} sm={1} md={1} lg={1}>
+                                <div style={{ marginTop: 5 }}>
+                                    <MenuIcon
+                                        className="menuiconBtn"
+                                    />
+                                </div>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </div>
                 </div>
 
                 <Drawer

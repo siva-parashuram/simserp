@@ -14,12 +14,12 @@ class breadcrumbbtngrouprow extends React.Component {
             <Fragment>
                 <div className="breadcrumb-height" style={{ marginTop: -5 }}>
                     <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={4} lg={4} >
+                        <Grid item xs={8} sm={8} md={4} lg={4} >
                             <div style={{ marginTop: 8 }}>
                                 {this.props.breadcrumb}
                             </div>
                         </Grid>
-                        <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <Grid item xs={4} sm={4} md={8} lg={8}>
                             <div style={{
                                 marginLeft: 10,
                                 marginTop: 1, paddingTop: 5,
