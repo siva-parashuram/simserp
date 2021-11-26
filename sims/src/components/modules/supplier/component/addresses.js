@@ -40,6 +40,10 @@ import Inputcustom from "../../../compo/inputcustom";
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
+import SIB from "../../../compo/gridtextboxinput";
+import SDIB from "../../../compo/griddropdowninput";
+import SSIB from "../../../compo/gridswitchinput";
+import SDBIB from "../../../compo/griddropdowninputwithbutton";
 
 class addresses extends React.Component {
   constructor(props) {
@@ -239,8 +243,8 @@ class addresses extends React.Component {
         let newData = [];
         for (let i = 0; i < data.length; i++) {
           let d = {
-            name: data[i].name,
-            value: data[i].countryId,
+            name: data[i].Name,
+            value: data[i].CountryID,
           };
           newData.push(d);
         }
@@ -289,7 +293,7 @@ class addresses extends React.Component {
           <Grid style={{ paddingTop: 10 }} container spacing={0}>
             <Grid xs={12} sm={12} md={8} lg={8}>
               <Button
-               startIcon={APIURLS.buttonTitle.save.icon}
+                startIcon={APIURLS.buttonTitle.save.icon}
                 className="action-btns"
                 style={{ marginLeft: 10 }}
                 onClick={(e) => this.AddNew(e)}
@@ -332,16 +336,11 @@ class addresses extends React.Component {
 
                     <AccordionDetails key="" className="AccordionDetails-css">
                       <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="SupplierAddress List table"
-                            >
-                              <TableBody className="tableBody">
-                                <TextboxInput
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          <div>
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SIB
                                   id="Code"
                                   label="Code"
                                   onChange={(e) =>
@@ -355,12 +354,8 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress.Code
                                       .errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress.Code
-                                      .errorMssg
-                                  }
                                 />
-                                <TextboxInput
+                                <SIB
                                   id="Name"
                                   label="Name"
                                   onChange={(e) =>
@@ -373,12 +368,8 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress.Name
                                       .errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress.Name
-                                      .errorMssg
-                                  }
                                 />
-                                <TextboxInput
+                                <SIB
                                   id="Address"
                                   label="Address"
                                   onChange={(e) =>
@@ -391,12 +382,8 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress
                                       .Address.errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress
-                                      .Address.errorMssg
-                                  }
                                 />
-                                <TextboxInput
+                                <SIB
                                   id="Address2"
                                   label="Address2"
                                   onChange={(e) =>
@@ -409,12 +396,8 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress
                                       .Address2.errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress
-                                      .Address2.errorMssg
-                                  }
                                 />
-                                <TextboxInput
+                                <SIB
                                   id="Address3"
                                   label="Address3"
                                   onChange={(e) =>
@@ -427,12 +410,8 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress
                                       .Address3.errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress
-                                      .Address3.errorMssg
-                                  }
                                 />
-                                <TextboxInput
+                                <SIB
                                   id="City"
                                   label="City"
                                   onChange={(e) =>
@@ -445,12 +424,8 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress.City
                                       .errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress.City
-                                      .errorMssg
-                                  }
                                 />
-                                <TextboxInput
+                                <SIB
                                   id="PostCode"
                                   label="PostCode"
                                   onChange={(e) =>
@@ -463,13 +438,9 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress
                                       .PostCode.errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress
-                                      .PostCode.errorMssg
-                                  }
                                 />
 
-                                <SwitchInput
+                                <SSIB
                                   key="IsBlock"
                                   id="IsBlock"
                                   label="IsBlock"
@@ -479,39 +450,29 @@ class addresses extends React.Component {
                                   }
                                   value={this.state.SupplierAddress.IsBlock}
                                 />
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6} lg={6}>
-                          <TableContainer>
-                            <Table
-                              stickyHeader
-                              size="small"
-                              className="accordion-table"
-                              aria-label="SupplierAddress List table"
-                            >
-                              <TableBody className="tableBody">
-                                <DropdownInput
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SDIB
                                   id="CountryID"
                                   label="Country"
                                   onChange={(e) =>
                                     this.updateFormValue("CountryID", e, "ADD")
                                   }
-                                  options={this.state.countryData}
+                                  param={this.state.countryData}
                                   isMandatory={true}
                                   value={this.state.SupplierAddress.CountryID}
                                 />
-                                <DropdownInput
+                                <SDIB
                                   id="StateID"
                                   label="State"
                                   onChange={(e) =>
                                     this.updateFormValue("StateID", e, "ADD")
                                   }
-                                  options={this.state.stateData}
+                                  param={this.state.stateData}
                                   value={this.state.SupplierAddress.StateID}
                                 />
-                                <TextboxInput
+                                <SIB
                                   id="ContactPerson"
                                   label="Contact Person"
                                   onChange={(e) =>
@@ -530,12 +491,8 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress
                                       .ContactPerson.errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress
-                                      .ContactPerson.errorMssg
-                                  }
                                 />
-                                <TextboxInput
+                                <SIB
                                   id="PhoneNo"
                                   label="Phone No "
                                   onChange={(e) =>
@@ -548,13 +505,9 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress
                                       .PhoneNo.errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress
-                                      .PhoneNo.errorMssg
-                                  }
                                 />
 
-                                <TextboxInput
+                                <SIB
                                   id="EmailID"
                                   label="Email ID"
                                   onChange={(e) =>
@@ -567,12 +520,9 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress
                                       .EmailID.errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress
-                                      .EmailID.errorMssg
-                                  }
                                 />
-                                <TextboxInput
+
+                                <SIB
                                   id="VATNo"
                                   label="VATNo"
                                   onChange={(e) =>
@@ -585,12 +535,9 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress.VATNo
                                       .errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress.VATNo
-                                      .errorMssg
-                                  }
                                 />
-                                <TextboxInput
+
+                                <SIB
                                   id="GSTNo"
                                   label="GSTNo"
                                   onChange={(e) =>
@@ -603,13 +550,9 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress.GSTNo
                                       .errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress.GSTNo
-                                      .errorMssg
-                                  }
                                 />
 
-                                <TextboxInput
+                                <SIB
                                   id="SpecialInstruction"
                                   label="Special Instruction"
                                   onChange={(e) =>
@@ -629,14 +572,10 @@ class addresses extends React.Component {
                                     this.state.Validations.SupplierAddress
                                       .SpecialInstruction.errorState
                                   }
-                                  helperText={
-                                    this.state.Validations.SupplierAddress
-                                      .SpecialInstruction.errorMssg
-                                  }
                                 />
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
+                              </Grid>
+                            </Grid>
+                          </div>
                         </Grid>
                       </Grid>
                     </AccordionDetails>
@@ -1562,7 +1501,7 @@ class addresses extends React.Component {
                     <Grid item xs={12} sm={12} md={4} lg={4}>
                       <div>
                         <Button
-                         startIcon={APIURLS.buttonTitle.update.icon}
+                          startIcon={APIURLS.buttonTitle.update.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.UpdateSupplierAddress(e)}
@@ -1608,10 +1547,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .Code.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .Code.errorMssg
-                              }
+                             
                             />
                             <TextboxInput
                               id="Name"
@@ -1626,10 +1562,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .Name.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .Name.errorMssg
-                              }
+                            
                             />
                             <TextboxInput
                               id="Address"
@@ -1644,10 +1577,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .Address.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .Address.errorMssg
-                              }
+                             
                             />
                             <TextboxInput
                               id="Address2"
@@ -1662,10 +1592,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .Address2.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .Address2.errorMssg
-                              }
+                              
                             />
                             <TextboxInput
                               id="Address3"
@@ -1680,10 +1607,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .Address3.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .Address3.errorMssg
-                              }
+                             
                             />
                             <TextboxInput
                               id="City"
@@ -1698,10 +1622,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .City.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .City.errorMssg
-                              }
+                             
                             />
                             <TextboxInput
                               id="PostCode"
@@ -1716,10 +1637,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .PostCode.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .PostCode.errorMssg
-                              }
+                              
                             />
 
                             <SwitchInput
@@ -1767,10 +1685,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .ContactPerson.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .ContactPerson.errorMssg
-                              }
+                             
                             />
                             <TextboxInput
                               id="PhoneNo"
@@ -1785,10 +1700,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .PhoneNo.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .PhoneNo.errorMssg
-                              }
+                             
                             />
 
                             <TextboxInput
@@ -1804,10 +1716,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .EmailID.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .EmailID.errorMssg
-                              }
+                             
                             />
                             <TextboxInput
                               id="VATNo"
@@ -1822,10 +1731,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .VATNo.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .VATNo.errorMssg
-                              }
+                             
                             />
                             <TextboxInput
                               id="GSTNo"
@@ -1840,10 +1746,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .GSTNo.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .GSTNo.errorMssg
-                              }
+                              
                             />
 
                             <TextboxInput
@@ -1866,10 +1769,7 @@ class addresses extends React.Component {
                                 this.state.Validations.UpdateSupplierAddress
                                   .SpecialInstruction.errorState
                               }
-                              helperText={
-                                this.state.Validations.UpdateSupplierAddress
-                                  .SpecialInstruction.errorMssg
-                              }
+                              
                             />
                           </TableBody>
                         </Table>

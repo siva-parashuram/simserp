@@ -24,6 +24,11 @@ import TextboxInput from "../../compo/tablerowcelltextboxinput";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../compo/backdrop";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
+
 
 
 let today = moment().format("MM/DD/YYYY");
@@ -459,18 +464,13 @@ class coaactivity extends React.Component {
       <Fragment>
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
+            <div>
             <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="Coa Activity table"
-                    >
-                      <TableBody className="tableBody">
-                        <TextboxInput
+              <Grid item xs={12} sm={12} md={5} lg={5}>
+                {/* <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}> */}
+                    
+                        <SIB
                           id="ACNo"
                           label="ACNo"
                           variant="outlined"
@@ -478,10 +478,9 @@ class coaactivity extends React.Component {
                           onChange={(e) => updateFormValue("ACNo", e)}
                           value={this.state.ChartOfAccount.ACNo}
                           error={this.state.Validations.ACNo.errorState}
-                          helperText={this.state.Validations.ACNo.errorMssg}
                           isMandatory={true}
                         />
-                        <TextboxInput
+                        <SIB
                           id="Name"
                           label="Name"
                           variant="outlined"
@@ -489,11 +488,10 @@ class coaactivity extends React.Component {
                           onChange={(e) => updateFormValue("Name", e)}
                           value={this.state.ChartOfAccount.Name}
                           error={this.state.Validations.Name.errorState}
-                          helperText={this.state.Validations.Name.errorMssg}
                           isMandatory={true}
                         />
 
-                        <TextboxInput
+                        <SIB
                           id="Indentation"
                           label="Indentation"
                           variant="outlined"
@@ -501,7 +499,7 @@ class coaactivity extends React.Component {
                           onChange={(e) => updateFormValue("Indentation", e)}
                           value={this.state.ChartOfAccount.Indentation}
                         />
-                        <TextboxInput
+                        <SIB
                           id="Totaling"
                           label="Totaling"
                           variant="outlined"
@@ -509,82 +507,74 @@ class coaactivity extends React.Component {
                           onChange={(e) => updateFormValue("Totaling", e)}
                           value={this.state.ChartOfAccount.Totaling}
                           error={this.state.Validations.Totaling.errorState}
-                          helperText={this.state.Validations.Totaling.errorMssg}
                         />
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                </Grid>
+                     
+                  {/* </Grid>
+                </Grid> */}
               </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="Coa Activity table"
-                    >
-                      <TableBody className="tableBody">
-                        <DropdownInput
+              <Grid item xs={12} sm={12} md={1} lg={1}> </Grid>
+                {/* <Grid container spacing={0}> */}
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                   
+                        <SDIB
                           id="ACType"
                           label="ACType"
                           onChange={(e) => updateFormValue("ACType", e)}
                           value={this.state.ChartOfAccount.ACType}
-                          options={APIURLS.ACType}
+                          param={APIURLS.ACType}
                           isMandatory={true}
                         />
-                        <DropdownInput
+                        <SDIB
                           id="IncomeBalance"
                           label="IncomeBalance"
                           onChange={(e) => updateFormValue("IncomeBalance", e)}
                           value={this.state.ChartOfAccount.IncomeBalance}
-                          options={APIURLS.IncomeBalance}
+                          param={APIURLS.IncomeBalance}
                           isMandatory={true}
                         />
-                        <DropdownInput
+                        <SDIB
                           id="ACCategory"
                           label="ACCategory"
                           onChange={(e) => updateFormValue("ACCategory", e)}
                           value={this.state.ChartOfAccount.ACCategory}
-                          options={APIURLS.ACCategory}
+                          param={APIURLS.ACCategory}
                           isMandatory={true}
                         />
-                        <DropdownInput
+                        <SDIB
                           id="ACSubCategory"
                           label="ACSubCategory"
                           onChange={(e) => updateFormValue("ACSubCategory", e)}
                           value={this.state.ChartOfAccount.ACSubCategory}
-                          options={this.state.ACSubCategory}
+                          param={this.state.ACSubCategory}
                         />
-                        <DropdownInput
+                        <SDIB
                           id="DebitCredit"
                           label="DebitCredit"
                           onChange={(e) => updateFormValue("DebitCredit", e)}
                           value={this.state.ChartOfAccount.DebitCredit}
-                          options={APIURLS.DebitCredit}
+                          param={APIURLS.DebitCredit}
                           isMandatory={true}
                         />
-                        <SwitchInput
+                        <SSIB
                           key="IsBlock"
                           id="IsBlock"
                           label="IsBlock"
                           param={this.state.ChartOfAccount.IsBlock}
                           onChange={(e) => updateFormValue("IsBlock", e)}
                         />
-                        <SwitchInput
+                        <SSIB
                           key="DirectPosting"
                           id="DirectPosting"
                           label="DirectPosting"
                           param={this.state.ChartOfAccount.DirectPosting}
                           onChange={(e) => updateFormValue("DirectPosting", e)}
                         />
-                      </TableBody>
-                    </Table>
-                  </Grid>
-                </Grid>
+                     
+                  {/* </Grid>
+                </Grid> */}
               </Grid>
             </Grid>
+            </div>
           </Grid>
         </Grid>
       </Fragment>

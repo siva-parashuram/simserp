@@ -23,14 +23,15 @@ import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
-import Loader from "../../../compo/loader";
 import ErrorSnackBar from "../../../compo/errorSnackbar";
 import SuccessSnackBar from "../../../compo/successSnackbar";
 import Breadcrumb from "../../../compo/breadcrumb";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../../compo/backdrop";
-
+import SIB from "../../../compo/gridtextboxinput";
+import SDIB from "../../../compo/griddropdowninput";
+import SSIB from "../../../compo/gridswitchinput";
 
 class editItemSuperCategory extends React.Component {
   constructor(props) {
@@ -329,78 +330,65 @@ class editItemSuperCategory extends React.Component {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label=" Item-category List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
-                        id="ItemType"
-                        label="Item Type"
-                        onChange={(e) => updateFormValue("ItemType", e)}
-                        options={this.state.ItemTypeMaster}
-                        value={this.state.ItemType}
-                        isMandatory={true}
-                      />
-                      <TextboxInput
-                        id="Code"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Code", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 20,
-                        }}
-                        value={this.state.Code}
-                        error={this.state.Validations.Code.errorState}
-                        helperText={this.state.Validations.Code.errorMssg}
-                        isMandatory={true}
-                      />
-                      <TextboxInput
-                        id="Description"
-                        label="Description"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Description", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.Description}
-                        error={this.state.Validations.Description.errorState}
-                        helperText={
-                          this.state.Validations.Description.errorMssg
-                        }
-                      />
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SDIB
+                            id="ItemType"
+                            label="Item Type"
+                            onChange={(e) => updateFormValue("ItemType", e)}
+                            param={this.state.ItemTypeMaster}
+                            value={this.state.ItemType}
+                            isMandatory={true}
+                          />
 
-                      <TextboxInput
-                        id="HSNCode"
-                        label="HSN Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("HSNCode", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 10,
-                        }}
-                        value={this.state.HSNCode}
-                        error={this.state.Validations.HSNCode.errorState}
-                        helperText={this.state.Validations.HSNCode.errorMssg}
-                      />
-                      <SwitchInput
-                        key="IsActive"
-                        id="IsActive"
-                        label="IsActive"
-                        param={this.state.IsActive}
-                        onChange={(e) => updateFormValue("IsActive", e)}
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                          <SIB
+                            id="Code"
+                            label="Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Code", e)}
+                            value={this.state.Code}
+                            error={this.state.Validations.Code.errorState}
+                            isMandatory={true}
+                          />
+                          <SIB
+                            id="Description"
+                            label="Description"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Description", e)}
+                            value={this.state.Description}
+                            error={
+                              this.state.Validations.Description.errorState
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            id="HSNCode"
+                            label="HSN Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("HSNCode", e)}
+                            value={this.state.HSNCode}
+                            error={this.state.Validations.HSNCode.errorState}
+                          />
+                          <SSIB
+                            key="IsActive"
+                            id="IsActive"
+                            label="IsActive"
+                            param={this.state.IsActive}
+                            onChange={(e) => updateFormValue("IsActive", e)}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Grid>

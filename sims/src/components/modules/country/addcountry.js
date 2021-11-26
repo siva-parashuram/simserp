@@ -32,7 +32,10 @@ import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../compo/backdrop";
-
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 class addcountry extends React.Component {
   constructor(props) {
@@ -415,96 +418,75 @@ class addcountry extends React.Component {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="company List table"
-                  >
-                    <TableBody className="tableBody">
-                      <Tablerowcelltextboxinput
-                        id="Name"
-                        label="Country Name"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Name", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.Name}
-                        error={this.state.Validations.Name.errorState}
-                        helperText={this.state.Validations.Name.errorMssg}
-                      />
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            id="Name"
+                            label="Country Name"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Name", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 50,
+                            }}
+                            value={this.state.Name}
+                            error={this.state.Validations.Name.errorState}
+                          />
 
-                      <Tablerowcelltextboxinput
-                        id="TwoDitgitCode"
-                        label="Two Digit Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("TwoDitgitCode", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 20,
-                        }}
-                        value={this.state.TwoDitgitCode}
-                        error={this.state.Validations.TwoDitgitCode.errorState}
-                        helperText={
-                          this.state.Validations.TwoDitgitCode.errorMssg
-                        }
-                      />
-
-                      <Tablerowcelltextboxinput
-                        id="ThreeDitgitCode"
-                        label="Three Digit Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("ThreeDitgitCode", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 20,
-                        }}
-                        value={this.state.ThreeDitgitCode}
-                        error={
-                          this.state.Validations.ThreeDitgitCode.errorState
-                        }
-                        helperText={
-                          this.state.Validations.ThreeDitgitCode.errorMssg
-                        }
-                      />
-                      <DropdownInput
-                        id="ZoneID"
-                        label="Zone"
-                        onChange={(e) => updateFormValue("ZoneID", e)}
-                        options={this.state.zones}
-                        value={this.state.selectedZone}
-                      />
-
-                      {/* <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Zone
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <select
-                              className="dropdown-css"
-                              id="ZoneID"
-                              label="Zone"
-                              fullWidth
-                              value={parseInt(this.state.selectedZone)}
-                              onChange={(e) => updateFormValue("ZoneID", e)}
-                            >
-                              {this.state.zones.map((item, i) => (
-                                <option value={item.zoneId}>
-                                  {item.description}({item.code})
-                                </option>
-                              ))}
-                            </select>
-                          </TableCell>
-                        </TableRow> */}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                          <SIB
+                            id="TwoDitgitCode"
+                            label="Two Digit Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) =>
+                              updateFormValue("TwoDitgitCode", e)
+                            }
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 20,
+                            }}
+                            value={this.state.TwoDitgitCode}
+                            error={
+                              this.state.Validations.TwoDitgitCode.errorState
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            id="ThreeDitgitCode"
+                            label="Three Digit Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) =>
+                              updateFormValue("ThreeDitgitCode", e)
+                            }
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 20,
+                            }}
+                            value={this.state.ThreeDitgitCode}
+                            error={
+                              this.state.Validations.ThreeDitgitCode.errorState
+                            }
+                           
+                          />
+                          <SDIB
+                            id="ZoneID"
+                            label="Zone"
+                            onChange={(e) => updateFormValue("ZoneID", e)}
+                            param={this.state.zones}
+                            value={this.state.selectedZone}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Grid>

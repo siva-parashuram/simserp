@@ -818,9 +818,7 @@ class addnewcompany extends React.Component {
                              error={
                                this.state.Validations.city.errorState
                              }
-                             helperText={
-                               this.state.Validations.city.errorMsg
-                             }
+                            
                              />
                              <SIB
                               id="Postcode"

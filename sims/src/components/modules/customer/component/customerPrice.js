@@ -324,7 +324,7 @@ class customerPrice extends React.Component {
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={10} lg={10}>
             <Button
-             startIcon={APIURLS.buttonTitle.add.icon}
+              startIcon={APIURLS.buttonTitle.add.icon}
               className="action-btns"
               style={{ marginLeft: 5, marginBottom: 10 }}
               onClick={(e) => this.showAddNewPanel(e)}
@@ -513,7 +513,7 @@ class customerPrice extends React.Component {
 
             validtn.EmailID = {
               errorState: true,
-              errorMssg:"Invalid Email" ,
+              errorMssg: "Invalid Email",
             };
             this.setState({ Validations: validtn });
         }
@@ -771,7 +771,7 @@ class customerPrice extends React.Component {
                     <div>
                       {this.state.createNewBtn === true ? (
                         <Button
-                        startIcon={APIURLS.buttonTitle.add.icon}
+                          startIcon={APIURLS.buttonTitle.add.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.createCustomerPrice("NEW")}
@@ -781,7 +781,7 @@ class customerPrice extends React.Component {
                         </Button>
                       ) : (
                         <Button
-                        startIcon={APIURLS.buttonTitle.update.icon}
+                          startIcon={APIURLS.buttonTitle.update.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.createCustomerPrice("UPDATE")}
@@ -868,7 +868,6 @@ class customerPrice extends React.Component {
                             onChange={(e) => this.updateFormValue("MinQty", e)}
                             value={this.state.CustomerPrice.MinQty}
                             error={this.state.Validations.MinQty.errorState}
-                            helperText={this.state.Validations.MinQty.errorMssg}
                           />
                           <TextboxInput
                             id="MaxQty"
@@ -878,7 +877,6 @@ class customerPrice extends React.Component {
                             onChange={(e) => this.updateFormValue("MaxQty", e)}
                             value={this.state.CustomerPrice.MaxQty}
                             error={this.state.Validations.MaxQty.errorState}
-                            helperText={this.state.Validations.MaxQty.errorMssg}
                           />
                           <TextboxInput
                             id="UnitPrice"
@@ -890,9 +888,6 @@ class customerPrice extends React.Component {
                             }
                             value={this.state.CustomerPrice.UnitPrice}
                             error={this.state.Validations.UnitPrice.errorState}
-                            helperText={
-                              this.state.Validations.UnitPrice.errorMssg
-                            }
                           />
                           <TextboxInput
                             id="EmailID"
@@ -902,9 +897,6 @@ class customerPrice extends React.Component {
                             onChange={(e) => this.updateFormValue("EmailID", e)}
                             value={this.state.CustomerPrice.EmailID}
                             error={this.state.Validations.EmailID.errorState}
-                            helperText={
-                              this.state.Validations.EmailID.errorMssg
-                            }
                           />
                         </TableBody>
                       </Table>

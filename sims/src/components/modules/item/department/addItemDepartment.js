@@ -28,7 +28,9 @@ import SuccessSnackBar from "../../../compo/successSnackbar";
 import Breadcrumb from "../../../compo/breadcrumb";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../../compo/backdrop";
-
+import SIB from "../../../compo/gridtextboxinput";
+import SDIB from "../../../compo/griddropdowninput";
+import SSIB from "../../../compo/gridswitchinput";
 
 class addItemDepartment extends React.Component {
   constructor(props) {
@@ -259,52 +261,49 @@ class addItemDepartment extends React.Component {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label=" Item-catagory List table"
-                  >
-                    <TableBody className="tableBody">
-                      <TextboxInput
-                        id="Code"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Code", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 20,
-                        }}
-                        value={this.state.Code}
-                        error={this.state.Validations.Code.errorState}
-                        helperText={this.state.Validations.Code.errorMssg}
-                      />
-                      <TextboxInput
-                        id="Name"
-                        label="Name"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Name", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.Name}
-                        error={this.state.Validations.Name.errorState}
-                        helperText={this.state.Validations.Name.errorMssg}
-                      />
-                      <SwitchInput
-                        key="IsActive"
-                        id="IsActive"
-                        label="IsActive"
-                        param={this.state.IsActive}
-                        onChange={(e) => updateFormValue("IsActive", e)}
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            id="Code"
+                            label="Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Code", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 20,
+                            }}
+                            value={this.state.Code}
+                            error={this.state.Validations.Code.errorState}
+                          />
+                          <SIB
+                            id="Name"
+                            label="Name"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Name", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 50,
+                            }}
+                            value={this.state.Name}
+                            error={this.state.Validations.Name.errorState}
+                          />
+                          <SSIB
+                            key="IsActive"
+                            id="IsActive"
+                            label="IsActive"
+                            param={this.state.IsActive}
+                            onChange={(e) => updateFormValue("IsActive", e)}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Grid>

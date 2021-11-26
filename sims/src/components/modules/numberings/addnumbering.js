@@ -33,6 +33,10 @@ import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import * as CF from "../../../services/functions/customfunctions";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 class addnumbering extends React.Component {
   constructor(props) {
@@ -368,48 +372,42 @@ class addnumbering extends React.Component {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="">
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="company List table"
-                  >
-                    <TableBody className="tableBody">
-                      <Tablerowcelltextboxinput
-                        id="Code"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Code", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 20,
-                        }}
-                        value={this.state.noSeries.Code}
-                        error={this.state.Validations.Code.errorState}
-                        helperText={this.state.Validations.Code.errorMssg}
-                      />
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            id="Code"
+                            label="Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Code", e)}
+                            value={this.state.noSeries.Code}
+                            error={this.state.Validations.Code.errorState}
+                          />
 
-                      <Tablerowcelltextboxinput
-                        id="Description"
-                        label="Description"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Description", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.noSeries.Description}
-                        error={this.state.Validations.Description.errorState}
-                        helperText={
-                          this.state.Validations.Description.errorMssg
-                        }
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                          <SIB
+                            id="Description"
+                            label="Description"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Description", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 50,
+                            }}
+                            value={this.state.noSeries.Description}
+                            error={
+                              this.state.Validations.Description.errorState
+                            }
+                           
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
               </AccordionDetails>
             </Accordion>
             <Accordion
