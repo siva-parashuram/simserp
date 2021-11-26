@@ -29,8 +29,9 @@ import SuccessSnackBar from "../../../compo/successSnackbar";
 import Breadcrumb from "../../../compo/breadcrumb";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../../compo/backdrop";
-
-
+import SIB from "../../../compo/gridtextboxinput";
+import SDIB from "../../../compo/griddropdowninput";
+import SSIB from "../../../compo/gridswitchinput";
 
 class editItemDepartment extends React.Component {
   constructor(props) {
@@ -278,82 +279,77 @@ class editItemDepartment extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
-       
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={6} md={6} lg={6}>
-              <Accordion
-                key="Item-catagory-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={6} md={6} lg={6}>
+            <Accordion
+              key="Item-catagory-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
+            >
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    General Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label=" Item-catagory List table"
-                    >
-                      <TableBody className="tableBody">
-                        <TextboxInput
-                          id="Code"
-                          label="Code"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Code", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 20,
-                          }}
-                          value={this.state.Code}
-                          error={this.state.Validations.Code.errorState}
-                          helperText={this.state.Validations.Code.errorMssg}
-                        />
-                        <TextboxInput
-                          id="Name"
-                          label="Name"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Name", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.Name}
-                          error={this.state.Validations.Name.errorState}
-                          helperText={this.state.Validations.Name.errorMssg}
-                        />
-                        <SwitchInput
-                          key="IsActive"
-                          id="IsActive"
-                          label="IsActive"
-                          param={this.state.IsActive}
-                          onChange={(e) => updateFormValue("IsActive", e)}
-                        />
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
+                <Typography key="" className="accordion-Header-Title">
+                  General Details
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            id="Code"
+                            label="Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Code", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 20,
+                            }}
+                            value={this.state.Code}
+                            error={this.state.Validations.Code.errorState}
+                          />
+                          <SIB
+                            id="Name"
+                            label="Name"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Name", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                              maxlength: 50,
+                            }}
+                            value={this.state.Name}
+                            error={this.state.Validations.Name.errorState}
+                          />
+                          <SSIB
+                            key="IsActive"
+                            id="IsActive"
+                            label="IsActive"
+                            param={this.state.IsActive}
+                            onChange={(e) => updateFormValue("IsActive", e)}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-        
+        </Grid>
       </Fragment>
     );
   }

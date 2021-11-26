@@ -20,7 +20,9 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
 import BackdropLoader from "../../compo/backdrop";
-
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
 
 let columns = [
   {
@@ -705,58 +707,53 @@ class addpage extends React.Component {
                     {APIURLS.buttonTitle.add.name}
                   </Button>
                 </Grid>
-              </Grid>
-              <Grid container spacing={0}>
-                <Grid xs={8} sm={8} md={8} lg={8}>
-                  <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="company List table"
-                    >
-                      <TableBody className="tableBody">
-                        <TextboxInput
-                          id="pageName"
-                          label="Page Name"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("pageName", e)}
-                          fullWidth
-                          error={this.state.Validations.pageName.errorState}
-                          helperText={this.state.Validations.pageName.errorMsg}
-                        />
-                        <TextboxInput
-                          id="pageLink"
-                          label="Page Link"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("pageLink", e)}
-                          fullWidth
-                          value={this.state.pageLink}
-                          error={this.state.Validations.pageLink.errorState}
-                          helperText={this.state.Validations.pageLink.errorMsg}
-                        />
-                        <TextboxInput
-                          id="description"
-                          label="Description"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("description", e)}
-                          fullWidth
-                          value={this.state.description}
-                          error={this.state.Validations.description.errorState}
-                          helperText={this.state.Validations.description.errorMsg}
-                          maxlength={20}
-                        />
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Grid>
-              </Grid>
-            </div>
+              </Grid>            
+          </div>
           </Grid>
-        </Grid>        
+          </Grid>
+
+          <div style={{ height: 20 }}></div>
+          <Grid container spacing={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <div>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    <SIB
+                      id="pageName"
+                      label="Page Name"
+                      variant="outlined"
+                      size="small"
+                      onChange={(e) => updateFormValue("pageName", e)}
+                      fullWidth
+                      error={this.state.Validations.pageName.errorState}
+                    />
+                    <SIB
+                      id="pageLink"
+                      label="Page Link"
+                      variant="outlined"
+                      size="small"
+                      onChange={(e) => updateFormValue("pageLink", e)}
+                      fullWidth
+                      value={this.state.pageLink}
+                      error={this.state.Validations.pageLink.errorState}
+                    />
+                    <SIB
+                      id="description"
+                      label="Description"
+                      variant="outlined"
+                      size="small"
+                      onChange={(e) => updateFormValue("description", e)}
+                      fullWidth
+                      value={this.state.description}
+                      error={this.state.Validations.description.errorState}
+                      maxlength={20}
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          </Grid>
+         
       </Fragment>
     );
 

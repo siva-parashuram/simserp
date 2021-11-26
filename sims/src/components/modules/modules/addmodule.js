@@ -409,7 +409,6 @@ class addmodule extends React.Component {
                         }}
                         value={this.state.Name}
                         error={this.state.Validations.Name.errorState}
-                        helperText={this.state.Validations.Name.errorMsg}
                       />
                       <Tablerowcelltextboxinput
                         id="Description"
@@ -422,7 +421,6 @@ class addmodule extends React.Component {
                         }}
                         value={this.state.Description}
                         error={this.state.Validations.Description.errorState}
-                        helperText={this.state.Validations.Description.errorMsg}
                       />
                       <Tablerowcelltextboxinput
                         id="IconName"
@@ -435,7 +433,6 @@ class addmodule extends React.Component {
                         }}
                         value={this.state.IconName}
                         error={this.state.Validations.IconName.errorState}
-                        helperText={this.state.Validations.IconName.errorMsg}
                       />
                     </TableBody>
                   </Table>

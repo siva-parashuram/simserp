@@ -26,7 +26,10 @@ import SwitchInput from "../../compo/tablerowcellswitchinput";
 import * as CF from "../../../services/functions/customfunctions";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../compo/backdrop";
-
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 class addItem extends React.Component {
   constructor(props) {
@@ -1080,246 +1083,218 @@ class addItem extends React.Component {
 
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <DropdownInput
-                              id="CatID"
-                              label="ItemCat"
-                              onChange={(e) => updateFormValue("CatId", e)}
-                              options={this.state.ItemCategoryData}
-                              value={this.state.CatId}
-                              isMandatory={true}
-                            />
-                            <DropdownInput
-                              id="ItemDeptID"
-                              label="ItemDept"
-                              onChange={(e) => updateFormValue("ItemDeptId", e)}
-                              options={this.state.itemDepartmentMasterData}
-                              value={this.state.ItemDeptId}
-                              isMandatory={true}
-                            />
-                            <DropdownInput
-                              id="ItemType"
-                              label="Item Type"
-                              // onChange={(e) => updateFormValue("ItemType", e)}
-                              options={APIURLS.ItemType}
-                              value={this.state.ItemType}
-                              disabled={true}
-                            />
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SDIB
+                                id="CatID"
+                                label="ItemCat"
+                                onChange={(e) => updateFormValue("CatId", e)}
+                                param={this.state.ItemCategoryData}
+                                value={this.state.CatId}
+                                isMandatory={true}
+                              />
+                              <SDIB
+                                id="ItemDeptID"
+                                label="ItemDept"
+                                onChange={(e) =>
+                                  updateFormValue("ItemDeptId", e)
+                                }
+                                param={this.state.itemDepartmentMasterData}
+                                value={this.state.ItemDeptId}
+                                isMandatory={true}
+                              />
+                              <SDIB
+                                id="ItemType"
+                                label="Item Type"
+                                // onChange={(e) => updateFormValue("ItemType", e)}
+                                param={APIURLS.ItemType}
+                                value={this.state.ItemType}
+                                disabled={true}
+                              />
 
-                            <TextboxInput
-                              id="ItemNo"
-                              label="ItemNo"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("ItemNo", e)}
-                              value={this.state.No}
-                              disabled={true}
-                              isMandatory={true}
-                            />
+                              <SIB
+                                id="ItemNo"
+                                label="ItemNo"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("ItemNo", e)}
+                                value={this.state.No}
+                                disabled={true}
+                                isMandatory={true}
+                              />
 
-                            <TextboxInput
-                              id="Code"
-                              label="Code"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Code", e)}
-                              value={this.state.Code}
-                              error={this.state.Validations.Code.errorState}
-                              helperText={this.state.Validations.Code.errorMssg}
-                              isMandatory={true}
-                            />
-                            <TextboxInput
-                              id="Alias"
-                              label="Alias"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Alias", e)}
-                              value={this.state.Alias}
-                              error={this.state.Validations.Alias.errorState}
-                              helperText={
-                                this.state.Validations.Alias.errorMssg
-                              }
-                            />
-                            <TextboxInput
-                              id="Description1"
-                              label="Description 1"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("Description1", e)
-                              }
-                              value={this.state.Description1}
-                              error={
-                                this.state.Validations.Description1.errorState
-                              }
-                              helperText={
-                                this.state.Validations.Description1.errorMssg
-                              }
-                              isMandatory={true}
-                            />
-                            <TextboxInput
-                              id="Description2"
-                              label="Description 2"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("Description2", e)
-                              }
-                              value={this.state.Description2}
-                              error={
-                                this.state.Validations.Description2.errorState
-                              }
-                              helperText={
-                                this.state.Validations.Description2.errorMssg
-                              }
-                            />
+                              <SIB
+                                id="Code"
+                                label="Code"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Code", e)}
+                                value={this.state.Code}
+                                error={this.state.Validations.Code.errorState}
+                                isMandatory={true}
+                              />
+                              <SIB
+                                id="Alias"
+                                label="Alias"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Alias", e)}
+                                value={this.state.Alias}
+                                error={this.state.Validations.Alias.errorState}
+                              />
+                              <SIB
+                                id="Description1"
+                                label="Description 1"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("Description1", e)
+                                }
+                                value={this.state.Description1}
+                                error={
+                                  this.state.Validations.Description1.errorState
+                                }
+                                isMandatory={true}
+                              />
+                              <SIB
+                                id="Description2"
+                                label="Description 2"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("Description2", e)
+                                }
+                                value={this.state.Description2}
+                                error={
+                                  this.state.Validations.Description2.errorState
+                                }
+                              />
 
-                            <TextboxInput
-                              id="PackingDesc1"
-                              label="PackingDesc 1"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("PackingDesc1", e)
-                              }
-                              value={this.state.PackingDesc1}
-                              error={
-                                this.state.Validations.PackingDesc1.errorState
-                              }
-                              helperText={
-                                this.state.Validations.PackingDesc1.errorMssg
-                              }
-                            />
-                            <TextboxInput
-                              id="PackingDesc2"
-                              label="PackingDesc 2"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("PackingDesc2", e)
-                              }
-                              value={this.state.PackingDesc2}
-                              error={
-                                this.state.Validations.PackingDesc2.errorState
-                              }
-                              helperText={
-                                this.state.Validations.PackingDesc2.errorMssg
-                              }
-                            />
-                          </TableBody>
-                        </Table>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <SwitchInput
-                              key="IsTrading"
-                              id="IsTrading"
-                              label="IsTrading"
-                              param={this.state.IsTrading}
-                              onChange={(e) => updateFormValue("IsTrading", e)}
-                            />
+                              <SIB
+                                id="PackingDesc1"
+                                label="PackingDesc 1"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("PackingDesc1", e)
+                                }
+                                value={this.state.PackingDesc1}
+                                error={
+                                  this.state.Validations.PackingDesc1.errorState
+                                }
+                              />
+                              <SIB
+                                id="PackingDesc2"
+                                label="PackingDesc 2"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("PackingDesc2", e)
+                                }
+                                value={this.state.PackingDesc2}
+                                error={
+                                  this.state.Validations.PackingDesc2.errorState
+                                }
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SSIB
+                                key="IsTrading"
+                                id="IsTrading"
+                                label="IsTrading"
+                                param={this.state.IsTrading}
+                                onChange={(e) =>
+                                  updateFormValue("IsTrading", e)
+                                }
+                              />
 
-                            <SwitchInput
-                              key="IsActive"
-                              id="IsActive"
-                              label="IsActive"
-                              param={this.state.IsActive}
-                              onChange={(e) => updateFormValue("IsActive", e)}
-                            />
-                            <SwitchInput
-                              key="IsNonStockValuation"
-                              id="IsNonStockValuation"
-                              label="IsNonStockValuation"
-                              param={this.state.IsNonStockValuation}
-                              onChange={(e) =>
-                                updateFormValue("IsNonStockValuation", e)
-                              }
-                            />
-                            <SwitchInput
-                              key="IsCustomized"
-                              id="IsCustomized"
-                              label="IsCustomized"
-                              param={this.state.IsCustomized}
-                              onChange={(e) =>
-                                updateFormValue("IsCustomized", e)
-                              }
-                            />
-                            <SwitchInput
-                              key="IsSaleEvenQuantity"
-                              id="IsSaleEvenQuantity"
-                              label="IsSaleEvenQuantity"
-                              param={this.state.IsSaleEvenQuantity}
-                              onChange={(e) =>
-                                updateFormValue("IsSaleEvenQuantity", e)
-                              }
-                            />
+                              <SSIB
+                                key="IsActive"
+                                id="IsActive"
+                                label="IsActive"
+                                param={this.state.IsActive}
+                                onChange={(e) => updateFormValue("IsActive", e)}
+                              />
+                              <SSIB
+                                key="IsNonStockValuation"
+                                id="IsNonStockValuation"
+                                label="IsNonStockValuation"
+                                param={this.state.IsNonStockValuation}
+                                onChange={(e) =>
+                                  updateFormValue("IsNonStockValuation", e)
+                                }
+                              />
+                              <SSIB
+                                key="IsCustomized"
+                                id="IsCustomized"
+                                label="IsCustomized"
+                                param={this.state.IsCustomized}
+                                onChange={(e) =>
+                                  updateFormValue("IsCustomized", e)
+                                }
+                              />
+                              <SSIB
+                                key="IsSaleEvenQuantity"
+                                id="IsSaleEvenQuantity"
+                                label="IsSaleEvenQuantity"
+                                param={this.state.IsSaleEvenQuantity}
+                                onChange={(e) =>
+                                  updateFormValue("IsSaleEvenQuantity", e)
+                                }
+                              />
 
-                            <SwitchInput
-                              key="IsCertified"
-                              id="IsCertified"
-                              label="IsCertified"
-                              param={this.state.IsCertified}
-                              onChange={(e) =>
-                                updateFormValue("IsCertified", e)
-                              }
-                            />
+                              <SSIB
+                                key="IsCertified"
+                                id="IsCertified"
+                                label="IsCertified"
+                                param={this.state.IsCertified}
+                                onChange={(e) =>
+                                  updateFormValue("IsCertified", e)
+                                }
+                              />
 
-                            <TextboxInput
-                              id="CertificateNo"
-                              label="CertificateNo"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("CertificateNo", e)
-                              }
-                              value={this.state.CertificateNo}
-                              disabled={!this.state.IsCertified}
-                              error={
-                                this.state.Validations.CertificateNo.errorState
-                              }
-                              helperText={
-                                this.state.Validations.CertificateNo.errorMssg
-                              }
-                            />
+                              <SIB
+                                id="CertificateNo"
+                                label="CertificateNo"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("CertificateNo", e)
+                                }
+                                value={this.state.CertificateNo}
+                                disabled={!this.state.IsCertified}
+                                error={
+                                  this.state.Validations.CertificateNo
+                                    .errorState
+                                }
+                              />
 
-                            <SwitchInput
-                              key="IsDiscontine"
-                              id="IsDiscontine"
-                              label="IsDiscontine"
-                              param={this.state.IsDiscontine}
-                              onChange={(e) =>
-                                updateFormValue("IsDiscontine", e)
-                              }
-                            />
+                              <SSIB
+                                key="IsDiscontine"
+                                id="IsDiscontine"
+                                label="IsDiscontine"
+                                param={this.state.IsDiscontine}
+                                onChange={(e) =>
+                                  updateFormValue("IsDiscontine", e)
+                                }
+                              />
 
-                            <TextboxInput
-                              id="Reason"
-                              label="Reason"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Reason", e)}
-                              disabled={!this.state.IsDiscontine}
-                              value={this.state.Reason}
-                              error={this.state.Validations.Reason.errorState}
-                              helperText={
-                                this.state.Validations.Reason.errorMssg
-                              }
-                            />
-                          </TableBody>
-                        </Table>
+                              <SIB
+                                id="Reason"
+                                label="Reason"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Reason", e)}
+                                disabled={!this.state.IsDiscontine}
+                                value={this.state.Reason}
+                                error={this.state.Validations.Reason.errorState}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -1350,238 +1325,217 @@ class addItem extends React.Component {
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <TextboxInput
-                              id="CartonHeight"
-                              label="Carton Height"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("CartonHeight", e)
-                              }
-                              value={this.state.CartonHeight}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="CartonLength"
-                              label="Carton Length"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("CartonLength", e)
-                              }
-                              value={this.state.CartonLength}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="CartonWidth"
-                              label="Carton Width"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("CartonWidth", e)
-                              }
-                              value={this.state.CartonWidth}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="NetWeight"
-                              label="Net Weight"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("NetWeight", e)}
-                              value={this.state.NetWeight}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="GrossWeight"
-                              label="Gross Weight"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("GrossWeight", e)
-                              }
-                              value={this.state.GrossWeight}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="WarningLevel"
-                              label="Warning Level"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("WarningLevel", e)
-                              }
-                              value={this.state.WarningLevel}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="MinStockLevel"
-                              label="MinStock Level"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("MinStockLevel", e)
-                              }
-                              value={this.state.MinStockLevel}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="AMSF"
-                              label="AMSF"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Amsf", e)}
-                              value={this.state.Amsf}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="MSF"
-                              label="MSF"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Msf", e)}
-                              value={this.state.Msf}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="BSF"
-                              label="BSF"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Bsf", e)}
-                              value={this.state.Bsf}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="MOQ"
-                              label="MOQ"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Moq", e)}
-                              value={this.state.Moq}
-                            />
-                          </TableBody>
-                        </Table>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <TextboxInput
-                              type="number"
-                              id="ShipperQuantity"
-                              label="Shipper Quantity"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("ShipperQuantiry", e)
-                              }
-                              value={this.state.ShipperQuantiry}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="CBMPerShipper"
-                              label="CBMPer Shipper"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("CbmperShipper", e)
-                              }
-                              value={this.state.CbmperShipper}
-                            />
-                            <SwitchInput
-                              key="IsQuality"
-                              id="IsQuality"
-                              label="IsQuality"
-                              param={this.state.IsQuality}
-                              onChange={(e) => updateFormValue("IsQuality", e)}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="SpecID"
-                              label="SpecID"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("SpecId", e)}
-                              value={this.state.SpecId}
-                            />
-                            <SwitchInput
-                              key="AllowNegativeStock"
-                              id="AllowNegativeStock"
-                              label="AllowNegativeStock"
-                              param={this.state.AllowNegativeStock}
-                              onChange={(e) =>
-                                updateFormValue("AllowNegativeStock", e)
-                              }
-                            />
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                id="CartonHeight"
+                                label="Carton Height"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("CartonHeight", e)
+                                }
+                                value={this.state.CartonHeight}
+                              />
+                              <SIB
+                                id="CartonLength"
+                                label="Carton Length"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("CartonLength", e)
+                                }
+                                value={this.state.CartonLength}
+                              />
+                              <SIB
+                                id="CartonWidth"
+                                label="Carton Width"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("CartonWidth", e)
+                                }
+                                value={this.state.CartonWidth}
+                              />
+                              <SIB
+                                id="NetWeight"
+                                label="Net Weight"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("NetWeight", e)
+                                }
+                                value={this.state.NetWeight}
+                              />
+                              <SIB
+                                id="GrossWeight"
+                                label="Gross Weight"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("GrossWeight", e)
+                                }
+                                value={this.state.GrossWeight}
+                              />
+                              <SIB
+                                type="number"
+                                id="WarningLevel"
+                                label="Warning Level"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("WarningLevel", e)
+                                }
+                                value={this.state.WarningLevel}
+                              />
+                              <SIB
+                                id="MinStockLevel"
+                                label="MinStock Level"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("MinStockLevel", e)
+                                }
+                                value={this.state.MinStockLevel}
+                              />
+                              <SIB
+                                id="AMSF"
+                                label="AMSF"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Amsf", e)}
+                                value={this.state.Amsf}
+                              />
+                              <SIB
+                                id="MSF"
+                                label="MSF"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Msf", e)}
+                                value={this.state.Msf}
+                              />
+                              <SIB
+                                id="BSF"
+                                label="BSF"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Bsf", e)}
+                                value={this.state.Bsf}
+                              />
+                              <SIB
+                                id="MOQ"
+                                label="MOQ"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Moq", e)}
+                                value={this.state.Moq}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                id="ShipperQuantity"
+                                label="Shipper Quantity"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("ShipperQuantiry", e)
+                                }
+                                value={this.state.ShipperQuantiry}
+                              />
+                              <SIB
+                                id="CBMPerShipper"
+                                label="CBMPer Shipper"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("CbmperShipper", e)
+                                }
+                                value={this.state.CbmperShipper}
+                              />
+                              <SSIB
+                                key="IsQuality"
+                                id="IsQuality"
+                                label="IsQuality"
+                                param={this.state.IsQuality}
+                                onChange={(e) =>
+                                  updateFormValue("IsQuality", e)
+                                }
+                              />
+                              <SIB
+                                type="number"
+                                id="SpecID"
+                                label="SpecID"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("SpecId", e)}
+                                value={this.state.SpecId}
+                              />
+                              <SSIB
+                                key="AllowNegativeStock"
+                                id="AllowNegativeStock"
+                                label="AllowNegativeStock"
+                                param={this.state.AllowNegativeStock}
+                                onChange={(e) =>
+                                  updateFormValue("AllowNegativeStock", e)
+                                }
+                              />
 
-                            <DropdownInput
-                              id="PostingGroup"
-                              label="Posting Group"
-                              onChange={(e) =>
-                                updateFormValue("ItemPostingGroupID", e)
-                              }
-                              options={APIURLS.ItemPostingGroup}
-                              value={this.state.ItemPostingGroupID}
-                            />
+                              <SDIB
+                                id="PostingGroup"
+                                label="Posting Group"
+                                onChange={(e) =>
+                                  updateFormValue("ItemPostingGroupID", e)
+                                }
+                                param={APIURLS.ItemPostingGroup}
+                                value={this.state.ItemPostingGroupID}
+                              />
 
-                            <DropdownInput
-                              id="CostingMethod"
-                              label="Costing Method"
-                              onChange={(e) =>
-                                updateFormValue("CostingMethod", e)
-                              }
-                              options={APIURLS.CostingMethod}
-                              value={this.state.CostingMethod}
-                            />
+                              <SDIB
+                                id="CostingMethod"
+                                label="Costing Method"
+                                onChange={(e) =>
+                                  updateFormValue("CostingMethod", e)
+                                }
+                                param={APIURLS.CostingMethod}
+                                value={this.state.CostingMethod}
+                              />
 
-                            <TextboxInput
-                              type="number"
-                              id="StandardCost"
-                              label="Standard Cost"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("StandardCost", e)
-                              }
-                              value={this.state.StandardCost}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="IndirectCostPercentage"
-                              label="Indirect Cost Percentage"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("IndirectCostPercentage", e)
-                              }
-                              value={this.state.IndirectCostPercentage}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="ProfitPercentage"
-                              label="Profit Percentage"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("ProfitPercentage", e)
-                              }
-                              value={this.state.ProfitPercentage}
-                            />
-                          </TableBody>
-                        </Table>
+                              <SIB
+                                id="StandardCost"
+                                label="Standard Cost"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("StandardCost", e)
+                                }
+                                value={this.state.StandardCost}
+                              />
+                              <SIB
+                                id="IndirectCostPercentage"
+                                label="Indirect Cost Percentage"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("IndirectCostPercentage", e)
+                                }
+                                value={this.state.IndirectCostPercentage}
+                              />
+                              <SIB
+                                id="ProfitPercentage"
+                                label="Profit Percentage"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("ProfitPercentage", e)
+                                }
+                                value={this.state.ProfitPercentage}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -1612,92 +1566,83 @@ class addItem extends React.Component {
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <TextboxInput
-                              type="number"
-                              id="TolerancePercentage"
-                              label="Tolerance Percentage"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("TolerancePercentage", e)
-                              }
-                              value={this.state.TolerancePercentage}
-                            />
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                id="TolerancePercentage"
+                                label="Tolerance Percentage"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("TolerancePercentage", e)
+                                }
+                                value={this.state.TolerancePercentage}
+                              />
 
-                            <DropdownInput
-                              id="GSTGroupID"
-                              label="GST GroupID"
-                              onChange={(e) => updateFormValue("GstgroupId", e)}
-                              options={[]}
-                              value={this.state.GstgroupId}
-                            />
+                              <SDIB
+                                id="GSTGroupID"
+                                label="GST GroupID"
+                                onChange={(e) =>
+                                  updateFormValue("GstgroupId", e)
+                                }
+                                param={[]}
+                                value={this.state.GstgroupId}
+                              />
 
-                            <TextboxInput
-                              id="HSNCode"
-                              label="HSN Code"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Hsncode", e)}
-                              value={this.state.Hsncode}
-                              error={this.state.Validations.Hsncode.errorState}
-                              helperText={
-                                this.state.Validations.Hsncode.errorMssg
-                              }
-                            />
+                              <SIB
+                                id="HSNCode"
+                                label="HSN Code"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Hsncode", e)}
+                                value={this.state.Hsncode}
+                                error={
+                                  this.state.Validations.Hsncode.errorState
+                                }
+                              />
 
-                            <DropdownInput
-                              id="BaseUOM"
-                              label="Base UOM "
-                              onChange={(e) => updateFormValue("BaseUom", e)}
-                              options={this.state.UOMList}
-                              value={this.state.BaseUom}
-                            />
-                          </TableBody>
-                        </Table>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <DropdownInput
-                              id="SalesUOM"
-                              label="Sales UOM"
-                              onChange={(e) => updateFormValue("SalesUom", e)}
-                              options={this.state.UOMList}
-                              value={this.state.SalesUom}
-                            />
+                              <SDIB
+                                id="BaseUOM"
+                                label="Base UOM "
+                                onChange={(e) => updateFormValue("BaseUom", e)}
+                                param={this.state.UOMList}
+                                value={this.state.BaseUom}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SDIB
+                                id="SalesUOM"
+                                label="Sales UOM"
+                                onChange={(e) => updateFormValue("SalesUom", e)}
+                                param={this.state.UOMList}
+                                value={this.state.SalesUom}
+                              />
 
-                            <DropdownInput
-                              id="PurchaseUOM"
-                              label="Purchase UOM"
-                              onChange={(e) =>
-                                updateFormValue("PurchaseUom", e)
-                              }
-                              options={this.state.UOMList}
-                              value={this.state.PurchaseUom}
-                            />
+                              <SDIB
+                                id="PurchaseUOM"
+                                label="Purchase UOM"
+                                onChange={(e) =>
+                                  updateFormValue("PurchaseUom", e)
+                                }
+                                param={this.state.UOMList}
+                                value={this.state.PurchaseUom}
+                              />
 
-                            <DropdownInput
-                              id="PackingUOM"
-                              label="Packing UOM"
-                              onChange={(e) => updateFormValue("PackingUom", e)}
-                              options={this.state.UOMList}
-                              value={this.state.PackingUom}
-                            />
-                          </TableBody>
-                        </Table>
+                              <SDIB
+                                id="PackingUOM"
+                                label="Packing UOM"
+                                onChange={(e) =>
+                                  updateFormValue("PackingUom", e)
+                                }
+                                param={this.state.UOMList}
+                                value={this.state.PackingUom}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -1731,74 +1676,62 @@ class addItem extends React.Component {
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <DropdownInput
-                              id="Replenishment"
-                              label="Replenishment"
-                              onChange={(e) =>
-                                updateFormValue("Replenishment", e)
-                              }
-                              options={APIURLS.Replenishment}
-                              value={this.state.Replenishment}
-                            />
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SDIB
+                                id="Replenishment"
+                                label="Replenishment"
+                                onChange={(e) =>
+                                  updateFormValue("Replenishment", e)
+                                }
+                                param={APIURLS.Replenishment}
+                                value={this.state.Replenishment}
+                              />
 
-                            <TextboxInput
-                              type="number"
-                              id="LeadTime"
-                              label="Lead Time"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("LeadTime", e)}
-                              value={this.state.LeadTime}
-                            />
+                              <SIB
+                                id="LeadTime"
+                                label="Lead Time"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("LeadTime", e)}
+                                value={this.state.LeadTime}
+                              />
 
-                            <DropdownInput
-                              id="ManufacturingPolicy"
-                              label="Manufacturing Policy"
-                              onChange={(e) =>
-                                updateFormValue("ManufacturingPolicy", e)
-                              }
-                              options={APIURLS.ManufacturingPolicy}
-                              value={this.state.ManufacturingPolicy}
-                            />
-                          </TableBody>
-                        </Table>
-                      </Grid>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <TextboxInput
-                              type="number"
-                              id="RoutingID"
-                              label="RoutingID "
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("RoutingId", e)}
-                              value={this.state.RoutingId}
-                            />
-                            <TextboxInput
-                              type="number"
-                              id="BOMID"
-                              label="BOMID "
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Bomid", e)}
-                              value={this.state.Bomid}
-                            />
-                          </TableBody>
-                        </Table>
+                              <SDIB
+                                id="ManufacturingPolicy"
+                                label="Manufacturing Policy"
+                                onChange={(e) =>
+                                  updateFormValue("ManufacturingPolicy", e)
+                                }
+                                param={APIURLS.ManufacturingPolicy}
+                                value={this.state.ManufacturingPolicy}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                id="RoutingID"
+                                label="RoutingID "
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("RoutingId", e)
+                                }
+                                value={this.state.RoutingId}
+                              />
+                              <SIB
+                                id="BOMID"
+                                label="BOMID "
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Bomid", e)}
+                                value={this.state.Bomid}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -1830,40 +1763,39 @@ class addItem extends React.Component {
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
-                      <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="Item List table"
-                        >
-                          <TableBody className="tableBody">
-                            <TextboxInput
-                              id="Location"
-                              label="Location"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Location", e)}
-                              value={this.state.Location}
-                            />
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                id="Location"
+                                label="Location"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Location", e)}
+                                value={this.state.Location}
+                              />
 
-                            <TextboxInput
-                              id="BarcodeNo"
-                              label="Barcode No"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("BarcodeNo", e)}
-                              value={this.state.BarcodeNo}
-                            />
-                            <SwitchInput
-                              key="IsLot"
-                              id="IsLot"
-                              label="IsLot"
-                              param={this.state.IsLot}
-                              onChange={(e) => updateFormValue("IsLot", e)}
-                            />
-                          </TableBody>
-                        </Table>
+                              <SIB
+                                id="BarcodeNo"
+                                label="Barcode No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("BarcodeNo", e)
+                                }
+                                value={this.state.BarcodeNo}
+                              />
+                              <SSIB
+                                key="IsLot"
+                                id="IsLot"
+                                label="IsLot"
+                                param={this.state.IsLot}
+                                onChange={(e) => updateFormValue("IsLot", e)}
+                              />
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>

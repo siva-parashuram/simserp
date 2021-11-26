@@ -35,7 +35,9 @@ import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../../compo/backdrop";
-
+import SIB from "../../../compo/gridtextboxinput";
+import SDIB from "../../../compo/griddropdowninput";
+import SSIB from "../../../compo/gridswitchinput";
 
 class postingGroupMaster extends React.Component {
   constructor(props) {
@@ -1135,51 +1137,43 @@ class postingGroupMaster extends React.Component {
         </Grid>
 
         <Grid item xs={12} sm={12} md={7} lg={7}>
-          <TableContainer>
-            <Table
-              stickyHeader
-              size="small"
-              className="accordion-table"
-              aria-label="PostingGroup List table"
-            >
-              <TableBody className="tableBody">
-                <TextboxInput
-                  id="codeItemPostingGroup"
-                  label="Code"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.ItemPostingGroup.Code}
-                  onChange={(e) =>
-                    updateFormValue("ItemPostingGroup", "Code", e)
-                  }
-                  error={
-                    this.state.Validations.ItemPostingGroup.Code.errorState
-                  }
-                  helperText={
-                    this.state.Validations.ItemPostingGroup.Code.errorMssg
-                  }
-                />
-                <TextboxInput
-                  id="descriptionItemPostingGroup"
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.ItemPostingGroup.Description}
-                  onChange={(e) =>
-                    updateFormValue("ItemPostingGroup", "Description", e)
-                  }
-                  error={
-                    this.state.Validations.ItemPostingGroup.Description
-                      .errorState
-                  }
-                  helperText={
-                    this.state.Validations.ItemPostingGroup.Description
-                      .errorMssg
-                  }
-                />
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Grid container spacing={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <div>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    <SIB
+                      id="codeItemPostingGroup"
+                      label="Code"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.ItemPostingGroup.Code}
+                      onChange={(e) =>
+                        updateFormValue("ItemPostingGroup", "Code", e)
+                      }
+                      error={
+                        this.state.Validations.ItemPostingGroup.Code.errorState
+                      }
+                    />
+                    <SIB
+                      id="descriptionItemPostingGroup"
+                      label="Description"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.ItemPostingGroup.Description}
+                      onChange={(e) =>
+                        updateFormValue("ItemPostingGroup", "Description", e)
+                      }
+                      error={
+                        this.state.Validations.ItemPostingGroup.Description
+                          .errorState
+                      }
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -1196,51 +1190,44 @@ class postingGroupMaster extends React.Component {
           </Button>
         </Grid>
         <Grid item xs={12} sm={12} md={7} lg={7}>
-          <TableContainer>
-            <Table
-              stickyHeader
-              size="small"
-              className="accordion-table"
-              aria-label="PostingGroup List table"
-            >
-              <TableBody className="tableBody">
-                <TextboxInput
-                  id="codeGeneralPostingGroup"
-                  label="Code"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.GeneralPostingGroup.Code}
-                  onChange={(e) =>
-                    updateFormValue("GeneralPostingGroup", "Code", e)
-                  }
-                  error={
-                    this.state.Validations.GeneralPostingGroup.Code.errorState
-                  }
-                  helperText={
-                    this.state.Validations.GeneralPostingGroup.Code.errorMssg
-                  }
-                />
-                <TextboxInput
-                  id="descriptionGeneralPostingGroup"
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.GeneralPostingGroup.Description}
-                  onChange={(e) =>
-                    updateFormValue("GeneralPostingGroup", "Description", e)
-                  }
-                  error={
-                    this.state.Validations.GeneralPostingGroup.Description
-                      .errorState
-                  }
-                  helperText={
-                    this.state.Validations.GeneralPostingGroup.Description
-                      .errorMssg
-                  }
-                />
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Grid container spacing={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <div>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    <SIB
+                      id="codeGeneralPostingGroup"
+                      label="Code"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.GeneralPostingGroup.Code}
+                      onChange={(e) =>
+                        updateFormValue("GeneralPostingGroup", "Code", e)
+                      }
+                      error={
+                        this.state.Validations.GeneralPostingGroup.Code
+                          .errorState
+                      }
+                    />
+                    <SIB
+                      id="descriptionGeneralPostingGroup"
+                      label="Description"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.GeneralPostingGroup.Description}
+                      onChange={(e) =>
+                        updateFormValue("GeneralPostingGroup", "Description", e)
+                      }
+                      error={
+                        this.state.Validations.GeneralPostingGroup.Description
+                          .errorState
+                      }
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -1258,91 +1245,93 @@ class postingGroupMaster extends React.Component {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={11} lg={11}>
-          <TableContainer>
-            <Table
-              stickyHeader
-              size="small"
-              className="accordion-table"
-              aria-label="PostingGroup List table"
-            >
-              <TableBody className="tableBody">
-                {console.log(
-                  "processDropdownList > GeneralPostingGroupSetup > ",
-                  processDropdownList(
-                    "GeneralPostingGroupSetup",
-                    this.state.GeneralPostingGroupList
-                  )
-                )}
-                <DropdownInput
-                  id="GeneralPostingGroupID"
-                  label="General Posting GroupID"
-                  onChange={(e) =>
-                    updateFormValue(
-                      "GeneralPostingGroupSetup",
-                      "GeneralPostingGroupID",
-                      e
-                    )
-                  }
-                  options={processDropdownList(
-                    "GeneralPostingGroupID",
-                    this.state.GeneralPostingGroupList
-                  )}
-                />
-                <DropdownInput
-                  id="ItemPostingGroupID"
-                  label="Item Posting GroupID"
-                  onChange={(e) =>
-                    updateFormValue(
-                      "GeneralPostingGroupSetup",
-                      "ItemPostingGroupID",
-                      e
-                    )
-                  }
-                  options={processDropdownList(
-                    "ItemPostingGroupID",
-                    this.state.ItemPostingGroupList
-                  )}
-                />
+          <Grid container spacing={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <div>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    {console.log(
+                      "processDropdownList > GeneralPostingGroupSetup > ",
+                      processDropdownList(
+                        "GeneralPostingGroupSetup",
+                        this.state.GeneralPostingGroupList
+                      )
+                    )}
+                    <SDIB
+                      id="GeneralPostingGroupID"
+                      label="General Posting GroupID"
+                      onChange={(e) =>
+                        updateFormValue(
+                          "GeneralPostingGroupSetup",
+                          "GeneralPostingGroupID",
+                          e
+                        )
+                      }
+                      param={processDropdownList(
+                        "GeneralPostingGroupID",
+                        this.state.GeneralPostingGroupList
+                      )}
+                    />
+                    <SDIB
+                      id="ItemPostingGroupID"
+                      label="Item Posting GroupID"
+                      onChange={(e) =>
+                        updateFormValue(
+                          "GeneralPostingGroupSetup",
+                          "ItemPostingGroupID",
+                          e
+                        )
+                      }
+                      param={processDropdownList(
+                        "ItemPostingGroupID",
+                        this.state.ItemPostingGroupList
+                      )}
+                    />
 
-                <DropdownInput
-                  id="SalesAccount"
-                  label="Sales Account"
-                  // onChange={(e) => updateFormValue("SalesAccount", e)}
-                  options={this.state.COAList}
-                />
-                <DropdownInput
-                  id="SalesCNAccount"
-                  label="SalesCNAccount"
-                  // onChange={(e) => updateFormValue("SalesCNAccount", e)}
-                  options={this.state.COAList}
-                />
-                <DropdownInput
-                  id="SalesDNAccount"
-                  label="SalesDNAccount"
-                  // onChange={(e) => updateFormValue("SalesDNAccount", e)}
-                  options={this.state.COAList}
-                />
-                <DropdownInput
-                  id="PurchaseAccount"
-                  label="Purchase Account"
-                  // onChange={(e) => updateFormValue("PurchaseAccount", e)}
-                  options={this.state.COAList}
-                />
-                <DropdownInput
-                  id="PurchaseCNAccount"
-                  label="PurchaseCNAccount"
-                  // onChange={(e) => updateFormValue("PurchaseCNAccount", e)}
-                  options={this.state.COAList}
-                />
-                <DropdownInput
-                  id="PurchaseDNAccount"
-                  label="PurchaseDNAccount"
-                  // onChange={(e) => updateFormValue("PurchaseDNAccount", e)}
-                  options={this.state.COAList}
-                />
-              </TableBody>
-            </Table>
-          </TableContainer>
+                    <SDIB
+                      id="SalesAccount"
+                      label="Sales Account"
+                      // onChange={(e) => updateFormValue("SalesAccount", e)}
+                      param={this.state.COAList}
+                    />
+                    <SDIB
+                      id="SalesCNAccount"
+                      label="SalesCNAccount"
+                      // onChange={(e) => updateFormValue("SalesCNAccount", e)}
+                      param={this.state.COAList}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    <SDIB
+                      id="SalesDNAccount"
+                      label="SalesDNAccount"
+                      // onChange={(e) => updateFormValue("SalesDNAccount", e)}
+                      param={this.state.COAList}
+                    />
+                    <SDIB
+                      id="PurchaseAccount"
+                      label="Purchase Account"
+                      // onChange={(e) => updateFormValue("PurchaseAccount", e)}
+                      param={this.state.COAList}
+                    />
+                    <SDIB
+                      id="PurchaseCNAccount"
+                      label="PurchaseCNAccount"
+                      // onChange={(e) => updateFormValue("PurchaseCNAccount", e)}
+                      param={this.state.COAList}
+                    />
+                    <SDIB
+                      id="PurchaseDNAccount"
+                      label="PurchaseDNAccount"
+                      // onChange={(e) => updateFormValue("PurchaseDNAccount", e)}
+                      param={this.state.COAList}
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -1360,69 +1349,83 @@ class postingGroupMaster extends React.Component {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={11} lg={11}>
-          <TableContainer>
-            <Table
-              stickyHeader
-              size="small"
-              className="accordion-table"
-              aria-label="PostingGroup List table"
-            >
-              <TableBody className="tableBody">
-                <TextboxInput
-                  id="codeSupplierPostingGroup"
-                  label="Code"
-                  variant="outlined"
-                  size="small"
-                  isMandatory={true}
-                  value={this.state.SupplierPostingGroup.Code}
-                  onChange={(e) =>
-                    updateFormValue("SupplierPostingGroup", "Code", e)
-                  }
-                />
-                <TextboxInput
-                  id="descriptionSupplierPostingGroup"
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.SupplierPostingGroup.Description}
-                  onChange={(e) =>
-                    updateFormValue("SupplierPostingGroup", "Description", e)
-                  }
-                />
-                <DropdownInput
-                  id="PayableAccount"
-                  label="Payable Account"
-                  options={this.state.COAList}
-                  value={this.state.SupplierPostingGroup.PayableAccount}
-                  onChange={(e) =>
-                    updateFormValue("SupplierPostingGroup", "PayableAccount", e)
-                  }
-                />
-                <DropdownInput
-                  id="ReceivableAccount"
-                  label="Receivable Account"
-                  options={this.state.COAList}
-                  value={this.state.SupplierPostingGroup.ReceivableAccount}
-                  onChange={(e) =>
-                    updateFormValue(
-                      "SupplierPostingGroup",
-                      "ReceivableAccount",
-                      e
-                    )
-                  }
-                />
-                <DropdownInput
-                  id="RoundingAmount"
-                  label="Rounding Amount"
-                  options={this.state.COAList}
-                  value={this.state.SupplierPostingGroup.RoundingAmount}
-                  onChange={(e) =>
-                    updateFormValue("SupplierPostingGroup", "RoundingAmount", e)
-                  }
-                />
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Grid container spacing={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <div>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    <SIB
+                      id="codeSupplierPostingGroup"
+                      label="Code"
+                      variant="outlined"
+                      size="small"
+                      isMandatory={true}
+                      value={this.state.SupplierPostingGroup.Code}
+                      onChange={(e) =>
+                        updateFormValue("SupplierPostingGroup", "Code", e)
+                      }
+                    />
+                    <SIB
+                      id="descriptionSupplierPostingGroup"
+                      label="Description"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.SupplierPostingGroup.Description}
+                      onChange={(e) =>
+                        updateFormValue(
+                          "SupplierPostingGroup",
+                          "Description",
+                          e
+                        )
+                      }
+                    />
+                    <SDIB
+                      id="PayableAccount"
+                      label="Payable Account"
+                      param={this.state.COAList}
+                      value={this.state.SupplierPostingGroup.PayableAccount}
+                      onChange={(e) =>
+                        updateFormValue(
+                          "SupplierPostingGroup",
+                          "PayableAccount",
+                          e
+                        )
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    <SDIB
+                      id="ReceivableAccount"
+                      label="Receivable Account"
+                      param={this.state.COAList}
+                      value={this.state.SupplierPostingGroup.ReceivableAccount}
+                      onChange={(e) =>
+                        updateFormValue(
+                          "SupplierPostingGroup",
+                          "ReceivableAccount",
+                          e
+                        )
+                      }
+                    />
+                    <SDIB
+                      id="RoundingAmount"
+                      label="Rounding Amount"
+                      para={this.state.COAList}
+                      value={this.state.SupplierPostingGroup.RoundingAmount}
+                      onChange={(e) =>
+                        updateFormValue(
+                          "SupplierPostingGroup",
+                          "RoundingAmount",
+                          e
+                        )
+                      }
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -1441,60 +1444,44 @@ class postingGroupMaster extends React.Component {
           </Grid>
         </Grid>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
+          <Grid xs={12} sm={12} md={10} lg={10}>
             <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <div>
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={5} lg={5}>
+                      <SDIB
                         id="SuplID"
                         label="SuplID"
                         // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
+                        param={[]}
                         isMandatory={true}
                       />
-                      <DropdownInput
+                      <SDIB
                         id="BranchID"
                         label="BranchID"
                         // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
+                        param={[]}
                         isMandatory={true}
                       />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={7} lg={7}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                    <Grid item xs={12} sm={12} md={5} lg={5}>
+                      <SDIB
                         id="GeneralPostingGroupID"
-                        label="General Posting GroupID"
+                        label="General Posting "
                         // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
+                        param={[]}
                       />
-                      <DropdownInput
+                      <SDIB
                         id="SupplierPostingGroupID"
-                        label="Supplier Posting GroupID"
+                        label="Supplier Posting "
                         // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
+                        param={[]}
                       />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                    </Grid>
+                  </Grid>
+                </div>
               </Grid>
             </Grid>
           </Grid>
@@ -1515,69 +1502,83 @@ class postingGroupMaster extends React.Component {
           </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={11} lg={11}>
-          <TableContainer>
-            <Table
-              stickyHeader
-              size="small"
-              className="accordion-table"
-              aria-label="PostingGroup List table"
-            >
-              <TableBody className="tableBody">
-                <TextboxInput
-                  id="Code"
-                  label="Code"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.CustomerPostingGroup.Code}
-                  onChange={(e) =>
-                    updateFormValue("CustomerPostingGroup", "Code", e)
-                  }
-                  isMandatory={true}
-                />
-                <TextboxInput
-                  id="Description"
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.CustomerPostingGroup.Description}
-                  onChange={(e) =>
-                    updateFormValue("CustomerPostingGroup", "Description", e)
-                  }
-                />
-                <DropdownInput
-                  id="PayableAccount"
-                  label="Payable Account"
-                  onChange={(e) =>
-                    updateFormValue("CustomerPostingGroup", "PayableAccount", e)
-                  }
-                  value={this.state.CustomerPostingGroup.PayableAccount}
-                  options={this.state.COAList}
-                />
-                <DropdownInput
-                  id="ReceivableAccount"
-                  label="Receivable Account"
-                  value={this.state.CustomerPostingGroup.ReceivableAccount}
-                  onChange={(e) =>
-                    updateFormValue(
-                      "CustomerPostingGroup",
-                      "ReceivableAccount",
-                      e
-                    )
-                  }
-                  options={this.state.COAList}
-                />
-                <DropdownInput
-                  id="RoundingAmount"
-                  label="Rounding Amount"
-                  value={this.state.CustomerPostingGroup.RoundingAmount}
-                  onChange={(e) =>
-                    updateFormValue("CustomerPostingGroup", "RoundingAmount", e)
-                  }
-                  options={this.state.COAList}
-                />
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Grid container spacing={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <div>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    <SIB
+                      id="Code"
+                      label="Code"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.CustomerPostingGroup.Code}
+                      onChange={(e) =>
+                        updateFormValue("CustomerPostingGroup", "Code", e)
+                      }
+                      isMandatory={true}
+                    />
+                    <SIB
+                      id="Description"
+                      label="Description"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.CustomerPostingGroup.Description}
+                      onChange={(e) =>
+                        updateFormValue(
+                          "CustomerPostingGroup",
+                          "Description",
+                          e
+                        )
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                  <Grid item xs={12} sm={12} md={5} lg={5}>
+                    <SDIB
+                      id="PayableAccount"
+                      label="Payable Account"
+                      onChange={(e) =>
+                        updateFormValue(
+                          "CustomerPostingGroup",
+                          "PayableAccount",
+                          e
+                        )
+                      }
+                      value={this.state.CustomerPostingGroup.PayableAccount}
+                      param={this.state.COAList}
+                    />
+                    <SDIB
+                      id="ReceivableAccount"
+                      label="Receivable Account"
+                      value={this.state.CustomerPostingGroup.ReceivableAccount}
+                      onChange={(e) =>
+                        updateFormValue(
+                          "CustomerPostingGroup",
+                          "ReceivableAccount",
+                          e
+                        )
+                      }
+                      param={this.state.COAList}
+                    />
+                    <SDIB
+                      id="RoundingAmount"
+                      label="Rounding Amount"
+                      value={this.state.CustomerPostingGroup.RoundingAmount}
+                      onChange={(e) =>
+                        updateFormValue(
+                          "CustomerPostingGroup",
+                          "RoundingAmount",
+                          e
+                        )
+                      }
+                      param={this.state.COAList}
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -1595,60 +1596,44 @@ class postingGroupMaster extends React.Component {
           </Grid>
         </Grid>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
+          <Grid xs={12} sm={12} md={10} lg={10}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <div>
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={5} lg={5}>
+                      <SDIB
                         id="CustID"
                         label="CustID"
                         // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
+                        param={[]}
                         isMandatory={true}
                       />
-                      <DropdownInput
+                      <SDIB
                         id="BranchID"
                         label="BranchID"
                         // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
+                        param={[]}
                         isMandatory={true}
                       />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={7} lg={7}>
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="PostingGroup List table"
-                  >
-                    <TableBody className="tableBody">
-                      <DropdownInput
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                    <Grid item xs={12} sm={12} md={5} lg={5}>
+                      <SDIB
                         id="GeneralPostingGroupID"
-                        label="General Posting GroupID"
+                        label="General Posting"
                         // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
+                        param={[]}
                       />
-                      <DropdownInput
+                      <SDIB
                         id="CustomerPostingGroupID"
-                        label="Customer Posting GroupID"
+                        label="Customer Posting"
                         // onChange={(e) => updateFormValue("PayableAccount", e)}
-                        // options={}
+                        param={[]}
                       />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                    </Grid>
+                  </Grid>
+                </div>
               </Grid>
             </Grid>
           </Grid>

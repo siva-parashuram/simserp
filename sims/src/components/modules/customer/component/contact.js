@@ -664,7 +664,6 @@ class contact extends React.Component {
                             onChange={(e) => this.updateFormValue("Name", e)}
                             value={this.state.CustomerContact.Name}
                             error={this.state.Validations.Name.errorState}
-                            helperText={this.state.Validations.Name.errorMssg}
                           />
                           <TextboxInput
                             id="PhoneNo"
@@ -674,9 +673,7 @@ class contact extends React.Component {
                             onChange={(e) => this.updateFormValue("PhoneNo", e)}
                             value={this.state.CustomerContact.PhoneNo}
                             error={this.state.Validations.PhoneNo.errorState}
-                            helperText={
-                              this.state.Validations.PhoneNo.errorMssg
-                            }
+                            
                           />
                           <TextboxInput
                             id="EmailID"
@@ -686,9 +683,7 @@ class contact extends React.Component {
                             onChange={(e) => this.updateFormValue("EmailID", e)}
                             value={this.state.CustomerContact.EmailID}
                             error={this.state.Validations.EmailID.errorState}
-                            helperText={
-                              this.state.Validations.EmailID.errorMssg
-                            }
+                            
                           />
                           <SwitchInput
                             key="IsBlock"

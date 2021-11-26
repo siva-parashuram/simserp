@@ -31,7 +31,10 @@ import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../compo/backdrop";
-
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 class addwarehouse extends React.Component {
   constructor(props) {
@@ -594,16 +597,11 @@ class addwarehouse extends React.Component {
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="table"
-                          >
-                            <TableBody className="tableBody">
-                              <Tablerowcelltextboxinput
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
                                 id="Code"
                                 label="Code"
                                 variant="outlined"
@@ -615,12 +613,9 @@ class addwarehouse extends React.Component {
                                 }}
                                 value={this.state.Code}
                                 error={this.state.Validations.Code.errorState}
-                                helperText={
-                                  this.state.Validations.Code.errorMssg
-                                }
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="Description"
                                 label="Description"
                                 variant="outlined"
@@ -636,11 +631,8 @@ class addwarehouse extends React.Component {
                                 error={
                                   this.state.Validations.Description.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.Description.errorMssg
-                                }
                               />
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="contactPerson"
                                 label=" Contact Person"
                                 variant="outlined"
@@ -657,13 +649,9 @@ class addwarehouse extends React.Component {
                                   this.state.Validations.ContactPerson
                                     .errorState
                                 }
-                                helperText={
-                                  this.state.Validations.ContactPerson.errorMssg
-                                }
                               />
 
-                              <Tablerowcelltextboxinput
-                                type="number"
+                              <SIB
                                 id="phoneNo"
                                 label="Phone No"
                                 variant="outlined"
@@ -677,100 +665,69 @@ class addwarehouse extends React.Component {
                                 error={
                                   this.state.Validations.PhoneNo.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.PhoneNo.errorMssg
-                                }
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="table"
-                          >
-                            <TableBody className="tableBody">
-                              <Tablerowcelltextboxinput
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
                                 id="EmailID"
                                 label="Email ID"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("EmailID", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
                                 value={this.state.EmailId}
                                 error={
                                   this.state.Validations.EmailId.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.EmailId.errorMssg
-                                }
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="Address"
                                 label="Address Line 1"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("Address", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
                                 value={this.state.Address}
                                 error={
                                   this.state.Validations.Address.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.Address.errorMssg
-                                }
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="Address2"
                                 label="Address Line 2"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("Address2", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 10,
-                                }}
                                 value={this.state.Address2}
                                 error={
                                   this.state.Validations.Address2.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.Address2.errorMssg
-                                }
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 id="Address3"
                                 label="Address Line 3"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("Address3", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 10,
-                                }}
                                 value={this.state.Address3}
                                 error={
                                   this.state.Validations.Address3.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.Address3.errorMssg
+                              />
+
+                              <SSIB
+                                key="IsActive"
+                                id="IsActive"
+                                label="IsActive"
+                                param={this.state.IsActive}
+                                onChange={(e) =>
+                                  this.updateFormValue("IsActive", e)
                                 }
                               />
 
-                              <TableRow>
+                              {/* <TableRow>
                                 <TableCell
                                   align="left"
                                   className="no-border-table"
@@ -788,10 +745,10 @@ class addwarehouse extends React.Component {
                                     }
                                   />
                                 </TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                              </TableRow> */}
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>
@@ -819,16 +776,20 @@ class addwarehouse extends React.Component {
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
                     <Grid container spacing={0}>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="table"
-                          >
-                            <TableBody className="tableBody">
-                              <TableRow>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SSIB
+                                key="IsEdi"
+                                id="IsEdi"
+                                label="IsEdi?"
+                                param={this.state.IsEdi}
+                                onChange={(e) =>
+                                  this.updateFormValue("IsEdi", e)
+                                }
+                              />
+                              {/* <TableRow>
                                 <TableCell
                                   align="left"
                                   className="no-border-table"
@@ -846,37 +807,20 @@ class addwarehouse extends React.Component {
                                     }
                                   />
                                 </TableCell>
-                              </TableRow>
-                              <Tablerowcelltextboxinput
+                              </TableRow> */}
+                              <SIB
                                 id="ediurl"
                                 label="EDI Url"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("ediurl", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 10,
-                                }}
                                 value={this.state.Ediurl}
                                 error={this.state.Validations.Ediurl.errorState}
-                                helperText={
-                                  this.state.Validations.Ediurl.errorMssg
-                                }
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
-                      </Grid>
-                      <Grid xs={12} sm={12} md={6} lg={6}>
-                        <TableContainer>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className="accordion-table"
-                            aria-label="table"
-                          >
-                            <TableBody className="tableBody">
-                              <Tablerowcelltextboxinput
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
                                 id="ediloginid"
                                 label="EDI LoginID"
                                 variant="outlined"
@@ -892,12 +836,9 @@ class addwarehouse extends React.Component {
                                 error={
                                   this.state.Validations.EdiloginId.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.EdiloginId.errorMssg
-                                }
                               />
 
-                              <Tablerowcelltextboxinput
+                              <SIB
                                 type="password"
                                 id="edipassword"
                                 label="EDI Password"
@@ -906,21 +847,14 @@ class addwarehouse extends React.Component {
                                 onChange={(e) =>
                                   updateFormValue("edipassword", e)
                                 }
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 10,
-                                }}
                                 value={this.state.Edipassword}
                                 error={
                                   this.state.Validations.Edipassword.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.Edipassword.errorMssg
-                                }
                               />
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
                     </Grid>
                   </AccordionDetails>

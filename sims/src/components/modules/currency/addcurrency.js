@@ -31,6 +31,10 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
 
 const Dformat = APIURLS.DFormat;
 const viewDate = "yyyy-mm-dd";
@@ -364,76 +368,80 @@ class addcurrency extends React.Component {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
-                <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="company List table"
-                  >
-                    <TableBody className="tableBody">
-                      <Tablerowcelltextboxinput
-                        id="Code"
-                        label="Code"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Code", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                        }}
-                        value={this.state.Code}
-                        error={this.state.Validations.Code.errorState}
-                        helperText={this.state.Validations.Code.errorMssg}
-                      />
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                    <div>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            id="Code"
+                            label="Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Code", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                            }}
+                            value={this.state.Code}
+                            error={this.state.Validations.Code.errorState}
+                          />
 
-                      <Tablerowcelltextboxinput
-                        id="Description"
-                        label="Description"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Description", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                        }}
-                        value={this.state.Description}
-                        error={this.state.Validations.Description.errorState}
-                        helperText={
-                          this.state.Validations.Description.errorMssg
-                        }
-                      />
+                          <SIB
+                            id="Description"
+                            label="Description"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Description", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                            }}
+                            value={this.state.Description}
+                            error={
+                              this.state.Validations.Description.errorState
+                            }
+                            
+                          />
 
-                      <Tablerowcelltextboxinput
-                        id="Symbol"
-                        label="Symbol"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Symbol", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                        }}
-                        value={this.state.Symbol}
-                        error={this.state.Validations.Symbol.errorState}
-                        helperText={this.state.Validations.Symbol.errorMssg}
-                      />
+                          <SIB
+                            id="Symbol"
+                            label="Symbol"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("Symbol", e)}
+                            InputProps={{
+                              className: "textFieldCss",
+                            }}
+                            value={this.state.Symbol}
+                            error={this.state.Validations.Symbol.errorState}
+                            helperText={this.state.Validations.Symbol.errorMssg}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SDIB
+                            id="RealizedGainId"
+                            label="Realized Gain"
+                            onChange={(e) =>
+                              updateFormValue("RealizedGainId", e)
+                            }
+                            value={this.state.Currency.RealizedGainId}
+                            param={this.state.COAList}
+                          />
 
-                      <DropdownInput
-                        id="RealizedGainId"
-                        label="Realized Gain"
-                        onChange={(e) => updateFormValue("RealizedGainId", e)}
-                        value={this.state.Currency.RealizedGainId}
-                        options={this.state.COAList}
-                      />
-
-                      <DropdownInput
-                        id="RealizedLossId"
-                        label="Realized Loss "
-                        onChange={(e) => updateFormValue("RealizedLossId", e)}
-                        value={this.state.Currency.RealizedLossId}
-                        options={this.state.COAList}
-                      />
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                          <SDIB
+                            id="RealizedLossId"
+                            label="Realized Loss "
+                            onChange={(e) =>
+                              updateFormValue("RealizedLossId", e)
+                            }
+                            value={this.state.Currency.RealizedLossId}
+                            param={this.state.COAList}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Grid>

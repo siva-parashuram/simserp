@@ -1554,9 +1554,6 @@ class editbranch extends React.Component {
                                 }}
                                 value={this.state.branch.Name}
                                 error={this.state.Validations.name.errorState}
-                                helperText={
-                                  this.state.Validations.name.errorMsg
-                                }
                                 isMandatory={true}
                               />
 
@@ -1593,9 +1590,6 @@ class editbranch extends React.Component {
                                 error={
                                   this.state.Validations.address.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.address.errorMsg
-                                }
                               />
 
                               <SIB
@@ -1611,9 +1605,6 @@ class editbranch extends React.Component {
                                 value={this.state.branch.Address2}
                                 error={
                                   this.state.Validations.address2.errorState
-                                }
-                                helperText={
-                                  this.state.Validations.address2.errorMsg
                                 }
                               />
 
@@ -1631,9 +1622,6 @@ class editbranch extends React.Component {
                                 error={
                                   this.state.Validations.address3.errorState
                                 }
-                                helperText={
-                                  this.state.Validations.address3.errorMsg
-                                }
                               />
                               <SIB
                                 id="City"
@@ -1647,9 +1635,6 @@ class editbranch extends React.Component {
                                 }}
                                 value={this.state.branch.City}
                                 error={this.state.Validations.city.errorState}
-                                helperText={
-                                  this.state.Validations.city.errorMsg
-                                }
                               />
 
                               <SIB
@@ -1665,9 +1650,6 @@ class editbranch extends React.Component {
                                 value={this.state.branch.Postcode}
                                 error={
                                   this.state.Validations.postcode.errorState
-                                }
-                                helperText={
-                                  this.state.Validations.postcode.errorMsg
                                 }
                               />
                               <SDIB
@@ -1777,7 +1759,6 @@ class editbranch extends React.Component {
                                 }
                                 value={this.state.branch.EffectiveDate}
                                 error={null}
-                                helperText={null}
                               />
                               <SIB
                                 id="ContactPerson"
@@ -1795,9 +1776,6 @@ class editbranch extends React.Component {
                                 error={
                                   this.state.Validations.ContactPerson
                                     .errorState
-                                }
-                                helperText={
-                                  this.state.Validations.ContactPerson.errorMsg
                                 }
                               />
                               <SSIB
@@ -1903,9 +1881,6 @@ class editbranch extends React.Component {
                                 }}
                                 value={this.state.branch.CINNo}
                                 error={this.state.Validations.CINNo.errorState}
-                                helperText={
-                                  this.state.Validations.CINNo.errorMsg
-                                }
                               />
                               <SIB
                                 id="IECNo"
