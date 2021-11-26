@@ -25,8 +25,7 @@ import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
 
-import Userbranchalot from "../branch/userbranchalot";
-import Usermoduleassign from "../modules/usermoduleassign";
+import MasterDataGrid from "../../compo/masterdatagrid";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
@@ -52,6 +51,8 @@ class usermaster extends React.Component {
       passData: [],
       userBranchMappingList: [],
       editurl: null,
+      columns:APIURLS.userMasterColumn,
+      selectionModel:1,
     };
   }
 
@@ -190,15 +191,18 @@ class usermaster extends React.Component {
       .then((response) => {
         let data = response.data;
 
-        let rows = data;
+        for(let i=0;i<data.length;i++){
+          data[i].id=i+1;
+        }
+        
         this.setState(
           {
             users: data,
             ProgressLoader: true,
           },
           () => {
-            if (rows.length > 0) {
-              this.InitialhandleRowClick(null, rows[0], "row_0");
+            if (data.length > 0) {
+              this.handleRowClick([1]);
             }
           }
         );
@@ -206,70 +210,22 @@ class usermaster extends React.Component {
       .catch((error) => {});
   }
 
-  InitialhandleRowClick(e, item, id) {
+  handleRowClick=(e)=>{
+    let index = e[0];
+      
+    let item = this.state.users[index - 1]; 
     let editUrl =
       URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.UserID;
 
-    this.setState({ editurl: editUrl });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
+    this.setState({ editurl: editUrl,selectionModel:index });
+   
+  
   }
 
-  InitialremoveIsSelectedRowClasses() {
-    try {
-      for (let i = 0; i < this.state.users.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    } catch (e) {}
-  }
+  
 
   render() {
-    const handleAccordionClick = (val, e) => {
-      if (val === "allotBranch") {
-        this.state.allotBranch === true
-          ? this.setState({ allotBranch: false })
-          : this.setState({ allotBranch: true });
-      }
-      if (val === "allotModule") {
-        this.state.allotModule === true
-          ? this.setState({ allotModule: false })
-          : this.setState({ allotModule: true });
-      }
-    };
-
-    const handleRowClick = (e, item, id) => {
-      try {
-        this.setState({ passData: [] });
-
-        let editUrl =
-          URLS.URLS.editUser + this.state.urlparams + "&userId=" + item.UserID;
-
-        this.setState({ userId: item.UserID, editurl: editUrl });
-        removeIsSelectedRowClasses();
-        this.getUserBranches(item.UserID);
-        document.getElementById(id).classList.add("selectedRow");
-      } catch (e) {}
-    };
-
-    const removeIsSelectedRowClasses = () => {
-      try {
-        for (let i = 0; i < this.state.users.length; i++) {
-          document.getElementById("row_" + i).className = "";
-        }
-      } catch (e) {}
-    };
-
-    const changeUserStatus = (item, val) => {
-      let users = this.state.users;
-      let index = users.indexOf(item);
-
-      let user = users[index];
-      user.isActive = val;
-      users[index] = user;
-
-      this.setState({ users: users });
-    };
-
+    
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
@@ -279,22 +235,16 @@ class usermaster extends React.Component {
       let rows = data;
       let page = parseInt(this.state.pagination.page);
       let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
-
       return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     };
 
     const handlePageChange = (event, newPage) => {
-      removeSelected();
-
       let pagination = this.state.pagination;
       pagination.page = newPage;
       this.setState({ pagination: pagination });
     };
 
-    const removeSelected = () => {
-      removeIsSelectedRowClasses();
-      this.setState({ userBranchMappingList: [], passData: [] });
-    };
+    
 
     const breadcrumbHtml = (
       <Fragment>
@@ -348,75 +298,12 @@ class usermaster extends React.Component {
               <Grid xs={12} sm={12} md={11} lg={11}>
                 {this.state.users.length > 0 ? (
                   <Fragment>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className=""
-                      aria-label="Country List table"
-                    >
-                      <TableHead className="table-header-background">
-                        <TableRow>
-                          <TableCell className="table-header-font">#</TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Email Id
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            First Name
-                          </TableCell>
-
-                          <TableCell className="table-header-font" align="left">
-                            Login Id
-                          </TableCell>
-
-                          <TableCell className="table-header-font" align="left">
-                            Status
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody className="tableBody">
-                        {getPageData(this.state.users).map((item, i) => (
-                          <TableRow
-                            id={"row_" + i}
-                            className={this.state.initialCss}
-                            hover
-                            key={i}
-                            onClick={(event) =>
-                              handleRowClick(event, item, "row_" + i)
-                            }
-                          >
-                            <TableCell align="left">
-                              <a
-                                className="LINK tableLink"
-                                href={
-                                  URLS.URLS.editUser +
-                                  this.state.urlparams +
-                                  "&userId=" +
-                                  item.UserID
-                                }
-                              >
-                                {URLS.PREFIX.userID + item.UserID}
-                              </a>
-                            </TableCell>
-                            <TableCell align="left">{item.EmailID}</TableCell>
-                            <TableCell align="left">{item.FirstName}</TableCell>
-
-                            <TableCell align="left">{item.LoginID}</TableCell>
-
-                            <TableCell align="left">
-                              {item.IsActive === true ? (
-                                <span style={{ color: "green" }}>Active</span>
-                              ) : (
-                                <span style={{ color: "red" }}>In-Active</span>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-
-                    <Pagination
-                      data={this.state.users}
+                    <MasterDataGrid
+                      selectionModel={this.state.selectionModel}
+                      rows={this.state.users}
+                      columns={this.state.columns}
                       pagination={this.state.pagination}
+                      onSelectionModelChange={(e) => this.handleRowClick(e)}
                       onPageChange={handlePageChange}
                     />
                   </Fragment>

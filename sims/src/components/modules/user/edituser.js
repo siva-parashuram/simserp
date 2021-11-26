@@ -75,14 +75,7 @@ class edituser extends React.Component {
         LoginID: "",
         Password: "",
         UserID: 0
-        // UserID: 0,
-        // LoginID: null,
-        // Password: null,
-        // FirstName: null,
-        // LastName: null,
-        // EmailID: null,
-        // isActive: null,
-        // IsAdmin: false,
+       
       },
       UserID: 0,
       LoginID: null,
@@ -610,109 +603,121 @@ class edituser extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={6} md={6} lg={6}>
-            <Accordion
-              key="country-General-Details"
-              expanded={this.state.GeneralDetailsExpanded}
-            >
-              <AccordionSummary
-                className="accordion-Header-Design"
-                expandIcon={
-                  <ExpandMoreIcon
-                    onClick={(e) =>
-                      handleAccordionClick("GeneralDetailsExpanded", e)
+          <Grid xs={12} sm={12} md={8} lg={8}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+                <Accordion
+                  key="country-General-Details"
+                  expanded={this.state.GeneralDetailsExpanded}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) =>
+                          handleAccordionClick("GeneralDetailsExpanded", e)
+                        }
+                      />
                     }
-                  />
-                }
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-                style={{ minHeight: 20, height: "100%" }}
-              >
-                <Typography key="" className="accordion-Header-Title">
-                  General Details
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails key="" className="AccordionDetails-css">
-              <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <div>
-                      <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={5} lg={5}>
-                          <SIB
-                            isMandatory={true}
-                            id="FirstName"
-                            label="First Name"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("FirstName", e)}
-                            value={this.state.user.FirstName}
-                            error={this.state.Validations.FirstName.errorState}
-                          />
-                          <SIB
-                           
-                            id="LastName"
-                            label="LastName"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("LastName", e)}
-                            value={this.state.user.LastName}
-                            error={this.state.Validations.LastName.errorState}
-                          />
-                          <SIB
-                           
-                           id="EmailID"
-                           label="EmailID"
-                           variant="outlined"
-                           size="small"
-                           onChange={(e) => updateFormValue("EmailID", e)}
-                           value={this.state.user.EmailID}
-                           error={this.state.Validations.EmailID.errorState}
-                         />
-                         <SIB
-                           
-                           id="LoginID"
-                           label="LoginID"
-                           variant="outlined"
-                           size="small"
-                           onChange={(e) => updateFormValue("LoginID", e)}
-                           value={this.state.user.LoginID}
-                           error={this.state.Validations.LoginID.errorState}
-                         />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                        <Grid item xs={12} sm={12} md={5} lg={5}>
-                          <SIB
-                           type="password"
-                            id="Password"
-                            label="Password"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("Password", e)}
-                            value={this.state.user.Password}
-                            error={this.state.Validations.Password.errorState}
-                          />
-                          <SSIB
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 20, height: "100%" }}
+                  >
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Grid container spacing={0}>
+                      <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                isMandatory={true}
+                                id="FirstName"
+                                label="First Name"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("FirstName", e)}
+                                value={this.state.user.FirstName}
+                                error={this.state.Validations.FirstName.errorState}
+                              />
+                              <SIB
+
+                                id="LastName"
+                                label="LastName"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("LastName", e)}
+                                value={this.state.user.LastName}
+                                error={this.state.Validations.LastName.errorState}
+                              />
+                              <SIB
+
+                                id="EmailID"
+                                label="EmailID"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("EmailID", e)}
+                                value={this.state.user.EmailID}
+                                error={this.state.Validations.EmailID.errorState}
+                              />
+                              <SIB
+
+                                id="LoginID"
+                                label="LoginID"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("LoginID", e)}
+                                value={this.state.user.LoginID}
+                                error={this.state.Validations.LoginID.errorState}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                type="password"
+                                id="Password"
+                                label="Password"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Password", e)}
+                                value={this.state.user.Password}
+                                error={this.state.Validations.Password.errorState}
+                              />
+                              <SSIB
                                 key="isAdmin"
                                 id="isAdmin"
                                 label="isAdmin"
                                 param={this.state.user.IsAdmin}
                                 onChange={(e) => updateFormValue("IsAdmin", e)}
                               />
-                               <SSIB
+                              <SSIB
                                 key="isActive"
                                 id="IsActive"
                                 label="Active"
                                 param={this.state.user.IsActive}
                                 onChange={(e) => updateFormValue("IsActive", e)}
                               />
-                        </Grid>
+                            </Grid>
+                          </Grid>
+                        </div>
                       </Grid>
-                    </div>
-                  </Grid>
-                </Grid>
-                
-              </AccordionDetails>
-            </Accordion>
+                    </Grid>
+
+                  </AccordionDetails>
+                </Accordion>
+              </Grid>
+            </Grid>
+          
+          </Grid>
+          <Grid xs={12} sm={12} md={4} lg={4}>              
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+              
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
         {dialog}

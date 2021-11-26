@@ -520,6 +520,43 @@ export const  stateMasterColumn=[
     headerClassName: 'table-header-font'
   }
 
-  //     
+   
+];
+
+export const userMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 50,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'EmailID',
+    headerName: 'Email Id',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'FirstName',
+    headerName: 'First Name',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'LoginID',
+    headerName: 'Login Id',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'IsActive',
+    headerName: 'Status',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
 ];
 
