@@ -37,6 +37,7 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import Userbranchalot from "../branch/userbranchalot";
+import Usermoduleassign from "../modules/usermoduleassign";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
@@ -57,6 +58,7 @@ class edituser extends React.Component {
       DisableUpdatebtn: true,
       duplicateExist: false,
       users: [],
+      userBranchMappingList:[],
       oldEMAILID: "",
       Dialog: {
         DialogTitle: "",
@@ -64,14 +66,23 @@ class edituser extends React.Component {
         DialogContent: null,
       },
       user: {
-        UserID: 0,
-        LoginID: null,
-        Password: null,
-        FirstName: null,
-        LastName: null,
-        EmailID: null,
-        isActive: null,
-        IsAdmin: false,
+        CreationDate: "",
+        EmailID: "",
+        FirstName: "",
+        IsActive: true,
+        IsAdmin: true,
+        LastName: "",
+        LoginID: "",
+        Password: "",
+        UserID: 0
+        // UserID: 0,
+        // LoginID: null,
+        // Password: null,
+        // FirstName: null,
+        // LastName: null,
+        // EmailID: null,
+        // isActive: null,
+        // IsAdmin: false,
       },
       UserID: 0,
       LoginID: null,
@@ -114,9 +125,15 @@ class edituser extends React.Component {
       },
       () => {
         this.getUserDetails();
+        this.getUserBranches(parseInt(userId))
       }
     );
   }
+
+
+
+  
+
   getUsersList() {
     this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
@@ -165,12 +182,13 @@ class edituser extends React.Component {
         user.FirstName = data.firstName;
         user.LastName = data.lastName;
         user.EmailID = data.emailId;
-        user.isActive = data.isActive;
+        user.IsActive = data.isActive;
         user.IsAdmin = data.isAdmin;
+
 
         this.setState({
           oldEMAILID: data.emailId,
-          user: user,
+          user: data,
           country: data,
           LoginID: data.loginId,
           Password: data.password,
@@ -180,9 +198,37 @@ class edituser extends React.Component {
           IsAdmin: data.isAdmin,
           isActive: data.isActive,
           ProgressLoader: true,
+          DisableUpdatebtn:false,
         });
       })
       .catch((error) => {});
+  }
+
+  getUserBranches(userId) {
+    let userBranches = [];
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let data = {
+      ValidUser: ValidUser,
+      UserID: userId,
+      userBranchMappingList: null,
+    };
+    let GetUserBranchMappedByUserIDUrl =
+      APIURLS.APIURL.GetUserBranchMappedByUserID;
+
+    axios
+      .post(GetUserBranchMappedByUserIDUrl, data, { headers })
+      .then((response) => {
+        let data = response.data;
+        this.setState({ userBranchMappingList: data.userBranchMappingList });
+        this.processData(data.userBranchMappingList, userId);
+      })
+      .catch((error) => {});
+    return userBranches;
   }
 
   render() {
@@ -198,37 +244,11 @@ class edituser extends React.Component {
           : this.setState({ AddressDetailsExpanded: true });
       }
     };
-    // const CheckFirstName = () => {
-    //   //  if(this.state.duplicateExist===true||this.state.EmailID.length>50){
-    //   //    if(this.state.FirstName.length>20){
-    //   //      this.setState({DisableUpdatebtn:true})
-    //   //    }else{
-    //   //     this.setState({DisableUpdatebtn:true})
-    //   //    }
-    //   //  }else if(this.state.FirstName.length>20){
-    //   //   this.setState({DisableUpdatebtn:true})
-    //   // }
-    //   if (this.state.FirstName.length > 20) {
-    //     if (
-    //       this.state.duplicateExist === true ||
-    //       this.state.EmailID.length > 50
-    //     ) {
-    //       this.setState({ DisableUpdatebtn: true });
-    //     }
-    //   } else if (
-    //     this.state.duplicateExist === true ||
-    //     this.state.EmailID.length > 50
-    //   ) {
-    //     this.setState({ DisableUpdatebtn: true });
-    //   } else {
-    //     this.setState({ DisableUpdatebtn: false });
-    //   }
-    // };
-
+    
     const updateFormValue = (id, e) => {
-      if (id === "isActive") {
+      if (id === "IsActive") {
         let user = this.state.user;
-        user.isActive = e.target.checked;
+        user.IsActive = e.target.checked;
         this.setState({ user: user, isActive: e.target.checked });
       }
 
@@ -443,7 +463,7 @@ class edituser extends React.Component {
           <DialogTitle
             id="dialog-title"
             className="dialog-area"
-            style={{ maxHeight: 50 }}
+            style={{ maxHeight: 90 }}
           >
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={1} lg={1}>
@@ -479,21 +499,24 @@ class edituser extends React.Component {
 
     const userBranch = <Userbranchalot UserID={this.state.user.UserID} />;
 
+    const userModuleAssign=<Usermoduleassign data={{userId:this.state.user.UserID,List:this.state.userBranchMappingList}}   />
+
+    
+
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
       Dialog.DialogTitle = param;
 
       switch (param) {
-        case "AssignBranch":
+        case "Assign Branch":
           Dialog.DialogContent = userBranch;
           this.setState({ Dialog: Dialog });
           break;
-        case "AssignRole":
-          // Dialog.DialogContent = ;
+        case "Assign Role":
+           Dialog.DialogContent = userModuleAssign;
           this.setState({ Dialog: Dialog });
           break;
-
         default:
           break;
       }
@@ -551,16 +574,19 @@ class edituser extends React.Component {
             {APIURLS.buttonTitle.save.name}
           </Button>
           <Button
+            startIcon={APIURLS.buttonTitle.assignBranch.icon}
             className="action-btns"
-            onClick={(e) => openDialog("AssignBranch")}
+            onClick={(e) => openDialog("Assign Branch")}
           >
-            ASSIGN BRANCH
+           {APIURLS.buttonTitle.assignBranch.name}
           </Button>
           <Button
+           startIcon={APIURLS.buttonTitle.assignRole.icon}
             className="action-btns"
-            onClick={(e) => openDialog("AssignRole")}
+            onClick={(e) => openDialog("Assign Role")}
           >
-            ASSIGN ROLE
+             {APIURLS.buttonTitle.assignRole.name}
+            
           </Button>
         </ButtonGroup>
       </Fragment>
@@ -674,147 +700,17 @@ class edituser extends React.Component {
                               />
                                <SSIB
                                 key="isActive"
-                                id="isActive"
-                                label="isActive"
-                                param={this.state.user.isActive}
-                                onChange={(e) => updateFormValue("isActive", e)}
+                                id="IsActive"
+                                label="Active"
+                                param={this.state.user.IsActive}
+                                onChange={(e) => updateFormValue("IsActive", e)}
                               />
                         </Grid>
                       </Grid>
                     </div>
                   </Grid>
                 </Grid>
-                {/* <TableContainer>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className="accordion-table"
-                    aria-label="company List table"
-                  >
-                    <TableBody className="tableBody">
-                      <Tablerowcelltextboxinput
-                        id="FirstName"
-                        label="First Name"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("FirstName", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.FirstName}
-                        error={this.state.Validations.FirstName.errorState}
-                        helperText={this.state.Validations.FirstName.errorMssg}
-                      />
-
-                      <Tablerowcelltextboxinput
-                        id="LastName"
-                        label="LastName"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("LastName", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.LastName}
-                        error={this.state.Validations.LastName.errorState}
-                        helperText={this.state.Validations.LastName.errorMssg}
-                      />
-                      <Tablerowcelltextboxinput
-                        id="EmailID"
-                        label="Email ID"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("EmailID", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.EmailID}
-                        error={this.state.Validations.EmailID.errorState}
-                        helperText={this.state.Validations.EmailID.errorMssg}
-                      />
-
-                      <Tablerowcelltextboxinput
-                        id="LoginID"
-                        label="Login ID"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("LoginID", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.LoginID}
-                        error={this.state.Validations.LoginID.errorState}
-                        helperText={this.state.Validations.LoginID.errorMssg}
-                      />
-
-                      <Tablerowcelltextboxinput
-                        type="password"
-                        id="Password"
-                        label="Password"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => updateFormValue("Password", e)}
-                        InputProps={{
-                          className: "textFieldCss",
-                          maxlength: 50,
-                        }}
-                        value={this.state.Password}
-                        error={this.state.Validations.Password.errorState}
-                        helperText={this.state.Validations.Password.errorMssg}
-                      />
-
-                      <TableRow>
-                        <TableCell align="left" className="no-border-table">
-                          is Admin?
-                        </TableCell>
-                        <TableCell align="left" className="no-border-table">
-                          <Switch
-                            key="isadminswitch"
-                            size="small"
-                            checked={
-                              this.state.IsAdmin
-                                ? this.state.IsAdmin === true
-                                  ? "checked"
-                                  : "unchecked"
-                                : null
-                            }
-                            onChange={(e) => updateFormValue("isAdmin", e)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell align="left" className="no-border-table">
-                          is Active?
-                        </TableCell>
-                        <TableCell align="left" className="no-border-table">
-                          {this.state.isActive === true ? (
-                            <Switch
-                              key="isactiuveswitch"
-                              size="small"
-                              checked={
-                                this.state.IsActive === true
-                                  ? "checked"
-                                  : "unchecked"
-                              }
-                              onChange={(e) => updateFormValue("isActive", e)}
-                            />
-                          ) : (
-                            <Switch
-                              key="isactiuveswitch"
-                              size="small"
-                              checked={false}
-                              onChange={(e) => updateFormValue("isActive", e)}
-                            />
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer> */}
+                
               </AccordionDetails>
             </Accordion>
           </Grid>

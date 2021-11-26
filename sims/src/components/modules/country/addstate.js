@@ -141,6 +141,11 @@ class addstate extends React.Component {
     this.setState({ countryData: newData, ProgressLoader: true });
   }
 
+  openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -312,9 +317,10 @@ class addstate extends React.Component {
         .post(CreateStateUrl, handleCreateData, { headers })
         .then((response) => {
           let data = response.data;
-
+      
           if (response.status === 200 || response.status === 201) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            this.openPage(URLS.URLS.stateMaster + this.state.urlparams);
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }

@@ -343,7 +343,7 @@ class usermaster extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={12} md={5} lg={5}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={11} lg={11}>
                 {this.state.users.length > 0 ? (
@@ -426,63 +426,10 @@ class usermaster extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid xs={12} sm={12} md={7} lg={7}>
+          <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={11} lg={11}>
-                <Accordion key="allotBranch" expanded={this.state.allotBranch}>
-                  <AccordionSummary
-                    className="side-display-accordion-Header-Design"
-                    expandIcon={
-                      <ExpandMoreIcon
-                        onClick={(e) => handleAccordionClick("allotBranch", e)}
-                      />
-                    }
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    style={{ minHeight: 20, height: "100%" }}
-                  >
-                    <Typography key="" className="side-display-header-css">
-                      Assign Branch
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails key="">
-                    <Grid container spacing={1}>
-                      <Grid xs={12} sm={12} md={11} lg={11}>
-                        <Userbranchalot data={this.state.passData} />
-                        {/* User Branch Allotment section */}
-                      </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
-                <Accordion key="allotModule" expanded={this.state.allotModule}>
-                  <AccordionSummary
-                    className="side-display-accordion-Header-Design"
-                    expandIcon={
-                      <ExpandMoreIcon
-                        onClick={(e) => handleAccordionClick("allotModule", e)}
-                      />
-                    }
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    style={{ minHeight: 20, height: "100%" }}
-                  >
-                    <Typography key="" className="side-display-header-css">
-                      Assign Role
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails key="">
-                    <Grid container spacing={1}>
-                      <Grid xs={12} sm={12} md={12} lg={12}>
-                        <Usermoduleassign
-                          data={{
-                            userId: this.state.userId,
-                            List: this.state.userBranchMappingList,
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
+                
               </Grid>
             </Grid>
           </Grid>

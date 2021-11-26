@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import Table from "@material-ui/core/Table";
@@ -11,7 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 
-import ButtonGroup from "@mui/material/ButtonGroup";
+
 
 import EditIcon from "@mui/icons-material/Edit";
 import "../../user/dasboard.css";
@@ -27,8 +27,9 @@ import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
 import Tableskeleton from "../../compo/tableskeleton";
-import Pagination from "../../compo/paginationcomponent";
+import ErrorSnackBar from "../../compo/errorSnackbar";
 import BackdropLoader from "../../compo/backdrop";
+import MasterDataGrid from "../../compo/masterdatagrid";
 
 class statemaster extends React.Component {
   constructor(props) {
@@ -42,9 +43,12 @@ class statemaster extends React.Component {
       rowsPerPage: 10,
       urlparams: "",
       ProgressLoader: false,
+      ErrorPrompt:false,
       stateData: [],
       destinations: [],
       editurl: null,
+      columns:APIURLS.stateMasterColumn,
+      selectionModel:1,
     };
   }
   componentDidMount() {
@@ -68,7 +72,7 @@ class statemaster extends React.Component {
   }
 
   getStateList() {
-    let rows = [];
+     
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -82,120 +86,83 @@ class statemaster extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
-        rows = data;
-        this.setState({ stateData: rows, ProgressLoader: true }, () => {
-          if (rows.length > 0) {
-            this.InitialhandleRowClick(null, rows[0], "row_0");
+        for(let i=0;i<data.length;i++){
+          data[i].id=i+1;
+        }
+        console.log("data > ",data);
+
+        this.setState({ stateData: data, ProgressLoader: true },()=>{
+          if(data.length>0){
+            this.handleRowClick([this.state.selectionModel]);
           }
         });
       })
       .catch((error) => {});
   }
 
-  // getAllDestinations = () => {
-  //   this.setState({ ProgressLoader: false });
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
+   
 
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   let GetDestinationsUrl = APIURLS.APIURL.GetDestinations;
-
-  //   axios
-  //     .post(GetDestinationsUrl, ValidUser, { headers })
-  //     .then((response) => {
-  //       let data = response.data;
-
-  //       this.setState({ destinations: data, ProgressLoader: true });
-  //     })
-  //     .catch((error) => {});
-  // };
-
-  InitialhandleRowClick(e, item, id) {
+  handleRowClick=(e)=> {
     try {
+      let index = e[0];
+      let item = this.state.stateData[index - 1]; 
       let editUrl =
         URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
-
-      this.setState({ editurl: editUrl });
-      this.InitialremoveIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
+      this.setState({ editurl: editUrl,selectionModel:index });     
+      this.getDestinationsByState(item); 
     } catch (e) {
       console.log("Error : ", e);
     }
   }
 
-  InitialremoveIsSelectedRowClasses() {
-    try {
-      for (let i = 0; i < this.state.stateData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    } catch (e) {
-      console.log("Error : ", e);
-    }
-  }
+  getDestinationsByState = (item) => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-  render() {
-    const handleRowClick = (e, item, id) => {
-      try {
-        this.setState({ destinations: item.destinations });
-        let editUrl =
-          URLS.URLS.editState +
-          this.state.urlparams +
-          "&StateId=" +
-          item.stateId;
-
-        this.setState({ editurl: editUrl });
-        removeIsSelectedRowClasses();
-        document.getElementById(id).classList.add("selectedRow");
-      } catch (e) {}
-      // getDestinationsByState(item);
+    let data = {
+      Destination: {
+        // DestinationId: 0,
+        CountryId: item.countryId,
+        // DestinationName: null,
+        // Postcode: null,
+        StateID: item.stateId,
+      },
+      validUser: ValidUser,
     };
 
-    const removeIsSelectedRowClasses = () => {
-      try {
-        for (let i = 0; i < this.state.stateData.length; i++) {
-          document.getElementById("row_" + i).className = "";
-        }
-      } catch (e) {}
+    const headers = {
+      "Content-Type": "application/json",
     };
+    let GetDestinationByCountryIdAndStateIdUrl =
+      APIURLS.APIURL.GetDestinationByCountryIdAndStateId;
 
-    const getDestinationsByState = (item) => {
-      this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-
-      let data = {
-        Destination: {
-          DestinationId: 0,
-          CountryId: item.countryId,
-          DestinationName: null,
-          Postcode: null,
-          StateID: item.stateId,
-        },
-        validUser: ValidUser,
-      };
-
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let GetDestinationByCountryIdAndStateIdUrl =
-        APIURLS.APIURL.GetDestinationByCountryIdAndStateId;
-
-      axios
-        .post(GetDestinationByCountryIdAndStateIdUrl, data, { headers })
-        .then((response) => {
+    axios
+      .post(GetDestinationByCountryIdAndStateIdUrl, data, { headers })
+      .then((response) => {
+        console.log("getDestinationsByState > Fetching.....Fetched.....");
+        if(response.status===200){
           let data = response.data;
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ destinations: data, ProgressLoader: true });
           } else {
-            this.setState({ destinations: [], ProgressLoader: true });
+            this.setState({ destinations: [], ProgressLoader: true,ErrorPrompt:true });
           }
-        })
-        .catch((error) => {});
-    };
+        }else{
+          this.setState({ destinations: [], ProgressLoader: true,ErrorPrompt:true });
+        }
+      
+      })
+      .catch((error) => {
+        this.setState({ destinations: [], ProgressLoader: true,ErrorPrompt:true });
+      });
+  };
+
+ 
+
+  render() {
+    
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -203,7 +170,6 @@ class statemaster extends React.Component {
     };
 
     const handlePageChange = (event, newPage) => {
-      this.InitialremoveIsSelectedRowClasses();
       console.log("handlePageChange > event > ", event);
       console.log("handlePageChange > newPage > ", newPage);
       let pagination = this.state.pagination;
@@ -211,13 +177,7 @@ class statemaster extends React.Component {
       this.setState({ pagination: pagination });
     };
 
-    const getPageData = (data) => {
-      let rows = data;
-      let page = parseInt(this.state.pagination.page);
-      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
-
-      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-    };
+     
 
     const breadcrumbHtml = (
       <Fragment>
@@ -257,78 +217,45 @@ class statemaster extends React.Component {
       </Fragment>
     );
 
+
+    const closeErrorPrompt = (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      this.setState({ ErrorPrompt: false });
+    };
+
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+
+
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={12} md={8} lg={8}>
+          <Grid xs={12} sm={12} md={7} lg={7}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={10} lg={10}>
+              <Grid xs={12} sm={12} md={11} lg={11}>
                 {this.state.stateData.length > 0 ? (
                   <Fragment>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className=""
-                      aria-label="State List table"
-                    >
-                      <TableHead className="table-header-background">
-                        <TableRow>
-                          <TableCell className="table-header-font">#</TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            {" "}
-                            Name
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Code
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Gst Code
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody className="tableBody">
-                        {getPageData(this.state.stateData).map((item, i) => (
-                          <TableRow
-                            id={"row_" + i}
-                            className={this.state.initialCss}
-                            hover
-                            key={i}
-                            onClick={(event) =>
-                              handleRowClick(event, item, "row_" + i)
-                            }
-                          >
-                            <TableCell align="left">
-                              <a
-                                className="LINK tableLink"
-                                href={
-                                  URLS.URLS.editState +
-                                  this.state.urlparams +
-                                  "&StateId=" +
-                                  item.stateId
-                                }
-                              >
-                                {URLS.PREFIX.stateID + item.stateId}
-                              </a>
-                            </TableCell>
-                            <TableCell align="left">{item.name}</TableCell>
-                            <TableCell align="left">{item.code}</TableCell>
-                            <TableCell align="left">{item.gstcode}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
 
-                    <Pagination
-                      data={this.state.stateData}
-                      pagination={this.state.pagination}
-                      onPageChange={handlePageChange}
-                    />
+                <MasterDataGrid
+                 selectionModel={this.state.selectionModel}
+                 rows={this.state.stateData}
+                 columns={this.state.columns}
+                 pagination={this.state.pagination}
+                 onSelectionModelChange={(e) => this.handleRowClick(e)}
+                 onPageChange={handlePageChange}
+                />  
+
+                  
                   </Fragment>
                 ) : (
                   <Tableskeleton />
@@ -336,9 +263,9 @@ class statemaster extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid xs={12} sm={12} md={4} lg={4}>
-            <Grid container spacing={1}>
-              <Grid xs={12} sm={12} md={10} lg={11}>
+          <Grid xs={12} sm={12} md={5} lg={5}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={10} lg={10}>
                 <Destination destinations={this.state.destinations} />
               </Grid>
             </Grid>

@@ -680,7 +680,7 @@ class editcompany extends React.Component {
     };
 
     const updateCompanyDetails = () => {
-      // CheckTrue();
+      
 
       this.setState({ ProgressLoader: false });
       let company = this.state.company;
@@ -702,7 +702,7 @@ class editcompany extends React.Component {
         .then((response) => {
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
-            //this.props.history.push(gobackURL);
+             
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }

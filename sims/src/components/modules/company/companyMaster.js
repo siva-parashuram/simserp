@@ -77,6 +77,7 @@ class companyMaster extends React.Component {
       urlparams: "",
       filelist: [],
       rowClicked: 1,
+      selectionModel:1,
     };
   }
 
@@ -180,7 +181,7 @@ class companyMaster extends React.Component {
             }
             this.setState({companyData:data,ProgressLoader: true},()=>{
               if(data.length>0){
-                this.InitialhandleRowClick([1]);
+                this.handleRowClick([this.state.selectionModel]);
               }
             });            
           }
@@ -195,39 +196,31 @@ class companyMaster extends React.Component {
   }
 
 
-  InitialhandleRowClick(e) {
+  handleRowClick=(e)=> {
     try {
       console.log("handleRowClick > e > ", e);
       let index = e[0];
+      
       let item = this.state.companyData[index - 1];     
       let branches = item.Branch;
       let editUrl =
         URLS.URLS.editCompany +
         this.state.urlparams +
         "&compID=" +
-        item.CompanyID;
+        item.CompanyID+ "&type=edit";
       this.setState({
         item: item,
         branch: branches,
         editUrl: editUrl,
+        selectionModel:index,
       });
-      // getAttachments(item.CompanyID);
+      this.getAttachments(item.CompanyID);
     } catch (e) {
       console.log("Error : ", e);
     } 
-  }
+  }  
 
-  InitialremoveIsSelectedRowClasses() {
-    try {
-      for (let i = 0; i < this.state.companyData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    } catch (e) {
-      console.log("Error : ", e);
-    }
-  }
-
-  getAttachments(companyId) {
+  getAttachments=(companyId) =>{
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -255,144 +248,18 @@ class companyMaster extends React.Component {
       });
   }
 
-  render() {
-    const handleRowClick = (e) => {
+   openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
 
-      try {
-        console.log("handleRowClick > e > ", e);
-        let index = e[0];
-        let item = this.state.companyData[index - 1];     
-        let branches = item.Branch;
-        let editUrl =
-          URLS.URLS.editCompany +
-          this.state.urlparams +
-          "&compID=" +
-          item.CompanyID;
-        this.setState({
-          item: item,
-          branch: branches,
-          editUrl: editUrl,
-        });
-        getAttachments(item.CompanyID);
-      } catch (e) {
-        console.log("Error : ", e);
-      }     
-      
-    };
+  render() {    
 
-    const removeIsSelectedRowClasses = () => {
-      try {
-        for (let i = 0; i < this.state.companyData.length; i++) {
-          document.getElementById("row_" + i).className = "";
-        }
-      } catch (e) {
-        console.log("Error : ", e);
-      }
-    };
 
-    const getAttachments = (companyId) => {
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
-      const formData = new FormData();
-      formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
-      formData.append("Token", getCookie(COOKIE.TOKEN));
-      formData.append("CompanyId", companyId);
-      formData.append("BranchID", 0);
-      formData.append("Transaction", APIURLS.TrasactionType.default);
-      formData.append("TransactionNo", "");
-      formData.append("FileData", "");
-
-      axios
-        .post(FTPGetAttachmentsUrl, formData, { headers })
-        .then((response) => {
-          this.setState({ filelist: response.data });
-        })
-        .catch((error) => {
-          console.log("error > ", error);
-        });
-    };
-
-    const getCompanyBranchList = (companyId) => {};
-
-    const searchInput = (e) => {
-      removeIsSelectedRowClasses();
-      console.log("searchInput > e > ", e);
-      console.log("searchInput > e.target > ", e.target);
-      console.log("searchInput > e.value > ", e.value);
-      let key = document.getElementById("searchBox").value;
-      console.log("searchInput > key > ", key);
-      sortAsPerKey(key);
-    };
-
-    const sortAsPerKey = (key) => {
-      key = key.toLowerCase();
-      let rows = [];
-      let masterCompanyData = this.state.masterCompanyData;
-      if (key === "" || key == null) {
-        this.setState({ companyData: masterCompanyData });
-      } else {
-        for (let i = 0; i < masterCompanyData.length; i++) {
-          if (
-            masterCompanyData[i].companyName != null
-              ? masterCompanyData[i].companyName.toLowerCase().includes(key)
-              : null || masterCompanyData[i].address != null
-              ? masterCompanyData[i].address.toLowerCase().includes(key)
-              : null || masterCompanyData[i].companyId != null
-              ? masterCompanyData[i].companyId
-                  .toString()
-                  .toLowerCase()
-                  .includes(key)
-              : null
-          ) {
-            rows.push(masterCompanyData[i]);
-          }
-        }
-        this.setState({ companyData: rows });
-      }
-    };
-
-    const handlePageChange = (event, newPage) => {
-      this.InitialremoveIsSelectedRowClasses();
-      console.log("handlePageChange > event > ", event);
-      console.log("handlePageChange > newPage > ", newPage);
+    const handlePageChange = (event, newPage) => {     
       let pagination = this.state.pagination;
       pagination.page = newPage;
       this.setState({ pagination: pagination });
-    };
-
-    const getPageData = (data) => {
-      let rows = data;
-      let page = parseInt(this.state.pagination.page);
-      let rowsPerPage = parseInt(this.state.pagination.rowsPerPage);
-
-      return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-    };
-
-    const openCompanyDetail = (e, item) => {
-      console.log("openCompanyDetail > e > ", e);
-      console.log("openCompanyDetail > item > ", item);
-    };
-
-    const handleClose = (reason) => {
-      if (reason === "YES") {
-        this.setState({ companyDialogStatus: false });
-      }
-    };
-
-    const updateCompanyMasterDetail = (key, e) => {
-      console.log("updateCompanyMasterDetail > key > ", key);
-      console.log("updateCompanyMasterDetail > e > ", e.target);
-    };
-
-    const openPage = (url) => {
-      this.setState({ ProgressLoader: false });
-      window.location = url;
     };
 
     const breadcrumbHtml = (
@@ -419,7 +286,7 @@ class companyMaster extends React.Component {
             startIcon={APIURLS.buttonTitle.add.icon}
             className="action-btns"
             onClick={(e) =>
-              openPage(URLS.URLS.addNewCompany + this.state.urlparams)
+              this.openPage(URLS.URLS.addNewCompany + this.state.urlparams+ "&type=add")
             }
           >
             {APIURLS.buttonTitle.add.name}
@@ -427,7 +294,7 @@ class companyMaster extends React.Component {
           <Button
             startIcon={APIURLS.buttonTitle.edit.icon}
             className="action-btns"
-            onClick={(e) => openPage(this.state.editUrl)}
+            onClick={(e) => this.openPage(this.state.editUrl)}
           >
             {APIURLS.buttonTitle.edit.name}
           </Button>
@@ -450,13 +317,14 @@ class companyMaster extends React.Component {
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             {this.state.companyData.length > 0  ? (
-              <Fragment>               
+              <Fragment> 
+                         
                 <MasterDataGrid
-                 selectionModel={1}
+                 selectionModel={this.state.selectionModel}
                  rows={this.state.companyData}
                  columns={this.state.columns}
                  pagination={this.state.pagination}
-                 onSelectionModelChange={(e) => handleRowClick(e)}
+                 onSelectionModelChange={(e) => this.handleRowClick(e)}
                  onPageChange={handlePageChange}
                 />     
                             

@@ -7,7 +7,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
-import { Button } from "@material-ui/core";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@material-ui/core/Button";
 
 import TablePagination from "@mui/material/TablePagination";
 
@@ -76,65 +77,66 @@ class destination extends React.Component {
 
     return (
       <Fragment>
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={12} lg={12}>
-            <h5 className="destination-title">Destinations</h5>
-          </Grid>
-        </Grid>
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={6} lg={6}>
-            <a
-              className="LINK tableLink"
-              href={URLS.URLS.addDestination + this.state.urlparams}
-            >
-              + Add New
-            </a>
-            {/* <Button
-              startIcon={APIURLS.buttonTitle.add.icon}
-              className="action-btns"
-              onClick={(e) =>
-                openPage(URLS.URLS.addDestination + this.state.urlparams)
-              }
-            >
-              {APIURLS.buttonTitle.add.name}
-            </Button> */}
-          </Grid>
-        </Grid>
-        <div>
+
+        <div style={{marginTop:-20}}>
           <Grid container spacing={0}>
             <Grid xs={12} sm={12} md={12} lg={12}>
-              {this.props.destinations ? (
-                this.props.destinations.length > 0 ? (
-                  <Fragment>
-                    <TableContainer sx={{ maxHeight: 400 }}>
-                      <Table
-                        stickyHeader
-                        size="small"
-                        className=""
-                        aria-label="Destination & Postcode List table"
-                      >
-                        <TableHead className="table-header-background">
-                          <TableRow>
-                            <TableCell className="table-header-font">
-                              #
-                            </TableCell>
-                            <TableCell
-                              className="table-header-font"
-                              align="left"
-                            >
-                              Destination
-                            </TableCell>
-                            <TableCell
-                              className="table-header-font"
-                              align="left"
-                            >
-                              PostCode
-                            </TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody className="tableBody">
-                          {this.props.destinations
-                            ? getPageData(this.props.destinations).map(
+              <h5 className="destination-title">Destinations</h5>
+            </Grid>
+          </Grid>
+          <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={6} lg={6}>
+              <ButtonGroup
+                size="small"
+                variant="text"
+                aria-label="Action Menu Button group"
+              >
+                <Button
+                  startIcon={APIURLS.buttonTitle.add.icon}
+                  className="action-btns"
+                  onClick={(e) => openPage(URLS.URLS.addDestination + this.state.urlparams)}
+                >
+                  {APIURLS.buttonTitle.add.name}
+                </Button>
+
+              </ButtonGroup>
+            </Grid>
+          </Grid>
+          <div style={{ marginTop: 10 }}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+                {this.props.destinations ? (
+                  this.props.destinations.length > 0 ? (
+                    <Fragment>
+                      <TableContainer sx={{ maxHeight: 400 }}>
+                        <Table
+                          stickyHeader
+                          size="small"
+                          className=""
+                          aria-label="Destination & Postcode List table"
+                        >
+                          <TableHead className="table-header-background">
+                            <TableRow>
+                              <TableCell className="table-header-font">
+                                #
+                              </TableCell>
+                              <TableCell
+                                className="table-header-font"
+                                align="left"
+                              >
+                                Destination
+                              </TableCell>
+                              <TableCell
+                                className="table-header-font"
+                                align="left"
+                              >
+                                PostCode
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody className="tableBody">
+                            {this.props.destinations
+                              ? getPageData(this.props.destinations).map(
                                 (item, i) => (
                                   <TableRow>
                                     <TableCell>
@@ -149,8 +151,7 @@ class destination extends React.Component {
                                           item.countryId
                                         }
                                       >
-                                        {URLS.PREFIX.destinationID +
-                                          item.destinationId}{" "}
+                                        {i + 1}
                                       </a>
                                     </TableCell>
                                     <TableCell>
@@ -169,46 +170,30 @@ class destination extends React.Component {
                                       </a>
                                     </TableCell>
                                     <TableCell>
-                                      <input
-                                        className="table-text-field"
-                                        id={"postcode_" + item.destinationId}
-                                        size="small"
-                                        defaultValue={item.postcode}
-                                        onKeyUp={(e) =>
-                                          updatePostcode(
-                                            "postcode_" + item.destinationId,
-                                            e
-                                          )
-                                        }
-                                      />
+                                      {item.postcode}
                                     </TableCell>
                                   </TableRow>
                                 )
                               )
-                            : null}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
+                              : null}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
 
-                    <Pagination
-                      data={this.props.destinations}
-                      pagination={this.state.pagination}
-                      onPageChange={handlePageChange}
-                    />
-                  </Fragment>
-                ) : (
-                  <h5>No Destinations!</h5>
-                )
-              ) : null}
+                      <Pagination
+                        data={this.props.destinations}
+                        pagination={this.state.pagination}
+                        onPageChange={handlePageChange}
+                      />
+                    </Fragment>
+                  ) : (
+                    <h5>No Destinations!</h5>
+                  )
+                ) : null}
+              </Grid>
             </Grid>
-          </Grid>
+          </div>
         </div>
-
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-        </Grid>
       </Fragment>
     );
   }

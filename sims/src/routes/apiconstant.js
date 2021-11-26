@@ -1,6 +1,8 @@
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from '@mui/icons-material/Save';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import BadgeIcon from '@mui/icons-material/Badge';
 
 
 const domain = "http://192.168.10.200:8080/";
@@ -181,6 +183,14 @@ export const buttonTitle = {
   save: {
     name: "Save",
     icon: <SaveIcon />,
+  },
+  assignBranch:{
+    name:"Assign branch",
+    icon:<AccountTreeIcon/>,
+  },
+  assignRole:{
+    name:"Assign role",
+    icon:<BadgeIcon/>
   }
 };
 
@@ -467,7 +477,7 @@ export const companyMasterColumn = [
   {
     field: 'PhoneNo',
     headerName: 'Phone No',
-    width: 150,
+    width: 160,
     editable: false,
     headerClassName: 'table-header-font'
   },
@@ -479,5 +489,37 @@ export const companyMasterColumn = [
     headerClassName: 'table-header-font'
   },
 
+];
+
+export const  stateMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 50,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'name',
+    headerName: 'Name',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'code',
+    headerName: 'Code',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'gstcode',
+    headerName: 'Gst Code',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }
+
+  //     
 ];
 

@@ -79,10 +79,21 @@ body{
   font-size: 14px !important;
 }
 
+.css-ypofq1-MuiDataGrid-toolbarContainer{
+  background-color: #fff !important;
+}
+.css-okt5j6-MuiDataGrid-columnHeaders{
+  background-color: #fff !important;
+}
+.css-1b34haf-MuiDataGrid-footerContainer {
+  height: 40px !important;
+  min-height: 40px !important;
+}
+
 .MuiDataGrid-cell {
-  line-height: 20px !important;
-  max-height: 20px !important;
-  min-height: 20px !important;
+  line-height: 15px !important;
+  max-height: 15px !important;
+  min-height: 15px !important;
 }
 
 .MuiButton-root {

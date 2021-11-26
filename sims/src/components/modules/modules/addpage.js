@@ -61,6 +61,7 @@ class addpage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      updateBtnDisable:true,
       urlparams: "",
       showDetails: true,
       addNewPageSection: false,
@@ -125,15 +126,15 @@ class addpage extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           let data = response.data;
-
           rows = data;
-          this.setState({ modules: rows });
+          this.setState({ modules: rows,updateBtnDisable:false });
           this.updateColumns(rows);
         } else {
+          this.setState({ modules: [], ProgressLoader: true });
         }
       })
       .catch((error) => {
-        this.setState({ ProgressLoader: false });
+        this.setState({ modules: [], ProgressLoader: true });
       });
   }
 
@@ -313,7 +314,7 @@ class addpage extends React.Component {
       }
     };
 
-    const onSelectionModelChange = (e) => {};
+    
 
     const onEditRowsModelChange = (e) => {
       var keys = Object.keys(e);
@@ -594,13 +595,7 @@ class addpage extends React.Component {
       this.setState({ ProgressLoader: true });
     };
 
-    const handleAccordionClick = (val, e) => {
-      if (val === "GeneralDetailsExpanded") {
-        this.state.GeneralDetailsExpanded === true
-          ? this.setState({ GeneralDetailsExpanded: false })
-          : this.setState({ GeneralDetailsExpanded: true });
-      }
-    };
+    
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -637,137 +632,138 @@ class addpage extends React.Component {
 
     const tab1Html = (
       <Fragment>
-        <Grid
-          xs={12}
-          sm={12}
-          md={12}
-          lg={12}
-          style={{ backgroundColor: "#fff" }}
-        >
-          <Grid container spacing={3}>
-            <Grid xs={12} sm={12} md={8} lg={8}>
-              <Button
-                className="action-btns"
-                startIcon={APIURLS.buttonTitle.save.icon}
-                style={{ marginLeft: 10, marginTop: 20 }}
-                disabled={this.state.updateBtnDisable}
-                onClick={handleUpdate}
-              >
-                {APIURLS.buttonTitle.save.name}
-              </Button>
+          
+        <Grid container spacing={0}>
+          <Grid xs={12} sm={12} md={12} lg={12}>
+          <div style={{ marginLeft: 10 }}>
+            <Grid container spacing={0}>
+              <Grid xs={8} sm={8} md={8} lg={8}>
+                <Button
+                  className="action-btns"
+                  startIcon={APIURLS.buttonTitle.save.icon}
+                  style={{ marginLeft: 10, marginTop: 20 }}
+                  disabled={this.state.updateBtnDisable}
+                  onClick={handleUpdate}
+                >
+                  {APIURLS.buttonTitle.save.name}
+                </Button>
+              </Grid>
             </Grid>
+            <div style={{ height: 20 }}></div>
+            <Grid container spacing={0}>
+              <Grid xs={11} sm={11} md={11} lg={11}>
+                <div style={{ height: 400, width: "100%" }}>
+                  {this.state.refreshPageLinkList ? (
+                    <DataGrid
+                      rows={this.state.rows}
+                      columns={this.state.columns}
+                      pageSize={this.state.pageSize}
+                      rowsPerPageOptions={[this.state.rowsPerPageOptions]}
+                      onEditRowsModelChange={(e) => {
+                        onEditRowsModelChange(e);
+                      }}
+                    />
+                  ) : (
+                    <Fragment>
+                      <DataGrid
+                        rows={this.props.data.rows}
+                        columns={this.state.columns}
+                        pageSize={this.state.pageSize}
+                        rowsPerPageOptions={[this.state.rowsPerPageOptions]}
+                        onEditRowsModelChange={(e) => {
+                          onEditRowsModelChange(e);
+                        }}
+                      />
+                    </Fragment>
+                  )}
+                </div>
+              </Grid>
+            </Grid>
+            </div>
           </Grid>
-
-          <div style={{ height: 20 }}></div>
-          <div style={{ height: 400, width: "100%" }}>
-            {this.state.refreshPageLinkList ? (
-              <DataGrid
-                rows={this.state.rows}
-                columns={this.state.columns}
-                pageSize={this.state.pageSize}
-                rowsPerPageOptions={[this.state.rowsPerPageOptions]}
-                onEditRowsModelChange={(e) => {
-                  onEditRowsModelChange(e);
-                }}
-              />
-            ) : (
-              <Fragment>
-                <DataGrid
-                  rows={this.props.data.rows}
-                  columns={this.state.columns}
-                  pageSize={this.state.pageSize}
-                  rowsPerPageOptions={[this.state.rowsPerPageOptions]}
-                  onEditRowsModelChange={(e) => {
-                    onEditRowsModelChange(e);
-                  }}
-                />
-              </Fragment>
-            )}
-          </div>
         </Grid>
+         
+
       </Fragment>
     );
 
     const tab2Html = (
       <Fragment>
-        <Grid
-          xs={12}
-          sm={12}
-          md={12}
-          lg={12}
-          style={{ backgroundColor: "#fff" }}
-        >
-          <div style={{ height: 20 }}></div>
-          <div style={{ marginLeft: 10 }}>
-            <Grid container spacing={3}>
-              <Grid xs={12} sm={12} md={8} lg={8}>
-                <Button
-                  startIcon={APIURLS.buttonTitle.add.icon}
-                  style={{ marginLeft: 5 }}
-                  onClick={(e) => {
-                    handlecreate(this.props.data.moduleId);
-                  }}
-                  disabled={this.state.createBtnDisable}
-                >
-                  {APIURLS.buttonTitle.add.name}
-                </Button>
+        <Grid container spacing={0}>
+          <Grid xs={12} sm={12} md={12} lg={12}>
+            <div style={{ marginLeft: 10 }}>
+              <Grid container spacing={0}>
+                <Grid xs={8} sm={8} md={8} lg={8}>
+                  <Button
+                    startIcon={APIURLS.buttonTitle.add.icon}
+                    style={{ marginLeft: 5 }}
+                    onClick={(e) => {
+                      handlecreate(this.props.data.moduleId);
+                    }}
+                    disabled={this.state.createBtnDisable}
+                  >
+                    {APIURLS.buttonTitle.add.name}
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
-
-          <div style={{ height: 20 }}></div>
-          <TableContainer>
-            <Table
-              stickyHeader
-              size="small"
-              className="accordion-table"
-              aria-label="company List table"
-            >
-              <TableBody className="tableBody">
-                <TextboxInput
-                  id="pageName"
-                  label="Page Name"
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => updateFormValue("pageName", e)}
-                  fullWidth
-                  error={this.state.Validations.pageName.errorState}
-                  helperText={this.state.Validations.pageName.errorMsg}
-                />
-                <TextboxInput
-                  id="pageLink"
-                  label="Page Link"
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => updateFormValue("pageLink", e)}
-                  fullWidth
-                  value={this.state.pageLink}
-                  error={this.state.Validations.pageLink.errorState}
-                  helperText={this.state.Validations.pageLink.errorMsg}
-                />
-                <TextboxInput
-                  id="description"
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  onChange={(e) => updateFormValue("description", e)}
-                  fullWidth
-                  value={this.state.description}
-                  error={this.state.Validations.description.errorState}
-                  helperText={this.state.Validations.description.errorMsg}
-                  maxlength={20}
-                />
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
+              <Grid container spacing={0}>
+                <Grid xs={8} sm={8} md={8} lg={8}>
+                  <TableContainer>
+                    <Table
+                      stickyHeader
+                      size="small"
+                      className="accordion-table"
+                      aria-label="company List table"
+                    >
+                      <TableBody className="tableBody">
+                        <TextboxInput
+                          id="pageName"
+                          label="Page Name"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("pageName", e)}
+                          fullWidth
+                          error={this.state.Validations.pageName.errorState}
+                          helperText={this.state.Validations.pageName.errorMsg}
+                        />
+                        <TextboxInput
+                          id="pageLink"
+                          label="Page Link"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("pageLink", e)}
+                          fullWidth
+                          value={this.state.pageLink}
+                          error={this.state.Validations.pageLink.errorState}
+                          helperText={this.state.Validations.pageLink.errorMsg}
+                        />
+                        <TextboxInput
+                          id="description"
+                          label="Description"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("description", e)}
+                          fullWidth
+                          value={this.state.description}
+                          error={this.state.Validations.description.errorState}
+                          helperText={this.state.Validations.description.errorMsg}
+                          maxlength={20}
+                        />
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Grid>
+              </Grid>
+            </div>
+          </Grid>
+        </Grid>        
       </Fragment>
     );
 
     return (
       <Fragment>
         {this.props.data ? (
-          <div style={{ marginTop: -50 }}>
+          <div style={{ marginTop: -30 }}>
             <BackdropLoader open={!this.state.ProgressLoader} />
             <ErrorSnackBar
               ErrorPrompt={this.state.ErrorPrompt}

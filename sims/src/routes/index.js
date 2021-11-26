@@ -12,6 +12,7 @@ import LoginPage from "../components/login";
 import userDashboard from "../components/user/userDashboard";
 import testReport from "../components/reports/testReport";
 import companyMaster from "../components/modules/company/companyMaster";
+import companyactivity from "../components/modules/company/companyactivity";
 import addNewCompany from "../components/modules/company/addnewcompany";
 import editCompany from "../components/modules/company/editcompany";
 import report1 from "../components/modules/reports/report1";
@@ -82,12 +83,12 @@ let routes = ({ location, ...rest }) => {
   return (
     <Router>
       {window.location.pathname === "/" ||
-      window.location.pathname === "/loginExpired" ? null : (
+        window.location.pathname === "/loginExpired" ? null : (
         <Header />
       )}
       <div style={{
         //  marginLeft:  
-         }}>
+      }}>
         <Switch>
           <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
           <Route path={URLS.URLS.userDashboard} component={userDashboard} />
@@ -95,8 +96,12 @@ let routes = ({ location, ...rest }) => {
 
           {/*  Company Routes  */}
           <Route path={URLS.URLS.companyMaster} component={companyMaster} />
-          <Route path={URLS.URLS.addNewCompany} component={addNewCompany} />
-          <Route path={URLS.URLS.editCompany} component={editCompany} />
+          <Route path={URLS.URLS.addNewCompany} component={companyactivity} />
+          <Route path={URLS.URLS.editCompany} component={companyactivity} />
+          {/* <Route path={URLS.URLS.addNewCompany} component={addNewCompany} />
+          <Route path={URLS.URLS.editCompany} component={editCompany} /> */}
+
+          {/* companyactivity */}
 
           {/*  Country Routes  */}
           <Route path={URLS.URLS.countryMaster} component={countryMaster} />
@@ -123,7 +128,7 @@ let routes = ({ location, ...rest }) => {
           {/* <Route path={URLS.URLS.editBranch} component={editBranch} />
           <Route path={URLS.URLS.addBranch} component={addBranch} /> */}
 
-          
+
 
           {/* Module Routes*/}
           <Route path={URLS.URLS.moduleMaster} component={moduleMaster} />

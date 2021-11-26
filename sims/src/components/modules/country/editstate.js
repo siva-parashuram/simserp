@@ -35,7 +35,7 @@ class editstate extends React.Component {
       GeneralDetailsExpanded: true,
 
       state: {
-        StateId: 0,
+        stateId: 0,
         CountryId: 0,
         CreationDate: "",
         Name: "",
@@ -340,7 +340,15 @@ class editstate extends React.Component {
       let state = this.state.state;
       const handleUpdateData = {
         validUser: ValidUser,
-        state: state,
+        state: {
+          stateId:state.stateId,
+          countryId:this.state.countryId,
+          name:this.state.name,
+          code:this.state.code,
+          gstcode:this.state.gstcode,
+          creationDate:"",
+          userId:parseInt(getCookie(COOKIE.USERID)),
+        },
       };
       const headers = {
         "Content-Type": "application/json",

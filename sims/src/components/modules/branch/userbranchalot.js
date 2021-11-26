@@ -23,6 +23,7 @@ import Checkbox from "@mui/material/Checkbox";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Menubar from "../../user/menubar";
+import { Divider } from "@material-ui/core";
 
 class userbranchalot extends React.Component {
   constructor(props) {
@@ -197,7 +198,7 @@ class userbranchalot extends React.Component {
         .then((response) => {
           console.log("response > ", response);
           this.setState({ ProgressLoader: true, SuccessPrompt: true });
-          window.location.reload();
+           
         })
         .catch((error) => {
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -282,68 +283,46 @@ class userbranchalot extends React.Component {
 
         {this.state.data.companyBranch ? (
           this.state.data.companyBranch.length > 0 ? (
-            <div style={{ marginLeft: 10, marginTop: 10 }}>
+            <div style={{ marginLeft: 10, marginTop: 1 }}>
               {this.state.ProgressLoader === false ? (
                 <div style={{ marginTop: -8, marginLeft: -10 }}>
                   <LinearProgress style={{ backgroundColor: "#ffeb3b" }} />{" "}
                 </div>
               ) : null}
-              <Grid container spacing={1}>
-                <Grid xs={6} sm={6} md={6} lg={6}>
+              
+              <Grid container spacing={0}>
+              <Grid xs={1} sm={1} md={1} lg={1}></Grid>
+                <Grid xs={12} sm={12} md={10} lg={10}>
                   <Button
+                    startIcon={APIURLS.buttonTitle.save.icon}
+                    className="action-btns"
                     style={{ marginLeft: 5, }}
-                     className="action-btns"
                     onClick={(e) => handleBranchAdd(this.state.UserID)}
                   >
-                    Alot
+                    {APIURLS.buttonTitle.save.name}
                   </Button>
                 </Grid>
+                <Grid xs={1} sm={1} md={1} lg={1}></Grid>
               </Grid>
-              <div style={{ height: 20 }}></div>
+              <Grid container spacing={0}>
+                <Grid xs={1} sm={1} md={1} lg={1}></Grid>
+                  <Grid xs={10} sm={10} md={10} lg={10}>
+                  <div style={{ height: 350 }}> 
 
-              <div style={{ height: 250 }}>
-                <Grid container spacing={0}>
-                  <Grid xs={12} sm={12} md={11} lg={11}>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className=""
-                      aria-label="company Branch List table"
-                    >
-                      <TableHead className="table-header-background">
-                        <TableRow>
-                          <TableCell className="table-header-font">
-                            <input
-                              type="checkbox"
-                              id="selectAllBranch"
-                              className="checkbox-css"
-                              onClick={(e) => selectAllBranches(e)}
-                            />
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            &nbsp;
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Branch Short Name
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody className="tableBody">
-                        {this.state.data.companyBranch.map((item, i) => (
+                    {this.state.data.companyBranch.map((item, i) => (
+                      <Fragment>  
+                        <div style={{height:25,backgroundColor:'#bdbdbd'}}>
+                          <div style={{marginLeft:10}}>
+                            <h4><u>{item.companyName}</u></h4>
+                          </div>
+                        </div>
+                       
+                        <div style={{height:150,overflowY:'scroll' }}>                        
+                        {item.branch.map((branchItem, j) => (
                           <Fragment>
-                            <TableRow>
-                              <TableCell>&nbsp;</TableCell>
-                              <TableCell>
-                                <h4>{item.companyName} </h4>
-                              </TableCell>
-                              <TableCell>&nbsp;</TableCell>
-                            </TableRow>
-
-                            {item.branch.map((branchItem, j) => (
-                              <TableRow>
-                                {console.log("branchItem > ", branchItem)}
-                                <TableCell>
-                                  {parseInt(branchItem.mark) == 1 ? (
+                            <div style={{ marginLeft: 20}}>
+                              <p>
+                              {parseInt(branchItem.mark) == 1 ? (
                                     <input
                                       type="checkbox"
                                       className="checkbox-css branchchecks"
@@ -372,25 +351,24 @@ class userbranchalot extends React.Component {
                                       }
                                     />
                                   )}
-                                </TableCell>
-
-                                <TableCell align="left">
-                                  {" "}
-                                  {branchItem.branchName}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {" "}
-                                  {branchItem.shortName}{" "}
-                                </TableCell>
-                              </TableRow>
-                            ))}
+                                {branchItem.branchName}
+                              </p>
+                            </div>
+                            <Divider/>
                           </Fragment>
                         ))}
-                      </TableBody>
-                    </Table>
+                        </div>                       
+                        <div style={{ height: 50 }}></div>
+                      </Fragment>
+                    ))}
+                  </div>
+                  <div style={{ height: 20 }}></div>
+                  <div style={{ height: 20 }}></div>
                   </Grid>
-                </Grid>
-              </div>
+                  <Grid xs={1} sm={1} md={1} lg={1}></Grid>
+              </Grid>           
+              
+              
             </div>
           ) : null
         ) : (
