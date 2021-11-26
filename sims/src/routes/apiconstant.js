@@ -560,3 +560,43 @@ export const userMasterColumn=[
   },
 ];
 
+export const branchMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 50,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'Name',
+    headerName: 'Branch Name',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'ShortName',
+    headerName: 'Short Name',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'Address',
+    headerName: 'Address',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'PhoneNo',
+    headerName: 'PhoneNo',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }
+
+  
+  
+];
+

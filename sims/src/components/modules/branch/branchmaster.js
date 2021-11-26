@@ -22,8 +22,8 @@ import BranchQuickDetails from "./branchquickdetails";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TablePagination from "@mui/material/TablePagination";
 
-import Loader from "../../compo/loader";
-
+ 
+import MasterDataGrid from "../../compo/masterdatagrid";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
@@ -47,6 +47,8 @@ class branchMaster extends React.Component {
       editUrl: null,
       filelist: [],
       rowClicked: 1,
+      columns:APIURLS.branchMasterColumn,
+      selectionModel:1,
     };
   }
 
@@ -90,10 +92,12 @@ class branchMaster extends React.Component {
       .post(GetBrachesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-
+        for(let i=0;i<data.length;i++){
+          data[i].id=i+1;
+        }
         this.setState({ branchData: data, ProgressLoader: true }, () => {
           if (this.state.branchData.length > 0) {
-            this.InitialhandleRowClick(null, data[0], "row_0");
+            this.handleRowClick([1]);
           }
         });
       })
@@ -102,8 +106,10 @@ class branchMaster extends React.Component {
       });
   }
 
-  InitialhandleRowClick(e, item, id) {
+  handleRowClick(e) {
     try {
+      let index = e[0];      
+      let item = this.state.branchData[index - 1]; 
       let editUrl =
         URLS.URLS.editBranch +
         this.state.urlparams +
@@ -113,21 +119,14 @@ class branchMaster extends React.Component {
       this.setState({
         branchItem: item,
         editUrl: editUrl,
-        rowClicked: parseInt(this.state.rowClicked) + 1,
+        selectionModel:index
       });
-      this.InitialremoveIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
+      
       this.getAttachments(item.CompanyID, item.BranchID);
     } catch (e) {}
   }
 
-  InitialremoveIsSelectedRowClasses() {
-    try {
-      for (let i = 0; i < this.state.branchData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    } catch (e) {}
-  }
+  
 
   getAttachments(companyId, branchId) {
     let ValidUser = APIURLS.ValidUser;
@@ -158,63 +157,6 @@ class branchMaster extends React.Component {
   }
 
   render() {
-    const handleRowClick = (e, item, id) => {
-      try {
-        this.setState({ selectedRow: id });
-
-        let editUrl =
-          URLS.URLS.editBranch +
-          this.state.urlparams +
-          "&editbranchId=" +
-          item.BranchID +
-          "&type=edit";
-        this.setState({
-          branchItem: item,
-          editUrl: editUrl,
-          rowClicked: parseInt(this.state.rowClicked) + 1,
-        });
-        removeIsSelectedRowClasses();
-        document.getElementById(id).classList.add("selectedRow");
-        getAttachments(item.CompanyID, item.BranchID);
-      } catch (e) {}
-    };
-
-    const removeIsSelectedRowClasses = () => {
-      try {
-        for (let i = 0; i < this.state.branchData.length; i++) {
-          document.getElementById("row_" + i).className = "";
-        }
-      } catch (e) {}
-    };
-
-    const getAttachments = (companyId, branchId) => {
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
-      const formData = new FormData();
-      formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
-      formData.append("Token", getCookie(COOKIE.TOKEN));
-      formData.append("CompanyId", companyId);
-      formData.append("BranchID", branchId);
-      formData.append("Transaction", APIURLS.TrasactionType.default);
-      formData.append("TransactionNo", "");
-      formData.append("FileData", "");
-
-      axios
-        .post(FTPGetAttachmentsUrl, formData, { headers })
-        .then((response) => {
-          this.setState({ filelist: response.data });
-        })
-        .catch((error) => {
-          this.setState({ filelist: [] });
-        });
-    };
-
     function Alert(props) {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
@@ -231,8 +173,7 @@ class branchMaster extends React.Component {
       return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     };
 
-    const handlePageChange = (event, newPage) => {
-      removeIsSelectedRowClasses();
+    const handlePageChange = (event, newPage) => {     
       let pagination = this.state.pagination;
       pagination.page = newPage;
       this.setState({ pagination: pagination });
@@ -292,60 +233,17 @@ class branchMaster extends React.Component {
               <Grid xs={12} sm={12} md={12} lg={12}>
                 {this.state.branchData.length > 0 ? (
                   <Fragment>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className=""
-                      aria-label="Country List table"
-                    >
-                      <TableHead className="table-header-background">
-                        <TableRow>
-                          <TableCell className="table-header-font">#</TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Branch Name
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Short Name
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody className="tableBody">
-                        {getPageData(this.state.branchData).map((item, i) => (
-                          <TableRow
-                            id={"row_" + i}
-                            className={this.state.initialCss}
-                            hover
-                            key={i}
-                            onClick={(event) =>
-                              handleRowClick(event, item, "row_" + i)
-                            }
-                          >
-                            <TableCell align="left">
-                              <a
-                                className="LINK tableLink"
-                                href={
-                                  URLS.URLS.editBranch +
-                                  this.state.urlparams +
-                                  "&editbranchId=" +
-                                  item.BranchID +
-                                  "&type=edit"
-                                }
-                              >
-                                {URLS.PREFIX.branchId + item.BranchID}
-                              </a>
-                            </TableCell>
-                            <TableCell align="left">{item.Name}</TableCell>
-                            <TableCell align="left">{item.ShortName}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
 
-                    <Pagination
-                      data={this.state.branchData}
+                    <MasterDataGrid
+                      selectionModel={this.state.selectionModel}
+                      rows={this.state.branchData}
+                      columns={this.state.columns}
                       pagination={this.state.pagination}
+                      onSelectionModelChange={(e) => this.handleRowClick(e)}
                       onPageChange={handlePageChange}
                     />
+
+                   
                   </Fragment>
                 ) : (
                   <Tableskeleton />

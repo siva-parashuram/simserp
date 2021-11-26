@@ -29,8 +29,7 @@ import MasterDataGrid from "../../compo/masterdatagrid";
 import Breadcrumb from "../../compo/breadcrumb";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 
-import Tableskeleton from "../../compo/tableskeleton";
-import Pagination from "../../compo/paginationcomponent";
+import Tableskeleton from "../../compo/tableskeleton"; 
 import BackdropLoader from "../../compo/backdrop";
 
 class usermaster extends React.Component {
