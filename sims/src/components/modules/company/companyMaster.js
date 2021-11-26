@@ -29,7 +29,7 @@ import Branchlistbycompany from "./branchlistbycompany";
 
 import CompanyQuickDetails from "./companyquickdetails";
 
-import Csvexport from "../../compo/csvexport";
+import MasterDataGrid from "../../compo/masterdatagrid";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
@@ -41,9 +41,8 @@ import BackdropLoader from "../../compo/backdrop";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-let columns = [];
-
-let rows = [];
+ 
+ 
 
 const initialCss = "";
 
@@ -52,7 +51,7 @@ class companyMaster extends React.Component {
     super(props);
     this.state = {
       pagination: {
-        page: 0,
+        page: 1,
         rowsPerPage: APIURLS.pagination.rowsPerPage,
       },
       page: 1,
@@ -65,10 +64,10 @@ class companyMaster extends React.Component {
       branchName: "",
       branchId: "",
       compName: "",
-      branch: [],
-      columns: columns,
-      masterCompanyData: rows,
-      companyData: rows,
+      branch: [],  
+      columns: APIURLS.companyMasterColumn,
+      masterCompanyData: [],
+      companyData: [],
       showSavedAlert: false,
       selectedCompanyId: 0,
       initialCss: initialCss,
@@ -84,7 +83,7 @@ class companyMaster extends React.Component {
   componentDidMount() {
     if (getCookie(COOKIE.USERID) != null) {
       this.getCompanyList();
-      this.setColumns();
+       
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
       let branchId = url.searchParams.get("branchId");
@@ -124,26 +123,33 @@ class companyMaster extends React.Component {
     }
   };
 
-  setColumns() {
-    let columns = [
-      {
-        field: "sno",
-        headerName: "sno",
-        type: "number",
-        width: 100,
-        editable: false,
-        headerClassName: "tbl-hdr-css",
-      },
-      {
-        field: "company",
-        headerName: "company",
-        width: 300,
-        editable: true,
-        headerClassName: "tbl-hdr-css",
-      },
-    ];
+  
 
-    this.setState({ columns: columns });
+  initializeRows=(data)=>{
+    let rows=[];
+    for(let i=0;i<data.length;i++){
+      let r = {
+        id: data[i].CompanyID,
+        Address: data[i].Address,
+        Address2: data[i].Address2,
+        Address3: data[i].Address3,
+        Branch:data[i].Branch ,
+        City: data[i].City,
+        CompanyID: data[i].CompanyID,
+        CompanyName: data[i].CompanyName,
+        CountryID: data[i].CountryID,
+        IsActive: data[i].IsActive,
+        PhoneNo: data[i].PhoneNo,
+        Postcode: data[i].Postcode,
+        StateID: data[i].StateID,
+        Website: data[i].Website,
+      };
+      rows.push(r);
+    }
+
+    
+
+    this.setState({companyData:rows,ProgressLoader: true});
   }
 
   getCompanyList() {
@@ -167,24 +173,16 @@ class companyMaster extends React.Component {
             window.close();
           } else {
             let data = response.data;
-
-            rows = data;
-            this.setState(
-              {
-                masterCompanyData: rows,
-                companyData: rows,
-                ProgressLoader: true,
-              },
-              () => {
-                if (this.state.companyData.length > 0) {
-                  this.InitialhandleRowClick(
-                    null,
-                    this.state.companyData[0],
-                    "row_0"
-                  );
-                }
+            // rows = data;
+             rows=[];
+            for(let i=0;i<data.length;i++){
+              data[i].id=i+1;              
+            }
+            this.setState({companyData:data,ProgressLoader: true},()=>{
+              if(data.length>0){
+                this.InitialhandleRowClick([1]);
               }
-            );
+            });            
           }
         } else {
           this.setState({ ErrorPrompt: true, ProgressLoader: true });
@@ -196,28 +194,27 @@ class companyMaster extends React.Component {
       });
   }
 
-  InitialhandleRowClick(e, item, id) {
+
+  InitialhandleRowClick(e) {
     try {
-      console.log("handleRowClick > id > ", id);
-      console.log("handleRowClick > vitem > ", item);
+      console.log("handleRowClick > e > ", e);
+      let index = e[0];
+      let item = this.state.companyData[index - 1];     
+      let branches = item.Branch;
       let editUrl =
         URLS.URLS.editCompany +
         this.state.urlparams +
         "&compID=" +
         item.CompanyID;
-      let branches = item.Branch;
       this.setState({
         item: item,
         branch: branches,
         editUrl: editUrl,
-        rowClicked: parseInt(this.state.rowClicked) + 1,
       });
-      this.InitialremoveIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-      this.getAttachments(item.CompanyID);
+      // getAttachments(item.CompanyID);
     } catch (e) {
       console.log("Error : ", e);
-    }
+    } 
   }
 
   InitialremoveIsSelectedRowClasses() {
@@ -259,29 +256,28 @@ class companyMaster extends React.Component {
   }
 
   render() {
-    const handleRowClick = (e, item, id) => {
+    const handleRowClick = (e) => {
+
       try {
         console.log("handleRowClick > e > ", e);
-        console.log("handleRowClick > item > ", item);
+        let index = e[0];
+        let item = this.state.companyData[index - 1];     
         let branches = item.Branch;
         let editUrl =
           URLS.URLS.editCompany +
           this.state.urlparams +
           "&compID=" +
           item.CompanyID;
-        // getCompanyBranchList(item.companyId);
         this.setState({
           item: item,
           branch: branches,
           editUrl: editUrl,
-          rowClicked: parseInt(this.state.rowClicked) + 1,
         });
-        removeIsSelectedRowClasses();
-        document.getElementById(id).classList.add("selectedRow");
         getAttachments(item.CompanyID);
       } catch (e) {
         console.log("Error : ", e);
-      }
+      }     
+      
     };
 
     const removeIsSelectedRowClasses = () => {
@@ -453,71 +449,17 @@ class companyMaster extends React.Component {
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
-            {this.state.companyData.length > 0 ? (
-              <Fragment>
-                <TableContainer style={{ maxHeight: 450, minHeight: 450 }}>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className=""
-                    aria-label="company List table"
-                  >
-                    <TableHead className="table-header-background">
-                      <TableRow>
-                        {/* <TableCell className="table-header-font">#</TableCell> */}
-                        <TableCell className="table-header-font" align="left">
-                          Company Name
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Address
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody className="tableBody">
-                      {
-                        
-                        getPageData(this.state.companyData).map((item, i) => (
-                          <TableRow
-                            id={"row_" + i}
-                            className={this.state.initialCss}
-                            hover
-                            key={i}
-                            onClick={(event) =>
-                              handleRowClick(event, item, "row_" + i)
-                            }
-                          >
-                            {/* <TableCell align="left">
-                              <a
-                                className="LINK tableLink"
-                                href={
-                                  URLS.URLS.editCompany +
-                                  this.state.urlparams +
-                                  "&compID=" +
-                                  item.CompanyID
-                                }
-                                onClick={(e) => openCompanyDetail(e, item)}
-                              >
-                                {i+1}
-                              </a>
-                            </TableCell> */}
-                            <TableCell align="left">
-                              {item.CompanyName}
-                            </TableCell>
-                            <TableCell align="left">{item.Address}</TableCell>
-                          </TableRow>
-                        ))
-                      }
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-
-                <Pagination
-                data={this.state.companyData}
-                pagination={this.state.pagination}                
-                onPageChange={handlePageChange}
-                />
-
-                 
+            {this.state.companyData.length > 0  ? (
+              <Fragment>               
+                <MasterDataGrid
+                 selectionModel={1}
+                 rows={this.state.companyData}
+                 columns={this.state.columns}
+                 pagination={this.state.pagination}
+                 onSelectionModelChange={(e) => handleRowClick(e)}
+                 onPageChange={handlePageChange}
+                />     
+                            
               </Fragment>
             ) : (
               <Tableskeleton />
@@ -532,7 +474,7 @@ class companyMaster extends React.Component {
                 {/*<Branchlistbycompany data={this.state.branch} />*/}
                 {this.state.item === null || this.state.item === {} ? null : (
                   <CompanyQuickDetails
-                    data={this.state.branch}
+                    data={this.state.branch===null?[]:this.state.branch}
                     item={this.state.item}
                     filelist={this.state.filelist}
                     rowClicked={this.state.rowClicked}

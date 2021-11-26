@@ -441,4 +441,43 @@ export let GetAllUserPermissionData = {
 };
 
 
+/* -------------------------------DATAGRID COLUMNS CONSTANT--------------------------------------------------------------- */
+
+export const companyMasterColumn = [
+  {
+    field: 'id',
+    headerName: '#',
+    width: 50,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'CompanyName',
+    headerName: 'Company Name',
+    width: 160,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'Address',
+    headerName: 'Address',
+    width: 350,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'PhoneNo',
+    headerName: 'Phone No',
+    width: 150,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'Website',
+    headerName: 'Website',
+    width: 150,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },
+
+];
 
