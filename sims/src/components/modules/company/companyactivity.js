@@ -283,7 +283,7 @@ class addnewcompany extends React.Component {
       switch (param) {
         case "CompanyName":
           let duplicateExist = false;
-          if (e.target.value && e.target.value != "") {
+          if (e.target.value) {
             duplicateExist = CF.chkDuplicateName(
               this.state.companyData,
               "CompanyName",
@@ -316,7 +316,7 @@ class addnewcompany extends React.Component {
                 errorState: false,
                 errorMsg: "",
               };
-              company[param] = e.target.value.trim();
+              company[param] = e.target.value;
               this.setParams(company);
               this.setState({ Validations: v });
             }
