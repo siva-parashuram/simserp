@@ -188,6 +188,7 @@ class addnewcompany extends React.Component {
               company:response.data,          
               selectedCountry: response.data.countryId,
               ProgressLoader: true,
+              BtnDisable: false
             },
             () => {
               this.setInitialParamsForEdit();
@@ -278,6 +279,8 @@ class addnewcompany extends React.Component {
 
 
     const updateFormValue = (param, e) => {
+      console.log("param > ",param);
+      console.log("value > ", e.target.value);
       let company = this.state.company;
       let v = this.state.Validations;
      
@@ -422,17 +425,26 @@ class addnewcompany extends React.Component {
           } 
           break;
         case "CountryID":
-          this.getStateByCountry(CF.toInt(e.target.value));
-          company[param] = CF.toInt(e.target.value);
-
-          v.country = {
-            errorState: false,
-            errorMsg: "",
-          };
-          
-          this.setParams(company);
-          this.setState({Validations:v});
-
+          if(e.target.value==="-"){
+            v.country = {
+              errorState: true,
+              errorMsg: "Select Country",
+            };
+            company[param] = e.target.value.trim();
+            this.setParams(company);
+            this.setState({Validations:v});
+          }else{
+            this.getStateByCountry(CF.toInt(e.target.value));
+            company[param] = CF.toInt(e.target.value);
+  
+            v.country = {
+              errorState: false,
+              errorMsg: "",
+            };
+            
+            this.setParams(company);
+            this.setState({Validations:v});
+          }
           break;
         case "StateID":
           company[param] = CF.toInt(e.target.value);
@@ -491,8 +503,10 @@ class addnewcompany extends React.Component {
       let company = this.state.company;
       let v=this.state.Validations;
       console.log("v > ",this.state.Validations);
+      console.log("company > ",company);
       let chkerrorState=false;
- 
+
+
       if(
         v.address.errorState===true ||
         v.address2.errorState===true ||
@@ -508,27 +522,15 @@ class addnewcompany extends React.Component {
         chkerrorState=true;
       }
 
-      
-      if (company.CompanyName!="" && 
+      console.log("chkerrorState > ",chkerrorState);
+      if (company.CompanyName!="" &&             
           company.Address !=""   && 
-          company.CountryID!=0 && 
+          (company.CountryID!=0 || company.CountryID!="-" ) &&          
           chkerrorState===false) {
          this.setState({ BtnDisable: false });   
        } else {
          this.setState({ BtnDisable: true });
-       }
- 
-      // if (
-      //  ( company.CompanyName!=""  && chkerrorState===false  ) &&
-      //  ( company.Address !=""  && chkerrorState===false ) &&
-      //   (company.CountryID!=0   && chkerrorState===false )
-      // ) {
-      //   this.setState({ BtnDisable: false });   
-      // } else {
-      //   this.setState({ BtnDisable: true });
-      // }
-       
-      
+       }      
     };
 
     const handleAccordionClick = (val, e) => {
@@ -739,7 +741,7 @@ class addnewcompany extends React.Component {
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
               onClick={(e) => updateCompanyDetails()}
-              disabled={this.state.updateBtnDisabled}
+              disabled={this.state.BtnDisable}
             >
               {APIURLS.buttonTitle.save.name}
             </Button>
