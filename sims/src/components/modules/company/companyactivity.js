@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 
-/* Custom components and support imports*/ 
+/* Custom components and support imports*/
 import "../../user/dasboard.css";
 import * as URLS from "../../../routes/constants";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -34,7 +34,7 @@ class addnewcompany extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type:null,
+      type: null,
       typoTitle: null,
       companyData: [],
       ErrorPrompt: false,
@@ -75,7 +75,7 @@ class addnewcompany extends React.Component {
         StateID: 0,
         PhoneNo: "",
         Website: "",
-        IsActive: true
+        IsActive: true,
       },
       Validations: {
         companyName: { errorState: false, errorMsg: "" },
@@ -95,7 +95,7 @@ class addnewcompany extends React.Component {
   componentDidMount() {
     this.getCompanyList();
     this.getCountryList();
-    
+
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -112,18 +112,18 @@ class addnewcompany extends React.Component {
       "&branchName=" +
       branchName;
 
+    let company = this.state.company;
+    company.CompanyID = CF.toInt(CompanyID);
 
-      let company = this.state.company;
+    if (type === "edit") {
       company.CompanyID = CF.toInt(CompanyID);
-
-      if (type === "edit") {
-        company.CompanyID = CF.toInt(CompanyID);
-        this.getCompanyDetails(CompanyID);
-      }
+      this.getCompanyDetails(CompanyID);
+      this.setState({ BtnDisable: false });
+    }
 
     this.setState({
       urlparams: urlparams,
-      company:company,
+      company: company,
       CompanyID: CompanyID,
       type: type,
       typoTitle: typoTitle,
@@ -131,7 +131,7 @@ class addnewcompany extends React.Component {
     });
   }
 
-  getCompanyList=()=> {
+  getCompanyList = () => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -160,9 +160,9 @@ class addnewcompany extends React.Component {
       .catch((error) => {
         this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
-  }
+  };
 
-  getCompanyDetails=(CompanyID)=> {
+  getCompanyDetails = (CompanyID) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -181,11 +181,11 @@ class addnewcompany extends React.Component {
       .post(GetCompanyUrl, data, { headers })
       .then((response) => {
         if (response.status === 200) {
-          let data=response.data;
-          if(data.Branch===null)data.Branch=[];       
+          let data = response.data;
+          if (data.Branch === null) data.Branch = [];
           this.setState(
             {
-              company:response.data,          
+              company: response.data,
               selectedCountry: response.data.countryId,
               ProgressLoader: true,
               BtnDisable: false
@@ -196,11 +196,11 @@ class addnewcompany extends React.Component {
             }
           );
         } else {
-          this.setState({ErrorPrompt:true,ProgressLoader: true,});
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
         }
       })
       .catch((error) => {});
-  }
+  };
 
   setInitialParamsForEdit = () => {
     let CountryID = this.state.company.CountryID;
@@ -208,8 +208,7 @@ class addnewcompany extends React.Component {
     this.getStateByCountry(CountryID);
   };
 
-
-  getCountryList=()=> {
+  getCountryList = () => {
     let rows = [];
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -228,8 +227,8 @@ class addnewcompany extends React.Component {
         this.setState({ MasterCountryData: data });
         this.processCountryData(data);
       })
-      .catch((error) => { });
-  }
+      .catch((error) => {});
+  };
 
   getStateByCountry = (CountryID) => {
     console.log("getStateByCountry > CountryID > ", CountryID);
@@ -258,8 +257,7 @@ class addnewcompany extends React.Component {
     this.setState({ stateData: newData, ProgressLoader: true });
   };
 
-
-  processCountryData=(data)=> {
+  processCountryData = (data) => {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
@@ -269,60 +267,60 @@ class addnewcompany extends React.Component {
       newData.push(d);
     }
     this.setState({ countryData: newData, ProgressLoader: true });
-  }
+  };
 
   setParams = (object) => {
     this.setState({ company: object });
   };
 
   render() {
-
-
     const updateFormValue = (param, e) => {
       console.log("param > ",param);
       console.log("value > ", e.target.value);
       let company = this.state.company;
       let v = this.state.Validations;
-     
+
       switch (param) {
         case "CompanyName":
           let duplicateExist = false;
-          if (e.target.value && e.target.value!="") {
+          if (e.target.value && e.target.value != "") {
             duplicateExist = CF.chkDuplicateName(
               this.state.companyData,
               "CompanyName",
               e.target.value.toLowerCase()
             );
           }
-          if (duplicateExist === true) {              
+          if (duplicateExist === true) {
             v.companyName = {
               errorState: true,
               errorMsg: "Company with same name already exist!",
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }else{
-            if(e.target.value === "" ||
-            e.target.value == null ||
-            e.target.value.length > 50){
+            this.setState({ Validations: v });
+          } else {
+            if (
+              e.target.value === "" ||
+              e.target.value == null ||
+              e.target.value.length > 50
+            ) {
               v.companyName = {
                 errorState: true,
                 errorMsg: "Inproper data",
               };
               company[param] = e.target.value;
               this.setParams(company);
-              this.setState({Validations:v});
-            }else{
+              this.setState({ Validations: v });
+            } else {
               v.companyName = {
                 errorState: false,
                 errorMsg: "",
               };
               company[param] = e.target.value.trim();
               this.setParams(company);
-              this.setState({Validations:v});
-            }            
-          }         
+              this.setState({ Validations: v });
+            }
+          }
           break;
         case "Address":
           if (
@@ -336,17 +334,17 @@ class addnewcompany extends React.Component {
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }else{
+            this.setState({ Validations: v });
+          } else {
             v.address = {
               errorState: false,
               errorMsg: "",
             };
             company[param] = e.target.value;
-          this.setParams(company);
-          this.setState({Validations:v});
+            this.setParams(company);
+            this.setState({ Validations: v });
           }
-          
+
           break;
         case "Address2":
           if (e.target.value.length > 50) {
@@ -356,16 +354,16 @@ class addnewcompany extends React.Component {
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }else{
+            this.setState({ Validations: v });
+          } else {
             v.address2 = {
               errorState: false,
               errorMsg: "",
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }         
+            this.setState({ Validations: v });
+          }
           break;
         case "Address3":
           if (e.target.value.length > 50) {
@@ -375,16 +373,16 @@ class addnewcompany extends React.Component {
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }else{
+            this.setState({ Validations: v });
+          } else {
             v.address3 = {
               errorState: false,
               errorMsg: "",
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          } 
+            this.setState({ Validations: v });
+          }
           break;
         case "City":
           if (e.target.value.length > 50) {
@@ -394,16 +392,16 @@ class addnewcompany extends React.Component {
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }else{
+            this.setState({ Validations: v });
+          } else {
             v.city = {
               errorState: false,
               errorMsg: "",
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          } 
+            this.setState({ Validations: v });
+          }
           break;
         case "Postcode":
           if (e.target.value.length > 10) {
@@ -413,16 +411,16 @@ class addnewcompany extends React.Component {
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }else{
+            this.setState({ Validations: v });
+          } else {
             v.postcode = {
               errorState: false,
               errorMsg: "",
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          } 
+            this.setState({ Validations: v });
+          }
           break;
         case "CountryID":
           if(e.target.value==="-"){
@@ -458,16 +456,16 @@ class addnewcompany extends React.Component {
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }else{
+            this.setState({ Validations: v });
+          } else {
             v.phoneno = {
               errorState: false,
               errorMsg: "",
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          } 
+            this.setState({ Validations: v });
+          }
           break;
         case "Website":
           if (e.target.value.length > 50) {
@@ -477,28 +475,27 @@ class addnewcompany extends React.Component {
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          }else{
+            this.setState({ Validations: v });
+          } else {
             v.website = {
               errorState: false,
               errorMsg: "",
             };
             company[param] = e.target.value;
             this.setParams(company);
-            this.setState({Validations:v});
-          } 
+            this.setState({ Validations: v });
+          }
           break;
 
         default:
-          company[param]  = e.target.checked;
+          company[param] = e.target.checked;
           this.setParams(company);
           break;
       }
-      
+
       validate();
     };
 
- 
     const validate = () => {
       let company = this.state.company;
       let v=this.state.Validations;
@@ -554,7 +551,7 @@ class addnewcompany extends React.Component {
 
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
-      
+
       let chkFields = true;
       if (chkFields === false) {
       } else {
@@ -605,7 +602,6 @@ class addnewcompany extends React.Component {
         .then((response) => {
           if (response.status === 200) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
-             
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
@@ -632,7 +628,7 @@ class addnewcompany extends React.Component {
               <Grid item xs={12} sm={12} md={1} lg={1}>
                 <IconButton
                   aria-label="ArrowBackIcon"
-                // style={{ textAlign: 'left', marginTop: 8 }}
+                  // style={{ textAlign: 'left', marginTop: 8 }}
                 >
                   <ArrowBackIcon onClick={(e) => handleClose()} />
                 </IconButton>
@@ -667,11 +663,11 @@ class addnewcompany extends React.Component {
 
       switch (param) {
         case "Country":
-          // Dialog.DialogContent = Address;
+          // Dialog.DialogContent =;
           this.setState({ Dialog: Dialog });
           break;
         case "State":
-          // Dialog.DialogContent = contact;
+          // Dialog.DialogContent = ;
           this.setState({ Dialog: Dialog });
           break;
 
@@ -724,13 +720,12 @@ class addnewcompany extends React.Component {
           variant="text"
           aria-label="Action Menu Button group"
         >
-
           {this.state.type === "add" ? (
             <Button
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
               disabled={this.state.BtnDisable}
-              onClick={(e)=>handleCreateCompanyClick()}
+              onClick={(e) => handleCreateCompanyClick()}
             >
               {APIURLS.buttonTitle.save.name}
             </Button>
@@ -745,15 +740,14 @@ class addnewcompany extends React.Component {
             >
               {APIURLS.buttonTitle.save.name}
             </Button>
-          ) : null}          
-
+          ) : null}
         </ButtonGroup>
       </Fragment>
     );
 
     return (
       <Fragment>
-       <BackdropLoader open={!this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
@@ -762,8 +756,10 @@ class addnewcompany extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
-        <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
-
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
@@ -786,11 +782,7 @@ class addnewcompany extends React.Component {
                     id="panel1a-header"
                     style={{ minHeight: "40px", maxHeight: "40px" }}
                   >
-                    <Typography
-
-                      key=""
-                      className="accordion-Header-Title"
-                    >
+                    <Typography key="" className="accordion-Header-Title">
                       General
                     </Typography>
                   </AccordionSummary>
@@ -801,195 +793,159 @@ class addnewcompany extends React.Component {
                         <div>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SIB
+                                isMandatory={true}
+                                id="companyName"
+                                label="Company Name"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("CompanyName", e)
+                                }
+                                value={this.state.company.CompanyName}
+                                error={
+                                  this.state.Validations.companyName.errorState
+                                }
+                              />
 
+                              <SIB
+                                isMandatory={true}
+                                id="Address"
+                                label="Address"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.company.Address}
+                                error={
+                                  this.state.Validations.address.errorState
+                                }
+                              />
 
-                             <SIB
-                              isMandatory={true}
-                              id="companyName"
-                              label="Company Name"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("CompanyName", e)
-                              }
-                              value={this.state.company.CompanyName}
-                              error={
-                                this.state.Validations.companyName
-                                  .errorState
-                              }
-                             />
-
-                             <SIB
-                              isMandatory={true}
-                              id="Address"
-                              label="Address"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("Address", e)
-                              }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
-                              value={this.state.company.Address}
-                              error={
-                                this.state.Validations.address.errorState
-                              }
-                             />
-
-
-                             <SIB
-                             id="Address2"
-                             label="Address 2"
-                             variant="outlined"
-                             size="small"
-                             onChange={(e) =>
-                               updateFormValue("Address2", e)
-                             }
-                             InputProps={{
-                               className: "textFieldCss",
-                               maxlength: 50,
-                             }}
-                             value={this.state.company.Address2}
-                             error={
-                               this.state.Validations.address2.errorState
-                             }
-                             />
-                             <SIB
-                             id="Address3"
-                             label="Address 3"
-                             variant="outlined"
-                             size="small"
-                             onChange={(e) =>
-                               updateFormValue("Address3", e)
-                             }
-                             InputProps={{
-                               className: "textFieldCss",
-                               maxlength: 50,
-                             }}
-                             value={this.state.company.Address3}
-                             error={
-                               this.state.Validations.address3.errorState
-                             }
-                             />
-                             <SIB
-                             id="City"
-                             label="City"
-                             variant="outlined"
-                             size="small"
-                             onChange={(e) => updateFormValue("City", e)}
-                             InputProps={{
-                               className: "textFieldCss",
-                               maxlength: 50,
-                             }}
-                             value={this.state.company.City}
-                             error={
-                               this.state.Validations.city.errorState
-                             }
-                             helperText={
-                               this.state.Validations.city.errorMsg
-                             }
-                             />
-                             <SIB
-                              id="Postcode"
-                              label="Postcode"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("Postcode", e)
-                              }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 10,
-                              }}
-                              value={this.state.company.Postcode}
-                              error={
-                                this.state.Validations.postcode.errorState
-                              }
-                             />
+                              <SIB
+                                id="Address2"
+                                label="Address 2"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address2", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.company.Address2}
+                                error={
+                                  this.state.Validations.address2.errorState
+                                }
+                              />
+                              <SIB
+                                id="Address3"
+                                label="Address 3"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address3", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.company.Address3}
+                                error={
+                                  this.state.Validations.address3.errorState
+                                }
+                              />
+                              <SIB
+                                id="City"
+                                label="City"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("City", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.company.City}
+                                error={this.state.Validations.city.errorState}
+                              />
+                              <SIB
+                                id="Postcode"
+                                label="Postcode"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Postcode", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.Postcode}
+                                error={
+                                  this.state.Validations.postcode.errorState
+                                }
+                              />
                             </Grid>
                             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
-
                               <SDBIB
-                               isMandatory={true} 
-                               id="countrySelect"
-                               label="Country"
-                               onChange={(e) =>
-                                 updateFormValue("CountryID", e)
-                               }
-                               value={this.state.company.CountryID}
-                               param={this.state.countryData}
-                               onClick={(e) => openDialog("Country")}
+                                isMandatory={true}
+                                id="countrySelect"
+                                label="Country"
+                                onChange={(e) =>
+                                  updateFormValue("CountryID", e)
+                                }
+                                value={this.state.company.CountryID}
+                                param={this.state.countryData}
+                                onClick={(e) => openDialog("Country")}
                               />
 
                               <SDBIB
                                 id="stateSelect"
                                 label="State"
-                                onChange={(e) =>
-                                  updateFormValue("StateID", e)
-                                }
+                                onChange={(e) => updateFormValue("StateID", e)}
                                 value={this.state.company.StateID}
                                 param={this.state.stateData}
                                 onClick={(e) => openDialog("State")}
                               />
 
-                             
-
                               <SIB
-                              id="PhoneNo"
-                              label="Phone No"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("PhoneNo", e)
-                              }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 10,
-                              }}
-
-                              value={this.state.company.PhoneNo}
-                              error={
-                                this.state.Validations.phoneno.errorState
-                              }
+                                id="PhoneNo"
+                                label="Phone No"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("PhoneNo", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.PhoneNo}
+                                error={
+                                  this.state.Validations.phoneno.errorState
+                                }
                               />
                               <SIB
-                              id="Website"
-                              label="Website"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) =>
-                                updateFormValue("Website", e)
-                              }
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 10,
-                              }}
-                              value={this.state.company.Website}
-                              error={
-                                this.state.Validations.website.errorState
-                              }
+                                id="Website"
+                                label="Website"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Website", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 10,
+                                }}
+                                value={this.state.company.Website}
+                                error={
+                                  this.state.Validations.website.errorState
+                                }
                               />
 
                               <SSIB
-                               key="IsActive"
-                               id="IsActive"
-                               label="IsActive"
-                               param={this.state.company.IsActive}
-                               onChange={(e) =>
-                                 updateFormValue("IsActive", e)
-                               }
+                                key="IsActive"
+                                id="IsActive"
+                                label="IsActive"
+                                param={this.state.company.IsActive}
+                                onChange={(e) => updateFormValue("IsActive", e)}
                               />
-                              
-                            
-
-                              
-
                             </Grid>
-
-                            
                           </Grid>
                         </div>
                       </Grid>
