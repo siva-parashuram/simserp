@@ -13,7 +13,9 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 
 
 import Dialog from "@mui/material/Dialog";
@@ -36,11 +38,12 @@ import Breadcrumb from "../../compo/breadcrumb";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Accordioncomponent from "../../compo/accordioncomponent";
-import TextboxInput from "../../compo/tablerowcelltextboxinput";
-import TablecustomInput from "../../compo/tablerowcellcustomhtml";
-import DropdownInput from "../../compo/Tablerowcelldropdown";
-import SwitchInput from "../../compo/tablerowcellswitchinput";
-import Dualtabcomponent from "../../compo/dualtabcomponent";
+
+import SIB from "../../compo/gridtextboxinput";
+import SDIB from "../../compo/griddropdowninput";
+import SSIB from "../../compo/gridswitchinput";
+import SDBIB from "../../compo/griddropdowninputwithbutton";
+import SADIB from "../../compo/gridautocompletedropdowninput";
 
 
 class poactivity extends React.Component {
@@ -50,8 +53,10 @@ class poactivity extends React.Component {
       DialogStatus:false,
       BranchID: 0,
       accordion1: true,
-      accordion2: true,
+      accordion2: false,
       accordion3: false,
+      accordion4: false,
+      accordion5: false,
       ProgressLoader: false,
       ErrorPrompt: false,
       SuccessPrompt: false,
@@ -67,7 +72,17 @@ class poactivity extends React.Component {
       POItemType: APIURLS.POItemType,
       ItemLinesRow: [],
       ItemLinesColm: [],
+      supplierList:[],
       ItemDatagrid: null,
+      stepper:{
+        MRNSTATUS:3,
+        activeStep:0,
+        steps:["Open","Release","MRN","Short Close"],
+        skipped:new Set(),
+      },
+      Forms:{
+        general:null,
+      },
       PO: {
         POID:0,
         BranchID:0,
@@ -79,35 +94,34 @@ class poactivity extends React.Component {
         IsImport:false,
         CurrID:0,  //on supplier chnage show curr dropdown with preselected of supplier
         ExchRate:0,   // on chnage of curr show Exchang Rate by calling API of exchnage
-        FCValue:0,   //non editable - but calculate as er user entry as per item added
-       
+        FCValue:0,   //non editable - but calculate as er user entry as per item added       
         PaymentTermID:0,     // on supplier chnage dispplay payment term
-        PaymentTerm:"",
-        ContactPerson:"",
-        Reference:"",
-        Status:0,
-        DispachDate:"",
-        DeliveryDate:"",
-        WareHouseID:0,
-        SpecialInst:"",
-        DeliveryAddress:"",
-        MODTaxID:0,
-        AmendmentNo:"",
-        AmendmentDate:"",
-        IsRegistedSupplier:false,
-        GSTNo:"",
-        VATNo:"",
-        IsRounding:false,
-        IncoID:0,
-        ShipmentModeID:0,
-        Notes:"",
-        IsSEZPurchase:false,
-        IsTaxExempt:false,
-        Reason:"",
-        GeneralPostingGroupID:0,
-        SupplierPostingGroupID:0,
-        EmployeeID:0, 
-        UserID:0,
+        PaymentTerm:"",   // show as per dropdown selected of - PaymentTermID
+        ContactPerson:"", // on supplier chnage show ContactPerson - but user can change the input data
+        Reference:"",   // direct input
+        Status:2,   //non editable but show the status
+        DispachDate:"",   // as per  user input - but not less than PO date
+        DeliveryDate:"",   // as er user inut - but not less than dispatch date
+        WareHouseID:0,   // show branch warehouse
+        SpecialInst:"",   // get list instruction from table, and display initial datat and Also, Accet user input - and select from dropdown
+        DeliveryAddress:"",  // as per ware house selected and also Provide user inut, and allow full access to change 
+        MODTaxID:0,   // select from dropdown -> use API
+        AmendmentNo:"",  // user input - only integer enable at the time of edit
+        AmendmentDate:"",  // user input - enable at the time of edit
+        IsRegistedSupplier:false, // if anything of GST/VAT is available as per suplier selection
+        GSTNo:"",  //of supplier
+        VATNo:"", //of supplier
+        IsRounding:false,   //as per branch data (by default false) - if true -> enable the input(but allow user user to chnage) else disable
+        IncoID:0, // from table-> use API
+        ShipmentModeID:0,   // use API and dislay in dropdown
+        Notes:"",  // as per user entry
+        IsSEZPurchase:false,  // as per branch information
+        IsTaxExempt:false,  // as per supplier branch maping API 
+        Reason:"",   // as per supplier branch maping API     
+        GeneralPostingGroupID:0,  // Non editable as per supplier branch mapping data
+        SupplierPostingGroupID:0, // Non editable as per supplier branch mapping data
+        EmployeeID:0, //dropdown - For Kind Attn. input
+        UserID:0,   // loggind in user 
       }
 
 
@@ -118,6 +132,9 @@ class poactivity extends React.Component {
   componentDidMount() {
     this.getItemLinesColm();
     this.getItemLineList();
+
+    this.getSupplierList();
+
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -152,6 +169,37 @@ class poactivity extends React.Component {
     });
 
     console.log("On load state > ", this.state);
+  }
+
+
+  getSupplierList = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllSupplier;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newData=[];
+        for(let i=0;i<data.length;i++){
+          let o={ label: data[i].Name, id: data[i].SuplID };
+          newData.push(o);
+        }
+        if (data.length > 0) {
+          this.setState({ supplierList: newData },()=>{
+            this.generalForm();
+          });
+        } else {
+          this.setState({ supplierList: data, ProgressLoader: true });
+        }
+      })
+      .catch((error) => {
+        this.setState({ supplierList: [], ProgressLoader: true });
+      });
   }
 
   renderType(params) {
@@ -370,7 +418,59 @@ class poactivity extends React.Component {
      console.log("deleteSelectedItem > currentDeleteItemparams > ",this.state.currentDeleteItemparams);
   }
 
+  getMRNStatus=()=>{
+    let MRNSTATUS = "";
+    let status = this.state.PO.Status;
+    switch (status) {
+      case 3:
+        MRNSTATUS = "Complete";
+        break;
+      case 4:
+        MRNSTATUS = "Partially";
+        break;
+      default:
+        break;
+    }
+    return MRNSTATUS;
+  }
 
+  generalForm=()=>{
+    const generalForm = (
+      <Fragment>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={6} lg={6}> 
+            <SIB
+              id="No"
+              label="No"
+              variant="outlined"
+              size="small"             
+              value={this.state.PO.No}
+              disabled={true}
+            />
+            <SADIB
+              id="SuplID"
+              label="Supplier"
+              // onChange={(e) => this.updateFormValue("CountryID", e)}
+              // value={[]}
+              options={this.state.supplierList}
+              isMandatory={true}
+            />
+          
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}> 
+          
+          </Grid>
+        </Grid>
+      </Fragment>
+    );
+    let Forms=this.state.Forms;
+    Forms.general=generalForm;
+    this.setState({
+      Forms:Forms
+    });
+  }
+
+ 
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -389,6 +489,19 @@ class poactivity extends React.Component {
           ? this.setState({ accordion3: false })
           : this.setState({ accordion3: true });
       }
+
+      if (val === "accordion4") {
+        this.state.accordion4 === true
+          ? this.setState({ accordion4: false })
+          : this.setState({ accordion4: true });
+      }
+
+      if (val === "accordion5") {
+        this.state.accordion5 === true
+          ? this.setState({ accordion5: false })
+          : this.setState({ accordion5: true });
+      }
+
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -465,6 +578,16 @@ class poactivity extends React.Component {
       </Fragment>
     );
 
+   
+
+    const isStepOptional = (step) => {
+      return step === 1;
+    };
+
+    const isStepSkipped = (step) => {
+      return this.state.stepper.skipped.has(step);
+    };
+
     return (
       <Fragment>
          <BackdropLoader open={!this.state.ProgressLoader} />
@@ -483,50 +606,119 @@ class poactivity extends React.Component {
         />
 
 
-        <Grid className="table-adjust" container spacing={0}>
-          <Grid item xs={12} sm={12} md={8} lg={8}>
-            <Accordioncomponent
-              accordionKey="a-1"
-              expanded={this.state.accordion1}
-              onClick={(e) => handleAccordionClick("accordion1", e)}
-              id="accordion1"
-              typographyKey="GD-Activity"
-              typography="General Details"
-              accordiondetailsKey="accordion1"
-              html={null}
-            />
-            <Accordioncomponent
-              accordionKey="a-2"
-              expanded={this.state.accordion2}
-              onClick={(e) => handleAccordionClick("accordion2", e)}
-              id="accordion2"
-              typographyKey="Inv-Activity"
-              typography="Item Lines"
-              accordiondetailsKey="accordion2"
-              html={this.state.ItemDatagrid}
-            />
-            {/* <Accordioncomponent
-              accordionKey="a-3"
-              expanded={this.state.accordion3}
-              onClick={(e) => handleAccordionClick("accordion3", e)}
-              id="accordion3"
-              typographyKey="TaxInf-Activity"
-              typography="Tax Information"
-              accordiondetailsKey="accordion3"
-              html={null}
-            /> */}
-            <div style={{ height: 50 }}></div>
+        <Fragment>
+          <div style={{ height: 10 }}>&nbsp;</div>
+          <div style={{ height: 10 }}>&nbsp;</div>
+          <Grid container spacing={0}>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={2} lg={2}></Grid>
+                <Grid item xs={12} sm={12} md={8} lg={8}>
+                  <Stepper activeStep={this.state.stepper.activeStep}>
+                    {this.state.stepper.steps.map((label, index) => {
+                      const stepProps = {};
+                      const labelProps = {};
+                      return (
+                        <Step key={label} {...stepProps}>
+                          <StepLabel {...labelProps}>
+                          {index === 2 ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
+                          </StepLabel>
+                        </Step>
+                      );
+                    })}
+                  </Stepper>
+                </Grid>
+                <Grid item xs={12} sm={12} md={2} lg={2}></Grid>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={12} md={4} lg={4}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={11} lg={11}>
-                <div style={{ marginLeft: 10 }}>
-                  {/* {sideDataNavigation} */}
-                </div>
+          <div style={{ height: 10 }}>&nbsp;</div>
+          <div style={{ height: 10 }}>&nbsp;</div>
+          <div style={{ height: 10 }}>&nbsp;</div>
+        </Fragment>
+       
+
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid className="table-adjust" container spacing={0}>
+              <Grid item xs={12} sm={12} md={8} lg={8}>
+                <Accordioncomponent
+                  accordionKey="a-1"
+                  expanded={this.state.accordion1}
+                  onClick={(e) => handleAccordionClick("accordion1", e)}
+                  id="accordion1"
+                  typographyKey="GD-Activity"
+                  typography="General"
+                  accordiondetailsKey="accordion1"
+                  html={this.state.Forms.general}
+                />
+                <Accordioncomponent
+                  accordionKey="a-2"
+                  expanded={this.state.accordion2}
+                  onClick={(e) => handleAccordionClick("accordion2", e)}
+                  id="accordion2"
+                  typographyKey="Inv-Activity"
+                  typography="Lines"
+                  accordiondetailsKey="accordion2"
+                  html={[]}
+                />
+                <Accordioncomponent
+                  accordionKey="a-3"
+                  expanded={this.state.accordion3}
+                  onClick={(e) => handleAccordionClick("accordion3", e)}
+                  id="accordion3"
+                  typographyKey="Invoice-Activity"
+                  typography="Invoice Details"
+                  accordiondetailsKey="accordion3"
+                  html={null}
+                />
+
+                <Accordioncomponent
+                  accordionKey="a-4"
+                  expanded={this.state.accordion4}
+                  onClick={(e) => handleAccordionClick("accordion4", e)}
+                  id="accordion4"
+                  typographyKey="Tax-Activity"
+                  typography="Tax Information"
+                  accordiondetailsKey="accordion4"
+                  html={null}
+                />
+
+                <Accordioncomponent
+                  accordionKey="a-5"
+                  expanded={this.state.accordion5}
+                  onClick={(e) => handleAccordionClick("accordion5", e)}
+                  id="accordion5"
+                  typographyKey="Terms-Activity"
+                  typography="Terms"
+                  accordiondetailsKey="accordion5"
+                  html={null}
+                />
+
+                <div style={{ height: 50 }}></div>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    <div style={{ marginLeft: 10,backgroundColor:'#ffffff',height:350 }}>
+                      <div  style={{ marginLeft: 10  }}>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={11} lg={11}>
+                              Hi
+                        </Grid>
+                      </Grid>
+                      </div>                      
+                    </div>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
+
+
+
+       
 
        
 

@@ -79,6 +79,16 @@ body{
   font-size: 14px !important;
 }
 
+.MuiAutocomplete-root{
+  height: 27.81px !important;
+  line-height: 27.81px !important;
+}
+
+.css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input {
+  height: 27.81px !important;
+  line-height: 27.81px !important;
+}
+
 .MuiDataGrid-toolbarContainer{
   background-color: #fff !important;
 }
