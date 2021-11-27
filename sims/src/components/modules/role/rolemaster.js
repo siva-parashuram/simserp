@@ -352,10 +352,10 @@ class rolemaster extends React.Component {
                                       item.moduleId
                                     }
                                   >
-                                    {URLS.PREFIX.roleID + item.roleId}
+                                    {URLS.PREFIX.roleID + item.RoleID}
                                   </a>
                                 </TableCell>
-                                <TableCell align="left">{item.name}</TableCell>
+                                <TableCell align="left">{item.Name}</TableCell>
                               </TableRow>
                             ))
                           : null}
