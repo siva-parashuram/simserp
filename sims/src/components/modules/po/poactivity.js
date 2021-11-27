@@ -69,7 +69,45 @@ class poactivity extends React.Component {
       ItemLinesColm: [],
       ItemDatagrid: null,
       PO: {
-        POID: 0,
+        POID:0,
+        BranchID:0,
+        No:"",
+        PODate:"",
+        SuplID:0,   //on supplier chnage show address(BillingID) dropdown, show 1 address detail in section
+        POType:0,
+        BillingID:0,   //on suplier chnage - show address detail in section
+        IsImport:false,
+        CurrID:0,  //on supplier chnage show curr dropdown with preselected of supplier
+        ExchRate:0,   // on chnage of curr show Exchang Rate by calling API of exchnage
+        FCValue:0,   //non editable - but calculate as er user entry as per item added
+       
+        PaymentTermID:0,     // on supplier chnage dispplay payment term
+        PaymentTerm:"",
+        ContactPerson:"",
+        Reference:"",
+        Status:0,
+        DispachDate:"",
+        DeliveryDate:"",
+        WareHouseID:0,
+        SpecialInst:"",
+        DeliveryAddress:"",
+        MODTaxID:0,
+        AmendmentNo:"",
+        AmendmentDate:"",
+        IsRegistedSupplier:false,
+        GSTNo:"",
+        VATNo:"",
+        IsRounding:false,
+        IncoID:0,
+        ShipmentModeID:0,
+        Notes:"",
+        IsSEZPurchase:false,
+        IsTaxExempt:false,
+        Reason:"",
+        GeneralPostingGroupID:0,
+        SupplierPostingGroupID:0,
+        EmployeeID:0, 
+        UserID:0,
       }
 
 

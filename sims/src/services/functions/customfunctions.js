@@ -60,36 +60,7 @@ export const ADD_NEW_BRANCH_OPEN = (branchId) => {
     console.log("CHECK_IF_BRANCH_IS_OPEN > EX > ",ex);
   } 
 }
-
-//to check if branch window is already open
-// export const CHECK_IF_BRANCH_IS_OPEN=(branchId)=>{
-//   let isPresent=false;
-//   let BRANCH_OPEN=localStorage.getItem('BRANCH_OPEN');
-//   console.log("checkIfBranchIsOpen > BRANCH_OPEN > ",BRANCH_OPEN);
-//   if(BRANCH_OPEN===null || BRANCH_OPEN==="" || BRANCH_OPEN==="null"){
-//       BRANCH_OPEN=[];
-//       BRANCH_OPEN.push(branchId);
-//       if(BRANCH_OPEN.toString()==="0"){}else{
-//           localStorage.setItem('BRANCH_OPEN', BRANCH_OPEN.toString());
-//       }      
-//   }else{
-//       var existingBRANCH_OPEN = BRANCH_OPEN.split(",").map(Number);
-//       console.log("checkIfBranchIsOpen > existingBRANCH_OPEN > ",existingBRANCH_OPEN);      
-//       for(let i=0;i<existingBRANCH_OPEN.length;i++){
-//           if(existingBRANCH_OPEN[i]===parseInt(branchId)){
-//               isPresent=true;
-//               break;
-//           }
-//       }
-//       if(isPresent===true){
-//           // console.log("checkIfBranchIsOpen > branchId Already EXIST > ",branchId);
-//       }else{
-//           existingBRANCH_OPEN.push(branchId);
-//           localStorage.setItem('BRANCH_OPEN', existingBRANCH_OPEN.toString());          
-//       }
-//   }           
-//  return isPresent;
-// }
+ 
 
 //-------------------------------All reusable custom functions are below-----------------------------------------------
 

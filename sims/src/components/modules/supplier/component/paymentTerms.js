@@ -254,7 +254,7 @@ class paymentTerms extends React.Component {
     let Url = APIURLS.APIURL.UpdatePaymentTerms;
     let reqData = {
       ValidUser: ValidUser,
-      paymentTermsData: this.state.paymentTermsData,
+      PaymentTermsList: this.state.paymentTermsData,
     };
 
     console.log("reqData > ", reqData);
