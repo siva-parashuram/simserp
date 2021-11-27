@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import '../user/dasboard.css';
 
 
