@@ -1,6 +1,7 @@
 import "./dasboard.css";
 import { COOKIE, getCookie, deleteCookie } from "../../services/cookie";
 import * as URLS from "../../routes/constants";
+import * as CF from "../../services/functions/customfunctions"; 
 import React, { Fragment, useEffect } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
@@ -127,12 +128,11 @@ export default function ButtonAppBar() {
 
 
   const closeWindow = (e) => {
-    updateBRANCH_OPEN();
+    CF.UPDATE_BRANCH_OPEN_REMOVE(branchId);
     window.close();
   };
 
-  const updateBRANCH_OPEN = () => {
-    
+  const updateBRANCH_OPEN = (branchId) => {    
     let BRANCH_OPEN = localStorage.getItem('BRANCH_OPEN');
     if (BRANCH_OPEN) {
       var BRANCH_OPENArray = BRANCH_OPEN.split(",").map(Number);

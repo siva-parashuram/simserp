@@ -124,7 +124,7 @@ class addnewcompany extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    // let urlparams = "?branchId=" + null + "&compName=" + null + "&branchName=" + null; //for testing null values
+     
     this.setState({
       urlparams: urlparams,
     });

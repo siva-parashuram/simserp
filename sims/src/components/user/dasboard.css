@@ -79,6 +79,14 @@ body{
   font-size: 14px !important;
 }
 
+.MuiDataGrid-toolbarContainer{
+  background-color: #fff !important;
+}
+
+.MuiDataGrid-columnHeaderWrapper{
+  background-color: #fff !important;
+}
+
 .css-ypofq1-MuiDataGrid-toolbarContainer{
   background-color: #fff !important;
 }

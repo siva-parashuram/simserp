@@ -317,8 +317,7 @@ class companyMaster extends React.Component {
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             {this.state.companyData.length > 0  ? (
-              <Fragment> 
-                         
+              <Fragment>                          
                 <MasterDataGrid
                  selectionModel={this.state.selectionModel}
                  rows={this.state.companyData}

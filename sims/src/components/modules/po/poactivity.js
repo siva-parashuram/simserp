@@ -13,20 +13,13 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+
+
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogContent from "@mui/material/DialogContent";
-
 import DialogTitle from "@mui/material/DialogTitle";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import IconButton from "@mui/material/IconButton";
@@ -37,7 +30,8 @@ import { Divider } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 
 
-import Loader from "../../compo/loader";
+import BackdropLoader from "../../compo/backdrop";
+import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import Breadcrumb from "../../compo/breadcrumb";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -133,7 +127,6 @@ class poactivity extends React.Component {
           <select
             className="dropdown-css"
             defaultValue={params.value}
-
           >
             {POItemType.map((item, i) => (
               <option value={item.value}> {item.name}</option>
@@ -146,8 +139,8 @@ class poactivity extends React.Component {
     return o;
   }
 
-  renderNo(params) {
-    console.log("renderNo > params > ", params);
+  renderTypeItem(params) {
+    console.log("renderTypeItem > params > ", params);
     let NoList = [];
 
     if (params.value > 1) {
@@ -202,6 +195,7 @@ class poactivity extends React.Component {
         field: 'id',
         headerName: '&nbsp',
         width: 50,
+        headerClassName: 'table-header-font',
         renderCell: (params) => (
           <Fragment>
             <DeleteForeverIcon 
@@ -212,12 +206,13 @@ class poactivity extends React.Component {
           </Fragment>
         ),
       },
-      { field: 'id', headerName: '#', width: 50 },
+      
       {
         field: 'Type',
         headerName: 'Type',
         width: 150,
         editable: false,
+        headerClassName: 'table-header-font',
         renderCell: this.renderType,
       },
       {
@@ -225,13 +220,15 @@ class poactivity extends React.Component {
         headerName: 'No.',
         width: 150,
         editable: false,
-        renderCell: this.renderNo,
+        headerClassName: 'table-header-font',
+        renderCell: this.renderTypeItem,
       },
 
       {
         field: 'Description',
         headerName: 'Description',
         width: 350,
+        headerClassName: 'table-header-font',
         editable: true,
       },
       {
@@ -239,12 +236,14 @@ class poactivity extends React.Component {
         headerName: 'Qty',
         type: 'number',
         width: 110,
+        headerClassName: 'table-header-font',
         editable: true,
       },
       {
         field: 'UOMID',
         headerName: 'Unit of Measurement',
         width: 250,
+        headerClassName: 'table-header-font',
         editable: true,
       },
 
@@ -257,14 +256,13 @@ class poactivity extends React.Component {
   setItemLinesListToState = () => {
     let datagrid = (
       <Fragment>
-
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
+            {/* <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div style={{ height: 50 }}>&nbsp;</div>
               </Grid>
-            </Grid>
+            </Grid> */}
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div style={{ display: 'flex', height: 350, width: '100%' }}>
@@ -282,14 +280,8 @@ class poactivity extends React.Component {
                 </div>
               </Grid>
             </Grid>
-
           </Grid>
         </Grid>
-
-
-
-
-
       </Fragment>
     );
     this.setState({ ItemDatagrid: datagrid });
@@ -399,13 +391,45 @@ class poactivity extends React.Component {
     };
 
 
- 
+    const breadcrumbHtml = (
+      <Fragment>
+        <Breadcrumb
+          backOnClick={this.props.history.goBack}
+          linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+          linkTitle="Dashboard"
+          masterHref={URLS.URLS.poMaster + this.state.urlparams}
+          masterLinkTitle="PO Master"
+          typoTitle={this.state.typoTitle}
+          level={2}
+        />
+      </Fragment>
+    );
 
+    const buttongroupHtml = (
+      <Fragment>
+        <ButtonGroup
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          {this.state.type === "add" ? (
+            <Button
+            startIcon={APIURLS.buttonTitle.add.icon}
+              className="action-btns"
+              // onClick={(e) => AddNew(e)}
+              disabled={this.state.DisableCreatebtn}
+            >
+              {APIURLS.buttonTitle.add.name}
+            </Button>
+          ) : null}
 
+        </ButtonGroup>
+      </Fragment>
+    );
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
@@ -415,49 +439,12 @@ class poactivity extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div className="breadcrumb-height">
-          <Grid container spacing={1}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={4}
-              lg={4}
-              style={{
-                borderRightStyle: "solid",
-                borderRightColor: "#bdbdbd",
-                borderRightWidth: 1,
-              }}
-            >
-              <div style={{ marginTop: 8 }}>
-                <Breadcrumb
-                  backOnClick={this.props.history.goBack}
-                  linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                  linkTitle="Dashboard"
-                  masterHref={URLS.URLS.poMaster + this.state.urlparams}
-                  masterLinkTitle="PO Master"
-                  typoTitle={this.state.typoTitle}
-                  level={2}
-                />
-              </div>
+        <TopFixedRow3
+          breadcrumb={breadcrumbHtml}
+          buttongroup={buttongroupHtml}
+        />
 
-            </Grid>
-            <Grid xs={12} sm={12} md={7} lg={7}>
-              <div className="btn-area-div-row">
-                {this.state.type === "add" ? (
-                  <Button
-                    className="action-btns"
-                    // onClick={(e) => AddNew(e)}
-                    disabled={this.state.DisableCreatebtn}
-                  >
-                    {APIURLS.buttonTitle.add.name}
-                  </Button>
-                ) : null}
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-        <div className="breadcrumb-bottom"></div>
-        <div className="breadcrumb-bottom"></div>
+
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
             <Accordioncomponent

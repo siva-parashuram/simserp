@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import Sivamap from '../siva-map.jpg';
 import logo from '../logo.png';
 import * as APIURLS from "../routes/apiconstant";
-
+import * as CF from "../services/functions/customfunctions"; 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -232,6 +232,8 @@ class login extends React.Component {
         deleteCookie(COOKIE.FIRSTNAME, null);
         deleteCookie(COOKIE.BRANCH_OPEN, null);
         this.removeSavedState();
+        CF.EMPTY_BRANCH_OPEN();  //remove all BRANCH OPEN WINDOWS from storage
+
       });
       // window.location.reload();
     }
