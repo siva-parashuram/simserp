@@ -187,10 +187,10 @@ class currencymaster extends React.Component {
                           }
                         >
                           <TableCell align="left">{i + 1}</TableCell>
-                          <TableCell align="left">{item.code}</TableCell>
-                          <TableCell align="left">{item.description}</TableCell>
-                          <TableCell align="left">{item.rounding}</TableCell>
-                          <TableCell align="left">{item.symbol}</TableCell>
+                          <TableCell align="left">{item.Code}</TableCell>
+                          <TableCell align="left">{item.Description}</TableCell>
+                          <TableCell align="left">{item.Rounding}</TableCell>
+                          <TableCell align="left">{item.Symbol}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

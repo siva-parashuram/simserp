@@ -74,6 +74,7 @@ body{
   overflow-x: hidden;
 }
 
+
 .themeFont{
   font-family: Calibri !important;
   font-size: 14px !important;
@@ -137,6 +138,19 @@ body{
 
 .MuiTableCell-root{
   font-family: Calibri !important;
+}
+
+
+.GridLabelHeaders{
+  font-family: Calibri !important;
+  font-size: 20px !important;
+  color: rgb(80, 92, 109) !important;
+}
+
+.GridLabelValue{
+  font-family: Calibri !important;
+  font-size: 14px !important;
+  color: rgb(0, 115, 124) !important;
 }
 
 .tableBody{
