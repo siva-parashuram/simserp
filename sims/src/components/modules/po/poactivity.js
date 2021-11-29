@@ -80,6 +80,7 @@ class poactivity extends React.Component {
       CurrencyList:[],
       PaymentTermList:[],
       SpecialInstList:[],
+      WareHouseList:[],
       SpecialInstValue:"",
       BillingIDValue:"",
       ItemDatagrid: null,
@@ -95,8 +96,19 @@ class poactivity extends React.Component {
         terms:null,
         taxInfo:null,
       },
-
-     
+      AmendmentInput:{
+        status:false,
+        old:{},
+        new:{}
+      },
+      branchCurrency:{   
+        CurrID: 0,
+        Code:"INR"
+      }, 
+      supplierCurrency:{   
+        CurrID: 0,
+        Code:"$"
+      },     
       PO: {
         POID: 0,
         BranchID: 0,
@@ -107,7 +119,7 @@ class poactivity extends React.Component {
         BillingID: 0,   //on suplier chnage - show address detail in section
         IsImport: false,
         CurrID: 0,  //on supplier chnage show curr dropdown with preselected of supplier
-        ExchRate: 0,   // on chnage of curr show Exchang Rate by calling API of exchnage
+        ExchRate: "0.0000",   // on chnage of curr show Exchang Rate by calling API of exchnage
         FCValue: 0,   //non editable - but calculate as er user entry as per item added       
         PaymentTermID: 0,     // on supplier chnage dispplay payment term
         PaymentTerm: "",   // show as per dropdown selected of - PaymentTermID
@@ -405,106 +417,7 @@ class poactivity extends React.Component {
   };
 
 
-  getInvoiceDetails = () => {
-    let o = (
-      <Fragment>
-       
 
-        <Grid container spacing={0}>
-        <Grid item xs={12} sm={12} md={12} lg={12}>
-           &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                  <SSIB
-                      key="IsRounding"
-                      id="IsRounding"
-                      label="Is Rounding?"
-                      param={this.state.PO.IsRounding}
-                      onChange={(e) => this.updateFormValue("IsRounding", e)}
-                    />
-
-                    <SDIB
-                      id="CurrID"
-                      label="CurrID"
-                      onChange={(e) => this.updateFormValue("CurrID", e)}
-                      value={this.state.PO.CurrID}
-                      param={this.state.CurrencyList}
-                      isMandatory={true}
-                    />
-
-                    <SIB
-                      id="ExchRate"
-                      label="Exchange Rate"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.ExchRate}
-                      disabled={true}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-                    R1C2
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-           &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Divider/>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-           &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid item xs={12} sm={12} md={11} lg={11}>
-                  <SSDV
-                    label="Subtotal Excl. VAT (INR)"
-                    value="164,920.00"
-                  />
-                  <SSDV
-                    label="Invoice Discount %"
-                    value="0.00"
-                  />
-                </Grid>
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid item xs={12} sm={12} md={11} lg={11}>
-                  <SSDV
-                    label="Total Excl. VAT (INR)"
-                    value="164,920.00"
-                  />
-                  <SSDV
-                    label="Total VAT (INR)"
-                    value="0.00"
-                  />
-                  <SSDV
-                    label="Total Incl. VAT (INR)"
-                    value="0.00"
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-
-        
-      </Fragment>
-    );
-    this.setState({ InvoiceDetails: o });
-  }
 
 
   updateFormValue = (param, e) => {
@@ -598,23 +511,85 @@ class poactivity extends React.Component {
                   options={this.state.supplierList}
                   isMandatory={true}
                 />
-                 <SIB
-                  id="ContactPerson"
-                  label="Contact Person"
-                  variant="outlined"
-                  size="small"
-                  value={this.state.PO.ContactPerson}
-                  
-                />
+                
+                
 
+               
 
-                <SSIB
-                  key="IsImport"
-                  id="IsImport"
-                  label="IsImport"
-                  param={this.state.PO.IsImport}
-                  onChange={(e) => this.updateFormValue("IsImport", e)}
-                />
+                    <SDIB
+                      id="BillingID"
+                      label="Billing"
+                      onChange={(e) => this.updateFormValue("BillingID", e)}
+                      value={this.state.PO.BillingID}
+                      param={this.state.SupplierAdressList}
+                      isMandatory={true}
+                    />
+                    <SIB
+                      id="Address"
+                      label="Address 1"
+                      variant="outlined"
+                      size="small"
+                      value={null}                                              
+                      disabled={true}                    
+                    />
+                     <SIB
+                      id="Address2"
+                      label="Address 2"
+                      variant="outlined"
+                      size="small"
+                      value={null}                                           
+                      disabled={true}                    
+                    />
+                    <SIB
+                      id="Address3"
+                      label="Address 3"
+                      variant="outlined"
+                      size="small"
+                      value={null}                                              
+                      disabled={true}                    
+                    />
+                    <SIB
+                      id="City"
+                      label="City"
+                      variant="outlined"
+                      size="small"
+                      value={null}                                              
+                      disabled={true}                    
+                    />
+                     <SIB
+                      id="Postcode"
+                      label="Postcode"
+                      variant="outlined"
+                      size="small"
+                      value={null}                                              
+                      disabled={true}                    
+                    />
+                     <SIB
+                      id="Country"
+                      label="Country"
+                      variant="outlined"
+                      size="small"
+                      value={null}                                            
+                      disabled={true}                    
+                    />
+                     <SIB
+                      id="State"
+                      label="State"
+                      variant="outlined"
+                      size="small"
+                      value={null}                                             
+                      disabled={true}                    
+                    />
+
+<SDIB
+                      id="WareHouseID"
+                      label="Ware House"
+                      onChange={(e) => this.updateFormValue("WareHouseID", e)}
+                      value={this.state.PO.WareHouseID}
+                      param={this.state.WareHouseList}
+                      isMandatory={true}
+                    />
+               
 
               
 
@@ -629,6 +604,24 @@ class poactivity extends React.Component {
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={11} lg={11}>
+
+            
+
+              <SSIB
+                  key="IsImport"
+                  id="IsImport"
+                  label="IsImport"
+                  param={this.state.PO.IsImport}
+                  onChange={(e) => this.updateFormValue("IsImport", e)}
+                />
+
+                <SSIB
+                  key="amendEvent"
+                  id="AmendmentInput"
+                  label="Amending?"                  
+                  param={this.state.type==="add"?false:this.state.AmendmentInput.status}
+                  onChange={(e) => this.updateFormValue("AmendmentInput", e)}
+                />
 
               <SIB
                   id="AmendmentNo"
@@ -650,28 +643,63 @@ class poactivity extends React.Component {
                   disabled={this.state.type==="add"?true:false}
                 />
 
-              
+                    <SDTI
+                     isMandatory={true}
+                      id="DispachDate"
+                      label="Dispach Date"
+                      variant="outlined"
+                      size="small"
+                      onChange={(e) =>
+                        this.updateFormValue("DispachDate", e)
+                      }
+                      value={this.state.PO.DispachDate}
+                    />
+
+                    <SDTI
+                     isMandatory={true}
+                      id="DeliveryDate"
+                      label="Delivery Date"
+                      variant="outlined"
+                      size="small"
+                      onChange={(e) =>
+                        this.updateFormValue("DeliveryDate", e)
+                      }
+                      value={this.state.PO.DeliveryDate}
+                    />
+
+ 
+                    
+
+                    <SIB
+                      id="ContactPerson"
+                      label="Contact Person"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.ContactPerson}
+
+                    />
+
+                    <SIB
+                      id="Reference"
+                      label="Referance"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.Reference}
+
+                    />
+
+                    <SSIB
+                      key="IsRounding"
+                      id="IsRounding"
+                      label="Is Rounding?"
+                      param={this.state.PO.IsRounding}
+                      onChange={(e) => this.updateFormValue("IsRounding", e)}
+                    />
+
+
               
 
-               <SDIB
-                  id="BillingID"
-                  label="Billing"
-                  onChange={(e) => this.updateFormValue("BillingID", e)}
-                  value={this.state.PO.BillingID}
-                  param={this.state.SupplierAdressList}
-                  isMandatory={true}
-                />
-                <SIB
-                  id="BillingIDValue"
-                  label="Billing Details"                  
-                  variant="outlined"
-                  size="small"
-                  value={this.state.BillingIDValue}
-                  isMandatory={true}
-                  multiline={true}
-                  disabled={true}
-                  rows={5}
-                />
+               
               </Grid>
             </Grid>
           </Grid>
@@ -692,6 +720,204 @@ class poactivity extends React.Component {
     });
   }
 
+  getInvoiceDetails = () => {
+    let o = (
+      <Fragment>
+       
+
+        <Grid container spacing={0}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+           &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+
+              
+{/* show Currency as per supplier selected */}
+                    <SDIB
+                      id="CurrID"
+                      label="CurrID"
+                      onChange={(e) => this.updateFormValue("CurrID", e)}
+                      value={this.state.PO.CurrID}
+                      param={this.state.CurrencyList}
+                      isMandatory={true}
+                    />
+
+                    <SIB
+                      id="ExchRate"
+                      label="Exchange Rate"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.ExchRate}
+                      
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                  <SDIB
+                      id="PaymentTermID"
+                      label="Payment Term"
+                      onChange={(e) => this.updateFormValue("PaymentTermID", e)}
+                      value={this.state.PO.PaymentTermID}
+                      param={this.state.PaymentTermList}
+                      isMandatory={true}
+                    />
+                    <SIB
+                      id="PaymentTerm"
+                      label="Pay..Term..Details"
+                      onChange={(e) => this.updateFormValue("PaymentTerm", e)}
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.PaymentTerm}
+                      isMandatory={true}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+           &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Divider/>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+           &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid item xs={12} sm={12} md={11} lg={11}>
+                  <SSDV
+                    label={"Total Excl. VAT ("+this.state.supplierCurrency.Code+")"}
+                    value="164,920.00"
+                  />
+                  <SSDV
+                    label="Invoice Discount %"
+                    value="0.00"
+                  />
+                  <SSDV
+                    label={"Total VAT ("+this.state.supplierCurrency.Code+")"}
+                    value="0.00"
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid item xs={12} sm={12} md={11} lg={11}>
+                  <SSDV
+                    label={"Total FC.Value ("+this.state.supplierCurrency.Code+")"}   
+                    value="164,920.00"
+                  />
+                  
+                  <SSDV
+                    label={"Total Base.Value ("+this.state.branchCurrency.Code+")"}
+                    value="0.00"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        
+      </Fragment>
+    );
+    this.setState({ InvoiceDetails: o });
+  }
+
+  taxForm = () => {
+    const taxInfo = (
+      <Fragment>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    <SSIB
+                      key="IsRegistedSupplier"
+                      id="IsRegistedSupplier"
+                      label="Registed Supplier?"
+                      param={this.state.PO.IsRegistedSupplier}
+                      
+                    />
+
+                    <SIB
+                      id="GSTNo"
+                      label="GST No"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.GSTNo}
+                      disabled={true}
+                    />
+
+                    <SIB
+                      id="VATNo"
+                      label="VAT No"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.VATNo}
+                      disabled={true}
+                    />
+
+
+ 
+                    
+
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+
+                    <SSIB
+                      key="IsTaxExempt"
+                      id="IsTaxExempt"
+                      label="Is TaxExempt?"
+                      param={this.state.PO.IsTaxExempt}
+
+                    />
+
+                    <SIB
+                      id="Reason"
+                      label="Reason"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.Reason}
+                      disabled={true}
+                    />
+
+                    
+
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+        </Grid>
+      </Fragment>
+    );
+    let Forms = this.state.Forms;
+    Forms.taxInfo = taxInfo;
+    this.setState({
+      Forms: Forms
+    });
+  }
+
   termsForm = () => {
     const termsForm = (
       <Fragment>
@@ -704,22 +930,20 @@ class poactivity extends React.Component {
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <SDIB
-                      id="PaymentTermID"
-                      label="Choose Payment Term"
-                      onChange={(e) => this.updateFormValue("PaymentTermID", e)}
-                      value={this.state.PO.PaymentTermID}
-                      param={this.state.PaymentTermList}
-                      isMandatory={true}
-                    />
+
+                  <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>&nbsp;</Grid>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>&nbsp;</Grid>
+                  </Grid>
+                  
                     <SIB
-                      id="PaymentTerm"
-                      label="Payment Term"
-                      onChange={(e) => this.updateFormValue("PaymentTerm", e)}
+                      id="DeliveryAddress"
+                      label="Delivery Address"
+                      onChange={(e) => this.updateFormValue("DeliveryAddress", e)}
                       variant="outlined"
                       size="small"
-                      value={this.state.PO.PaymentTerm}
-                      isMandatory={true}
+                      value={this.state.PO.DeliveryAddress}
+                      
                       multiline={true}
                       rows={5}
                     />
@@ -731,7 +955,7 @@ class poactivity extends React.Component {
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <SDIB
+                  <SDIB
                       id="SpecialInstList"
                       label="Choose Special Inst"
                       onChange={(e) => this.updateFormValue("SpecialInstList", e)}
@@ -750,8 +974,6 @@ class poactivity extends React.Component {
                       multiline={true}
                       rows={5}
                     />
-
-
 
                   </Grid>
                 </Grid>
@@ -781,52 +1003,7 @@ class poactivity extends React.Component {
     });
   }
 
-  taxForm = () => {
-    const taxInfo = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <SSIB
-                      key="IsRegistedSupplier"
-                      id="IsRegistedSupplier"
-                      label="Registed Supplier?"
-                      param={this.state.PO.IsRegistedSupplier}
-                      onChange={(e) => this.updateFormValue("IsRegistedSupplier", e)}
-                    />
 
-
-
-                    
-
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}></Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
-    let Forms = this.state.Forms;
-    Forms.taxInfo = taxInfo;
-    this.setState({
-      Forms: Forms
-    });
-  }
 
 
 

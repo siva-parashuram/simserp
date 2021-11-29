@@ -32,7 +32,10 @@ class griddateinput extends React.Component {
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <TextField
                   className="textFieldCss"
-                  style={{ minWidth: "100%" }}
+                  style={
+                    this.props.disabled===true?{minWidth: "100%",backgroundColor:'#f5f5f5'}:
+                    { minWidth: "100%" }
+                  }
                   type="date"
                   id={this.props.id}
                   variant={this.props.variant}

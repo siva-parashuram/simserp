@@ -33,10 +33,15 @@ class gridtextboxinput extends React.Component {
           <Grid item xs={5} sm={5} md={8} lg={8}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
+                 
                 <TextField
-                  style={{width: '100%', fontSize: 14 }}
-                  className="textFieldCss"
-                  // style={this.props.style}
+                  style={
+                    this.props.disabled===true? 
+                    {width: '100%', fontSize: 14,backgroundColor:'#f5f5f5' }:
+                    {width: '100%', fontSize: 14 }
+                    
+                  }
+                  className="textFieldCss"                   
                   type={this.props.type}
                   id={this.props.id}
                   variant={this.props.variant}
