@@ -47,8 +47,9 @@ class gridtextboxinput extends React.Component {
                   error={this.props.error}
                   helperText={this.props.helperText}
                   disabled={this.props.disabled}
-
                   maxlength={this.props.maxlength}
+                  multiline={this.props.multiline}
+                  rows={this.props.rows}
                 />
               </Grid>
             </Grid>

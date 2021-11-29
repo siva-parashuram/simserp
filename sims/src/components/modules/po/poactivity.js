@@ -45,6 +45,7 @@ import SSIB from "../../compo/gridswitchinput";
 import SDBIB from "../../compo/griddropdowninputwithbutton";
 import SADIB from "../../compo/gridautocompletedropdowninput";
 import SSDV from "../../compo/grid2sectiondisplayview";
+import SDTI from "../../compo/griddateinput"; 
 
 
 class poactivity extends React.Component {
@@ -72,9 +73,13 @@ class poactivity extends React.Component {
       type: "",
       POTypeList: APIURLS.POType,
       POItemType: APIURLS.POItemType,
+      SupplierAdressList:[],
       ItemLinesRow: [],
       ItemLinesColm: [],
       supplierList: [],
+      CurrencyList:[],
+      PaymentTermList:[],
+      BillingIDValue:"",
       ItemDatagrid: null,
       InvoiceDetails: null,
       stepper: {
@@ -85,7 +90,10 @@ class poactivity extends React.Component {
       },
       Forms: {
         general: null,
+        terms:null
       },
+
+     
       PO: {
         POID: 0,
         BranchID: 0,
@@ -132,12 +140,17 @@ class poactivity extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.getItemLinesColm();
-    this.getItemLineList();
+  refreshStateFormData=()=>{
     this.getSupplierList();
     this.getInvoiceDetails();
     this.generalForm();
+    this.termsForm();
+  }
+
+  componentDidMount() {
+    this.getItemLinesColm();
+    this.getItemLineList();
+    this.refreshStateFormData();
 
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -391,41 +404,90 @@ class poactivity extends React.Component {
   getInvoiceDetails = () => {
     let o = (
       <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={11} lg={11}>
-                <SSDV
-                  label="Subtotal Excl. VAT (INR)"
-                  value="164,920.00"
-                />
-                <SSDV
-                  label="Invoice Discount %"
-                  value="0.00"
-                />
+       
 
+        <Grid container spacing={0}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+           &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    <SDIB
+                      id="CurrID"
+                      label="CurrID"
+                      onChange={(e) => this.updateFormValue("CurrID", e)}
+                      value={this.state.PO.CurrID}
+                      param={this.state.CurrencyList}
+                      isMandatory={true}
+                    />
+
+                    <SIB
+                      id="ExchRate"
+                      label="Exchange Rate"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.ExchRate}
+                      disabled={true}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    R1C2
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+           &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Divider/>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+           &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
             <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={11} lg={11}>
-                <SSDV
-                  label="Total Excl. VAT (INR)"
-                  value="164,920.00"
-                />
-                <SSDV
-                  label="Total VAT (INR)"
-                  value="0.00"
-                />
-                <SSDV
-                  label="Total Incl. VAT (INR)"
-                  value="0.00"
-                />
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid item xs={12} sm={12} md={11} lg={11}>
+                  <SSDV
+                    label="Subtotal Excl. VAT (INR)"
+                    value="164,920.00"
+                  />
+                  <SSDV
+                    label="Invoice Discount %"
+                    value="0.00"
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid item xs={12} sm={12} md={11} lg={11}>
+                  <SSDV
+                    label="Total Excl. VAT (INR)"
+                    value="164,920.00"
+                  />
+                  <SSDV
+                    label="Total VAT (INR)"
+                    value="0.00"
+                  />
+                  <SSDV
+                    label="Total Incl. VAT (INR)"
+                    value="0.00"
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
+
+        
       </Fragment>
     );
     this.setState({ InvoiceDetails: o });
@@ -479,11 +541,16 @@ class poactivity extends React.Component {
   generalForm = () => {
     const generalForm = (
       <Fragment>
-        <Grid container spacing={0}>
+         <Grid container spacing={0}>
+         <Grid item xs={12} sm={12} md={12} lg={12}>
+           &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={11} lg={11}>
-                <SIB
+              <SIB
                   id="No"
                   label="No"
                   variant="outlined"
@@ -491,13 +558,17 @@ class poactivity extends React.Component {
                   value={this.state.PO.No}
                   disabled={true}
                 />
-                <SADIB
-                  id="SuplID"
-                  label="Supplier"
-                  // onChange={(e) => this.updateFormValue("CountryID", e)}
-                  // value={[]}
-                  options={this.state.supplierList}
+                <SDTI
                   isMandatory={true}
+                  id="PODate"
+                  label="PO Date"
+                  variant="outlined"
+                  size="small"
+                  onChange={(e) =>
+                    this.updateFormValue("PODate", e)
+                  }
+                  value={this.state.PO.PODate}
+
                 />
                 <SDIB
                   id="POType"
@@ -507,6 +578,37 @@ class poactivity extends React.Component {
                   param={this.state.POTypeList}
                   isMandatory={true}
                 />
+                <SADIB
+                  id="SuplID"
+                  label="Supplier"
+                  onChange={(e) => this.updateFormValue("SuplID", e)}
+                  value={this.state.PO.SuplID}
+                  options={this.state.supplierList}
+                  isMandatory={true}
+                />
+                 <SIB
+                  id="ContactPerson"
+                  label="Contact Person"
+                  variant="outlined"
+                  size="small"
+                  value={this.state.PO.ContactPerson}
+                  
+                />
+
+
+
+                <SSIB
+                  key="IsImport"
+                  id="IsImport"
+                  label="IsImport"
+                  param={this.state.PO.IsImport}
+                  onChange={(e) => this.updateFormValue("IsImport", e)}
+                />
+
+              
+
+
+
               </Grid>
             </Grid>
 
@@ -516,15 +618,100 @@ class poactivity extends React.Component {
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={11} lg={11}>
-
+               <SDIB
+                  id="BillingID"
+                  label="Billing"
+                  onChange={(e) => this.updateFormValue("BillingID", e)}
+                  value={this.state.PO.BillingID}
+                  param={this.state.SupplierAdressList}
+                  isMandatory={true}
+                />
+                <SIB
+                  id="BillingIDValue"
+                  label="Billing Details"                  
+                  variant="outlined"
+                  size="small"
+                  value={this.state.BillingIDValue}
+                  isMandatory={true}
+                  multiline={true}
+                  disabled={true}
+                  rows={5}
+                />
               </Grid>
             </Grid>
           </Grid>
         </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+           &nbsp;
+          </Grid>
+         </Grid>
+         
+       
       </Fragment>
     );
     let Forms = this.state.Forms;
     Forms.general = generalForm;
+    this.setState({
+      Forms: Forms
+    });
+  }
+
+  termsForm = () => {
+    const termsForm = (
+      <Fragment>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    <SDIB
+                      id="PaymentTermID"
+                      label="Choose Payment Term"
+                      onChange={(e) => this.updateFormValue("PaymentTermID", e)}
+                      value={this.state.PO.PaymentTermID}
+                      param={this.state.PaymentTermList}
+                      isMandatory={true}
+                    />
+                    <SIB
+                      id="PaymentTerm"
+                      label="Payment Term"
+                      onChange={(e) => this.updateFormValue("PaymentTerm", e)}
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.PaymentTerm}
+                      isMandatory={true}
+                      multiline={true}
+                      rows={5}
+                    />
+
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+        </Grid>
+       
+      </Fragment>
+    );
+    let Forms = this.state.Forms;
+    Forms.terms = termsForm;
     this.setState({
       Forms: Forms
     });
@@ -751,7 +938,7 @@ class poactivity extends React.Component {
                   typographyKey="Terms-Activity"
                   typography="Terms"
                   accordiondetailsKey="accordion5"
-                  html={null}
+                  html={this.state.Forms.terms}
                 />
 
                 <div style={{ height: 50 }}></div>

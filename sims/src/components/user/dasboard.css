@@ -895,7 +895,9 @@ cursor: pointer;
 .css-ghsjzk-MuiInputBase-root-MuiInput-root:after {
   border-bottom:0px solid #fff !important;  
 }
-
+.css-1glvl0p-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-clearIndicator {
+  display: none !important;
+}
  
 
 .no-border-table{
