@@ -134,9 +134,21 @@ class adddestination extends React.Component {
         let data = response.data;
 
         rows = data;
-        this.setState({ stateData: rows, ProgressLoader: true });
+       this. processstateData(data)
       })
       .catch((error) => {});
+  }
+
+  processstateData(data) {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let d = {
+        name: data[i]. name,
+        value: data[i].stateId,
+      };
+      newData.push(d);
+    }
+    this.setState({ stateData: newData, ProgressLoader: true });
   }
 
   getAllDestinations = () => {
@@ -253,12 +265,14 @@ class adddestination extends React.Component {
       }
       if (id === "CountryID") {
         this.setState({
-          countryId: e.target.value,
+          countryId: CF.toInt(e.target.value),
         });
       }
       if (id === "stateID") {
+        console.log("stateID",e.target.value)
         this.setState({
-          stateId: e.target.value,
+          stateId: CF.toInt(e.target.value),
+         
         });
       }
     };
