@@ -39,7 +39,7 @@ class gridautocompletedropdowninput extends React.Component {
                   id={this.props.id}
                   options={this.props.options}
                   // sx={{ width: '100%' }}
-                  renderInput={(params) => <TextField
+                  renderInput={(params) => <TextField  
                      className="AutocompletetextFieldCss" 
                      variant="standard" 
                      size="small" 
