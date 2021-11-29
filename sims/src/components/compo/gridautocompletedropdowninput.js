@@ -43,7 +43,7 @@ class gridautocompletedropdowninput extends React.Component {
                      className="AutocompletetextFieldCss" 
                      variant="standard" 
                      size="small" 
-                     style={{borderBottomStyle:'none'}}
+                     style={{borderBottomStyle:'none',marginTop:-5}}
                      {...params} />}
                 />
               </Grid>
