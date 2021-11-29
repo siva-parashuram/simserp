@@ -10,13 +10,10 @@ import * as CF from "../../../services/functions/customfunctions";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@mui/icons-material/Edit";
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
 import Dialog from "@mui/material/Dialog";
@@ -36,10 +33,6 @@ import Breadcrumb from "../../compo/breadcrumb";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Accordioncomponent from "../../compo/accordioncomponent";
-import TextboxInput from "../../compo/tablerowcelltextboxinput";
-import TablecustomInput from "../../compo/tablerowcellcustomhtml";
-import DropdownInput from "../../compo/Tablerowcelldropdown";
-import SwitchInput from "../../compo/tablerowcellswitchinput";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 

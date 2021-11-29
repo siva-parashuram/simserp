@@ -4,6 +4,8 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 import '../user/dasboard.css';
 
 
@@ -17,14 +19,27 @@ class accordioncomponent extends React.Component {
     componentDidMount() { }
     render() {
         
+        const HtmlTooltip = styled(({ className, ...props }) => (
+            <Tooltip {...props} classes={{ popper: className }} />
+          ))(({ theme }) => ({
+            [`& .${tooltipClasses.tooltip}`]: {
+              backgroundColor: '#e0f2f1',
+              color: 'rgba(0, 0, 0, 0.87)',
+              maxWidth: 220,
+              fontSize: theme.typography.pxToRem(12),
+              border: '1px solid #dadde9',
+            },
+          }));
 
         return (
             <Fragment>
+                <HtmlTooltip title={this.props.tooltip?this.props.tooltip:this.props.typography} placement="right">
                 <Accordion
                     key={this.props.accordionKey}
                     expanded={this.props.expanded}
                     className="accordionD"
                 >
+
                     <AccordionSummary
                         className="accordion-Header-Design"
                         expandIcon={<ExpandMoreIcon onClick={this.props.onClick} />}
@@ -44,6 +59,8 @@ class accordioncomponent extends React.Component {
                         {this.props.html}
                     </AccordionDetails>
                 </Accordion>
+                </HtmlTooltip>
+               
             </Fragment>
         )
     }

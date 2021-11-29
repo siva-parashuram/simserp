@@ -10,6 +10,8 @@ import * as CF from "../../../services/functions/customfunctions";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -17,7 +19,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-
+import Slide from '@mui/material/Slide';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -45,8 +47,10 @@ import SADIB from "../../compo/gridautocompletedropdowninput";
 import SSDV from "../../compo/grid2sectiondisplayview";
 import SDTI from "../../compo/griddateinput";
 
+/* supporting components */
+import Viewpo from "./component/viewpo";
 
-const today=moment().format(
+const today = moment().format(
   "YYYY-MM-DD"
 );
 
@@ -54,6 +58,11 @@ class poactivity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      Dialog: {
+        DialogTitle: "",
+        DialogStatus: false,
+        DialogContent: null,
+      },
       DialogStatus: false,
       BranchID: 0,
       accordion1: true,
@@ -1024,7 +1033,7 @@ class poactivity extends React.Component {
                       multiline={true}
                       rows={5}
                     />
-                   <div style={{ height:70 }}>&nbsp;</div>
+                    <div style={{ height: 70 }}>&nbsp;</div>
                   </Grid>
                 </Grid>
               </Grid>
@@ -1052,15 +1061,15 @@ class poactivity extends React.Component {
                       multiline={true}
                       rows={5}
                     />
- <div style={{ height:70 }}>&nbsp;</div>
+                    <div style={{ height: 70 }}>&nbsp;</div>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
-         
+
           <Grid item xs={12} sm={12} md={11} lg={11}>
-          <div style={{ height:30 }}>&nbsp;</div>
+            <div style={{ height: 30 }}>&nbsp;</div>
             <Grid container spacing={0}>
               <Grid item xs={5} sm={5} md={2} lg={2}>
                 <span className="themeFont" style={{ color: '#212121' }}>
@@ -1115,6 +1124,30 @@ class poactivity extends React.Component {
   }
 
 
+
+  handleClose = () => {
+    let Dialog = this.state.Dialog;
+    Dialog.DialogStatus = false;
+    this.setState({ Dialog: Dialog });
+  };
+
+  openDialog = (param) => {
+    let Dialog = this.state.Dialog;
+    Dialog.DialogStatus = true;
+    Dialog.DialogTitle = param;
+
+    switch (param) {
+      case "Preview":
+        Dialog.DialogContent = <Viewpo/>;
+        this.setState({ Dialog: Dialog });
+        break;
+
+      default:
+        break;
+    }
+
+    this.setState({ Dialog: Dialog });
+  };
 
 
 
@@ -1220,7 +1253,69 @@ class poactivity extends React.Component {
             </Button>
           ) : null}
 
+          <Button
+            startIcon={APIURLS.buttonTitle.view.icon}
+            className="action-btns"
+            onClick={(e) => this.openDialog("Preview")}
+          >
+            {APIURLS.buttonTitle.view.name}
+          </Button>
+
+
         </ButtonGroup>
+      </Fragment>
+    );
+
+    const Transition = React.forwardRef(function Transition(props, ref) {
+      return <Slide direction="up" ref={ref} {...props} />;
+    });
+
+    const dialog = (
+      <Fragment>
+        <Dialog         
+          TransitionComponent={Transition}
+          fullWidth={true}
+          maxWidth="lg"
+          open={this.state.Dialog.DialogStatus}
+          aria-labelledby="PO-page-dialog-title"
+          aria-describedby="PO-page-dialog"
+          className="dialog-prompt-activity"
+        >
+          <DialogTitle
+            id="dialog-title"
+            className="dialog-area"
+            style={{ maxHeight: 50 }}
+          >
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}>
+                <IconButton
+                  aria-label="ArrowBackIcon"
+                // style={{ textAlign: 'left', marginTop: 8 }}
+                >
+                  <ArrowBackIcon onClick={(e) => this.handleClose()} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2} lg={2}>
+                <div style={{ marginLeft: -50 }}>
+                  {" "}
+                  <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
+                    {" "}
+                    {this.state.Dialog.DialogTitle}{" "}
+                  </span>{" "}
+                </div>
+              </Grid>
+            </Grid>
+          </DialogTitle>
+          <DialogContent className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+              {this.state.Dialog.DialogContent}
+               
+              </Grid>
+            </Grid>
+            <div style={{ height: 50 }}>&nbsp;</div>
+          </DialogContent>
+        </Dialog>
       </Fragment>
     );
 
@@ -1465,10 +1560,6 @@ class poactivity extends React.Component {
 
 
 
-
-
-
-
         <Dialog
           open={this.state.DialogStatus}
           onClose={() => this.handleDialogClose()}
@@ -1492,6 +1583,7 @@ class poactivity extends React.Component {
         </Dialog>
 
 
+        {dialog}
       </Fragment>
     );
   }

@@ -3,7 +3,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from '@mui/icons-material/Save';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import BadgeIcon from '@mui/icons-material/Badge';
-
+import PreviewIcon from '@mui/icons-material/Preview';
+import PrintIcon from '@mui/icons-material/Print';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import SendIcon from '@mui/icons-material/Send';
 
 const domain = "http://192.168.10.200:8080/";
 
@@ -164,6 +167,22 @@ export const pagination = {
 
 
 export const buttonTitle = {
+  print:{
+    name: "Print",
+    icon: <PrintIcon />,
+  },
+  send:{
+    name: "Send",
+    icon: <SendIcon />,
+  },
+  preview: {
+    name: "Preview",
+    icon: <PreviewIcon />,
+  },
+  view: {
+    name: "View",
+    icon: <VisibilityIcon />,
+  },
   add: {
     name: "Add",
     icon: <AddIcon />,
