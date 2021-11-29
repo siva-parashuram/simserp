@@ -8,7 +8,7 @@ import * as URLS from "../../../routes/constants";
 import * as CF from "../../../services/functions/customfunctions";
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
- 
+
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -44,13 +44,14 @@ import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 import SDBIB from "../../compo/griddropdowninputwithbutton";
 import SADIB from "../../compo/gridautocompletedropdowninput";
+import SSDV from "../../compo/grid2sectiondisplayview";
 
 
 class poactivity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      DialogStatus:false,
+      DialogStatus: false,
       BranchID: 0,
       accordion1: true,
       accordion2: false,
@@ -62,8 +63,8 @@ class poactivity extends React.Component {
       SuccessPrompt: false,
       DisableCreatebtn: true,
       DisableUpdatebtn: false,
-      SnackbarStatus:false,
-      currentDeleteItemparams:{},
+      SnackbarStatus: false,
+      currentDeleteItemparams: {},
       initialCss: "",
       urlparams: "",
       editurl: "",
@@ -72,56 +73,57 @@ class poactivity extends React.Component {
       POItemType: APIURLS.POItemType,
       ItemLinesRow: [],
       ItemLinesColm: [],
-      supplierList:[],
+      supplierList: [],
       ItemDatagrid: null,
-      stepper:{
-        MRNSTATUS:3,
-        activeStep:0,
-        steps:["Open","Release","MRN","Short Close"],
-        skipped:new Set(),
+      InvoiceDetails: null,
+      stepper: {
+        MRNSTATUS: 3,
+        activeStep: 0,
+        steps: ["Open", "Release", "MRN", "Short Close"],
+        skipped: new Set(),
       },
-      Forms:{
-        general:null,
+      Forms: {
+        general: null,
       },
       PO: {
-        POID:0,
-        BranchID:0,
-        No:"",
-        PODate:"",
-        SuplID:0,   //on supplier chnage show address(BillingID) dropdown, show 1 address detail in section
-        POType:0,
-        BillingID:0,   //on suplier chnage - show address detail in section
-        IsImport:false,
-        CurrID:0,  //on supplier chnage show curr dropdown with preselected of supplier
-        ExchRate:0,   // on chnage of curr show Exchang Rate by calling API of exchnage
-        FCValue:0,   //non editable - but calculate as er user entry as per item added       
-        PaymentTermID:0,     // on supplier chnage dispplay payment term
-        PaymentTerm:"",   // show as per dropdown selected of - PaymentTermID
-        ContactPerson:"", // on supplier chnage show ContactPerson - but user can change the input data
-        Reference:"",   // direct input
-        Status:2,   //non editable but show the status
-        DispachDate:"",   // as per  user input - but not less than PO date
-        DeliveryDate:"",   // as er user inut - but not less than dispatch date
-        WareHouseID:0,   // show branch warehouse
-        SpecialInst:"",   // get list instruction from table, and display initial datat and Also, Accet user input - and select from dropdown
-        DeliveryAddress:"",  // as per ware house selected and also Provide user inut, and allow full access to change 
-        MODTaxID:0,   // select from dropdown -> use API
-        AmendmentNo:"",  // user input - only integer enable at the time of edit
-        AmendmentDate:"",  // user input - enable at the time of edit
-        IsRegistedSupplier:false, // if anything of GST/VAT is available as per suplier selection
-        GSTNo:"",  //of supplier
-        VATNo:"", //of supplier
-        IsRounding:false,   //as per branch data (by default false) - if true -> enable the input(but allow user user to chnage) else disable
-        IncoID:0, // from table-> use API
-        ShipmentModeID:0,   // use API and dislay in dropdown
-        Notes:"",  // as per user entry
-        IsSEZPurchase:false,  // as per branch information
-        IsTaxExempt:false,  // as per supplier branch maping API 
-        Reason:"",   // as per supplier branch maping API     
-        GeneralPostingGroupID:0,  // Non editable as per supplier branch mapping data
-        SupplierPostingGroupID:0, // Non editable as per supplier branch mapping data
-        EmployeeID:0, //dropdown - For Kind Attn. input
-        UserID:0,   // loggind in user 
+        POID: 0,
+        BranchID: 0,
+        No: "",
+        PODate: "",
+        SuplID: 0,   //on supplier chnage show address(BillingID) dropdown, show 1 address detail in section
+        POType: 0,
+        BillingID: 0,   //on suplier chnage - show address detail in section
+        IsImport: false,
+        CurrID: 0,  //on supplier chnage show curr dropdown with preselected of supplier
+        ExchRate: 0,   // on chnage of curr show Exchang Rate by calling API of exchnage
+        FCValue: 0,   //non editable - but calculate as er user entry as per item added       
+        PaymentTermID: 0,     // on supplier chnage dispplay payment term
+        PaymentTerm: "",   // show as per dropdown selected of - PaymentTermID
+        ContactPerson: "", // on supplier chnage show ContactPerson - but user can change the input data
+        Reference: "",   // direct input
+        Status: 2,   //non editable but show the status
+        DispachDate: "",   // as per  user input - but not less than PO date
+        DeliveryDate: "",   // as er user inut - but not less than dispatch date
+        WareHouseID: 0,   // show branch warehouse
+        SpecialInst: "",   // get list instruction from table, and display initial datat and Also, Accet user input - and select from dropdown
+        DeliveryAddress: "",  // as per ware house selected and also Provide user inut, and allow full access to change 
+        MODTaxID: 0,   // select from dropdown -> use API
+        AmendmentNo: "",  // user input - only integer enable at the time of edit
+        AmendmentDate: "",  // user input - enable at the time of edit
+        IsRegistedSupplier: false, // if anything of GST/VAT is available as per suplier selection
+        GSTNo: "",  //of supplier
+        VATNo: "", //of supplier
+        IsRounding: false,   //as per branch data (by default false) - if true -> enable the input(but allow user user to chnage) else disable
+        IncoID: 0, // from table-> use API
+        ShipmentModeID: 0,   // use API and dislay in dropdown
+        Notes: "",  // as per user entry
+        IsSEZPurchase: false,  // as per branch information
+        IsTaxExempt: false,  // as per supplier branch maping API 
+        Reason: "",   // as per supplier branch maping API     
+        GeneralPostingGroupID: 0,  // Non editable as per supplier branch mapping data
+        SupplierPostingGroupID: 0, // Non editable as per supplier branch mapping data
+        EmployeeID: 0, //dropdown - For Kind Attn. input
+        UserID: 0,   // loggind in user 
       }
 
 
@@ -132,8 +134,9 @@ class poactivity extends React.Component {
   componentDidMount() {
     this.getItemLinesColm();
     this.getItemLineList();
-
     this.getSupplierList();
+    this.getInvoiceDetails();
+    this.generalForm();
 
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -184,13 +187,13 @@ class poactivity extends React.Component {
       .post(Url, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        let newData=[];
-        for(let i=0;i<data.length;i++){
-          let o={ label: data[i].Name, id: data[i].SuplID };
+        let newData = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = { label: data[i].Name, id: data[i].SuplID };
           newData.push(o);
         }
         if (data.length > 0) {
-          this.setState({ supplierList: newData },()=>{
+          this.setState({ supplierList: newData }, () => {
             this.generalForm();
           });
         } else {
@@ -266,12 +269,12 @@ class poactivity extends React.Component {
     return o;
   }
 
-  itemDelete=(e,params)=>{
-    console.log("itemDelete > e > ",e);
-    console.log("itemDelete > params > ",params);
-    this.setState({   
-      DialogStatus:true,   
-      currentDeleteItemparams:params
+  itemDelete = (e, params) => {
+    console.log("itemDelete > e > ", e);
+    console.log("itemDelete > params > ", params);
+    this.setState({
+      DialogStatus: true,
+      currentDeleteItemparams: params
     });
   }
 
@@ -284,15 +287,15 @@ class poactivity extends React.Component {
         headerClassName: 'table-header-font',
         renderCell: (params) => (
           <Fragment>
-            <DeleteForeverIcon 
-            fontSize="small" 
-            className="table-delete-icon" 
-            onClick={(e)=>this.itemDelete(e,params)}
+            <DeleteForeverIcon
+              fontSize="small"
+              className="table-delete-icon"
+              onClick={(e) => this.itemDelete(e, params)}
             />
           </Fragment>
         ),
       },
-      
+
       {
         field: 'Type',
         headerName: 'Type',
@@ -339,16 +342,13 @@ class poactivity extends React.Component {
     });
   }
 
+
+
   setItemLinesListToState = () => {
     let datagrid = (
       <Fragment>
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            {/* <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <div style={{ height: 50 }}>&nbsp;</div>
-              </Grid>
-            </Grid> */}
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div style={{ display: 'flex', height: 350, width: '100%' }}>
@@ -387,7 +387,48 @@ class poactivity extends React.Component {
   };
 
 
+  getInvoiceDetails = () => {
+    let o = (
+      <Fragment>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={11} lg={11}>
+                <SSDV
+                  label="Subtotal Excl. VAT (INR)"
+                  value="164,920.00"
+                />
+                <SSDV
+                  label="Invoice Discount %"
+                  value="0.00"
+                />
 
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={11} lg={11}>
+                <SSDV
+                  label="Total Excl. VAT (INR)"
+                  value="164,920.00"
+                />
+                <SSDV
+                  label="Total VAT (INR)"
+                  value="0.00"
+                />
+                <SSDV
+                  label="Total Incl. VAT (INR)"
+                  value="0.00"
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Fragment>
+    );
+    this.setState({ InvoiceDetails: o });
+  }
 
 
   updateFormValue = (param, e) => {
@@ -409,16 +450,16 @@ class poactivity extends React.Component {
   };
 
 
-  handleDialogClose=()=>{
-    this.setState({DialogStatus:false});
+  handleDialogClose = () => {
+    this.setState({ DialogStatus: false });
   }
 
-  deleteSelectedItem=()=>{
+  deleteSelectedItem = () => {
     this.handleDialogClose();
-     console.log("deleteSelectedItem > currentDeleteItemparams > ",this.state.currentDeleteItemparams);
+    console.log("deleteSelectedItem > currentDeleteItemparams > ", this.state.currentDeleteItemparams);
   }
 
-  getMRNStatus=()=>{
+  getMRNStatus = () => {
     let MRNSTATUS = "";
     let status = this.state.PO.Status;
     switch (status) {
@@ -434,43 +475,53 @@ class poactivity extends React.Component {
     return MRNSTATUS;
   }
 
-  generalForm=()=>{
+  generalForm = () => {
     const generalForm = (
       <Fragment>
         <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={6} lg={6}> 
-            <SIB
-              id="No"
-              label="No"
-              variant="outlined"
-              size="small"             
-              value={this.state.PO.No}
-              disabled={true}
-            />
-            <SADIB
-              id="SuplID"
-              label="Supplier"
-              // onChange={(e) => this.updateFormValue("CountryID", e)}
-              // value={[]}
-              options={this.state.supplierList}
-              isMandatory={true}
-            />
-          
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={11} lg={11}>
+                <SIB
+                  id="No"
+                  label="No"
+                  variant="outlined"
+                  size="small"
+                  value={this.state.PO.No}
+                  disabled={true}
+                />
+                <SADIB
+                  id="SuplID"
+                  label="Supplier"
+                  // onChange={(e) => this.updateFormValue("CountryID", e)}
+                  // value={[]}
+                  options={this.state.supplierList}
+                  isMandatory={true}
+                />
+              </Grid>
+            </Grid>
+
+
+
           </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6}> 
-          
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={11} lg={11}>
+
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Fragment>
     );
-    let Forms=this.state.Forms;
-    Forms.general=generalForm;
+    let Forms = this.state.Forms;
+    Forms.general = generalForm;
     this.setState({
-      Forms:Forms
+      Forms: Forms
     });
   }
 
- 
+
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -565,7 +616,7 @@ class poactivity extends React.Component {
         >
           {this.state.type === "add" ? (
             <Button
-            startIcon={APIURLS.buttonTitle.add.icon}
+              startIcon={APIURLS.buttonTitle.add.icon}
               className="action-btns"
               // onClick={(e) => AddNew(e)}
               disabled={this.state.DisableCreatebtn}
@@ -578,7 +629,7 @@ class poactivity extends React.Component {
       </Fragment>
     );
 
-   
+
 
     const isStepOptional = (step) => {
       return step === 1;
@@ -590,7 +641,7 @@ class poactivity extends React.Component {
 
     return (
       <Fragment>
-         <BackdropLoader open={!this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
@@ -621,7 +672,7 @@ class poactivity extends React.Component {
                       return (
                         <Step key={label} {...stepProps}>
                           <StepLabel {...labelProps}>
-                          {index === 2 ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
+                            {index === 2 ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
                           </StepLabel>
                         </Step>
                       );
@@ -636,7 +687,6 @@ class poactivity extends React.Component {
           <div style={{ height: 10 }}>&nbsp;</div>
           <div style={{ height: 10 }}>&nbsp;</div>
         </Fragment>
-       
 
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -660,7 +710,7 @@ class poactivity extends React.Component {
                   typographyKey="Inv-Activity"
                   typography="Lines"
                   accordiondetailsKey="accordion2"
-                  html={[]}
+                  html={this.state.ItemDatagrid}
                 />
                 <Accordioncomponent
                   accordionKey="a-3"
@@ -670,7 +720,7 @@ class poactivity extends React.Component {
                   typographyKey="Invoice-Activity"
                   typography="Invoice Details"
                   accordiondetailsKey="accordion3"
-                  html={null}
+                  html={this.state.InvoiceDetails}
                 />
 
                 <Accordioncomponent
@@ -700,14 +750,116 @@ class poactivity extends React.Component {
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <div style={{ marginLeft: 10,backgroundColor:'#ffffff',height:350 }}>
-                      <div  style={{ marginLeft: 10  }}>
-                      <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={11} lg={11}>
-                              Hi
+                    <div style={{ marginLeft: 10, backgroundColor: '#ffffff', height: 450, overflowY: 'scroll' }}>
+                      <div style={{ marginLeft: 10 }}>
+                        <Grid container spacing={0}>
+                          <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                          <Grid item xs={12} sm={12} md={10} lg={10}>
+                            <div style={{ marginTop: 10 }}>
+
+                              <Grid container spacing={0}>
+                                <Grid item xs={12} sm={12} md={11} lg={11}>
+                                  <h3>Supplier Statistics</h3>
+                                </Grid>
+                              </Grid>
+                              <Grid container spacing={0}>
+                                <Grid item xs={12} sm={12} md={11} lg={11}>
+                                  <SSDV
+                                    label="Supplier No."
+                                    value="5000.00"
+                                  />
+                                  <SSDV
+                                    label="Balance"
+                                    value="00000.00"
+                                  />
+                                  <SSDV
+                                    label="Outstanding Orders"
+                                    value="00000.00"
+                                  />
+                                  <SSDV
+                                    label="Outstanding Invoices"
+                                    value="00000.00"
+                                  />
+                                  <SSDV
+                                    label="Total"
+                                    value="00000.00"
+                                  />
+                                  <SSDV
+                                    label="Invoice Prepaid Amount"
+                                    value="00000.00"
+                                  />
+                                  <SSDV
+                                    label="Payments"
+                                    value="00000.00"
+                                  />
+                                  <SSDV
+                                    label="Last payment Date"
+                                    value="30/11/2021"
+                                  />
+                                </Grid>
+                              </Grid>
+
+                              <Grid container spacing={0} style={{ marginTop: 20 }}>
+                                <Grid item xs={12} sm={12} md={11} lg={11}>
+                                  <Divider />
+                                </Grid>
+                              </Grid>
+
+                              <Grid container spacing={0}>
+                                <Grid item xs={12} sm={12} md={11} lg={11}>
+                                  <h3>Supplier History</h3>
+                                </Grid>
+                              </Grid>
+
+                              <Grid container spacing={1} >
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                  <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                      <CardContent>
+                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                          Orders
+                                        </Typography>
+                                        <Typography >
+                                          870
+                                        </Typography>
+                                      </CardContent>
+                                    </Card>
+                                  </div>
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                  <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                      <CardContent>
+                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                          Quotes
+                                        </Typography>
+                                        <Typography>
+                                          5
+                                        </Typography>
+                                      </CardContent>
+                                    </Card>
+                                  </div>
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                  <div key="paymentPendingLink" to="#" className="card-link">
+                                    <Card className="dash-activity-card2" raised={false}>
+                                      <CardContent>
+                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                          Com. Pur..
+                                        </Typography>
+                                        <Typography>
+                                          1,766
+                                        </Typography>
+                                      </CardContent>
+                                    </Card>
+                                  </div>
+                                </Grid>
+                              </Grid>
+                            </div>
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                         </Grid>
-                      </Grid>
-                      </div>                      
+                      </div>
                     </div>
                   </Grid>
                 </Grid>
@@ -718,31 +870,31 @@ class poactivity extends React.Component {
 
 
 
-       
 
-       
+
+
 
         <Dialog
-        open={this.state.DialogStatus}
-        onClose={()=>this.handleDialogClose()}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          <span style={{color:'red'}}>Item Delete Request</span>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-          {"Do you want to delete this item ?"}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={()=>this.handleDialogClose()}>No</Button>
-          <Button onClick={()=>this.deleteSelectedItem()} autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
+          open={this.state.DialogStatus}
+          onClose={() => this.handleDialogClose()}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            <span style={{ color: 'red' }}>Item Delete Request</span>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {"Do you want to delete this item ?"}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => this.handleDialogClose()}>No</Button>
+            <Button onClick={() => this.deleteSelectedItem()} autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
 
 
       </Fragment>

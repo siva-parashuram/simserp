@@ -251,8 +251,8 @@ class editbranch extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].code,
-            value: data[i].currId,
+            name: data[i].Code,
+            value: data[i].CurrID,
           };
           newD.push(o);
         }
