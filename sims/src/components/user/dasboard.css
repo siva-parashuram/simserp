@@ -865,7 +865,7 @@ cursor: pointer;
   /* height: 20 !important; */
   line-height: 27.81px !important;
   /* height: 25px !important; */
-  font-size: 13px !important;
+  font-size: 14px !important;
   border-radius: 0px !important;
   /* min-width: 100% !important; */
   box-sizing:border-box;
@@ -876,28 +876,39 @@ cursor: pointer;
   border-radius: 0px !important;   
   -webkit-border-radius: 0px;
  
+ 
 }
 
 .autocomplete-css:focus{
   outline: none !important;
-  /* border-style: solid !important; */
-  /* height: 25px !important; */
-  font-size: 13px !important;
+  border-style: solid !important; 
+  height: 25px !important;
+  font-size: 14px !important;
   border-radius: 0px !important;
   border-color: rgba(224, 224, 224, 1) !important;
-  box-sizing:border-box;
-  /* min-width: 100% !important; */
-  border-width: 1px !important;
+   box-sizing:border-box; 
+  min-width: 100% !important; 
+   border-width: 1px !important;
   border-radius: 0px !important;    
    -webkit-border-radius: 0px;
 }
 
-.css-ghsjzk-MuiInputBase-root-MuiInput-root:after {
-  border-bottom:0px solid #fff !important;  
+.autocomplete-css .css-ghsjzk-MuiInputBase-root-MuiInput-root::before,::after {
+  border-bottom:0px solid #fff !important; 
+  
 }
-.css-1glvl0p-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-clearIndicator {
-  display: none !important;
+
+.autocomplete-css .css-9e5uuu-MuiPaper-root-MuiAutocomplete-paper {
+  font-size: 14px;
 }
+
+
+
+.autocomplete-css .css-ghsjzk-MuiInputBase-root-MuiInput-root{
+  font-size: 14px;
+}
+  
+
  
 
 .no-border-table{

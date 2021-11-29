@@ -56,7 +56,7 @@ class coaactivity extends React.Component {
         ACType: "-",
         IncomeBalance: "-",
         ACCategory: "-",
-        ACSubCategory: "-",
+        ACSubCategory: 0,
         DebitCredit: "-",
         IsBlock: false,
         DirectPosting: false,
