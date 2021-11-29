@@ -79,6 +79,8 @@ class poactivity extends React.Component {
       supplierList: [],
       CurrencyList:[],
       PaymentTermList:[],
+      SpecialInstList:[],
+      SpecialInstValue:"",
       BillingIDValue:"",
       ItemDatagrid: null,
       InvoiceDetails: null,
@@ -90,7 +92,8 @@ class poactivity extends React.Component {
       },
       Forms: {
         general: null,
-        terms:null
+        terms:null,
+        taxInfo:null,
       },
 
      
@@ -145,6 +148,7 @@ class poactivity extends React.Component {
     this.getInvoiceDetails();
     this.generalForm();
     this.termsForm();
+    this.taxForm();
   }
 
   componentDidMount() {
@@ -415,6 +419,15 @@ class poactivity extends React.Component {
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={11} lg={11}>
+
+                  <SSIB
+                      key="IsRounding"
+                      id="IsRounding"
+                      label="Is Rounding?"
+                      param={this.state.PO.IsRounding}
+                      onChange={(e) => this.updateFormValue("IsRounding", e)}
+                    />
+
                     <SDIB
                       id="CurrID"
                       label="CurrID"
@@ -568,7 +581,6 @@ class poactivity extends React.Component {
                     this.updateFormValue("PODate", e)
                   }
                   value={this.state.PO.PODate}
-
                 />
                 <SDIB
                   id="POType"
@@ -596,7 +608,6 @@ class poactivity extends React.Component {
                 />
 
 
-
                 <SSIB
                   key="IsImport"
                   id="IsImport"
@@ -618,6 +629,30 @@ class poactivity extends React.Component {
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={11} lg={11}>
+
+              <SIB
+                  id="AmendmentNo"
+                  label="Amendment No"
+                  variant="outlined"
+                  size="small"
+                  value={this.state.PO.AmendmentNo}
+                  disabled={this.state.type==="add"?true:false}
+                />
+                 <SDTI                  
+                  id="AmendmentDate"
+                  label="Amendment Date"
+                  variant="outlined"
+                  size="small"
+                  onChange={(e) =>
+                    this.updateFormValue("AmendmentDate", e)
+                  }
+                  value={this.state.PO.AmendmentDate}
+                  disabled={this.state.type==="add"?true:false}
+                />
+
+              
+              
+
                <SDIB
                   id="BillingID"
                   label="Billing"
@@ -692,6 +727,35 @@ class poactivity extends React.Component {
                   </Grid>
                 </Grid>
               </Grid>
+              
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    <SDIB
+                      id="SpecialInstList"
+                      label="Choose Special Inst"
+                      onChange={(e) => this.updateFormValue("SpecialInstList", e)}
+                      value={this.state.PO.SpecialInst}
+                      param={this.state.SpecialInstList}
+                      isMandatory={true}
+                    />
+                    <SIB
+                      id="SpecialInst"
+                      label="Special Inst"
+                      onChange={(e) => this.updateFormValue("SpecialInst", e)}
+                      variant="outlined"
+                      size="small"
+                      value={this.state.SpecialInstValue}
+                      isMandatory={true}
+                      multiline={true}
+                      rows={5}
+                    />
+
+
+
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -712,6 +776,53 @@ class poactivity extends React.Component {
     );
     let Forms = this.state.Forms;
     Forms.terms = termsForm;
+    this.setState({
+      Forms: Forms
+    });
+  }
+
+  taxForm = () => {
+    const taxInfo = (
+      <Fragment>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    <SSIB
+                      key="IsRegistedSupplier"
+                      id="IsRegistedSupplier"
+                      label="Registed Supplier?"
+                      param={this.state.PO.IsRegistedSupplier}
+                      onChange={(e) => this.updateFormValue("IsRegistedSupplier", e)}
+                    />
+
+
+
+                    
+
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}></Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+        </Grid>
+      </Fragment>
+    );
+    let Forms = this.state.Forms;
+    Forms.taxInfo = taxInfo;
     this.setState({
       Forms: Forms
     });
@@ -927,7 +1038,7 @@ class poactivity extends React.Component {
                   typographyKey="Tax-Activity"
                   typography="Tax Information"
                   accordiondetailsKey="accordion4"
-                  html={null}
+                  html={this.state.Forms.taxInfo}
                 />
 
                 <Accordioncomponent

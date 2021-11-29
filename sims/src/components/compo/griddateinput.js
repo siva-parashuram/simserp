@@ -45,6 +45,7 @@ class griddateinput extends React.Component {
                   //   }}
                   error={this.props.error}
                   helperText={this.props.helperText}
+                  disabled={this.props.disabled}
                 />
               </Grid>
             </Grid>
