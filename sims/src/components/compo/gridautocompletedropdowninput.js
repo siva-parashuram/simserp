@@ -14,7 +14,7 @@ class gridautocompletedropdowninput extends React.Component {
   render() {
     return (
       <Fragment>
-        <Grid container spacing={0} style={{ marginBottom: 10 }}>
+        <Grid container spacing={0} style={{ marginBottom: 20 }}>
           <Grid item xs={5} sm={5} md={4} lg={4}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -33,14 +33,18 @@ class gridautocompletedropdowninput extends React.Component {
                  
                 <Autocomplete
                    className="autocomplete-css"
-                  style={{ width: "100%",height:"20px"}}
-                  // className="dropdown-css"
-                  //  size="small"
+                  style={{ width: "100%"}}
+                  underlineShow={false}
                   disablePortal
                   id={this.props.id}
                   options={this.props.options}
-                  sx={{ width: '100%' }}
-                  renderInput={(params) => <TextField className="AutocompletetextFieldCss" variant="standard" size="small" {...params} />}
+                  // sx={{ width: '100%' }}
+                  renderInput={(params) => <TextField
+                     className="AutocompletetextFieldCss" 
+                     variant="standard" 
+                     size="small" 
+                     style={{borderBottomStyle:'none'}}
+                     {...params} />}
                 />
               </Grid>
             </Grid>
