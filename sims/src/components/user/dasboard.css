@@ -744,12 +744,19 @@ cursor: pointer;
 
 .AutocompletetextFieldCss{
   font-family: Calibri !important;
+  padding: 5px 5px !important;
   height: 30px !important;
   font-size: 14px !important;
   border-radius: 0px !important;
   -webkit-border-radius: 0px;
   border-color: rgba(224, 224, 224, 1) !important; 
+ 
 }
+
+
+
+
+
 
 .textFieldCss{
   font-family: Calibri !important;
@@ -886,31 +893,31 @@ cursor: pointer;
 
 .autocomplete-css:focus{
   outline: none !important;
-  border-style: solid !important; 
-  height: 25px !important;
+  /* border-style: solid !important; 
+  height: 25px !important; */
   font-size: 14px !important;
   border-radius: 0px !important;
   border-color: rgba(224, 224, 224, 1) !important;
    box-sizing:border-box; 
-  min-width: 100% !important; 
+  /* min-width: 100% !important;  */
    border-width: 1px !important;
   border-radius: 0px !important;    
    -webkit-border-radius: 0px;
 }
 
-.autocomplete-css .css-ghsjzk-MuiInputBase-root-MuiInput-root::before,::after {
+.css-ghsjzk-MuiInputBase-root-MuiInput-root::before,::after {
   border-bottom:0px solid #fff !important; 
   
 }
 
-.autocomplete-css .css-9e5uuu-MuiPaper-root-MuiAutocomplete-paper {
-  font-size: 14px;
+.css-9e5uuu-MuiPaper-root-MuiAutocomplete-paper {
+  font-size: 14px !important;
 }
 
 
 
 .autocomplete-css .css-ghsjzk-MuiInputBase-root-MuiInput-root{
-  font-size: 14px;
+  font-size: 14px !important;
 }
   
 
