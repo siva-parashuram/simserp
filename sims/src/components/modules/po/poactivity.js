@@ -46,6 +46,10 @@ import SSDV from "../../compo/grid2sectiondisplayview";
 import SDTI from "../../compo/griddateinput";
 
 
+const today=moment().format(
+  "YYYY-MM-DD"
+);
+
 class poactivity extends React.Component {
   constructor(props) {
     super(props);
@@ -117,7 +121,7 @@ class poactivity extends React.Component {
         POID: 0,
         BranchID: 0,
         No: "",
-        PODate: "",
+        PODate: today,
         SuplID: 0,   //on supplier chnage show address(BillingID) dropdown, show 1 address detail in section
         POType: 0,
         BillingID: 0,   //on suplier chnage - show address detail in section
@@ -131,14 +135,14 @@ class poactivity extends React.Component {
         ContactPerson: "", // on supplier chnage show ContactPerson - but user can change the input data
         Reference: "",   // direct input
         Status: 2,   //non editable but show the status
-        DispachDate: "",   // as per  user input - but not less than PO date
-        DeliveryDate: "",   // as er user inut - but not less than dispatch date
+        DispachDate: today,   // as per  user input - but not less than PO date
+        DeliveryDate: today,   // as er user inut - but not less than dispatch date
         WareHouseID: 0,   // show branch warehouse
         SpecialInst: "",   // get list instruction from table, and display initial datat and Also, Accet user input - and select from dropdown
         DeliveryAddress: "",  // as per ware house selected and also Provide user inut, and allow full access to change 
         MODTaxID: 0,   // select from dropdown -> use API
         AmendmentNo: "",  // user input - only integer enable at the time of edit
-        AmendmentDate: "",  // user input - enable at the time of edit
+        AmendmentDate: today,  // user input - enable at the time of edit
         IsRegistedSupplier: false, // if anything of GST/VAT is available as per suplier selection
         GSTNo: "",  //of supplier
         VATNo: "", //of supplier
@@ -1054,26 +1058,7 @@ class poactivity extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          {/* <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid> */}
-          {/* <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
          
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-         
-          </Grid> 
-           */}
           <Grid item xs={12} sm={12} md={11} lg={11}>
           <div style={{ height:30 }}>&nbsp;</div>
             <Grid container spacing={0}>
