@@ -14,7 +14,7 @@ class gridautocompletedropdowninput extends React.Component {
   render() {
     return (
       <Fragment>
-        <Grid container spacing={0} style={{ marginBottom: 20 }}>
+        <Grid container spacing={0} style={{ marginBottom: 10 }}>
           <Grid item xs={5} sm={5} md={4} lg={4}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
