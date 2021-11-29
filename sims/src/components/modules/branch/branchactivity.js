@@ -28,7 +28,7 @@ import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
 import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
 import UpdateIcon from "@material-ui/icons/Update";
 import * as CF from "../../../services/functions/customfunctions";
-import Loader from "../../compo/loader";
+import BackdropLoader from "../../compo/backdrop";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
@@ -1478,7 +1478,7 @@ class editbranch extends React.Component {
 
     return (
       <Fragment>
-        <Loader ProgressLoader={this.state.ProgressLoader} />
+        <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
