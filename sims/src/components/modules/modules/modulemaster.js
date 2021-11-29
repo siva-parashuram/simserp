@@ -148,6 +148,7 @@ class modulemasters extends React.Component {
   }
 
   InitialresetDataList(data) {
+    console.log("InitialresetDataList > data ",data);
     let rows = [];
     for (let i = 0; i < data.length; i++) {
       let r = {
@@ -190,6 +191,7 @@ class modulemasters extends React.Component {
     };
 
     const getPageList = (moduleId) => {
+      console.log("getPageList > moduleId ",moduleId);
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -213,7 +215,8 @@ class modulemasters extends React.Component {
         .then((response) => {
           if (response.status === 200) {
             let data = response.data;
-            resetDataList(data);
+            console.log("getPageList > moduleId > data > ",data);
+              resetDataList(data);
           } else {
           }
         })

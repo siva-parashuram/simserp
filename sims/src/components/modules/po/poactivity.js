@@ -70,6 +70,7 @@ class poactivity extends React.Component {
       editurl: "",
       typoTitle: "",
       type: "",
+      POTypeList: APIURLS.POType,
       POItemType: APIURLS.POItemType,
       ItemLinesRow: [],
       ItemLinesColm: [],
@@ -496,6 +497,14 @@ class poactivity extends React.Component {
                   // onChange={(e) => this.updateFormValue("CountryID", e)}
                   // value={[]}
                   options={this.state.supplierList}
+                  isMandatory={true}
+                />
+                <SDIB
+                  id="POType"
+                  label="PO Type"
+                  onChange={(e) => this.updateFormValue("POType", e)}
+                  value={this.state.PO.POType}
+                  param={this.state.POTypeList}
                   isMandatory={true}
                 />
               </Grid>

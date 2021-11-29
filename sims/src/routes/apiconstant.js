@@ -451,6 +451,19 @@ export let GetAllUserPermissionData = {
 };
 
 
+/*---------------------PO Constatnts---------------------- */
+
+export let POType=[
+  {value:0,name:"Stock"},
+  {value:1,name:"Non Stock"},
+  {value:2,name:"Service"},
+  {value:3,name:"Sample"},
+  {value:4,name:"Trading"}
+];
+
+/*------------------------------------------- */
+
+
 /* -------------------------------DATAGRID COLUMNS CONSTANT--------------------------------------------------------------- */
 
 export const companyMasterColumn = [

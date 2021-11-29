@@ -33,15 +33,15 @@ class gridautocompletedropdowninput extends React.Component {
           <Grid item xs={5} sm={5} md={8} lg={8}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
-                {console.log("Autocomplete - this.props.options > ",this.props.options)}
+                 
                 <Autocomplete
                  className="autocomplete-css"
                  size="small"
                   disablePortal
                   id={this.props.id}
                   options={this.props.options}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField className="textFieldCss" size="small" {...params} />}
+                  sx={{ width: '100%' }}
+                  renderInput={(params) => <TextField className="AutocompletetextFieldCss" variant="standard" size="small" {...params} />}
                 />
               </Grid>
             </Grid>
