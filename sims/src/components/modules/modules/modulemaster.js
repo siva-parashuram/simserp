@@ -171,10 +171,10 @@ class modulemasters extends React.Component {
           URLS.URLS.editModule +
           this.state.urlparams +
           "&moduleId=" +
-          item.moduleId;
+          item.ModuleID;
 
-        this.setState({ moduleId: item.moduleId, editurl: editUrl });
-        getPageList(item.moduleId);
+        this.setState({ moduleId: item.ModuleID, editurl: editUrl });
+        getPageList(item.ModuleID);
 
         removeIsSelectedRowClasses();
         document.getElementById(id).classList.add("selectedRow");
@@ -351,12 +351,12 @@ class modulemasters extends React.Component {
                                       item.moduleId
                                     }
                                   >
-                                    {URLS.PREFIX.moduleID + item.moduleId}
+                                    {URLS.PREFIX.moduleID + item.ModuleID}
                                   </a>
                                 </TableCell>
-                                <TableCell align="left">{item.name}</TableCell>
+                                <TableCell align="left">{item.Name}</TableCell>
                                 <TableCell align="left">
-                                  {item.description}
+                                  {item.Description}
                                 </TableCell>
                               </TableRow>
                             ))
