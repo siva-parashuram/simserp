@@ -37,17 +37,16 @@ class viewpo extends React.Component {
         >
 
           <Button
-            startIcon={APIURLS.buttonTitle.preview.icon}
+            startIcon={APIURLS.buttonTitle.send.icon}
             className="action-btns"
-            onClick={(e) => this.openDialog("Preview")}
+            
           >
-            {APIURLS.buttonTitle.preview.name}
+            {APIURLS.buttonTitle.send.name}
           </Button>
 
           <Button
             startIcon={APIURLS.buttonTitle.print.icon}
             className="action-btns"
-            onClick={(e) => this.openDialog("Preview")}
           >
             {APIURLS.buttonTitle.print.name}
           </Button>

@@ -1137,7 +1137,7 @@ class poactivity extends React.Component {
     Dialog.DialogTitle = param;
 
     switch (param) {
-      case "Preview":
+      case "View":
         Dialog.DialogContent = <Viewpo/>;
         this.setState({ Dialog: Dialog });
         break;
@@ -1256,7 +1256,7 @@ class poactivity extends React.Component {
           <Button
             startIcon={APIURLS.buttonTitle.view.icon}
             className="action-btns"
-            onClick={(e) => this.openDialog("Preview")}
+            onClick={(e) => this.openDialog("View")}
           >
             {APIURLS.buttonTitle.view.name}
           </Button>
@@ -1266,14 +1266,12 @@ class poactivity extends React.Component {
       </Fragment>
     );
 
-    const Transition = React.forwardRef(function Transition(props, ref) {
-      return <Slide direction="up" ref={ref} {...props} />;
-    });
+   
 
     const dialog = (
       <Fragment>
         <Dialog         
-          TransitionComponent={Transition}
+           
           fullWidth={true}
           maxWidth="lg"
           open={this.state.Dialog.DialogStatus}
