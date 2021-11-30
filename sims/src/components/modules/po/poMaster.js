@@ -26,6 +26,17 @@ import Tableskeleton from "../../compo/tableskeleton";
 import Dualtabcomponent from '../../compo/dualtabcomponent';
 import BackdropLoader from "../../compo/backdrop";
 
+document.addEventListener('keydown', function (e) {
+    switch (e.keyCode) {
+        case 78:
+            document.getElementById("add_New").click();
+            break;
+        default:
+            console.log("e > ", e);
+            break;
+    }
+});
+
 
 class poMaster extends React.Component {
     constructor(props) {
@@ -113,6 +124,7 @@ class poMaster extends React.Component {
                     aria-label="Action Menu Button group"
                 >
                     <Button
+                        id="add_New"
                         className="action-btns"
                         startIcon={APIURLS.buttonTitle.add.icon}
                         onClick={(e) =>

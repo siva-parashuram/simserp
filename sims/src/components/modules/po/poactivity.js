@@ -201,14 +201,14 @@ class poactivity extends React.Component {
   
 
   componentDidMount() {    
-    this.getCurrencyList();
-    this.getCountryList();
-    this.getStateList();
-    this.getPaymentTerms();
-    this.getAllSupplierPostingGroup();
-    this.getAllGeneralPostingGroup();  
-    this.getGetMODTax();   
-    this.getGetShipmentMode();
+    // this.getCurrencyList();
+    // this.getCountryList();
+    // this.getStateList();
+    // this.getPaymentTerms();
+    // this.getAllSupplierPostingGroup();
+    // this.getAllGeneralPostingGroup();  
+    // this.getGetMODTax();   
+    // this.getGetShipmentMode();
     
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -245,7 +245,7 @@ class poactivity extends React.Component {
       this.getItemLinesColm();
       this.getItemLineList();
       this.refreshStateFormData();
-      this.getWarehouseList();
+      // this.getWarehouseList();
       this.getSupplierList();
     });
 
