@@ -39,6 +39,7 @@ class griddropdowninput extends React.Component {
                   id={this.props.id}
                   onChange={this.props.onChange}
                   value={this.props.value}
+                  disabled={this.props.disabled}
                 >
                   <option value="-">Select</option>
 

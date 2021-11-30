@@ -68,6 +68,7 @@ export const APIURL = {
   CreateUserPermission: domain + "api/UserPermission/CreateUserPermission",
   GetUserPermissionByRoleId: domain + "api/UserPermission/GetUserPermissionByRoleId",
   GetWareHouses: domain + "api/WareHouse/GetWareHouses",
+  GetWareHouseByBranchID:domain +"api/WareHouse/GetWareHouseByBranchID",
   CreateWareHouse: domain + "api/WareHouse/CreateWareHouse",
   UpdateWareHouse: domain + "api/WareHouse/UpdateWareHouse",
   GetWareHouse: domain + "api/WareHouse/GetWareHouse",
@@ -153,7 +154,9 @@ export const APIURL = {
   UpdateSupplierAddress: domain + "api/Supplier/UpdateSupplierAddress",
   GetSupplierAddress: domain + "api/Supplier/GetSupplierAddress",
   Add_UpdateSupplierPrice: domain + "api/Supplier/Add_UpdateSupplierPrice",
-  GetSupplierPriceBySuplID: domain + "api/Supplier/GetSupplierPriceBySuplID"
+  GetSupplierPriceBySuplID: domain + "api/Supplier/GetSupplierPriceBySuplID",
+  GetMODTax:domain +"api/Common/GetMODTax",
+  GetShipmentMode:domain+"api/Common/GetShipmentMode",
 };
 
 export const CTimeOut = 10;

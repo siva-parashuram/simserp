@@ -85,6 +85,12 @@ body{
   line-height: 27.81px !important;
 }
 
+.MuiDataGrid-cell:focus{
+  outline: 'none' !important;
+}
+
+
+
 .css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input {
   height: 27.81px !important;
   line-height: 27.81px !important;
@@ -920,6 +926,10 @@ cursor: pointer;
   font-size: 14px !important;
 }
   
+.lineDatagridCell{
+  font-family: Calibri !important;
+  font-size: 14px !important;
+}
 
  
 
