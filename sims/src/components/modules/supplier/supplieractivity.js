@@ -385,7 +385,6 @@ class supplieractivity extends React.Component {
   }
 
   getCurrencyList = () => {
-    this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -402,15 +401,14 @@ class supplieractivity extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].code,
-            value: data[i].currId,
+            name: data[i].Code,
+            value: data[i].CurrID,
           };
           newD.push(o);
         }
 
         this.setState({
           currencyList: newD,
-          ProgressLoader: true,
         });
       })
       .catch((error) => {});

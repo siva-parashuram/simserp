@@ -134,8 +134,8 @@ class branchMapping extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].name,
-            value: data[i].branchId,
+            name: data[i].Name,
+            value: data[i].BranchID,
           };
           newD.push(o);
         }
@@ -702,6 +702,7 @@ class branchMapping extends React.Component {
                                       this.updateFormValue("Reason", e)
                                     }
                                     value={this.state.BranchMapping.Reason}
+                                    disabled={!this.state.BranchMapping.IsTaxExempt}
                                   />
                                 </TableBody>
                               </Table>

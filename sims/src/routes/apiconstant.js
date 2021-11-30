@@ -107,7 +107,6 @@ export const APIURL = {
   CreateCustomerPostingGroup: domain + "api/Posting/CreateCustomerPostingGroup",
   CreateSupplierPostingGroup: domain + "api/Posting/CreateSupplierPostingGroup",
   GetAllSupplierPostingGroup: domain + "api/Posting/GetAllSupplierPostingGroup",
-
   GetAllCustomerPostingGroup: domain + "api/Posting/GetAllCustomerPostingGroup",
   CreateChartOfAccount: domain + "api/ChartOfAccount/CreateChartOfAccount",
   GetChartOfAccounts: domain + "api/ChartOfAccount/GetChartOfAccounts",
@@ -140,11 +139,11 @@ export const APIURL = {
   GetCustomerPriceByCustID: domain + "api/Customer/GetCustomerPriceByCustID",
   CreateCustomerBranchMapping: domain + "api/Customer/CreateCustomerBranchMapping",
   GetCustomerBranchMappingByCustID: domain + "api/Customer/GetCustomerBranchMappingByCustID",
-
   GetAllSupplier: domain + "api/Supplier/GetAllSupplier",
   UpdateSupplier: domain + "api/Supplier/UpdateSupplier",
   CreateSupplier: domain + "api/Supplier/CreateSupplier",
   GetSupplier: domain + "api/Supplier/GetSupplier",
+  GetSuppliersByBranchID:domain + "api/Supplier/GetSuppliersByBranchID",
   GetAllNoSeriesByBranchId: domain + "api/NoSeriesDetails/GetAllNoSeriesByBranchId",
   GetMasterDocumentNumber: domain + "api/Common/GetMasterDocumentNumber",
   CreateSupplierBranchMapping: domain + "api/Supplier/CreateSupplierBranchMapping",

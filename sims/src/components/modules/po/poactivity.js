@@ -84,10 +84,15 @@ class poactivity extends React.Component {
       type: "",
       POTypeList: APIURLS.POType,
       POItemType: APIURLS.POItemType,
+      CountryList:[],
+      StateList:[],
+      SupplierAddressMasterList: [],
       SupplierAdressList: [],
       ItemLinesRow: [],
       ItemLinesColm: [],
+      supplierMasterList: [],
       supplierList: [],
+      CurrencyMasterList: [],
       CurrencyList: [],
       PaymentTermList: [],
       SpecialInstList: [],
@@ -99,6 +104,7 @@ class poactivity extends React.Component {
       BillingIDValue: "",
       ItemDatagrid: null,
       InvoiceDetails: null,
+      SADIB_VALUE: null,
       stepper: {
         MRNSTATUS: 3,
         activeStep: 0,
@@ -126,6 +132,14 @@ class poactivity extends React.Component {
       branchTaxType: {
         name: "VAT",
       },
+      Name: "",
+      Address: "",
+      Address2: "",
+      Address3: "",
+      City: "",
+      PostCode: "",
+      CountryID: "",
+      StateID: "",
       PO: {
         POID: 0,
         BranchID: 0,
@@ -179,13 +193,14 @@ class poactivity extends React.Component {
     this.generalForm();
     this.termsForm();
     this.taxForm();
+    this.getCurrencyList();
   }
 
-  componentDidMount() {
-    this.getItemLinesColm();
-    this.getItemLineList();
-    this.refreshStateFormData();
+  
 
+  componentDidMount() {
+    this.getCountryList();
+    this.getStateList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -217,11 +232,83 @@ class poactivity extends React.Component {
       typoTitle: typoTitle,
       ProgressLoader: type === "add" ? true : false,
       BranchID: CF.toInt(branchId),
+    }, () => {
+      this.getItemLinesColm();
+      this.getItemLineList();
+      this.refreshStateFormData();
     });
 
     console.log("On load state > ", this.state);
   }
 
+  getCountryList=()=>{
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetCountryUrl = APIURLS.APIURL.GetCountries;
+
+    axios
+      .post(GetCountryUrl, ValidUser, { headers })
+      .then((response) => {
+        this.setState({CountryList:response.data});
+      })
+      .catch((error) => {});
+  }
+
+  getStateList=()=>{
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetStatesUrl = APIURLS.APIURL.GetStates;
+
+    axios
+      .post(GetStatesUrl, ValidUser, { headers })
+      .then((response) => {
+        this.setState({StateList:response.data});
+      })
+      .catch((error) => {});
+  }
+
+  getCurrencyList = () => {
+    // this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetCurrencies;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code,
+            value: data[i].CurrID,
+          };
+          newD.push(o);
+        }
+
+        this.setState({
+          CurrencyMasterList: data,
+          CurrencyList: newD,
+          // ProgressLoader: true,
+        }, () => {
+          this.getInvoiceDetails();
+        });
+      })
+      .catch((error) => { });
+  }
 
   getSupplierList = () => {
     let ValidUser = APIURLS.ValidUser;
@@ -230,9 +317,15 @@ class poactivity extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.GetAllSupplier;
+    let Url = APIURLS.APIURL.GetSuppliersByBranchID;
+    let reqData = {
+      ValidUser: ValidUser,
+      Supplier: {
+        BranchID: CF.toInt(this.state.BranchID)
+      }
+    };
     axios
-      .post(Url, ValidUser, { headers })
+      .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
         let newData = [];
@@ -241,7 +334,7 @@ class poactivity extends React.Component {
           newData.push(o);
         }
         if (data.length > 0) {
-          this.setState({ supplierList: newData }, () => {
+          this.setState({ supplierList: newData, supplierMasterList: data }, () => {
             this.generalForm();
           });
         } else {
@@ -251,6 +344,127 @@ class poactivity extends React.Component {
       .catch((error) => {
         this.setState({ supplierList: [], ProgressLoader: true });
       });
+  }
+
+  setFieldValuesOnSuplierChange = (SuplID) => {
+    //set Currency
+    let PO = this.state.PO;
+    //set Address list
+    let data = this.getSupplierAddressList(SuplID);
+
+    console.log("setFieldValuesOnSuplierChange > data > ", data);
+    PO.CurrID = data.CurrID;
+    if (data.SupplierAdressList.length > 0) {
+      PO.BillingID = data.SupplierAdressList[0].value;
+      let BillingID = data.SupplierAdressList[0].value;
+      this.setState({        
+        PO:PO
+      }, () => {        
+        this.generalForm();
+        console.log("setFieldValuesOnSuplierChange > BillingID > ", BillingID);
+        let BCdata = this.getDataToSetOnBillingChange(CF.toInt(BillingID));
+        console.log("setFieldValuesOnSuplierChange > BCdata > ", BCdata);
+        let PO=this.state.PO;
+        PO.ContactPerson = BCdata.ContactPerson;
+        PO.GSTNo = BCdata.GSTNo;
+        PO.GeneralPostingGroupID = BCdata.GeneralPostingGroupID;
+        PO.SupplierPostingGroupID = BCdata.SupplierPostingGroupID;
+        PO.IsTaxExempt = BCdata.IsTaxExempt;
+        PO.Reason = BCdata.Reason;
+        PO.SpecialInstruction = BCdata.SpecialInstruction;
+        PO.VATNo = BCdata.VATNo;
+        // IsRegistedSupplier
+
+        if(BCdata.GSTNo==="" || BCdata.VATNo===""){
+          PO.IsRegistedSupplier=false;
+        }else{
+          PO.IsRegistedSupplier=true;
+        }
+
+        this.setState({
+          PO:PO,
+          Name: BCdata.Name,
+          Address: BCdata.Address,
+          Address2: BCdata.Address2,
+          Address3: BCdata.Address3,
+          City: BCdata.City,
+          PostCode: BCdata.PostCode,
+          CountryID: this.getCountryNameByID(BCdata.CountryID),
+          StateID: this.getStateNameByID(BCdata.StateID),
+        },()=>{
+          
+          this.getInvoiceDetails();
+          this.generalForm();
+          this.termsForm();
+          this.taxForm();
+        });        
+      });
+
+    }
+    this.setState({
+      SupplierAdressList: data.SupplierAdressList,
+      SupplierAddressMasterList: data.SupplierAddressMasterList,
+      PO: PO,
+
+    }, () => {
+      this.generalForm();
+    });
+
+  }
+
+
+
+  getSupplierAddressList = (SuplID) => {
+    let dropdownData = [];
+    let Address = [];
+    let CurrID = 0;
+    for (let i = 0; i < this.state.supplierMasterList.length; i++) {
+      if (this.state.supplierMasterList[i].SuplID === SuplID) {
+        Address = this.state.supplierMasterList[i].Address;
+        CurrID = this.state.supplierMasterList[i].CurrID;
+        break;
+      }
+    }
+    for (let i = 0; i < Address.length; i++) {
+      let o = { name: Address[i].Code, value: Address[i].AddressID };
+      dropdownData.push(o);
+    }
+
+    return { SupplierAdressList: dropdownData, SupplierAddressMasterList: Address, CurrID: CurrID };
+
+    // this.setState({SupplierAdressList:dropdownData,SupplierAddressMasterList:Address},()=>{
+    //   this.refreshStateFormData();
+    // });
+  }
+
+  getDataToSetOnBillingChange = (AddressID) => {
+    console.log("getDataToSetOnBillingChange -> AddressID > ",AddressID);
+    console.log("getDataToSetOnBillingChange -> this.state.SupplierAddressMasterList > ",this.state.SupplierAddressMasterList);
+    let data = {};
+    for (let i = 0; i < this.state.SupplierAddressMasterList.length; i++) {
+      if (this.state.SupplierAddressMasterList[i].AddressID === AddressID) {
+        data = {
+          Name: this.state.SupplierAddressMasterList[i].Name,
+          Address: this.state.SupplierAddressMasterList[i].Address,
+          Address2: this.state.SupplierAddressMasterList[i].Address2,
+          Address3: this.state.SupplierAddressMasterList[i].Address3,
+          City: this.state.SupplierAddressMasterList[i].City,
+          ContactPerson: this.state.SupplierAddressMasterList[i].ContactPerson,
+          GSTNo: this.state.SupplierAddressMasterList[i].GSTNo,
+          GeneralPostingGroupID: this.state.SupplierAddressMasterList[i].GeneralPostingGroupID,
+          IsTaxExempt: this.state.SupplierAddressMasterList[i].IsTaxExempt,
+          PostCode: this.state.SupplierAddressMasterList[i].PostCode,
+          Reason: this.state.SupplierAddressMasterList[i].Reason,
+          SpecialInstruction: this.state.SupplierAddressMasterList[i].SpecialInstruction,
+          CountryID: this.state.SupplierAddressMasterList[i].CountryID,
+          StateID: this.state.SupplierAddressMasterList[i].StateID,
+          SupplierPostingGroupID: this.state.SupplierAddressMasterList[i].SupplierPostingGroupID,
+          VATNo: this.state.SupplierAddressMasterList[i].VATNo,
+        };
+        break;
+      }
+    }
+    return data;
   }
 
   renderType(params) {
@@ -435,10 +649,82 @@ class poactivity extends React.Component {
   };
 
 
+  setFieldValuesOnBillingSelect = (data) => {
+    let PO = this.state.PO;
+    PO.ContactPerson = data.ContactPerson;
+    PO.GSTNo = data.GSTNo;
+    PO.GeneralPostingGroupID = data.GeneralPostingGroupID;
+    PO.SupplierPostingGroupID = data.SupplierPostingGroupID;
+    PO.IsTaxExempt = data.IsTaxExempt;
+    PO.Reason = data.Reason;
+    PO.SpecialInstruction = data.SpecialInstruction;
+    PO.VATNo = data.VATNo;
+    this.setState({
+      PO: PO,
+      Address: data.Address,
+      Address2: data.Address2,
+      Address3: data.Address3,
+      City: data.City,
+      PostCode: data.PostCode,
+      CountryID: this.getCountryNameByID(data.CountryID),
+      StateID: this.getStateNameByID(data.StateID),
 
+    }, () => {
+      this.generalForm();
+      this.getInvoiceDetails();
+      this.termsForm();
+      this.taxForm();
+    });
+  }
+
+  getCountryNameByID = (id) => {
+    for (let i = 0; i < this.state.CountryList.length; i++) {
+      if (this.state.CountryList[i].CountryID === id) {
+        return this.state.CountryList[i].Name;
+        break;
+      }
+    }
+  }
+
+  getStateNameByID=(id)=>{
+    for (let i = 0; i < this.state.StateList.length; i++) {
+      if (this.state.StateList[i].stateId === id) {
+        return this.state.StateList[i].name;
+        break;
+      }
+    }
+  }
 
 
   updateFormValue = (param, e) => {
+    let PO = this.state.PO;
+
+    switch (param) {
+      case "SuplID":
+        this.setState({ SADIB_VALUE: e }, () => {
+          this.generalForm();
+        });
+        PO.SuplID = CF.toInt(e.id);
+        this.setFieldValuesOnSuplierChange(CF.toInt(e.id));
+        this.setState({ PO: PO }, () => {
+          this.generalForm();
+          this.getInvoiceDetails();
+        });
+        break;
+      case "BillingID":
+        PO.BillingID = CF.toInt(e.target.value);
+        this.setFieldValuesOnBillingSelect(
+          this.getDataToSetOnBillingChange(CF.toInt(e.target.value))
+        );
+        this.setState({
+          PO: PO,
+        }, () => {
+          this.generalForm();
+        });
+        break;
+      default:
+        break;
+    }
 
     this.validateBtnEnable();
   };
@@ -448,7 +734,9 @@ class poactivity extends React.Component {
   };
 
   setParams = (object) => {
-    this.setState({ Customer: object });
+    this.setState({ PO: object }, () => {
+      this.refreshStateFormData();
+    });
   };
 
   openPage = (url) => {
@@ -506,8 +794,8 @@ class poactivity extends React.Component {
                     <SADIB
                       id="SuplID"
                       label="Supplier"
-                      onChange={(e) => this.updateFormValue("SuplID", e)}
-                      value={this.state.PO.SuplID}
+                      onChange={(e, value) => this.updateFormValue("SuplID", value)}
+                      value={this.state.SADIB_VALUE}
                       options={this.state.supplierList}
                       isMandatory={true}
                     />
@@ -524,12 +812,23 @@ class poactivity extends React.Component {
                       param={this.state.SupplierAdressList}
                       isMandatory={true}
                     />
+
                     <SIB
-                      id="Address"
-                      label="Address 1"
+                      id="Name"
+                      label="Name"
                       variant="outlined"
                       size="small"
-                      value={null}
+                      value={this.state.Name}
+                      disabled={true}
+                    />
+
+
+                    <SIB
+                      id="Address"
+                      label="Address"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.Address}
                       disabled={true}
                     />
                     <SIB
@@ -537,7 +836,7 @@ class poactivity extends React.Component {
                       label="Address 2"
                       variant="outlined"
                       size="small"
-                      value={null}
+                      value={this.state.Address2}
                       disabled={true}
                     />
                     <SIB
@@ -545,7 +844,7 @@ class poactivity extends React.Component {
                       label="Address 3"
                       variant="outlined"
                       size="small"
-                      value={null}
+                      value={this.state.Address3}
                       disabled={true}
                     />
                     <SIB
@@ -553,7 +852,7 @@ class poactivity extends React.Component {
                       label="City"
                       variant="outlined"
                       size="small"
-                      value={null}
+                      value={this.state.City}
                       disabled={true}
                     />
                     <SIB
@@ -561,7 +860,7 @@ class poactivity extends React.Component {
                       label="Postcode"
                       variant="outlined"
                       size="small"
-                      value={null}
+                      value={this.state.PostCode}
                       disabled={true}
                     />
                     <SIB
@@ -569,7 +868,7 @@ class poactivity extends React.Component {
                       label="Country"
                       variant="outlined"
                       size="small"
-                      value={null}
+                      value={this.state.CountryID}
                       disabled={true}
                     />
                     <SIB
@@ -577,13 +876,13 @@ class poactivity extends React.Component {
                       label="State"
                       variant="outlined"
                       size="small"
-                      value={null}
+                      value={this.state.StateID}
                       disabled={true}
                     />
 
                     <SDIB
                       id="WareHouseID"
-                      label="Ware House"
+                      label="Warehouse"
                       onChange={(e) => this.updateFormValue("WareHouseID", e)}
                       value={this.state.PO.WareHouseID}
                       param={this.state.WareHouseList}
@@ -1138,7 +1437,7 @@ class poactivity extends React.Component {
 
     switch (param) {
       case "View":
-        Dialog.DialogContent = <Viewpo/>;
+        Dialog.DialogContent = <Viewpo />;
         this.setState({ Dialog: Dialog });
         break;
 
@@ -1266,12 +1565,12 @@ class poactivity extends React.Component {
       </Fragment>
     );
 
-   
+
 
     const dialog = (
       <Fragment>
-        <Dialog         
-           
+        <Dialog
+
           fullWidth={true}
           maxWidth="lg"
           open={this.state.Dialog.DialogStatus}
@@ -1307,8 +1606,8 @@ class poactivity extends React.Component {
           <DialogContent className="dialog-area">
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
-              {this.state.Dialog.DialogContent}
-               
+                {this.state.Dialog.DialogContent}
+
               </Grid>
             </Grid>
             <div style={{ height: 50 }}>&nbsp;</div>
