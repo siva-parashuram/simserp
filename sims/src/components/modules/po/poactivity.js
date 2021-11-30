@@ -188,9 +188,6 @@ class poactivity extends React.Component {
         UserID: 0,   // loggind in user 
       },
       PurchaseOrderLine:[]
-
-
-
     };
   }
 
