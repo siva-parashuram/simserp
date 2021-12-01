@@ -27,10 +27,13 @@ import SuccessSnackBar from "../../../compo/successSnackbar";
 import Loader from "../../../compo/loader";
 import Breadcrumb from "../../../compo/breadcrumb";
 import Dualtabcomponent from "../../../compo/dualtabcomponent";
-import Accordioncomponent from "../../../compo/accordioncomponent";
 import Sectiontitle from "../../../compo/sectiontitle";
 import Inputcustom from "../../../compo/inputcustom";
-
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Typography } from "@material-ui/core";
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
@@ -1411,7 +1414,7 @@ class postingGroupMaster extends React.Component {
                     <SDIB
                       id="RoundingAmount"
                       label="Rounding Amount"
-                      para={this.state.COAList}
+                      param={this.state.COAList}
                       value={this.state.SupplierPostingGroup.RoundingAmount}
                       onChange={(e) =>
                         updateFormValue(
@@ -1641,94 +1644,98 @@ class postingGroupMaster extends React.Component {
       </Grid>
     );
 
-    const section1 = (
-      <Fragment>
-        <Grid container spacing={0} style={{ marginTop: 20, marginBottom: 20 }}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Dualtabcomponent
-              tab1name="List"
-              tab2name="New"
-              tab1Html={tableItemPostingGroup}
-              tab2Html={formItemPostingGroup}
-            />
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
+    // const section1 = (
+    //   <Fragment>
+    //     <Grid container spacing={0} style={{ marginTop: 20, marginBottom: 20 }}>
+    //       <Grid item xs={12} sm={12} md={12} lg={12}>
+    //         <Dualtabcomponent
+    //           tab1name="List"
+    //           tab2name="New"
+    //           tab1Html={tableItemPostingGroup}
+    //           tab2Html={formItemPostingGroup}
+    //         />
+    //       </Grid>
+    //     </Grid>
+    //   </Fragment>
+    // );
 
-    const section2 = (
-      <Grid container spacing={0}>
-        <Grid item xs={12} sm={12} md={11} lg={11}>
-          <Dualtabcomponent
-            tab1name="List"
-            tab2name="New"
-            tab1Html={tableGeneralPostingGroup}
-            tab2Html={formGeneralPostingGroup}
-          />
-        </Grid>
-      </Grid>
-    );
+    // const section2 = (
+    //   <Grid container spacing={0}>
+    //     <Grid item xs={12} sm={12} md={11} lg={11}>
+    //       <Dualtabcomponent
+    //         tab1name="List"
+    //         tab2name="New"
+    //         tab1Html={tableGeneralPostingGroup}
+    //         tab2Html={formGeneralPostingGroup}
+    //       />
+    //     </Grid>
+    //   </Grid>
+    // );
 
-    const section3 = (
-      <Grid container spacing={0}>
-        <Grid item xs={12} sm={12} md={11} lg={11}>
-          <Dualtabcomponent
-            tab1name="List"
-            tab2name="New"
-            tab1Html={tableGeneralPostingGroupSetup}
-            tab2Html={formGeneralPostingGroupSetup}
-          />
-        </Grid>
-      </Grid>
-    );
-    const section4 = (
-      <Grid container spacing={0}>
-        <Grid item xs={12} sm={12} md={11} lg={11}>
-          <Dualtabcomponent
-            tab1name="List"
-            tab2name="New"
-            tab1Html={tableSupplierPostingGroup}
-            tab2Html={formSupplierPostingGroup}
-          />
-        </Grid>
-      </Grid>
-    );
-    const section5 = (
-      <Grid container spacing={0}>
-        <Grid item xs={12} sm={12} md={11} lg={11}>
-          <Dualtabcomponent
-            tab1name="List"
-            tab2name="New"
-            tab1Html={tableSupplierBranchMapping}
-            tab2Html={formSupplierBranchMapping}
-          />
-        </Grid>
-      </Grid>
-    );
-    const section6 = (
-      <Grid container spacing={0}>
-        <Grid item xs={12} sm={12} md={11} lg={11}>
-          <Dualtabcomponent
-            tab1name="List"
-            tab2name="New"
-            tab1Html={tableCustomerPostingGroup}
-            tab2Html={formCustomerPostingGroup}
-          />
-        </Grid>
-      </Grid>
-    );
-    const section7 = (
-      <Grid container spacing={0}>
-        <Grid item xs={12} sm={12} md={11} lg={11}>
-          <Dualtabcomponent
-            tab1name="List"
-            tab2name="New"
-            tab1Html={tableCustomerBranchMapping}
-            tab2Html={formCustomerBranchMapping}
-          />
-        </Grid>
-      </Grid>
-    );
+    // const section3 = (
+    //   <Grid container spacing={0}>
+    //     <Grid item xs={12} sm={12} md={11} lg={11}>
+    //       <Dualtabcomponent
+    //         tab1name="List"
+    //         tab2name="New"
+    //         tab1Html={tableGeneralPostingGroupSetup}
+    //         tab2Html={formGeneralPostingGroupSetup}
+    //       />
+    //     </Grid>
+    //   </Grid>
+    // );
+
+    // const section4 = (
+    //   <Grid container spacing={0}>
+    //     <Grid item xs={12} sm={12} md={11} lg={11}>
+    //       <Dualtabcomponent
+    //         tab1name="List"
+    //         tab2name="New"
+    //         tab1Html={tableSupplierPostingGroup}
+    //         tab2Html={formSupplierPostingGroup}
+    //       />
+    //     </Grid>
+    //   </Grid>
+    // );
+    // const section5 = (
+    //   <Grid container spacing={0}>
+    //     <Grid item xs={12} sm={12} md={11} lg={11}>
+    //       <Dualtabcomponent
+    //         tab1name="List"
+    //         tab2name="New"
+    //         tab1Html={tableSupplierBranchMapping}
+    //         tab2Html={formSupplierBranchMapping}
+    //       />
+    //     </Grid>
+    //   </Grid>
+    // );
+    // const section6 = (
+    //   <Grid container spacing={0}>
+    //     <Grid item xs={12} sm={12} md={11} lg={11}>
+    //       <Dualtabcomponent
+    //         tab1name="List"
+    //         tab2name="New"
+    //         tab1Html={tableCustomerPostingGroup}
+    //         tab2Html={formCustomerPostingGroup}
+    //       />
+    //     </Grid>
+    //   </Grid>
+    // );
+
+    // const section7 = (
+    //   <Grid container spacing={0}>
+    //     <Grid item xs={12} sm={12} md={11} lg={11}>
+    //       <Dualtabcomponent
+    //         tab1name="List"
+    //         tab2name="New"
+    //         tab1Html={tableCustomerBranchMapping}
+    //         tab2Html={formCustomerBranchMapping}
+    //       />
+    //     </Grid>
+    //   </Grid>
+    // );
+    
+    
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
         this.state.accordion1 === true
@@ -1811,96 +1818,260 @@ class postingGroupMaster extends React.Component {
           <Sectiontitle title="Item" />
           <Grid container spacing={0}>
             <Grid xs={12} sm={12} md={11} lg={11}>
-              <Accordioncomponent
-                style={{ backgroundColor: "#fafafa" }}
-                accordionKey="a-1"
+              <Accordion
+                key="PostingGroup-Details"
                 expanded={this.state.accordion1}
-                onClick={(e) => handleAccordionClick("accordion1", e)}
-                id="accordion1"
-                typographyKey="Item-Posting-Group"
-                typography="Item Posting Group"
-                accordiondetailsKey="accordion1"
-                html={section1}
-              />
+              >
+                <AccordionSummary
+                  className="accordion-Header-Design"
+                  expandIcon={
+                    <ExpandMoreIcon
+                      onClick={(e) => handleAccordionClick("accordion1", e)}
+                    />
+                  }
+                  onClick={(e) => handleAccordionClick("accordion1", e)}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                >
+                  <Typography key="" className="accordion-Header-Title">
+                    Item Posting Group
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails key="" className="AccordionDetails-css">
+                  <Grid
+                    container
+                    spacing={0}
+                    // style={{ marginTop: 20, marginBottom: 20 }}
+                  >
+                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                      <Dualtabcomponent
+                        tab1name="List"
+                        tab2name="New"
+                        tab1Html={tableItemPostingGroup}
+                        tab2Html={formItemPostingGroup}
+                      />
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
             <Grid xs={12} sm={12} md={11} lg={11}>
-              <Accordioncomponent
-                accordionKey="a-2"
+              <Accordion
+                key="PostingGroup-Details"
                 expanded={this.state.accordion2}
-                onClick={(e) => handleAccordionClick("accordion2", e)}
-                id="accordion2"
-                typographyKey="General-Posting-Group"
-                typography="General Posting Group"
-                accordiondetailsKey="accordion2"
-                html={section2}
-              />
+              >
+                <AccordionSummary
+                  className="accordion-Header-Design"
+                  expandIcon={
+                    <ExpandMoreIcon
+                      onClick={(e) => handleAccordionClick("accordion2", e)}
+                    />
+                  }
+                  onClick={(e) => handleAccordionClick("accordion2", e)}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                >
+                  <Typography key="" className="accordion-Header-Title">
+                    General Posting Group
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails key="" className="AccordionDetails-css">
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                      <Dualtabcomponent
+                        tab1name="List"
+                        tab2name="New"
+                        tab1Html={tableGeneralPostingGroup}
+                        tab2Html={formGeneralPostingGroup}
+                      />
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
             <Grid xs={12} sm={12} md={11} lg={11}>
-              <Accordioncomponent
-                accordionKey="a-3"
+              <Accordion
+                key="PostingGroup-Details"
                 expanded={this.state.accordion3}
-                onClick={(e) => handleAccordionClick("accordion3", e)}
-                id="accordion3"
-                typographyKey="General-Posting-Group-Setup"
-                typography="General Posting Group Setup"
-                accordiondetailsKey="accordion3"
-                html={section3}
-              />
+              >
+                <AccordionSummary
+                  className="accordion-Header-Design"
+                  expandIcon={
+                    <ExpandMoreIcon
+                      onClick={(e) => handleAccordionClick("accordion3", e)}
+                    />
+                  }
+                  onClick={(e) => handleAccordionClick("accordion3", e)}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                >
+                  <Typography key="" className="accordion-Header-Title">
+                    General Posting Group Setup
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails key="" className="AccordionDetails-css">
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                      <Dualtabcomponent
+                        tab1name="List"
+                        tab2name="New"
+                        tab1Html={tableGeneralPostingGroupSetup}
+                        tab2Html={formGeneralPostingGroupSetup}
+                      />
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
           </Grid>
           <Sectiontitle title="Supplier" />
           <Grid container spacing={0}>
             <Grid xs={12} sm={12} md={11} lg={11}>
-              <Accordioncomponent
-                accordionKey="a-4"
+              <Accordion
+                key="PostingGroup-Details"
                 expanded={this.state.accordion4}
-                onClick={(e) => handleAccordionClick("accordion4", e)}
-                id="accordion4"
-                typographyKey="Supplier-Posting-Group"
-                typography="Supplier-Posting-Group"
-                accordiondetailsKey="accordion4"
-                html={section4}
-              />
+              >
+                <AccordionSummary
+                  className="accordion-Header-Design"
+                  expandIcon={
+                    <ExpandMoreIcon
+                      onClick={(e) => handleAccordionClick("accordion4", e)}
+                    />
+                  }
+                  onClick={(e) => handleAccordionClick("accordion4", e)}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                >
+                  <Typography key="" className="accordion-Header-Title">
+                    Supplier-Posting-Group
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails key="" className="AccordionDetails-css">
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                      <Dualtabcomponent
+                        tab1name="List"
+                        tab2name="New"
+                        tab1Html={tableSupplierPostingGroup}
+                        tab2Html={formSupplierPostingGroup}
+                      />
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
             <Grid xs={12} sm={12} md={11} lg={11}>
-              <Accordioncomponent
-                accordionKey="a-5"
+              <Accordion
+                key="PostingGroup-Details"
                 expanded={this.state.accordion5}
-                onClick={(e) => handleAccordionClick("accordion5", e)}
-                id="accordion5"
-                typographyKey="SupplierBranchMapping"
-                typography="Supplier Branch Mapping"
-                accordiondetailsKey="accordion5"
-                html={section5}
-              />
+              >
+                <AccordionSummary
+                  className="accordion-Header-Design"
+                  expandIcon={
+                    <ExpandMoreIcon
+                      onClick={(e) => handleAccordionClick("accordion5", e)}
+                    />
+                  }
+                  onClick={(e) => handleAccordionClick("accordion5", e)}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                >
+                  <Typography key="" className="accordion-Header-Title">
+                    Supplier Branch Mapping
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails key="" className="AccordionDetails-css">
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                      <Dualtabcomponent
+                        tab1name="List"
+                        tab2name="New"
+                        tab1Html={tableSupplierBranchMapping}
+                        tab2Html={formSupplierBranchMapping}
+                      />
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
           </Grid>
 
           <Sectiontitle title="Customer" />
           <Grid container spacing={0}>
             <Grid xs={12} sm={12} md={11} lg={11}>
-              <Accordioncomponent
-                accordionKey="a-6"
+              <Accordion
+                key="PostingGroup-Details"
                 expanded={this.state.accordion6}
-                onClick={(e) => handleAccordionClick("accordion6", e)}
-                id="accordion6"
-                typographyKey="Customer-Posting-Group"
-                typography=" Customer Posting Group"
-                accordiondetailsKey="accordion6"
-                html={section6}
-              />
+              >
+                <AccordionSummary
+                  className="accordion-Header-Design"
+                  expandIcon={
+                    <ExpandMoreIcon
+                      onClick={(e) => handleAccordionClick("accordion6", e)}
+                    />
+                  }
+                  onClick={(e) => handleAccordionClick("accordion6", e)}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                >
+                  <Typography key="" className="accordion-Header-Title">
+                    Customer Posting Group
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails key="" className="AccordionDetails-css">
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                      <Dualtabcomponent
+                        tab1name="List"
+                        tab2name="New"
+                        tab1Html={tableCustomerPostingGroup}
+                        tab2Html={formCustomerPostingGroup}
+                      />
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
             <Grid xs={12} sm={12} md={11} lg={11}>
-              <Accordioncomponent
-                accordionKey="a-7"
+              <Accordion
+                key="PostingGroup-Details"
                 expanded={this.state.accordion7}
-                onClick={(e) => handleAccordionClick("accordion7", e)}
-                id="accordion7"
-                typographyKey="Customer-Branch-Mapping"
-                typography="Customer Branch Mapping"
-                accordiondetailsKey="accordion7"
-                html={section7}
-              />
+              >
+                <AccordionSummary
+                  className="accordion-Header-Design"
+                  expandIcon={
+                    <ExpandMoreIcon
+                      onClick={(e) => handleAccordionClick("accordion7", e)}
+                    />
+                  }
+                  onClick={(e) => handleAccordionClick("accordion7", e)}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                >
+                  <Typography key="" className="accordion-Header-Title">
+                    Customer Branch Mapping
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails key="" className="AccordionDetails-css">
+                  <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                      <Dualtabcomponent
+                        tab1name="List"
+                        tab2name="New"
+                        tab1Html={tableCustomerBranchMapping}
+                        tab2Html={formCustomerBranchMapping}
+                      />
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
           </Grid>
         </div>

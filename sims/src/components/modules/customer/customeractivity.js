@@ -41,6 +41,10 @@ import TablecustomInput from "../../compo/tablerowcellcustomhtml";
 import DropdownInput from "../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Addresses from "./component/addresses";
 import Contact from "./component/contact";
@@ -426,8 +430,8 @@ class customeractivity extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].code,
-            value: data[i].currId,
+            name: data[i].Code,
+            value: data[i].CurrID,
           };
           newD.push(o);
         }
@@ -889,7 +893,7 @@ class customeractivity extends React.Component {
         Customer[param] = CF.toInt(e.target.value);
         this.setParams(Customer);
         break;
-      case "CustomerCategoryID":
+      case "CustomerPostingGroupID":
         Customer[param] = CF.toInt(e.target.value);
         this.setParams(Customer);
         break;
@@ -897,7 +901,7 @@ class customeractivity extends React.Component {
         Customer[param] = CF.toInt(e.target.value);
         this.setParams(Customer);
         break;
-      case "CustomerPostingGroupID":
+      case "PaymentTermID":
         Customer[param] = CF.toInt(e.target.value);
         this.setParams(Customer);
         break;
@@ -1250,6 +1254,7 @@ class customeractivity extends React.Component {
 
       let Customer = this.state.Customer;
       let reqData = {
+        ValidUser:ValidUser,
         DocumentNumber: {
           NoSeriesID: 1,
           TransDate: moment().format("MM-DD-YYYY"),
@@ -1333,581 +1338,581 @@ class customeractivity extends React.Component {
         });
     };
 
-    const generalform = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <div>
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={5} lg={5}>
-                  <SIB
-                    id="No"
-                    label="No"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("No", e)}
-                    value={this.state.Customer.No}
-                    isMandatory={true}
-                    disabled={true}
-                  />
-                  <SIB
-                    id="Name"
-                    label="Name"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("Name", e)}
-                    value={this.state.Customer.Name}
-                    isMandatory={true}
-                    error={this.state.Validations.Name.errorState}
-                  />
-                  <SIB
-                    id="Address"
-                    label="Address"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("Address", e)}
-                    value={this.state.Customer.Address}
-                    error={this.state.Validations.Address.errorState}
-                  />
-                  <SIB
-                    id="Address2"
-                    label="Address2"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("Address2", e)}
-                    value={this.state.Customer.Address2}
-                    error={this.state.Validations.Address2.errorState}
-                  />
-                  <SIB
-                    id="Address3"
-                    label="Address3"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("Address3", e)}
-                    value={this.state.Customer.Address3}
-                    error={this.state.Validations.Address3.errorState}
-                  />
-                  <SIB
-                    id="City"
-                    label="City"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("City", e)}
-                    value={this.state.Customer.City}
-                    error={this.state.Validations.City.errorState}
-                  />
-                  <SIB
-                    id="PostCode"
-                    label="PostCode"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("PostCode", e)}
-                    value={this.state.Customer.PostCode}
-                    error={this.state.Validations.PostCode.errorState}
-                  />
-                  <SDIB
-                    id="CountryID"
-                    label="Country"
-                    onChange={(e) => this.updateFormValue("CountryID", e)}
-                    value={this.state.Customer.CountryID}
-                    param={this.state.countryData}
-                    isMandatory={true}
-                  />
-                  <SDIB
-                    id="StateID"
-                    label="State"
-                    onChange={(e) => this.updateFormValue("StateID", e)}
-                    value={this.state.Customer.StateID}
-                    param={this.state.stateData}
-                  />
+    // const generalform = (
+    //   <Fragment>
+    //     <Grid container spacing={0}>
+    //       <Grid item xs={12} sm={12} md={12} lg={12}>
+    //         <div>
+    //           <Grid container spacing={0}>
+    //             <Grid item xs={12} sm={12} md={5} lg={5}>
+    //               <SIB
+    //                 id="No"
+    //                 label="No"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("No", e)}
+    //                 value={this.state.Customer.No}
+    //                 isMandatory={true}
+    //                 disabled={true}
+    //               />
+    //               <SIB
+    //                 id="Name"
+    //                 label="Name"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("Name", e)}
+    //                 value={this.state.Customer.Name}
+    //                 isMandatory={true}
+    //                 error={this.state.Validations.Name.errorState}
+    //               />
+    //               <SIB
+    //                 id="Address"
+    //                 label="Address"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("Address", e)}
+    //                 value={this.state.Customer.Address}
+    //                 error={this.state.Validations.Address.errorState}
+    //               />
+    //               <SIB
+    //                 id="Address2"
+    //                 label="Address2"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("Address2", e)}
+    //                 value={this.state.Customer.Address2}
+    //                 error={this.state.Validations.Address2.errorState}
+    //               />
+    //               <SIB
+    //                 id="Address3"
+    //                 label="Address3"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("Address3", e)}
+    //                 value={this.state.Customer.Address3}
+    //                 error={this.state.Validations.Address3.errorState}
+    //               />
+    //               <SIB
+    //                 id="City"
+    //                 label="City"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("City", e)}
+    //                 value={this.state.Customer.City}
+    //                 error={this.state.Validations.City.errorState}
+    //               />
+    //               <SIB
+    //                 id="PostCode"
+    //                 label="PostCode"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("PostCode", e)}
+    //                 value={this.state.Customer.PostCode}
+    //                 error={this.state.Validations.PostCode.errorState}
+    //               />
+    //               <SDIB
+    //                 id="CountryID"
+    //                 label="Country"
+    //                 onChange={(e) => this.updateFormValue("CountryID", e)}
+    //                 value={this.state.Customer.CountryID}
+    //                 param={this.state.countryData}
+    //                 isMandatory={true}
+    //               />
+    //               <SDIB
+    //                 id="StateID"
+    //                 label="State"
+    //                 onChange={(e) => this.updateFormValue("StateID", e)}
+    //                 value={this.state.Customer.StateID}
+    //                 param={this.state.stateData}
+    //               />
 
-                  <SIB
-                    id="ContactPerson"
-                    label="ContactPerson"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("ContactPerson", e)}
-                    value={this.state.Customer.ContactPerson}
-                    error={this.state.Validations.ContactPerson.errorState}
-                  />
-                  <SIB
-                    id="EmailID"
-                    label="EmailID"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("EmailID", e)}
-                    value={this.state.Customer.EmailID}
-                    error={this.state.Validations.EmailID.errorState}
-                  />
-                  <SDBIB
-                    id="SalesPersonID"
-                    label="Sales Person"
-                    onChange={(e) => this.updateFormValue("SalesPersonID", e)}
-                    value={this.state.Customer.SalesPersonID}
-                    param={this.state.SalesPersonData}
-                    onClick={(e) => openDialog("SalesPerson")}
-                  />
+    //               <SIB
+    //                 id="ContactPerson"
+    //                 label="ContactPerson"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("ContactPerson", e)}
+    //                 value={this.state.Customer.ContactPerson}
+    //                 error={this.state.Validations.ContactPerson.errorState}
+    //               />
+    //               <SIB
+    //                 id="EmailID"
+    //                 label="EmailID"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("EmailID", e)}
+    //                 value={this.state.Customer.EmailID}
+    //                 error={this.state.Validations.EmailID.errorState}
+    //               />
+    //               <SDBIB
+    //                 id="SalesPersonID"
+    //                 label="Sales Person"
+    //                 onChange={(e) => this.updateFormValue("SalesPersonID", e)}
+    //                 value={this.state.Customer.SalesPersonID}
+    //                 param={this.state.SalesPersonData}
+    //                 onClick={(e) => openDialog("SalesPerson")}
+    //               />
 
-                  {/* <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Sales Person
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
-                                <select
-                                  style={{ width: "90%", height: 30 }}
-                                  className="dropdown-css"
-                                  id="SalesPersonID"
-                                  onChange={(e) =>
-                                    this.updateFormValue("SalesPersonID", e)
-                                  }
-                                  value={this.state.Customer.SalesPersonID}
-                                >
-                                  <option value="-" disabled>
-                                    Select
-                                  </option>
+    //               {/* <TableRow>
+    //                       <TableCell align="left" className="no-border-table">
+    //                         Sales Person
+    //                       </TableCell>
+    //                       <TableCell align="left" className="no-border-table">
+    //                         <Grid container spacing={0}>
+    //                           <Grid item xs={12} sm={12} md={10} lg={10}>
+    //                             <select
+    //                               style={{ width: "90%", height: 30 }}
+    //                               className="dropdown-css"
+    //                               id="SalesPersonID"
+    //                               onChange={(e) =>
+    //                                 this.updateFormValue("SalesPersonID", e)
+    //                               }
+    //                               value={this.state.Customer.SalesPersonID}
+    //                             >
+    //                               <option value="-" disabled>
+    //                                 Select
+    //                               </option>
 
-                                  {this.state.SalesPersonData.map((item, i) => (
-                                    <option value={parseInt(item.value)}>
-                                      {item.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <button
-                                  className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("SalesPerson")}
-                                >
-                                  ...
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow> */}
-                  <SDBIB
-                    id="CustomerCategoryID"
-                    label=" Customer Category"
-                    onChange={(e) =>
-                      this.updateFormValue("CustomerCategoryID", e)
-                    }
-                    value={this.state.Customer.CustomerCategoryID}
-                    param={this.state.CustomerCategoryData}
-                    onClick={(e) => openDialog("CustomerCategory")}
-                  />
+    //                               {this.state.SalesPersonData.map((item, i) => (
+    //                                 <option value={parseInt(item.value)}>
+    //                                   {item.name}
+    //                                 </option>
+    //                               ))}
+    //                             </select>
+    //                           </Grid>
+    //                           <Grid item xs={12} sm={12} md={2} lg={2}>
+    //                             <button
+    //                               className="dropdowninputbtn"
+    //                               onClick={(e) => openDialog("SalesPerson")}
+    //                             >
+    //                               ...
+    //                             </button>
+    //                           </Grid>
+    //                         </Grid>
+    //                       </TableCell>
+    //                     </TableRow> */}
+    //               <SDBIB
+    //                 id="CustomerCategoryID"
+    //                 label=" Customer Category"
+    //                 onChange={(e) =>
+    //                   this.updateFormValue("CustomerCategoryID", e)
+    //                 }
+    //                 value={this.state.Customer.CustomerCategoryID}
+    //                 param={this.state.CustomerCategoryData}
+    //                 onClick={(e) => openDialog("CustomerCategory")}
+    //               />
 
-                  {/* <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Customer Category
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
-                                <select
-                                  style={{ width: "90%", height: 30 }}
-                                  className="dropdown-css"
-                                  id="CustomerCategoryID"
-                                  onChange={(e) =>
-                                    this.updateFormValue(
-                                      "CustomerCategoryID",
-                                      e
-                                    )
-                                  }
-                                  value={this.state.Customer.CustomerCategoryID}
-                                >
-                                  <option value="-" disabled>
-                                    Select
-                                  </option>
+    //               {/* <TableRow>
+    //                       <TableCell align="left" className="no-border-table">
+    //                         Customer Category
+    //                       </TableCell>
+    //                       <TableCell align="left" className="no-border-table">
+    //                         <Grid container spacing={0}>
+    //                           <Grid item xs={12} sm={12} md={10} lg={10}>
+    //                             <select
+    //                               style={{ width: "90%", height: 30 }}
+    //                               className="dropdown-css"
+    //                               id="CustomerCategoryID"
+    //                               onChange={(e) =>
+    //                                 this.updateFormValue(
+    //                                   "CustomerCategoryID",
+    //                                   e
+    //                                 )
+    //                               }
+    //                               value={this.state.Customer.CustomerCategoryID}
+    //                             >
+    //                               <option value="-" disabled>
+    //                                 Select
+    //                               </option>
 
-                                  {this.state.CustomerCategoryData.map(
-                                    (item, i) => (
-                                      <option value={parseInt(item.value)}>
-                                        {item.name}
-                                      </option>
-                                    )
-                                  )}
-                                </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <button
-                                  className="dropdowninputbtn"
-                                  onClick={(e) =>
-                                    openDialog("CustomerCategory")
-                                  }
-                                >
-                                  ...
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow> */}
-                </Grid>
-                <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                <Grid item xs={12} sm={12} md={5} lg={5}>
-                  <SIB
-                    id="Website"
-                    label="Website"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("Website", e)}
-                    value={this.state.Customer.Website}
-                    error={this.state.Validations.Website.errorState}
-                  />
-                  <SIB
-                    id="PhoneNo"
-                    label="PhoneNo"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("PhoneNo", e)}
-                    value={this.state.Customer.PhoneNo}
-                    error={this.state.Validations.PhoneNo.errorState}
-                  />
-                  <SIB
-                    id="FaxNo"
-                    label="FaxNo"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("FaxNo", e)}
-                    value={this.state.Customer.FaxNo}
-                    error={this.state.Validations.FaxNo.errorState}
-                  />
+    //                               {this.state.CustomerCategoryData.map(
+    //                                 (item, i) => (
+    //                                   <option value={parseInt(item.value)}>
+    //                                     {item.name}
+    //                                   </option>
+    //                                 )
+    //                               )}
+    //                             </select>
+    //                           </Grid>
+    //                           <Grid item xs={12} sm={12} md={2} lg={2}>
+    //                             <button
+    //                               className="dropdowninputbtn"
+    //                               onClick={(e) =>
+    //                                 openDialog("CustomerCategory")
+    //                               }
+    //                             >
+    //                               ...
+    //                             </button>
+    //                           </Grid>
+    //                         </Grid>
+    //                       </TableCell>
+    //                     </TableRow> */}
+    //             </Grid>
+    //             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+    //             <Grid item xs={12} sm={12} md={5} lg={5}>
+    //               <SIB
+    //                 id="Website"
+    //                 label="Website"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("Website", e)}
+    //                 value={this.state.Customer.Website}
+    //                 error={this.state.Validations.Website.errorState}
+    //               />
+    //               <SIB
+    //                 id="PhoneNo"
+    //                 label="PhoneNo"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("PhoneNo", e)}
+    //                 value={this.state.Customer.PhoneNo}
+    //                 error={this.state.Validations.PhoneNo.errorState}
+    //               />
+    //               <SIB
+    //                 id="FaxNo"
+    //                 label="FaxNo"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("FaxNo", e)}
+    //                 value={this.state.Customer.FaxNo}
+    //                 error={this.state.Validations.FaxNo.errorState}
+    //               />
 
-                  <SIB
-                    id="CreditDays"
-                    label="CreditDays"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("CreditDays", e)}
-                    value={this.state.Customer.CreditDays}
-                    error={this.state.Validations.CreditDays.errorState}
-                  />
-                  <SIB
-                    id="CreditLimit"
-                    label="CreditLimit"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("CreditLimit", e)}
-                    value={this.state.Customer.CreditLimit}
-                    error={this.state.Validations.CreditLimit.errorState}
-                  />
+    //               <SIB
+    //                 id="CreditDays"
+    //                 label="CreditDays"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("CreditDays", e)}
+    //                 value={this.state.Customer.CreditDays}
+    //                 error={this.state.Validations.CreditDays.errorState}
+    //               />
+    //               <SIB
+    //                 id="CreditLimit"
+    //                 label="CreditLimit"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("CreditLimit", e)}
+    //                 value={this.state.Customer.CreditLimit}
+    //                 error={this.state.Validations.CreditLimit.errorState}
+    //               />
 
-                  <SDIB
-                    id="CreditRating"
-                    label="CreditRating"
-                    onChange={(e) => this.updateFormValue("CreditRating", e)}
-                    value={this.state.Customer.CreditRating}
-                    param={this.state.CreditRating}
-                  />
+    //               <SDIB
+    //                 id="CreditRating"
+    //                 label="CreditRating"
+    //                 onChange={(e) => this.updateFormValue("CreditRating", e)}
+    //                 value={this.state.Customer.CreditRating}
+    //                 param={this.state.CreditRating}
+    //               />
 
-                  <SIB
-                    id="GraceDays"
-                    label="GraceDays"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("GraceDays", e)}
-                    value={this.state.Customer.GraceDays}
-                    error={this.state.Validations.GraceDays.errorState}
-                  />
+    //               <SIB
+    //                 id="GraceDays"
+    //                 label="GraceDays"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("GraceDays", e)}
+    //                 value={this.state.Customer.GraceDays}
+    //                 error={this.state.Validations.GraceDays.errorState}
+    //               />
 
-                  <SSIB
-                    key="IsGroupCompany"
-                    id="IsGroupCompany"
-                    label="IsGroupCompany"
-                    param={this.state.Customer.IsGroupCompany}
-                    onChange={(e) => this.updateFormValue("IsGroupCompany", e)}
-                  />
+    //               <SSIB
+    //                 key="IsGroupCompany"
+    //                 id="IsGroupCompany"
+    //                 label="IsGroupCompany"
+    //                 param={this.state.Customer.IsGroupCompany}
+    //                 onChange={(e) => this.updateFormValue("IsGroupCompany", e)}
+    //               />
 
-                  <SSIB
-                    key="IsBlock"
-                    id="IsBlock"
-                    label="IsBlock"
-                    param={this.state.Customer.IsBlock}
-                    onChange={(e) => this.updateFormValue("IsBlock", e)}
-                  />
-                  <SSIB
-                    key="IsEmailAlert"
-                    id="IsEmailAlert"
-                    label="IsEmailAlert"
-                    param={this.state.Customer.IsEmailAlert}
-                    onChange={(e) => this.updateFormValue("IsEmailAlert", e)}
-                  />
-                </Grid>
-              </Grid>
-            </div>
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
+    //               <SSIB
+    //                 key="IsBlock"
+    //                 id="IsBlock"
+    //                 label="IsBlock"
+    //                 param={this.state.Customer.IsBlock}
+    //                 onChange={(e) => this.updateFormValue("IsBlock", e)}
+    //               />
+    //               <SSIB
+    //                 key="IsEmailAlert"
+    //                 id="IsEmailAlert"
+    //                 label="IsEmailAlert"
+    //                 param={this.state.Customer.IsEmailAlert}
+    //                 onChange={(e) => this.updateFormValue("IsEmailAlert", e)}
+    //               />
+    //             </Grid>
+    //           </Grid>
+    //         </div>
+    //       </Grid>
+    //     </Grid>
+    //   </Fragment>
+    // );
 
-    const invform = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <div>
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={5} lg={5}>
-                  <SDIB
-                    id="CurrID"
-                    label="CurrID"
-                    onChange={(e) => this.updateFormValue("CurrID", e)}
-                    value={this.state.Customer.CurrID}
-                    param={this.state.currencyList}
-                    isMandatory={true}
-                  />
-                  <SSIB
-                    key="IsGrowthBonanza"
-                    id="IsGrowthBonanza"
-                    label="IsGrowthBonanza"
-                    param={this.state.Customer.IsGrowthBonanza}
-                    onChange={(e) => this.updateFormValue("IsGrowthBonanza", e)}
-                  />
-                  <SSIB
-                    key="IsSlabDiscount"
-                    id="IsSlabDiscount"
-                    label="IsSlabDiscount"
-                    param={this.state.Customer.IsSlabDiscount}
-                    onChange={(e) => this.updateFormValue("IsSlabDiscount", e)}
-                  />
-                  <SSIB
-                    key="IsCarriage"
-                    id="IsCarriage"
-                    label="IsCarriage"
-                    param={this.state.Customer.IsCarriage}
-                    onChange={(e) => this.updateFormValue("IsCarriage", e)}
-                  />
-                  <SSIB
-                    key="IsDueEndOfMonth"
-                    id="IsDueEndOfMonth"
-                    label="IsDueEndOfMonth"
-                    param={this.state.Customer.IsDueEndOfMonth}
-                    onChange={(e) => this.updateFormValue("IsDueEndOfMonth", e)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                <Grid item xs={12} sm={12} md={5} lg={5}>
-                  <SSIB
-                    key="IsBankCharge"
-                    id="IsBankCharge"
-                    label="IsBankCharge"
-                    param={this.state.Customer.IsBankCharge}
-                    onChange={(e) => this.updateFormValue("IsBankCharge", e)}
-                  />
-                  <SIB
-                    id="BankCharge"
-                    label="BankCharge"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("BankCharge", e)}
-                    value={this.state.Customer.BankCharge}
-                    error={this.state.Validations.BankCharge.errorState}
-                  />
+    // const invform = (
+    //   <Fragment>
+    //     <Grid container spacing={0}>
+    //       <Grid item xs={12} sm={12} md={12} lg={12}>
+    //         <div>
+    //           <Grid container spacing={0}>
+    //             <Grid item xs={12} sm={12} md={5} lg={5}>
+    //               <SDIB
+    //                 id="CurrID"
+    //                 label="CurrID"
+    //                 onChange={(e) => this.updateFormValue("CurrID", e)}
+    //                 value={this.state.Customer.CurrID}
+    //                 param={this.state.currencyList}
+    //                 isMandatory={true}
+    //               />
+    //               <SSIB
+    //                 key="IsGrowthBonanza"
+    //                 id="IsGrowthBonanza"
+    //                 label="IsGrowthBonanza"
+    //                 param={this.state.Customer.IsGrowthBonanza}
+    //                 onChange={(e) => this.updateFormValue("IsGrowthBonanza", e)}
+    //               />
+    //               <SSIB
+    //                 key="IsSlabDiscount"
+    //                 id="IsSlabDiscount"
+    //                 label="IsSlabDiscount"
+    //                 param={this.state.Customer.IsSlabDiscount}
+    //                 onChange={(e) => this.updateFormValue("IsSlabDiscount", e)}
+    //               />
+    //               <SSIB
+    //                 key="IsCarriage"
+    //                 id="IsCarriage"
+    //                 label="IsCarriage"
+    //                 param={this.state.Customer.IsCarriage}
+    //                 onChange={(e) => this.updateFormValue("IsCarriage", e)}
+    //               />
+    //               <SSIB
+    //                 key="IsDueEndOfMonth"
+    //                 id="IsDueEndOfMonth"
+    //                 label="IsDueEndOfMonth"
+    //                 param={this.state.Customer.IsDueEndOfMonth}
+    //                 onChange={(e) => this.updateFormValue("IsDueEndOfMonth", e)}
+    //               />
+    //             </Grid>
+    //             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+    //             <Grid item xs={12} sm={12} md={5} lg={5}>
+    //               <SSIB
+    //                 key="IsBankCharge"
+    //                 id="IsBankCharge"
+    //                 label="IsBankCharge"
+    //                 param={this.state.Customer.IsBankCharge}
+    //                 onChange={(e) => this.updateFormValue("IsBankCharge", e)}
+    //               />
+    //               <SIB
+    //                 id="BankCharge"
+    //                 label="BankCharge"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("BankCharge", e)}
+    //                 value={this.state.Customer.BankCharge}
+    //                 error={this.state.Validations.BankCharge.errorState}
+    //               />
 
-                  <SDIB
-                    id="GeneralPostingGroupID"
-                    label="GeneralPosting"
-                    onChange={(e) =>
-                      this.updateFormValue("GeneralPostingGroupID", e)
-                    }
-                    value={this.state.Customer.GeneralPostingGroupID}
-                    param={this.state.GeneralPostingGroupList}
-                    isMandatory={true}
-                  />
-                  <SDIB
-                    id="CustomerPostingGroupID"
-                    label="CustomerPosting"
-                    onChange={(e) => this.updateFormValue("PaymentTermID", e)}
-                    value={this.state.Customer.PaymentTermID}
-                    param={this.state.CustomerPostingGroupList}
-                    isMandatory={true}
-                  />
+    //               <SDIB
+    //                 id="GeneralPostingGroupID"
+    //                 label="GeneralPosting"
+    //                 onChange={(e) =>
+    //                   this.updateFormValue("GeneralPostingGroupID", e)
+    //                 }
+    //                 value={this.state.Customer.GeneralPostingGroupID}
+    //                 param={this.state.GeneralPostingGroupList}
+    //                 isMandatory={true}
+    //               />
+    //               <SDIB
+    //                 id="CustomerPostingGroupID"
+    //                 label="CustomerPosting"
+    //                 onChange={(e) => this.updateFormValue("PaymentTermID", e)}
+    //                 value={this.state.Customer.PaymentTermID}
+    //                 param={this.state.CustomerPostingGroupList}
+    //                 isMandatory={true}
+    //               />
 
-                  <SDBIB
-                    id="PaymentTermID"
-                    label="  Payment Term"
-                    onChange={(e) =>
-                      this.updateFormValue("CustomerCategoryID", e)
-                    }
-                    value={this.state.Customer.CustomerCategoryID}
-                    param={this.state.paymentTermsData}
-                    onClick={(e) => openDialog("PaymentTerms")}
-                  />
+    //               <SDBIB
+    //                 id="PaymentTermID"
+    //                 label="  Payment Term"
+    //                 onChange={(e) =>
+    //                   this.updateFormValue("CustomerCategoryID", e)
+    //                 }
+    //                 value={this.state.Customer.CustomerCategoryID}
+    //                 param={this.state.paymentTermsData}
+    //                 onClick={(e) => openDialog("PaymentTerms")}
+    //               />
 
-                  {/* <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            Payment Term
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Grid container spacing={0}>
-                              <Grid item xs={12} sm={12} md={10} lg={10}>
-                                <select
-                                  className="dropdown-css"
-                                  id="PaymentTermID"
-                                  onChange={(e) =>
-                                    this.updateFormValue("PaymentTermID", e)
-                                  }
-                                  value={this.state.Customer.PaymentTermID}
-                                >
-                                  <option value="-" disabled>
-                                    Select
-                                  </option>
+    //               {/* <TableRow>
+    //                       <TableCell align="left" className="no-border-table">
+    //                         Payment Term
+    //                       </TableCell>
+    //                       <TableCell align="left" className="no-border-table">
+    //                         <Grid container spacing={0}>
+    //                           <Grid item xs={12} sm={12} md={10} lg={10}>
+    //                             <select
+    //                               className="dropdown-css"
+    //                               id="PaymentTermID"
+    //                               onChange={(e) =>
+    //                                 this.updateFormValue("PaymentTermID", e)
+    //                               }
+    //                               value={this.state.Customer.PaymentTermID}
+    //                             >
+    //                               <option value="-" disabled>
+    //                                 Select
+    //                               </option>
 
-                                  {this.state.paymentTermsData.map(
-                                    (item, i) => (
-                                      <option value={parseInt(item.value)}>
-                                        {item.name}
-                                      </option>
-                                    )
-                                  )}
-                                </select>
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <button
-                                  className="dropdowninputbtn"
-                                  onClick={(e) => openDialog("PaymentTerms")}
-                                >
-                                  ...
-                                </button>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-                        </TableRow> */}
-                </Grid>
-              </Grid>
-            </div>
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
+    //                               {this.state.paymentTermsData.map(
+    //                                 (item, i) => (
+    //                                   <option value={parseInt(item.value)}>
+    //                                     {item.name}
+    //                                   </option>
+    //                                 )
+    //                               )}
+    //                             </select>
+    //                           </Grid>
+    //                           <Grid item xs={12} sm={12} md={2} lg={2}>
+    //                             <button
+    //                               className="dropdowninputbtn"
+    //                               onClick={(e) => openDialog("PaymentTerms")}
+    //                             >
+    //                               ...
+    //                             </button>
+    //                           </Grid>
+    //                         </Grid>
+    //                       </TableCell>
+    //                     </TableRow> */}
+    //             </Grid>
+    //           </Grid>
+    //         </div>
+    //       </Grid>
+    //     </Grid>
+    //   </Fragment>
+    // );
 
-    const taxinfoform = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <div>
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={5} lg={5}>
-                  <SSIB
-                    key="IsTaxExempt"
-                    id="IsTaxExempt"
-                    label="IsTaxExempt"
-                    param={this.state.Customer.IsTaxExempt}
-                    onChange={(e) => this.updateFormValue("IsTaxExempt", e)}
-                  />
-                  <SIB
-                    id="Reason"
-                    label="Reason"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("Reason", e)}
-                    value={this.state.Customer.Reason}
-                    error={this.state.Validations.Reason.errorState}
-                  />
+    // const taxinfoform = (
+    //   <Fragment>
+    //     <Grid container spacing={0}>
+    //       <Grid item xs={12} sm={12} md={12} lg={12}>
+    //         <div>
+    //           <Grid container spacing={0}>
+    //             <Grid item xs={12} sm={12} md={5} lg={5}>
+    //               <SSIB
+    //                 key="IsTaxExempt"
+    //                 id="IsTaxExempt"
+    //                 label="IsTaxExempt"
+    //                 param={this.state.Customer.IsTaxExempt}
+    //                 onChange={(e) => this.updateFormValue("IsTaxExempt", e)}
+    //               />
+    //               <SIB
+    //                 id="Reason"
+    //                 label="Reason"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("Reason", e)}
+    //                 value={this.state.Customer.Reason}
+    //                 error={this.state.Validations.Reason.errorState}
+    //               />
 
-                  <SSIB
-                    key="IsEcommerce"
-                    id="IsEcommerce"
-                    label="IsEcommerce"
-                    param={this.state.Customer.IsEcommerce}
-                    onChange={(e) => this.updateFormValue("IsEcommerce", e)}
-                  />
-                  <SIB
-                    id="EcommerceGSTNo"
-                    label="EcommerceGSTNo"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("EcommerceGSTNo", e)}
-                    value={this.state.Customer.EcommerceGSTNo}
-                    error={this.state.Validations.EcommerceGSTNo.errorState}
-                  />
+    //               <SSIB
+    //                 key="IsEcommerce"
+    //                 id="IsEcommerce"
+    //                 label="IsEcommerce"
+    //                 param={this.state.Customer.IsEcommerce}
+    //                 onChange={(e) => this.updateFormValue("IsEcommerce", e)}
+    //               />
+    //               <SIB
+    //                 id="EcommerceGSTNo"
+    //                 label="EcommerceGSTNo"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("EcommerceGSTNo", e)}
+    //                 value={this.state.Customer.EcommerceGSTNo}
+    //                 error={this.state.Validations.EcommerceGSTNo.errorState}
+    //               />
 
-                  <SSIB
-                    key="EcommerceB2B"
-                    id="EcommerceB2B"
-                    label="EcommerceB2B"
-                    param={this.state.Customer.EcommerceB2B}
-                    onChange={(e) => this.updateFormValue("EcommerceB2B", e)}
-                  />
+    //               <SSIB
+    //                 key="EcommerceB2B"
+    //                 id="EcommerceB2B"
+    //                 label="EcommerceB2B"
+    //                 param={this.state.Customer.EcommerceB2B}
+    //                 onChange={(e) => this.updateFormValue("EcommerceB2B", e)}
+    //               />
 
-                  <SDIB
-                    id="EcommerceNoSeries"
-                    label="EcommerceNoSeries"
-                    onChange={(e) =>
-                      this.updateFormValue("EcommerceNoSeries", e)
-                    }
-                    value={this.state.Customer.EcommerceNoSeries}
-                    param={[]}
-                  />
-                  <SDIB
-                    id="GSTCutomerType"
-                    label="GSTCutomerType"
-                    onChange={(e) => this.updateFormValue("GSTCutomerType", e)}
-                    value={this.state.Customer.GSTCutomerType}
-                    param={this.state.GSTCutomerType}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                <Grid item xs={12} sm={12} md={5} lg={5}>
-                  <SIB
-                    id="GSTNo"
-                    label="GST No"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("GSTNo", e)}
-                    value={this.state.Customer.GSTNo}
-                    error={this.state.Validations.GSTNo.errorState}
-                  />
-                  <SIB
-                    id="PANNo"
-                    label="PAN No"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("PANNo", e)}
-                    value={this.state.Customer.PANNo}
-                    error={this.state.Validations.PANNo.errorState}
-                  />
-                  <SDIB
-                    id="IncoID"
-                    label="IncoID"
-                    onChange={(e) => this.updateFormValue("IncoID", e)}
-                    value={this.state.Customer.IncoID}
-                    param={[]}
-                  />
-                  <SIB
-                    id="VATNo"
-                    label="VATNo"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("VATNo", e)}
-                    value={this.state.Customer.VATNo}
-                    error={this.state.Validations.VATNo.errorState}
-                  />
+    //               <SDIB
+    //                 id="EcommerceNoSeries"
+    //                 label="EcommerceNoSeries"
+    //                 onChange={(e) =>
+    //                   this.updateFormValue("EcommerceNoSeries", e)
+    //                 }
+    //                 value={this.state.Customer.EcommerceNoSeries}
+    //                 param={[]}
+    //               />
+    //               <SDIB
+    //                 id="GSTCutomerType"
+    //                 label="GSTCutomerType"
+    //                 onChange={(e) => this.updateFormValue("GSTCutomerType", e)}
+    //                 value={this.state.Customer.GSTCutomerType}
+    //                 param={this.state.GSTCutomerType}
+    //               />
+    //             </Grid>
+    //             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+    //             <Grid item xs={12} sm={12} md={5} lg={5}>
+    //               <SIB
+    //                 id="GSTNo"
+    //                 label="GST No"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("GSTNo", e)}
+    //                 value={this.state.Customer.GSTNo}
+    //                 error={this.state.Validations.GSTNo.errorState}
+    //               />
+    //               <SIB
+    //                 id="PANNo"
+    //                 label="PAN No"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("PANNo", e)}
+    //                 value={this.state.Customer.PANNo}
+    //                 error={this.state.Validations.PANNo.errorState}
+    //               />
+    //               <SDIB
+    //                 id="IncoID"
+    //                 label="IncoID"
+    //                 onChange={(e) => this.updateFormValue("IncoID", e)}
+    //                 value={this.state.Customer.IncoID}
+    //                 param={[]}
+    //               />
+    //               <SIB
+    //                 id="VATNo"
+    //                 label="VATNo"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("VATNo", e)}
+    //                 value={this.state.Customer.VATNo}
+    //                 error={this.state.Validations.VATNo.errorState}
+    //               />
 
-                  <SIB
-                    id="EORINo"
-                    label="EORINo"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("EORINo", e)}
-                    value={this.state.Customer.EORINo}
-                    error={this.state.Validations.EORINo.errorState}
-                  />
-                  <SIB
-                    id="TSSNo"
-                    label="TSSNo"
-                    variant="outlined"
-                    size="small"
-                    onChange={(e) => this.updateFormValue("TSSNo", e)}
-                    value={this.state.Customer.TSSNo}
-                    error={this.state.Validations.TSSNo.errorState}
-                  />
-                </Grid>
-              </Grid>
-            </div>
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
+    //               <SIB
+    //                 id="EORINo"
+    //                 label="EORINo"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("EORINo", e)}
+    //                 value={this.state.Customer.EORINo}
+    //                 error={this.state.Validations.EORINo.errorState}
+    //               />
+    //               <SIB
+    //                 id="TSSNo"
+    //                 label="TSSNo"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => this.updateFormValue("TSSNo", e)}
+    //                 value={this.state.Customer.TSSNo}
+    //                 error={this.state.Validations.TSSNo.errorState}
+    //               />
+    //             </Grid>
+    //           </Grid>
+    //         </div>
+    //       </Grid>
+    //     </Grid>
+    //   </Fragment>
+    // );
 
     const dialog = (
       <Fragment>
@@ -2392,36 +2397,788 @@ class customeractivity extends React.Component {
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
-            <Accordioncomponent
-              accordionKey="a-1"
-              expanded={this.state.accordion1}
-              onClick={(e) => handleAccordionClick("accordion1", e)}
-              id="accordion1"
-              typographyKey="GD-Activity"
-              typography="General Details"
-              accordiondetailsKey="accordion1"
-              html={generalform}
-            />
-            <Accordioncomponent
-              accordionKey="a-2"
-              expanded={this.state.accordion2}
-              onClick={(e) => handleAccordionClick("accordion2", e)}
-              id="accordion2"
-              typographyKey="Inv-Activity"
-              typography="Invoicing"
-              accordiondetailsKey="accordion2"
-              html={invform}
-            />
-            <Accordioncomponent
-              accordionKey="a-3"
-              expanded={this.state.accordion3}
-              onClick={(e) => handleAccordionClick("accordion3", e)}
-              id="accordion3"
-              typographyKey="TaxInf-Activity"
-              typography="Tax Information"
-              accordiondetailsKey="accordion3"
-              html={taxinfoform}
-            />
+            <Grid container spacing={1}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+                <Accordion
+                  key="Customer-General-Details"
+                  expanded={this.state.accordion1}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) => handleAccordionClick("accordion1", e)}
+                      />
+                    }
+                    onClick={(e) => handleAccordionClick("accordion1", e)}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                  >
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Fragment>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          <div>
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SIB
+                                  id="No"
+                                  label="No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("No", e)
+                                  }
+                                  value={this.state.Customer.No}
+                                  isMandatory={true}
+                                  disabled={true}
+                                />
+                                <SIB
+                                  id="Name"
+                                  label="Name"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Name", e)
+                                  }
+                                  value={this.state.Customer.Name}
+                                  isMandatory={true}
+                                  error={this.state.Validations.Name.errorState}
+                                />
+                                <SIB
+                                  id="Address"
+                                  label="Address"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Address", e)
+                                  }
+                                  value={this.state.Customer.Address}
+                                  error={
+                                    this.state.Validations.Address.errorState
+                                  }
+                                />
+                                <SIB
+                                  id="Address2"
+                                  label="Address2"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Address2", e)
+                                  }
+                                  value={this.state.Customer.Address2}
+                                  error={
+                                    this.state.Validations.Address2.errorState
+                                  }
+                                />
+                                <SIB
+                                  id="Address3"
+                                  label="Address3"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Address3", e)
+                                  }
+                                  value={this.state.Customer.Address3}
+                                  error={
+                                    this.state.Validations.Address3.errorState
+                                  }
+                                />
+                                <SIB
+                                  id="City"
+                                  label="City"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("City", e)
+                                  }
+                                  value={this.state.Customer.City}
+                                  error={this.state.Validations.City.errorState}
+                                />
+                                <SIB
+                                  id="PostCode"
+                                  label="PostCode"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PostCode", e)
+                                  }
+                                  value={this.state.Customer.PostCode}
+                                  error={
+                                    this.state.Validations.PostCode.errorState
+                                  }
+                                />
+                                <SDIB
+                                  id="CountryID"
+                                  label="Country"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CountryID", e)
+                                  }
+                                  value={this.state.Customer.CountryID}
+                                  param={this.state.countryData}
+                                  isMandatory={true}
+                                />
+                                <SDIB
+                                  id="StateID"
+                                  label="State"
+                                  onChange={(e) =>
+                                    this.updateFormValue("StateID", e)
+                                  }
+                                  value={this.state.Customer.StateID}
+                                  param={this.state.stateData}
+                                />
+
+                                <SIB
+                                  id="ContactPerson"
+                                  label="ContactPerson"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("ContactPerson", e)
+                                  }
+                                  value={this.state.Customer.ContactPerson}
+                                  error={
+                                    this.state.Validations.ContactPerson
+                                      .errorState
+                                  }
+                                />
+                                <SIB
+                                  id="EmailID"
+                                  label="EmailID"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EmailID", e)
+                                  }
+                                  value={this.state.Customer.EmailID}
+                                  error={
+                                    this.state.Validations.EmailID.errorState
+                                  }
+                                />
+                                <SDBIB
+                                  id="SalesPersonID"
+                                  label="Sales Person"
+                                  onChange={(e) =>
+                                    this.updateFormValue("SalesPersonID", e)
+                                  }
+                                  value={this.state.Customer.SalesPersonID}
+                                  param={this.state.SalesPersonData}
+                                  onClick={(e) => openDialog("SalesPerson")}
+                                />
+
+                                {/* <TableRow>
+                          <TableCell align="left" className="no-border-table">
+                            Sales Person
+                          </TableCell>
+                          <TableCell align="left" className="no-border-table">
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={10} lg={10}>
+                                <select
+                                  style={{ width: "90%", height: 30 }}
+                                  className="dropdown-css"
+                                  id="SalesPersonID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("SalesPersonID", e)
+                                  }
+                                  value={this.state.Customer.SalesPersonID}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
+
+                                  {this.state.SalesPersonData.map((item, i) => (
+                                    <option value={parseInt(item.value)}>
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={2} lg={2}>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) => openDialog("SalesPerson")}
+                                >
+                                  ...
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                        </TableRow> */}
+                                <SDBIB
+                                  id="CustomerCategoryID"
+                                  label=" Customer Category"
+                                  onChange={(e) =>
+                                    this.updateFormValue(
+                                      "CustomerCategoryID",
+                                      e
+                                    )
+                                  }
+                                  value={this.state.Customer.CustomerCategoryID}
+                                  param={this.state.CustomerCategoryData}
+                                  onClick={(e) =>
+                                    openDialog("CustomerCategory")
+                                  }
+                                />
+
+                                {/* <TableRow>
+                          <TableCell align="left" className="no-border-table">
+                            Customer Category
+                          </TableCell>
+                          <TableCell align="left" className="no-border-table">
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={10} lg={10}>
+                                <select
+                                  style={{ width: "90%", height: 30 }}
+                                  className="dropdown-css"
+                                  id="CustomerCategoryID"
+                                  onChange={(e) =>
+                                    this.updateFormValue(
+                                      "CustomerCategoryID",
+                                      e
+                                    )
+                                  }
+                                  value={this.state.Customer.CustomerCategoryID}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
+
+                                  {this.state.CustomerCategoryData.map(
+                                    (item, i) => (
+                                      <option value={parseInt(item.value)}>
+                                        {item.name}
+                                      </option>
+                                    )
+                                  )}
+                                </select>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={2} lg={2}>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) =>
+                                    openDialog("CustomerCategory")
+                                  }
+                                >
+                                  ...
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                        </TableRow> */}
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SIB
+                                  id="Website"
+                                  label="Website"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Website", e)
+                                  }
+                                  value={this.state.Customer.Website}
+                                  error={
+                                    this.state.Validations.Website.errorState
+                                  }
+                                />
+                                <SIB
+                                  id="PhoneNo"
+                                  label="PhoneNo"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PhoneNo", e)
+                                  }
+                                  value={this.state.Customer.PhoneNo}
+                                  error={
+                                    this.state.Validations.PhoneNo.errorState
+                                  }
+                                />
+                                <SIB
+                                  id="FaxNo"
+                                  label="FaxNo"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("FaxNo", e)
+                                  }
+                                  value={this.state.Customer.FaxNo}
+                                  error={
+                                    this.state.Validations.FaxNo.errorState
+                                  }
+                                />
+
+                                <SIB
+                                  id="CreditDays"
+                                  label="CreditDays"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CreditDays", e)
+                                  }
+                                  value={this.state.Customer.CreditDays}
+                                  error={
+                                    this.state.Validations.CreditDays.errorState
+                                  }
+                                />
+                                <SIB
+                                  id="CreditLimit"
+                                  label="CreditLimit"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CreditLimit", e)
+                                  }
+                                  value={this.state.Customer.CreditLimit}
+                                  error={
+                                    this.state.Validations.CreditLimit
+                                      .errorState
+                                  }
+                                />
+
+                                <SDIB
+                                  id="CreditRating"
+                                  label="CreditRating"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CreditRating", e)
+                                  }
+                                  value={this.state.Customer.CreditRating}
+                                  param={this.state.CreditRating}
+                                />
+
+                                <SIB
+                                  id="GraceDays"
+                                  label="GraceDays"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("GraceDays", e)
+                                  }
+                                  value={this.state.Customer.GraceDays}
+                                  error={
+                                    this.state.Validations.GraceDays.errorState
+                                  }
+                                />
+
+                                <SSIB
+                                  key="IsGroupCompany"
+                                  id="IsGroupCompany"
+                                  label="IsGroupCompany"
+                                  param={this.state.Customer.IsGroupCompany}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsGroupCompany", e)
+                                  }
+                                />
+
+                                <SSIB
+                                  key="IsBlock"
+                                  id="IsBlock"
+                                  label="IsBlock"
+                                  param={this.state.Customer.IsBlock}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsBlock", e)
+                                  }
+                                />
+                                <SSIB
+                                  key="IsEmailAlert"
+                                  id="IsEmailAlert"
+                                  label="IsEmailAlert"
+                                  param={this.state.Customer.IsEmailAlert}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsEmailAlert", e)
+                                  }
+                                />
+                              </Grid>
+                            </Grid>
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </Fragment>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  key="Customer-General-Details"
+                  expanded={this.state.accordion2}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) => handleAccordionClick("accordion2", e)}
+                      />
+                    }
+                    onClick={(e) => handleAccordionClick("accordion2", e)}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                  >
+                    <Typography key="" className="accordion-Header-Title">
+                      Invoicing
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Fragment>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          <div>
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SDIB
+                                  id="CurrID"
+                                  label="CurrID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CurrID", e)
+                                  }
+                                  value={this.state.Customer.CurrID}
+                                  param={this.state.currencyList}
+                                  isMandatory={true}
+                                />
+                                <SSIB
+                                  key="IsGrowthBonanza"
+                                  id="IsGrowthBonanza"
+                                  label="IsGrowthBonanza"
+                                  param={this.state.Customer.IsGrowthBonanza}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsGrowthBonanza", e)
+                                  }
+                                />
+                                <SSIB
+                                  key="IsSlabDiscount"
+                                  id="IsSlabDiscount"
+                                  label="IsSlabDiscount"
+                                  param={this.state.Customer.IsSlabDiscount}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsSlabDiscount", e)
+                                  }
+                                />
+                                <SSIB
+                                  key="IsCarriage"
+                                  id="IsCarriage"
+                                  label="IsCarriage"
+                                  param={this.state.Customer.IsCarriage}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsCarriage", e)
+                                  }
+                                />
+                                <SSIB
+                                  key="IsDueEndOfMonth"
+                                  id="IsDueEndOfMonth"
+                                  label="IsDueEndOfMonth"
+                                  param={this.state.Customer.IsDueEndOfMonth}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsDueEndOfMonth", e)
+                                  }
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SSIB
+                                  key="IsBankCharge"
+                                  id="IsBankCharge"
+                                  label="IsBankCharge"
+                                  param={this.state.Customer.IsBankCharge}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsBankCharge", e)
+                                  }
+                                />
+                                <SIB
+                                  id="BankCharge"
+                                  label="BankCharge"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("BankCharge", e)
+                                  }
+                                  value={this.state.Customer.BankCharge}
+                                  error={
+                                    this.state.Validations.BankCharge.errorState
+                                  }
+                                />
+
+                                <SDIB
+                                  id="GeneralPostingGroupID"
+                                  label="GeneralPosting"
+                                  onChange={(e) =>
+                                    this.updateFormValue(
+                                      "GeneralPostingGroupID",
+                                      e
+                                    )
+                                  }
+                                  value={
+                                    this.state.Customer.GeneralPostingGroupID
+                                  }
+                                  param={this.state.GeneralPostingGroupList}
+                                  isMandatory={true}
+                                />
+                                <SDIB
+                                  id="CustomerPostingGroupID"
+                                  label="CustomerPosting"
+                                  onChange={(e) =>
+                                    this.updateFormValue("CustomerPostingGroupID", e)
+                                  }
+                                  value={this.state.Customer.CustomerPostingGroupID}
+                                  param={this.state.CustomerPostingGroupList}
+                                  isMandatory={true}
+                                />
+
+                                <SDBIB
+                                  id="PaymentTermID"
+                                  label="Payment Term"
+                                  onChange={(e) =>
+                                    this.updateFormValue(
+                                      "PaymentTermID",
+                                      e
+                                    )
+                                  }
+                                  value={this.state.Customer.PaymentTermID}
+                                  param={this.state.paymentTermsData}
+                                  onClick={(e) => openDialog("PaymentTerms")}
+                                />
+
+                                {/* <TableRow>
+                          <TableCell align="left" className="no-border-table">
+                            Payment Term
+                          </TableCell>
+                          <TableCell align="left" className="no-border-table">
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={10} lg={10}>
+                                <select
+                                  className="dropdown-css"
+                                  id="PaymentTermID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PaymentTermID", e)
+                                  }
+                                  value={this.state.Customer.PaymentTermID}
+                                >
+                                  <option value="-" disabled>
+                                    Select
+                                  </option>
+
+                                  {this.state.paymentTermsData.map(
+                                    (item, i) => (
+                                      <option value={parseInt(item.value)}>
+                                        {item.name}
+                                      </option>
+                                    )
+                                  )}
+                                </select>
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={2} lg={2}>
+                                <button
+                                  className="dropdowninputbtn"
+                                  onClick={(e) => openDialog("PaymentTerms")}
+                                >
+                                  ...
+                                </button>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                        </TableRow> */}
+                              </Grid>
+                            </Grid>
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </Fragment>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion
+                  key="Customer-General-Details"
+                  expanded={this.state.accordion3}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) => handleAccordionClick("accordion3", e)}
+                      />
+                    }
+                    onClick={(e) => handleAccordionClick("accordion3", e)}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                  >
+                    <Typography key="" className="accordion-Header-Title">
+                      Tax Information
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Fragment>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          <div>
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SSIB
+                                  key="IsTaxExempt"
+                                  id="IsTaxExempt"
+                                  label="IsTaxExempt"
+                                  param={this.state.Customer.IsTaxExempt}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsTaxExempt", e)
+                                  }
+                                />
+                                <SIB
+                                  id="Reason"
+                                  label="Reason"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("Reason", e)
+                                  }
+                                  value={this.state.Customer.Reason}
+                                  error={
+                                    this.state.Validations.Reason.errorState
+                                  }
+                                />
+
+                                <SSIB
+                                  key="IsEcommerce"
+                                  id="IsEcommerce"
+                                  label="IsEcommerce"
+                                  param={this.state.Customer.IsEcommerce}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsEcommerce", e)
+                                  }
+                                />
+                                <SIB
+                                  id="EcommerceGSTNo"
+                                  label="EcommerceGSTNo"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EcommerceGSTNo", e)
+                                  }
+                                  value={this.state.Customer.EcommerceGSTNo}
+                                  error={
+                                    this.state.Validations.EcommerceGSTNo
+                                      .errorState
+                                  }
+                                />
+
+                                <SSIB
+                                  key="EcommerceB2B"
+                                  id="EcommerceB2B"
+                                  label="EcommerceB2B"
+                                  param={this.state.Customer.EcommerceB2B}
+                                  onChange={(e) =>
+                                    this.updateFormValue("EcommerceB2B", e)
+                                  }
+                                />
+
+                                <SDIB
+                                  id="EcommerceNoSeries"
+                                  label="EcommerceNoSeries"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EcommerceNoSeries", e)
+                                  }
+                                  value={this.state.Customer.EcommerceNoSeries}
+                                  param={[]}
+                                />
+                                <SDIB
+                                  id="GSTCutomerType"
+                                  label="GSTCutomerType"
+                                  onChange={(e) =>
+                                    this.updateFormValue("GSTCutomerType", e)
+                                  }
+                                  value={this.state.Customer.GSTCutomerType}
+                                  param={this.state.GSTCutomerType}
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SIB
+                                  id="GSTNo"
+                                  label="GST No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("GSTNo", e)
+                                  }
+                                  value={this.state.Customer.GSTNo}
+                                  error={
+                                    this.state.Validations.GSTNo.errorState
+                                  }
+                                />
+                                <SIB
+                                  id="PANNo"
+                                  label="PAN No"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PANNo", e)
+                                  }
+                                  value={this.state.Customer.PANNo}
+                                  error={
+                                    this.state.Validations.PANNo.errorState
+                                  }
+                                />
+                                <SDIB
+                                  id="IncoID"
+                                  label="IncoID"
+                                  onChange={(e) =>
+                                    this.updateFormValue("IncoID", e)
+                                  }
+                                  value={this.state.Customer.IncoID}
+                                  param={[]}
+                                />
+                                <SIB
+                                  id="VATNo"
+                                  label="VATNo"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("VATNo", e)
+                                  }
+                                  value={this.state.Customer.VATNo}
+                                  error={
+                                    this.state.Validations.VATNo.errorState
+                                  }
+                                />
+
+                                <SIB
+                                  id="EORINo"
+                                  label="EORINo"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("EORINo", e)
+                                  }
+                                  value={this.state.Customer.EORINo}
+                                  error={
+                                    this.state.Validations.EORINo.errorState
+                                  }
+                                />
+                                <SIB
+                                  id="TSSNo"
+                                  label="TSSNo"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("TSSNo", e)
+                                  }
+                                  value={this.state.Customer.TSSNo}
+                                  error={
+                                    this.state.Validations.TSSNo.errorState
+                                  }
+                                />
+                              </Grid>
+                            </Grid>
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </Fragment>
+                  </AccordionDetails>
+                </Accordion>
+              </Grid>
+            </Grid>
+
             <div style={{ height: 50 }}></div>
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4}>
