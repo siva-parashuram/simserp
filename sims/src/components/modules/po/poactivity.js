@@ -197,13 +197,11 @@ class poactivity extends React.Component {
         NotifyTo: "",
         UserID: CF.toInt(getCookie(COOKIE.USERID)),
       },
-      PurchaseOrderLine: [
-
-      ],   
+      PurchaseOrderLine: [],   
       emptyLine: {
         POID: 0,
         Type: 0,
-        LNo: 1,
+        LNo: 0,
         TypeID: 0,
         SupplierCode: "",
         Narration: "",
@@ -251,7 +249,38 @@ class poactivity extends React.Component {
   createNewBlankLine = () => {
     console.log("-createNewBlankLine-");
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
-    PurchaseOrderLine.push(this.state.emptyLine);
+    let length=PurchaseOrderLine.length;
+    let EL={
+      POID: 0,
+      Type: 0,
+      LNo: length+1,
+      TypeIDList:[],
+      TypeID: 0,
+      SupplierCode: "",
+      Narration: "",
+      UOMID: 0,
+      TolerancePercentage: 0,
+      Quantity: 0,
+      Price: 0,
+      LineDiscPercentage: 0,
+      LineDiscAmount: 0,
+      ItemPostingGroupID: 0,
+      GeneralPostingGroupID: 0,
+      VATPercentage: 0,
+      VATAmount: 0,
+      HSNCode: "",
+      GSTGroupID: 0,
+      SupplyStateID: 0,
+      GSTPercentage: 0,
+      BuyFromGSTN: "",
+      NatureOfSupply: "",
+      DValueID: 0,
+      IsQuality: false,
+      IsLot: false,
+      isDataProper: false,
+    };
+    
+    PurchaseOrderLine.push(EL);
     this.setState({ PurchaseOrderLine: PurchaseOrderLine });
   }
 
@@ -294,12 +323,10 @@ class poactivity extends React.Component {
       ProgressLoader: type === "add" ? true : false,
       BranchID: CF.toInt(branchId),
     }, () => {
-
-
       this.getSupplierList();
     });
 
-    console.log("On load state > ", this.state);
+   
   }
 
   getSupplierList = () => {
@@ -630,76 +657,9 @@ class poactivity extends React.Component {
     return data;
   }
 
-  renderType(params) {
-    console.log("renderType > params > ", params);
-    let POItemType = APIURLS.POItemType;
-    console.log("POItemType > ", POItemType);
-    let o = null;
-    try {
-      o = (
-        <Fragment>
-          <select
-            style={{ width: '100%' }}
-            className="dropdown-css"
-            defaultValue={params.value}
-          >
-            {POItemType.map((item, i) => (
-              <option value={item.value}> {item.name}</option>
-            ))}
-          </select>
-        </Fragment>
-      );
-    } catch (err) { }
+   
 
-    return o;
-  }
-
-  renderTypeItem(params) {
-    console.log("renderTypeItem > params > ", params);
-    let NoList = [];
-
-    if (params.value > 1) {
-      NoList = [
-        { name: "A", value: 0 },
-        { name: "B", value: 1 },
-        { name: "C", value: 2 },
-        { name: "D", value: 3 },
-      ];
-    } else {
-      NoList = [
-        { name: "X", value: 0 },
-        { name: "Y", value: 1 },
-        { name: "Z", value: 2 },
-        { name: "T", value: 3 },
-      ];
-    }
-
-    console.log("NoList > ", NoList);
-    let o = null;
-    try {
-      o = (
-        <Fragment>
-          <SCADI
-            id={"ID_" + params.value}
-            // onChange={(e, value) => this.updateFormValue("SuplID", value)}
-            value={null}
-            options={NoList}
-          />
-          {/* <select
-           style={{width:'100%'}}
-            className="dropdown-css"
-            defaultValue={params.value}
-          >
-            {NoList.map((item, i) => (
-              <option value={item.value}> {item.name}</option>
-            ))}
-          </select> */}
-        </Fragment>
-      );
-    } catch (err) { }
-
-    return o;
-  }
+  
 
   itemDelete = (i, params) => {
     console.log("itemDelete > i > ", i);
@@ -710,123 +670,12 @@ class poactivity extends React.Component {
     });
   }
 
-  getItemLinesColm = () => {
-    const columns = [
-      {
-        field: 'id',
-        headerName: '&nbsp',
-        width: 50,
-        headerClassName: 'line-table-header-font',
-        // cellClassName:'no-border-table',
-        renderCell: (params) => (
-          <Fragment>
-            <DeleteForeverIcon
-              fontSize="small"
-              className="table-delete-icon"
-
-              onClick={(e) => this.itemDelete(e, params)}
-            />
-          </Fragment>
-        ),
-      },
-
-      {
-        field: 'Type',
-        headerName: 'Type',
-        width: 150,
-        editable: false,
-        headerClassName: 'line-table-header-font',
-        cellClassName: 'lineDatagridCell',
-        renderCell: this.renderType,
-
-      },
-      {
-        field: 'NO',
-        headerName: 'Item',
-        width: 150,
-        editable: false,
-        headerClassName: 'line-table-header-font',
-        // cellClassName:'no-border-table',
-        renderCell: (param) => {
-          return (
-            <Fragment>
-              {this.renderTypeItem(param)}
-            </Fragment>
-          )
-        },
-      },
-
-      {
-        field: 'Description',
-        headerName: 'Description',
-        width: 350,
-        headerClassName: 'line-table-header-font',
-        // cellClassName:'no-border-table',
-        editable: true,
-      },
-      {
-        field: 'Qty',
-        headerName: 'Qty',
-        type: 'number',
-        width: 110,
-        headerClassName: 'line-table-header-font',
-        // cellClassName:'no-border-table',
-        editable: true,
-      },
-      {
-        field: 'UOMID',
-        headerName: 'Unit of Measurement',
-        width: 250,
-        headerClassName: 'line-table-header-font',
-        // cellClassName:'no-border-table',
-        editable: true,
-      },
-
-    ];
-    this.setState({ ItemLinesColm: columns }, () => {
-      this.setItemLinesListToState();
-    });
-  }
+   
 
 
+ 
 
-  setItemLinesListToState = () => {
-    let datagrid = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <div style={{ display: 'flex', height: 350, width: '100%' }}>
-                  {/* <div style={{ flexGrow: 1 }}> */}
-                  <DataGrid
-                    rows={this.state.ItemLinesRow}
-                    columns={this.state.ItemLinesColm}
-                    pageSize={100}
-                    rowsPerPageOptions={[100]}
-                    checkboxSelection={false}
-                    disableSelectionOnClick={true}
-                    hideFooterPagination
-                  />
-                  {/* </div> */}
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
-    this.setState({ ItemDatagrid: datagrid });
-  }
-
-  getItemLineList = () => {
-    const rows = [
-      { id: 1, Type: 0, NO: 101, Description: 'This is example descript', Qty: 12, UOMID: 1 },
-      { id: 2, Type: 1, NO: 225, Description: 'This is example descript - 2 ', Qty: 5, UOMID: 3 },
-
-    ];
-    this.setState({ ItemLinesRow: rows });
-  }
+  
 
   getPODetails = () => {
 
@@ -1089,23 +938,20 @@ class poactivity extends React.Component {
     console.log("i > ",i);
     console.log("key > ",key);
     console.log("e.target.value > ",e.target.value);
-    let PurchaseOrderLine=this.state.PurchaseOrderLine;
+    let PurchaseOrderLine = this.state.PurchaseOrderLine;
+    let o = PurchaseOrderLine[i];
     switch(key){
-      case "Type":
-           let o=PurchaseOrderLine[i];
-           console.log("o > ",o);
-           o[key]=CF.toInt(e.target.value);
-          //  PurchaseOrderLine[i]=o;
-          let newP=[];
-          for(let c=0;c<PurchaseOrderLine.length;c++){
-            if(c===i){
-              newP.push(o);
-            }else{
-              newP.push(PurchaseOrderLine[c]);
-            }
-          }
-           this.setLineParams(newP);
-      break;
+      case "Type":        
+        o[key] = CF.toInt(e.target.value);
+        PurchaseOrderLine[i]=o;
+        //fetch Item list as per ITEM tYPE selected
+        this.setLineParams(PurchaseOrderLine);
+        break;     
+      case "Narration":        
+        o[key] = e.target.value;
+        PurchaseOrderLine[i]=o;
+       this.setLineParams(PurchaseOrderLine);
+        break;
       default:
         break;
     }
@@ -1736,20 +1582,14 @@ class poactivity extends React.Component {
                                   </TableCell>
                                   <TableCell align="center">
                                     <select
+                                      id={"Type_"+i}
                                       style={{ width: '100%' }}
                                       className="dropdown-css"
-                                      // value={item.Type}
+                                      value={item.Type}
                                       onChange={(e)=>this.updateLineDetail(i,"Type",e)}
                                     >
                                       {APIURLS.POItemType.map((op, i) => (
-                                        <Fragment>
-                                          {item.Type === op.value ? (
-                                            <option value={op.value} selected> {op.name}-{op.value}</option>
-                                          ) : (
-                                            <option value={op.value} > {op.name}</option>
-                                          )}
-                                          
-                                        </Fragment>
+                                        <option value={op.value} > {op.name}</option>
                                         
                                       ))}
                                     </select>
@@ -1760,7 +1600,7 @@ class poactivity extends React.Component {
                                       className="dropdown-css"
                                       value={item.TypeID}
                                     >
-                                      {APIURLS.POItemType.map((item, i) => (
+                                      {item.TypeIDList.map((item, i) => (
                                         <option value={item.value}> {item.name}</option>
                                       ))}
                                     </select>
@@ -1774,6 +1614,7 @@ class poactivity extends React.Component {
                                       variant="outlined"
                                       size="small"
                                       value={item.Narration}
+                                      onChange={(e)=>this.updateLineDetail(i,"Narration",e)}
                                     />
                                   </TableCell>
                                   <TableCell align="center">
