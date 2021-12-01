@@ -43,7 +43,7 @@ class gridautocompletedropdowninput extends React.Component {
                   disablePortal
                   id={this.props.id}
                   options={this.props.options}
-                  // sx={{ width: '100%' }}
+                  onChange={this.props.onChange}
                   renderInput={(params) => (
                     <TextField
                       className="AutocompletetextFieldCss"
