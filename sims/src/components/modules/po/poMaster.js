@@ -26,16 +26,16 @@ import Tableskeleton from "../../compo/tableskeleton";
 import Dualtabcomponent from '../../compo/dualtabcomponent';
 import BackdropLoader from "../../compo/backdrop";
 
-document.addEventListener('keydown', function (e) {
-    switch (e.keyCode) {
-        case 78:
-            document.getElementById("add_New").click();
-            break;
-        default:
-            console.log("e > ", e);
-            break;
-    }
-});
+// document.addEventListener('keydown', function (e) {
+//     switch (e.keyCode) {
+//         case 78:
+//             document.getElementById("add_New").click();
+//             break;
+//         default:
+//             console.log("e > ", e);
+//             break;
+//     }
+// });
 
 
 class poMaster extends React.Component {

@@ -42,16 +42,16 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
  
-document.addEventListener('keydown', function (e) {
-  switch (e.keyCode) {
-      case 78:
-          document.getElementById("add_New").click();
-          break;
-      default:
-          console.log("e > ", e);
-          break;
-  }
-});
+// document.addEventListener('keydown', function (e) {
+//   switch (e.keyCode) {
+//       case 78:
+//           document.getElementById("add_New").click();
+//           break;
+//       default:
+//           console.log("e > ", e);
+//           break;
+//   }
+// });
  
 
 const initialCss = "";

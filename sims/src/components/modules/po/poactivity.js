@@ -254,175 +254,55 @@ class poactivity extends React.Component {
 
 
   getGetMODTax=()=>{
-    this.setState({ProgressLoader: false});
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetMODTax;
-    axios
-    .post(Url, ValidUser, { headers })
-    .then((response) => {
-      this.setState({MODTaxList:response.data},()=>{
-        this.taxForm();
-      });
-    })
-    .catch((error) => {});
-  }
-
-  getGetShipmentMode=()=>{
-    this.setState({ProgressLoader: false});
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetShipmentMode;
-    axios
-    .post(Url, ValidUser, { headers })
-    .then((response) => {
-      this.setState({ShipmentModeList:response.data},()=>{
-        this.termsForm();
-      });
-    })
-    .catch((error) => {});
-  }
-
-  getWarehouseList=()=>{
-    this.setState({ProgressLoader: false});
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetWareHousesUrl = APIURLS.APIURL.GetWareHouseByBranchID;
-    let reqData={
-      ValidUser:ValidUser,
-      WareHouse:{
-        BranchID:this.state.BranchID
+  getWarehouseList = (data) => {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      var add2, add3, ContactPerson, EmailID, PhoneNo;
+      add2 = add3 = ContactPerson = EmailID = PhoneNo = "";
+      if (data[i].Address2) {
+        add2 = data[i].Address2 + "\n";
       }
+      if (data[i].Address3) {
+        add3 = data[i].Address3 + "\n";
+      }
+      if (data[i].ContactPerson) {
+        ContactPerson = data[i].ContactPerson + "\n";
+      }
+      if (data[i].EmailID) {
+        EmailID = data[i].EmailID + "\n";
+      }
+      if (data[i].PhoneNo) {
+        PhoneNo = data[i].PhoneNo + "\n";
+      }
+
+      let deliveryAddress = data[i].Address + "\n" +
+        add2 +
+        add3 +
+        ContactPerson +
+        EmailID +
+        PhoneNo;
+      let o = {
+        name: data[i].Code,
+        value: data[i].WareHouseID,
+        deliveryAddress: deliveryAddress
+      };
+      newData.push(o);
     }
-    axios
-      .post(GetWareHousesUrl, reqData, { headers })
-      .then((response) => {
-        let data = response.data;
-        if (response.status === 200) {    
-          let newData=[];
-          for(let i=0;i<data.length;i++){
-            var add2,add3,ContactPerson,EmailID,PhoneNo;
-             add2=add3=ContactPerson=EmailID=PhoneNo="";
-            if(data[i].Address2){
-              add2=data[i].Address2+"\n";
-            }
-            if(data[i].Address3){
-              add3=data[i].Address3+"\n";
-            }
-            if(data[i].ContactPerson){
-              ContactPerson=data[i].ContactPerson+"\n";
-            }
-            if(data[i].EmailID){
-              EmailID=data[i].EmailID+"\n";
-            }
-            if(data[i].PhoneNo){
-              PhoneNo=data[i].PhoneNo+"\n";
-            }
 
-            let deliveryAddress = data[i].Address + "\n" +
-              add2 +
-              add3 +
-              ContactPerson +
-              EmailID +
-              PhoneNo;
-            let o={
-              name:data[i].Code,
-              value:data[i].WareHouseID,
-              deliveryAddress:deliveryAddress
-            };
-            newData.push(o);
-          }     
-          this.setState({WarehouseList: newData,ProgressLoader: true},()=>{
-            this.generalForm();
-          });
-        } else {
-          this.setState({ WarehouseList: [], ProgressLoader: true });
-        }
-      })
-      .catch((error) => {});
+    return newData;
   }
 
-  getCountryList=()=>{
-    this.setState({ProgressLoader: false});
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetCountryUrl = APIURLS.APIURL.GetCountries;
-
-    axios
-      .post(GetCountryUrl, ValidUser, { headers })
-      .then((response) => {
-        this.setState({CountryList:response.data});
-      })
-      .catch((error) => {});
-  }
-
-  getStateList=()=>{
-    this.setState({ProgressLoader: false});
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let GetStatesUrl = APIURLS.APIURL.GetStates;
-
-    axios
-      .post(GetStatesUrl, ValidUser, { headers })
-      .then((response) => {
-        this.setState({StateList:response.data});
-      })
-      .catch((error) => {});
-  }
-
-  getCurrencyList = () => {
-     this.setState({ ProgressLoader: false });
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetCurrencies;
-
-    axios
-      .post(Url, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-
-        let newD = [];
-        for (let i = 0; i < data.length; i++) {
-          let o = {
-            name: data[i].Code,
-            value: data[i].CurrID,
-          };
-          newD.push(o);
-        }
-
-        this.setState({
-          CurrencyMasterList: data,
-          CurrencyList: newD,
-          // ProgressLoader: true,
-        }, () => {
-          this.getInvoiceDetails();
-        });
-      })
-      .catch((error) => { });
+ 
+  getCurrencyList = (data) => {
+    let newD = [];
+    for (let i = 0; i < data.length; i++) {
+      let o = {
+        name: data[i].Code,
+        value: data[i].CurrID,
+      };
+      newD.push(o);
+    }
+    return newD
   }
 
   getSupplierList = () => {
@@ -444,68 +324,69 @@ class poactivity extends React.Component {
       .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
-        let newData = [];
-        for (let i = 0; i < data.length; i++) {
-          let o = { label: data[i].Name, id: data[i].SuplID };
-          newData.push(o);
+
+        let Country=data.Country;
+        let Currency=this.getCurrencyList(data.Currency);
+        let GeneralPostingGroup=this.getAllGeneralPostingGroup(data.GeneralPostingGroup);
+        let MODTax=data.MODTax;
+        let PaymentTerms=this.getPaymentTerms(data.PaymentTerms);
+        let ShipmentMode=data.ShipmentMode;
+        let State=data.State;
+        let Supplier=data.Supplier;
+        let SupplierPostingGroup=this.getAllSupplierPostingGroup(data.SupplierPostingGroup);
+        let WareHouse=this.getWarehouseList(data.WareHouse);
+
+        let newSupplierData = [];
+        for (let i = 0; i < Supplier.length; i++) {
+          let o = { label: Supplier[i].Name, id: Supplier[i].SuplID };
+          newSupplierData.push(o);
         }
-        if (data.length > 0) {
-          this.setState({ supplierList: newData, supplierMasterList: data }, () => {
-            this.generalForm();
-          });
-        } else {
-          this.setState({ supplierList: data, ProgressLoader: true });
-        }
+
+        this.setState({          
+          CountryList:Country, 
+          CurrencyMasterList: data.Currency,
+          CurrencyList: Currency,          
+          GeneralPostingGroupList:GeneralPostingGroup,
+          MODTaxList:MODTax,
+          PaymentTermsMasterList:data.PaymentTerms,
+          PaymentTermsList: PaymentTerms,
+          ShipmentModeList:ShipmentMode,
+          StateList:State,
+          supplierMasterList: Supplier,
+          supplierList:newSupplierData,
+          SupplierPostingGroupList: SupplierPostingGroup,
+          WarehouseList: WareHouse,
+          ProgressLoader: true
+        },()=>{
+          this.generalForm();
+          this.getInvoiceDetails();
+          this.generalForm();
+          this.taxForm();
+          this.termsForm();
+        });
+
+      
+
       })
       .catch((error) => {
         this.setState({ supplierList: [], ProgressLoader: true });
       });
   }
 
-  getPaymentTerms = () => {
-    this.setState({ProgressLoader: false});
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetAllPaymentTerms;
-    axios
-      .post(Url, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-        let newData=[];
-        for(let i=0;i<data.length;i++){
-          let o={
-           name:data[i].Code+" - "+data[i].Description,
-           value:data[i].PaymentTermID,
-          };
-          newData.push(o);
-        }
-        this.setState({ PaymentTermsMasterList:data,PaymentTermsList: newData, ProgressLoader: true });
-      })
-      .catch((error) => {
-        this.setState({ PaymentTermsMasterList:[],PaymentTermsList: [], ProgressLoader: false });
-      });
+  getPaymentTerms = (data) => {
+    let newData=[];
+    for(let i=0;i<data.length;i++){
+      let o={
+       name:data[i].Code+" - "+data[i].Description,
+       value:data[i].PaymentTermID,
+      };
+      newData.push(o);
+    }
+   return newData;
   };
 
-  getAllSupplierPostingGroup = () => {
-    this.setState({ProgressLoader: false});
-    console.log("getAllSupplierPostingGroup > ");
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetAllSupplierPostingGroup;
-    axios
-      .post(Url, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-        console.log("getAllSupplierPostingGroup > data > ", data);
-        let newD = [];
+  getAllSupplierPostingGroup = (data) => {
+    let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
             name: data[i].Code,
@@ -513,39 +394,20 @@ class poactivity extends React.Component {
           };
           newD.push(o);          
         }
-        this.setState({ SupplierPostingGroupList: newD,ProgressLoader: true });
-      })
-      .catch((error) => {
-        
-      });
+       
+        return newD;
   };
 
-  getAllGeneralPostingGroup = () => {
-    this.setState({ProgressLoader: false});
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetAllGeneralPostingGroup;
-    axios
-      .post(Url, ValidUser, { headers })
-      .then((response) => {
-        let data = response.data;
-        console.log("data > ", data);
-        let newD = [];
+  getAllGeneralPostingGroup = (data) => {
+    let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
             name: data[i].Code + "-" + data[i].Description,
             value: data[i].GeneralPostingGroupID,
           };
-          newD.push(o);
-         
+          newD.push(o);         
         }
-        this.setState({ GeneralPostingGroupList: newD,ProgressLoader: true });
-      })
-      .catch((error) => {});
+       return newD;
   };
 
   setFieldValuesOnSuplierChange = (SuplID) => {
@@ -618,8 +480,6 @@ class poactivity extends React.Component {
     });
 
   }
-
-
 
   getSupplierAddressList = (SuplID) => {
     let dropdownData = [];
