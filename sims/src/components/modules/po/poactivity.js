@@ -253,7 +253,6 @@ class poactivity extends React.Component {
   }
 
 
-  getGetMODTax=()=>{
   getWarehouseList = (data) => {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
