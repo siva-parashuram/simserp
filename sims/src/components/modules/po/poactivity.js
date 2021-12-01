@@ -9,7 +9,11 @@ import * as CF from "../../../services/functions/customfunctions";
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Typography from "@material-ui/core/Typography";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Grid from "@material-ui/core/Grid";
@@ -24,7 +28,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Divider } from "@material-ui/core";
@@ -84,15 +87,15 @@ class poactivity extends React.Component {
       type: "",
       POTypeList: APIURLS.POType,
       POItemType: APIURLS.POItemType,
-      MODTaxList:[],
-      ShipmentModeList:[],
-      WarehouseList:[],
-      SupplierPostingGroupList:[],
-      GeneralPostingGroupList:[],
-      CountryList:[],
-      StateList:[],
-      PaymentTermsMasterList:[],
-      PaymentTermsList:[],
+      MODTaxList: [],
+      ShipmentModeList: [],
+      WarehouseList: [],
+      SupplierPostingGroupList: [],
+      GeneralPostingGroupList: [],
+      CountryList: [],
+      StateList: [],
+      PaymentTermsMasterList: [],
+      PaymentTermsList: [],
       SupplierAddressMasterList: [],
       SupplierAdressList: [],
       ItemLinesRow: [],
@@ -117,11 +120,7 @@ class poactivity extends React.Component {
         steps: ["Open", "Release", "MRN", "Short Close"],
         skipped: new Set(),
       },
-      Forms: {
-        general: null,
-        terms: null,
-        taxInfo: null,
-      },
+      
       AmendmentInput: {
         status: false,
         old: {},
@@ -187,29 +186,13 @@ class poactivity extends React.Component {
         NotifyTo: "", //dropdown - For Kind Attn. input
         UserID: 0,   // loggind in user 
       },
-      PurchaseOrderLine:[]
+      PurchaseOrderLine: []
     };
   }
 
-  refreshStateFormData = () => {    
-    this.generalForm();
-    this.termsForm();
-    this.taxForm();
-    this.getInvoiceDetails();   
-  }
+ 
+  componentDidMount() {  
 
-  
-
-  componentDidMount() {    
-    // this.getCurrencyList();
-    // this.getCountryList();
-    // this.getStateList();
-    // this.getPaymentTerms();
-    // this.getAllSupplierPostingGroup();
-    // this.getAllGeneralPostingGroup();  
-    // this.getGetMODTax();   
-    // this.getGetShipmentMode();
-    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -241,11 +224,9 @@ class poactivity extends React.Component {
       typoTitle: typoTitle,
       ProgressLoader: type === "add" ? true : false,
       BranchID: CF.toInt(branchId),
-    }, () => {
-      this.getItemLinesColm();
-      this.getItemLineList();
-      this.refreshStateFormData();
-      // this.getWarehouseList();
+    }, () => {    
+     
+      
       this.getSupplierList();
     });
 
@@ -291,7 +272,7 @@ class poactivity extends React.Component {
     return newData;
   }
 
- 
+
   getCurrencyList = (data) => {
     let newD = [];
     for (let i = 0; i < data.length; i++) {
@@ -305,7 +286,7 @@ class poactivity extends React.Component {
   }
 
   getSupplierList = () => {
-    this.setState({ProgressLoader: false});
+    this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -323,16 +304,16 @@ class poactivity extends React.Component {
       .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
-        let Country=data.Country;
-        let Currency=this.getCurrencyList(data.Currency);
-        let GeneralPostingGroup=this.getAllGeneralPostingGroup(data.GeneralPostingGroup);
-        let MODTax=data.MODTax;
-        let PaymentTerms=this.getPaymentTerms(data.PaymentTerms);
-        let ShipmentMode=data.ShipmentMode;
-        let State=data.State;
-        let Supplier=data.Supplier;
-        let SupplierPostingGroup=this.getAllSupplierPostingGroup(data.SupplierPostingGroup);
-        let WareHouse=this.getWarehouseList(data.WareHouse);
+        let Country = data.Country;
+        let Currency = this.getCurrencyList(data.Currency);
+        let GeneralPostingGroup = this.getAllGeneralPostingGroup(data.GeneralPostingGroup);
+        let MODTax = data.MODTax;
+        let PaymentTerms = this.getPaymentTerms(data.PaymentTerms);
+        let ShipmentMode = data.ShipmentMode;
+        let State = data.State;
+        let Supplier = data.Supplier;
+        let SupplierPostingGroup = this.getAllSupplierPostingGroup(data.SupplierPostingGroup);
+        let WareHouse = this.getWarehouseList(data.WareHouse);
 
         let newSupplierData = [];
         for (let i = 0; i < Supplier.length; i++) {
@@ -340,85 +321,79 @@ class poactivity extends React.Component {
           newSupplierData.push(o);
         }
 
-        this.setState({          
-          CountryList:Country, 
+        this.setState({
+          CountryList: Country,
           CurrencyMasterList: data.Currency,
-          CurrencyList: Currency,          
-          GeneralPostingGroupList:GeneralPostingGroup,
-          MODTaxList:MODTax,
-          PaymentTermsMasterList:data.PaymentTerms,
+          CurrencyList: Currency,
+          GeneralPostingGroupList: GeneralPostingGroup,
+          MODTaxList: MODTax,
+          PaymentTermsMasterList: data.PaymentTerms,
           PaymentTermsList: PaymentTerms,
-          ShipmentModeList:ShipmentMode,
-          StateList:State,
+          ShipmentModeList: ShipmentMode,
+          StateList: State,
           supplierMasterList: Supplier,
-          supplierList:newSupplierData,
+          supplierList: newSupplierData,
           SupplierPostingGroupList: SupplierPostingGroup,
           WarehouseList: WareHouse,
           ProgressLoader: true
-        },()=>{
-          this.generalForm();
-          this.getInvoiceDetails();
-          this.generalForm();
-          this.taxForm();
-          this.termsForm();
-        });      
+        });
 
       })
       .catch((error) => {
-        this.setState({ 
-          CountryList:[], 
-          CurrencyMasterList:[],
-          CurrencyList: [],        
-          GeneralPostingGroupList:[],
-          MODTaxList:[],
-          PaymentTermsMasterList:[],
+        this.setState({
+          CountryList: [],
+          CurrencyMasterList: [],
+          CurrencyList: [],
+          GeneralPostingGroupList: [],
+          MODTaxList: [],
+          PaymentTermsMasterList: [],
           PaymentTermsList: [],
-          ShipmentModeList:[],
-          StateList:[],
+          ShipmentModeList: [],
+          StateList: [],
           supplierMasterList: [],
-          supplierList:[],
+          supplierList: [],
           SupplierPostingGroupList: [],
           WarehouseList: [],
-          ProgressLoader: true 
+          ProgressLoader: true
         });
       });
   }
 
   getPaymentTerms = (data) => {
-    let newData=[];
-    for(let i=0;i<data.length;i++){
-      let o={
-       name:data[i].Code+" - "+data[i].Description,
-       value:data[i].PaymentTermID,
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let o = {
+        name: data[i].Code + " - " + data[i].Description,
+        value: data[i].PaymentTermID,
       };
       newData.push(o);
     }
-   return newData;
+    return newData;
   };
 
   getAllSupplierPostingGroup = (data) => {
     let newD = [];
-        for (let i = 0; i < data.length; i++) {
-          let o = {
-            name: data[i].Code,
-            value: data[i].SupplierPostingGroupID,
-          };
-          newD.push(o);          
-        }
-       
-        return newD;
+    for (let i = 0; i < data.length; i++) {
+      let o = {
+        name: data[i].Code,
+        value: data[i].SupplierPostingGroupID,
+      };
+      newD.push(o);
+    }
+
+    return newD;
   };
 
   getAllGeneralPostingGroup = (data) => {
     let newD = [];
-        for (let i = 0; i < data.length; i++) {
-          let o = {
-            name: data[i].Code + "-" + data[i].Description,
-            value: data[i].GeneralPostingGroupID,
-          };
-          newD.push(o);         
-        }
-       return newD;
+    for (let i = 0; i < data.length; i++) {
+      let o = {
+        name: data[i].Code + "-" + data[i].Description,
+        value: data[i].GeneralPostingGroupID,
+      };
+      newD.push(o);
+    }
+    return newD;
   };
 
   setFieldValuesOnSuplierChange = (SuplID) => {
@@ -434,36 +409,32 @@ class poactivity extends React.Component {
       let BillingID = data.SupplierAdressList[0].value;
       PO.CurrID = data.CurrID;
       PO.PaymentTermID = data.PaymentTermID;
-      
-      PO.PaymentTerm=this.getPaymentTermsDescriptionByID(data.PaymentTermID);
 
-      this.setState({        
-        PO:PO
+      PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
+
+      this.setState({
+        PO: PO
       }, () => {        
-        this.generalForm();
-        this.taxForm();
-        this.getInvoiceDetails();
-        this.termsForm();
         console.log("setFieldValuesOnSuplierChange > BillingID > ", BillingID);
         let BCdata = this.getDataToSetOnBillingChange(CF.toInt(BillingID));
         console.log("setFieldValuesOnSuplierChange > BCdata > ", BCdata);
-        let PO=this.state.PO;
+        let PO = this.state.PO;
         PO.ContactPerson = BCdata.ContactPerson;
         PO.GSTNo = BCdata.GSTNo;
         PO.GeneralPostingGroupID = CF.toInt(BCdata.GeneralPostingGroupID);
         PO.SupplierPostingGroupID = CF.toInt(BCdata.SupplierPostingGroupID);
         PO.IsTaxExempt = BCdata.IsTaxExempt;
-        PO.Reason = BCdata.Reason;        
-        PO.VATNo = BCdata.VATNo;        
-        PO.SpecialInst=BCdata.SpecialInstruction;
-        if(BCdata.GSTNo==="" || BCdata.VATNo===""){
-          PO.IsRegistedSupplier=false;
-        }else{
-          PO.IsRegistedSupplier=true;
+        PO.Reason = BCdata.Reason;
+        PO.VATNo = BCdata.VATNo;
+        PO.SpecialInst = BCdata.SpecialInstruction;
+        if (BCdata.GSTNo === "" || BCdata.VATNo === "") {
+          PO.IsRegistedSupplier = false;
+        } else {
+          PO.IsRegistedSupplier = true;
         }
 
         this.setState({
-          PO:PO,
+          PO: PO,
           Name: BCdata.Name,
           Address: BCdata.Address,
           Address2: BCdata.Address2,
@@ -472,22 +443,15 @@ class poactivity extends React.Component {
           PostCode: BCdata.PostCode,
           CountryID: this.getCountryNameByID(BCdata.CountryID),
           StateID: this.getStateNameByID(BCdata.StateID),
-        },()=>{          
-          this.getInvoiceDetails();
-          this.generalForm();
-          this.termsForm();
-          this.taxForm();
-        });        
+        });
       });
 
     }
     this.setState({
       SupplierAdressList: data.SupplierAdressList,
       SupplierAddressMasterList: data.SupplierAddressMasterList,
-      PO: PO,
+      PO: PO
 
-    }, () => {
-      this.generalForm();
     });
 
   }
@@ -497,13 +461,13 @@ class poactivity extends React.Component {
     let Address = [];
     let CurrID = 0;
     let PaymentTermID = 0;
-    
+
     for (let i = 0; i < this.state.supplierMasterList.length; i++) {
       if (this.state.supplierMasterList[i].SuplID === SuplID) {
         Address = this.state.supplierMasterList[i].Address;
         CurrID = this.state.supplierMasterList[i].CurrID;
         PaymentTermID = this.state.supplierMasterList[i].PaymentTermID;
-        
+
         break;
       }
     }
@@ -512,20 +476,20 @@ class poactivity extends React.Component {
       dropdownData.push(o);
     }
 
-    return { 
-      SupplierAdressList: dropdownData, 
-      SupplierAddressMasterList: Address, 
+    return {
+      SupplierAdressList: dropdownData,
+      SupplierAddressMasterList: Address,
       CurrID: CurrID,
-      PaymentTermID:PaymentTermID,
-      
+      PaymentTermID: PaymentTermID,
+
     };
 
-    
+
   }
 
   getDataToSetOnBillingChange = (AddressID) => {
-    console.log("getDataToSetOnBillingChange -> AddressID > ",AddressID);
-    console.log("getDataToSetOnBillingChange -> this.state.SupplierAddressMasterList > ",this.state.SupplierAddressMasterList);
+    console.log("getDataToSetOnBillingChange -> AddressID > ", AddressID);
+    console.log("getDataToSetOnBillingChange -> this.state.SupplierAddressMasterList > ", this.state.SupplierAddressMasterList);
     let data = {};
     for (let i = 0; i < this.state.SupplierAddressMasterList.length; i++) {
       if (this.state.SupplierAddressMasterList[i].AddressID === AddressID) {
@@ -562,7 +526,7 @@ class poactivity extends React.Component {
       o = (
         <Fragment>
           <select
-            style={{width:'100%'}}
+            style={{ width: '100%' }}
             className="dropdown-css"
             defaultValue={params.value}
           >
@@ -603,10 +567,10 @@ class poactivity extends React.Component {
       o = (
         <Fragment>
           <SCADI
-          id={"ID_"+params.value}
+            id={"ID_" + params.value}
             // onChange={(e, value) => this.updateFormValue("SuplID", value)}
             value={null}
-            options={NoList}          
+            options={NoList}
           />
           {/* <select
            style={{width:'100%'}}
@@ -646,7 +610,7 @@ class poactivity extends React.Component {
             <DeleteForeverIcon
               fontSize="small"
               className="table-delete-icon"
-              
+
               onClick={(e) => this.itemDelete(e, params)}
             />
           </Fragment>
@@ -659,9 +623,9 @@ class poactivity extends React.Component {
         width: 150,
         editable: false,
         headerClassName: 'table-header-font',
-       cellClassName:'lineDatagridCell',
+        cellClassName: 'lineDatagridCell',
         renderCell: this.renderType,
-        
+
       },
       {
         field: 'NO',
@@ -670,12 +634,12 @@ class poactivity extends React.Component {
         editable: false,
         headerClassName: 'table-header-font',
         // cellClassName:'no-border-table',
-        renderCell: (param)=>{
-        return(
-          <Fragment>
-            {this.renderTypeItem(param)}
-          </Fragment>
-        )
+        renderCell: (param) => {
+          return (
+            <Fragment>
+              {this.renderTypeItem(param)}
+            </Fragment>
+          )
         },
       },
 
@@ -722,15 +686,15 @@ class poactivity extends React.Component {
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div style={{ display: 'flex', height: 350, width: '100%' }}>
                   {/* <div style={{ flexGrow: 1 }}> */}
-                    <DataGrid
-                      rows={this.state.ItemLinesRow}
-                      columns={this.state.ItemLinesColm}
-                      pageSize={100}
-                      rowsPerPageOptions={[100]}
-                      checkboxSelection={false}
-                      disableSelectionOnClick={true}
-                      hideFooterPagination
-                    />
+                  <DataGrid
+                    rows={this.state.ItemLinesRow}
+                    columns={this.state.ItemLinesColm}
+                    pageSize={100}
+                    rowsPerPageOptions={[100]}
+                    checkboxSelection={false}
+                    disableSelectionOnClick={true}
+                    hideFooterPagination
+                  />
                   {/* </div> */}
                 </div>
               </Grid>
@@ -793,7 +757,7 @@ class poactivity extends React.Component {
     }
   }
 
-  getStateNameByID=(id)=>{
+  getStateNameByID = (id) => {
     for (let i = 0; i < this.state.StateList.length; i++) {
       if (this.state.StateList[i].stateId === id) {
         return this.state.StateList[i].name;
@@ -802,7 +766,7 @@ class poactivity extends React.Component {
     }
   }
 
-  getPaymentTermsDescriptionByID=(id)=>{    
+  getPaymentTermsDescriptionByID = (id) => {
     for (let i = 0; i < this.state.PaymentTermsMasterList.length; i++) {
       if (this.state.PaymentTermsMasterList[i].PaymentTermID === id) {
         return this.state.PaymentTermsMasterList[i].Description;
@@ -819,7 +783,7 @@ class poactivity extends React.Component {
       }
     }
   }
- 
+
 
 
   updateFormValue = (param, e) => {
@@ -828,17 +792,14 @@ class poactivity extends React.Component {
     switch (param) {
       case "SuplID":
         console.log("- IN SuplID - ");
-        console.log("e -> ",e);
+        console.log("e -> ", e);
         this.setState({ SADIB_VALUE: e }, () => {
-          console.log("SADIB_VALUE -> ",this.state.SADIB_VALUE);
-          this.generalForm();
+          console.log("SADIB_VALUE -> ", this.state.SADIB_VALUE);
+          
           PO.SuplID = CF.toInt(e.id);
           this.setFieldValuesOnSuplierChange(CF.toInt(e.id));
-          this.setState({ PO: PO }, () => {
-            this.generalForm();
-            this.getInvoiceDetails();
-          });
-        });       
+          this.setState({ PO: PO });
+        });
         break;
       case "BillingID":
         PO.BillingID = CF.toInt(e.target.value);
@@ -847,29 +808,52 @@ class poactivity extends React.Component {
         );
         this.setState({
           PO: PO,
-        }, () => {
-          this.generalForm();
         });
         break;
-        case "WareHouseID":
-          PO.WareHouseID = CF.toInt(e.target.value);
-          PO.DeliveryAddress=this.getWareHousedeliveryAddressById( CF.toInt(e.target.value));
-          this.setState({
-            PO: PO,
-          }, () => {
-            this.generalForm();
-            this.termsForm();
-          });
-          break;
-          case "PaymentTermID":
-            PO.PaymentTermID= CF.toInt(e.target.value);
-            PO.PaymentTerm=this.getPaymentTermsDescriptionByID(CF.toInt(e.target.value));
-            this.setState({
-              PO: PO,
-            }, () => {
-              this.getInvoiceDetails();
-            });
-            break;
+      case "WareHouseID":
+        PO.WareHouseID = CF.toInt(e.target.value);
+        PO.DeliveryAddress = this.getWareHousedeliveryAddressById(CF.toInt(e.target.value));
+        this.setState({
+          PO: PO,
+        });
+        break;
+      case "PaymentTermID":
+        PO.PaymentTermID = CF.toInt(e.target.value);
+        PO.PaymentTerm = this.getPaymentTermsDescriptionByID(CF.toInt(e.target.value));
+        this.setState({
+          PO: PO,
+        });
+        break;
+      case "POType":
+        PO.POType = CF.toInt(e.target.value);
+        this.setState({
+          PO: PO,
+        });
+        break;
+      case "PODate":
+        PO.PODate = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({
+          PO: PO,
+        });
+        break;
+      case "DispachDate":
+        PO.DispachDate = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({
+          PO: PO,
+        });
+        break;
+      case "DeliveryDate":
+        PO.DeliveryDate = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({
+          PO: PO,
+        });
+        break;
+      case "ContactPerson":
+        PO.ContactPerson = e.target.value;
+        this.setState({
+          PO: PO,
+        });
+        break;
       default:
         break;
     }
@@ -877,13 +861,13 @@ class poactivity extends React.Component {
     this.validateBtnEnable();
   };
 
-  
+
 
   validateBtnEnable = () => {
 
   };
 
- 
+
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -916,641 +900,7 @@ class poactivity extends React.Component {
     return MRNSTATUS;
   }
 
-  generalForm = () => {
-    const generalForm = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <SIB
-                      id="No"
-                      label="No"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.No}
-                      disabled={true}
-                    />
-
-                    <SADIB
-                      id="SuplID"
-                      label="Supplier"
-                      onChange={(e, value) => this.updateFormValue("SuplID", value)}
-                      value={this.state.SADIB_VALUE}
-                      options={this.state.supplierList}
-                      isMandatory={true}
-                    />
-
-                    <SDIB
-                      id="BillingID"
-                      label="Billing"
-                      onChange={(e) => this.updateFormValue("BillingID", e)}
-                      value={this.state.PO.BillingID}
-                      param={this.state.SupplierAdressList}
-                      isMandatory={true}
-                    />
-
-                    <SIB
-                      id="Name"
-                      label="Name"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.Name}
-                      disabled={true}
-                    />
-
-
-                    <SIB
-                      id="Address"
-                      label="Address"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.Address}
-                      disabled={true}
-                    />
-                    <SIB
-                      id="Address2"
-                      label="Address 2"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.Address2}
-                      disabled={true}
-                    />
-                    <SIB
-                      id="Address3"
-                      label="Address 3"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.Address3}
-                      disabled={true}
-                    />
-                    <SIB
-                      id="City"
-                      label="City"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.City}
-                      disabled={true}
-                    />
-                    <SIB
-                      id="Postcode"
-                      label="Postcode"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PostCode}
-                      disabled={true}
-                    />
-                    <SIB
-                      id="Country"
-                      label="Country"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.CountryID}
-                      disabled={true}
-                    />
-                    <SIB
-                      id="State"
-                      label="State"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.StateID}
-                      disabled={true}
-                    />
-
-                    <SDIB
-                      id="WareHouseID"
-                      label="Warehouse"
-                      onChange={(e) => this.updateFormValue("WareHouseID", e)}
-                      value={this.state.PO.WareHouseID}
-                      param={this.state.WarehouseList}
-                      isMandatory={true}
-                    />
-
-
-                    <SSIB
-                      key="IsImport"
-                      id="IsImport"
-                      label="Import?"
-                      param={this.state.PO.IsImport}
-                      onChange={(e) => this.updateFormValue("IsImport", e)}
-                    />
-
-
-
-                  </Grid>
-                </Grid>
-
-
-
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                    <SDTI
-                      isMandatory={true}
-                      id="PODate"
-                      label="PO Date"
-                      variant="outlined"
-                      size="small"
-                      onChange={(e) =>
-                        this.updateFormValue("PODate", e)
-                      }
-                      value={this.state.PO.PODate}
-                    />
-                    <SDIB
-                      id="POType"
-                      label="PO Type"
-                      onChange={(e) => this.updateFormValue("POType", e)}
-                      value={this.state.PO.POType}
-                      param={this.state.POTypeList}
-                      isMandatory={true}
-                    />
-
-
-
-
-
-                    <SSIB
-                      key="amendEvent"
-                      id="AmendmentInput"
-                      label="Amending?"
-                      param={this.state.type === "add" ? false : this.state.AmendmentInput.status}
-                      onChange={(e) => this.updateFormValue("AmendmentInput", e)}
-                    />
-
-                    <SIB
-                      id="AmendmentNo"
-                      label="Amendment No"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.AmendmentNo}
-                      disabled={this.state.type === "add" ? true : false}
-                    />
-                    <SDTI
-                      id="AmendmentDate"
-                      label="Amendment Date"
-                      variant="outlined"
-                      size="small"
-                      onChange={(e) =>
-                        this.updateFormValue("AmendmentDate", e)
-                      }
-                      value={this.state.PO.AmendmentDate}
-                      disabled={this.state.type === "add" ? true : false}
-                    />
-
-                    <SDTI
-                      isMandatory={true}
-                      id="DispachDate"
-                      label="Dispach Date"
-                      variant="outlined"
-                      size="small"
-                      onChange={(e) =>
-                        this.updateFormValue("DispachDate", e)
-                      }
-                      value={this.state.PO.DispachDate}
-                    />
-
-                    <SDTI
-                      isMandatory={true}
-                      id="DeliveryDate"
-                      label="Delivery Date"
-                      variant="outlined"
-                      size="small"
-                      onChange={(e) =>
-                        this.updateFormValue("DeliveryDate", e)
-                      }
-                      value={this.state.PO.DeliveryDate}
-                    />
-
-
-
-
-
-                    <SIB
-                      id="ContactPerson"
-                      label="Contact Person"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.ContactPerson}
-
-                    />
-
-                    <SIB
-                      id="Reference"
-                      label="Referance"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.Reference}
-
-                    />
-
-
-                    <SIB
-                      id="NotifyTo"
-                      label="Notify To"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.NotifyTo}
-                    />
-
-                    <SSIB
-                      key="IsSEZPurchase"
-                      id="IsSEZPurchase"
-                      label="SEZ Purchase?"
-                      param={this.state.PO.IsSEZPurchase}
-                      onChange={(e) => this.updateFormValue("IsSEZPurchase", e)}
-                    />
-
-
-
-                    <SSIB
-                      key="IsRounding"
-                      id="IsRounding"
-                      label="Is Rounding?"
-                      param={this.state.PO.IsRounding}
-                      onChange={(e) => this.updateFormValue("IsRounding", e)}
-                    />
-
-
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-        </Grid>
-
-
-      </Fragment>
-    );
-    let Forms = this.state.Forms;
-    Forms.general = generalForm;
-    this.setState({
-      Forms: Forms
-    });
-  }
-
-  getInvoiceDetails = () => {
-    let o = (
-      <Fragment>
-
-
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-
-
-                    {/* show Currency as per supplier selected */}
-                    <SDIB
-                      id="CurrID"
-                      label="CurrID"
-                      onChange={(e) => this.updateFormValue("CurrID", e)}
-                      value={this.state.PO.CurrID}
-                      param={this.state.CurrencyList}
-                      isMandatory={true}
-                    />
-
-                    <SIB
-                      id="ExchRate"
-                      label="Exchange Rate"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.ExchRate}
-
-                    />
-
-                    <SDIB
-                      id="GeneralPostingGroupID"
-                      label="Gen.Posting Group"
-                      value={this.state.PO.GeneralPostingGroupID}
-                      param={this.state.GeneralPostingGroupList}
-                      isMandatory={true}
-                      disabled={true}
-                    />
-
-                 
-
-
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <SDIB
-                      id="PaymentTermID"
-                      label="Payment Term"
-                      onChange={(e) => this.updateFormValue("PaymentTermID", e)}
-                      value={this.state.PO.PaymentTermID}
-                      param={this.state.PaymentTermsList}
-                      isMandatory={true}     
-                                    
-                    />
-                    <SIB
-                      id="PaymentTerm"
-                      label="Pay..Term..Details"
-                      onChange={(e) => this.updateFormValue("PaymentTerm", e)}
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.PaymentTerm}
-                      isMandatory={true}
-                    />
-                    <SDIB
-                     id="SupplierPostingGroupID"
-                     label="Sup.Posting Group"                    
-                      value={this.state.PO.SupplierPostingGroupID}
-                      param={this.state.SupplierPostingGroupList}
-                      isMandatory={true}     
-                      disabled={true}             
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Divider />
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid item xs={12} sm={12} md={11} lg={11}>
-                  <SSDV
-                    label={"Total Excl. " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
-                    value={"0.00"}
-                  />
-                  <SSDV
-                    label="Invoice Discount %"
-                    value="0.00"
-                  />
-                  <SSDV
-                    label={"Total " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
-                    value="0.00"
-                  />
-                </Grid>
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid item xs={12} sm={12} md={11} lg={11}>
-                  <SSDV
-                    label={"Total FC.Value (" + this.state.supplierCurrency.Code + ")"}
-                    value={this.state.PO.FCValue}
-                  />
-
-                  <SSDV
-                    label={"Total Base.Value (" + this.state.branchCurrency.Code + ")"}
-                    value={this.state.PO.BaseValue}
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-
-
-      </Fragment>
-    );
-    this.setState({ InvoiceDetails: o });
-  }
-
-  taxForm = () => {
-    const taxInfo = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <SSIB
-                      key="IsRegistedSupplier"
-                      id="IsRegistedSupplier"
-                      label="Registed Supplier?"
-                      param={this.state.PO.IsRegistedSupplier}
-
-                    />
-
-                    <SIB
-                      id="GSTNo"
-                      label="GST No"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.GSTNo}
-                      disabled={true}
-                    />
-
-                    <SIB
-                      id="VATNo"
-                      label="VAT No"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.VATNo}
-                      disabled={true}
-                    />
-
-
-
-
-
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                    <SSIB
-                      key="IsTaxExempt"
-                      id="IsTaxExempt"
-                      label="Is TaxExempt?"
-                      param={this.state.PO.IsTaxExempt}
-
-                    />
-
-                    <SIB
-                      id="Reason"
-                      label="Reason"
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.Reason}
-                      disabled={true}
-                    />
-
-                    <SDIB
-                      id="MODTaxID"
-                      label="Mode of Tax"
-                      onChange={(e) => this.updateFormValue("MODTaxID", e)}
-                      value={this.state.PO.MODTaxID}
-                      param={this.state.MODTaxList}
-                      isMandatory={true}
-                    />
-
-
-
-
-
-
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
-    let Forms = this.state.Forms;
-    Forms.taxInfo = taxInfo;
-    this.setState({
-      Forms: Forms
-    });
-  }
-
-  termsForm = () => {
-    const termsForm = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <SDIB
-                      id="IncoID"
-                      label="Inco Term"
-                      onChange={(e) => this.updateFormValue("IncoID", e)}
-                      value={this.state.PO.IncoID}
-                      param={this.state.IncoTermList}
-
-                    />
-
-                  
-
-                    <SIB
-                      id="DeliveryAddress"
-                      label="Delivery Address"
-                      onChange={(e) => this.updateFormValue("DeliveryAddress", e)}
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.DeliveryAddress}
-                      multiline={true}
-                      rows={5}
-                    />
-                    <div style={{ height: 70 }}>&nbsp;</div>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
-                  
-                    <SDIB
-                      id="ShipmentModeID"
-                      label="Shipment Mode"
-                      onChange={(e) => this.updateFormValue("ShipmentModeID", e)}
-                      value={this.state.PO.ShipmentModeID}
-                      param={this.state.ShipmentModeList}
-                    />
-                     
-                    <SIB
-                      id="SpecialInst"
-                      label="Special Inst"
-                      onChange={(e) => this.updateFormValue("SpecialInst", e)}
-                      variant="outlined"
-                      size="small"
-                      value={this.state.PO.SpecialInst}                     
-                      multiline={true}
-                      rows={5}
-                    />
-                    <div style={{ height: 70 }}>&nbsp;</div>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={11} lg={11}>
-            <div style={{ height: 30 }}>&nbsp;</div>
-            <Grid container spacing={0}>
-              <Grid item xs={5} sm={5} md={2} lg={2}>
-                <span className="themeFont" style={{ color: '#212121' }}>
-                  Remarks
-                </span>
-              </Grid>
-              <Grid item xs={5} sm={5} md={10} lg={10}>
-                <TextField
-                  style={
-                    { width: '100%', fontSize: 14 }
-                  }
-                  className="textFieldCss"
-                  id="Notes"
-                  onChange={(e) => this.updateFormValue("Notes", e)}
-                  variant="outlined"
-                  size="small"
-                  value={this.state.PO.Notes}
-                  multiline={true}
-                  rows={3}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            &nbsp;
-          </Grid>
-
-        </Grid>
-
-      </Fragment>
-    );
-    let Forms = this.state.Forms;
-    Forms.terms = termsForm;
-    this.setState({
-      Forms: Forms
-    });
-  }
+  
 
 
 
@@ -1756,6 +1106,9 @@ class poactivity extends React.Component {
       return this.state.stepper.skipped.has(step);
     };
 
+
+    
+
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
@@ -1809,17 +1162,728 @@ class poactivity extends React.Component {
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Grid className="table-adjust" container spacing={0}>
               <Grid item xs={12} sm={12} md={8} lg={8}>
-                <Accordioncomponent
-                  accordionKey="a-1"
+
+
+                <Accordion
+                  key="a-1"
                   expanded={this.state.accordion1}
-                  onClick={(e) => handleAccordionClick("accordion1", e)}
-                  id="accordion1"
-                  typographyKey="GD-Activity"
-                  typography="General"
-                  accordiondetailsKey="accordion1"
-                  html={this.state.Forms.general}
+                  className="accordionD"
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion1", e)} />}
+                    aria-controls="panel1a-content"
+                    id="accordion1"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) => handleAccordionClick("accordion1", e)}
+                  >
+                    <Typography
+                      key="GD-Activity"
+                      className="accordion-Header-Title"
+                    >General</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails                    
+                    key="accordion1" className="AccordionDetails-css">
+                    <Fragment>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          &nbsp;
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                              <Grid container spacing={0}>
+                                <Grid item xs={12} sm={12} md={11} lg={11}>
+                                  <SIB
+                                    id="No"
+                                    label="No"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.PO.No}
+                                    disabled={true}
+                                  />
+
+                                  <SADIB
+                                    id="SuplID"
+                                    label="Supplier"
+                                    onChange={(e, value) => this.updateFormValue("SuplID", value)}
+                                    value={this.state.SADIB_VALUE}
+                                    options={this.state.supplierList}
+                                    isMandatory={true}
+                                  />
+
+                                  <SDIB
+                                    id="BillingID"
+                                    label="Billing"
+                                    onChange={(e) => this.updateFormValue("BillingID", e)}
+                                    value={this.state.PO.BillingID}
+                                    param={this.state.SupplierAdressList}
+                                    isMandatory={true}
+                                  />
+
+                                  <SIB
+                                    id="Name"
+                                    label="Name"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.Name}
+                                    disabled={true}
+                                  />
+
+
+                                  <SIB
+                                    id="Address"
+                                    label="Address"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.Address}
+                                    disabled={true}
+                                  />
+                                  <SIB
+                                    id="Address2"
+                                    label="Address 2"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.Address2}
+                                    disabled={true}
+                                  />
+                                  <SIB
+                                    id="Address3"
+                                    label="Address 3"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.Address3}
+                                    disabled={true}
+                                  />
+                                  <SIB
+                                    id="City"
+                                    label="City"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.City}
+                                    disabled={true}
+                                  />
+                                  <SIB
+                                    id="Postcode"
+                                    label="Postcode"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.PostCode}
+                                    disabled={true}
+                                  />
+                                  <SIB
+                                    id="Country"
+                                    label="Country"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.CountryID}
+                                    disabled={true}
+                                  />
+                                  <SIB
+                                    id="State"
+                                    label="State"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.StateID}
+                                    disabled={true}
+                                  />
+
+                                  <SDIB
+                                    id="WareHouseID"
+                                    label="Warehouse"
+                                    onChange={(e) => this.updateFormValue("WareHouseID", e)}
+                                    value={this.state.PO.WareHouseID}
+                                    param={this.state.WarehouseList}
+                                    isMandatory={true}
+                                  />
+
+
+                                  <SSIB
+                                    key="IsImport"
+                                    id="IsImport"
+                                    label="Import?"
+                                    param={this.state.PO.IsImport}
+                                    onChange={(e) => this.updateFormValue("IsImport", e)}
+                                  />
+
+
+
+                                </Grid>
+                              </Grid>
+
+
+
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                              <Grid container spacing={0}>
+                                <Grid item xs={12} sm={12} md={11} lg={11}>
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="PODate"
+                                    label="PO Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("PODate", e)
+                                    }
+                                    value={this.state.PO.PODate}
+                                  />
+                                  <SDIB
+                                    id="POType"
+                                    label="PO Type"
+                                    onChange={(e) => this.updateFormValue("POType", e)}
+                                    value={this.state.PO.POType}
+                                    param={this.state.POTypeList}
+                                    isMandatory={true}
+                                  />
+
+
+
+
+
+                                  <SSIB
+                                    key="amendEvent"
+                                    id="AmendmentInput"
+                                    label="Amending?"
+                                    param={this.state.type === "add" ? false : this.state.AmendmentInput.status}
+                                    onChange={(e) => this.updateFormValue("AmendmentInput", e)}
+                                  />
+
+                                  <SIB
+                                    id="AmendmentNo"
+                                    label="Amendment No"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.PO.AmendmentNo}
+                                    disabled={this.state.type === "add" ? true : false}
+                                  />
+                                  <SDTI
+                                    id="AmendmentDate"
+                                    label="Amendment Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("AmendmentDate", e)
+                                    }
+                                    value={this.state.PO.AmendmentDate}
+                                    disabled={this.state.type === "add" ? true : false}
+                                  />
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="DispachDate"
+                                    label="Dispach Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("DispachDate", e)
+                                    }
+                                    value={this.state.PO.DispachDate}
+                                  />
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="DeliveryDate"
+                                    label="Delivery Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("DeliveryDate", e)
+                                    }
+                                    value={this.state.PO.DeliveryDate}
+                                  />
+
+
+
+
+
+                                  <SIB
+                                    id="ContactPerson"
+                                    label="Contact Person"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.PO.ContactPerson}
+                                    onChange={(e) =>
+                                      this.updateFormValue("ContactPerson", e)
+                                    }
+                                  />
+
+                                  <SIB
+                                    id="Reference"
+                                    label="Referance"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.PO.Reference}
+
+                                  />
+
+
+                                  <SIB
+                                    id="NotifyTo"
+                                    label="Notify To"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.PO.NotifyTo}
+                                  />
+
+                                  <SSIB
+                                    key="IsSEZPurchase"
+                                    id="IsSEZPurchase"
+                                    label="SEZ Purchase?"
+                                    param={this.state.PO.IsSEZPurchase}
+                                    onChange={(e) => this.updateFormValue("IsSEZPurchase", e)}
+                                  />
+
+
+
+                                  <SSIB
+                                    key="IsRounding"
+                                    id="IsRounding"
+                                    label="Is Rounding?"
+                                    param={this.state.PO.IsRounding}
+                                    onChange={(e) => this.updateFormValue("IsRounding", e)}
+                                  />
+
+
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          &nbsp;
+                        </Grid>
+                      </Grid>
+
+
+                    </Fragment>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  key="a-2"
+                  expanded={this.state.accordion2}
+                  className="accordionD"
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion2", e)} />}
+                    aria-controls="panel1a-content"
+                    id="accordion2"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) => handleAccordionClick("accordion2", e)}
+                  >
+                    <Typography
+                      key="Lines-Activity"
+                      className="accordion-Header-Title"
+                    >Lines</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails                    
+                    key="accordion2" className="AccordionDetails-css">
+
+                  </AccordionDetails>
+                </Accordion>
+               
+                <Accordion
+                  key="a-3"
+                  expanded={this.state.accordion3}
+                  className="accordionD"
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion3", e)} />}
+                    aria-controls="panel1a-content"
+                    id="accordion3"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) => handleAccordionClick("accordion3", e)}
+                  >
+                    <Typography
+                      key="Lines-Activity"
+                      className="accordion-Header-Title"
+                    >Invoice Details</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails                    
+                    key="accordion3" className="AccordionDetails-css">
+<Fragment>
+
+
+<Grid container spacing={0}>
+  <Grid item xs={12} sm={12} md={12} lg={12}>
+    &nbsp;
+  </Grid>
+  <Grid item xs={12} sm={12} md={12} lg={12}>
+    <Grid container spacing={0}>
+      <Grid item xs={12} sm={12} md={6} lg={6}>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={11} lg={11}>
+
+
+            {/* show Currency as per supplier selected */}
+            <SDIB
+              id="CurrID"
+              label="Currency"
+              onChange={(e) => this.updateFormValue("CurrID", e)}
+              value={this.state.PO.CurrID}
+              param={this.state.CurrencyList}
+              isMandatory={true}
+            />
+
+            <SIB
+              id="ExchRate"
+              label="Exchange Rate"
+              variant="outlined"
+              size="small"
+              value={this.state.PO.ExchRate}
+
+            />
+
+            <SDIB
+              id="GeneralPostingGroupID"
+              label="Gen.Posting Group"
+              value={this.state.PO.GeneralPostingGroupID}
+              param={this.state.GeneralPostingGroupList}
+              isMandatory={true}
+              disabled={true}
+            />
+
+
+
+
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} sm={12} md={6} lg={6}>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={11} lg={11}>
+            <SDIB
+              id="PaymentTermID"
+              label="Payment Term"
+              onChange={(e) => this.updateFormValue("PaymentTermID", e)}
+              value={this.state.PO.PaymentTermID}
+              param={this.state.PaymentTermsList}
+              isMandatory={true}
+
+            />
+            <SIB
+              id="PaymentTerm"
+              label="Pay..Term..Details"
+              onChange={(e) => this.updateFormValue("PaymentTerm", e)}
+              variant="outlined"
+              size="small"
+              value={this.state.PO.PaymentTerm}
+              isMandatory={true}
+            />
+            <SDIB
+              id="SupplierPostingGroupID"
+              label="Sup.Posting Group"
+              value={this.state.PO.SupplierPostingGroupID}
+              param={this.state.SupplierPostingGroupList}
+              isMandatory={true}
+              disabled={true}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+  <Grid item xs={12} sm={12} md={12} lg={12}>
+    &nbsp;
+  </Grid>
+  <Grid item xs={12} sm={12} md={12} lg={12}>
+    <Divider />
+  </Grid>
+  <Grid item xs={12} sm={12} md={12} lg={12}>
+    &nbsp;
+  </Grid>
+  <Grid item xs={12} sm={12} md={12} lg={12}>
+    <Grid container spacing={0}>
+      <Grid item xs={12} sm={12} md={6} lg={6}>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <SSDV
+            label={"Total Excl. " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
+            value={"0.00"}
+          />
+          <SSDV
+            label="Invoice Discount %"
+            value="0.00"
+          />
+          <SSDV
+            label={"Total " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
+            value="0.00"
+          />
+        </Grid>
+      </Grid>
+      <Grid item xs={12} sm={12} md={6} lg={6}>
+        <Grid item xs={12} sm={12} md={11} lg={11}>
+          <SSDV
+            label={"Total FC.Value (" + this.state.supplierCurrency.Code + ")"}
+            value={this.state.PO.FCValue}
+          />
+
+          <SSDV
+            label={"Total Base.Value (" + this.state.branchCurrency.Code + ")"}
+            value={this.state.PO.BaseValue}
+          />
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+</Grid>
+
+
+</Fragment>
+                  </AccordionDetails>
+                </Accordion>
+
+                <Accordion
+                  key="a-4"
+                  expanded={this.state.accordion4}
+                  className="accordionD"
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion4", e)} />}
+                    aria-controls="panel1a-content"
+                    id="accordion4"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) => handleAccordionClick("accordion4", e)}
+                  >
+                    <Typography
+                      key="Tax-Activity"
+                      className="accordion-Header-Title"
+                    >Tax Information</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails                    
+                    key="accordion4" className="AccordionDetails-css">
+ <Fragment>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    <SSIB
+                      key="IsRegistedSupplier"
+                      id="IsRegistedSupplier"
+                      label="Registed Supplier?"
+                      param={this.state.PO.IsRegistedSupplier}
+
+                    />
+
+                    <SIB
+                      id="GSTNo"
+                      label="GST No"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.GSTNo}
+                      disabled={true}
+                    />
+
+                    <SIB
+                      id="VATNo"
+                      label="VAT No"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.VATNo}
+                      disabled={true}
+                    />
+
+
+
+
+
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+
+                    <SSIB
+                      key="IsTaxExempt"
+                      id="IsTaxExempt"
+                      label="Is TaxExempt?"
+                      param={this.state.PO.IsTaxExempt}
+
+                    />
+
+                    <SIB
+                      id="Reason"
+                      label="Reason"
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.Reason}
+                      disabled={true}
+                    />
+
+                    <SDIB
+                      id="MODTaxID"
+                      label="Mode of Tax"
+                      onChange={(e) => this.updateFormValue("MODTaxID", e)}
+                      value={this.state.PO.MODTaxID}
+                      param={this.state.MODTaxList}
+                      isMandatory={true}
+                    />
+
+
+
+
+
+
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+        </Grid>
+      </Fragment>
+                  </AccordionDetails>
+                </Accordion>
+
+                
+                <Accordion
+                  key="a-5"
+                  expanded={this.state.accordion5}
+                  className="accordionD"
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion5", e)} />}
+                    aria-controls="panel1a-content"
+                    id="accordion5"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) => handleAccordionClick("accordion5", e)}
+                  >
+                    <Typography
+                      key="Terms-Activity"
+                      className="accordion-Header-Title"
+                    >Terms</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails                    
+                    key="accordion5" className="AccordionDetails-css">
+ <Fragment>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                    <SDIB
+                      id="IncoID"
+                      label="Inco Term"
+                      onChange={(e) => this.updateFormValue("IncoID", e)}
+                      value={this.state.PO.IncoID}
+                      param={this.state.IncoTermList}
+
+                    />
+
+
+
+                    <SIB
+                      id="DeliveryAddress"
+                      label="Delivery Address"
+                      onChange={(e) => this.updateFormValue("DeliveryAddress", e)}
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.DeliveryAddress}
+                      multiline={true}
+                      rows={5}
+                    />
+                    <div style={{ height: 70 }}>&nbsp;</div>
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={11} lg={11}>
+
+                    <SDIB
+                      id="ShipmentModeID"
+                      label="Shipment Mode"
+                      onChange={(e) => this.updateFormValue("ShipmentModeID", e)}
+                      value={this.state.PO.ShipmentModeID}
+                      param={this.state.ShipmentModeList}
+                    />
+
+                    <SIB
+                      id="SpecialInst"
+                      label="Special Inst"
+                      onChange={(e) => this.updateFormValue("SpecialInst", e)}
+                      variant="outlined"
+                      size="small"
+                      value={this.state.PO.SpecialInst}
+                      multiline={true}
+                      rows={5}
+                    />
+                    <div style={{ height: 70 }}>&nbsp;</div>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={11} lg={11}>
+            <div style={{ height: 30 }}>&nbsp;</div>
+            <Grid container spacing={0}>
+              <Grid item xs={5} sm={5} md={2} lg={2}>
+                <span className="themeFont" style={{ color: '#212121' }}>
+                  Remarks
+                </span>
+              </Grid>
+              <Grid item xs={5} sm={5} md={10} lg={10}>
+                <TextField
+                  style={
+                    { width: '100%', fontSize: 14 }
+                  }
+                  className="textFieldCss"
+                  id="Notes"
+                  onChange={(e) => this.updateFormValue("Notes", e)}
+                  variant="outlined"
+                  size="small"
+                  value={this.state.PO.Notes}
+                  multiline={true}
+                  rows={3}
                 />
-                <Accordioncomponent
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
+            &nbsp;
+          </Grid>
+
+        </Grid>
+
+      </Fragment>
+                  </AccordionDetails>
+                </Accordion>
+                 
+                {/* <Accordioncomponent
                   accordionKey="a-2"
                   expanded={this.state.accordion2}
                   onClick={(e) => handleAccordionClick("accordion2", e)}
@@ -1828,8 +1892,8 @@ class poactivity extends React.Component {
                   typography="Lines"
                   accordiondetailsKey="accordion2"
                   html={this.state.ItemDatagrid}
-                />
-                <Accordioncomponent
+                /> */}
+                {/* <Accordioncomponent
                   accordionKey="a-3"
                   expanded={this.state.accordion3}
                   onClick={(e) => handleAccordionClick("accordion3", e)}
@@ -1838,9 +1902,9 @@ class poactivity extends React.Component {
                   typography="Invoice Details"
                   accordiondetailsKey="accordion3"
                   html={this.state.InvoiceDetails}
-                />
+                /> */}
 
-                <Accordioncomponent
+                {/* <Accordioncomponent
                   accordionKey="a-4"
                   expanded={this.state.accordion4}
                   onClick={(e) => handleAccordionClick("accordion4", e)}
@@ -1849,9 +1913,9 @@ class poactivity extends React.Component {
                   typography="Tax Information"
                   accordiondetailsKey="accordion4"
                   html={this.state.Forms.taxInfo}
-                />
+                /> */}
 
-                <Accordioncomponent
+                {/* <Accordioncomponent
                   accordionKey="a-5"
                   expanded={this.state.accordion5}
                   onClick={(e) => handleAccordionClick("accordion5", e)}
@@ -1860,7 +1924,7 @@ class poactivity extends React.Component {
                   typography="Terms"
                   accordiondetailsKey="accordion5"
                   html={this.state.Forms.terms}
-                />
+                /> */}
 
                 <div style={{ height: 50 }}></div>
               </Grid>
