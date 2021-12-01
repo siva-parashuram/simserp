@@ -44,6 +44,7 @@ class gridautocompletedropdowninput extends React.Component {
                   id={this.props.id}
                   options={this.props.options}
                   onChange={this.props.onChange}
+                  value={this.props.value}
                   renderInput={(params) => (
                     <TextField
                       className="AutocompletetextFieldCss"

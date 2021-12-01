@@ -830,6 +830,7 @@ class poactivity extends React.Component {
         console.log("- IN SuplID - ");
         console.log("e -> ",e);
         this.setState({ SADIB_VALUE: e }, () => {
+          console.log("SADIB_VALUE -> ",this.state.SADIB_VALUE);
           this.generalForm();
           PO.SuplID = CF.toInt(e.id);
           this.setFieldValuesOnSuplierChange(CF.toInt(e.id));
@@ -944,10 +945,6 @@ class poactivity extends React.Component {
                       options={this.state.supplierList}
                       isMandatory={true}
                     />
-
-
-
-
 
                     <SDIB
                       id="BillingID"
@@ -1886,7 +1883,7 @@ class poactivity extends React.Component {
                                 <Grid item xs={12} sm={12} md={11} lg={11}>
                                   <SSDV
                                     label="Supplier No."
-                                    value="00000.00"
+                                    value="S0001"
                                   />
                                   <SSDV
                                     label="Balance"
