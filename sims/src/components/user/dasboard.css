@@ -653,6 +653,15 @@ cursor: pointer;
   display:none !important;
 }
 
+.line-table-header-font{
+  
+  color:#009688 !important;
+  /* font-size: 10px !important; */
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+  background-color: #fff !important;
+}
+
 .table-header-font{
   color:#009688 !important;
   font-weight: 545 !important;
@@ -664,6 +673,10 @@ cursor: pointer;
 cursor: pointer;
 }
 
+.linetableRow{
+  background-color: 'pink' !important;
+}
+
 .table-header-background{
   background-color: #eeeeee !important;
    
@@ -671,6 +684,9 @@ cursor: pointer;
 
 .selectedRow{
   background-color: #e0f2f1 !important;
+}
+.selectedRowError{
+  background-color: #ffebee !important;
 }
 
 .accordionD{
