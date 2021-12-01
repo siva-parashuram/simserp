@@ -323,52 +323,71 @@ class poactivity extends React.Component {
       .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
-
-        let Country=data.Country;
-        let Currency=this.getCurrencyList(data.Currency);
-        let GeneralPostingGroup=this.getAllGeneralPostingGroup(data.GeneralPostingGroup);
-        let MODTax=data.MODTax;
-        let PaymentTerms=this.getPaymentTerms(data.PaymentTerms);
-        let ShipmentMode=data.ShipmentMode;
-        let State=data.State;
-        let Supplier=data.Supplier;
-        let SupplierPostingGroup=this.getAllSupplierPostingGroup(data.SupplierPostingGroup);
-        let WareHouse=this.getWarehouseList(data.WareHouse);
-
-        let newSupplierData = [];
-        for (let i = 0; i < Supplier.length; i++) {
-          let o = { label: Supplier[i].Name, id: Supplier[i].SuplID };
-          newSupplierData.push(o);
-        }
-
-        this.setState({          
-          CountryList:Country, 
-          CurrencyMasterList: data.Currency,
-          CurrencyList: Currency,          
-          GeneralPostingGroupList:GeneralPostingGroup,
-          MODTaxList:MODTax,
-          PaymentTermsMasterList:data.PaymentTerms,
-          PaymentTermsList: PaymentTerms,
-          ShipmentModeList:ShipmentMode,
-          StateList:State,
-          supplierMasterList: Supplier,
-          supplierList:newSupplierData,
-          SupplierPostingGroupList: SupplierPostingGroup,
-          WarehouseList: WareHouse,
-          ProgressLoader: true
-        },()=>{
-          this.generalForm();
-          this.getInvoiceDetails();
-          this.generalForm();
-          this.taxForm();
-          this.termsForm();
-        });
-
-      
+        try{
+          let Country=data.Country;
+          let Currency=this.getCurrencyList(data.Currency);
+          let GeneralPostingGroup=this.getAllGeneralPostingGroup(data.GeneralPostingGroup);
+          let MODTax=data.MODTax;
+          let PaymentTerms=this.getPaymentTerms(data.PaymentTerms);
+          let ShipmentMode=data.ShipmentMode;
+          let State=data.State;
+          let Supplier=data.Supplier;
+          let SupplierPostingGroup=this.getAllSupplierPostingGroup(data.SupplierPostingGroup);
+          let WareHouse=this.getWarehouseList(data.WareHouse);
+  
+          let newSupplierData = [];
+          for (let i = 0; i < Supplier.length; i++) {
+            let o = { label: Supplier[i].Name, id: Supplier[i].SuplID };
+            newSupplierData.push(o);
+          }
+  
+          this.setState({          
+            CountryList:Country, 
+            CurrencyMasterList: data.Currency,
+            CurrencyList: Currency,          
+            GeneralPostingGroupList:GeneralPostingGroup,
+            MODTaxList:MODTax,
+            PaymentTermsMasterList:data.PaymentTerms,
+            PaymentTermsList: PaymentTerms,
+            ShipmentModeList:ShipmentMode,
+            StateList:State,
+            supplierMasterList: Supplier,
+            supplierList:newSupplierData,
+            SupplierPostingGroupList: SupplierPostingGroup,
+            WarehouseList: WareHouse,
+            ProgressLoader: true
+          },()=>{
+            this.generalForm();
+            this.getInvoiceDetails();
+            this.generalForm();
+            this.taxForm();
+            this.termsForm();
+          }); 
+        }catch(exception){
+          console.log("Something is wrong!");
+          this.setState({
+            ProgressLoader: true 
+          });
+        }           
 
       })
       .catch((error) => {
-        this.setState({ supplierList: [], ProgressLoader: true });
+        this.setState({ 
+          CountryList:[], 
+          CurrencyMasterList:[],
+          CurrencyList: [],        
+          GeneralPostingGroupList:[],
+          MODTaxList:[],
+          PaymentTermsMasterList:[],
+          PaymentTermsList: [],
+          ShipmentModeList:[],
+          StateList:[],
+          supplierMasterList: [],
+          supplierList:[],
+          SupplierPostingGroupList: [],
+          WarehouseList: [],
+          ProgressLoader: true 
+        });
       });
   }
 
