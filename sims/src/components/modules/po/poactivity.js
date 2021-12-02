@@ -56,6 +56,7 @@ import SCADI from "../../compo/customautocompletecomponent";
 import SCI from "../../compo/customtextboxinput";
 import SCSI from "../../compo/customswitchinput";
 
+
 /* supporting components */
 import Viewpo from "./component/viewpo";
 
@@ -96,12 +97,20 @@ class poactivity extends React.Component {
       typoTitle: "",
       type: "",
       POTypeList: APIURLS.POType,
-      POItemType: APIURLS.POItemType,
+      POItemType: APIURLS.POItemType, 
+      GLAccount:[],
+      Charges:[],
+      Category:[],
+      SupplierItemCategory:[],
+      GSTGroupIDList:[],
+      UOMList:[],
+      DimensionsList:[],
       MODTaxList: [],
       ShipmentModeList: [],
       WarehouseList: [],
       SupplierPostingGroupList: [],
       GeneralPostingGroupList: [],
+      ItemPostingGroupList: [],
       CountryList: [],
       StateList: [],
       PaymentTermsMasterList: [],
@@ -119,6 +128,7 @@ class poactivity extends React.Component {
       WareHouseList: [],
       MODTaxList: [],
       IncoTermList: [],
+      SupplierItemList:[],
       SpecialInstValue: "",
       BillingIDValue: "",
       ItemDatagrid: null,
@@ -197,7 +207,7 @@ class poactivity extends React.Component {
         NotifyTo: "",
         UserID: CF.toInt(getCookie(COOKIE.USERID)),
       },
-      PurchaseOrderLine: [],   
+      PurchaseOrderLine: [],
       emptyLine: {
         POID: 0,
         Type: 0,
@@ -231,8 +241,6 @@ class poactivity extends React.Component {
   }
 
   onKeyDownHandler = e => {
-    console.log("onKeyDownHandler > e > ", e);
-    console.log("onKeyDownHandler > e.shiftKey > ", e.shiftKey);
     if (e.shiftKey === true) {
       switch (e.keyCode) {
         case 13:
@@ -247,30 +255,37 @@ class poactivity extends React.Component {
 
 
   createNewBlankLine = () => {
-    console.log("-createNewBlankLine-");
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
-    let length=PurchaseOrderLine.length;
-    let EL={
+    let length = PurchaseOrderLine.length;
+    let EL = {
       POID: 0,
-      Type: 0,
-      LNo: length+1,
-      TypeIDList:[],
-      TypeID: 0,
+      Type: null,
+      LNo: length + 1,
+      TypeIDList: [],
+      CategoryList:[],
+      isCategoryDisabled:true,
+      CategoryId:null,
+      ItemList:[],   
+      ItemListSelected:null,   
+      TypeID: null,
+      Description: null,
+      packingDescription: null,
       SupplierCode: "",
-      Narration: "",
-      UOMID: 0,
+      Narration: "",       
+      UOMID:  null,
       TolerancePercentage: 0,
       Quantity: 0,
       Price: 0,
       LineDiscPercentage: 0,
-      LineDiscAmount: 0,
-      ItemPostingGroupID: 0,
+      LineDiscAmount: 0,      
+      ItemPostingGroupID:  null,
+      GeneralPostingGroupList: [],
       GeneralPostingGroupID: 0,
       VATPercentage: 0,
       VATAmount: 0,
-      HSNCode: "",
-      GSTGroupID: 0,
-      SupplyStateID: 0,
+      HSNCode: "", 
+      GSTGroupID:  null,
+      SupplyStateID:  null,
       GSTPercentage: 0,
       BuyFromGSTN: "",
       NatureOfSupply: "",
@@ -279,7 +294,7 @@ class poactivity extends React.Component {
       IsLot: false,
       isDataProper: false,
     };
-    
+
     PurchaseOrderLine.push(EL);
     this.setState({ PurchaseOrderLine: PurchaseOrderLine });
   }
@@ -290,6 +305,7 @@ class poactivity extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDownHandler);
+   
 
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -326,7 +342,7 @@ class poactivity extends React.Component {
       this.getSupplierList();
     });
 
-   
+
   }
 
   getSupplierList = () => {
@@ -359,6 +375,13 @@ class poactivity extends React.Component {
         let Supplier = data.Supplier;
         let SupplierPostingGroup = this.getAllSupplierPostingGroup(data.SupplierPostingGroup);
         let WareHouse = this.getWarehouseList(data.WareHouse);
+        let UOM=data.UOM;
+        let ItemPostingGroup=this.getAllItemPostingGroup(data.ItemPostingGroup);
+        let GSTGROUP=data.GSTGROUP;
+        let GLAccount=data.GLAccount;
+        let Charges=data.Charges;
+        let DimensionsList=data.DimensionValue;
+        
 
         let newSupplierData = [];
         for (let i = 0; i < Supplier.length; i++) {
@@ -397,11 +420,18 @@ class poactivity extends React.Component {
           supplierList: newSupplierData,
           SupplierPostingGroupList: SupplierPostingGroup,
           WarehouseList: WareHouse,
+          UOMList:UOM,
+          ItemPostingGroupList:ItemPostingGroup,
+          GSTGroupIDList:GSTGROUP,
+          GLAccount:GLAccount,
+          Charges:Charges,
+          DimensionsList:DimensionsList,
           ProgressLoader: true
         });
 
       })
       .catch((error) => {
+        console.log("Error - supplier fetch > ",error);
         this.setState({
           CountryList: [],
           CurrencyMasterList: [],
@@ -536,25 +566,26 @@ class poactivity extends React.Component {
   };
 
   setFieldValuesOnSuplierChange = (SuplID) => {
+    console.log();
     let PO = this.state.PO;
-    let data = this.getSupplierAddressList(SuplID);
+    let data = this.getSupplierDataList(SuplID);
     PO.CurrID = data.CurrID;
+    // UOMList
     if (data.SupplierAdressList.length > 0) {
       PO.BillingID = data.SupplierAdressList[0].value;
       let BillingID = data.SupplierAdressList[0].value;
       PO.CurrID = data.CurrID;
       PO.PaymentTermID = data.PaymentTermID;
       PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
-
-
+       
 
 
       this.setState({
-        PO: PO
+        PO: PO,
+        // SupplierItemList:data.Item
+        SupplierItemCategory:data.SupplierItemCategory
       }, () => {
-        console.log("setFieldValuesOnSuplierChange > BillingID > ", BillingID);
         let BCdata = this.getDataToSetOnBillingChange(CF.toInt(BillingID));
-        console.log("setFieldValuesOnSuplierChange > BCdata > ", BCdata);
         let PO = this.state.PO;
         PO.ContactPerson = BCdata.ContactPerson;
         PO.GSTNo = BCdata.GSTNo;
@@ -596,14 +627,18 @@ class poactivity extends React.Component {
     });
   }
 
-  getSupplierAddressList = (SuplID) => {
+  getSupplierDataList = (SuplID) => {
     let dropdownData = [];
+    let SupplierItemCategory=[];
+    // let Item = [];
     let Address = [];
     let CurrID = 0;
     let PaymentTermID = 0;
 
     for (let i = 0; i < this.state.supplierMasterList.length; i++) {
       if (this.state.supplierMasterList[i].SuplID === SuplID) {
+        SupplierItemCategory= this.state.supplierMasterList[i].Category
+        // Item = this.state.supplierMasterList[i].Item;
         Address = this.state.supplierMasterList[i].Address;
         CurrID = this.state.supplierMasterList[i].CurrID;
         PaymentTermID = this.state.supplierMasterList[i].PaymentTermID;
@@ -611,12 +646,17 @@ class poactivity extends React.Component {
         break;
       }
     }
+
+    
+
     for (let i = 0; i < Address.length; i++) {
       let o = { name: Address[i].Code, value: Address[i].AddressID };
       dropdownData.push(o);
     }
 
     return {
+      SupplierItemCategory:SupplierItemCategory,
+      // Item:Item,
       SupplierAdressList: dropdownData,
       SupplierAddressMasterList: Address,
       CurrID: CurrID,
@@ -628,8 +668,6 @@ class poactivity extends React.Component {
   }
 
   getDataToSetOnBillingChange = (AddressID) => {
-    console.log("getDataToSetOnBillingChange -> AddressID > ", AddressID);
-    console.log("getDataToSetOnBillingChange -> this.state.SupplierAddressMasterList > ", this.state.SupplierAddressMasterList);
     let data = {};
     for (let i = 0; i < this.state.SupplierAddressMasterList.length; i++) {
       if (this.state.SupplierAddressMasterList[i].AddressID === AddressID) {
@@ -657,25 +695,46 @@ class poactivity extends React.Component {
     return data;
   }
 
-   
+  getAllItemPostingGroup = (data) => {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let o = {
+        name: data[i].Code + " - " + data[i].Description,
+        value: data[i].ItemPostingGroupID,
+      };
+      newData.push(o);
+    }
 
-  
+    return newData;
+  };
+
+ getDimensions=(data)=>{
+  let newData=[];
+  for (let i = 0; i < data.length; i++) {
+    let o = {
+      name: data[i].Name + " - " + data[i].Description,
+      value: data[i].DimensionID,
+    };
+    newData.push(o);
+  }
+   return newData;
+ }
 
   itemDelete = (i, params) => {
     console.log("itemDelete > i > ", i);
     console.log("itemDelete > params > ", params);
     this.setState({
       DialogStatus: true,
-      currentDeleteItemLine: {index:i,params:params}
+      currentDeleteItemLine: { index: i, params: params }
     });
   }
 
-   
 
 
- 
 
-  
+
+
+
 
   getPODetails = () => {
 
@@ -746,15 +805,10 @@ class poactivity extends React.Component {
     }
   }
 
-
-
   updateFormValue = (param, e) => {
     let PO = this.state.PO;
-    console.log("- IN updateFormValue - ");
     switch (param) {
       case "SuplID":
-        console.log("- IN SuplID - ");
-        console.log("e -> ", e);
         if (e) {
           this.setState({ SADIB_VALUE: e }, () => {
             PO.SuplID = CF.toInt(e.id);
@@ -882,15 +936,15 @@ class poactivity extends React.Component {
 
   deleteSelectedItem = () => {
     this.handleDialogClose();
-    let currentDeleteItemLine=this.state.currentDeleteItemLine;
-    let PurchaseOrderLine=this.state.PurchaseOrderLine;
-    let newPurchaseOrderLine=[];
-    for(let i=0;i<PurchaseOrderLine.length;i++){
-      if(currentDeleteItemLine.index===i){}else{
+    let currentDeleteItemLine = this.state.currentDeleteItemLine;
+    let PurchaseOrderLine = this.state.PurchaseOrderLine;
+    let newPurchaseOrderLine = [];
+    for (let i = 0; i < PurchaseOrderLine.length; i++) {
+      if (currentDeleteItemLine.index === i) { } else {
         newPurchaseOrderLine.push(PurchaseOrderLine[i]);
       }
     }
-    this.setState({PurchaseOrderLine:newPurchaseOrderLine});
+    this.setState({ PurchaseOrderLine: newPurchaseOrderLine });
   }
 
   getMRNStatus = () => {
@@ -934,30 +988,202 @@ class poactivity extends React.Component {
     this.setState({ Dialog: Dialog });
   };
 
-  updateLineDetail=(i,key,e)=>{
-    console.log("i > ",i);
-    console.log("key > ",key);
-    console.log("e.target.value > ",e.target.value);
+  updateLineDetail = (i, key, e) => {
+    // console.log("i > ", i);
+    // console.log("key > ", key);
+    // console.log("e.target.value > ", e.target.value);
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
     let o = PurchaseOrderLine[i];
-    switch(key){
-      case "Type":        
-        o[key] = CF.toInt(e.target.value);
-        PurchaseOrderLine[i]=o;
-        //fetch Item list as per ITEM tYPE selected
+    switch (key) {
+      case "Type":
+        o[key] = CF.toInt(e.target.value);//setting the dropdown value.
+        switch (CF.toInt(e.target.value)) {
+          case 0:
+            o.CategoryList=this.state.SupplierItemCategory;             
+            o.isCategoryDisabled=false;
+            o.ItemList=[];
+            break;
+          case 1:
+            o.CategoryList = [];
+           o.CategoryId=null;
+            o.isCategoryDisabled = true;
+            o.ItemList=this.state.GLAccount;
+            break;
+          case 3:
+            o.CategoryList = [];
+            o.CategoryId=null;
+            o.isCategoryDisabled = true;
+            o.ItemList=this.state.Charges;
+            break;
+          default:
+            o.CategoryList = [];
+           o.CategoryId=null;
+            o.isCategoryDisabled = true;
+            o.ItemList=[];
+            break;
+        }
+        PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
-        break;     
-      case "Narration":        
-        o[key] = e.target.value;
-        PurchaseOrderLine[i]=o;
-       this.setLineParams(PurchaseOrderLine);
         break;
+      case "CategoryId":
+        o[key] = CF.toInt(e.target.value);
+        let CategoryList=o.CategoryList;
+        console.log("--> CategoryList > ",CategoryList);
+        for(let i=0;i<CategoryList.length;i++){
+          if(CategoryList[i].value===CF.toInt(e.target.value)){
+            o.ItemList=CategoryList[i].Item;
+            break;
+          }
+        }
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "SupplierCode":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "Narration":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "TypeID":
+        if (e) {
+          console.log("TypeID > e > ", e);
+          o.ItemListSelected=e;
+          o.TypeID = CF.toInt(e.value);
+          o.Description = e.Description1;
+          o.packingDescription = e.PackingDesc1;
+          o.HSNCode=e.HSNCode;
+          o.GSTGroupID = e.GSTGroupID;
+          o.GSTPercentage=e.GSTPercentage;
+          o.UOMID= e.PurchaseUOM;
+          o.ItemPostingGroupID = e.ItemPostingGroupID;
+          o.TolerancePercentage = e.TolerancePercentage;
+          o.IsLot = e.IsLot;
+          o.IsQuality = e.IsQuality;           
+          PurchaseOrderLine[i] = o;
+          this.setLineParams(PurchaseOrderLine);
+        }
+        break;
+      case "UOMID":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "TolerancePercentage":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "Quantity":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "Price":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "LineDiscPercentage":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "ItemPostingGroupID":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "GeneralPostingGroupID":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "VATPercentage":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "VATAmount":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "HSNCode":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "GSTGroupID":
+        o[key] = CF.toInt(e.target.value);
+        let GSTGroupIDList=this.state.GSTGroupIDList;
+        for(let i=0;i<GSTGroupIDList.length;i++){
+          if(GSTGroupIDList[i].value===CF.toInt(e.target.value)){
+            o.GSTPercentage=GSTGroupIDList[i].GSTPercentage;
+          }
+        }        
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "SupplyStateID":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "GSTPercentage":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      
+      case "NatureOfSupply":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "DValueID":
+        o[key] = e.target.value;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "IsQuality":
+        o[key] = e.target.checked;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+      case "IsLot":
+        o[key] = e.target.checked;
+        PurchaseOrderLine[i] = o;
+        this.setLineParams(PurchaseOrderLine);
+        break;
+
       default:
         break;
     }
+
+    let validLine = this.validateLine();
+    if (validLine === true) {
+      o.isDataProper = true;
+      PurchaseOrderLine[i] = o;
+      this.setLineParams(PurchaseOrderLine);
+    } else {
+      o.isDataProper = false;
+      PurchaseOrderLine[i] = o;
+      this.setLineParams(PurchaseOrderLine);
+    }
+  
+
   }
 
   setLineParams = (object) => { this.setState({ PurchaseOrderLine: object }) };
+
+  validateLine=()=>{
+    let validLine=false;
+    return validLine;
+  }
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -1512,288 +1738,323 @@ class poactivity extends React.Component {
                     <div style={{ height: 250, width: '100%', overflowY: 'scroll', overflowX: 'scroll' }}>
                       <Grid container spacing={0}>
                         <Grid xs={12} sm={12} md={12} lg={12}>
-                          <Table
-                            stickyHeader
-                            size="small"
-                            className=""
-                            aria-label="Lines List table"
-                          >
-                            <TableHead className="table-header-background">
-                              <TableRow>
-                                <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="center">&nbsp;</TableCell>
-                                <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Type</TableCell>
-                                <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Item</TableCell>
-                                <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Sup.Code</TableCell>
-                                <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Narration</TableCell>
-                                <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">UOM</TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Tolerance %</TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Quantity </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Price </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Line.Disc %</TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Item Posting Group </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Gen Posting Group</TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT % </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">HSN </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">GST Group </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Supply State </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> GST %</TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Buy From GSTN</TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Nature Of Supply </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Dim.Value </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Is Quality? </TableCell>
-                                <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Is Lot? </TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody className="tableBody">
-                              {this.state.PurchaseOrderLine.map((item, i) => (
-                                <TableRow className={item.isDataProper === true ? "selectedRow" : "selectedRowError"}>
-                                  <TableCell align="left">
-                                    <ButtonGroup
-                                      size="small"
-                                      variant="text"
-                                      aria-label="Action Menu Button group"
-                                    >
-                                      <DeleteForeverIcon
-                                        fontSize="small"
-                                        style={{
-                                          color: '#e53935'
-                                        }}
-                                        onClick={(e) => this.itemDelete(i, item)}
-                                      />
-
-                                      {
-                                        (i + 1) === this.state.PurchaseOrderLine.length ? (
-                                          <Fragment>
-                                            <AddCircleOutlineIcon
-                                              fontSize="small"
-                                              style={{
-                                                color: '#00897b',
-                                                marginLeft: 10
-                                              }}
-                                              onClick={(e) => this.createNewBlankLine()}
-                                            />
-                                          </Fragment>
-                                        ) : null
-                                      }
-
-                                    </ButtonGroup>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <select
-                                      id={"Type_"+i}
-                                      style={{ width: '100%' }}
-                                      className="dropdown-css"
-                                      value={item.Type}
-                                      onChange={(e)=>this.updateLineDetail(i,"Type",e)}
-                                    >
-                                      {APIURLS.POItemType.map((op, i) => (
-                                        <option value={op.value} > {op.name}</option>
-                                        
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <select
-                                      style={{ width: '100%' }}
-                                      className="dropdown-css"
-                                      value={item.TypeID}
-                                    >
-                                      {item.TypeIDList.map((item, i) => (
-                                        <option value={item.value}> {item.name}</option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <b>S00012</b>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"Naration_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.Narration}
-                                      onChange={(e)=>this.updateLineDetail(i,"Narration",e)}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <select
-                                      style={{ width: '100%' }}
-                                      className="dropdown-css"
-                                      value={item.UOMID}
-                                    >
-                                      {APIURLS.POItemType.map((item, i) => (
-                                        <option value={item.value}> {item.name}</option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"TolerancePercentage_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.TolerancePercentage}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"Quantity_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.Quantity}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"Price_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.Price}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"LineDiscPercentage_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.LineDiscPercentage}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"LineDiscAmount_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.LineDiscAmount}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <select
-                                      style={{ width: '100%' }}
-                                      className="dropdown-css"
-                                      value={item.ItemPostingGroupID}
-                                    >
-                                      {APIURLS.POItemType.map((item, i) => (
-                                        <option value={item.value}> {item.name}</option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <select
-                                      style={{ width: '100%' }}
-                                      className="dropdown-css"
-                                      value={item.GeneralPostingGroupID}
-                                    >
-                                      {APIURLS.POItemType.map((item, i) => (
-                                        <option value={item.value}> {item.name}</option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"VATPercentage_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.VATPercentage}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"VATAmount_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.VATAmount}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"HSNCode_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.HSNCode}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <select
-                                      style={{ width: '100%' }}
-                                      className="dropdown-css"
-                                      value={item.GSTGroupID}
-                                    >
-                                      {APIURLS.POItemType.map((item, i) => (
-                                        <option value={item.value}> {item.name}</option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-
-                                  <TableCell align="center">
-                                    <select
-                                      style={{ width: '100%' }}
-                                      className="dropdown-css"
-                                      value={item.SupplyStateID}
-                                    >
-                                      {APIURLS.POItemType.map((item, i) => (
-                                        <option value={item.value}> {item.name}</option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"GSTPercentage_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.GSTPercentage}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"BuyFromGSTN_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.BuyFromGSTN}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCI
-                                      id={"NatureOfSupply_" + i}
-                                      variant="outlined"
-                                      size="small"
-                                      value={item.NatureOfSupply}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <select
-                                      style={{ width: '100%' }}
-                                      className="dropdown-css"
-                                      value={item.DValueID}
-                                    >
-                                      {APIURLS.POItemType.map((item, i) => (
-                                        <option value={item.value}> {item.name}</option>
-                                      ))}
-                                    </select>
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCSI
-                                      key={"IsQuality_+i"}
-                                      id={"IsQuality_+i"}
-                                      param={item.IsQuality}
-                                    />
-                                  </TableCell>
-                                  <TableCell align="center">
-                                    <SCSI
-                                      key={"IsLot_+i"}
-                                      id={"IsLot_+i"}
-                                      param={item.IsLot}
-                                    />
-                                  </TableCell>
-
+                          <div style={{ marginRight: 20 }}>
+                            <Table
+                              stickyHeader
+                              size="small"
+                              className=""
+                              aria-label="Lines List table"
+                            >
+                              <TableHead className="table-header-background">
+                                <TableRow>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="center">&nbsp;</TableCell>                                
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Type</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Category</TableCell>
+                                  <TableCell style={{ maxWidth: 350, minWidth: 350 }} className="line-table-header-font" align="center">Item</TableCell>
+                                  
+                                  <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Desc</TableCell>
+                                  <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Pack.Desc</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Sup.Code</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Narration</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">UOM</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Tolerance %</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Quantity </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Price </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Line.Disc %</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Item Posting Group </TableCell>
+                                  
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT % </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">HSN </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">GST Group </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> GST %</TableCell>                                 
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Dim.Value </TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Is Quality? </TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Is Lot? </TableCell>
                                 </TableRow>
-                              ))}
+                              </TableHead>
+                              <TableBody className="tableBody">
+                                
 
-                            </TableBody>
+                                {this.state.PurchaseOrderLine.length>0?(
+                                  <Fragment>
+                                    {this.state.PurchaseOrderLine.map((item, i) => (
+                                  <TableRow className={item.isDataProper === true ? "selectedRow" : "selectedRowError"}>
+                                    <TableCell align="left">
+                                      <ButtonGroup
+                                        size="small"
+                                        variant="text"
+                                        aria-label="Action Menu Button group"
+                                      >
+                                        <DeleteForeverIcon
+                                          fontSize="small"
+                                          style={{
+                                            color: '#e53935'
+                                          }}
+                                          onClick={(e) => this.itemDelete(i, item)}
+                                        />
 
-                          </Table>
+                                        {
+                                          (i + 1) === this.state.PurchaseOrderLine.length ? (
+                                            <Fragment>
+                                              <AddCircleOutlineIcon
+                                                fontSize="small"
+                                                style={{
+                                                  color: '#00897b',
+                                                  marginLeft: 10
+                                                }}
+                                                onClick={(e) => this.createNewBlankLine()}
+                                              />
+                                            </Fragment>
+                                          ) : null
+                                        }
+
+                                      </ButtonGroup>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <select
+                                        id={"Type_" + i}
+                                        style={{ width: '100%' }}
+                                        className="dropdown-css"
+                                        value={item.Type}
+                                        onChange={(e) => this.updateLineDetail(i, "Type", e)}
+                                      >
+                                         <option value="" >Select</option>
+                                        {APIURLS.POItemType.map((op, i) => (
+                                          <option value={op.value} > {op.name}</option>
+
+                                        ))}
+                                      </select>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      {console.log("this.state.PurchaseOrderLine > ",this.state.PurchaseOrderLine)}
+                                      <select
+                                        id={"Category_" + i}
+                                        style={{ width: '100%' }}
+                                        className="dropdown-css"
+                                        value={item.CategoryId}
+                                        onChange={(e) => this.updateLineDetail(i, "CategoryId", e)}
+                                        disabled={item.isCategoryDisabled}
+                                      >
+                                        <option value="" >Select</option>
+                                        {item.CategoryList.map((op, i) => (
+                                          <option value={op.value} > {op.name}</option>
+
+                                        ))}
+                                      </select>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCADI
+                                        style={{ width: '100%' }}
+                                        id={"TypeID_" + i}
+                                        onChange={(e, value) => this.updateLineDetail(i,"TypeID", value)}
+                                        value={item.ItemListSelected}
+                                        options={item.ItemList}
+                                        isMandatory={true}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="left">
+                                    {item.Description}
+                                    </TableCell>
+                                    <TableCell align="left">
+                                    {item.packingDescription}
+                                    </TableCell>
+                                   
+                                    <TableCell align="center">
+                                    <SCI
+                                        id={"Naration_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.SupplierCode}
+                                        onChange={(e) => this.updateLineDetail(i, "SupplierCode", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"Naration_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.Narration}
+                                        onChange={(e) => this.updateLineDetail(i, "Narration", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      
+                                      <select
+                                        style={{ width: '100%' }}
+                                        className="dropdown-css"
+                                        value={item.UOMID}
+                                        onChange={(e) => this.updateLineDetail(i, "UOMID", e)}
+                                      >
+                                        {this.state.UOMList.map((op, i) => (
+                                          <option value={op.value}> {op.name}</option>
+                                        ))}
+                                      </select>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"TolerancePercentage_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.TolerancePercentage}
+                                        onChange={(e) => this.updateLineDetail(i, "TolerancePercentage", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"Quantity_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.Quantity}
+                                        onChange={(e) => this.updateLineDetail(i, "Quantity", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"Price_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.Price}
+                                        onChange={(e) => this.updateLineDetail(i, "Price", e)}
+                                        disabled={true}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"LineDiscPercentage_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.LineDiscPercentage}
+                                        onChange={(e) => this.updateLineDetail(i, "LineDiscPercentage", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"LineDiscAmount_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.LineDiscAmount}
+                                        onChange={(e) => this.updateLineDetail(i, "LineDiscAmount", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <select
+                                        style={{ width: '100%' }}
+                                        className="dropdown-css"
+                                        value={item.ItemPostingGroupID}
+                                        onChange={(e) => this.updateLineDetail(i, "ItemPostingGroupID", e)}
+                                        disabled={true}
+                                      >
+                                        {this.state.ItemPostingGroupList.map((op, i) => (
+                                          <option value={op.value}> {op.name}</option>
+                                        ))}
+                                      </select>
+                                    </TableCell>
+                                   
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"VATPercentage_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.VATPercentage}
+                                        onChange={(e) => this.updateLineDetail(i, "VATPercentage", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"VATAmount_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.VATAmount}
+                                        onChange={(e) => this.updateLineDetail(i, "VATAmount", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"HSNCode_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.HSNCode}  
+                                        onChange={(e) => this.updateLineDetail(i, "HSNCode", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <select
+                                        style={{ width: '100%' }}
+                                        className="dropdown-css"
+                                        value={item.GSTGroupID}
+                                        onChange={(e) => this.updateLineDetail(i, "GSTGroupID", e)}
+                                      >
+                                        {this.state.GSTGroupIDList.map((op, i) => (
+                                          <option value={op.value}> {op.name}</option>
+                                        ))}
+                                      </select>
+                                    </TableCell>
+
+                                    
+                                    <TableCell align="center">
+                                      <SCI
+                                        id={"GSTPercentage_" + i}
+                                        variant="outlined"
+                                        size="small"
+                                        value={item.GSTPercentage}
+                                        onChange={(e) => this.updateLineDetail(i, "GSTPercentage", e)}
+                                        disabled={true}
+                                      />
+                                    </TableCell>
+                                   
+                                   
+                                    <TableCell align="center">
+                                      <select
+                                        style={{ width: '100%' }}
+                                        className="dropdown-css"
+                                        value={item.DValueID}
+                                        onChange={(e) => this.updateLineDetail(i, "DValueID", e)}
+                                      >
+                                        <option value="">Select</option>
+                                        {this.state.DimensionsList.map((op, i) => (
+                                          <option value={op.value}> {op.name}</option>
+                                        ))}
+                                      </select>
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCSI
+                                        key={"IsQuality_+i"}
+                                        id={"IsQuality_+i"}
+                                        param={item.IsQuality}
+                                        onChange={(e) => this.updateLineDetail(i, "IsQuality", e)}
+                                      />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                      <SCSI
+                                        key={"IsLot_+i"}
+                                        id={"IsLot_+i"}
+                                        param={item.IsLot}
+                                        onChange={(e) => this.updateLineDetail(i, "IsLot", e)}
+
+                                      />
+                                    </TableCell>
+
+                                  </TableRow>
+                                ))}
+                                  </Fragment>
+                                ):(
+                                  <Fragment>
+                                      <TableRow>
+                                        <TableCell style={{ borderBottomStyle: 'none' }} colSpan={2} align="center">
+                                          <span style={{color:'#1976d2'}}>Press <b>SHIFT+ENTER</b> to start...</span>
+                                        </TableCell>
+                                      </TableRow>
+                                  </Fragment>
+                                )}
+
+                              </TableBody>
+
+                            </Table>
+                          </div>
                         </Grid>
+
                       </Grid>
                     </div>
 
@@ -2314,15 +2575,15 @@ class poactivity extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title"   className="dialog-area">
+          <DialogTitle id="alert-dialog-title" className="dialog-area">
             <span style={{ color: 'red' }}>Line Delete Request</span>
           </DialogTitle>
-          <DialogContent   className="dialog-area">
+          <DialogContent className="dialog-area">
             <DialogContentText id="alert-dialog-description">
               {"Do you want to delete this Line ?"}
             </DialogContentText>
           </DialogContent>
-          <DialogActions   className="dialog-area">
+          <DialogActions className="dialog-area">
             <Button onClick={() => this.handleDialogClose()}>No</Button>
             <Button onClick={() => this.deleteSelectedItem()} >
               Yes
