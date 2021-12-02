@@ -157,6 +157,7 @@ export const APIURL = {
   GetSupplierPriceBySuplID: domain + "api/Supplier/GetSupplierPriceBySuplID",
   GetMODTax:domain +"api/Common/GetMODTax",
   GetShipmentMode:domain+"api/Common/GetShipmentMode",
+  GetDimensions:domain+"api/Dimension/GetDimensions",
 };
 
 export const CTimeOut = 10;
