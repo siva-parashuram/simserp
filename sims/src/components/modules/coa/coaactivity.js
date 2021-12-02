@@ -13,12 +13,16 @@ import Grid from "@material-ui/core/Grid";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Typography from "@material-ui/core/Typography";
 
 import Breadcrumb from "../../compo/breadcrumb";
 import Loader from "../../compo/loader";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
-import Accordioncomponent from "../../compo/accordioncomponent";
 import DropdownInput from "../../compo/Tablerowcelldropdown";
 import TextboxInput from "../../compo/tablerowcelltextboxinput";
 import SwitchInput from "../../compo/tablerowcellswitchinput";
@@ -28,8 +32,6 @@ import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 import SDBIB from "../../compo/griddropdowninputwithbutton";
-
-
 
 let today = moment().format("MM/DD/YYYY");
 
@@ -460,125 +462,126 @@ class coaactivity extends React.Component {
       }
     };
 
-    const form1 = (
-      <Fragment>
-        <Grid container spacing={0}>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
-            <div>
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={5} lg={5}>
-                {/* <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={12} lg={12}> */}
-                    
-                        <SIB
-                          id="ACNo"
-                          label="ACNo"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("ACNo", e)}
-                          value={this.state.ChartOfAccount.ACNo}
-                          error={this.state.Validations.ACNo.errorState}
-                          isMandatory={true}
-                        />
-                        <SIB
-                          id="Name"
-                          label="Name"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Name", e)}
-                          value={this.state.ChartOfAccount.Name}
-                          error={this.state.Validations.Name.errorState}
-                          isMandatory={true}
-                        />
+    // const form1 = (
+    //   <Fragment>
+    //     <Grid container spacing={0}>
+    //       <Grid item xs={12} sm={12} md={12} lg={12}>
+    //         <div>
+    //           <Grid container spacing={0}>
+    //             <Grid item xs={12} sm={12} md={5} lg={5}>
+    //               {/* <Grid container spacing={0}>
+    //               <Grid item xs={12} sm={12} md={12} lg={12}> */}
 
-                        <SIB
-                          id="Indentation"
-                          label="Indentation"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Indentation", e)}
-                          value={this.state.ChartOfAccount.Indentation}
-                        />
-                        <SIB
-                          id="Totaling"
-                          label="Totaling"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Totaling", e)}
-                          value={this.state.ChartOfAccount.Totaling}
-                          error={this.state.Validations.Totaling.errorState}
-                        />
-                     
-                  {/* </Grid>
-                </Grid> */}
-              </Grid>
-              <Grid item xs={12} sm={12} md={1} lg={1}> </Grid>
-                {/* <Grid container spacing={0}> */}
-                  <Grid item xs={12} sm={12} md={5} lg={5}>
-                   
-                        <SDIB
-                          id="ACType"
-                          label="ACType"
-                          onChange={(e) => updateFormValue("ACType", e)}
-                          value={this.state.ChartOfAccount.ACType}
-                          param={APIURLS.ACType}
-                          isMandatory={true}
-                        />
-                        <SDIB
-                          id="IncomeBalance"
-                          label="IncomeBalance"
-                          onChange={(e) => updateFormValue("IncomeBalance", e)}
-                          value={this.state.ChartOfAccount.IncomeBalance}
-                          param={APIURLS.IncomeBalance}
-                          isMandatory={true}
-                        />
-                        <SDIB
-                          id="ACCategory"
-                          label="ACCategory"
-                          onChange={(e) => updateFormValue("ACCategory", e)}
-                          value={this.state.ChartOfAccount.ACCategory}
-                          param={APIURLS.ACCategory}
-                          isMandatory={true}
-                        />
-                        <SDIB
-                          id="ACSubCategory"
-                          label="ACSubCategory"
-                          onChange={(e) => updateFormValue("ACSubCategory", e)}
-                          value={this.state.ChartOfAccount.ACSubCategory}
-                          param={this.state.ACSubCategory}
-                        />
-                        <SDIB
-                          id="DebitCredit"
-                          label="DebitCredit"
-                          onChange={(e) => updateFormValue("DebitCredit", e)}
-                          value={this.state.ChartOfAccount.DebitCredit}
-                          param={APIURLS.DebitCredit}
-                          isMandatory={true}
-                        />
-                        <SSIB
-                          key="IsBlock"
-                          id="IsBlock"
-                          label="IsBlock"
-                          param={this.state.ChartOfAccount.IsBlock}
-                          onChange={(e) => updateFormValue("IsBlock", e)}
-                        />
-                        <SSIB
-                          key="DirectPosting"
-                          id="DirectPosting"
-                          label="DirectPosting"
-                          param={this.state.ChartOfAccount.DirectPosting}
-                          onChange={(e) => updateFormValue("DirectPosting", e)}
-                        />
-                     
-                  {/* </Grid>
-                </Grid> */}
-              </Grid>
-            </Grid>
-            </div>
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
+    //               <SIB
+    //                 id="ACNo"
+    //                 label="ACNo"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => updateFormValue("ACNo", e)}
+    //                 value={this.state.ChartOfAccount.ACNo}
+    //                 error={this.state.Validations.ACNo.errorState}
+    //                 isMandatory={true}
+    //               />
+    //               <SIB
+    //                 id="Name"
+    //                 label="Name"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => updateFormValue("Name", e)}
+    //                 value={this.state.ChartOfAccount.Name}
+    //                 error={this.state.Validations.Name.errorState}
+    //                 isMandatory={true}
+    //               />
+
+    //               <SIB
+    //                 id="Indentation"
+    //                 label="Indentation"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => updateFormValue("Indentation", e)}
+    //                 value={this.state.ChartOfAccount.Indentation}
+    //               />
+    //               <SIB
+    //                 id="Totaling"
+    //                 label="Totaling"
+    //                 variant="outlined"
+    //                 size="small"
+    //                 onChange={(e) => updateFormValue("Totaling", e)}
+    //                 value={this.state.ChartOfAccount.Totaling}
+    //                 error={this.state.Validations.Totaling.errorState}
+    //               />
+
+    //               {/* </Grid>
+    //             </Grid> */}
+    //             </Grid>
+    //             <Grid item xs={12} sm={12} md={1} lg={1}>
+    //               {" "}
+    //             </Grid>
+    //             {/* <Grid container spacing={0}> */}
+    //             <Grid item xs={12} sm={12} md={5} lg={5}>
+    //               <SDIB
+    //                 id="ACType"
+    //                 label="ACType"
+    //                 onChange={(e) => updateFormValue("ACType", e)}
+    //                 value={this.state.ChartOfAccount.ACType}
+    //                 param={APIURLS.ACType}
+    //                 isMandatory={true}
+    //               />
+    //               <SDIB
+    //                 id="IncomeBalance"
+    //                 label="IncomeBalance"
+    //                 onChange={(e) => updateFormValue("IncomeBalance", e)}
+    //                 value={this.state.ChartOfAccount.IncomeBalance}
+    //                 param={APIURLS.IncomeBalance}
+    //                 isMandatory={true}
+    //               />
+    //               <SDIB
+    //                 id="ACCategory"
+    //                 label="ACCategory"
+    //                 onChange={(e) => updateFormValue("ACCategory", e)}
+    //                 value={this.state.ChartOfAccount.ACCategory}
+    //                 param={APIURLS.ACCategory}
+    //                 isMandatory={true}
+    //               />
+    //               <SDIB
+    //                 id="ACSubCategory"
+    //                 label="ACSubCategory"
+    //                 onChange={(e) => updateFormValue("ACSubCategory", e)}
+    //                 value={this.state.ChartOfAccount.ACSubCategory}
+    //                 param={this.state.ACSubCategory}
+    //               />
+    //               <SDIB
+    //                 id="DebitCredit"
+    //                 label="DebitCredit"
+    //                 onChange={(e) => updateFormValue("DebitCredit", e)}
+    //                 value={this.state.ChartOfAccount.DebitCredit}
+    //                 param={APIURLS.DebitCredit}
+    //                 isMandatory={true}
+    //               />
+    //               <SSIB
+    //                 key="IsBlock"
+    //                 id="IsBlock"
+    //                 label="IsBlock"
+    //                 param={this.state.ChartOfAccount.IsBlock}
+    //                 onChange={(e) => updateFormValue("IsBlock", e)}
+    //               />
+    //               <SSIB
+    //                 key="DirectPosting"
+    //                 id="DirectPosting"
+    //                 label="DirectPosting"
+    //                 param={this.state.ChartOfAccount.DirectPosting}
+    //                 onChange={(e) => updateFormValue("DirectPosting", e)}
+    //               />
+
+    //               {/* </Grid>
+    //             </Grid> */}
+    //             </Grid>
+    //           </Grid>
+    //         </div>
+    //       </Grid>
+    //     </Grid>
+    //   </Fragment>
+    // );
 
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -664,16 +667,173 @@ class coaactivity extends React.Component {
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid item xs={12} sm={12} md={8} lg={8}>
-            <Accordioncomponent
-              accordionKey="a-7"
-              expanded={this.state.accordion1}
-              onClick={(e) => handleAccordionClick("accordion1", e)}
-              id="accordion1"
-              typographyKey="Coa-Activity"
-              typography="General Details"
-              accordiondetailsKey="accordion1"
-              html={form1}
-            />
+            <Grid container spacing={1}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+                <Accordion
+                  key="COA-General-Details"
+                  expanded={this.state.accordion1}
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={
+                      <ExpandMoreIcon
+                        onClick={(e) => handleAccordionClick("accordion1", e)}
+                      />
+                    }
+                    onClick={(e) => handleAccordionClick("accordion1", e)}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
+                  >
+                    <Typography key="" className="accordion-Header-Title">
+                      General Details
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails key="" className="AccordionDetails-css">
+                    <Fragment>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          <div>
+                            <Grid container spacing={0}>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                {/* <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}> */}
+
+                                <SIB
+                                  id="ACNo"
+                                  label="ACNo"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue("ACNo", e)}
+                                  value={this.state.ChartOfAccount.ACNo}
+                                  error={this.state.Validations.ACNo.errorState}
+                                  isMandatory={true}
+                                />
+                                <SIB
+                                  id="Name"
+                                  label="Name"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) => updateFormValue("Name", e)}
+                                  value={this.state.ChartOfAccount.Name}
+                                  error={this.state.Validations.Name.errorState}
+                                  isMandatory={true}
+                                />
+
+                                <SIB
+                                  id="Indentation"
+                                  label="Indentation"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("Indentation", e)
+                                  }
+                                  value={this.state.ChartOfAccount.Indentation}
+                                />
+                                <SIB
+                                  id="Totaling"
+                                  label="Totaling"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    updateFormValue("Totaling", e)
+                                  }
+                                  value={this.state.ChartOfAccount.Totaling}
+                                  error={
+                                    this.state.Validations.Totaling.errorState
+                                  }
+                                />
+
+                                {/* </Grid>
+                </Grid> */}
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}>
+                                {" "}
+                              </Grid>
+                              {/* <Grid container spacing={0}> */}
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                                <SDIB
+                                  id="ACType"
+                                  label="ACType"
+                                  onChange={(e) => updateFormValue("ACType", e)}
+                                  value={this.state.ChartOfAccount.ACType}
+                                  param={APIURLS.ACType}
+                                  isMandatory={true}
+                                />
+                                <SDIB
+                                  id="IncomeBalance"
+                                  label="IncomeBalance"
+                                  onChange={(e) =>
+                                    updateFormValue("IncomeBalance", e)
+                                  }
+                                  value={
+                                    this.state.ChartOfAccount.IncomeBalance
+                                  }
+                                  param={APIURLS.IncomeBalance}
+                                  isMandatory={true}
+                                />
+                                <SDIB
+                                  id="ACCategory"
+                                  label="ACCategory"
+                                  onChange={(e) =>
+                                    updateFormValue("ACCategory", e)
+                                  }
+                                  value={this.state.ChartOfAccount.ACCategory}
+                                  param={APIURLS.ACCategory}
+                                  isMandatory={true}
+                                />
+                                <SDIB
+                                  id="ACSubCategory"
+                                  label="ACSubCategory"
+                                  onChange={(e) =>
+                                    updateFormValue("ACSubCategory", e)
+                                  }
+                                  value={
+                                    this.state.ChartOfAccount.ACSubCategory
+                                  }
+                                  param={this.state.ACSubCategory}
+                                />
+                                <SDIB
+                                  id="DebitCredit"
+                                  label="DebitCredit"
+                                  onChange={(e) =>
+                                    updateFormValue("DebitCredit", e)
+                                  }
+                                  value={this.state.ChartOfAccount.DebitCredit}
+                                  param={APIURLS.DebitCredit}
+                                  isMandatory={true}
+                                />
+                                <SSIB
+                                  key="IsBlock"
+                                  id="IsBlock"
+                                  label="IsBlock"
+                                  param={this.state.ChartOfAccount.IsBlock}
+                                  onChange={(e) =>
+                                    updateFormValue("IsBlock", e)
+                                  }
+                                />
+                                <SSIB
+                                  key="DirectPosting"
+                                  id="DirectPosting"
+                                  label="DirectPosting"
+                                  param={
+                                    this.state.ChartOfAccount.DirectPosting
+                                  }
+                                  onChange={(e) =>
+                                    updateFormValue("DirectPosting", e)
+                                  }
+                                />
+                              </Grid>
+                            </Grid>
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </Fragment>
+                  </AccordionDetails>
+                </Accordion>
+                
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4}></Grid>
         </Grid>
