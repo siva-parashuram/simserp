@@ -175,6 +175,7 @@ class addmodule extends React.Component {
             };
             this.setState({
               CreateBtnDisable: true,
+              Name: e.target.value,
               Validations: Validations,
             });
           }
@@ -215,6 +216,7 @@ class addmodule extends React.Component {
             };
             this.setState({
               Validations: Validations,
+              Description: e.target.value,
 
               CreateBtnDisable: true,
             });
@@ -255,6 +257,8 @@ class addmodule extends React.Component {
           }
           this.setState({
             Validations: Validations,
+            IconName: e.target.value,
+
           });
         } else {
           let Module = this.state.Module;
@@ -310,10 +314,6 @@ class addmodule extends React.Component {
       }
       this.setState({ SuccessPrompt: false });
     };
-
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
 
     const breadcrumbHtml = (
       <Fragment>

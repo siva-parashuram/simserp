@@ -41,6 +41,7 @@ class editItem extends React.Component {
       WarehouseDetailsExpanded: false,
       InvoicingDetailsExpanded: false,
       ReplenishmentDetailsExpanded: false,
+      Updatebtn:false,
       SuccessPrompt: false,
       ErrorPrompt: false,
       ProgressLoader: true,
@@ -254,8 +255,8 @@ class editItem extends React.Component {
           Description2: data.description2,
           PackingDesc1: data.packingDesc1,
           PackingDesc2: data.packingDesc2,
-          ItemDeptId: data.itemDeptID,
-          CatId: data.catId,
+          ItemDeptId: parseInt(data.itemDeptId),
+          CatId: parseInt(data.catId),
           IsActive: data.isActive,
           IsTrading: data.isTrading,
           IsNonStockValuation: data.isNonStockValuation,
@@ -389,6 +390,7 @@ class editItem extends React.Component {
           if (e.target.value.length > 20) {
             v1.Code = { errorState: true, errorMssg: "Maximum 20 characters" };
             this.setState({ Validations: v1 });
+            setStateParam({}, param, e.target.value);
           } else {
             v1.Code = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v1 });
@@ -401,6 +403,7 @@ class editItem extends React.Component {
           if (e.target.value.length > 20) {
             v2.Alias = { errorState: true, errorMssg: "Maximum 20 characters" };
             this.setState({ Validations: v2 });
+            setStateParam({}, param, e.target.value);
           } else {
             v2.Alias = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v2 });
@@ -416,6 +419,7 @@ class editItem extends React.Component {
               errorMssg: "Maximum 250 characters",
             };
             this.setState({ Validations: v3 });
+            setStateParam({}, param, e.target.value);
           } else {
             v3.Description1 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v3 });
@@ -431,6 +435,7 @@ class editItem extends React.Component {
               errorMssg: "Maximum 250 characters",
             };
             this.setState({ Validations: v4 });
+            setStateParam({}, param, e.target.value);
           } else {
             v4.Description2 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v4 });
@@ -445,6 +450,7 @@ class editItem extends React.Component {
               errorMssg: "Maximum 250 characters",
             };
             this.setState({ Validations: v5 });
+            setStateParam({}, param, e.target.value);
           } else {
             v5.PackingDesc1 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v5 });
@@ -459,6 +465,7 @@ class editItem extends React.Component {
               errorMssg: "Maximum 250 characters",
             };
             this.setState({ Validations: v6 });
+            setStateParam({}, param, e.target.value);
           } else {
             v6.PackingDesc2 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v6 });
@@ -497,6 +504,7 @@ class editItem extends React.Component {
               errorMssg: "Maximum 50 characters",
             };
             this.setState({ Validations: v7 });
+            setStateParam({}, param, e.target.value);
           } else {
             v7.CertificateNo = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v7 });
@@ -511,6 +519,7 @@ class editItem extends React.Component {
               errorMssg: "Maximum 50 characters",
             };
             this.setState({ Validations: v8 });
+            setStateParam({}, param, e.target.value);
           } else {
             v8.Reason = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v8 });
@@ -1061,6 +1070,7 @@ class editItem extends React.Component {
             startIcon={APIURLS.buttonTitle.save.icon}
             className="action-btns"
             onClick={(e) => processUpdateItem()}
+            disabled={this.state.Updatebtn}
           >
             {APIURLS.buttonTitle.save.name}
           </Button>

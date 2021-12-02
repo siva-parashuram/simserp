@@ -43,6 +43,7 @@ class addItem extends React.Component {
       SuccessPrompt: false,
       ErrorPrompt: false,
       ProgressLoader: true,
+      Disablebtn:false,
       urlparams: "",
       ItemTypeMaster: APIURLS.ItemType,
 
@@ -318,6 +319,7 @@ class addItem extends React.Component {
           if (e.target.value.length > 20) {
             v1.Code = { errorState: true, errorMssg: "Maximum 20 characters" };
             this.setState({ Validations: v1 });
+            setStateParam({}, param, e.target.value)
           } else {
             v1.Code = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v1 });
@@ -330,6 +332,7 @@ class addItem extends React.Component {
           if (e.target.value.length > 20) {
             v2.Alias = { errorState: true, errorMssg: "Maximum 20 characters" };
             this.setState({ Validations: v2 });
+            setStateParam({}, param, e.target.value);
           } else {
             v2.Alias = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v2 });
@@ -345,6 +348,7 @@ class addItem extends React.Component {
               errorMssg: "Maximum 250 characters",
             };
             this.setState({ Validations: v3 });
+            setStateParam({}, param, e.target.value);
           } else {
             v3.Description1 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v3 });
@@ -360,6 +364,7 @@ class addItem extends React.Component {
               errorMssg: "Maximum 250 characters",
             };
             this.setState({ Validations: v4 });
+            setStateParam({}, param, e.target.value);
           } else {
             v4.Description2 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v4 });
@@ -374,6 +379,7 @@ class addItem extends React.Component {
               errorMssg: "Maximum 250 characters",
             };
             this.setState({ Validations: v5 });
+            setStateParam({}, param, e.target.value);
           } else {
             v5.PackingDesc1 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v5 });
@@ -388,6 +394,7 @@ class addItem extends React.Component {
               errorMssg: "Maximum 250 characters",
             };
             this.setState({ Validations: v6 });
+            setStateParam({}, param, e.target.value);
           } else {
             v6.PackingDesc2 = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v6 });
@@ -426,6 +433,7 @@ class addItem extends React.Component {
               errorMssg: "Maximum 50 characters",
             };
             this.setState({ Validations: v7 });
+            setStateParam({}, param, e.target.value);
           } else {
             v7.CertificateNo = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v7 });
@@ -440,6 +448,7 @@ class addItem extends React.Component {
               errorMssg: "Maximum 50 characters",
             };
             this.setState({ Validations: v8 });
+            setStateParam({}, param, e.target.value);
           } else {
             v8.Reason = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v8 });
@@ -712,6 +721,7 @@ class addItem extends React.Component {
               errorMssg: "Maximum 20 characters",
             };
             this.setState({ Validations: v9 });
+            setStateParam({}, param, e.target.value);
           } else {
             v9.Hsncode = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v9 });
@@ -1028,6 +1038,7 @@ class addItem extends React.Component {
             className="action-btns"
             startIcon={APIURLS.buttonTitle.save.icon}
             onClick={(e) => processCreateItem()}
+            disabled={this.state.Disablebtn}
           >
             {APIURLS.buttonTitle.save.name}
           </Button>

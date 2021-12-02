@@ -98,7 +98,7 @@ class warehouseMaster extends React.Component {
       URLS.URLS.editWarehouse +
       this.state.urlparams +
       "&editwareHouseId=" +
-      item.wareHouseId;
+      item.WareHouseID;
 
     this.setState({ editurl: editUrl });
     this.InitialremoveIsSelectedRowClasses();
@@ -117,7 +117,7 @@ class warehouseMaster extends React.Component {
         URLS.URLS.editWarehouse +
         this.state.urlparams +
         "&editwareHouseId=" +
-        item.wareHouseId;
+        item.WareHouseID;
       this.setState({ editurl: editUrl });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
@@ -226,16 +226,16 @@ class warehouseMaster extends React.Component {
                                 URLS.URLS.editWarehouse +
                                 this.state.urlparams +
                                 "&editwareHouseId=" +
-                                item.wareHouseId
+                                item.WareHouseID
                               }
                             >
-                              {URLS.PREFIX.wareHouseId + item.wareHouseId}
+                              {URLS.PREFIX.wareHouseId + item.WareHouseID}
                             </a>
                           </TableCell>
-                          <TableCell align="left">{item.code}</TableCell>
-                          <TableCell align="left">{item.description}</TableCell>
+                          <TableCell align="left">{item.Code}</TableCell>
+                          <TableCell align="left">{item.Description}</TableCell>
                           <TableCell align="left">
-                            {item.isActive === true ? (
+                            {item.IsActive === true ? (
                               <CheckIcon style={{ color: "green" }} />
                             ) : (
                               <PriorityHighIcon style={{ color: "red" }} />

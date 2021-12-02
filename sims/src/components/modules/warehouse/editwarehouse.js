@@ -58,34 +58,34 @@ class editwarehouse extends React.Component {
       warehouse: {
         WareHouseId: 0,
         BranchId: 0,
-        Code: null,
-        Description: null,
-        Address: null,
-        Address2: null,
-        Address3: null,
+        Code: "",
+        Description: "",
+        Address: "",
+        Address2: "",
+        Address3: "",
         IsEdi: false,
-        Ediurl: null,
+        Ediurl: "",
         EdiloginId: 0,
-        Edipassword: null,
-        ContactPerson: null,
-        EmailId: null,
+        Edipassword: "",
+        ContactPerson: "",
+        EmailId: "",
         PhoneNo: 0,
         IsActive: false,
       },
       WareHouseId: 0,
       BranchId: 0,
-      Code: null,
-      Description: null,
-      Address: null,
-      Address2: null,
-      Address3: null,
+      Code: "",
+      Description: "",
+      Address: "",
+      Address2: "",
+      Address3: "",
       IsEdi: false,
-      Ediurl: null,
+      Ediurl: "",
       EdiloginId: 0,
-      Edipassword: null,
-      ContactPerson: null,
-      EmailId: null,
-      PhoneNo: null,
+      Edipassword: "",
+      ContactPerson: "",
+      EmailId: "",
+      PhoneNo: "",
       IsActive: false,
       Validations: {
         Code: { errorState: false, errorMssg: "" },
@@ -118,7 +118,7 @@ class editwarehouse extends React.Component {
       "&branchName=" +
       branchName;
     let warehouse = this.state.warehouse;
-    warehouse.WareHouseId = editwareHouseId;
+    warehouse.WareHouseId =editwareHouseId;
     warehouse.BranchId = branchId;
     this.setState(
       {
@@ -177,23 +177,23 @@ class editwarehouse extends React.Component {
       .then((response) => {
         let warehouse = {
           WareHouseId: wareHouseId,
-          BranchId: response.data.branchId,
-          Code: response.data.code,
-          Description: response.data.description,
-          Address: response.data.address,
-          Address2: response.data.address2,
-          Address3: response.data.address3,
-          IsEdi: response.data.isEdi,
-          Ediurl: response.data.ediurl,
-          EdiloginId: response.data.ediloginId,
-          Edipassword: response.data.edipassword,
-          ContactPerson: response.data.contactPerson,
-          EmailId: response.data.emailId,
-          PhoneNo: response.data.phoneNo,
-          IsActive: response.data.isActive,
+          BranchId: response.data.BranchID,
+          Code: response.data.Code,
+          Description: response.data.Description,
+          Address: response.data.Address,
+          Address2: response.data.Address2,
+          Address3: response.data.Address3,
+          IsEdi: response.data.IsEDI,
+          Ediurl: response.data.EDIUrl,
+          EdiloginId: response.data.EDILoginID,
+          Edipassword: response.data.EDIPassword,
+          ContactPerson: response.data.ContactPerson,
+          EmailId: response.data.EmailID,
+          PhoneNo: response.data.PhoneNo,
+          IsActive: response.data.IsActive,
         };
         this.setState({
-          oldCode: response.data.code,
+          oldCode: response.data.Code,
           warehouse: warehouse,
           ProgressLoader: true,
         });
@@ -614,7 +614,7 @@ class editwarehouse extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 10,
                                 }}
-                                value={this.state.Code}
+                                value={this.state.warehouse.Code}
                                 error={this.state.Validations.Code.errorState}
                               />
 
@@ -630,7 +630,7 @@ class editwarehouse extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 10,
                                 }}
-                                value={this.state.Description}
+                                value={this.state.warehouse.Description}
                                 error={
                                   this.state.Validations.Description.errorState
                                 }
@@ -647,7 +647,7 @@ class editwarehouse extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 50,
                                 }}
-                                value={this.state.ContactPerson}
+                                value={this.state.warehouse.ContactPerson}
                                 error={
                                   this.state.Validations.ContactPerson
                                     .errorState
@@ -664,7 +664,7 @@ class editwarehouse extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 50,
                                 }}
-                                value={this.state.PhoneNo}
+                                value={this.state.warehouse.PhoneNo}
                                 error={
                                   this.state.Validations.PhoneNo.errorState
                                 }
@@ -678,7 +678,7 @@ class editwarehouse extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("EmailID", e)}
-                                value={this.state.EmailId}
+                                value={this.state.warehouse.EmailId}
                                 error={
                                   this.state.Validations.EmailId.errorState
                                 }
@@ -690,7 +690,7 @@ class editwarehouse extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("Address", e)}
-                                value={this.state.Address}
+                                value={this.state.warehouse.Address}
                                 error={
                                   this.state.Validations.Address.errorState
                                 }
@@ -702,7 +702,7 @@ class editwarehouse extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("Address2", e)}
-                                value={this.state.Address2}
+                                value={this.state.warehouse.Address2}
                                 error={
                                   this.state.Validations.Address2.errorState
                                 }
@@ -714,7 +714,7 @@ class editwarehouse extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("Address3", e)}
-                                value={this.state.Address3}
+                                value={this.state.warehouse.Address3}
                                 error={
                                   this.state.Validations.Address3.errorState
                                 }
@@ -724,9 +724,9 @@ class editwarehouse extends React.Component {
                                 key="IsActive"
                                 id="IsActive"
                                 label="IsActive"
-                                param={this.state.IsActive}
+                                param={this.state.warehouse.IsActive}
                                 onChange={(e) =>
-                                  this.updateFormValue("IsActive", e)
+                                  updateFormValue("IsActive", e)
                                 }
                               />
 
@@ -787,7 +787,7 @@ class editwarehouse extends React.Component {
                                 key="IsEdi"
                                 id="IsEdi"
                                 label="IsEdi?"
-                                param={this.state.IsEdi}
+                                param={this.state.warehouse.IsEdi}
                                 onChange={(e) =>
                                   this.updateFormValue("IsEdi", e)
                                 }
@@ -817,7 +817,7 @@ class editwarehouse extends React.Component {
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("ediurl", e)}
-                                value={this.state.Ediurl}
+                                value={this.state.warehouse.Ediurl}
                                 error={this.state.Validations.Ediurl.errorState}
                               />
                             </Grid>
@@ -835,7 +835,7 @@ class editwarehouse extends React.Component {
                                   className: "textFieldCss",
                                   maxlength: 10,
                                 }}
-                                value={this.state.EdiloginId}
+                                value={this.state.warehouse.EdiloginId}
                                 error={
                                   this.state.Validations.EdiloginId.errorState
                                 }
@@ -850,7 +850,7 @@ class editwarehouse extends React.Component {
                                 onChange={(e) =>
                                   updateFormValue("edipassword", e)
                                 }
-                                value={this.state.Edipassword}
+                                value={this.state.warehouse.Edipassword}
                                 error={
                                   this.state.Validations.Edipassword.errorState
                                 }
