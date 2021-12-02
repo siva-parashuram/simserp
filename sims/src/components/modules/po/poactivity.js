@@ -78,6 +78,7 @@ class poactivity extends React.Component {
         DialogContent: null,
       },
       DialogStatus: false,
+      isDataFetched: false,
       BranchID: 0,
       accordion1: false,
       accordion2: true,
@@ -97,14 +98,15 @@ class poactivity extends React.Component {
       typoTitle: "",
       type: "",
       POTypeList: APIURLS.POType,
-      POItemType: APIURLS.POItemType, 
-      GLAccount:[],
-      Charges:[],
-      Category:[],
-      SupplierItemCategory:[],
-      GSTGroupIDList:[],
-      UOMList:[],
-      DimensionsList:[],
+      POItemType: APIURLS.POItemType,
+      GLAccount: [],
+      Charges: [],
+      FixedAsset:[],
+      Category: [],
+      SupplierItemCategory: [],
+      GSTGroupIDList: [],
+      UOMList: [],
+      DimensionsList: [],
       MODTaxList: [],
       ShipmentModeList: [],
       WarehouseList: [],
@@ -128,7 +130,7 @@ class poactivity extends React.Component {
       WareHouseList: [],
       MODTaxList: [],
       IncoTermList: [],
-      SupplierItemList:[],
+      SupplierItemList: [],
       SpecialInstValue: "",
       BillingIDValue: "",
       ItemDatagrid: null,
@@ -241,14 +243,16 @@ class poactivity extends React.Component {
   }
 
   onKeyDownHandler = e => {
-    if (e.shiftKey === true) {
-      switch (e.keyCode) {
-        case 13:
-          console.log("SHIFT+ENTER > ");
-          this.createNewBlankLine();
-          break;
-        default:
-          break;
+    if (this.state.isDataFetched === true) {
+      if (e.shiftKey === true) {
+        switch (e.keyCode) {
+          case 13:
+            console.log("SHIFT+ENTER > ");
+            this.createNewBlankLine();
+            break;
+          default:
+            break;
+        }
       }
     }
   };
@@ -262,30 +266,30 @@ class poactivity extends React.Component {
       Type: null,
       LNo: length + 1,
       TypeIDList: [],
-      CategoryList:[],
-      isCategoryDisabled:true,
-      CategoryId:null,
-      ItemList:[],   
-      ItemListSelected:null,   
+      CategoryList: [],
+      isCategoryDisabled: true,
+      CategoryId: null,
+      ItemList: [],
+      ItemListSelected: null,
       TypeID: null,
       Description: null,
       packingDescription: null,
       SupplierCode: "",
-      Narration: "",       
-      UOMID:  null,
+      Narration: "",
+      UOMID: null,
       TolerancePercentage: 0,
       Quantity: 0,
       Price: 0,
       LineDiscPercentage: 0,
-      LineDiscAmount: 0,      
-      ItemPostingGroupID:  null,
+      LineDiscAmount: 0,
+      ItemPostingGroupID: null,
       GeneralPostingGroupList: [],
       GeneralPostingGroupID: 0,
-      VATPercentage: 0,
+      VATPercentage: CF.toFloat(this.state.Branch.VATPercentage),
       VATAmount: 0,
-      HSNCode: "", 
-      GSTGroupID:  null,
-      SupplyStateID:  null,
+      HSNCode: "",
+      GSTGroupID: null,
+      SupplyStateID: null,
       GSTPercentage: 0,
       BuyFromGSTN: "",
       NatureOfSupply: "",
@@ -305,7 +309,7 @@ class poactivity extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDownHandler);
-   
+
 
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -364,74 +368,83 @@ class poactivity extends React.Component {
       .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
-        let Branch = data.Branch[0];
-        let Country = this.getCountryList(data.Country);
-        let Currency = this.getCurrencyList(data.Currency);
-        let GeneralPostingGroup = this.getAllGeneralPostingGroup(data.GeneralPostingGroup);
-        let MODTax = data.MODTax;
-        let PaymentTerms = this.getPaymentTerms(data.PaymentTerms);
-        let ShipmentMode = data.ShipmentMode;
-        let State = this.getStateList(data.State);
-        let Supplier = data.Supplier;
-        let SupplierPostingGroup = this.getAllSupplierPostingGroup(data.SupplierPostingGroup);
-        let WareHouse = this.getWarehouseList(data.WareHouse);
-        let UOM=data.UOM;
-        let ItemPostingGroup=this.getAllItemPostingGroup(data.ItemPostingGroup);
-        let GSTGROUP=data.GSTGROUP;
-        let GLAccount=data.GLAccount;
-        let Charges=data.Charges;
-        let DimensionsList=data.DimensionValue;
-        
 
-        let newSupplierData = [];
-        for (let i = 0; i < Supplier.length; i++) {
-          let o = { label: Supplier[i].Name, id: Supplier[i].SuplID };
-          newSupplierData.push(o);
-        }
+        if (response.status === 200) {
+          let Branch = data.Branch[0];
+          let Country = this.getCountryList(data.Country);
+          let Currency = data.Currency;
+          let GeneralPostingGroup = this.getAllGeneralPostingGroup(data.GeneralPostingGroup);
+          let MODTax = data.MODTax;
+          let PaymentTerms = this.getPaymentTerms(data.PaymentTerms);
+          let ShipmentMode = data.ShipmentMode;
+          let State = this.getStateList(data.State);
+          let Supplier = data.Supplier;
+          let SupplierPostingGroup = this.getAllSupplierPostingGroup(data.SupplierPostingGroup);
+          let WareHouse = this.getWarehouseList(data.WareHouse);
+          let UOM = data.UOM;
+          let ItemPostingGroup = this.getAllItemPostingGroup(data.ItemPostingGroup);
+          let GSTGROUP = data.GSTGROUP;
+          let GLAccount = data.GLAccount;
+          let Charges = data.Charges;
+          let FixedAsset=data.FixedAsset;
+          let DimensionsList = data.DimensionValue;
 
-        let PO = this.state.PO;
 
-        if (Branch.IsSEZ === true) {
-          PO.IsSEZPurchase = true;
+          // let newSupplierData = [];
+          // for (let i = 0; i < Supplier.length; i++) {
+          //   let o =Supplier[i];
+          //   o.label=Supplier[i].Name;
+          //   o.id=Supplier[i].SuplID;             
+          //   newSupplierData.push(o);
+          // }
+
+          let PO = this.state.PO;
+
+          if (Branch.IsSEZ === true) {
+            PO.IsSEZPurchase = true;
+          } else {
+            PO.IsSEZPurchase = false;
+          }
+          if (Branch.AllowRounding === true) {
+            PO.IsRounding = true;
+          } else {
+            PO.IsRounding = false;
+          }
+
+          this.setState({
+
+            PO: PO,
+            Branch: Branch,
+            CountryList: Country,
+            CurrencyMasterList: data.Currency,
+            CurrencyList: Currency,
+            GeneralPostingGroupList: GeneralPostingGroup,
+            MODTaxList: MODTax,
+            PaymentTermsMasterList: data.PaymentTerms,
+            PaymentTermsList: PaymentTerms,
+            ShipmentModeList: ShipmentMode,
+            StateList: State,
+            supplierMasterList: Supplier,
+            supplierList: Supplier,
+            SupplierPostingGroupList: SupplierPostingGroup,
+            WarehouseList: WareHouse,
+            UOMList: UOM,
+            ItemPostingGroupList: ItemPostingGroup,
+            GSTGroupIDList: GSTGROUP,
+            GLAccount: GLAccount,
+            Charges: Charges,
+            FixedAsset:FixedAsset,
+            DimensionsList: DimensionsList,
+            ProgressLoader: true
+          });
         } else {
-          PO.IsSEZPurchase = false;
-        }
-        if (Branch.AllowRounding === true) {
-          PO.IsRounding = true;
-        } else {
-          PO.IsRounding = false;
+          // this.setState({isDataFetched:false});
         }
 
-
-
-        this.setState({
-          PO: PO,
-          Branch: Branch,
-          CountryList: Country,
-          CurrencyMasterList: data.Currency,
-          CurrencyList: Currency,
-          GeneralPostingGroupList: GeneralPostingGroup,
-          MODTaxList: MODTax,
-          PaymentTermsMasterList: data.PaymentTerms,
-          PaymentTermsList: PaymentTerms,
-          ShipmentModeList: ShipmentMode,
-          StateList: State,
-          supplierMasterList: Supplier,
-          supplierList: newSupplierData,
-          SupplierPostingGroupList: SupplierPostingGroup,
-          WarehouseList: WareHouse,
-          UOMList:UOM,
-          ItemPostingGroupList:ItemPostingGroup,
-          GSTGroupIDList:GSTGROUP,
-          GLAccount:GLAccount,
-          Charges:Charges,
-          DimensionsList:DimensionsList,
-          ProgressLoader: true
-        });
 
       })
       .catch((error) => {
-        console.log("Error - supplier fetch > ",error);
+        console.log("Error - supplier fetch > ", error);
         this.setState({
           CountryList: [],
           CurrencyMasterList: [],
@@ -577,13 +590,13 @@ class poactivity extends React.Component {
       PO.CurrID = data.CurrID;
       PO.PaymentTermID = data.PaymentTermID;
       PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
-       
+
 
 
       this.setState({
         PO: PO,
         // SupplierItemList:data.Item
-        SupplierItemCategory:data.SupplierItemCategory
+        SupplierItemCategory: data.SupplierItemCategory
       }, () => {
         let BCdata = this.getDataToSetOnBillingChange(CF.toInt(BillingID));
         let PO = this.state.PO;
@@ -629,7 +642,7 @@ class poactivity extends React.Component {
 
   getSupplierDataList = (SuplID) => {
     let dropdownData = [];
-    let SupplierItemCategory=[];
+    let SupplierItemCategory = [];
     // let Item = [];
     let Address = [];
     let CurrID = 0;
@@ -637,7 +650,7 @@ class poactivity extends React.Component {
 
     for (let i = 0; i < this.state.supplierMasterList.length; i++) {
       if (this.state.supplierMasterList[i].SuplID === SuplID) {
-        SupplierItemCategory= this.state.supplierMasterList[i].Category
+        SupplierItemCategory = this.state.supplierMasterList[i].Category
         // Item = this.state.supplierMasterList[i].Item;
         Address = this.state.supplierMasterList[i].Address;
         CurrID = this.state.supplierMasterList[i].CurrID;
@@ -647,7 +660,7 @@ class poactivity extends React.Component {
       }
     }
 
-    
+
 
     for (let i = 0; i < Address.length; i++) {
       let o = { name: Address[i].Code, value: Address[i].AddressID };
@@ -655,7 +668,7 @@ class poactivity extends React.Component {
     }
 
     return {
-      SupplierItemCategory:SupplierItemCategory,
+      SupplierItemCategory: SupplierItemCategory,
       // Item:Item,
       SupplierAdressList: dropdownData,
       SupplierAddressMasterList: Address,
@@ -708,17 +721,17 @@ class poactivity extends React.Component {
     return newData;
   };
 
- getDimensions=(data)=>{
-  let newData=[];
-  for (let i = 0; i < data.length; i++) {
-    let o = {
-      name: data[i].Name + " - " + data[i].Description,
-      value: data[i].DimensionID,
-    };
-    newData.push(o);
+  getDimensions = (data) => {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      let o = {
+        name: data[i].Name + " - " + data[i].Description,
+        value: data[i].DimensionID,
+      };
+      newData.push(o);
+    }
+    return newData;
   }
-   return newData;
- }
 
   itemDelete = (i, params) => {
     console.log("itemDelete > i > ", i);
@@ -810,7 +823,15 @@ class poactivity extends React.Component {
     switch (param) {
       case "SuplID":
         if (e) {
-          this.setState({ SADIB_VALUE: e }, () => {
+          this.setState({ SADIB_VALUE: e, isDataFetched: true }, () => {
+            console.log("e > ",e);
+            for(let i=0;i<this.state.CurrencyList.length;i++){
+              if(this.state.CurrencyList[i].value===CF.toInt(e.CurrID)){
+                PO.ExchRate=this.state.CurrencyList[i].ExchRate;
+                break;
+              }
+            }
+
             PO.SuplID = CF.toInt(e.id);
             this.setFieldValuesOnSuplierChange(CF.toInt(e.id));
             this.setParams(PO);
@@ -864,7 +885,13 @@ class poactivity extends React.Component {
         this.setParams(PO);
         break;
       case "CurrID":
-        PO.CurrID = e.target.value;
+        PO.CurrID = CF.toInt(e.target.value);
+        for(let i=0;i<this.state.CurrencyList.length;i++){
+          if(this.state.CurrencyList[i].value===CF.toInt(e.target.value)){
+            PO.ExchRate=this.state.CurrencyList[i].ExchRate;
+            break;
+          }
+        }
         this.setParams(PO);
         break;
       case "ExchRate":
@@ -998,28 +1025,36 @@ class poactivity extends React.Component {
       case "Type":
         o[key] = CF.toInt(e.target.value);//setting the dropdown value.
         switch (CF.toInt(e.target.value)) {
-          case 0:
-            o.CategoryList=this.state.SupplierItemCategory;             
-            o.isCategoryDisabled=false;
-            o.ItemList=[];
+          case 0://item
+            o.CategoryList = this.state.SupplierItemCategory;
+            o.isCategoryDisabled = false;
+            o.ItemList = [];
             break;
-          case 1:
+          case 1://G/L Account
+          o.ItemListSelected = null;
             o.CategoryList = [];
-           o.CategoryId=null;
+            o.CategoryId = null;
             o.isCategoryDisabled = true;
-            o.ItemList=this.state.GLAccount;
+            o.ItemList = this.state.GLAccount;
             break;
-          case 3:
+          case 2://Fixed Asset
+         
+            
+            o.ItemListSelected = null;
             o.CategoryList = [];
-            o.CategoryId=null;
+            o.CategoryId = null;
             o.isCategoryDisabled = true;
-            o.ItemList=this.state.Charges;
+            o.ItemList = this.state.FixedAsset;
             break;
+          case 3://Charge
+           o.ItemListSelected = null;
+            o.CategoryList = [];
+            o.CategoryId = null;
+            o.isCategoryDisabled = true;
+            o.ItemList = this.state.Charges;
+            break;
+
           default:
-            o.CategoryList = [];
-           o.CategoryId=null;
-            o.isCategoryDisabled = true;
-            o.ItemList=[];
             break;
         }
         PurchaseOrderLine[i] = o;
@@ -1027,11 +1062,11 @@ class poactivity extends React.Component {
         break;
       case "CategoryId":
         o[key] = CF.toInt(e.target.value);
-        let CategoryList=o.CategoryList;
-        console.log("--> CategoryList > ",CategoryList);
-        for(let i=0;i<CategoryList.length;i++){
-          if(CategoryList[i].value===CF.toInt(e.target.value)){
-            o.ItemList=CategoryList[i].Item;
+        let CategoryList = o.CategoryList;
+        console.log("--> CategoryList > ", CategoryList);
+        for (let i = 0; i < CategoryList.length; i++) {
+          if (CategoryList[i].value === CF.toInt(e.target.value)) {
+            o.ItemList = CategoryList[i].Item;
             break;
           }
         }
@@ -1051,18 +1086,18 @@ class poactivity extends React.Component {
       case "TypeID":
         if (e) {
           console.log("TypeID > e > ", e);
-          o.ItemListSelected=e;
+          o.ItemListSelected = e;
           o.TypeID = CF.toInt(e.value);
           o.Description = e.Description1;
           o.packingDescription = e.PackingDesc1;
-          o.HSNCode=e.HSNCode;
+          o.HSNCode = e.HSNCode;
           o.GSTGroupID = e.GSTGroupID;
-          o.GSTPercentage=e.GSTPercentage;
-          o.UOMID= e.PurchaseUOM;
+          o.GSTPercentage = e.GSTPercentage;
+          o.UOMID = e.PurchaseUOM;
           o.ItemPostingGroupID = e.ItemPostingGroupID;
           o.TolerancePercentage = e.TolerancePercentage;
           o.IsLot = e.IsLot;
-          o.IsQuality = e.IsQuality;           
+          o.IsQuality = e.IsQuality;
           PurchaseOrderLine[i] = o;
           this.setLineParams(PurchaseOrderLine);
         }
@@ -1119,12 +1154,12 @@ class poactivity extends React.Component {
         break;
       case "GSTGroupID":
         o[key] = CF.toInt(e.target.value);
-        let GSTGroupIDList=this.state.GSTGroupIDList;
-        for(let i=0;i<GSTGroupIDList.length;i++){
-          if(GSTGroupIDList[i].value===CF.toInt(e.target.value)){
-            o.GSTPercentage=GSTGroupIDList[i].GSTPercentage;
+        let GSTGroupIDList = this.state.GSTGroupIDList;
+        for (let i = 0; i < GSTGroupIDList.length; i++) {
+          if (GSTGroupIDList[i].value === CF.toInt(e.target.value)) {
+            o.GSTPercentage = GSTGroupIDList[i].GSTPercentage;
           }
-        }        
+        }
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
@@ -1138,7 +1173,7 @@ class poactivity extends React.Component {
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
-      
+
       case "NatureOfSupply":
         o[key] = e.target.value;
         PurchaseOrderLine[i] = o;
@@ -1174,14 +1209,14 @@ class poactivity extends React.Component {
       PurchaseOrderLine[i] = o;
       this.setLineParams(PurchaseOrderLine);
     }
-  
+
 
   }
 
   setLineParams = (object) => { this.setState({ PurchaseOrderLine: object }) };
 
-  validateLine=()=>{
-    let validLine=false;
+  validateLine = () => {
+    let validLine = false;
     return validLine;
   }
 
@@ -1747,11 +1782,11 @@ class poactivity extends React.Component {
                             >
                               <TableHead className="table-header-background">
                                 <TableRow>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="center">&nbsp;</TableCell>                                
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="center">&nbsp;</TableCell>
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Type</TableCell>
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Category</TableCell>
                                   <TableCell style={{ maxWidth: 350, minWidth: 350 }} className="line-table-header-font" align="center">Item</TableCell>
-                                  
+
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Desc</TableCell>
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Pack.Desc</TableCell>
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Sup.Code</TableCell>
@@ -1763,289 +1798,315 @@ class poactivity extends React.Component {
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Line.Disc %</TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Item Posting Group </TableCell>
-                                  
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT % </TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell>
+
+                                  {this.state.Branch.IsVAT === true ? (
+                                    <Fragment>
+                                      <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT % </TableCell>
+                                      <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell>
+                                    </Fragment>
+                                  ) : null}
+
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">HSN </TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">GST Group </TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> GST %</TableCell>                                 
+
+                                  {
+                                    this.state.Branch.IsGST === true ? (
+                                      <Fragment>
+                                        <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">GST Group </TableCell>
+                                        <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> GST %</TableCell>
+                                      </Fragment>
+                                    ) : null
+                                  }
+
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Dim.Value </TableCell>
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Is Quality? </TableCell>
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Is Lot? </TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody className="tableBody">
-                                
 
-                                {this.state.PurchaseOrderLine.length>0?(
+
+                                {this.state.PurchaseOrderLine.length > 0 ? (
                                   <Fragment>
                                     {this.state.PurchaseOrderLine.map((item, i) => (
-                                  <TableRow className={item.isDataProper === true ? "selectedRow" : "selectedRowError"}>
-                                    <TableCell align="left">
-                                      <ButtonGroup
-                                        size="small"
-                                        variant="text"
-                                        aria-label="Action Menu Button group"
-                                      >
-                                        <DeleteForeverIcon
-                                          fontSize="small"
-                                          style={{
-                                            color: '#e53935'
-                                          }}
-                                          onClick={(e) => this.itemDelete(i, item)}
-                                        />
+                                      <TableRow className={item.isDataProper === true ? "selectedRow" : "selectedRowError"}>
+                                        <TableCell align="left">
+                                          <ButtonGroup
+                                            size="small"
+                                            variant="text"
+                                            aria-label="Action Menu Button group"
+                                          >
+                                            <DeleteForeverIcon
+                                              fontSize="small"
+                                              style={{
+                                                color: '#e53935'
+                                              }}
+                                              onClick={(e) => this.itemDelete(i, item)}
+                                            />
+
+                                            {
+                                              (i + 1) === this.state.PurchaseOrderLine.length ? (
+                                                <Fragment>
+                                                  <AddCircleOutlineIcon
+                                                    fontSize="small"
+                                                    style={{
+                                                      color: '#00897b',
+                                                      marginLeft: 10
+                                                    }}
+                                                    onClick={(e) => this.createNewBlankLine()}
+                                                  />
+                                                </Fragment>
+                                              ) : null
+                                            }
+
+                                          </ButtonGroup>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <select
+                                            id={"Type_" + i}
+                                            style={{ width: '100%' }}
+                                            className="dropdown-css"
+                                            value={item.Type}
+                                            onChange={(e) => this.updateLineDetail(i, "Type", e)}
+                                          >
+                                            <option value="" >Select</option>
+                                            {APIURLS.POItemType.map((op, i) => (
+                                              <option value={op.value} > {op.name}</option>
+
+                                            ))}
+                                          </select>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          {console.log("this.state.PurchaseOrderLine > ", this.state.PurchaseOrderLine)}
+                                          <select
+                                            id={"Category_" + i}
+                                            style={{ width: '100%' }}
+                                            className="dropdown-css"
+                                            value={item.CategoryId}
+                                            onChange={(e) => this.updateLineDetail(i, "CategoryId", e)}
+                                            disabled={item.isCategoryDisabled}
+                                          >
+                                            <option value="" >Select</option>
+                                            {item.CategoryList.map((op, i) => (
+                                              <option value={op.value} > {op.name}</option>
+                                            ))}
+                                          </select>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <SCADI
+                                            style={{ width: '100%' }}
+                                            id={"TypeID_" + i}
+                                            onChange={(e, value) => this.updateLineDetail(i, "TypeID", value)}
+                                            value={item.ItemListSelected}
+                                            options={item.ItemList}
+                                            isMandatory={true}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="left"> 
+                                          {item.Description}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                          {item.packingDescription}
+                                        </TableCell>
+
+                                        <TableCell align="center">
+                                          <SCI
+                                            id={"Naration_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.SupplierCode}
+                                            onChange={(e) => this.updateLineDetail(i, "SupplierCode", e)}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <SCI
+                                            id={"Naration_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.Narration}
+                                            onChange={(e) => this.updateLineDetail(i, "Narration", e)}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="center">
+
+                                          <select
+                                            style={{ width: '100%' }}
+                                            className="dropdown-css"
+                                            value={item.UOMID}
+                                            onChange={(e) => this.updateLineDetail(i, "UOMID", e)}
+                                          >
+                                            {this.state.UOMList.map((op, i) => (
+                                              <option value={op.value}> {op.name}</option>
+                                            ))}
+                                          </select>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <SCI
+                                            id={"TolerancePercentage_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.TolerancePercentage}
+                                            onChange={(e) => this.updateLineDetail(i, "TolerancePercentage", e)}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <SCI
+                                            id={"Quantity_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.Quantity}
+                                            onChange={(e) => this.updateLineDetail(i, "Quantity", e)}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <SCI
+                                            id={"Price_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.Price}
+                                            onChange={(e) => this.updateLineDetail(i, "Price", e)}
+                                            disabled={true}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <SCI
+                                            id={"LineDiscPercentage_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.LineDiscPercentage}
+                                            onChange={(e) => this.updateLineDetail(i, "LineDiscPercentage", e)}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <SCI
+                                            id={"LineDiscAmount_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.LineDiscAmount}
+                                            onChange={(e) => this.updateLineDetail(i, "LineDiscAmount", e)}
+                                            disabled={true}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <select
+                                            style={{ width: '100%' }}
+                                            className="dropdown-css"
+                                            value={item.ItemPostingGroupID}
+                                            onChange={(e) => this.updateLineDetail(i, "ItemPostingGroupID", e)}
+                                            disabled={true}
+                                          >
+                                            {this.state.ItemPostingGroupList.map((op, i) => (
+                                              <option value={op.value}> {op.name}</option>
+                                            ))}
+                                          </select>
+                                        </TableCell>
+                                        {this.state.Branch.IsVAT === true ? (
+                                          <Fragment>
+                                            <TableCell align="center">
+                                              <SCI
+                                                id={"VATPercentage_" + i}
+                                                variant="outlined"
+                                                size="small"
+                                                value={item.VATPercentage}
+                                                onChange={(e) => this.updateLineDetail(i, "VATPercentage", e)}
+                                              />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                              <SCI
+                                                id={"VATAmount_" + i}
+                                                variant="outlined"
+                                                size="small"
+                                                value={item.VATAmount}
+                                                onChange={(e) => this.updateLineDetail(i, "VATAmount", e)}
+                                              />
+                                            </TableCell>
+                                          </Fragment>
+                                        ) : null}
+
+
+                                        <TableCell align="center">
+                                          <SCI
+                                            id={"HSNCode_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.HSNCode}
+                                            onChange={(e) => this.updateLineDetail(i, "HSNCode", e)}
+                                          />
+                                        </TableCell>
 
                                         {
-                                          (i + 1) === this.state.PurchaseOrderLine.length ? (
+                                          this.state.Branch.IsGST === true ? (
                                             <Fragment>
-                                              <AddCircleOutlineIcon
-                                                fontSize="small"
-                                                style={{
-                                                  color: '#00897b',
-                                                  marginLeft: 10
-                                                }}
-                                                onClick={(e) => this.createNewBlankLine()}
-                                              />
+                                              <TableCell align="center">
+                                                <select
+                                                  style={{ width: '100%' }}
+                                                  className="dropdown-css"
+                                                  value={item.GSTGroupID}
+                                                  onChange={(e) => this.updateLineDetail(i, "GSTGroupID", e)}
+                                                >
+                                                  <option value=""> Select</option>
+                                                  {this.state.GSTGroupIDList.map((op, i) => (
+                                                    <option value={op.value}> {op.name}</option>
+                                                  ))}
+                                                </select>
+                                              </TableCell>
+                                              <TableCell align="center">
+                                                <SCI
+                                                  id={"GSTPercentage_" + i}
+                                                  variant="outlined"
+                                                  size="small"
+                                                  value={item.GSTPercentage}
+                                                  onChange={(e) => this.updateLineDetail(i, "GSTPercentage", e)}
+                                                  disabled={true}
+                                                />
+                                              </TableCell>
                                             </Fragment>
                                           ) : null
                                         }
 
-                                      </ButtonGroup>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <select
-                                        id={"Type_" + i}
-                                        style={{ width: '100%' }}
-                                        className="dropdown-css"
-                                        value={item.Type}
-                                        onChange={(e) => this.updateLineDetail(i, "Type", e)}
-                                      >
-                                         <option value="" >Select</option>
-                                        {APIURLS.POItemType.map((op, i) => (
-                                          <option value={op.value} > {op.name}</option>
 
-                                        ))}
-                                      </select>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      {console.log("this.state.PurchaseOrderLine > ",this.state.PurchaseOrderLine)}
-                                      <select
-                                        id={"Category_" + i}
-                                        style={{ width: '100%' }}
-                                        className="dropdown-css"
-                                        value={item.CategoryId}
-                                        onChange={(e) => this.updateLineDetail(i, "CategoryId", e)}
-                                        disabled={item.isCategoryDisabled}
-                                      >
-                                        <option value="" >Select</option>
-                                        {item.CategoryList.map((op, i) => (
-                                          <option value={op.value} > {op.name}</option>
 
-                                        ))}
-                                      </select>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCADI
-                                        style={{ width: '100%' }}
-                                        id={"TypeID_" + i}
-                                        onChange={(e, value) => this.updateLineDetail(i,"TypeID", value)}
-                                        value={item.ItemListSelected}
-                                        options={item.ItemList}
-                                        isMandatory={true}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="left">
-                                    {item.Description}
-                                    </TableCell>
-                                    <TableCell align="left">
-                                    {item.packingDescription}
-                                    </TableCell>
-                                   
-                                    <TableCell align="center">
-                                    <SCI
-                                        id={"Naration_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.SupplierCode}
-                                        onChange={(e) => this.updateLineDetail(i, "SupplierCode", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"Naration_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.Narration}
-                                        onChange={(e) => this.updateLineDetail(i, "Narration", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      
-                                      <select
-                                        style={{ width: '100%' }}
-                                        className="dropdown-css"
-                                        value={item.UOMID}
-                                        onChange={(e) => this.updateLineDetail(i, "UOMID", e)}
-                                      >
-                                        {this.state.UOMList.map((op, i) => (
-                                          <option value={op.value}> {op.name}</option>
-                                        ))}
-                                      </select>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"TolerancePercentage_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.TolerancePercentage}
-                                        onChange={(e) => this.updateLineDetail(i, "TolerancePercentage", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"Quantity_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.Quantity}
-                                        onChange={(e) => this.updateLineDetail(i, "Quantity", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"Price_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.Price}
-                                        onChange={(e) => this.updateLineDetail(i, "Price", e)}
-                                        disabled={true}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"LineDiscPercentage_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.LineDiscPercentage}
-                                        onChange={(e) => this.updateLineDetail(i, "LineDiscPercentage", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"LineDiscAmount_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.LineDiscAmount}
-                                        onChange={(e) => this.updateLineDetail(i, "LineDiscAmount", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <select
-                                        style={{ width: '100%' }}
-                                        className="dropdown-css"
-                                        value={item.ItemPostingGroupID}
-                                        onChange={(e) => this.updateLineDetail(i, "ItemPostingGroupID", e)}
-                                        disabled={true}
-                                      >
-                                        {this.state.ItemPostingGroupList.map((op, i) => (
-                                          <option value={op.value}> {op.name}</option>
-                                        ))}
-                                      </select>
-                                    </TableCell>
-                                   
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"VATPercentage_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.VATPercentage}
-                                        onChange={(e) => this.updateLineDetail(i, "VATPercentage", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"VATAmount_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.VATAmount}
-                                        onChange={(e) => this.updateLineDetail(i, "VATAmount", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"HSNCode_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.HSNCode}  
-                                        onChange={(e) => this.updateLineDetail(i, "HSNCode", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <select
-                                        style={{ width: '100%' }}
-                                        className="dropdown-css"
-                                        value={item.GSTGroupID}
-                                        onChange={(e) => this.updateLineDetail(i, "GSTGroupID", e)}
-                                      >
-                                        {this.state.GSTGroupIDList.map((op, i) => (
-                                          <option value={op.value}> {op.name}</option>
-                                        ))}
-                                      </select>
-                                    </TableCell>
 
-                                    
-                                    <TableCell align="center">
-                                      <SCI
-                                        id={"GSTPercentage_" + i}
-                                        variant="outlined"
-                                        size="small"
-                                        value={item.GSTPercentage}
-                                        onChange={(e) => this.updateLineDetail(i, "GSTPercentage", e)}
-                                        disabled={true}
-                                      />
-                                    </TableCell>
-                                   
-                                   
-                                    <TableCell align="center">
-                                      <select
-                                        style={{ width: '100%' }}
-                                        className="dropdown-css"
-                                        value={item.DValueID}
-                                        onChange={(e) => this.updateLineDetail(i, "DValueID", e)}
-                                      >
-                                        <option value="">Select</option>
-                                        {this.state.DimensionsList.map((op, i) => (
-                                          <option value={op.value}> {op.name}</option>
-                                        ))}
-                                      </select>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCSI
-                                        key={"IsQuality_+i"}
-                                        id={"IsQuality_+i"}
-                                        param={item.IsQuality}
-                                        onChange={(e) => this.updateLineDetail(i, "IsQuality", e)}
-                                      />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                      <SCSI
-                                        key={"IsLot_+i"}
-                                        id={"IsLot_+i"}
-                                        param={item.IsLot}
-                                        onChange={(e) => this.updateLineDetail(i, "IsLot", e)}
-
-                                      />
-                                    </TableCell>
-
-                                  </TableRow>
-                                ))}
-                                  </Fragment>
-                                ):(
-                                  <Fragment>
-                                      <TableRow>
-                                        <TableCell style={{ borderBottomStyle: 'none' }} colSpan={2} align="center">
-                                          <span style={{color:'#1976d2'}}>Press <b>SHIFT+ENTER</b> to start...</span>
+                                        <TableCell align="center">
+                                          <select
+                                            style={{ width: '100%' }}
+                                            className="dropdown-css"
+                                            value={item.DValueID}
+                                            onChange={(e) => this.updateLineDetail(i, "DValueID", e)}
+                                          >
+                                            <option value="">Select</option>
+                                            {this.state.DimensionsList.map((op, i) => (
+                                              <option value={op.value}> {op.name}</option>
+                                            ))}
+                                          </select>
                                         </TableCell>
+                                        <TableCell align="center">
+                                          <SCSI
+                                            key={"IsQuality_+i"}
+                                            id={"IsQuality_+i"}
+                                            param={item.IsQuality}
+                                            onChange={(e) => this.updateLineDetail(i, "IsQuality", e)}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                          <SCSI
+                                            key={"IsLot_+i"}
+                                            id={"IsLot_+i"}
+                                            param={item.IsLot}
+                                            onChange={(e) => this.updateLineDetail(i, "IsLot", e)}
+
+                                          />
+                                        </TableCell>
+
                                       </TableRow>
+                                    ))}
+                                  </Fragment>
+                                ) : (
+                                  <Fragment>
+                                    <TableRow>
+                                      <TableCell style={{ borderBottomStyle: 'none' }} colSpan={2} align="center">
+                                        <span style={{ color: '#1976d2' }}>Press <b>SHIFT+ENTER</b> to start...</span>
+                                      </TableCell>
+                                    </TableRow>
                                   </Fragment>
                                 )}
 
@@ -2112,6 +2173,7 @@ class poactivity extends React.Component {
                                     size="small"
                                     value={this.state.PO.ExchRate}
                                     onChange={(e) => this.updateFormValue("ExchRate", e)}
+                                    isMandatory={true}
                                   />
 
                                   <SDIB
