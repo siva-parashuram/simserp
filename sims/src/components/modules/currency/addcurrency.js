@@ -186,6 +186,8 @@ class addcurrency extends React.Component {
             this.setState({
               Validations: v,
               DisableCreatebtn: true,
+              Code: e.target.value,
+
             });
           }
         } else {
@@ -209,6 +211,8 @@ class addcurrency extends React.Component {
           };
           this.setState({
             Validations: v,
+            Description: e.target.value,
+
           });
         } else {
           let v = this.state.Validations;
@@ -230,6 +234,8 @@ class addcurrency extends React.Component {
           };
           this.setState({
             Validations: v,
+            Symbol: e.target.value,
+
           });
         } else {
           let v = this.state.Validations;

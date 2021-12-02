@@ -42,9 +42,9 @@ class editmodule extends React.Component {
       updateBtnDisable: true,
       Module: {
         ModuleId: 0,
-        Name: null,
-        Description: null,
-        IconName: null,
+        Name: "",
+        Description: "",
+        IconName: "",
       },
       Validations: {
         Name: { errorState: false, errorMsg: "" },
@@ -52,9 +52,9 @@ class editmodule extends React.Component {
         IconName: { errorState: false, errorMsg: "" },
       },
       ModuleId: 0,
-      Name: null,
-      Description: null,
-      IconName: null,
+      Name: "",
+      Description: "",
+      IconName: "",
       modules: [],
       oldName: "",
       duplicate: false,
@@ -79,7 +79,7 @@ class editmodule extends React.Component {
       branchName;
 
     let Module = this.state.Module;
-    Module.ModuleId = moduleId;
+    Module.ModuleId = CF.toInt(moduleId);
     this.setState(
       {
         urlparams: urlparams,
@@ -137,11 +137,11 @@ class editmodule extends React.Component {
           let data = response.data;
 
           this.setState({
-            oldName: data.name,
+            oldName: data.Name,
             Module: data,
-            Name: data.name,
-            Description: data.description,
-            IconName: data.iconName,
+            Name: data.Name,
+            Description: data.Description,
+            IconName: data.IconName,
             ProgressLoader: true,
           });
         } else {
@@ -225,6 +225,8 @@ class editmodule extends React.Component {
           this.setState({
             updateBtnDisable: true,
             Validations: Validations,
+            Name: e.target.value,
+
           });
         } else {
           let Module = this.state.Module;
@@ -266,6 +268,8 @@ class editmodule extends React.Component {
           this.setState({
             updateBtnDisable: true,
             Validations: Validations,
+            Description: e.target.value,
+
           });
         } else {
           let Module = this.state.Module;
@@ -304,6 +308,8 @@ class editmodule extends React.Component {
             this.setState({
               updateBtnDisable: true,
               Validations: Validations,
+              IconName: e.target.value,
+
             });
           }
         } else {
@@ -358,9 +364,7 @@ class editmodule extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    function Alert(props) {
-      return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
+    
 
     const breadcrumbHtml = (
       <Fragment>
@@ -455,7 +459,6 @@ class editmodule extends React.Component {
                         }}
                         value={this.state.Name}
                         error={this.state.Validations.Name.errorState}
-                        helperText={this.state.Validations.Name.errorMsg}
                       />
 
                       <Tablerowcelltextboxinput
@@ -470,7 +473,6 @@ class editmodule extends React.Component {
                         }}
                         value={this.state.Description}
                         error={this.state.Validations.Description.errorState}
-                        helperText={this.state.Validations.Description.errorMsg}
                       />
 
                       <Tablerowcelltextboxinput
@@ -485,7 +487,6 @@ class editmodule extends React.Component {
                         }}
                         value={this.state.IconName}
                         error={this.state.Validations.IconName.errorState}
-                        helperText={this.state.Validations.IconName.errorMsg}
                       />
                     </TableBody>
                   </Table>

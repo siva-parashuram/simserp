@@ -404,9 +404,14 @@ class addwarehouse extends React.Component {
         }
         //checkCode();
       }
-      if (id === "isEDI") {
+      if (id === "IsActive") {
+        warehouse.IsActive = e.target.checked;
+
+        this.setState({ warehouse: warehouse, IsActive: e.target.checked });
+      }
+      if (id === "IsEdi") {
         warehouse.IsEdi = e.target.checked;
-        this.setState({ warehouse: warehouse });
+        this.setState({ warehouse: warehouse, IsEdi: e.target.checked });
       }
       if (id === "ediurl") {
         warehouse.Ediurl = e.target.value;
@@ -722,9 +727,7 @@ class addwarehouse extends React.Component {
                                 id="IsActive"
                                 label="IsActive"
                                 param={this.state.IsActive}
-                                onChange={(e) =>
-                                  this.updateFormValue("IsActive", e)
-                                }
+                                onChange={(e) => updateFormValue("IsActive", e)}
                               />
 
                               {/* <TableRow>
@@ -785,9 +788,7 @@ class addwarehouse extends React.Component {
                                 id="IsEdi"
                                 label="IsEdi?"
                                 param={this.state.IsEdi}
-                                onChange={(e) =>
-                                  this.updateFormValue("IsEdi", e)
-                                }
+                                onChange={(e) => updateFormValue("IsEdi", e)}
                               />
                               {/* <TableRow>
                                 <TableCell

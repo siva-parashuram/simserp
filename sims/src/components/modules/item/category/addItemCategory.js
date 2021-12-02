@@ -148,7 +148,11 @@ class addItemCategory extends React.Component {
                 errorState: true,
                 errorMssg: "Maximum 20 characters allowed",
               };
-              this.setState({ Validations: v1, DisableCreatebtn: true });
+              this.setState({
+                Validations: v1,
+                DisableCreatebtn: true,
+                Code: e.target.value,
+              });
             }
           } else {
             v1.Code = { errorState: false, errorMssg: "" };
@@ -169,7 +173,7 @@ class addItemCategory extends React.Component {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
-            this.setState({ Validations: v2 });
+            this.setState({ Validations: v2, Description: e.target.value });
           } else {
             v2.Description = { errorState: false, errorMssg: "" };
             this.setState({
@@ -186,7 +190,7 @@ class addItemCategory extends React.Component {
               errorState: true,
               errorMssg: "Maximum 10 characters allowed",
             };
-            this.setState({ Validations: v3 });
+            this.setState({ Validations: v3, HSNCode: e.target.value });
           } else {
             v3.HSNCode = { errorState: false, errorMssg: "" };
             this.setState({
@@ -369,7 +373,6 @@ class addItemCategory extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => updateFormValue("Code", e)}
-                           
                             value={this.state.Code}
                             error={this.state.Validations.Code.errorState}
                             isMandatory={true}
@@ -380,12 +383,10 @@ class addItemCategory extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => updateFormValue("Description", e)}
-                           
                             value={this.state.Description}
                             error={
                               this.state.Validations.Description.errorState
                             }
-                           
                           />
                           <SIB
                             id="HSNCode"
@@ -393,7 +394,6 @@ class addItemCategory extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => updateFormValue("HSNCode", e)}
-                            
                             value={this.state.HSNCode}
                             error={this.state.Validations.HSNCode.errorState}
                           />
