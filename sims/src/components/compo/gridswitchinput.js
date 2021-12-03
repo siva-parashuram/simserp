@@ -46,6 +46,7 @@ class gridswitchinput extends React.Component {
                                 : null
                         }
                         onChange={this.props.onChange}
+                        disabled={this.props.disabled}
                     />
               </Grid>
             </Grid>

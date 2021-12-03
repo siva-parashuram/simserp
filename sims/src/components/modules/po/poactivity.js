@@ -65,9 +65,6 @@ const today = moment().format(
 );
 
 
-
-
-
 class poactivity extends React.Component {
   constructor(props) {
     super(props);
@@ -88,7 +85,7 @@ class poactivity extends React.Component {
       ProgressLoader: false,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      DisableCreatebtn: true,
+      DisableCreatebtn: false,
       DisableUpdatebtn: false,
       SnackbarStatus: false,
       currentDeleteItemLine: {},
@@ -178,21 +175,21 @@ class poactivity extends React.Component {
         BillingID: 0,
         IsImport: false,
         CurrID: 0,
-        ExchRate: "0.0000",
-        FCValue: "0.00",
-        BaseValue: "0.00",
+        ExchRate: 0.00,
+        FCValue: 0.00,
+        BaseValue: 0.00,
         PaymentTermID: 0,
         PaymentTerm: "",
         ContactPerson: "",
         Reference: "",
-        Status: 2,
+        Status: 1,
         DispachDate: today,
         DeliveryDate: today,
         WareHouseID: 0,
         SpecialInst: "",
         DeliveryAddress: "",
         MODTaxID: 0,
-        AmendmentNo: "",
+        AmendmentNo: 0,
         AmendmentDate: today,
         IsRegistedSupplier: false,
         GSTNo: "",
@@ -207,7 +204,7 @@ class poactivity extends React.Component {
         GeneralPostingGroupID: 0,
         SupplierPostingGroupID: 0,
         NotifyTo: "",
-        UserID: CF.toInt(getCookie(COOKIE.USERID)),
+        
       },
       PurchaseOrderLine: [],
       emptyLine: {
@@ -309,8 +306,6 @@ class poactivity extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeyDownHandler);
-
-
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -331,8 +326,14 @@ class poactivity extends React.Component {
     PO.POID = CF.toInt(POID);
     if (type === "edit") {
       PO.POID = CF.toInt(POID);
-      this.getPODetails(PO);
+      this.setState({BranchID: CF.toInt(branchId)},()=>{
+        this.getSupplierList();
+        this.getPODetails(PO);
+      });
+      
     }
+    console.log("-About to load-");
+     
 
     this.setState({
       PO: PO,
@@ -343,10 +344,68 @@ class poactivity extends React.Component {
       ProgressLoader: type === "add" ? true : false,
       BranchID: CF.toInt(branchId),
     }, () => {
-      this.getSupplierList();
+      if(type==="add"){this.getSupplierList(); }   
     });
 
 
+  }
+
+  getPODetails = (PO) => { 
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetPOByPOID;
+    let reqData = {
+        ValidUser: ValidUser,
+        PurchaseOrder: {
+          POID: CF.toInt(PO.POID)
+        }
+    };
+    axios
+    .post(Url, reqData, { headers })
+    .then((response) => {
+      if(response.status===200){
+        console.log("response.data > ",response.data);
+        let PO=response.data;
+        let PurchaseOrderLine=PO.PurchaseOrderLine;
+        try{delete PO['PurchaseOrderLine']; }catch(err){} 
+        PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
+        PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
+        PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
+        if(PO.AmendmentNo>0){
+          PO.AmendmentDate=moment(PO.AmendmentDate).format("YYYY-MM-DD");
+        }else{
+          PO.AmendmentDate="";
+        }
+
+        console.log("PO > ",PO);
+        console.log("PurchaseOrderLine > ",PurchaseOrderLine);
+        
+        this.setState({
+          PO:PO
+        },()=>{
+          this.presetSetSupplierDropdown(PO);
+          this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID));
+        });
+        
+      } else{
+        this.setState({ ErrorPrompt:true,  ProgressLoader: true });
+      }
+    })
+    .catch((error) => {         
+        this.setState({ ErrorPrompt:true,  ProgressLoader: true });
+    }); 
+  };
+
+  presetSetSupplierDropdown = (PO) => {
+    for (let i = 0; i < this.state.supplierList.length; i++) {
+      if (this.state.supplierList[i].id === PO.SuplID) {
+        this.setState({ SADIB_VALUE: this.state.supplierList[i], isDataFetched: true });
+      }
+    }
   }
 
   getSupplierList = () => {
@@ -388,7 +447,7 @@ class poactivity extends React.Component {
           let Charges = data.Charges;
           let FixedAsset=data.FixedAsset;
           let DimensionsList = data.DimensionValue;
-
+          let IncoTermList=data.IncoTerms;
 
           // let newSupplierData = [];
           // for (let i = 0; i < Supplier.length; i++) {
@@ -435,6 +494,7 @@ class poactivity extends React.Component {
             Charges: Charges,
             FixedAsset:FixedAsset,
             DimensionsList: DimensionsList,
+            IncoTermList:IncoTermList,
             ProgressLoader: true
           });
         } else {
@@ -501,8 +561,6 @@ class poactivity extends React.Component {
 
     return newData;
   }
-
-
   getCurrencyList = (data) => {
     let newD = [];
     for (let i = 0; i < data.length; i++) {
@@ -538,8 +596,6 @@ class poactivity extends React.Component {
     }
     return newD
   }
-
-
 
   getPaymentTerms = (data) => {
     let newData = [];
@@ -742,18 +798,6 @@ class poactivity extends React.Component {
     });
   }
 
-
-
-
-
-
-
-
-  getPODetails = () => {
-
-  };
-
-
   setFieldValuesOnBillingSelect = (data) => {
     let PO = this.state.PO;
     PO.ContactPerson = data.ContactPerson;
@@ -899,15 +943,15 @@ class poactivity extends React.Component {
         this.setParams(PO);
         break;
       case "PaymentTerm":
-        PO.PaymentTerm = e.target.value;
+        PO.PaymentTerm = CF.toInt(e.target.value);
         this.setParams(PO);
         break;
       case "MODTaxID":
-        PO.MODTaxID = e.target.value;
+        PO.MODTaxID = CF.toInt(e.target.value);
         this.setParams(PO);
         break;
       case "IncoID":
-        PO.IncoID = e.target.value;
+        PO.IncoID = CF.toInt(e.target.value);
         this.setParams(PO);
         break;
       case "DeliveryAddress":
@@ -915,11 +959,11 @@ class poactivity extends React.Component {
         this.setParams(PO);
         break;
       case "ShipmentModeID":
-        PO.ShipmentModeID = e.target.value;
+        PO.ShipmentModeID = CF.toInt(e.target.value);
         this.setParams(PO);
         break;
       case "SpecialInst":
-        PO.SpecialInst = e.target.value;
+        PO.SpecialInst = CF.toInt(e.target.value);
         this.setParams(PO);
         break;
       case "Notes":
@@ -934,6 +978,10 @@ class poactivity extends React.Component {
         PO.IsRounding = e.target.checked;
         this.setParams(PO);
         break;
+      case "AmendmentInput":
+        let AmendmentInput=this.state.AmendmentInput;
+        AmendmentInput.status=e.target.checked;
+           this.setState({AmendmentInput:AmendmentInput});  
       default:
         break;
     }
@@ -941,15 +989,11 @@ class poactivity extends React.Component {
     this.validateBtnEnable();
   };
 
-
-
   validateBtnEnable = () => {
 
   };
 
   setParams = (object) => { this.setState({ PO: object }) };
-
-
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -1015,6 +1059,48 @@ class poactivity extends React.Component {
     this.setState({ Dialog: Dialog });
   };
 
+  getNOSvalue = () => {
+    let UOMList = this.state.UOMList;   
+    for (let i = 0; i < UOMList.length; i++) {
+      if (UOMList[i].name === "NOS") {
+        return UOMList[i].value;
+        break;
+      }
+    }
+  }
+
+  fetchPrice = (Quantity, o) => {     
+    let UOMID_i=o.UOMID;
+    for (let i = 0; i < o.ItemList.length; i++) {     
+      if (o.ItemList[i].value === o.TypeID) {
+        let ItemPrice=o.ItemList[i]['ItemPrice'];
+        for (let j = 0; j < ItemPrice.length; j++) {
+          let UOM_j=ItemPrice[j]['UOM'];
+          if (UOMID_i === UOM_j) {
+            let jo=ItemPrice[j];
+            if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
+              return jo.UnitPrice;
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    /*for (let i = 0; i < o.ItemList.length; i++) {
+      if (o.ItemList[i].value === o.TypeID) {
+        for (let j = 0; j < o.ItemList[i]['ItemPrice'].length; j++) {
+          if (o.ItemList[i]['ItemPrice'][j]['UOM'] === o.ItemList[i]['UOMID']) {
+            if (parseFloat(Quantity) >= parseFloat(o.ItemList[i]['ItemPrice'][j].MinQty) && parseFloat(Quantity) <= parseFloat(o.ItemList[i]['ItemPrice'][j].MaxQty)) {
+              return o.ItemList[i]['ItemPrice'][j].UnitPrice;
+              break;
+            }
+          }
+        }
+      }
+    }*/
+  }
+
   updateLineDetail = (i, key, e) => {
     // console.log("i > ", i);
     // console.log("key > ", key);
@@ -1024,36 +1110,56 @@ class poactivity extends React.Component {
     switch (key) {
       case "Type":
         o[key] = CF.toInt(e.target.value);//setting the dropdown value.
+        o.Price = 0;
+        o.HSNCode="";
+        o.CategoryId = null;
+        o.SupplierCode=null;
+        o.Narration=null;
+        o.TolerancePercentage=null;
+        o.LineDiscPercentage=0;
+        o.ItemPostingGroupID=null;
+        o.GeneralPostingGroupID=null;
+        o.VATPercentage=0;
+        o.VATAmount=0;
+        o.GSTGroupID="";
+        o.SupplyStateID="";
+        o.DValueID="";
+        o.GSTPercentage=0;
         switch (CF.toInt(e.target.value)) {
           case 0://item
+            o.Quantity = 0;
             o.CategoryList = this.state.SupplierItemCategory;
             o.isCategoryDisabled = false;
             o.ItemList = [];
+            o.UOMID="";
             break;
           case 1://G/L Account
-          o.ItemListSelected = null;
+            o.Quantity = 1;
+            o.ItemListSelected = null;
             o.CategoryList = [];
             o.CategoryId = null;
             o.isCategoryDisabled = true;
             o.ItemList = this.state.GLAccount;
+            o.UOMID=this.getNOSvalue();
             break;
-          case 2://Fixed Asset
-         
-            
+          case 2://Fixed Asset        
+            o.Quantity = 1;
             o.ItemListSelected = null;
             o.CategoryList = [];
             o.CategoryId = null;
             o.isCategoryDisabled = true;
             o.ItemList = this.state.FixedAsset;
+            o.UOMID=this.getNOSvalue();
             break;
-          case 3://Charge
-           o.ItemListSelected = null;
+          case 3://Charge          
+            o.Quantity = 1;
+            o.ItemListSelected = null;
             o.CategoryList = [];
             o.CategoryId = null;
             o.isCategoryDisabled = true;
             o.ItemList = this.state.Charges;
+            o.UOMID=this.getNOSvalue();
             break;
-
           default:
             break;
         }
@@ -1113,6 +1219,10 @@ class poactivity extends React.Component {
         this.setLineParams(PurchaseOrderLine);
         break;
       case "Quantity":
+        let price=0;
+        price=this.fetchPrice(e.target.value,o);
+        console.log("IN Quantity > price slab value > ",price);
+        if(price){o.Price=price;}else{o.Price=0;}        
         o[key] = e.target.value;
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
@@ -1173,7 +1283,6 @@ class poactivity extends React.Component {
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
-
       case "NatureOfSupply":
         o[key] = e.target.value;
         PurchaseOrderLine[i] = o;
@@ -1194,12 +1303,12 @@ class poactivity extends React.Component {
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
-
       default:
         break;
     }
 
-    let validLine = this.validateLine();
+    let validLine = this.validateLine(o);
+    console.log("validLine > ",validLine);
     if (validLine === true) {
       o.isDataProper = true;
       PurchaseOrderLine[i] = o;
@@ -1215,9 +1324,98 @@ class poactivity extends React.Component {
 
   setLineParams = (object) => { this.setState({ PurchaseOrderLine: object }) };
 
-  validateLine = () => {
+  validateLine = (o) => {
     let validLine = false;
+
+    //---------------------------
+    if(
+      o.Type==="" || o.Type===null ||
+      o.TypeID==="" || o.TypeID===null ||
+      o.Quantity===0 ||
+      o.Price===0           
+    ){
+      validLine = false;
+    }else{
+      validLine = true; 
+    }
+
+    if(o.HSNCode){
+      if(( o.HSNCode.length<6|| o.HSNCode.length>8) ){validLine = false;}else{validLine = true;}
+    }else{
+      validLine = false;
+    }
+
+    //----------------------
+
+
+
+
     return validLine;
+  }
+
+  
+  getProcessedPurchaseOrderLineList=()=>{
+    let PurchaseOrderLineList=[];
+    let POL=this.state.PurchaseOrderLine;
+    for(let i=0;i<POL.length;i++){
+      let o = {
+        POID: this.state.PO.POID,
+        Type: POL[i].Type,
+        LNo: POL[i].LNo,
+        TypeID: POL[i].TypeID,
+        SupplierCode: POL[i].SupplierCode===null?"":POL[i].SupplierCode,
+        Narration: POL[i].Narration===null?"":POL[i].Narration,
+        UOMID: POL[i].UOMID,
+        TolerancePercentage: parseFloat(POL[i].TolerancePercentage),
+        Quantity: parseFloat(POL[i].Quantity) ,
+        Price: POL[i].Price,
+        LineDiscPercentage: parseFloat(POL[i].LineDiscPercentage),
+        // LineDiscAmount: POL[i].LineDiscAmount,
+        ItemPostingGroupID:POL[i].ItemPostingGroupID,
+        // GeneralPostingGroupID: POL[i].GeneralPostingGroupID,
+        VATPercentage: parseFloat(POL[i].VATPercentage),
+        // VATAmount: POL[i].VATAmount,
+        HSNCode:POL[i].HSNCode,
+        GSTGroupID: POL[i].GSTGroupID,
+        SupplyStateID: this.state.StateID,
+        GSTPercentage:POL[i].GSTPercentage,
+        // BuyFromGSTN: POL[i].BuyFromGSTN,
+        // NatureOfSupply: POL[i].NatureOfSupply,
+        DValueID: POL[i].DValueID==="" ?0:CF.toInt(POL[i].DValueID),
+        IsQuality: POL[i].IsQuality,
+        IsLot: POL[i].IsLot
+      };
+      PurchaseOrderLineList.push(o);
+    }
+    return PurchaseOrderLineList;
+  }
+
+  validatePOData=(PurchaseOrder)=>{
+    let isProperData=false;
+     
+
+    return isProperData;   
+  }
+
+//direct edit once first time entry is made
+  openEditMode=(ID)=>{
+    console.log("-openEditMode-");
+    console.log("ID -> ",ID);
+     
+    let type = "edit";
+    let POID = ID;
+    let typoTitle = "";
+    type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
+
+    let PO = this.state.PO;
+    PO.POID = CF.toInt(POID);
+
+    this.setState({
+      PO: PO,
+      type: type,
+      typoTitle: typoTitle,
+    });
+
   }
 
   render() {
@@ -1267,7 +1465,7 @@ class poactivity extends React.Component {
     };
 
     const AddNew = (e) => {
-      this.setState({ Loader: false });
+      this.setState({ ProgressLoader: false });
       console.log("Adding new");
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
@@ -1275,6 +1473,67 @@ class poactivity extends React.Component {
       const headers = {
         "Content-Type": "application/json",
       };
+
+      let PurchaseOrder=this.state.PO; 
+      PurchaseOrder.UserID=CF.toInt(getCookie(COOKIE.USERID));
+      PurchaseOrder.BranchID=this.state.BranchID;
+      PurchaseOrder.AmendmentDate=moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY"); 
+      PurchaseOrder.PODate=moment(PurchaseOrder.PODate).format("MM/DD/YYYY"); 
+      PurchaseOrder.DeliveryDate=moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
+      PurchaseOrder.DispachDate=moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
+      let PurchaseOrderLineList=this.getProcessedPurchaseOrderLineList();
+
+      let isProperData=this.validatePOData(PurchaseOrder);
+
+      let NoSeriesReqData = {
+        ValidUser: ValidUser,
+        DocumentNumber: {
+          NoSeriesID: this.state.PO.IsImport===true?CF.toInt(this.state.Branch.IPONo):CF.toInt(this.state.Branch.LPONo),
+          // BranchID:this.state.BranchID,
+          TransDate: moment().format("MM-DD-YYYY"),
+        },
+      };
+
+      let Url1=APIURLS.APIURL.GetMasterDocumentNumber;
+      axios
+        .post(Url1, NoSeriesReqData, { headers })
+        .then((response) => {
+          if (response.status === 200) {
+            PurchaseOrder.No = response.data;
+            let reqData = {
+              ValidUser: ValidUser,
+              PurchaseOrder: PurchaseOrder,
+              PurchaseOrderLineList: PurchaseOrderLineList
+            };
+            let Url2 = APIURLS.APIURL.Add_Update_PO;
+            axios
+              .post(Url2, reqData, { headers })
+              .then((response) => {
+                console.log("response > ",response);
+                if(response.status===201 || response.status===200){                  
+                  this.setState({ SuccessPrompt: true, ProgressLoader: true });
+                  //change to Edit mode
+                  this.openEditMode(response.data.ID);
+                }
+               
+              })
+              .catch((error) => {
+                console.log("Main API Error");
+                this.setState({ ErrorPrompt: true, ProgressLoader: true });
+              });
+          } else {
+            console.log("No series Error IF");
+            this.setState({ ErrorPrompt: true, ProgressLoader: true });
+          }
+        })
+        .catch((error) => {
+          console.log("No series Error");
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
+        });
+
+
+      
+     
 
 
     };
@@ -1313,6 +1572,17 @@ class poactivity extends React.Component {
 
 
           {this.state.type === "add" ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.save.icon}
+              className="action-btns"
+              onClick={(e) => AddNew(e)}
+              disabled={this.state.DisableCreatebtn}
+            >
+              {APIURLS.buttonTitle.save.name}
+            </Button>
+          ) : null}
+
+          {this.state.type === "edit" ? (
             <Button
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
@@ -1627,13 +1897,28 @@ class poactivity extends React.Component {
                                     isMandatory={true}
                                   />
 
-                                  <SSIB
+                                  {this.state.type === "add"?(
+                                    <SSIB
                                     key="amendEvent"
                                     id="AmendmentInput"
                                     label="Amending?"
-                                    param={this.state.type === "add" ? false : this.state.AmendmentInput.status}
-                                    onChange={(e) => this.updateFormValue("AmendmentInput", e)}
+                                    param={false}
+                                    // onChange={(e) => this.updateFormValue("AmendmentInput", e)}
+                                    disabled={true}
                                   />
+                                  ):null}
+
+                                  {this.state.type === "edit" ? (
+                                    <SSIB
+                                      key="amendEvent"
+                                      id="AmendmentInput"
+                                      label="Amending?"
+                                      param={this.state.AmendmentInput.status}
+                                      onChange={(e) => this.updateFormValue("AmendmentInput", e)}
+                                      disabled={false}
+                                    />
+                                  ) : null}
+                                 
 
                                   <SIB
                                     id="AmendmentNo"
@@ -1641,7 +1926,7 @@ class poactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.PO.AmendmentNo}
-                                    disabled={this.state.type === "add" ? true : false}
+                                    disabled={this.state.AmendmentInput.status === false ? true : false}
                                   />
                                   <SDTI
                                     id="AmendmentDate"
@@ -1652,8 +1937,10 @@ class poactivity extends React.Component {
                                       this.updateFormValue("AmendmentDate", e)
                                     }
                                     value={this.state.PO.AmendmentDate}
-                                    disabled={this.state.type === "add" ? true : false}
+                                    disabled={this.state.AmendmentInput.status === false ? true : false}
                                   />
+
+
 
                                   <SDTI
                                     isMandatory={true}
@@ -1794,7 +2081,7 @@ class poactivity extends React.Component {
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">UOM</TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Tolerance %</TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Quantity </TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Price </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Unit Price </TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Line.Disc %</TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Item Posting Group </TableCell>
@@ -1907,7 +2194,7 @@ class poactivity extends React.Component {
                                         <TableCell align="left">
                                           {item.packingDescription}
                                         </TableCell>
-
+  
                                         <TableCell align="center">
                                           <SCI
                                             id={"Naration_" + i}
@@ -1934,6 +2221,7 @@ class poactivity extends React.Component {
                                             value={item.UOMID}
                                             onChange={(e) => this.updateLineDetail(i, "UOMID", e)}
                                           >
+                                             <option value=""> Select</option>
                                             {this.state.UOMList.map((op, i) => (
                                               <option value={op.value}> {op.name}</option>
                                             ))}
@@ -1964,7 +2252,7 @@ class poactivity extends React.Component {
                                             size="small"
                                             value={item.Price}
                                             onChange={(e) => this.updateLineDetail(i, "Price", e)}
-                                            disabled={true}
+                                            disabled={item.Type===0?true:false}
                                           />
                                         </TableCell>
                                         <TableCell align="center">

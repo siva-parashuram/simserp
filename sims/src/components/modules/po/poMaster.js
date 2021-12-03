@@ -4,27 +4,17 @@ import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import * as CF from "../../../services/functions/customfunctions";
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-
-import { Divider } from '@material-ui/core';
 
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
-import Loader from "../../compo/loader";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
-import Dualtabcomponent from '../../compo/dualtabcomponent';
 import BackdropLoader from "../../compo/backdrop";
+import MasterDataGrid from "../../compo/masterdatagrid";
 
 // document.addEventListener('keydown', function (e) {
 //     switch (e.keyCode) {
@@ -42,16 +32,23 @@ class poMaster extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            pagination: {
+                page: 1,
+                rowsPerPage: APIURLS.pagination.rowsPerPage,
+            },
             ProgressLoader: true,
             editBtnDisable: true,
             initialCss: "",
             urlparams: "",
-            editUrl: "",
-            PODataList: []
+            item: null,
+            editUrl: null,
+            BranchID: 0,
+            columns: APIURLS.poMasterColumn,
+            PODataList: [],
+            selectionModel: 1,
         }
     }
     componentDidMount() {
-
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -63,46 +60,83 @@ class poMaster extends React.Component {
             compName +
             "&branchName=" +
             branchName;
-        this.setState({ urlparams: urlparams });
+        this.setState({ urlparams: urlparams, BranchID: branchId, editBtnDisable: false }, () => {
+            this.getPOList();
+        });
     }
 
-
-
-    handleRowClick = (e, item, id) => {
-
-        let editUrl =
-            URLS.URLS.editPO +
-            this.state.urlparams +
-            "&editPOID=" +
-            item.POID;
-        editUrl = editUrl + "&type=edit";
-        this.setState({
-            POID: item.POID,
-            editUrl: editUrl,
-            editBtnDisable: false,
-        });
-
-        this.removeIsSelectedRowClasses();
-        document.getElementById(id).classList.add("selectedRow");
-
+    getPOList = () => {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.GetPOByBranchID;
+        let reqData = {
+            ValidUser: ValidUser,
+            PurchaseOrder: {
+                BranchID: CF.toInt(this.state.BranchID)
+            }
+        };
+        axios
+            .post(Url, reqData, { headers })
+            .then((response) => {
+                let data = response.data;
+                console.log("data > ", data);
+                let newData = [];
+                for (let i = 0; i < data.length; i++) {
+                    data[i].id = i + 1;
+                    newData.push(data[i]);
+                }
+                this.setState({ PODataList: newData, ProgressLoader: true }, () => {
+                    if (newData.length > 0) {
+                        this.handleRowClick([1]);
+                    }
+                });
+            })
+            .catch((error) => {
+                console.log("Error > ", error);
+                this.setState({ PODataList: [], ProgressLoader: true });
+            });
     };
 
-    removeIsSelectedRowClasses = () => {
-        for (let i = 0; i < this.state.customerData.length; i++) {
-            document.getElementById("row_" + i).className = "";
+
+    handleRowClick = (e) => {
+        try {
+            console.log("handleRowClick > e > ", e);
+            let index = e[0];
+            console.log("handleRowClick > index > ", index);  
+            let item = this.state.PODataList[index - 1]; 
+            console.log("handleRowClick > item > ", item);          
+            let editUrl =
+                URLS.URLS.editPO +
+                this.state.urlparams +
+                "&editPOID=" +
+                item.POID + "&type=edit";
+            this.setState({
+                item: item,
+                editUrl: editUrl,
+                selectionModel: index,
+            });
+            //   this.getAttachments(item.POID);
+        } catch (e) {
+            console.log("Error : ", e);
         }
-    };
+    }
 
     render() {
-
-
-
-
         const openPage = (url) => {
             this.setState({ ProgressLoader: false });
+            console.log("url > ", url);
             window.location = url;
         };
 
+        const handlePageChange = (event, newPage) => {
+            let pagination = this.state.pagination;
+            pagination.page = newPage;
+            this.setState({ pagination: pagination });
+        };
 
         const breadcrumbHtml = (
             <Fragment>
@@ -148,44 +182,27 @@ class poMaster extends React.Component {
 
         return (
             <Fragment>
-               <BackdropLoader open={!this.state.ProgressLoader} />
+                <BackdropLoader open={!this.state.ProgressLoader} />
                 <TopFixedRow3
                     breadcrumb={breadcrumbHtml}
                     buttongroup={buttongroupHtml}
                 />
-                
+
                 <Grid className="table-adjust" container spacing={0}>
                     <Grid xs={12} sm={12} md={8} lg={8}>
                         <Fragment>
-                            {this.state.PODataList.length >= 0 ? (
+                            {console.log("this.state.PODataList > ", this.state.PODataList)}
+                            {this.state.PODataList.length > 0 ? (
                                 <Fragment>
-                                    <TableContainer style={{ maxHeight: 440 }}>
-                                        <Table
-                                            stickyHeader
-                                            size="small"
-                                            className=""
-                                            aria-label="item List table"
-                                        >
-                                            <TableHead className="table-header-background">
-                                                <TableRow>
-                                                    <TableCell className="table-header-font">No</TableCell>
-                                                    <TableCell className="table-header-font" align="left">
-                                                        PO Date
-                                                    </TableCell>
-                                                    <TableCell className="table-header-font" align="left">
-                                                        Supplier
-                                                    </TableCell>
-                                                    <TableCell className="table-header-font" align="left">
-                                                        Status
-                                                    </TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody className="tableBody">
-
-
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
+                                    <MasterDataGrid
+                                        selectionModel={this.state.selectionModel}
+                                        rows={this.state.PODataList}
+                                        columns={this.state.columns}
+                                        pagination={this.state.pagination}
+                                        // disableSelectionOnClick={false}
+                                        onSelectionModelChange={(e) => this.handleRowClick(e)}
+                                        onPageChange={handlePageChange}
+                                    />
                                 </Fragment>
                             ) : (
                                 <Tableskeleton />

@@ -221,6 +221,8 @@ let routes = ({ location, ...rest }) => {
           {/* Purchase Order */}
           <Route path={URLS.URLS.poMaster} component={poMaster} />
           <Route path={URLS.URLS.addPO} component={poactivity} />
+          <Route path={URLS.URLS.editPO} component={poactivity} />
+          
 
           {/* Gst */}
           <Route path={URLS.URLS.gstMaster} component={gstMaster} />

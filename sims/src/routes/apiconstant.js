@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+import moment from "moment";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from '@mui/icons-material/Save';
@@ -7,6 +9,10 @@ import PreviewIcon from '@mui/icons-material/Preview';
 import PrintIcon from '@mui/icons-material/Print';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SendIcon from '@mui/icons-material/Send';
+import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
+import AirplanemodeInactiveIcon from '@mui/icons-material/AirplanemodeInactive';
+ 
+
 
 const domain = "http://192.168.10.200:8080/";
 
@@ -147,6 +153,7 @@ export const APIURL = {
   GetSuppliersByBranchID:domain + "api/Supplier/GetSuppliersByBranchID",
   GetAllNoSeriesByBranchId: domain + "api/NoSeriesDetails/GetAllNoSeriesByBranchId",
   GetMasterDocumentNumber: domain + "api/Common/GetMasterDocumentNumber",
+  GetDocumentNumber: domain +"api/Common/GetDocumentNumber",
   CreateSupplierBranchMapping: domain + "api/Supplier/CreateSupplierBranchMapping",
   GetSupplierBranchMappingBySuplID: domain + "api/Supplier/GetSupplierBranchMappingBySuplID",
   GetAllSupplierAddressBySuplID: domain + "api/Supplier/GetAllSupplierAddressBySuplID",
@@ -158,6 +165,9 @@ export const APIURL = {
   GetMODTax:domain +"api/Common/GetMODTax",
   GetShipmentMode:domain+"api/Common/GetShipmentMode",
   GetDimensions:domain+"api/Dimension/GetDimensions",
+  Add_Update_PO:domain+"api/PO/Add_Update_PO",
+  GetPOByBranchID:domain+"api/PO/GetPOByBranchID",
+  GetPOByPOID:domain+"api/PO/GetPOByPOID",
 };
 
 export const CTimeOut = 10;
@@ -627,8 +637,87 @@ export const branchMasterColumn=[
     editable: false,
     headerClassName: 'table-header-font'
   }
-
-  
-  
 ];
+
+export const poMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 90,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'No',
+    headerName: 'No',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'PODate',
+    headerName: 'PO.Date',
+    width: 150,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {moment(params.value).format("MM/DD/YYYY")}
+      </Fragment>
+    ),
+  },{
+    field: 'SupplierName',
+    headerName: 'Supplier Name',
+    width: 250,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'CountryName',
+    headerName: 'Country',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'IsImport',
+    headerName: 'Is Import?',
+    width: 150,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+           {params.value===true?(
+             <Fragment>
+               <AirplanemodeActiveIcon sx={{ color: '#009688' }}/>
+             </Fragment>
+           ):(
+            <Fragment>
+              <AirplanemodeInactiveIcon sx={{ color: '#cddc39' }}/>              
+            </Fragment>
+           )}
+      </Fragment>
+    ),
+  },{
+    field: 'Code',
+    headerName: 'Currency',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'FCValue',
+    headerName: 'FC Value',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'ExchRate',
+    headerName: 'Exch Rate',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'BaseValue',
+    headerName: 'Base Value',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'ContactPerson',
+    headerName: 'Contact Person',
+    width: 250,
+    headerClassName: 'table-header-font'
+  },
+
+
+];
+
+ 
 
