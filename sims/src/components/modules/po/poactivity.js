@@ -369,9 +369,10 @@ class poactivity extends React.Component {
     .then((response) => {
       if(response.status===200){
         console.log("response.data > ",response.data);
-        let PO=response.data;
-        let PurchaseOrderLine=PO.PurchaseOrderLine;
-        try{delete PO['PurchaseOrderLine']; }catch(err){} 
+        let ResonsePO=response.data;
+        let PO=ResonsePO;
+        let PurchaseOrderLine=ResonsePO.PurchaseOrderLine;
+        
         PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
         PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
         PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
@@ -380,12 +381,57 @@ class poactivity extends React.Component {
         }else{
           PO.AmendmentDate="";
         }
-
         console.log("PO > ",PO);
         console.log("PurchaseOrderLine > ",PurchaseOrderLine);
+        console.log("------------------------------------------------------------------");
+        let newPOL=[];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
+        for(let i=0;i<PurchaseOrderLine.length;i++){
+          let EL = {
+            POID: PurchaseOrderLine[i].POID,
+            Type: PurchaseOrderLine[i].Type,
+            LNo: PurchaseOrderLine[i].LNo,
+            TypeIDList: [],
+            CategoryList: PurchaseOrderLine[i].Type===0?this.state.SupplierItemCategory:[],
+            isCategoryDisabled: PurchaseOrderLine[i].Type===0?false:true,
+            CategoryId: null,
+            ItemList: [],
+            ItemListSelected: null,
+            TypeID: PurchaseOrderLine[i].TypeID,
+            Description: null,
+            packingDescription: null,
+            SupplierCode: PurchaseOrderLine[i].SupplierCode,
+            Narration: PurchaseOrderLine[i].Narration,
+            UOMID: PurchaseOrderLine[i].UOMID,
+            TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+            Quantity: PurchaseOrderLine[i].Quantity,
+            Price: PurchaseOrderLine[i].Price,
+            LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
+            LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
+            ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+            GeneralPostingGroupList:[],
+            GeneralPostingGroupID: PurchaseOrderLine[i].GeneralPostingGroupID,
+            VATPercentage:PurchaseOrderLine[i].VATPercentage,
+            VATAmount: PurchaseOrderLine[i].VATAmount,
+            HSNCode: PurchaseOrderLine[i].HSNCode,
+            GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+            SupplyStateID: PurchaseOrderLine[i].SupplyStateID,
+            GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
+            BuyFromGSTN: PurchaseOrderLine[i].BuyFromGSTN,
+            NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
+            DValueID: PurchaseOrderLine[i].DValueID,
+            IsQuality: PurchaseOrderLine[i].IsQuality,
+            IsLot: PurchaseOrderLine[i].IsLot,
+            isDataProper: true,
+          };
+          newPOL.push(EL);
+         }
+         console.log("newPOL > ",newPOL);
+        console.log("------------------------------------------------------------------");
+        // try{delete PO['PurchaseOrderLine']; }catch(err){} 
         
         this.setState({
-          PO:PO
+          PO:PO,
+          PurchaseOrderLine:newPOL
         },()=>{
           this.presetSetSupplierDropdown(PO);
           this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID));
@@ -395,7 +441,8 @@ class poactivity extends React.Component {
         this.setState({ ErrorPrompt:true,  ProgressLoader: true });
       }
     })
-    .catch((error) => {         
+    .catch((error) => {   
+      console.log("Error > ",error);      
         this.setState({ ErrorPrompt:true,  ProgressLoader: true });
     }); 
   };
@@ -406,6 +453,52 @@ class poactivity extends React.Component {
         this.setState({ SADIB_VALUE: this.state.supplierList[i], isDataFetched: true });
       }
     }
+  }
+
+  getProcessedPurchaseOrderLineList=(PurchaseOrderLine)=>{
+    console.log("getProcessedPurchaseOrderLineList > PurchaseOrderLine > ",PurchaseOrderLine);
+    let newPOL=[];
+     for(let i=0;i<PurchaseOrderLine.length;i++){
+      let EL = {
+        POID: PurchaseOrderLine[i].POID,
+        Type: PurchaseOrderLine[i].Type,
+        LNo: PurchaseOrderLine[i].LNo,
+        TypeIDList: [],
+        CategoryList: [],
+        isCategoryDisabled: true,
+        CategoryId: null,
+        ItemList: [],
+        ItemListSelected: null,
+        TypeID: PurchaseOrderLine[i].TypeID,
+        Description: null,
+        packingDescription: null,
+        SupplierCode: PurchaseOrderLine[i].SupplierCode,
+        Narration: PurchaseOrderLine[i].Narration,
+        UOMID: PurchaseOrderLine[i].UOMID,
+        TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+        Quantity: PurchaseOrderLine[i].Quantity,
+        Price: PurchaseOrderLine[i].Price,
+        LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
+        LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
+        ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+        GeneralPostingGroupList:[],
+        GeneralPostingGroupID: PurchaseOrderLine[i].GeneralPostingGroupID,
+        VATPercentage:PurchaseOrderLine[i].VATPercentage,
+        VATAmount: PurchaseOrderLine[i].VATAmount,
+        HSNCode: PurchaseOrderLine[i].HSNCode,
+        GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+        SupplyStateID: PurchaseOrderLine[i].SupplyStateID,
+        GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
+        BuyFromGSTN: PurchaseOrderLine[i].BuyFromGSTN,
+        NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
+        DValueID: PurchaseOrderLine[i].DValueID,
+        IsQuality: PurchaseOrderLine[i].IsQuality,
+        IsLot: PurchaseOrderLine[i].IsLot,
+        isDataProper: true,
+      };
+      newPOL.push(EL);
+     }
+    return newPOL;
   }
 
   getSupplierList = () => {
@@ -981,7 +1074,24 @@ class poactivity extends React.Component {
       case "AmendmentInput":
         let AmendmentInput=this.state.AmendmentInput;
         AmendmentInput.status=e.target.checked;
-           this.setState({AmendmentInput:AmendmentInput});  
+        if(e.target.checked===true){
+          let old={
+            AmendmentNo:PO.AmendmentNo,
+            AmendmentDate:PO.AmendmentDate
+          };  
+          AmendmentInput.old=old; 
+        }       
+        this.setState({AmendmentInput:AmendmentInput},()=>{
+          if(e.target.checked===true){
+            PO.AmendmentNo=CF.toInt(PO.AmendmentNo)+1;
+            PO.AmendmentDate=today;
+          }else{
+            PO.AmendmentNo=AmendmentInput.old['AmendmentNo'];
+            PO.AmendmentDate=AmendmentInput.old['AmendmentDate'];
+          }
+          
+          this.setParams(PO);
+        });  
       default:
         break;
     }
@@ -1862,7 +1972,7 @@ class poactivity extends React.Component {
                                     id="IsImport"
                                     label="Import?"
                                     param={this.state.PO.IsImport}
-                                    disabled={true}
+                                   
                                   />
 
 
@@ -1926,7 +2036,7 @@ class poactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.PO.AmendmentNo}
-                                    disabled={this.state.AmendmentInput.status === false ? true : false}
+                                    disabled={true}
                                   />
                                   <SDTI
                                     id="AmendmentDate"
@@ -1937,7 +2047,7 @@ class poactivity extends React.Component {
                                       this.updateFormValue("AmendmentDate", e)
                                     }
                                     value={this.state.PO.AmendmentDate}
-                                    disabled={this.state.AmendmentInput.status === false ? true : false}
+                                    disabled={true}
                                   />
 
 
@@ -2111,7 +2221,7 @@ class poactivity extends React.Component {
                               </TableHead>
                               <TableBody className="tableBody">
 
-
+                                {console.log("this.state.PurchaseOrderLine > ",this.state.PurchaseOrderLine)}
                                 {this.state.PurchaseOrderLine.length > 0 ? (
                                   <Fragment>
                                     {this.state.PurchaseOrderLine.map((item, i) => (
