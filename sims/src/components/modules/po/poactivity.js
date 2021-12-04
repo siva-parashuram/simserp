@@ -259,7 +259,7 @@ class poactivity extends React.Component {
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
     let length = PurchaseOrderLine.length;
     let EL = {
-      POID: 0,
+      POID: this.state.type==="edit"?this.state.PO.POID:0,
       Type: null,
       LNo: length + 1,
       TypeIDList: [],
@@ -267,7 +267,7 @@ class poactivity extends React.Component {
       isCategoryDisabled: true,
       CategoryId: null,
       ItemList: [],
-      ItemListSelected: null,
+      ItemListSelected: null,//{name:"",value:""}
       TypeID: null,
       Description: null,
       packingDescription: null,
@@ -286,7 +286,7 @@ class poactivity extends React.Component {
       VATAmount: 0,
       HSNCode: "",
       GSTGroupID: null,
-      SupplyStateID: null,
+      SupplyStateID: this.state.StateID,
       GSTPercentage: 0,
       BuyFromGSTN: "",
       NatureOfSupply: "",
@@ -297,7 +297,9 @@ class poactivity extends React.Component {
     };
 
     PurchaseOrderLine.push(EL);
-    this.setState({ PurchaseOrderLine: PurchaseOrderLine });
+    this.setState({ PurchaseOrderLine: PurchaseOrderLine },()=>{
+      console.log("New Just Added PurchaseOrderLine > ",PurchaseOrderLine);
+    });
   }
 
   componentWillUnmount() {
@@ -369,10 +371,10 @@ class poactivity extends React.Component {
     .then((response) => {
       if(response.status===200){
         console.log("response.data > ",response.data);
-        let ResonsePO=response.data;
+        let ResonsePO=response.data;       
         let PO=ResonsePO;
-        let PurchaseOrderLine=ResonsePO.PurchaseOrderLine;
-        
+        let PurchaseOrderLine=ResonsePO.PurchaseOrderLine;  
+        PO.BillingID=CF.toInt(ResonsePO.BillingID); 
         PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
         PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
         PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
@@ -380,25 +382,26 @@ class poactivity extends React.Component {
           PO.AmendmentDate=moment(PO.AmendmentDate).format("YYYY-MM-DD");
         }else{
           PO.AmendmentDate="";
-        }
+        }        
+
         console.log("PO > ",PO);
         console.log("PurchaseOrderLine > ",PurchaseOrderLine);
         console.log("------------------------------------------------------------------");
         let newPOL=[];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
-        for(let i=0;i<PurchaseOrderLine.length;i++){
+        for (let i = 0; i < PurchaseOrderLine.length; i++) {
           let EL = {
-            POID: PurchaseOrderLine[i].POID,
+            POID: PO.POID,
             Type: PurchaseOrderLine[i].Type,
             LNo: PurchaseOrderLine[i].LNo,
             TypeIDList: [],
-            CategoryList: PurchaseOrderLine[i].Type===0?this.state.SupplierItemCategory:[],
-            isCategoryDisabled: PurchaseOrderLine[i].Type===0?false:true,
+            CategoryList: PurchaseOrderLine[i].Type === 0 ? this.state.SupplierItemCategory : [],
+            isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
             CategoryId: null,
             ItemList: [],
             ItemListSelected: null,
-            TypeID: PurchaseOrderLine[i].TypeID,
-            Description: null,
-            packingDescription: null,
+            TypeID: PurchaseOrderLine[i].value,
+            Description: PurchaseOrderLine[i].Description1,
+            packingDescription: PurchaseOrderLine[i].PackingDesc1,
             SupplierCode: PurchaseOrderLine[i].SupplierCode,
             Narration: PurchaseOrderLine[i].Narration,
             UOMID: PurchaseOrderLine[i].UOMID,
@@ -408,15 +411,15 @@ class poactivity extends React.Component {
             LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
             LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
             ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
-            GeneralPostingGroupList:[],
-            GeneralPostingGroupID: PurchaseOrderLine[i].GeneralPostingGroupID,
-            VATPercentage:PurchaseOrderLine[i].VATPercentage,
+            GeneralPostingGroupList: [],
+            GeneralPostingGroupID: null,
+            VATPercentage: PurchaseOrderLine[i].VATPercentage,
             VATAmount: PurchaseOrderLine[i].VATAmount,
             HSNCode: PurchaseOrderLine[i].HSNCode,
             GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
-            SupplyStateID: PurchaseOrderLine[i].SupplyStateID,
+            SupplyStateID: this.state.StateID,
             GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
-            BuyFromGSTN: PurchaseOrderLine[i].BuyFromGSTN,
+            BuyFromGSTN: PO.GSTNo,
             NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
             DValueID: PurchaseOrderLine[i].DValueID,
             IsQuality: PurchaseOrderLine[i].IsQuality,
@@ -424,8 +427,8 @@ class poactivity extends React.Component {
             isDataProper: true,
           };
           newPOL.push(EL);
-         }
-         console.log("newPOL > ",newPOL);
+        }
+        console.log("newPOL > ",newPOL);
         console.log("------------------------------------------------------------------");
         // try{delete PO['PurchaseOrderLine']; }catch(err){} 
         
@@ -434,7 +437,7 @@ class poactivity extends React.Component {
           PurchaseOrderLine:newPOL
         },()=>{
           this.presetSetSupplierDropdown(PO);
-          this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID));
+          this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID),null);
         });
         
       } else{
@@ -475,7 +478,7 @@ class poactivity extends React.Component {
         SupplierCode: PurchaseOrderLine[i].SupplierCode,
         Narration: PurchaseOrderLine[i].Narration,
         UOMID: PurchaseOrderLine[i].UOMID,
-        TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+        TolerancePercentage: (PurchaseOrderLine[i].TolerancePercentage===null || PurchaseOrderLine[i].TolerancePercentage==="NaN") ?0:PurchaseOrderLine[i].TolerancePercentage,
         Quantity: PurchaseOrderLine[i].Quantity,
         Price: PurchaseOrderLine[i].Price,
         LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
@@ -487,7 +490,7 @@ class poactivity extends React.Component {
         VATAmount: PurchaseOrderLine[i].VATAmount,
         HSNCode: PurchaseOrderLine[i].HSNCode,
         GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
-        SupplyStateID: PurchaseOrderLine[i].SupplyStateID,
+        SupplyStateID: this.state.StateID,
         GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
         BuyFromGSTN: PurchaseOrderLine[i].BuyFromGSTN,
         NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
@@ -727,47 +730,55 @@ class poactivity extends React.Component {
     return newD;
   };
 
-  setFieldValuesOnSuplierChange = (SuplID) => {
+  setFieldValuesOnSuplierChange = (SuplID,event) => {
     console.log();
     let PO = this.state.PO;
     let data = this.getSupplierDataList(SuplID);
     PO.CurrID = data.CurrID;
     // UOMList
     if (data.SupplierAdressList.length > 0) {
-      PO.BillingID = data.SupplierAdressList[0].value;
-      let BillingID = data.SupplierAdressList[0].value;
-      PO.CurrID = data.CurrID;
-      PO.PaymentTermID = data.PaymentTermID;
-      PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
-
-
+      let BillingID=null;
+      if(this.state.type==="add" || event==="dropdownChange"){
+        PO.BillingID = data.SupplierAdressList[0].value;
+        BillingID = data.SupplierAdressList[0].value;
+        PO.CurrID = data.CurrID;
+        PO.PaymentTermID = data.PaymentTermID;
+        PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
+      }
 
       this.setState({
         PO: PO,
         // SupplierItemList:data.Item
         SupplierItemCategory: data.SupplierItemCategory
       }, () => {
-        let BCdata = this.getDataToSetOnBillingChange(CF.toInt(BillingID));
         let PO = this.state.PO;
-        PO.ContactPerson = BCdata.ContactPerson;
-        PO.GSTNo = BCdata.GSTNo;
-        PO.GeneralPostingGroupID = CF.toInt(BCdata.GeneralPostingGroupID);
-        PO.SupplierPostingGroupID = CF.toInt(BCdata.SupplierPostingGroupID);
-        PO.IsTaxExempt = BCdata.IsTaxExempt;
-        PO.Reason = BCdata.Reason;
-        PO.VATNo = BCdata.VATNo;
-        PO.SpecialInst = BCdata.SpecialInstruction;
-        if (BCdata.GSTNo === "" || BCdata.VATNo === "") {
-          PO.IsRegistedSupplier = false;
-        } else {
-          PO.IsRegistedSupplier = true;
+        let BCdata = null;
+        if (this.state.type === "add"|| event==="dropdownChange") {
+          BCdata = this.getDataToSetOnBillingChange(CF.toInt(BillingID));
+          PO.ContactPerson = BCdata.ContactPerson;
+          PO.GSTNo = BCdata.GSTNo;
+          PO.GeneralPostingGroupID = CF.toInt(BCdata.GeneralPostingGroupID);
+          PO.SupplierPostingGroupID = CF.toInt(BCdata.SupplierPostingGroupID);
+          PO.IsTaxExempt = BCdata.IsTaxExempt;
+          PO.Reason = BCdata.Reason;
+          PO.VATNo = BCdata.VATNo;
+          PO.SpecialInst = BCdata.SpecialInstruction;
+          if (BCdata.GSTNo === "" || BCdata.VATNo === "") {
+            PO.IsRegistedSupplier = false;
+          } else {
+            PO.IsRegistedSupplier = true;
+          }
+          if (BCdata.CountryID === this.state.Branch.CountryID) {
+            PO.IsImport = false;
+          } else {
+            PO.IsImport = true;
+          }
+        }
+        if (this.state.type === "edit" && event!="dropdownChange") {
+          BCdata = this.getDataToSetOnBillingChange(CF.toInt(this.state.PO.BillingID));
         }
 
-        if (BCdata.CountryID === this.state.Branch.CountryID) {
-          PO.IsImport = false;
-        } else {
-          PO.IsImport = true;
-        }
+        console.log("#####################3-----------------------------------> BCdata > ",BCdata);
 
         this.setState({
           PO: PO,
@@ -911,11 +922,6 @@ class poactivity extends React.Component {
       CountryID: this.getCountryNameByID(data.CountryID),
       StateID: this.getStateNameByID(data.StateID),
 
-    }, () => {
-      this.generalForm();
-      this.getInvoiceDetails();
-      this.termsForm();
-      this.taxForm();
     });
   }
 
@@ -970,7 +976,7 @@ class poactivity extends React.Component {
             }
 
             PO.SuplID = CF.toInt(e.id);
-            this.setFieldValuesOnSuplierChange(CF.toInt(e.id));
+            this.setFieldValuesOnSuplierChange(CF.toInt(e.id),"dropdownChange");
             this.setParams(PO);
           });
         }
@@ -1180,35 +1186,26 @@ class poactivity extends React.Component {
   }
 
   fetchPrice = (Quantity, o) => {     
-    let UOMID_i=o.UOMID;
-    for (let i = 0; i < o.ItemList.length; i++) {     
-      if (o.ItemList[i].value === o.TypeID) {
-        let ItemPrice=o.ItemList[i]['ItemPrice'];
-        for (let j = 0; j < ItemPrice.length; j++) {
-          let UOM_j=ItemPrice[j]['UOM'];
-          if (UOMID_i === UOM_j) {
-            let jo=ItemPrice[j];
-            if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
-              return jo.UnitPrice;
-              break;
+    try{
+      let UOMID_i=o.UOMID;
+      for (let i = 0; i < o.ItemList.length; i++) {     
+        if (o.ItemList[i].value === o.TypeID) {
+          let ItemPrice=o.ItemList[i]['ItemPrice'];
+          for (let j = 0; j < ItemPrice.length; j++) {
+            let UOM_j=ItemPrice[j]['UOM'];
+            if (UOMID_i === UOM_j) {
+              let jo=ItemPrice[j];
+              if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
+                return jo.UnitPrice;
+                break;
+              }
             }
           }
         }
       }
-    }
-
-    /*for (let i = 0; i < o.ItemList.length; i++) {
-      if (o.ItemList[i].value === o.TypeID) {
-        for (let j = 0; j < o.ItemList[i]['ItemPrice'].length; j++) {
-          if (o.ItemList[i]['ItemPrice'][j]['UOM'] === o.ItemList[i]['UOMID']) {
-            if (parseFloat(Quantity) >= parseFloat(o.ItemList[i]['ItemPrice'][j].MinQty) && parseFloat(Quantity) <= parseFloat(o.ItemList[i]['ItemPrice'][j].MaxQty)) {
-              return o.ItemList[i]['ItemPrice'][j].UnitPrice;
-              break;
-            }
-          }
-        }
-      }
-    }*/
+    }catch(err){
+      return 0;
+    }   
   }
 
   updateLineDetail = (i, key, e) => {
@@ -1225,7 +1222,7 @@ class poactivity extends React.Component {
         o.CategoryId = null;
         o.SupplierCode=null;
         o.Narration=null;
-        o.TolerancePercentage=null;
+        o.TolerancePercentage=0;
         o.LineDiscPercentage=0;
         o.ItemPostingGroupID=null;
         o.GeneralPostingGroupID=null;
@@ -1591,7 +1588,7 @@ class poactivity extends React.Component {
       PurchaseOrder.PODate=moment(PurchaseOrder.PODate).format("MM/DD/YYYY"); 
       PurchaseOrder.DeliveryDate=moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
       PurchaseOrder.DispachDate=moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
-      let PurchaseOrderLineList=this.getProcessedPurchaseOrderLineList();
+      let PurchaseOrderLineList=this.getProcessedPurchaseOrderLineList(this.state.PurchaseOrderLine);
 
       let isProperData=this.validatePOData(PurchaseOrder);
 
@@ -1655,6 +1652,45 @@ class poactivity extends React.Component {
       const headers = {
         "Content-Type": "application/json",
       };
+
+
+      let PurchaseOrder=this.state.PO; 
+    try{delete PurchaseOrder['PurchaseOrderLine']; }catch(err){}
+      PurchaseOrder.UserID=CF.toInt(getCookie(COOKIE.USERID));
+      PurchaseOrder.BranchID=this.state.BranchID;
+      PurchaseOrder.AmendmentDate=moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY")==="Invalid date"?moment().format("MM/DD/YYYY"):moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY"); 
+      PurchaseOrder.PODate=moment(PurchaseOrder.PODate).format("MM/DD/YYYY"); 
+      PurchaseOrder.DeliveryDate=moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
+      PurchaseOrder.DispachDate=moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
+
+      let PurchaseOrderLine=this.state.PurchaseOrderLine;
+      let PurchaseOrderLineList=this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
+
+      console.log("PurchaseOrderLineList > ",PurchaseOrderLineList);
+  
+
+      let isProperData=this.validatePOData(PurchaseOrder);
+      let reqData = {
+        ValidUser: ValidUser,
+        PurchaseOrder: PurchaseOrder,
+        PurchaseOrderLineList: PurchaseOrderLineList
+      };
+      let Url = APIURLS.APIURL.Add_Update_PO;
+      axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        console.log("response > ",response);
+        if(response.status===201 || response.status===200){                  
+          this.setState({ SuccessPrompt: true, ProgressLoader: true });          
+          
+        }
+       
+      })
+      .catch((error) => {      
+        this.setState({ ErrorPrompt: true, ProgressLoader: true });
+      });
+
+
     };
 
     const breadcrumbHtml = (
@@ -1696,7 +1732,7 @@ class poactivity extends React.Component {
             <Button
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
-              // onClick={(e) => AddNew(e)}
+              onClick={(e) => updatePO(e)}
               disabled={this.state.DisableCreatebtn}
             >
               {APIURLS.buttonTitle.save.name}
@@ -2193,7 +2229,7 @@ class poactivity extends React.Component {
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Quantity </TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Unit Price </TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Line.Disc %</TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell>
+                                  {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell> */}
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Item Posting Group </TableCell>
 
                                   {this.state.Branch.IsVAT === true ? (
@@ -2374,7 +2410,7 @@ class poactivity extends React.Component {
                                             onChange={(e) => this.updateLineDetail(i, "LineDiscPercentage", e)}
                                           />
                                         </TableCell>
-                                        <TableCell align="center">
+                                        {/* <TableCell align="center">
                                           <SCI
                                             id={"LineDiscAmount_" + i}
                                             variant="outlined"
@@ -2383,7 +2419,7 @@ class poactivity extends React.Component {
                                             onChange={(e) => this.updateLineDetail(i, "LineDiscAmount", e)}
                                             disabled={true}
                                           />
-                                        </TableCell>
+                                        </TableCell> */}
                                         <TableCell align="center">
                                           <select
                                             style={{ width: '100%' }}
