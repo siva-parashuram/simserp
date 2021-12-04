@@ -2646,7 +2646,9 @@ class poactivity extends React.Component {
                               <Grid container spacing={0}>
                                 <Grid item xs={12} sm={12} md={11} lg={11}>
 
-
+ 
+ 
+ 
                                   {/* show Currency as per supplier selected */}
                                   <SDIB
                                     id="CurrID"
@@ -2726,28 +2728,67 @@ class poactivity extends React.Component {
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid item xs={12} sm={12} md={11} lg={11}>
-                                <SSDV
-                                  label={"Total Excl. "+(this.state.Branch.IsGST === true?"GST":"VAT")  + this.state.CurrencyCode }
-                                  // label={"Total Excl. " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
+
+
+                                {
+                                  this.state.CurrencyList.map((item, i) => (
+                                    this.state.PO.CurrID === item.value ? (
+                                      <Fragment>
+                                        <SSDV
+
+                                          label={"Total Excl. " + (this.state.Branch.IsGST === true ? "GST" : "VAT") +"( "+item.name+" ) "}
+                                          value={"0.00"}
+                                        />
+                                      </Fragment>
+                                    )
+                                      : null
+                                  ))
+                                }
+                                {/* <SSDV
+                                  label={"Total Excl. "+(this.state.Branch.IsGST === true?"GST":"VAT")  +
+                                  this.state.CurrencyCode }
                                   value={"0.00"}
-                                />
+                                /> */}
                                 <SSDV
                                   label="Invoice Discount %"
                                   value="0.00"
                                 />
-                                <SSDV
-                                 label={"Total "+(this.state.Branch.IsGST === true?"GST":"VAT") + this.state.CurrencyCode}
-                                  // label={"Total " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
-                                  value="0.00"
-                                />
+
+                                {
+                                  this.state.CurrencyList.map((item, i) => (
+                                    this.state.PO.CurrID === item.value ? (
+                                      <Fragment>
+                                        <SSDV
+                                          label={"Total " + (this.state.Branch.IsGST === true ? "GST" : "VAT") + "( " + item.name + " ) "}
+                                          value="0.00"
+                                        />
+                                      </Fragment>
+                                    )
+                                      : null
+                                  ))
+                                }
+
+                                
                               </Grid>
                             </Grid>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid item xs={12} sm={12} md={11} lg={11}>
-                                <SSDV
-                                  label={"Total FC.Value " + this.state.CurrencyCode}
-                                  value={this.state.PO.FCValue}
-                                />
+
+                              {
+                                  this.state.CurrencyList.map((item, i) => (
+                                    this.state.PO.CurrID === item.value ? (
+                                      <Fragment>
+                                        <SSDV
+                                          label={"Total FC.Value " + "( " + item.name + " ) "}
+                                          value="0.00"
+                                        />
+                                      </Fragment>
+                                    )
+                                      : null
+                                  ))
+                                }
+                              
+                                
 
                                 <SSDV
                                   label={"Total Base.Value (" + this.state.branchCurrency.Code + ")"}
