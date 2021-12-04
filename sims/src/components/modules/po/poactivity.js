@@ -919,8 +919,8 @@ class poactivity extends React.Component {
       Address3: data.Address3,
       City: data.City,
       PostCode: data.PostCode,
-      CountryID: this.getCountryNameByID(data.CountryID),
-      StateID: this.getStateNameByID(data.StateID),
+      CountryID: data.CountryID,
+      StateID: data.StateID,
 
     });
   }
