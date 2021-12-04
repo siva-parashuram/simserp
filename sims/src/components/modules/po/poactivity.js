@@ -139,7 +139,7 @@ class poactivity extends React.Component {
         steps: ["Open", "Release", "MRN", "Short Close"],
         skipped: new Set(),
       },
-
+      CurrencyCode:"",
       AmendmentInput: {
         status: false,
         old: {},
@@ -269,8 +269,8 @@ class poactivity extends React.Component {
       ItemList: [],
       ItemListSelected: null,//{name:"",value:""}
       TypeID: null,
-      Description: null,
-      packingDescription: null,
+      Description: "",
+      packingDescription: "",
       SupplierCode: "",
       Narration: "",
       UOMID: null,
@@ -331,8 +331,7 @@ class poactivity extends React.Component {
       this.setState({BranchID: CF.toInt(branchId)},()=>{
         this.getSupplierList();
         this.getPODetails(PO);
-      });
-      
+      });      
     }
     console.log("-About to load-");
      
@@ -430,12 +429,12 @@ class poactivity extends React.Component {
         }
         console.log("newPOL > ",newPOL);
         console.log("------------------------------------------------------------------");
-        // try{delete PO['PurchaseOrderLine']; }catch(err){} 
-        
+                
         this.setState({
           PO:PO,
           PurchaseOrderLine:newPOL
         },()=>{
+          
           this.presetSetSupplierDropdown(PO);
           this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID),null);
         });
@@ -968,13 +967,15 @@ class poactivity extends React.Component {
         if (e) {
           this.setState({ SADIB_VALUE: e, isDataFetched: true }, () => {
             console.log("e > ",e);
+            let CurrencyCode="";
             for(let i=0;i<this.state.CurrencyList.length;i++){
               if(this.state.CurrencyList[i].value===CF.toInt(e.CurrID)){
                 PO.ExchRate=this.state.CurrencyList[i].ExchRate;
+                CurrencyCode=" ("+this.state.CurrencyList[i].name+")";
                 break;
               }
             }
-
+            this.setState({CurrencyCode:CurrencyCode});
             PO.SuplID = CF.toInt(e.id);
             this.setFieldValuesOnSuplierChange(CF.toInt(e.id),"dropdownChange");
             this.setParams(PO);
@@ -1029,12 +1030,15 @@ class poactivity extends React.Component {
         break;
       case "CurrID":
         PO.CurrID = CF.toInt(e.target.value);
+        let CurrencyCode="";
         for(let i=0;i<this.state.CurrencyList.length;i++){
           if(this.state.CurrencyList[i].value===CF.toInt(e.target.value)){
             PO.ExchRate=this.state.CurrencyList[i].ExchRate;
+            CurrencyCode=" ("+this.state.CurrencyList[i].name+")";
             break;
           }
         }
+        this.setState({CurrencyCode:CurrencyCode});
         this.setParams(PO);
         break;
       case "ExchRate":
@@ -1062,7 +1066,7 @@ class poactivity extends React.Component {
         this.setParams(PO);
         break;
       case "SpecialInst":
-        PO.SpecialInst = CF.toInt(e.target.value);
+        PO.SpecialInst = e.target.value;
         this.setParams(PO);
         break;
       case "Notes":
@@ -1185,6 +1189,16 @@ class poactivity extends React.Component {
     }
   }
 
+  // getCurrencyCodeToShow = () => {
+  //   let code = "";
+  //   if (this.state.type === "edit") { 
+  //     let  Currency=this.state.Currency;
+       
+  //   }
+
+  //   return code;
+  // }
+
   fetchPrice = (Quantity, o) => {     
     try{
       let UOMID_i=o.UOMID;
@@ -1228,9 +1242,9 @@ class poactivity extends React.Component {
         o.GeneralPostingGroupID=null;
         o.VATPercentage=0;
         o.VATAmount=0;
-        o.GSTGroupID="";
-        o.SupplyStateID="";
-        o.DValueID="";
+        o.GSTGroupID=0;
+        o.SupplyStateID=0;
+        o.DValueID=0;
         o.GSTPercentage=0;
         switch (CF.toInt(e.target.value)) {
           case 0://item
@@ -1301,16 +1315,24 @@ class poactivity extends React.Component {
           console.log("TypeID > e > ", e);
           o.ItemListSelected = e;
           o.TypeID = CF.toInt(e.value);
+          o.GSTGroupID = e.GSTGroupID;
+          if(o.Type===0){
           o.Description = e.Description1;
           o.packingDescription = e.PackingDesc1;
-          o.HSNCode = e.HSNCode;
-          o.GSTGroupID = e.GSTGroupID;
+          o.HSNCode = e.HSNCode;          
           o.GSTPercentage = e.GSTPercentage;
           o.UOMID = e.PurchaseUOM;
           o.ItemPostingGroupID = e.ItemPostingGroupID;
           o.TolerancePercentage = e.TolerancePercentage;
           o.IsLot = e.IsLot;
-          o.IsQuality = e.IsQuality;
+          o.IsQuality = e.IsQuality;          
+          }else{
+            o.packingDescription = "";
+            o.UOMID=this.getNOSvalue();
+            o.ItemPostingGroupID = 0;
+            o.IsLot = false;
+            o.IsQuality = false;
+          }
           PurchaseOrderLine[i] = o;
           this.setLineParams(PurchaseOrderLine);
         }
@@ -1329,13 +1351,17 @@ class poactivity extends React.Component {
         let price=0;
         price=this.fetchPrice(e.target.value,o);
         console.log("IN Quantity > price slab value > ",price);
-        if(price){o.Price=price;}else{o.Price=0;}        
+        if(price){
+          o.Price=price;
+        }else{
+          o.Price=0;
+        }        
         o[key] = e.target.value;
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
       case "Price":
-        o[key] = e.target.value;
+        o[key] =  e.target.value;
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
@@ -1396,7 +1422,7 @@ class poactivity extends React.Component {
         this.setLineParams(PurchaseOrderLine);
         break;
       case "DValueID":
-        o[key] = e.target.value;
+        o[key] = CF.toInt(e.target.value);
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
@@ -1461,9 +1487,10 @@ class poactivity extends React.Component {
   }
 
   
-  getProcessedPurchaseOrderLineList=()=>{
+  getProcessedPurchaseOrderLineListUpdate=()=>{
     let PurchaseOrderLineList=[];
     let POL=this.state.PurchaseOrderLine;
+    console.log("> getProcessedPurchaseOrderLineListUpdate POL > ",POL);
     for(let i=0;i<POL.length;i++){
       let o = {
         POID: this.state.PO.POID,
@@ -1664,16 +1691,45 @@ class poactivity extends React.Component {
       PurchaseOrder.DispachDate=moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
 
       let PurchaseOrderLine=this.state.PurchaseOrderLine;
-      let PurchaseOrderLineList=this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
-
+      console.log("##############33 PurchaseOrderLine > ",PurchaseOrderLine);
+       
+      let PurchaseOrderLineList=[];
+     //  PurchaseOrderLineList=this.getProcessedPurchaseOrderLineListUpdate();
+      let newPOL=[];
+     for(let i=0;i<PurchaseOrderLine.length;i++){
+       let o={
+        "POID": PurchaseOrderLine[i].POID,
+        "Type": PurchaseOrderLine[i].Type,
+        "LNo": PurchaseOrderLine[i].LNo,
+        "TypeID": PurchaseOrderLine[i].TypeID,
+        "SupplierCode": PurchaseOrderLine[i].SupplierCode===null?"":PurchaseOrderLine[i].SupplierCode,
+        "Narration": PurchaseOrderLine[i].Narration===null?"":PurchaseOrderLine[i].Narration,
+        "UOMID": PurchaseOrderLine[i].UOMID,
+        "TolerancePercentage": PurchaseOrderLine[i].TolerancePercentage,
+        "Quantity": PurchaseOrderLine[i].Quantity,
+        "Price": PurchaseOrderLine[i].Price,
+        "LineDiscPercentage": PurchaseOrderLine[i].LineDiscPercentage,
+        "ItemPostingGroupID": PurchaseOrderLine[i].ItemPostingGroupID,
+        "VATPercentage": PurchaseOrderLine[i].VATPercentage,
+        "HSNCode": PurchaseOrderLine[i].HSNCode,
+        "GSTGroupID": PurchaseOrderLine[i].GSTGroupID,
+        "SupplyStateID": this.state.StateID,
+        "GSTPercentage": PurchaseOrderLine[i].GSTPercentage,
+        "DValueID": PurchaseOrderLine[i].DValueID,
+        "IsQuality": PurchaseOrderLine[i].IsQuality,
+        "IsLot": PurchaseOrderLine[i].IsLot
+      };
+       newPOL.push(o);
+     }
       console.log("PurchaseOrderLineList > ",PurchaseOrderLineList);
+      console.log("newPOL > ",newPOL);
   
 
       let isProperData=this.validatePOData(PurchaseOrder);
       let reqData = {
         ValidUser: ValidUser,
         PurchaseOrder: PurchaseOrder,
-        PurchaseOrderLineList: PurchaseOrderLineList
+        PurchaseOrderLineList: newPOL
       };
       let Url = APIURLS.APIURL.Add_Update_PO;
       axios
@@ -2428,6 +2484,7 @@ class poactivity extends React.Component {
                                             onChange={(e) => this.updateLineDetail(i, "ItemPostingGroupID", e)}
                                             disabled={true}
                                           >
+                                             <option value="0"> Select</option>
                                             {this.state.ItemPostingGroupList.map((op, i) => (
                                               <option value={op.value}> {op.name}</option>
                                             ))}
@@ -2507,7 +2564,7 @@ class poactivity extends React.Component {
                                             value={item.DValueID}
                                             onChange={(e) => this.updateLineDetail(i, "DValueID", e)}
                                           >
-                                            <option value="">Select</option>
+                                            <option value="0">Select</option>
                                             {this.state.DimensionsList.map((op, i) => (
                                               <option value={op.value}> {op.name}</option>
                                             ))}
@@ -2670,7 +2727,8 @@ class poactivity extends React.Component {
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid item xs={12} sm={12} md={11} lg={11}>
                                 <SSDV
-                                  label={"Total Excl. " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
+                                  label={"Total Excl. "+(this.state.Branch.IsGST === true?"GST":"VAT")  + this.state.CurrencyCode }
+                                  // label={"Total Excl. " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
                                   value={"0.00"}
                                 />
                                 <SSDV
@@ -2678,7 +2736,8 @@ class poactivity extends React.Component {
                                   value="0.00"
                                 />
                                 <SSDV
-                                  label={"Total " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
+                                 label={"Total "+(this.state.Branch.IsGST === true?"GST":"VAT") + this.state.CurrencyCode}
+                                  // label={"Total " + this.state.branchTaxType.name + " (" + this.state.supplierCurrency.Code + ")"}
                                   value="0.00"
                                 />
                               </Grid>
@@ -2686,7 +2745,7 @@ class poactivity extends React.Component {
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid item xs={12} sm={12} md={11} lg={11}>
                                 <SSDV
-                                  label={"Total FC.Value (" + this.state.supplierCurrency.Code + ")"}
+                                  label={"Total FC.Value " + this.state.CurrencyCode}
                                   value={this.state.PO.FCValue}
                                 />
 
