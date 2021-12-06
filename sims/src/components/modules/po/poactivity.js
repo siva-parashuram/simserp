@@ -98,7 +98,7 @@ class poactivity extends React.Component {
       POItemType: APIURLS.POItemType,
       GLAccount: [],
       Charges: [],
-      FixedAsset:[],
+      FixedAsset: [],
       Category: [],
       SupplierItemCategory: [],
       GSTGroupIDList: [],
@@ -139,7 +139,7 @@ class poactivity extends React.Component {
         steps: ["Open", "Release", "MRN", "Short Close"],
         skipped: new Set(),
       },
-      CurrencyCode:"",
+      CurrencyCode: "",
       AmendmentInput: {
         status: false,
         old: {},
@@ -165,6 +165,9 @@ class poactivity extends React.Component {
       CountryID: "",
       StateID: "",
       Branch: {},
+      Amount: 0.00,
+      DiscountAmount: 0.00,
+      TotalTax: 0.00,
       PO: {
         POID: 0,
         BranchID: 0,
@@ -204,7 +207,7 @@ class poactivity extends React.Component {
         GeneralPostingGroupID: 0,
         SupplierPostingGroupID: 0,
         NotifyTo: "",
-        
+
       },
       PurchaseOrderLine: [],
       emptyLine: {
@@ -259,7 +262,7 @@ class poactivity extends React.Component {
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
     let length = PurchaseOrderLine.length;
     let EL = {
-      POID: this.state.type==="edit"?this.state.PO.POID:0,
+      POID: this.state.type === "edit" ? this.state.PO.POID : 0,
       Type: null,
       LNo: length + 1,
       TypeIDList: [],
@@ -297,8 +300,8 @@ class poactivity extends React.Component {
     };
 
     PurchaseOrderLine.push(EL);
-    this.setState({ PurchaseOrderLine: PurchaseOrderLine },()=>{
-      console.log("New Just Added PurchaseOrderLine > ",PurchaseOrderLine);
+    this.setState({ PurchaseOrderLine: PurchaseOrderLine }, () => {
+      this.calculateInvoiceDetails();
     });
   }
 
@@ -324,18 +327,18 @@ class poactivity extends React.Component {
       "&branchName=" +
       branchName;
 
-    
+
 
     let PO = this.state.PO;
     PO.POID = CF.toInt(POID);
-    if (type === "edit") {      
-      PO.POID = CF.toInt(POID);  
+    if (type === "edit") {
+      PO.POID = CF.toInt(POID);
 
-      this.getSupplierList(CF.toInt(branchId),PO.POID);  
-      this.setState({BranchID: CF.toInt(branchId)},()=>{ 
-        this.getSupplierList(CF.toInt(branchId));  
-        
-      });      
+      this.getSupplierList(CF.toInt(branchId), PO.POID);
+      this.setState({ BranchID: CF.toInt(branchId) }, () => {
+        this.getSupplierList(CF.toInt(branchId));
+
+      });
     }
 
     this.setState({
@@ -347,105 +350,105 @@ class poactivity extends React.Component {
       ProgressLoader: type === "add" ? true : false,
       BranchID: CF.toInt(branchId),
     }, () => {
-     if(type==="add"){this.getSupplierList(CF.toInt(branchId)); }   
+      if (type === "add") { this.getSupplierList(CF.toInt(branchId)); }
     });
   }
 
-  getPODetails = (PO) => { 
+  getPODetails = (PO) => {
     this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
-        "Content-Type": "application/json",
+      "Content-Type": "application/json",
     };
     let Url = APIURLS.APIURL.GetPOByPOID;
     let reqData = {
-        ValidUser: ValidUser,
-        PurchaseOrder: {
-          POID: CF.toInt(PO.POID)
-        }
+      ValidUser: ValidUser,
+      PurchaseOrder: {
+        POID: CF.toInt(PO.POID)
+      }
     };
     axios
-    .post(Url, reqData, { headers })
-    .then((response) => {
-      if(response.status===200){
-        let ResonsePO=response.data;       
-        let PO=ResonsePO;
-        let PurchaseOrderLine=ResonsePO.PurchaseOrderLine;  
-        PO.BillingID=CF.toInt(ResonsePO.BillingID); 
-        PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
-        PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
-        PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
-        if(PO.AmendmentNo>0){
-          PO.AmendmentDate=moment(PO.AmendmentDate).format("YYYY-MM-DD");
-        }else{
-          PO.AmendmentDate="";
-        }        
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          let ResonsePO = response.data;
+          let PO = ResonsePO;
+          let PurchaseOrderLine = ResonsePO.PurchaseOrderLine;
+          PO.BillingID = CF.toInt(ResonsePO.BillingID);
+          PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
+          PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
+          PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
+          if (PO.AmendmentNo > 0) {
+            PO.AmendmentDate = moment(PO.AmendmentDate).format("YYYY-MM-DD");
+          } else {
+            PO.AmendmentDate = "";
+          }
 
-        let newPOL=[];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
-        for (let i = 0; i < PurchaseOrderLine.length; i++) {
-          let EL = {
-            POID: PO.POID,
-            Type: PurchaseOrderLine[i].Type,
-            LNo: PurchaseOrderLine[i].LNo,
-            TypeIDList: [],
-            CategoryList: PurchaseOrderLine[i].Type === 0 ? this.state.SupplierItemCategory : [],
-            isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
-            CategoryId: PurchaseOrderLine[i].CatID,
-            ItemList: [],//PurchaseOrderLine[i].Type === 0?[{name:PurchaseOrderLine[i].name,value:PurchaseOrderLine[i].value}]:[],
-            ItemListSelected: {name:PurchaseOrderLine[i].name,value:PurchaseOrderLine[i].value},
-            TypeID: PurchaseOrderLine[i].value,
-            Description: PurchaseOrderLine[i].Description1,
-            packingDescription: PurchaseOrderLine[i].PackingDesc1,
-            SupplierCode: PurchaseOrderLine[i].SupplierCode,
-            Narration: PurchaseOrderLine[i].Narration,
-            UOMID: PurchaseOrderLine[i].UOMID,
-            TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
-            Quantity: PurchaseOrderLine[i].Quantity,
-            Price: PurchaseOrderLine[i].Price,
-            LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
-            LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
-            ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
-            GeneralPostingGroupList: [],
-            GeneralPostingGroupID: null,
-            VATPercentage: PurchaseOrderLine[i].VATPercentage,
-            VATAmount: PurchaseOrderLine[i].VATAmount,
-            HSNCode: PurchaseOrderLine[i].HSNCode,
-            GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
-            SupplyStateID: this.state.StateID,
-            GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
-            BuyFromGSTN: PO.GSTNo,
-            NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
-            DValueID: PurchaseOrderLine[i].DValueID,
-            IsQuality: PurchaseOrderLine[i].IsQuality,
-            IsLot: PurchaseOrderLine[i].IsLot,
-            isDataProper: true,
-          };
-          newPOL.push(EL);
+          let newPOL = [];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
+          for (let i = 0; i < PurchaseOrderLine.length; i++) {
+            let EL = {
+              POID: PO.POID,
+              Type: PurchaseOrderLine[i].Type,
+              LNo: PurchaseOrderLine[i].LNo,
+              TypeIDList: [],
+              CategoryList: PurchaseOrderLine[i].Type === 0 ? this.state.SupplierItemCategory : [],
+              isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
+              CategoryId: PurchaseOrderLine[i].CatID,
+              ItemList: [],//PurchaseOrderLine[i].Type === 0?[{name:PurchaseOrderLine[i].name,value:PurchaseOrderLine[i].value}]:[],
+              ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
+              TypeID: PurchaseOrderLine[i].value,
+              Description: PurchaseOrderLine[i].Description1,
+              packingDescription: PurchaseOrderLine[i].PackingDesc1,
+              SupplierCode: PurchaseOrderLine[i].SupplierCode,
+              Narration: PurchaseOrderLine[i].Narration,
+              UOMID: PurchaseOrderLine[i].UOMID,
+              TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+              Quantity: PurchaseOrderLine[i].Quantity,
+              Price: PurchaseOrderLine[i].Price,
+              LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
+              LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
+              ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+              GeneralPostingGroupList: [],
+              GeneralPostingGroupID: null,
+              VATPercentage: PurchaseOrderLine[i].VATPercentage,
+              VATAmount: PurchaseOrderLine[i].VATAmount,
+              HSNCode: PurchaseOrderLine[i].HSNCode,
+              GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+              SupplyStateID: this.state.StateID,
+              GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
+              BuyFromGSTN: PO.GSTNo,
+              NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
+              DValueID: PurchaseOrderLine[i].DValueID,
+              IsQuality: PurchaseOrderLine[i].IsQuality,
+              IsLot: PurchaseOrderLine[i].IsLot,
+              isDataProper: true,
+            };
+            newPOL.push(EL);
+          }
+
+          this.setState({
+            PO: PO,
+            PurchaseOrderLine: newPOL,
+            ProgressLoader: true
+          }, () => {
+            this.calculateInvoiceDetails();
+            this.presetSetSupplierDropdown(PO);
+            this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID), null);
+          });
+
+        } else {
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
         }
-                
-        this.setState({
-          PO:PO,
-          PurchaseOrderLine:newPOL,
-          ProgressLoader: true
-        },()=>{
-          
-          this.presetSetSupplierDropdown(PO);
-          this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID),null);
-        });
-        
-      } else{
-        this.setState({ ErrorPrompt:true,  ProgressLoader: true });
-      }
-    })
-    .catch((error) => {   
-      console.log("Error > ",error);      
-        this.setState({ ErrorPrompt:true,  ProgressLoader: true });
-    }); 
+      })
+      .catch((error) => {
+        console.log("Error > ", error);
+        this.setState({ ErrorPrompt: true, ProgressLoader: true });
+      });
   };
 
-  getCategoryList=()=>{}
+  getCategoryList = () => { }
 
   presetSetSupplierDropdown = (PO) => {
     for (let i = 0; i < this.state.supplierList.length; i++) {
@@ -455,10 +458,10 @@ class poactivity extends React.Component {
     }
   }
 
-  getProcessedPurchaseOrderLineList=(PurchaseOrderLine)=>{
-    console.log("getProcessedPurchaseOrderLineList > PurchaseOrderLine > ",PurchaseOrderLine);
-    let newPOL=[];
-     for(let i=0;i<PurchaseOrderLine.length;i++){
+  getProcessedPurchaseOrderLineList = (PurchaseOrderLine) => {
+    console.log("getProcessedPurchaseOrderLineList > PurchaseOrderLine > ", PurchaseOrderLine);
+    let newPOL = [];
+    for (let i = 0; i < PurchaseOrderLine.length; i++) {
       let EL = {
         POID: PurchaseOrderLine[i].POID,
         Type: PurchaseOrderLine[i].Type,
@@ -475,15 +478,15 @@ class poactivity extends React.Component {
         SupplierCode: PurchaseOrderLine[i].SupplierCode,
         Narration: PurchaseOrderLine[i].Narration,
         UOMID: PurchaseOrderLine[i].UOMID,
-        TolerancePercentage: (PurchaseOrderLine[i].TolerancePercentage===null || PurchaseOrderLine[i].TolerancePercentage==="NaN") ?0:PurchaseOrderLine[i].TolerancePercentage,
+        TolerancePercentage: (PurchaseOrderLine[i].TolerancePercentage === null || PurchaseOrderLine[i].TolerancePercentage === "NaN") ? 0 : PurchaseOrderLine[i].TolerancePercentage,
         Quantity: PurchaseOrderLine[i].Quantity,
         Price: PurchaseOrderLine[i].Price,
         LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
         LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
         ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
-        GeneralPostingGroupList:[],
+        GeneralPostingGroupList: [],
         GeneralPostingGroupID: PurchaseOrderLine[i].GeneralPostingGroupID,
-        VATPercentage:PurchaseOrderLine[i].VATPercentage,
+        VATPercentage: PurchaseOrderLine[i].VATPercentage,
         VATAmount: PurchaseOrderLine[i].VATAmount,
         HSNCode: PurchaseOrderLine[i].HSNCode,
         GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
@@ -497,7 +500,7 @@ class poactivity extends React.Component {
         isDataProper: true,
       };
       newPOL.push(EL);
-     }
+    }
     return newPOL;
   }
 
@@ -538,9 +541,9 @@ class poactivity extends React.Component {
           let GSTGROUP = data.GSTGROUP;
           let GLAccount = data.GLAccount;
           let Charges = data.Charges;
-          let FixedAsset=data.FixedAsset;
+          let FixedAsset = data.FixedAsset;
           let DimensionsList = data.DimensionValue;
-          let IncoTermList=data.IncoTerms;
+          let IncoTermList = data.IncoTerms;
 
           let PO = this.state.PO;
 
@@ -576,14 +579,14 @@ class poactivity extends React.Component {
             GSTGroupIDList: GSTGROUP,
             GLAccount: GLAccount,
             Charges: Charges,
-            FixedAsset:FixedAsset,
+            FixedAsset: FixedAsset,
             DimensionsList: DimensionsList,
-            IncoTermList:IncoTermList,
-            ProgressLoader: this.state.type==="edit"?false:true
-          },()=>{
-            if(this.state.type==="edit"){
+            IncoTermList: IncoTermList,
+            ProgressLoader: this.state.type === "edit" ? false : true
+          }, () => {
+            if (this.state.type === "edit") {
               this.getPODetails(this.state.PO);
-            }            
+            }
           });
         } else {
           // this.setState({isDataFetched:false});
@@ -722,15 +725,15 @@ class poactivity extends React.Component {
     return newD;
   };
 
-  setFieldValuesOnSuplierChange = (SuplID,event) => {
+  setFieldValuesOnSuplierChange = (SuplID, event) => {
     console.log();
     let PO = this.state.PO;
     let data = this.getSupplierDataList(SuplID);
     PO.CurrID = data.CurrID;
     // UOMList
     if (data.SupplierAdressList.length > 0) {
-      let BillingID=null;
-      if(this.state.type==="add" || event==="dropdownChange"){
+      let BillingID = null;
+      if (this.state.type === "add" || event === "dropdownChange") {
         PO.BillingID = data.SupplierAdressList[0].value;
         BillingID = data.SupplierAdressList[0].value;
         PO.CurrID = data.CurrID;
@@ -745,7 +748,7 @@ class poactivity extends React.Component {
       }, () => {
         let PO = this.state.PO;
         let BCdata = null;
-        if (this.state.type === "add"|| event==="dropdownChange") {
+        if (this.state.type === "add" || event === "dropdownChange") {
           BCdata = this.getDataToSetOnBillingChange(CF.toInt(BillingID));
           PO.ContactPerson = BCdata.ContactPerson;
           PO.GSTNo = BCdata.GSTNo;
@@ -766,11 +769,11 @@ class poactivity extends React.Component {
             PO.IsImport = true;
           }
         }
-        if (this.state.type === "edit" && event!="dropdownChange") {
+        if (this.state.type === "edit" && event != "dropdownChange") {
           BCdata = this.getDataToSetOnBillingChange(CF.toInt(this.state.PO.BillingID));
         }
 
-        console.log("#####################3-----------------------------------> BCdata > ",BCdata);
+        console.log("#####################3-----------------------------------> BCdata > ", BCdata);
 
         this.setState({
           PO: PO,
@@ -959,18 +962,18 @@ class poactivity extends React.Component {
       case "SuplID":
         if (e) {
           this.setState({ SADIB_VALUE: e, isDataFetched: true }, () => {
-            console.log("e > ",e);
-            let CurrencyCode="";
-            for(let i=0;i<this.state.CurrencyList.length;i++){
-              if(this.state.CurrencyList[i].value===CF.toInt(e.CurrID)){
-                PO.ExchRate=this.state.CurrencyList[i].ExchRate;
-                CurrencyCode=" ("+this.state.CurrencyList[i].name+")";
+            console.log("e > ", e);
+            let CurrencyCode = "";
+            for (let i = 0; i < this.state.CurrencyList.length; i++) {
+              if (this.state.CurrencyList[i].value === CF.toInt(e.CurrID)) {
+                PO.ExchRate = this.state.CurrencyList[i].ExchRate;
+                CurrencyCode = " (" + this.state.CurrencyList[i].name + ")";
                 break;
               }
             }
-            this.setState({CurrencyCode:CurrencyCode});
+            this.setState({ CurrencyCode: CurrencyCode });
             PO.SuplID = CF.toInt(e.id);
-            this.setFieldValuesOnSuplierChange(CF.toInt(e.id),"dropdownChange");
+            this.setFieldValuesOnSuplierChange(CF.toInt(e.id), "dropdownChange");
             this.setParams(PO);
           });
         }
@@ -1023,15 +1026,15 @@ class poactivity extends React.Component {
         break;
       case "CurrID":
         PO.CurrID = CF.toInt(e.target.value);
-        let CurrencyCode="";
-        for(let i=0;i<this.state.CurrencyList.length;i++){
-          if(this.state.CurrencyList[i].value===CF.toInt(e.target.value)){
-            PO.ExchRate=this.state.CurrencyList[i].ExchRate;
-            CurrencyCode=" ("+this.state.CurrencyList[i].name+")";
+        let CurrencyCode = "";
+        for (let i = 0; i < this.state.CurrencyList.length; i++) {
+          if (this.state.CurrencyList[i].value === CF.toInt(e.target.value)) {
+            PO.ExchRate = this.state.CurrencyList[i].ExchRate;
+            CurrencyCode = " (" + this.state.CurrencyList[i].name + ")";
             break;
           }
         }
-        this.setState({CurrencyCode:CurrencyCode});
+        this.setState({ CurrencyCode: CurrencyCode });
         this.setParams(PO);
         break;
       case "ExchRate":
@@ -1075,26 +1078,26 @@ class poactivity extends React.Component {
         this.setParams(PO);
         break;
       case "AmendmentInput":
-        let AmendmentInput=this.state.AmendmentInput;
-        AmendmentInput.status=e.target.checked;
-        if(e.target.checked===true){
-          let old={
-            AmendmentNo:PO.AmendmentNo,
-            AmendmentDate:PO.AmendmentDate
-          };  
-          AmendmentInput.old=old; 
-        }       
-        this.setState({AmendmentInput:AmendmentInput},()=>{
-          if(e.target.checked===true){
-            PO.AmendmentNo=CF.toInt(PO.AmendmentNo)+1;
-            PO.AmendmentDate=today;
-          }else{
-            PO.AmendmentNo=AmendmentInput.old['AmendmentNo'];
-            PO.AmendmentDate=AmendmentInput.old['AmendmentDate'];
+        let AmendmentInput = this.state.AmendmentInput;
+        AmendmentInput.status = e.target.checked;
+        if (e.target.checked === true) {
+          let old = {
+            AmendmentNo: PO.AmendmentNo,
+            AmendmentDate: PO.AmendmentDate
+          };
+          AmendmentInput.old = old;
+        }
+        this.setState({ AmendmentInput: AmendmentInput }, () => {
+          if (e.target.checked === true) {
+            PO.AmendmentNo = CF.toInt(PO.AmendmentNo) + 1;
+            PO.AmendmentDate = today;
+          } else {
+            PO.AmendmentNo = AmendmentInput.old['AmendmentNo'];
+            PO.AmendmentDate = AmendmentInput.old['AmendmentDate'];
           }
-          
+
           this.setParams(PO);
-        });  
+        });
       default:
         break;
     }
@@ -1106,7 +1109,11 @@ class poactivity extends React.Component {
 
   };
 
-  setParams = (object) => { this.setState({ PO: object }) };
+  setParams = (object) => {
+    this.setState({ PO: object }, () => {
+      this.calculateInvoiceDetails();
+    })
+  };
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -1128,7 +1135,9 @@ class poactivity extends React.Component {
         newPurchaseOrderLine.push(PurchaseOrderLine[i]);
       }
     }
-    this.setState({ PurchaseOrderLine: newPurchaseOrderLine });
+    this.setState({ PurchaseOrderLine: newPurchaseOrderLine }, () => {
+      this.calculateInvoiceDetails();
+    });
   }
 
   getMRNStatus = () => {
@@ -1173,7 +1182,7 @@ class poactivity extends React.Component {
   };
 
   getNOSvalue = () => {
-    let UOMList = this.state.UOMList;   
+    let UOMList = this.state.UOMList;
     for (let i = 0; i < UOMList.length; i++) {
       if (UOMList[i].name === "NOS") {
         return UOMList[i].value;
@@ -1182,16 +1191,16 @@ class poactivity extends React.Component {
     }
   }
 
-  fetchPrice = (Quantity, o) => {     
-    try{
-      let UOMID_i=o.UOMID;
-      for (let i = 0; i < o.ItemList.length; i++) {     
+  fetchPrice = (Quantity, o) => {
+    try {
+      let UOMID_i = o.UOMID;
+      for (let i = 0; i < o.ItemList.length; i++) {
         if (o.ItemList[i].value === o.TypeID) {
-          let ItemPrice=o.ItemList[i]['ItemPrice'];
+          let ItemPrice = o.ItemList[i]['ItemPrice'];
           for (let j = 0; j < ItemPrice.length; j++) {
-            let UOM_j=ItemPrice[j]['UOM'];
+            let UOM_j = ItemPrice[j]['UOM'];
             if (UOMID_i === UOM_j) {
-              let jo=ItemPrice[j];
+              let jo = ItemPrice[j];
               if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
                 return jo.UnitPrice;
                 break;
@@ -1200,9 +1209,9 @@ class poactivity extends React.Component {
           }
         }
       }
-    }catch(err){
+    } catch (err) {
       return 0;
-    }   
+    }
   }
 
   updateLineDetail = (i, key, e) => {
@@ -1215,27 +1224,27 @@ class poactivity extends React.Component {
       case "Type":
         o[key] = CF.toInt(e.target.value);//setting the dropdown value.
         o.Price = 0;
-        o.HSNCode="";
+        o.HSNCode = "";
         o.CategoryId = null;
-        o.SupplierCode=null;
-        o.Narration=null;
-        o.TolerancePercentage=0;
-        o.LineDiscPercentage=0;
-        o.ItemPostingGroupID=null;
-        o.GeneralPostingGroupID=null;
-        o.VATPercentage=0;
-        o.VATAmount=0;
-        o.GSTGroupID=0;
-        o.SupplyStateID=0;
-        o.DValueID=0;
-        o.GSTPercentage=0;
+        o.SupplierCode = null;
+        o.Narration = null;
+        o.TolerancePercentage = 0;
+        o.LineDiscPercentage = 0;
+        o.ItemPostingGroupID = null;
+        o.GeneralPostingGroupID = null;
+        o.VATPercentage = 0;
+        o.VATAmount = 0;
+        o.GSTGroupID = 0;
+        o.SupplyStateID = 0;
+        o.DValueID = 0;
+        o.GSTPercentage = 0;
         switch (CF.toInt(e.target.value)) {
           case 0://item
             o.Quantity = 0;
             o.CategoryList = this.state.SupplierItemCategory;
             o.isCategoryDisabled = false;
             o.ItemList = [];
-            o.UOMID="";
+            o.UOMID = "";
             break;
           case 1://G/L Account
             o.Quantity = 1;
@@ -1244,7 +1253,7 @@ class poactivity extends React.Component {
             o.CategoryId = null;
             o.isCategoryDisabled = true;
             o.ItemList = this.state.GLAccount;
-            o.UOMID=this.getNOSvalue();
+            o.UOMID = this.getNOSvalue();
             break;
           case 2://Fixed Asset        
             o.Quantity = 1;
@@ -1253,7 +1262,7 @@ class poactivity extends React.Component {
             o.CategoryId = null;
             o.isCategoryDisabled = true;
             o.ItemList = this.state.FixedAsset;
-            o.UOMID=this.getNOSvalue();
+            o.UOMID = this.getNOSvalue();
             break;
           case 3://Charge          
             o.Quantity = 1;
@@ -1262,7 +1271,7 @@ class poactivity extends React.Component {
             o.CategoryId = null;
             o.isCategoryDisabled = true;
             o.ItemList = this.state.Charges;
-            o.UOMID=this.getNOSvalue();
+            o.UOMID = this.getNOSvalue();
             break;
           default:
             break;
@@ -1299,19 +1308,19 @@ class poactivity extends React.Component {
           o.ItemListSelected = e;
           o.TypeID = CF.toInt(e.value);
           o.GSTGroupID = e.GSTGroupID;
-          if(o.Type===0){
-          o.Description = e.Description1;
-          o.packingDescription = e.PackingDesc1;
-          o.HSNCode = e.HSNCode;          
-          o.GSTPercentage = e.GSTPercentage;
-          o.UOMID = e.PurchaseUOM;
-          o.ItemPostingGroupID = e.ItemPostingGroupID;
-          o.TolerancePercentage = e.TolerancePercentage;
-          o.IsLot = e.IsLot;
-          o.IsQuality = e.IsQuality;          
-          }else{
+          if (o.Type === 0) {
+            o.Description = e.Description1;
+            o.packingDescription = e.PackingDesc1;
+            o.HSNCode = e.HSNCode;
+            o.GSTPercentage = e.GSTPercentage;
+            o.UOMID = e.PurchaseUOM;
+            o.ItemPostingGroupID = e.ItemPostingGroupID;
+            o.TolerancePercentage = e.TolerancePercentage;
+            o.IsLot = e.IsLot;
+            o.IsQuality = e.IsQuality;
+          } else {
             o.packingDescription = "";
-            o.UOMID=this.getNOSvalue();
+            o.UOMID = this.getNOSvalue();
             o.ItemPostingGroupID = 0;
             o.IsLot = false;
             o.IsQuality = false;
@@ -1331,20 +1340,20 @@ class poactivity extends React.Component {
         this.setLineParams(PurchaseOrderLine);
         break;
       case "Quantity":
-        let price=0;
-        price=this.fetchPrice(e.target.value,o);
-        console.log("IN Quantity > price slab value > ",price);
-        if(price){
-          o.Price=price;
-        }else{
-          o.Price=0;
-        }        
+        let price = 0;
+        price = this.fetchPrice(e.target.value, o);
+        console.log("IN Quantity > price slab value > ", price);
+        if (price) {
+          o.Price = price;
+        } else {
+          o.Price = 0;
+        }
         o[key] = e.target.value;
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
       case "Price":
-        o[key] =  e.target.value;
+        o[key] = e.target.value;
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
@@ -1424,7 +1433,7 @@ class poactivity extends React.Component {
     }
 
     let validLine = this.validateLine(o);
-    console.log("validLine > ",validLine);
+    console.log("validLine > ", validLine);
     if (validLine === true) {
       o.isDataProper = true;
       PurchaseOrderLine[i] = o;
@@ -1438,23 +1447,27 @@ class poactivity extends React.Component {
 
   }
 
-  setLineParams = (object) => { this.setState({ PurchaseOrderLine: object }) };
+  setLineParams = (object) => {
+    this.setState({ PurchaseOrderLine: object }, () => {
+      this.calculateInvoiceDetails();
+    })
+  };
 
   validateLine = (o) => {
     let validLine = false;
 
-   console.log()
-    if(
-      o.Type==="" || o.Type===null ||
-      o.TypeID==="" || o.TypeID===null ||
-      o.Quantity===0 ||
-      o.Price===0            
-    ){
+    console.log()
+    if (
+      o.Type === "" || o.Type === null ||
+      o.TypeID === "" || o.TypeID === null ||
+      o.Quantity === 0 ||
+      o.Price === 0
+    ) {
       validLine = false;
-    }else{
-      if(o.HSNCode){
-        if(( o.HSNCode.length<6|| o.HSNCode.length>8) ){validLine = false;}else{validLine = true;}
-      }else{
+    } else {
+      if (o.HSNCode) {
+        if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { validLine = true; }
+      } else {
         validLine = false;
       }
       // validLine = true; 
@@ -1463,36 +1476,35 @@ class poactivity extends React.Component {
     return validLine;
   }
 
-  
-  getProcessedPurchaseOrderLineListUpdate=()=>{
-    let PurchaseOrderLineList=[];
-    let POL=this.state.PurchaseOrderLine;
-    console.log("> getProcessedPurchaseOrderLineListUpdate POL > ",POL);
-    for(let i=0;i<POL.length;i++){
+  getProcessedPurchaseOrderLineListUpdate = () => {
+    let PurchaseOrderLineList = [];
+    let POL = this.state.PurchaseOrderLine;
+    console.log("> getProcessedPurchaseOrderLineListUpdate POL > ", POL);
+    for (let i = 0; i < POL.length; i++) {
       let o = {
         POID: this.state.PO.POID,
         Type: POL[i].Type,
         LNo: POL[i].LNo,
         TypeID: POL[i].TypeID,
-        SupplierCode: POL[i].SupplierCode===null?"":POL[i].SupplierCode,
-        Narration: POL[i].Narration===null?"":POL[i].Narration,
+        SupplierCode: POL[i].SupplierCode === null ? "" : POL[i].SupplierCode,
+        Narration: POL[i].Narration === null ? "" : POL[i].Narration,
         UOMID: POL[i].UOMID,
         TolerancePercentage: parseFloat(POL[i].TolerancePercentage),
-        Quantity: parseFloat(POL[i].Quantity) ,
+        Quantity: parseFloat(POL[i].Quantity),
         Price: POL[i].Price,
         LineDiscPercentage: parseFloat(POL[i].LineDiscPercentage),
         // LineDiscAmount: POL[i].LineDiscAmount,
-        ItemPostingGroupID:POL[i].ItemPostingGroupID,
+        ItemPostingGroupID: POL[i].ItemPostingGroupID,
         // GeneralPostingGroupID: POL[i].GeneralPostingGroupID,
         VATPercentage: parseFloat(POL[i].VATPercentage),
         // VATAmount: POL[i].VATAmount,
-        HSNCode:POL[i].HSNCode,
+        HSNCode: POL[i].HSNCode,
         GSTGroupID: POL[i].GSTGroupID,
         SupplyStateID: this.state.StateID,
-        GSTPercentage:POL[i].GSTPercentage,
+        GSTPercentage: POL[i].GSTPercentage,
         // BuyFromGSTN: POL[i].BuyFromGSTN,
         // NatureOfSupply: POL[i].NatureOfSupply,
-        DValueID: POL[i].DValueID==="" ?0:CF.toInt(POL[i].DValueID),
+        DValueID: POL[i].DValueID === "" ? 0 : CF.toInt(POL[i].DValueID),
         IsQuality: POL[i].IsQuality,
         IsLot: POL[i].IsLot
       };
@@ -1501,18 +1513,18 @@ class poactivity extends React.Component {
     return PurchaseOrderLineList;
   }
 
-  validatePOData=(PurchaseOrder)=>{
-    let isProperData=false;
-     
+  validatePOData = (PurchaseOrder) => {
+    let isProperData = false;
 
-    return isProperData;   
+
+    return isProperData;
   }
 
-//direct edit once first time entry is made
-  openEditMode=(ID)=>{
+  //direct edit once first time entry is made
+  openEditMode = (ID) => {
     console.log("-openEditMode-");
-    console.log("ID -> ",ID);
-     
+    console.log("ID -> ", ID);
+
     let type = "edit";
     let POID = ID;
     let typoTitle = "";
@@ -1527,6 +1539,72 @@ class poactivity extends React.Component {
       typoTitle: typoTitle,
     });
 
+  }
+
+  calculateInvoiceDetails = () => {
+    let PurchaseOrderLine = this.state.PurchaseOrderLine;
+    let PO = this.state.PO;
+
+    let Amount = 0.00;
+    let DiscountAmount = 0.00;
+    let TotalTax = 0.00;
+
+    let FCValue = 0.00;
+    let BaseValue = 0.00;
+
+    try {
+      for (let i = 0; i < PurchaseOrderLine.length; i++) {
+        console.log("PurchaseOrderLine[i] > ", PurchaseOrderLine[i]);
+        let TAX = PurchaseOrderLine[i].GSTPercentage;
+        let itemQty = parseFloat(PurchaseOrderLine[i].Quantity);
+        let itemPrice = parseFloat(PurchaseOrderLine[i].Price);
+        let itemTotalQtyPrice = parseFloat(itemQty) * parseFloat(itemPrice);
+        let itemDiscountPercentage = parseFloat(PurchaseOrderLine[i].LineDiscPercentage);
+        let itemDiscountAmount = (parseFloat(itemTotalQtyPrice) * parseFloat(itemDiscountPercentage)) / 100;
+        let itemAmount = parseFloat(itemTotalQtyPrice) - parseFloat(itemDiscountAmount);
+        let itemTax = ((parseFloat(itemAmount) - parseFloat(itemDiscountAmount)) * parseFloat(TAX)) / 100;
+        Amount += parseFloat(itemAmount);
+        DiscountAmount += parseFloat(itemDiscountAmount);
+        TotalTax += parseFloat(itemTax);
+      }
+
+      FCValue = (parseFloat(Amount) - parseFloat(DiscountAmount)) + TotalTax
+      BaseValue = parseFloat(PO.ExchRate) * parseFloat(FCValue);
+
+      if (isNaN(Amount)) {
+        Amount = 0.00;
+      }
+
+      if (isNaN(DiscountAmount)) {
+        DiscountAmount = 0.00;
+      }
+
+      if (isNaN(TotalTax)) {
+        TotalTax = 0.00;
+      }
+
+      if (isNaN(FCValue)) {
+        FCValue = 0.00;
+      }
+      if (isNaN(BaseValue)) {
+        BaseValue = 0.00;
+      }
+
+      PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
+      PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
+    } catch (e) { }
+
+    this.setState({
+      PO: PO,
+      Amount: PO.IsRounding === true ? parseInt(Amount) : Amount.toFixed(2),
+      DiscountAmount: PO.IsRounding === true ? parseInt(DiscountAmount) : DiscountAmount.toFixed(2),
+      TotalTax: PO.IsRounding === true ? parseInt(TotalTax) : TotalTax.toFixed(2),
+    });
+  }
+
+
+  getCurrencyString = (price) => {
+    return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3 }).format(price);
   }
 
   render() {
@@ -1585,27 +1663,27 @@ class poactivity extends React.Component {
         "Content-Type": "application/json",
       };
 
-      let PurchaseOrder=this.state.PO; 
-      PurchaseOrder.UserID=CF.toInt(getCookie(COOKIE.USERID));
-      PurchaseOrder.BranchID=this.state.BranchID;
-      PurchaseOrder.AmendmentDate=moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY"); 
-      PurchaseOrder.PODate=moment(PurchaseOrder.PODate).format("MM/DD/YYYY"); 
-      PurchaseOrder.DeliveryDate=moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
-      PurchaseOrder.DispachDate=moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
-      let PurchaseOrderLineList=this.getProcessedPurchaseOrderLineList(this.state.PurchaseOrderLine);
+      let PurchaseOrder = this.state.PO;
+      PurchaseOrder.UserID = CF.toInt(getCookie(COOKIE.USERID));
+      PurchaseOrder.BranchID = this.state.BranchID;
+      PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY");
+      PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("MM/DD/YYYY");
+      PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
+      PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
+      let PurchaseOrderLineList = this.getProcessedPurchaseOrderLineList(this.state.PurchaseOrderLine);
 
-      let isProperData=this.validatePOData(PurchaseOrder);
+      let isProperData = this.validatePOData(PurchaseOrder);
 
       let NoSeriesReqData = {
         ValidUser: ValidUser,
         DocumentNumber: {
-          NoSeriesID: this.state.PO.IsImport===true?CF.toInt(this.state.Branch.IPONo):CF.toInt(this.state.Branch.LPONo),
+          NoSeriesID: this.state.PO.IsImport === true ? CF.toInt(this.state.Branch.IPONo) : CF.toInt(this.state.Branch.LPONo),
           // BranchID:this.state.BranchID,
           TransDate: moment().format("MM-DD-YYYY"),
         },
       };
 
-      let Url1=APIURLS.APIURL.GetMasterDocumentNumber;
+      let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
       axios
         .post(Url1, NoSeriesReqData, { headers })
         .then((response) => {
@@ -1620,13 +1698,13 @@ class poactivity extends React.Component {
             axios
               .post(Url2, reqData, { headers })
               .then((response) => {
-                console.log("response > ",response);
-                if(response.status===201 || response.status===200){                  
+                console.log("response > ", response);
+                if (response.status === 201 || response.status === 200) {
                   this.setState({ SuccessPrompt: true, ProgressLoader: true });
                   //change to Edit mode
                   this.openEditMode(response.data.ID);
                 }
-               
+
               })
               .catch((error) => {
                 console.log("Main API Error");
@@ -1643,8 +1721,8 @@ class poactivity extends React.Component {
         });
 
 
-      
-     
+
+
 
 
     };
@@ -1658,51 +1736,51 @@ class poactivity extends React.Component {
       };
 
 
-      let PurchaseOrder=this.state.PO; 
-    try{delete PurchaseOrder['PurchaseOrderLine']; }catch(err){}
-      PurchaseOrder.UserID=CF.toInt(getCookie(COOKIE.USERID));
-      PurchaseOrder.BranchID=this.state.BranchID;
-      PurchaseOrder.AmendmentDate=moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY")==="Invalid date"?moment().format("MM/DD/YYYY"):moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY"); 
-      PurchaseOrder.PODate=moment(PurchaseOrder.PODate).format("MM/DD/YYYY"); 
-      PurchaseOrder.DeliveryDate=moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
-      PurchaseOrder.DispachDate=moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
+      let PurchaseOrder = this.state.PO;
+      try { delete PurchaseOrder['PurchaseOrderLine']; } catch (err) { }
+      PurchaseOrder.UserID = CF.toInt(getCookie(COOKIE.USERID));
+      PurchaseOrder.BranchID = this.state.BranchID;
+      PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY") === "Invalid date" ? moment().format("MM/DD/YYYY") : moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY");
+      PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("MM/DD/YYYY");
+      PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
+      PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
 
-      let PurchaseOrderLine=this.state.PurchaseOrderLine;
-      console.log("##############33 PurchaseOrderLine > ",PurchaseOrderLine);
-       
-      let PurchaseOrderLineList=[];
-     //  PurchaseOrderLineList=this.getProcessedPurchaseOrderLineListUpdate();
-      let newPOL=[];
-     for(let i=0;i<PurchaseOrderLine.length;i++){
-       let o={
-        "POID": PurchaseOrderLine[i].POID,
-        "Type": PurchaseOrderLine[i].Type,
-        "LNo": PurchaseOrderLine[i].LNo,
-        "TypeID": PurchaseOrderLine[i].TypeID,
-        "SupplierCode": PurchaseOrderLine[i].SupplierCode===null?"":PurchaseOrderLine[i].SupplierCode,
-        "Narration": PurchaseOrderLine[i].Narration===null?"":PurchaseOrderLine[i].Narration,
-        "UOMID": PurchaseOrderLine[i].UOMID,
-        "TolerancePercentage": PurchaseOrderLine[i].TolerancePercentage,
-        "Quantity": PurchaseOrderLine[i].Quantity,
-        "Price": PurchaseOrderLine[i].Price,
-        "LineDiscPercentage": PurchaseOrderLine[i].LineDiscPercentage,
-        "ItemPostingGroupID": PurchaseOrderLine[i].ItemPostingGroupID,
-        "VATPercentage": PurchaseOrderLine[i].VATPercentage,
-        "HSNCode": PurchaseOrderLine[i].HSNCode,
-        "GSTGroupID": PurchaseOrderLine[i].GSTGroupID,
-        "SupplyStateID": this.state.StateID,
-        "GSTPercentage": PurchaseOrderLine[i].GSTPercentage,
-        "DValueID": PurchaseOrderLine[i].DValueID,
-        "IsQuality": PurchaseOrderLine[i].IsQuality,
-        "IsLot": PurchaseOrderLine[i].IsLot
-      };
-       newPOL.push(o);
-     }
-      console.log("PurchaseOrderLineList > ",PurchaseOrderLineList);
-      console.log("newPOL > ",newPOL);
-  
+      let PurchaseOrderLine = this.state.PurchaseOrderLine;
+      console.log("##############33 PurchaseOrderLine > ", PurchaseOrderLine);
 
-      let isProperData=this.validatePOData(PurchaseOrder);
+      let PurchaseOrderLineList = [];
+      //  PurchaseOrderLineList=this.getProcessedPurchaseOrderLineListUpdate();
+      let newPOL = [];
+      for (let i = 0; i < PurchaseOrderLine.length; i++) {
+        let o = {
+          "POID": PurchaseOrderLine[i].POID,
+          "Type": PurchaseOrderLine[i].Type,
+          "LNo": PurchaseOrderLine[i].LNo,
+          "TypeID": PurchaseOrderLine[i].TypeID,
+          "SupplierCode": PurchaseOrderLine[i].SupplierCode === null ? "" : PurchaseOrderLine[i].SupplierCode,
+          "Narration": PurchaseOrderLine[i].Narration === null ? "" : PurchaseOrderLine[i].Narration,
+          "UOMID": PurchaseOrderLine[i].UOMID,
+          "TolerancePercentage": PurchaseOrderLine[i].TolerancePercentage,
+          "Quantity": PurchaseOrderLine[i].Quantity,
+          "Price": PurchaseOrderLine[i].Price,
+          "LineDiscPercentage": PurchaseOrderLine[i].LineDiscPercentage,
+          "ItemPostingGroupID": PurchaseOrderLine[i].ItemPostingGroupID,
+          "VATPercentage": PurchaseOrderLine[i].VATPercentage,
+          "HSNCode": PurchaseOrderLine[i].HSNCode,
+          "GSTGroupID": PurchaseOrderLine[i].GSTGroupID,
+          "SupplyStateID": this.state.StateID,
+          "GSTPercentage": PurchaseOrderLine[i].GSTPercentage,
+          "DValueID": PurchaseOrderLine[i].DValueID,
+          "IsQuality": PurchaseOrderLine[i].IsQuality,
+          "IsLot": PurchaseOrderLine[i].IsLot
+        };
+        newPOL.push(o);
+      }
+      console.log("PurchaseOrderLineList > ", PurchaseOrderLineList);
+      console.log("newPOL > ", newPOL);
+
+
+      let isProperData = this.validatePOData(PurchaseOrder);
       let reqData = {
         ValidUser: ValidUser,
         PurchaseOrder: PurchaseOrder,
@@ -1710,18 +1788,18 @@ class poactivity extends React.Component {
       };
       let Url = APIURLS.APIURL.Add_Update_PO;
       axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        console.log("response > ",response);
-        if(response.status===201 || response.status===200){                  
-          this.setState({ SuccessPrompt: true, ProgressLoader: true });          
-          
-        }
-       
-      })
-      .catch((error) => {      
-        this.setState({ ErrorPrompt: true, ProgressLoader: true });
-      });
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          console.log("response > ", response);
+          if (response.status === 201 || response.status === 200) {
+            this.setState({ SuccessPrompt: true, ProgressLoader: true });
+
+          }
+
+        })
+        .catch((error) => {
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
+        });
 
 
     };
@@ -2041,7 +2119,7 @@ class poactivity extends React.Component {
                                     id="IsImport"
                                     label="Import?"
                                     param={this.state.PO.IsImport}
-                                   
+
                                   />
 
 
@@ -2076,16 +2154,16 @@ class poactivity extends React.Component {
                                     isMandatory={true}
                                   />
 
-                                  {this.state.type === "add"?(
+                                  {this.state.type === "add" ? (
                                     <SSIB
-                                    key="amendEvent"
-                                    id="AmendmentInput"
-                                    label="Amending?"
-                                    param={false}
-                                    // onChange={(e) => this.updateFormValue("AmendmentInput", e)}
-                                    disabled={true}
-                                  />
-                                  ):null}
+                                      key="amendEvent"
+                                      id="AmendmentInput"
+                                      label="Amending?"
+                                      param={false}
+                                      // onChange={(e) => this.updateFormValue("AmendmentInput", e)}
+                                      disabled={true}
+                                    />
+                                  ) : null}
 
                                   {this.state.type === "edit" ? (
                                     <SSIB
@@ -2097,7 +2175,7 @@ class poactivity extends React.Component {
                                       disabled={false}
                                     />
                                   ) : null}
-                                 
+
 
                                   <SIB
                                     id="AmendmentNo"
@@ -2290,7 +2368,7 @@ class poactivity extends React.Component {
                               </TableHead>
                               <TableBody className="tableBody">
 
-                                {console.log("this.state.PurchaseOrderLine > ",this.state.PurchaseOrderLine)}
+                                {console.log("this.state.PurchaseOrderLine > ", this.state.PurchaseOrderLine)}
                                 {this.state.PurchaseOrderLine.length > 0 ? (
                                   <Fragment>
                                     {this.state.PurchaseOrderLine.map((item, i) => (
@@ -2367,13 +2445,13 @@ class poactivity extends React.Component {
                                             isMandatory={true}
                                           />
                                         </TableCell>
-                                        <TableCell align="left"> 
+                                        <TableCell align="left">
                                           {item.Description}
                                         </TableCell>
                                         <TableCell align="left">
                                           {item.packingDescription}
                                         </TableCell>
-  
+
                                         <TableCell align="center">
                                           <SCI
                                             id={"Naration_" + i}
@@ -2400,7 +2478,7 @@ class poactivity extends React.Component {
                                             value={item.UOMID}
                                             onChange={(e) => this.updateLineDetail(i, "UOMID", e)}
                                           >
-                                             <option value=""> Select</option>
+                                            <option value=""> Select</option>
                                             {this.state.UOMList.map((op, i) => (
                                               <option value={op.value}> {op.name}</option>
                                             ))}
@@ -2431,7 +2509,7 @@ class poactivity extends React.Component {
                                             size="small"
                                             value={item.Price}
                                             onChange={(e) => this.updateLineDetail(i, "Price", e)}
-                                            disabled={item.Type===0?true:false}
+                                            disabled={item.Type === 0 ? true : false}
                                           />
                                         </TableCell>
                                         <TableCell align="center">
@@ -2461,7 +2539,7 @@ class poactivity extends React.Component {
                                             onChange={(e) => this.updateLineDetail(i, "ItemPostingGroupID", e)}
                                             disabled={true}
                                           >
-                                             <option value="0"> Select</option>
+                                            <option value="0"> Select</option>
                                             {this.state.ItemPostingGroupList.map((op, i) => (
                                               <option value={op.value}> {op.name}</option>
                                             ))}
@@ -2622,7 +2700,7 @@ class poactivity extends React.Component {
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid container spacing={0}>
                                 <Grid item xs={12} sm={12} md={11} lg={11}>
- 
+
                                   {/* show Currency as per supplier selected */}
                                   <SDIB
                                     id="CurrID"
@@ -2702,79 +2780,63 @@ class poactivity extends React.Component {
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid item xs={12} sm={12} md={11} lg={11}>
-
-
                                 {
                                   this.state.CurrencyList.map((item, i) => (
                                     this.state.PO.CurrID === item.value ? (
                                       <Fragment>
                                         <SSDV
 
-                                          label={"Total Excl. " + (this.state.Branch.IsGST === true ? "GST" : "VAT") +"("+item.name+")"}
-                                          value={"0.00"}
+                                          label={"Amount" + "(" + item.name + ")"}
+                                          value={this.getCurrencyString(this.state.Amount)}
                                         />
                                       </Fragment>
                                     )
                                       : null
                                   ))
                                 }
-                                {/* <SSDV
-                                  label={"Total Excl. "+(this.state.Branch.IsGST === true?"GST":"VAT")  +
-                                  this.state.CurrencyCode }
-                                  value={"0.00"}
-                                /> */}
                                 <SSDV
-                                  label="Invoice Discount %"
-                                  value="0.00"
+                                  label="Discount Amount"
+                                  value={this.getCurrencyString(this.state.DiscountAmount)}
                                 />
-
                                 {
                                   this.state.CurrencyList.map((item, i) => (
                                     this.state.PO.CurrID === item.value ? (
                                       <Fragment>
                                         <SSDV
                                           label={"Total " + (this.state.Branch.IsGST === true ? "GST" : "VAT") + "(" + item.name + ")"}
-                                          value="0.00"
+                                          value={this.getCurrencyString(this.state.TotalTax)}
                                         />
                                       </Fragment>
                                     )
                                       : null
                                   ))
                                 }
-
-                                
                               </Grid>
                             </Grid>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                              {
+                                {
                                   this.state.CurrencyList.map((item, i) => (
                                     this.state.PO.CurrID === item.value ? (
                                       <Fragment>
                                         <SSDV
                                           label={"Total FC.Value " + "(" + item.name + ")"}
-                                          value="0.00"
+                                          value={this.getCurrencyString(this.state.PO.FCValue)}
                                         />
                                       </Fragment>
                                     )
                                       : null
                                   ))
                                 }
-                              
-                                
-
                                 <SSDV
                                   label={"Total Base.Value (" + this.state.branchCurrency.Code + ")"}
-                                  value={this.state.PO.BaseValue}
+                                  value={this.getCurrencyString(this.state.PO.BaseValue)}
                                 />
                               </Grid>
                             </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
-
-
                     </Fragment>
                   </AccordionDetails>
                 </Accordion>
