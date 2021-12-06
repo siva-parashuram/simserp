@@ -542,14 +542,6 @@ class poactivity extends React.Component {
           let DimensionsList = data.DimensionValue;
           let IncoTermList=data.IncoTerms;
 
-          // let newSupplierData = [];
-          // for (let i = 0; i < Supplier.length; i++) {
-          //   let o =Supplier[i];
-          //   o.label=Supplier[i].Name;
-          //   o.id=Supplier[i].SuplID;             
-          //   newSupplierData.push(o);
-          // }
-
           let PO = this.state.PO;
 
           if (Branch.IsSEZ === true) {
@@ -1451,28 +1443,22 @@ class poactivity extends React.Component {
   validateLine = (o) => {
     let validLine = false;
 
-    //---------------------------
+   console.log()
     if(
       o.Type==="" || o.Type===null ||
       o.TypeID==="" || o.TypeID===null ||
       o.Quantity===0 ||
-      o.Price===0           
+      o.Price===0            
     ){
       validLine = false;
     }else{
-      validLine = true; 
+      if(o.HSNCode){
+        if(( o.HSNCode.length<6|| o.HSNCode.length>8) ){validLine = false;}else{validLine = true;}
+      }else{
+        validLine = false;
+      }
+      // validLine = true; 
     }
-
-    if(o.HSNCode){
-      if(( o.HSNCode.length<6|| o.HSNCode.length>8) ){validLine = false;}else{validLine = true;}
-    }else{
-      validLine = false;
-    }
-
-    //----------------------
-
-
-
 
     return validLine;
   }
