@@ -1349,8 +1349,7 @@ class poactivity extends React.Component {
           o.ItemListSelected = e;
           o.TypeID = CF.toInt(e.value);
           o.GSTGroupID = e.GSTGroupID;
-          if (o.Type === 0) {
-        
+          if (o.Type === 0) {        
            
             o.Description = e.Description1;
             o.packingDescription = e.PackingDesc1;
@@ -1367,6 +1366,13 @@ class poactivity extends React.Component {
             o.IsLot = e.IsLot;
             o.IsQuality = e.IsQuality;
           } else {
+            if(this.state.Branch.IsGST===true){
+              o.GSTPercentage = this.state.PO.IsTaxExempt===false?e.GSTPercentage:0;
+             }
+             if(this.state.Branch.IsVAT===true){
+              o.VATPercentage=this.state.PO.IsTaxExempt===false?this.state.Branch.VATPercentage:0;
+             } 
+
             o.packingDescription = "";
             o.UOMID = this.getNOSvalue();
             o.ItemPostingGroupID = 0;
