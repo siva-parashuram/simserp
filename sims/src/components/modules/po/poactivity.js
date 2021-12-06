@@ -352,6 +352,7 @@ class poactivity extends React.Component {
   }
 
   getPODetails = (PO) => { 
+    this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -369,7 +370,6 @@ class poactivity extends React.Component {
     .post(Url, reqData, { headers })
     .then((response) => {
       if(response.status===200){
-        console.log("response.data > ",response.data);
         let ResonsePO=response.data;       
         let PO=ResonsePO;
         let PurchaseOrderLine=ResonsePO.PurchaseOrderLine;  
@@ -383,9 +383,6 @@ class poactivity extends React.Component {
           PO.AmendmentDate="";
         }        
 
-        console.log("PO > ",PO);
-        console.log("PurchaseOrderLine > ",PurchaseOrderLine);
-        console.log("------------------------------------------------------------------");
         let newPOL=[];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
         for (let i = 0; i < PurchaseOrderLine.length; i++) {
           let EL = {
@@ -427,12 +424,11 @@ class poactivity extends React.Component {
           };
           newPOL.push(EL);
         }
-        console.log("newPOL > ",newPOL);
-        console.log("------------------------------------------------------------------");
                 
         this.setState({
           PO:PO,
-          PurchaseOrderLine:newPOL
+          PurchaseOrderLine:newPOL,
+          ProgressLoader: true
         },()=>{
           
           this.presetSetSupplierDropdown(PO);
@@ -591,7 +587,7 @@ class poactivity extends React.Component {
             FixedAsset:FixedAsset,
             DimensionsList: DimensionsList,
             IncoTermList:IncoTermList,
-            ProgressLoader: true
+            ProgressLoader: this.state.type==="edit"?false:true
           },()=>{
             if(this.state.type==="edit"){
               this.getPODetails(this.state.PO);
