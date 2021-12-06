@@ -88,6 +88,7 @@ class poactivity extends React.Component {
       DisableCreatebtn: true,
       DisableUpdatebtn: false,
       SnackbarStatus: false,
+      ErrorMessageProps:"",
       currentDeleteItemLine: {},
       initialCss: "",
       urlparams: "",
@@ -377,6 +378,9 @@ class poactivity extends React.Component {
           let PO = ResonsePO;
           let PurchaseOrderLine = ResonsePO.PurchaseOrderLine;
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
+          
+          
+
           PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
           PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
           PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
@@ -515,8 +519,8 @@ class poactivity extends React.Component {
         Narration: PurchaseOrderLine[i].Narration,
         UOMID: PurchaseOrderLine[i].UOMID,
         TolerancePercentage: (PurchaseOrderLine[i].TolerancePercentage === null || PurchaseOrderLine[i].TolerancePercentage === "NaN") ? 0 : PurchaseOrderLine[i].TolerancePercentage,
-        Quantity: PurchaseOrderLine[i].Quantity,
-        Price: PurchaseOrderLine[i].Price,
+        Quantity: parseFloat(PurchaseOrderLine[i].Quantity),
+        Price: parseFloat(PurchaseOrderLine[i].Price),
         LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
         LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
         ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
@@ -1346,10 +1350,17 @@ class poactivity extends React.Component {
           o.TypeID = CF.toInt(e.value);
           o.GSTGroupID = e.GSTGroupID;
           if (o.Type === 0) {
+        
+           
             o.Description = e.Description1;
             o.packingDescription = e.PackingDesc1;
             o.HSNCode = e.HSNCode;
-            o.GSTPercentage = e.GSTPercentage;
+             if(this.state.Branch.IsGST===true){
+              o.GSTPercentage = this.state.PO.IsTaxExempt===false?e.GSTPercentage:0;
+             }
+             if(this.state.Branch.IsVAT===true){
+              o.VATPercentage=this.state.PO.IsTaxExempt===false?this.state.Branch.VATPercentage:0;
+             }           
             o.UOMID = e.PurchaseUOM;
             o.ItemPostingGroupID = e.ItemPostingGroupID;
             o.TolerancePercentage = e.TolerancePercentage;
@@ -1394,7 +1405,7 @@ class poactivity extends React.Component {
         price = this.fetchPrice(e.target.value, o);
         console.log("IN Quantity > price slab value > ", price);
         if (price) {
-          o.Price = price;
+          o.Price = parseFloat(price).toFixed(2);
         } else {
           o.Price = 0;
         }
@@ -1440,11 +1451,16 @@ class poactivity extends React.Component {
       case "GSTGroupID":
         o[key] = CF.toInt(e.target.value);
         let GSTGroupIDList = this.state.GSTGroupIDList;
-        for (let i = 0; i < GSTGroupIDList.length; i++) {
-          if (GSTGroupIDList[i].value === CF.toInt(e.target.value)) {
-            o.GSTPercentage = GSTGroupIDList[i].GSTPercentage;
+        if(this.state.PO.IsTaxExempt===true){
+          o.GSTPercentage=0;
+        }else{
+          for (let i = 0; i < GSTGroupIDList.length; i++) {
+            if (GSTGroupIDList[i].value === CF.toInt(e.target.value)) {
+              o.GSTPercentage = GSTGroupIDList[i].GSTPercentage;
+            }
           }
         }
+        
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
@@ -1559,7 +1575,7 @@ class poactivity extends React.Component {
   }
 
   processAddUpdateStatus=(validLine)=>{
-   validLine===true?this.setState({DisableUpdatebtn:false}):this.setState({DisableUpdatebtn:true});
+   validLine===true?this.setState({DisableUpdatebtn:false,DisableCreatebtn:false}):this.setState({DisableUpdatebtn:true,DisableCreatebtn:false});
   }
 
   getProcessedPurchaseOrderLineListUpdate = () => {
@@ -1641,15 +1657,21 @@ class poactivity extends React.Component {
     try {
       for (let i = 0; i < PurchaseOrderLine.length; i++) {
         console.log("PurchaseOrderLine[i] > ", PurchaseOrderLine[i]);
-        let TAX = PurchaseOrderLine[i].GSTPercentage;
+        let TAX = 0;
+        if(this.state.Branch.IsGST===true){
+          TAX=PurchaseOrderLine[i].GSTPercentage;
+        }
+        if(this.state.Branch.IsVAT===true){
+          TAX=PurchaseOrderLine[i].VATPercentage;
+        }        
+        
         let itemQty = parseFloat(PurchaseOrderLine[i].Quantity);
         let itemPrice = parseFloat(PurchaseOrderLine[i].Price);
         let itemTotalQtyPrice = parseFloat(itemQty) * parseFloat(itemPrice);
         let itemDiscountPercentage = parseFloat(PurchaseOrderLine[i].LineDiscPercentage);
         let itemDiscountAmount = (parseFloat(itemTotalQtyPrice) * parseFloat(itemDiscountPercentage)) / 100;
-        let itemAmount = parseFloat(itemTotalQtyPrice) - parseFloat(itemDiscountAmount);
-        let itemTax = ((parseFloat(itemAmount) - parseFloat(itemDiscountAmount)) * parseFloat(TAX)) / 100;
-        Amount += parseFloat(itemAmount);
+        let itemTax = ((parseFloat(itemTotalQtyPrice) - parseFloat(itemDiscountAmount)) * parseFloat(TAX)) / 100;
+        Amount += parseFloat(itemTotalQtyPrice);
         DiscountAmount += parseFloat(itemDiscountAmount);
         TotalTax += parseFloat(itemTax);
       }
@@ -1690,7 +1712,8 @@ class poactivity extends React.Component {
 
 
   getCurrencyString = (price) => {
-    return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3 }).format(price);
+   // return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3 }).format(price);
+   return price;
   }
 
   render() {
@@ -1740,7 +1763,7 @@ class poactivity extends React.Component {
     };
 
     const AddNew = (e) => {
-      this.setState({ ProgressLoader: false });
+      this.setState({ ProgressLoader: false,ErrorMessageProps:"" });
       console.log("Adding new");
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
@@ -1797,13 +1820,16 @@ class poactivity extends React.Component {
                 this.setState({ ErrorPrompt: true, ProgressLoader: true });
               });
           } else {
-            console.log("No series Error IF");
-            this.setState({ ErrorPrompt: true, ProgressLoader: true });
+            console.log("EEEEEEEEEEEEEEEEEEEEEE > response > ",response);             
+            this.setState({ 
+              ErrorMessageProps:"No. Series Not defined.",
+              ErrorPrompt: true, 
+              ProgressLoader: true });
           }
         })
         .catch((error) => {
           console.log("No series Error");
-          this.setState({ ErrorPrompt: true, ProgressLoader: true });
+          this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps:"No. Series Not defined.", });
         });
 
 
@@ -1814,6 +1840,7 @@ class poactivity extends React.Component {
     };
 
     const updatePO = (e) => {
+      this.setState({ ProgressLoader: false,ErrorMessageProps:"" });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -1847,8 +1874,8 @@ class poactivity extends React.Component {
           "Narration": PurchaseOrderLine[i].Narration === null ? "" : PurchaseOrderLine[i].Narration,
           "UOMID": PurchaseOrderLine[i].UOMID,
           "TolerancePercentage": PurchaseOrderLine[i].TolerancePercentage,
-          "Quantity": PurchaseOrderLine[i].Quantity,
-          "Price": PurchaseOrderLine[i].Price,
+          "Quantity": parseFloat(PurchaseOrderLine[i].Quantity),
+          "Price": parseFloat(PurchaseOrderLine[i].Price),
           "LineDiscPercentage": PurchaseOrderLine[i].LineDiscPercentage,
           "ItemPostingGroupID": PurchaseOrderLine[i].ItemPostingGroupID,
           "VATPercentage": PurchaseOrderLine[i].VATPercentage,
@@ -2017,6 +2044,7 @@ class poactivity extends React.Component {
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
+          ErrorMessageProps={this.state.ErrorMessageProps}
         />
         <SuccessSnackBar
           SuccessPrompt={this.state.SuccessPrompt}
@@ -2429,14 +2457,16 @@ class poactivity extends React.Component {
                                   {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell> */}
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Item Posting Group </TableCell>
 
+                                 
+
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">HSN </TableCell>
+
                                   {this.state.Branch.IsVAT === true ? (
                                     <Fragment>
                                       <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT % </TableCell>
                                       <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell>
                                     </Fragment>
                                   ) : null}
-
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">HSN </TableCell>
 
                                   {
                                     this.state.Branch.IsGST === true ? (
@@ -2631,29 +2661,6 @@ class poactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        {this.state.Branch.IsVAT === true ? (
-                                          <Fragment>
-                                            <TableCell align="center">
-                                              <SCI
-                                                id={"VATPercentage_" + i}
-                                                variant="outlined"
-                                                size="small"
-                                                value={item.VATPercentage}
-                                                onChange={(e) => this.updateLineDetail(i, "VATPercentage", e)}
-                                              />
-                                            </TableCell>
-                                            <TableCell align="center">
-                                              <SCI
-                                                id={"VATAmount_" + i}
-                                                variant="outlined"
-                                                size="small"
-                                                value={item.VATAmount}
-                                                onChange={(e) => this.updateLineDetail(i, "VATAmount", e)}
-                                              />
-                                            </TableCell>
-                                          </Fragment>
-                                        ) : null}
-
 
                                         <TableCell align="center">
                                           <SCI
@@ -2664,6 +2671,34 @@ class poactivity extends React.Component {
                                             onChange={(e) => this.updateLineDetail(i, "HSNCode", e)}
                                           />
                                         </TableCell>
+
+                                        {this.state.Branch.IsVAT === true ? (
+                                          <Fragment>
+                                            <TableCell align="center">
+                                              <SCI
+                                                id={"VATPercentage_" + i}
+                                                variant="outlined"
+                                                size="small"
+                                                value={item.VATPercentage}
+                                                onChange={(e) => this.updateLineDetail(i, "VATPercentage", e)}
+                                                disabled={true}
+                                              />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                              <SCI
+                                                id={"VATAmount_" + i}
+                                                variant="outlined"
+                                                size="small"
+                                                value={item.VATAmount}
+                                                onChange={(e) => this.updateLineDetail(i, "VATAmount", e)}
+                                                disabled={true}
+                                              />
+                                            </TableCell>
+                                          </Fragment>
+                                        ) : null}
+
+
+                                       
 
                                         {
                                           this.state.Branch.IsGST === true ? (
@@ -2873,7 +2908,7 @@ class poactivity extends React.Component {
                                         <SSDV
 
                                           label={"Amount" + "(" + item.name + ")"}
-                                          value={this.getCurrencyString(this.state.Amount)}
+                                          value={this.state.Amount}
                                         />
                                       </Fragment>
                                     )
@@ -2890,7 +2925,7 @@ class poactivity extends React.Component {
                                       <Fragment>
                                         <SSDV
                                           label={"Total " + (this.state.Branch.IsGST === true ? "GST" : "VAT") + "(" + item.name + ")"}
-                                          value={this.getCurrencyString(this.state.TotalTax)}
+                                          value={this.state.TotalTax}
                                         />
                                       </Fragment>
                                     )
@@ -2907,7 +2942,7 @@ class poactivity extends React.Component {
                                       <Fragment>
                                         <SSDV
                                           label={"Total FC.Value " + "(" + item.name + ")"}
-                                          value={this.getCurrencyString(this.state.PO.FCValue)}
+                                          value={this.state.PO.FCValue}
                                         />
                                       </Fragment>
                                     )
@@ -2916,7 +2951,7 @@ class poactivity extends React.Component {
                                 }
                                 <SSDV
                                   label={"Total Base.Value (" + this.state.branchCurrency.Code + ")"}
-                                  value={this.getCurrencyString(this.state.PO.BaseValue)}
+                                  value={this.state.PO.BaseValue}
                                 />
                               </Grid>
                             </Grid>
@@ -2926,6 +2961,8 @@ class poactivity extends React.Component {
                     </Fragment>
                   </AccordionDetails>
                 </Accordion>
+
+                
 
                 <Accordion
                   key="a-4"

@@ -20,9 +20,10 @@ class errorSnackbar extends React.Component {
                     open={this.props.ErrorPrompt}
                     autoHideDuration={3000}
                     onClose={this.props.closeErrorPrompt}
+                    
                 >
-                    <Alert onClose={this.props.closeErrorPrompt} severity="error">
-                        Error!
+                    <Alert onClose={this.props.closeErrorPrompt} severity="error" sx={{ width: '100%' }}>
+                        Error! {this.props.ErrorMessageProps===""?"":" - "+(this.props.ErrorMessageProps)}
                     </Alert>
                 </Snackbar>
             </Fragment>
