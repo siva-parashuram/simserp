@@ -324,17 +324,19 @@ class poactivity extends React.Component {
       "&branchName=" +
       branchName;
 
+    
+
     let PO = this.state.PO;
     PO.POID = CF.toInt(POID);
-    if (type === "edit") {
-      PO.POID = CF.toInt(POID);
-      this.setState({BranchID: CF.toInt(branchId)},()=>{
-        this.getSupplierList();
-        this.getPODetails(PO);
+    if (type === "edit") {      
+      PO.POID = CF.toInt(POID);  
+
+      this.getSupplierList(CF.toInt(branchId),PO.POID);  
+      this.setState({BranchID: CF.toInt(branchId)},()=>{ 
+        this.getSupplierList(CF.toInt(branchId));  
+        
       });      
     }
-    console.log("-About to load-");
-     
 
     this.setState({
       PO: PO,
@@ -345,10 +347,8 @@ class poactivity extends React.Component {
       ProgressLoader: type === "add" ? true : false,
       BranchID: CF.toInt(branchId),
     }, () => {
-      if(type==="add"){this.getSupplierList(); }   
+     if(type==="add"){this.getSupplierList(CF.toInt(branchId)); }   
     });
-
-
   }
 
   getPODetails = (PO) => { 
@@ -395,9 +395,9 @@ class poactivity extends React.Component {
             TypeIDList: [],
             CategoryList: PurchaseOrderLine[i].Type === 0 ? this.state.SupplierItemCategory : [],
             isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
-            CategoryId: null,
-            ItemList: [],
-            ItemListSelected: null,
+            CategoryId: PurchaseOrderLine[i].CatID,
+            ItemList: [],//PurchaseOrderLine[i].Type === 0?[{name:PurchaseOrderLine[i].name,value:PurchaseOrderLine[i].value}]:[],
+            ItemListSelected: {name:PurchaseOrderLine[i].name,value:PurchaseOrderLine[i].value},
             TypeID: PurchaseOrderLine[i].value,
             Description: PurchaseOrderLine[i].Description1,
             packingDescription: PurchaseOrderLine[i].PackingDesc1,
@@ -448,6 +448,8 @@ class poactivity extends React.Component {
         this.setState({ ErrorPrompt:true,  ProgressLoader: true });
     }); 
   };
+
+  getCategoryList=()=>{}
 
   presetSetSupplierDropdown = (PO) => {
     for (let i = 0; i < this.state.supplierList.length; i++) {
@@ -503,7 +505,7 @@ class poactivity extends React.Component {
     return newPOL;
   }
 
-  getSupplierList = () => {
+  getSupplierList = (BranchID) => {
     this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
@@ -515,7 +517,7 @@ class poactivity extends React.Component {
     let reqData = {
       ValidUser: ValidUser,
       Supplier: {
-        BranchID: CF.toInt(this.state.BranchID)
+        BranchID: CF.toInt(BranchID)
       }
     };
     axios
@@ -566,7 +568,6 @@ class poactivity extends React.Component {
           }
 
           this.setState({
-
             PO: PO,
             Branch: Branch,
             CountryList: Country,
@@ -591,6 +592,10 @@ class poactivity extends React.Component {
             DimensionsList: DimensionsList,
             IncoTermList:IncoTermList,
             ProgressLoader: true
+          },()=>{
+            if(this.state.type==="edit"){
+              this.getPODetails(this.state.PO);
+            }            
           });
         } else {
           // this.setState({isDataFetched:false});
@@ -1188,16 +1193,6 @@ class poactivity extends React.Component {
       }
     }
   }
-
-  // getCurrencyCodeToShow = () => {
-  //   let code = "";
-  //   if (this.state.type === "edit") { 
-  //     let  Currency=this.state.Currency;
-       
-  //   }
-
-  //   return code;
-  // }
 
   fetchPrice = (Quantity, o) => {     
     try{
@@ -2645,9 +2640,6 @@ class poactivity extends React.Component {
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid container spacing={0}>
                                 <Grid item xs={12} sm={12} md={11} lg={11}>
-
- 
- 
  
                                   {/* show Currency as per supplier selected */}
                                   <SDIB
@@ -2736,7 +2728,7 @@ class poactivity extends React.Component {
                                       <Fragment>
                                         <SSDV
 
-                                          label={"Total Excl. " + (this.state.Branch.IsGST === true ? "GST" : "VAT") +"( "+item.name+" ) "}
+                                          label={"Total Excl. " + (this.state.Branch.IsGST === true ? "GST" : "VAT") +"("+item.name+")"}
                                           value={"0.00"}
                                         />
                                       </Fragment>
@@ -2759,7 +2751,7 @@ class poactivity extends React.Component {
                                     this.state.PO.CurrID === item.value ? (
                                       <Fragment>
                                         <SSDV
-                                          label={"Total " + (this.state.Branch.IsGST === true ? "GST" : "VAT") + "( " + item.name + " ) "}
+                                          label={"Total " + (this.state.Branch.IsGST === true ? "GST" : "VAT") + "(" + item.name + ")"}
                                           value="0.00"
                                         />
                                       </Fragment>
@@ -2779,7 +2771,7 @@ class poactivity extends React.Component {
                                     this.state.PO.CurrID === item.value ? (
                                       <Fragment>
                                         <SSDV
-                                          label={"Total FC.Value " + "( " + item.name + " ) "}
+                                          label={"Total FC.Value " + "(" + item.name + ")"}
                                           value="0.00"
                                         />
                                       </Fragment>
