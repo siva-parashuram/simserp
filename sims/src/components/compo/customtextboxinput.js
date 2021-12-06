@@ -16,8 +16,9 @@ class customtextboxinput extends React.Component {
             { width: '100%', fontSize: 14, backgroundColor: '#f5f5f5' } :
             { width: '100%', fontSize: 14, backgroundColor: '#fff' }
 
+
         }
-        className="textFieldCss"
+        className="textFieldCss "
         type={this.props.type}
         id={this.props.id}
         variant={this.props.variant}
@@ -31,6 +32,7 @@ class customtextboxinput extends React.Component {
         maxlength={this.props.maxlength}
         multiline={this.props.multiline}
         rows={this.props.rows}
+        inputProps={{style: { textAlign: this.props.align }}}
       />
     );
   }

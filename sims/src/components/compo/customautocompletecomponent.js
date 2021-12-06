@@ -33,7 +33,7 @@ class customautocompletecomponent extends React.Component {
           className="AutocompletetextFieldCss"
           variant="standard"
           size="small"
-          style={{ borderBottomStyle: 'none', marginTop: -5 }}
+          style={{ borderBottomStyle: 'none', marginTop: -5,backgroundColor:this.props.backgroundColor }}
           {...params} />}
       />
     );

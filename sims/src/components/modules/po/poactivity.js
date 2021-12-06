@@ -2446,46 +2446,46 @@ class poactivity extends React.Component {
                             >
                               <TableHead className="table-header-background">
                                 <TableRow>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="center">&nbsp;</TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Type</TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Category</TableCell>
-                                  <TableCell style={{ maxWidth: 350, minWidth: 350 }} className="line-table-header-font" align="center">Item</TableCell>
+                                  <TableCell style={{ maxWidth: 50, minWidth: 50 }} className="line-table-header-font" align="left">&nbsp;</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Type</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Category</TableCell>
+                                  <TableCell style={{ maxWidth: 350, minWidth: 350 }} className="line-table-header-font" align="left">Item</TableCell>
 
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Desc</TableCell>
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Pack.Desc</TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Sup.Code</TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Narration</TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">UOM</TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Tolerance %</TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Quantity </TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Unit Price </TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Line.Disc %</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Sup.Code</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Narration</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">UOM</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">Quantity </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">Unit Price </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">Line.Disc %</TableCell>
                                   {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell> */}
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Item Posting Group </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Item Posting Group </TableCell>
 
                                  
 
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">HSN </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">HSN </TableCell>
 
                                   {this.state.Branch.IsVAT === true ? (
                                     <Fragment>
-                                      <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT % </TableCell>
-                                      <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell>
+                                      <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">VAT % </TableCell>
+                                      {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell> */}
                                     </Fragment>
                                   ) : null}
 
                                   {
                                     this.state.Branch.IsGST === true ? (
                                       <Fragment>
-                                        <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">GST Group </TableCell>
-                                        <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> GST %</TableCell>
+                                        <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">GST Group </TableCell>
+                                        <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right"> GST %</TableCell>
                                       </Fragment>
                                     ) : null
                                   }
 
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">Dim.Value </TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Is Quality? </TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="center">Is Lot? </TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Dim.Value </TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody className="tableBody">
@@ -2494,8 +2494,8 @@ class poactivity extends React.Component {
                                 {this.state.PurchaseOrderLine.length > 0 ? (
                                   <Fragment>
                                     {this.state.PurchaseOrderLine.map((item, i) => (
-                                      <TableRow className={item.isDataProper === true ? "selectedRow" : "selectedRowError"}>
-                                        <TableCell align="left">
+                                      <TableRow className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
+                                        <TableCell align="left" style={{ maxWidth: 80, minWidth: 80 }}>
                                           <ButtonGroup
                                             size="small"
                                             variant="text"
@@ -2526,11 +2526,11 @@ class poactivity extends React.Component {
 
                                           </ButtonGroup>
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <select
                                             id={"Type_" + i}
                                             style={{ width: '100%' }}
-                                            className="dropdown-css"
+                                            className="line-dropdown-css"
                                             value={item.Type}
                                             onChange={(e) => this.updateLineDetail(i, "Type", e)}
                                           >
@@ -2541,12 +2541,13 @@ class poactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           {console.log("this.state.PurchaseOrderLine > ", this.state.PurchaseOrderLine)}
                                           <select
+                                            // style={{backgroundColor:'#e0f2f1'}}
                                             id={"Category_" + i}
                                             style={{ width: '100%' }}
-                                            className="dropdown-css"
+                                            className="line-dropdown-css"
                                             value={item.CategoryId}
                                             onChange={(e) => this.updateLineDetail(i, "CategoryId", e)}
                                             disabled={item.isCategoryDisabled}
@@ -2557,8 +2558,9 @@ class poactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <SCADI
+                                            
                                             style={{ width: '100%' }}
                                             id={"TypeID_" + i}
                                             onChange={(e, value) => this.updateLineDetail(i, "TypeID", value)}
@@ -2574,16 +2576,16 @@ class poactivity extends React.Component {
                                           {item.packingDescription}
                                         </TableCell>
 
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <SCI
-                                            id={"Naration_" + i}
+                                            id={"SupplierCode_" + i}
                                             variant="outlined"
                                             size="small"
                                             value={item.SupplierCode}
                                             onChange={(e) => this.updateLineDetail(i, "SupplierCode", e)}
                                           />
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <SCI
                                             id={"Naration_" + i}
                                             variant="outlined"
@@ -2592,11 +2594,11 @@ class poactivity extends React.Component {
                                             onChange={(e) => this.updateLineDetail(i, "Narration", e)}
                                           />
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="left">
 
                                           <select
                                             style={{ width: '100%' }}
-                                            className="dropdown-css"
+                                            className="line-dropdown-css"
                                             value={item.UOMID}
                                             onChange={(e) => this.updateLineDetail(i, "UOMID", e)}
                                           >
@@ -2606,25 +2608,27 @@ class poactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="right">
                                           <SCI
                                             id={"TolerancePercentage_" + i}
                                             variant="outlined"
                                             size="small"
                                             value={item.TolerancePercentage}
                                             onChange={(e) => this.updateLineDetail(i, "TolerancePercentage", e)}
+                                            align="right"
                                           />
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="right">
                                           <SCI
                                             id={"Quantity_" + i}
                                             variant="outlined"
                                             size="small"
                                             value={item.Quantity}
                                             onChange={(e) => this.updateLineDetail(i, "Quantity", e)}
+                                            align="right"
                                           />
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="right">
                                           <SCI
                                             id={"Price_" + i}
                                             variant="outlined"
@@ -2632,15 +2636,17 @@ class poactivity extends React.Component {
                                             value={item.Price}
                                             onChange={(e) => this.updateLineDetail(i, "Price", e)}
                                             disabled={item.Type === 0 ? true : false}
+                                            align="right"
                                           />
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="right">
                                           <SCI
                                             id={"LineDiscPercentage_" + i}
                                             variant="outlined"
                                             size="small"
                                             value={item.LineDiscPercentage}
                                             onChange={(e) => this.updateLineDetail(i, "LineDiscPercentage", e)}
+                                            align="right"
                                           />
                                         </TableCell>
                                         {/* <TableCell align="center">
@@ -2653,10 +2659,10 @@ class poactivity extends React.Component {
                                             disabled={true}
                                           />
                                         </TableCell> */}
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <select
                                             style={{ width: '100%' }}
-                                            className="dropdown-css"
+                                            className="line-dropdown-css"
                                             value={item.ItemPostingGroupID}
                                             onChange={(e) => this.updateLineDetail(i, "ItemPostingGroupID", e)}
                                             disabled={true}
@@ -2668,19 +2674,20 @@ class poactivity extends React.Component {
                                           </select>
                                         </TableCell>
 
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <SCI
                                             id={"HSNCode_" + i}
                                             variant="outlined"
                                             size="small"
                                             value={item.HSNCode}
                                             onChange={(e) => this.updateLineDetail(i, "HSNCode", e)}
+
                                           />
                                         </TableCell>
 
                                         {this.state.Branch.IsVAT === true ? (
                                           <Fragment>
-                                            <TableCell align="center">
+                                            <TableCell align="right">
                                               <SCI
                                                 id={"VATPercentage_" + i}
                                                 variant="outlined"
@@ -2688,9 +2695,10 @@ class poactivity extends React.Component {
                                                 value={item.VATPercentage}
                                                 onChange={(e) => this.updateLineDetail(i, "VATPercentage", e)}
                                                 disabled={true}
+                                                align="right"
                                               />
                                             </TableCell>
-                                            <TableCell align="center">
+                                            {/* <TableCell align="center">
                                               <SCI
                                                 id={"VATAmount_" + i}
                                                 variant="outlined"
@@ -2699,7 +2707,7 @@ class poactivity extends React.Component {
                                                 onChange={(e) => this.updateLineDetail(i, "VATAmount", e)}
                                                 disabled={true}
                                               />
-                                            </TableCell>
+                                            </TableCell> */}
                                           </Fragment>
                                         ) : null}
 
@@ -2709,10 +2717,10 @@ class poactivity extends React.Component {
                                         {
                                           this.state.Branch.IsGST === true ? (
                                             <Fragment>
-                                              <TableCell align="center">
+                                              <TableCell align="left">
                                                 <select
                                                   style={{ width: '100%' }}
-                                                  className="dropdown-css"
+                                                  className="line-dropdown-css"
                                                   value={item.GSTGroupID}
                                                   onChange={(e) => this.updateLineDetail(i, "GSTGroupID", e)}
                                                 >
@@ -2722,7 +2730,7 @@ class poactivity extends React.Component {
                                                   ))}
                                                 </select>
                                               </TableCell>
-                                              <TableCell align="center">
+                                              <TableCell align="right">
                                                 <SCI
                                                   id={"GSTPercentage_" + i}
                                                   variant="outlined"
@@ -2730,6 +2738,7 @@ class poactivity extends React.Component {
                                                   value={item.GSTPercentage}
                                                   onChange={(e) => this.updateLineDetail(i, "GSTPercentage", e)}
                                                   disabled={true}
+                                                  align="right"
                                                 />
                                               </TableCell>
                                             </Fragment>
@@ -2739,10 +2748,10 @@ class poactivity extends React.Component {
 
 
 
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <select
                                             style={{ width: '100%' }}
-                                            className="dropdown-css"
+                                            className="line-dropdown-css"
                                             value={item.DValueID}
                                             onChange={(e) => this.updateLineDetail(i, "DValueID", e)}
                                           >
@@ -2752,15 +2761,16 @@ class poactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <SCSI
                                             key={"IsQuality_+i"}
                                             id={"IsQuality_+i"}
                                             param={item.IsQuality}
                                             onChange={(e) => this.updateLineDetail(i, "IsQuality", e)}
+
                                           />
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell align="left">
                                           <SCSI
                                             key={"IsLot_+i"}
                                             id={"IsLot_+i"}
