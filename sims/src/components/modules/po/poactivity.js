@@ -85,7 +85,7 @@ class poactivity extends React.Component {
       ProgressLoader: false,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      DisableCreatebtn: false,
+      DisableCreatebtn: true,
       DisableUpdatebtn: false,
       SnackbarStatus: false,
       currentDeleteItemLine: {},
@@ -396,7 +396,7 @@ class poactivity extends React.Component {
               CategoryList: PurchaseOrderLine[i].Type === 0 ? this.state.SupplierItemCategory : [],
               isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
               CategoryId: PurchaseOrderLine[i].CatID,
-              ItemList: [],//PurchaseOrderLine[i].Type === 0?[{name:PurchaseOrderLine[i].name,value:PurchaseOrderLine[i].value}]:[],
+              ItemList: this.getItemList(PurchaseOrderLine[i].Type,PO.SuplID,PurchaseOrderLine[i].CatID),
               ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
               TypeID: PurchaseOrderLine[i].value,
               Description: PurchaseOrderLine[i].Description1,
@@ -448,7 +448,43 @@ class poactivity extends React.Component {
       });
   };
 
-  getCategoryList = () => { }
+  getItemList = (Type,SuplID,CategoryId) => { 
+    let Supplier=this.state.supplierList;
+    let CategoryList=[];
+    let ItemList=[];
+
+    switch (Type) {
+      case 0:
+        for (let i = 0; i < Supplier.length; i++) {
+          if (Supplier[i].SuplID === SuplID) {
+            CategoryList = Supplier[i].Category;
+
+          }
+        }
+
+        for (let i = 0; i < CategoryList.length; i++) {
+          if (CategoryList[i].value === CF.toInt(CategoryId)) {
+            ItemList = CategoryList[i].Item;
+            break;
+          }
+        }
+        break;
+      case 1:
+        ItemList = this.state.GLAccount;
+        break;
+      case 2:
+        ItemList = this.state.FixedAsset;
+        break;
+      case 3:
+        ItemList = this.state.Charges
+        break;
+      default:
+        break;
+    }
+    return ItemList;
+  }
+
+
 
   presetSetSupplierDropdown = (PO) => {
     for (let i = 0; i < this.state.supplierList.length; i++) {
@@ -1137,6 +1173,7 @@ class poactivity extends React.Component {
     }
     this.setState({ PurchaseOrderLine: newPurchaseOrderLine }, () => {
       this.calculateInvoiceDetails();
+      this.validateLineItems();
     });
   }
 
@@ -1327,6 +1364,19 @@ class poactivity extends React.Component {
           }
           PurchaseOrderLine[i] = o;
           this.setLineParams(PurchaseOrderLine);
+        }else{
+          o.TypeID = "";
+          o.ItemListSelected = null;
+          o.GSTGroupID = "";
+          o.Description = "";
+          o.packingDescription = "";
+          o.HSNCode = "";
+          o.GSTPercentage = 0;
+          o.UOMID = "";
+          o.ItemPostingGroupID = "";
+          o.TolerancePercentage = 0;
+          o.IsLot = false;
+          o.IsQuality = false;
         }
         break;
       case "UOMID":
@@ -1455,8 +1505,7 @@ class poactivity extends React.Component {
 
   validateLine = (o) => {
     let validLine = false;
-
-    console.log()
+   
     if (
       o.Type === "" || o.Type === null ||
       o.TypeID === "" || o.TypeID === null ||
@@ -1469,11 +1518,48 @@ class poactivity extends React.Component {
         if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { validLine = true; }
       } else {
         validLine = false;
-      }
-      // validLine = true; 
+      }       
     }
 
+    this.processAddUpdateStatus(validLine);
+
     return validLine;
+  }
+
+  validateLineItems = () => {
+    let PurchaseOrderLine = this.state.PurchaseOrderLine;
+    let totalLines=PurchaseOrderLine.length;
+    let totalValids=0;
+    for (let i = 0; i < PurchaseOrderLine.length; i++) {
+      let o = PurchaseOrderLine[i];
+      let validLine = false;
+      if (
+        o.Type === "" || o.Type === null ||
+        o.TypeID === "" || o.TypeID === null ||
+        o.Quantity === 0 ||
+        o.Price === 0
+      ) {
+        validLine = false;
+      } else {
+        if (o.HSNCode) {
+          if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { 
+            validLine = true; 
+            totalValids++;
+          }
+        } else {
+          validLine = false;
+        }
+      }
+    }
+    
+    let validLine=false;
+    totalLines===totalValids?validLine=true:validLine=false;
+
+    this.processAddUpdateStatus(validLine);    
+  }
+
+  processAddUpdateStatus=(validLine)=>{
+   validLine===true?this.setState({DisableUpdatebtn:false}):this.setState({DisableUpdatebtn:true});
   }
 
   getProcessedPurchaseOrderLineListUpdate = () => {
@@ -1844,7 +1930,7 @@ class poactivity extends React.Component {
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
               onClick={(e) => updatePO(e)}
-              disabled={this.state.DisableCreatebtn}
+              disabled={this.state.DisableUpdatebtn}
             >
               {APIURLS.buttonTitle.save.name}
             </Button>
