@@ -2453,23 +2453,20 @@ class poactivity extends React.Component {
 
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Desc</TableCell>
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Pack.Desc</TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Sup.Code</TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Narration</TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">UOM</TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">Quantity </TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">Unit Price </TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">Line.Disc %</TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Sup.Code</TableCell>
+                                  <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Narration</TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">UOM</TableCell>
+                                  <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Quantity </TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Unit Price </TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Disc %</TableCell>
                                   {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell> */}
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Item Posting Group </TableCell>
 
-                                 
-
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">HSN </TableCell>
-
+                                  <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">HSN </TableCell>
                                   {this.state.Branch.IsVAT === true ? (
                                     <Fragment>
-                                      <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right">VAT % </TableCell>
+                                      <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">VAT % </TableCell>
                                       {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell> */}
                                     </Fragment>
                                   ) : null}
@@ -2477,15 +2474,15 @@ class poactivity extends React.Component {
                                   {
                                     this.state.Branch.IsGST === true ? (
                                       <Fragment>
-                                        <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">GST Group </TableCell>
-                                        <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="right"> GST %</TableCell>
+                                        <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">GST Group </TableCell>
+                                        <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right"> GST %</TableCell>
                                       </Fragment>
                                     ) : null
                                   }
 
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Dim.Value </TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
-                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Dim.Value </TableCell>
+                                  <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody className="tableBody">
