@@ -1,5 +1,7 @@
 import React, { Fragment } from "react";
+import PrintTemplate from 'react-print';
 import "../../../user/dasboard.css";
+import "./po.css";
 import * as APIURLS from "../../../../routes/apiconstant";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -8,6 +10,9 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import * as URLS from "../../../../routes/constants";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 import Breadcrumb from "../../../compo/breadcrumb";
+
+
+import Printpo from "./printlocalpo";
 
 class viewpo extends React.Component {
   constructor(props) {
@@ -47,6 +52,7 @@ class viewpo extends React.Component {
           <Button
             startIcon={APIURLS.buttonTitle.print.icon}
             className="action-btns"
+            onClick={(e) => window.print()}
           >
             {APIURLS.buttonTitle.print.name}
           </Button>
@@ -66,10 +72,13 @@ class viewpo extends React.Component {
             buttongroup={buttongroupHtml}
           />
           
-          <div style={{ marginLeft: 25, marginRight: 25,height:400 }}>
-          <Grid container spacing={0}>
-            HI! Main content displays here
-          </Grid>
+          <div style={{ marginLeft: 25, marginRight: 25, height: 400 }}>
+          
+            <PrintTemplate>
+              <div id="print-mount">
+                <Printpo />
+              </div>
+            </PrintTemplate>
           </div>
 
          

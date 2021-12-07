@@ -1,0 +1,97 @@
+.po-themeFont{
+    font-family: Calibri !important;
+    font-size: 14px !important;
+    color:#000 !important; 
+}
+
+.po-title{
+    color:#000 !important; 
+    font-size: 1.6rem !important; 
+    font-weight: bold !important;
+}
+.po-no-title{
+    color:#000 !important; 
+    font-size: 1.2rem !important; 
+    font-weight: normal !important;
+}
+
+.po-itemlist-table-border{
+    border: 1px solid black;
+} 
+
+.po-itemlist-table-border th{
+    border: 1px solid black;
+}
+
+.po-print-no-border-table{
+    border-style:none !important;
+    /* display:inline; */
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.InvoiceBtns{
+    text-align: right !important;
+}
+
+
+
+.invoiceArea{
+    border-style: none !important;
+    border-width: 1px !important;
+    color: #000 !important;
+}
+.invoiceTitle{
+    text-align: center !important;
+    color:#000;
+    font-size: 1.4rem !important; 
+    margin-top: -2px !important;
+    margin-bottom: -2px !important;
+}
+
+.invoiceTitleDiv{
+    border-bottom-style: none;
+    border-width: 1px !important;
+}
+
+.boldHeader{
+    font-weight: bolder !important;
+    font-size: 20px !important;
+}
+
+.boldtext{
+    font-weight: 500;
+}
+
+ 
+
+.padding-left-20{
+    padding-left: 20px !important;
+}
+.padding-left-35{
+    padding-left: 35px !important;
+}
+.padding-left-45{
+    padding-left: 45px !important;
+}
+.padding-left-60{
+    padding-left: 60px !important;
+}
+.padding-left-63{
+    padding-left: 63px !important;
+}
+.padding-left-100{
+    padding-left: 100px !important;
+}

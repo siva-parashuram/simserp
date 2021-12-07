@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment} from "react";
 import axios from "axios";
 import moment from "moment";
+import ReactToPrint from 'react-to-print';
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -59,6 +60,9 @@ import SCSI from "../../compo/customswitchinput";
 
 /* supporting components */
 import Viewpo from "./component/viewpo";
+
+import PrintLocalPo from "./component/printlocalpo";
+
 
 const today = moment().format(
   "YYYY-MM-DD"
@@ -1977,6 +1981,24 @@ class poactivity extends React.Component {
             {APIURLS.buttonTitle.view.name}
           </Button>
 
+          <ReactToPrint
+            trigger={() => {
+              // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+              // to the root node of the returned component as it will be overwritten.
+              return (
+                <Button
+                  startIcon={APIURLS.buttonTitle.print.icon}
+                  className="action-btns"
+                >
+                  {APIURLS.buttonTitle.print.name}
+                </Button>
+              );
+            }}
+            content={() => this.componentRef}
+          />
+
+          
+
 
         </ButtonGroup>
       </Fragment>
@@ -2023,6 +2045,9 @@ class poactivity extends React.Component {
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 {this.state.Dialog.DialogContent}
 
+                 
+               
+
               </Grid>
             </Grid>
             <div style={{ height: 50 }}>&nbsp;</div>
@@ -2041,6 +2066,8 @@ class poactivity extends React.Component {
       return this.state.stepper.skipped.has(step);
     };
 
+
+   
 
 
 
@@ -2061,6 +2088,18 @@ class poactivity extends React.Component {
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
         />
+
+        <div style={{ display: "none" }}>
+          {this.state.PO.IsImport===false?(
+            <PrintLocalPo podata={
+              {
+                PurchaseOrderLine:this.state.PurchaseOrderLine,
+                UOMList:this.state.UOMList
+              }
+            }  ref={el => (this.componentRef = el)} />
+          ):null}
+          
+        </div>
 
 
         <Fragment>
@@ -3361,6 +3400,11 @@ class poactivity extends React.Component {
 
 
         {dialog}
+
+
+
+       
+
       </Fragment>
     );
   }
