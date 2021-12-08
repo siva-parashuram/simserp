@@ -238,7 +238,6 @@ class login extends React.Component {
       // window.location.reload();
     }
 
-
     const processLogout = (userID, token) => {
       const data = {
         "UserID": parseInt(userID),
@@ -257,16 +256,7 @@ class login extends React.Component {
 
         });
     }
-
-    const menuClick = event => {
-      try {
-        this.state.anchorEl
-          ? this.setState({ anchorEl: null })
-          : this.setState({ anchorEl: event.currentTarget });
-      } catch (err) {
-
-      }
-    };
+    
     const menuClose = event => {
       this.setState({ anchorEl: null });
     };
@@ -355,10 +345,13 @@ class login extends React.Component {
                             />
                             <Divider />
                             <CardContent style={{ textAlign: 'center', marginTop: 5, }}>
-                              {this.state.status === "DL" ? (
-                                <span>You are already logged in. Kindly loggout and login again</span>
-                              ) : (<CompanyList state={this.state} />)}
-
+                              <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={12} lg={12}>
+                                  {this.state.status === "DL" ? (
+                                    <span>You are already logged in. Kindly logout and login again</span>
+                                  ) : (<CompanyList state={this.state} />)}
+                                </Grid>
+                              </Grid>                             
                             </CardContent>
                           </Card>
                         </Paper>
@@ -411,7 +404,7 @@ class login extends React.Component {
                     </div>
 
                     <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
-                      <Alert onClose={closeErrorPrompt} severity="error">Login Failed!</Alert>
+                      <Alert onClose={closeErrorPrompt} severity="warning">Looks like Something is missing!</Alert>
                     </Snackbar>
 
                     <Menu

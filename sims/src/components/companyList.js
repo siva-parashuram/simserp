@@ -86,22 +86,7 @@ class CompanyList extends React.Component {
 
 
 
-        const disableBranchButton = (branchBtnId) => {
-            let BRANCH_OPEN = getCookie(COOKIE.BRANCH_OPEN);
-            let branch = {
-                branchBtnId: branchBtnId
-            }
-            if (BRANCH_OPEN === null) {
-                BRANCH_OPEN = [];
-                BRANCH_OPEN.push(branch);
-                createCookie(COOKIE.BRANCH_OPEN, BRANCH_OPEN, APIURLS.CTimeOut);
-                document.getElementById(branchBtnId).disabled = true;
-            } else {
-                BRANCH_OPEN.push(branch);
-                createCookie(COOKIE.BRANCH_OPEN, BRANCH_OPEN, APIURLS.CTimeOut);
-                document.getElementById(branchBtnId).disabled = true;
-            }
-        }
+        
 
         return (
             <Fragment>
