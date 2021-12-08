@@ -42,9 +42,10 @@ class CompanyList extends React.Component {
     }
 
     resetBranchWindowOpen=()=>{
-        CF.UPDATE_BRANCH_OPEN_REMOVE(this.state.branchId);
-        CF.ADD_NEW_BRANCH_OPEN(this.state.branchId);
-        this.openBranchWindow(this.state.url, this.state.branchId, this.state.compID, this.state.compName, this.state.branchName, this.state.name);
+        CF.UPDATE_BRANCH_OPEN_REMOVE(this.state.branchId);     
+        
+     //   CF.ADD_NEW_BRANCH_OPEN(this.state.branchId);      
+        // this.openBranchWindow(this.state.url, this.state.branchId, this.state.compID, this.state.compName, this.state.branchName, this.state.name);
         this.handleDialogClose();
     }
 
@@ -52,8 +53,8 @@ class CompanyList extends React.Component {
         let branchBtnId = ("branchBtn_" + compID + "_" + branchId).toString();
         url = url + "?branchBtnId=" + branchBtnId + "&branchId=" + branchId + "&compID=" + compID + "&compName=" + compName + "&branchName=" + name;
         let randomnumber = Math.floor((Math.random() * 100) + 1);
-        window.open(url, '', 'fullscreen=yes');
-        // window.open(url,"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0, toolbar=no,resizable=1,width=500,height=400');
+        // window.open(url, '', 'fullscreen=yes');
+        window.open(url,"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0, toolbar=no,resizable=1,width=500,height=400');
     }
 
     render() {
@@ -72,6 +73,7 @@ class CompanyList extends React.Component {
             console.log("isPresent > ",isPresent);
             if (isPresent === true) {
                //show prompt of branch  window already open
+              
                this.setState({DialogStatus:true});
             } else {
                 //if branch is not present add the branch id which is opening to storage and open the window

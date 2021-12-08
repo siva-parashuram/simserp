@@ -6,7 +6,7 @@ export const UPDATE_BRANCH_OPEN_REMOVE = (branchId) => {
     var BRANCH_OPENArray = BRANCH_OPEN.split(",").map(Number);
     var newBRANCH_OPEN = [];
     for (let i = 0; i < BRANCH_OPENArray.length; i++) {
-      if (BRANCH_OPENArray[i] === parseInt(branchId)) {
+      if (parseInt(BRANCH_OPENArray[i]) === parseInt(branchId)) {
 
       } else {
         newBRANCH_OPEN.push(BRANCH_OPENArray[i]);
@@ -52,6 +52,8 @@ export const ADD_NEW_BRANCH_OPEN = (branchId) => {
     var BRANCH_OPEN_ARRAY =[];
     if(BRANCH_OPEN){
       BRANCH_OPEN_ARRAY=BRANCH_OPEN.split(",").map(Number);
+      BRANCH_OPEN_ARRAY.push(branchId);
+      localStorage.setItem('BRANCH_OPEN', BRANCH_OPEN_ARRAY.toString()); 
     }else{
       BRANCH_OPEN_ARRAY.push(branchId);
       localStorage.setItem('BRANCH_OPEN', BRANCH_OPEN_ARRAY.toString()); 
