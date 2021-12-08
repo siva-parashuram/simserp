@@ -14,7 +14,7 @@ import { Divider } from "@material-ui/core";
 
 
 
-class printlocalpo extends React.Component {
+class printimportpo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -79,9 +79,10 @@ class printlocalpo extends React.Component {
 
     getStateNameByID = () => {
         let id = this.props.podata.Supplier.StateID;
-        let StateList = this.props.podata.Supplier.StateList;
+        let StateList = this.props.podata.Supplier.StateList;      
+
         for (let i = 0; i < StateList.length; i++) {
-            if (parseFloat(StateList[i].stateId) === parseFloat(id)) {
+            if (parseFloat(StateList[i].value) === parseFloat(id)) {
                 return StateList[i].name;
                 break;
             }
@@ -97,7 +98,7 @@ class printlocalpo extends React.Component {
         const marginLeft = "25px"
         const getPageMargins = () => {
             return `@page { margin: ${marginTop} ${marginRight} ${marginBottom} ${marginLeft} !important; }  @media print {
-                @page { size: landscape; }
+                @page { size: portrait; }
               } `;
         };
 
@@ -165,22 +166,16 @@ class printlocalpo extends React.Component {
                             </Fragment>
                         ) : null}
 
-                        {this.props.podata.Branch.IsGST === true ? (
-                            <Fragment>
-                                <span className="boldHeader">GST No.: {this.props.podata.Branch.GSTNo}</span><br />
-                            </Fragment>
+                        {this.props.podata.Branch.IsGST===true?(
+                            <span className="boldHeader">GST No.: {this.props.podata.Branch.IsGST}</span>><br />
+                        ):null}    
 
-                        ) : null}
-
-                        {this.props.podata.Branch.IsVAT === true ? (
-                            <Fragment>
-                                <span className="boldHeader">VAT No.: {this.props.podata.Branch.VATNo}</span> <br />
-                            </Fragment>
-
-                        ) : null}
+                        {this.props.podata.Branch.IsVAT===true?(
+                            <span className="boldHeader">VAT No.: {this.props.podata.Branch.IsGST}</span>><br />
+                        ):null}
 
                          <span>
-                            <span><b>Notify/Despatch To:</b></span> {this.props.podata.PO.ContactPerson}
+                            <span><b>Notify/Despatch To:</b></span> {this.props.podata.Branch.ContactPerson}
                         </span>      
                         
                     </Grid>
@@ -207,7 +202,7 @@ class printlocalpo extends React.Component {
                             E-mail: sales@sivatec.co
                         </span><br />
                         <span className="boldHeader">GST No.:  {this.props.podata.PO.GSTNo}</span><br />
-                        <span><b>State:</b>  {this.getStateNameByID()}</span>
+                        <span><b>State:</b> {this.getStateNameByID()}</span>
                     </Grid>
                     <Grid item xs={3}>
                         <span >
@@ -245,7 +240,7 @@ class printlocalpo extends React.Component {
                 <div style={{ height: 20 }}>&nbsp;</div>
                 <Grid container spacing={0}>
                     <Grid item xs={12}>
-                        <span>Dear Contact Person,</span><br />
+                        <span>Dear {this.props.podata.PO.ContactPerson},</span><br />
                         <span>We are pleased to place our order as per the details given below:</span>
                     </Grid>
                 </Grid>
@@ -266,72 +261,8 @@ class printlocalpo extends React.Component {
                                         <TableCell style={{ maxWidth: 50, minWidth: 50 }} align="left">Unit</TableCell>
                                         <TableCell style={{ maxWidth: 80, minWidth: 80 }} align="right">Quantity</TableCell>
                                         <TableCell style={{ maxWidth: 100, minWidth: 100 }} align="right">Unit Price</TableCell>
-                                        <TableCell style={{ maxWidth: 80, minWidth: 80 }} align="right">Amount</TableCell>
                                         <TableCell style={{ maxWidth: 80, minWidth: 80 }} align="right">Disc %</TableCell>
-                                        <TableCell style={{ maxWidth: 80, minWidth: 80 }} align="right">Taxable</TableCell>
-                                        <TableCell style={{ maxWidth: 100, minWidth: 100 }} align="center">
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>CGST</td>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <Divider />
-                                            <tr>
-                                                <td>%</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>Amt.</td>
-                                            </tr>
-                                        </TableCell>
-                                        <TableCell style={{ maxWidth: 100, minWidth: 100 }} align="center">
-                                            <tr>
-                                            <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>SCGST</td>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <Divider />
-                                            <tr>
-                                                <td>%</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>Amt.</td>
-                                            </tr>
-                                        </TableCell>
-                                        <TableCell style={{ maxWidth: 100, minWidth: 100 }} align="center">
-                                            <tr>
-                                            <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>ICGST</td>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <Divider />
-                                            <tr>
-                                                <td>%</td>                                                
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>Amt.</td>
-                                            </tr>
-                                        </TableCell>
+                                        <TableCell style={{ maxWidth: 80, minWidth: 80 }} align="right">Amount</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -350,41 +281,12 @@ class printlocalpo extends React.Component {
                                                     </Fragment>
                                                 ))}
                                             </TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.Quantity}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.Price}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{parseFloat(item.Quantity) * parseFloat(item.Price)}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.LineDiscPercentage}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.GSTPercentage}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">
-                                            <tr>
-                                                <td>0.00</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>0.00</td>
-                                            </tr>
-                                            </TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">
-                                            <tr>
-                                                <td>0.00</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>0.00</td>
-                                            </tr>
-                                            </TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">
-                                            <tr>
-                                                <td>0.00</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>&nbsp;</td>
-                                                <td>0.00</td>
-                                            </tr>
-                                            </TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{item.Quantity.toFixed(2)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{item.Price.toFixed(2)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{item.LineDiscPercentage.toFixed(2)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{(parseFloat(item.Quantity) * parseFloat(item.Price)).toFixed(2)}</TableCell>
+                                           
+                                            
                                         </TableRow>
                                     ))}
 
@@ -396,33 +298,21 @@ class printlocalpo extends React.Component {
                                         <TableCell className="po-print-no-border-table" align="left"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="right">{this.getTotalQuantity()}</TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right">{this.getTotalAmount().toFixed(2)}</TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right">{0.00}</TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right">
-                                            00.00
-                                        </TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right">
-                                            00.00
-                                        </TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right">
-                                            00.00
-                                        </TableCell>
+                                        <TableCell className="po-print-no-border-table" align="right">{this.getTotalAmount().toFixed(2)}</TableCell>
+                                        
+                                         
                                     </TableRow>
                                     <div style={{ height: 20 }}>&nbsp;</div>
                                     <TableRow>
-                                        <TableCell className="po-print-no-border-table" align="left" colSpan={7}>
+                                        <TableCell className="po-print-no-border-table" align="left" colSpan={5}>
                                             <b>
                                                 <span>
                                                     Amount In Words:- {this.getCurrencyName()}. {this.inWords()}
                                                 </span>
                                             </b>
                                         </TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right"> </TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right"></TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right"> </TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right" colSpan={2}>Grand Total {this.getCurrencyName()} {this.props.podata.PO.FCValue}</TableCell>
-
+                                        <TableCell className="po-print-no-border-table" align="right" colSpan={3}>Grand Total {this.getCurrencyName()} {this.props.podata.PO.FCValue} </TableCell>
                                         
                                     </TableRow>
                                 </TableBody>
@@ -435,11 +325,13 @@ class printlocalpo extends React.Component {
                 <Grid container spacing={0}>
                         <Grid item xs={8}></Grid>
                         <Grid item xs={4}>
-                            <div style={{ textAlign: 'center', marginRight: -50 }}>
+                            <div style={{ textAlign: 'center' }}>
                                 <span>
                                     For Siva Tec Ltd<br />
                                     Computer generated PO does not required signature<br />
-                                    Authorized by Vipul Thakkar
+                                  {this.props.podata.PO.Status===1?null:(
+                                      <span>Authorized by -</span>
+                                  )}  
                                 </span>
                             </div>
                         </Grid>
@@ -450,4 +342,4 @@ class printlocalpo extends React.Component {
     }
 }
 
-export default printlocalpo;
+export default printimportpo;

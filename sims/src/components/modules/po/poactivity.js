@@ -62,6 +62,8 @@ import SCSI from "../../compo/customswitchinput";
 import Viewpo from "./component/viewpo";
 
 import PrintLocalPo from "./component/printlocalpo";
+import PrintImportPo from "./component/printimportpo";
+
 
 
 const today = moment().format(
@@ -92,6 +94,7 @@ class poactivity extends React.Component {
       DisableCreatebtn: true,
       DisableUpdatebtn: false,
       SnackbarStatus: false,
+      branchName:"",
       ErrorMessageProps:"",
       currentDeleteItemLine: {},
       initialCss: "",
@@ -347,6 +350,7 @@ class poactivity extends React.Component {
     }
 
     this.setState({
+      branchName:branchName,
       PO: PO,
       POID: type === "edit" ? CF.toInt(POID) : 0,
       urlparams: urlparams,
@@ -1726,6 +1730,16 @@ class poactivity extends React.Component {
    return price;
   }
 
+  getSupplierName=()=>{
+    let supplierList=this.state.supplierList;
+    console.log("getSupplierName > supplierList > ",supplierList);
+    for(let i=0;i<supplierList.length;i++){
+      if(supplierList[i].SuplID===this.state.PO.SuplID){
+        return supplierList[i].Name
+      }
+    }
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -1830,7 +1844,6 @@ class poactivity extends React.Component {
                 this.setState({ ErrorPrompt: true, ProgressLoader: true });
               });
           } else {
-            console.log("EEEEEEEEEEEEEEEEEEEEEE > response > ",response);             
             this.setState({ 
               ErrorMessageProps:"No. Series Not defined.",
               ErrorPrompt: true, 
@@ -1841,12 +1854,6 @@ class poactivity extends React.Component {
           console.log("No series Error");
           this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps:"No. Series Not defined.", });
         });
-
-
-
-
-
-
     };
 
     const updatePO = (e) => {
@@ -1869,7 +1876,6 @@ class poactivity extends React.Component {
       PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
 
       let PurchaseOrderLine = this.state.PurchaseOrderLine;
-      console.log("##############33 PurchaseOrderLine > ", PurchaseOrderLine);
 
       let PurchaseOrderLineList = [];
       //  PurchaseOrderLineList=this.getProcessedPurchaseOrderLineListUpdate();
@@ -1899,8 +1905,6 @@ class poactivity extends React.Component {
         };
         newPOL.push(o);
       }
-      console.log("PurchaseOrderLineList > ", PurchaseOrderLineList);
-      console.log("newPOL > ", newPOL);
 
 
       let isProperData = this.validatePOData(PurchaseOrder);
@@ -1913,9 +1917,21 @@ class poactivity extends React.Component {
       axios
         .post(Url, reqData, { headers })
         .then((response) => {
-          console.log("response > ", response);
           if (response.status === 201 || response.status === 200) {
             this.setState({ SuccessPrompt: true, ProgressLoader: true });
+
+            let PO = this.state.PO;
+            PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
+            PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
+            PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
+            if (PO.AmendmentNo > 0) {
+              PO.AmendmentDate = moment(PO.AmendmentDate).format("YYYY-MM-DD");
+            } else {
+              PO.AmendmentDate = "";
+            }
+            this.setState({
+              PO:PO
+            });
 
           }
 
@@ -2067,10 +2083,6 @@ class poactivity extends React.Component {
     };
 
 
-   
-
-
-
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
@@ -2089,18 +2101,53 @@ class poactivity extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
-        <div style={{ display: "none" }}>
-          {this.state.PO.IsImport===false?(
+        <div style={{ display: "none" }}>       
+          {this.state.PO.IsImport===false?(            
             <PrintLocalPo podata={
               {
+                Branch:this.state.Branch,
+                PO:this.state.PO,
                 PurchaseOrderLine:this.state.PurchaseOrderLine,
-                UOMList:this.state.UOMList
+                UOMList:this.state.UOMList,
+                CurrencyList:this.state.CurrencyList,
+                Supplier:{
+                  Name:this.getSupplierName(),
+                  Address:this.state.Address,
+                  Address2:this.state.Address2,
+                  Address3:this.state.Address3,
+                  City:this.state.City,
+                  PostCode:this.state.PostCode,
+                  CountryID:this.state.CountryID,
+                  StateID:this.state.StateID,
+                  CountryList:this.state.CountryList,
+                  StateList:this.state.StateList
+                  }
               }
             }  ref={el => (this.componentRef = el)} />
-          ):null}
-          
+          ):(
+            <PrintImportPo podata={
+              {
+                Branch:this.state.Branch,
+                PO:this.state.PO,
+                PurchaseOrderLine:this.state.PurchaseOrderLine,
+                UOMList:this.state.UOMList,
+                CurrencyList:this.state.CurrencyList,
+                Supplier:{
+                  Name:this.getSupplierName(),
+                  Address:this.state.Address,
+                  Address2:this.state.Address2,
+                  Address3:this.state.Address3,
+                  City:this.state.City,
+                  PostCode:this.state.PostCode,
+                  CountryID:this.state.CountryID,
+                  StateID:this.state.StateID,
+                  CountryList:this.state.CountryList,
+                  StateList:this.state.StateList
+                  }
+              }
+            }  ref={el => (this.componentRef = el)} />
+          )}          
         </div>
-
 
         <Fragment>
           <div style={{ height: 10 }}>&nbsp;</div>
@@ -2203,6 +2250,7 @@ class poactivity extends React.Component {
                                     disabled={true}
                                   />
 
+                                 
 
                                   <SIB
                                     id="Address"
