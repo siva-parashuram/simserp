@@ -1,5 +1,11 @@
 import '../../../components/user/dasboard.css'; 
+import * as APIURLS from "../../../routes/apiconstant";
+import { COOKIE, getCookie } from "../../../services/cookie";
 import React, { Fragment } from 'react'; 
+import axios from "axios";
+import { saveAs } from 'file-saver';
+
+
 import Grid from '@material-ui/core/Grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Stack from '@mui/material/Stack';
@@ -44,12 +50,49 @@ class attachmentmaster extends React.Component {
            document.getElementById("file"+item.id).style.display='none';
         }
 
-        const handleClick=(e,item)=>{
-            var a = document.createElement('a');    
-            a.id="attachment_"+item.name;        
-            a.href =item.link;
-            a.download=item.name;
-            a.click();
+        const downloadThisFile=(e,item)=>{
+            console.log("++++++++++++++++++++IN downloadThisFile++++++++++++++++++++++");
+            console.log("e > ",e);
+            console.log("item > ",item);
+            let ValidUser = APIURLS.ValidUser;
+            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+            ValidUser.Token = getCookie(COOKIE.TOKEN);
+            const headers = {
+                "Content-Type": "application/json",
+            };
+            let Url=APIURLS.APIURL.FileDownload; 
+            // let reqData={
+            //   FileName:item.fileName,
+            //   companyId:this.props.companyId,
+            //   BranchID:this.props.branchId,
+            //   UserID:parseInt(getCookie(COOKIE.USERID)),
+            //   Token:getCookie(COOKIE.TOKEN),
+            // };
+
+            const fd = new FormData();
+            fd.append('FileName', item.fileName);
+            fd.append('companyId', this.props.companyId);
+            fd.append('BranchID', this.props.branchId);
+            fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+            fd.append('Token', getCookie(COOKIE.TOKEN));
+
+            axios
+                .post(Url, fd, { headers })
+                .then((response) => { 
+                    console.log("response > ",response);
+
+                  
+                
+                    
+
+                    
+                })
+                .catch((error) => {
+                    console.log("error > ", error);
+                    this.setState({ filelist: [] });
+                });
+
+
         }
 
         const CloseAlertDialog=()=>{
@@ -71,7 +114,7 @@ class attachmentmaster extends React.Component {
                             
                             <TableRow>
                                 <TableCell align="left">
-                                    <span className="avatar-hover" onClick={(e) => handleClick(e, item)}> {item.fileName} </span> <br/>
+                                    <span className="avatar-hover" onClick={(e) => downloadThisFile(e, item)}> {item.fileName} </span> <br/>
                                     <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
                                 </TableCell>
                                 <TableCell align="left">

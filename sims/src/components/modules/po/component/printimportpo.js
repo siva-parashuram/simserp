@@ -166,9 +166,12 @@ class printimportpo extends React.Component {
                             </Fragment>
                         ) : null}
 
-                        {this.props.podata.Branch.IsGST===true?(
-                            <span className="boldHeader">GST No.: {this.props.podata.Branch.IsGST}</span>><br />
-                        ):null}    
+                        {this.props.podata.Branch.IsGST === true ? (
+                            <Fragment>
+                                <span className="boldHeader">GST No.: {this.props.podata.Branch.GSTNo}</span><br />
+                            </Fragment>
+
+                        ) : null}
 
                         {this.props.podata.Branch.IsVAT===true?(
                             <span className="boldHeader">VAT No.: {this.props.podata.Branch.IsGST}</span>><br />

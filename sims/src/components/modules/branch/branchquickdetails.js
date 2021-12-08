@@ -139,9 +139,10 @@ class branchquickdetails extends React.Component {
 
         const tab2Html = (
             <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
+                {console.log("this.props.branchItem > ",this.props.branchItem)}
                 <Attachmentmaster
-                    companyId={this.props.branchItem.companyId}
-                    branchId={this.props.branchItem.branchId}
+                    companyId={this.props.branchItem.CompanyID}
+                    branchId={this.props.branchItem.BranchID}
                     filelist={this.props.filelist}
                     rowClicked={this.props.rowClicked}
                     category="branch"

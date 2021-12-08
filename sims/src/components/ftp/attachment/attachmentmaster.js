@@ -35,6 +35,46 @@ class attachmentmaster extends React.Component {
             fileSizeError:"Uploaded file size is not accepted",
         };
     }
+
+    componentDidMount() {
+        this.getBranchFileList(this.props.companyId,this.props.branchId);
+    }
+
+     getBranchFileList=(companyId,branchId) =>{
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;              
+        const headers = {
+            "Content-Type": "application/json",
+        };
+         
+        const fd = new FormData();
+        fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+        fd.append('Token', getCookie(COOKIE.TOKEN));
+        fd.append('CompanyId', companyId);
+        fd.append('BranchID', branchId);
+        fd.append('Transaction', APIURLS.TrasactionType.default);
+        fd.append('TransactionNo', "");
+        fd.append('FileData', "");
+    
+        axios
+          .post(FTPFILELIST, fd, { headers })
+          .then((response) => {
+              console.log("getBranchFileList > response > ",response);
+              if(response.status===200){
+                // this.props.filelist=response.data;
+                this.setState({ filelist:response.data, ShowLoader: false,newAdded:true,OldrowClicked:this.props.rowClicked });
+              }
+            
+          })
+          .catch((error) => {
+            console.log("error > ", error);
+            this.setState({ filelist: [] });
+          });
+      }
+
+
     render() {
         const processUpload = (e, type, category) => {
             this.setState({ ShowLoader: true });
@@ -52,14 +92,8 @@ class attachmentmaster extends React.Component {
         const SWITCH = (e, type, category,uploadOrList) => {
             const formData = new FormData();
             let file = e.target.files[0];
-            /*
-              companyId
-              branchId
-              file
-              transactionType - PO/SO/
-              transactionId
-            */
-            //APIURLS.TrasactionType.default;
+            // var filename = e.target.files[0].name;
+            // var extension = e.target.files[0].type;
             switch (category) {
                 case "company":
                     let companyId = this.props.companyId;
@@ -95,6 +129,7 @@ class attachmentmaster extends React.Component {
                 "Content-Type": "application/json",
             };
            
+            console.log("formData > ",formData);
 
             axios
                 .post(FTPUploadUrl, formData, { headers })
@@ -256,12 +291,22 @@ class attachmentmaster extends React.Component {
 
                     {/*****************************Attachment List as per Props input***********************************************/}
                     <div style={{ marginLeft: 10, marginTop: 20, marginBottom: 20 }}>
+                        {console.log("*********************this.props > ",this.props)}
                         {this.props.companyId ? this.props.companyId > 0 ? (
                             <Fragment>
                                 {(parseInt(this.props.rowClicked)>parseInt(this.state.OldrowClicked) )?(
-                                   <Getattachments filelist={this.props.filelist} />  
+                                   <Getattachments
+                                    filelist={this.props.filelist}
+                                    companyId={this.props.companyId}
+                                    branchId={this.props.branchId}
+
+                                     />  
                                 ):(
-                                    this.state.newAdded===true?(<Getattachments filelist={this.state.filelist} />):null
+                                    this.state.newAdded===true?(<Getattachments 
+                                        filelist={this.state.filelist} 
+                                        companyId={this.props.companyId}
+                                        branchId={this.props.branchId}
+                                        />):null
                                     
                                 )}
                                
