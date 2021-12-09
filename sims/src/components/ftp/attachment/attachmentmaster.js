@@ -313,7 +313,7 @@ class attachmentmaster extends React.Component {
                                                 <TableCell className="no-border-table">
                                                     <Button
                                                         className="action-btns"
-
+                                                        disabled={this.props.companyId?false:true}
                                                         startIcon={<AttachFileIcon />}
                                                         onClick={(e) => { document.getElementById("uploadInput").click() }}
                                                     >

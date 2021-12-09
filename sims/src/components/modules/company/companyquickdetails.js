@@ -112,7 +112,7 @@ class companyquickdetails extends React.Component {
                     filelist={this.props.filelist}  
                     category="company"
                     type="info"
-                    companyId={this.props.item.CompanyID}
+                    companyId={this.props.item?this.props.item.CompanyID:null}
                     upload={true}
                     fileuploaded={false}
                     fileUploadonChange={this.props.fileUploadonChange}

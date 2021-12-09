@@ -14,6 +14,10 @@ import Typography from "@material-ui/core/Typography";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 /* Custom components and support imports*/
 import "../../user/dasboard.css";
 import * as URLS from "../../../routes/constants";
@@ -29,6 +33,9 @@ import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 import SDBIB from "../../compo/griddropdowninputwithbutton";
+import DialogCustom from "../../compo/dialogcomponent";
+
+import CompanyQuickDetails from "./companyquickdetails";
 
 class addnewcompany extends React.Component {
   constructor(props) {
@@ -58,10 +65,18 @@ class addnewcompany extends React.Component {
       BtnDisable: true,
       GeneralDetailsExpanded: true,
       duplicate: false,
+      filelist: [],
       Dialog: {
         DialogTitle: "",
         DialogStatus: false,
         DialogContent: null,
+      },
+      AttachmentDialog:{
+        open:false
+      },
+      DeleteAttachment:{
+        e:null,
+        item:null
       },
       company: {
         CompanyID: 0,
@@ -193,6 +208,7 @@ class addnewcompany extends React.Component {
             () => {
               this.setInitialParamsForEdit();
               this.getStateByCountry(this.state.company.CountryID);
+              this.refreshFileLists();
             }
           );
         } else {
@@ -257,6 +273,8 @@ class addnewcompany extends React.Component {
     this.setState({ stateData: newData, ProgressLoader: true });
   };
 
+ 
+
   processCountryData = (data) => {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
@@ -272,6 +290,159 @@ class addnewcompany extends React.Component {
   setParams = (object) => {
     this.setState({ company: object });
   };
+
+  downloadThisFile = (e, item) => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.FileDownload;
+
+    const fd = new FormData();
+    fd.append('FileName', item.fileName);
+    fd.append('companyId', this.state.company.CountryID);
+    fd.append('BranchID', 0);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+
+    axios({
+      method: 'post',
+      url: Url,
+      responseType: 'blob',
+      data: fd
+    })
+      .then(function (response) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        let link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", item.fileName);
+        document.body.appendChild(link);
+        link.click();
+      });
+  }
+
+  handleDelete = (e, item) => {
+    let Dialog=this.state.AttachmentDialog;
+    Dialog.open=true;
+    let DeleteAttachment=this.state.DeleteAttachment;
+    DeleteAttachment.e=e;
+    DeleteAttachment.item=item;
+    this.setState({
+      DeleteAttachment:DeleteAttachment,
+      AttachmentDialog:Dialog
+    });
+  }
+
+  processDelete = () => {
+    let e=this.state.DeleteAttachment.e;
+    let item=this.state.DeleteAttachment.item;
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.DELETEFTPFILE;
+
+    const fd = new FormData();
+    fd.append('FileName', item.fileName);
+    fd.append('companyId', this.state.company.CountryID);
+    fd.append('BranchID', 0);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+
+    axios
+    .post(Url, fd, { headers })
+    .then((response) => {
+      if (response.status === 200) {
+        this.refreshFileLists();
+        let Dialog=this.state.AttachmentDialog;
+        Dialog.open=false;
+        this.setState({AttachmentDialog:Dialog});
+      }
+    })
+    .catch((error) => {
+      console.log("error > ", error);
+      this.setState({ filelist: [] });
+    });
+  }
+
+  /*******************FILEUPLOAD STARTS************************** */
+
+  refreshFileLists = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const fd = new FormData();
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+    fd.append('CompanyId', this.state.company.CountryID);
+    fd.append('BranchID', 0);
+    fd.append('Transaction', APIURLS.TrasactionType.default);
+    fd.append('TransactionNo', "");
+    fd.append('FileData', "");
+
+    console.log("getCompanyFileList > fd > ", fd);
+    axios
+      .post(FTPFILELIST, fd, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            filelist: response.data,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ filelist: [] });
+      });
+  }
+
+  processUpload=(e)=>{
+    this.setState({ ShowLoader: true });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const formData = CF.FILE_UPLOAD_FORMDATA(ValidUser,e, "company",  this.state.company.CountryID);
+   
+    const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(FTPUploadUrl, formData, { headers })
+      .then((response) => {        
+        if (response.status === 200 || response.status === 201) {
+          this.refreshFileLists();
+        }
+        if (response.status === 403) {
+          this.setState({ ErrorPrompt: true, ShowLoader: false });
+        }
+
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ ErrorPrompt: true, ShowLoader: false });
+       
+      });
+
+  }
+ 
+ 
+
+  
+
+  /*******************FILEUPLOAD ENDS************************** */
+
+  closeDialog=()=>{
+    let Dialog=this.state.AttachmentDialog;
+    Dialog.open=false;
+    this.setState({AttachmentDialog:Dialog});
+  }
 
   render() {
     const updateFormValue = (param, e) => {
@@ -706,7 +877,7 @@ class addnewcompany extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.companyMaster + this.state.urlparams}
-          masterLinkTitle="Company Master"
+          masterLinkTitle="Companies"
           typoTitle={this.state.typoTitle}
           level={2}
         />
@@ -759,6 +930,14 @@ class addnewcompany extends React.Component {
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
+        />
+
+        <DialogCustom
+          MessageHeader="Delete Attachment!"
+          MessageText="Do you want to delete this attachment?"
+          open={this.state.AttachmentDialog.open}
+          onClose={(e) => this.closeDialog()}
+          onOK={(e) => this.processDelete()}
         />
 
         <Grid className="table-adjust" container spacing={0}>
@@ -956,7 +1135,40 @@ class addnewcompany extends React.Component {
             </Grid>
             {/* </div> */}
           </Grid>
-          <Grid item xs={4}></Grid>
+          <Grid  item xs={12} sm={12} md={4} lg={4}>
+          <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={1} lg={1}>
+                &nbsp;
+              </Grid>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                {/*<Branchlistbycompany data={this.state.branch} />*/}
+                {this.state.item === null || this.state.item === {} ? null : (
+                  <CompanyQuickDetails
+                    data={this.state.company.Branch}
+                    item={this.state.type==="edit"?{CompanyID:this.state.CompanyID}:null}
+                    filelist={
+                      this.state.filelist.map((item, i) => (
+                        <TableRow id={"fileRow_" + item.fileName}>
+                            <TableCell align="left">
+                                <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
+                                <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
+                            </TableCell>
+                            <TableCell align="left">
+                                <IconButton size="small" edge="end" aria-label="delete">
+                                    <DeleteIcon role={item} fontSize="small" style={{ color: '#f44336' }}
+                                        onClick={(e) => this.handleDelete(e, item)} 
+                                    />
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))
+                    }
+                    fileUploadonChange={(e)=>this.processUpload(e)}     
+                  />
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
         {dialog}
       </Fragment>
