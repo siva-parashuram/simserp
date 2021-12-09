@@ -302,7 +302,7 @@ class addnewcompany extends React.Component {
 
     const fd = new FormData();
     fd.append('FileName', item.fileName);
-    fd.append('companyId', this.state.company.CountryID);
+    fd.append('companyId', this.state.company.CompanyID);
     fd.append('BranchID', 0);
     fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
     fd.append('Token', getCookie(COOKIE.TOKEN));
@@ -346,7 +346,7 @@ class addnewcompany extends React.Component {
 
     const fd = new FormData();
     fd.append('FileName', item.fileName);
-    fd.append('companyId', this.state.company.CountryID);
+    fd.append('companyId', this.state.company.CompanyID);
     fd.append('BranchID', 0);
     fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
     fd.append('Token', getCookie(COOKIE.TOKEN));
@@ -407,7 +407,7 @@ class addnewcompany extends React.Component {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const formData = CF.FILE_UPLOAD_FORMDATA(ValidUser,e, "company",  this.state.company.CountryID);
+    const formData = CF.FILE_UPLOAD_FORMDATA(ValidUser,e, "company",  this.state.company.CompanyID);
    
     const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
     const headers = {
@@ -1149,11 +1149,11 @@ class addnewcompany extends React.Component {
                     filelist={
                       this.state.filelist.map((item, i) => (
                         <TableRow id={"fileRow_" + item.fileName}>
-                            <TableCell align="left">
+                            <TableCell align="left" className="no-border-table">
                                 <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
                                 <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
                             </TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left" className="no-border-table">
                                 <IconButton size="small" edge="end" aria-label="delete">
                                     <DeleteIcon role={item} fontSize="small" style={{ color: '#f44336' }}
                                         onClick={(e) => this.handleDelete(e, item)} 

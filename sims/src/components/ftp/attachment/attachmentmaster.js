@@ -304,34 +304,35 @@ class attachmentmaster extends React.Component {
                                 </Alert>
                             </Snackbar>
 
+                           
+                            <div style={{ marginLeft: -20, marginTop: 1, marginBottom: 5 }}>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={11} lg={11}>
-                                    <TableContainer>
-                                        <Table stickyHeader size="small" className="" aria-label="Attachment Form table">
-                                            <TableRow>
-
-                                                <TableCell className="no-border-table">
-                                                    <Button
-                                                        className="action-btns"
-                                                        disabled={this.props.companyId?false:true}
-                                                        startIcon={<AttachFileIcon />}
-                                                        onClick={(e) => { document.getElementById("uploadInput").click() }}
-                                                    >
-                                                        Attach File
-                                                    </Button>
-                                                    <input
-                                                        className="file-upload-input"
-                                                        id="uploadInput"
-                                                        type="file"
-                                                        // onChange={(e) => this.processUpload(e, this.props.category)} 
-                                                        onChange={this.props.fileUploadonChange}
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                        </Table>
-                                    </TableContainer>
+                                    <Table stickyHeader size="small" className="" aria-label="Attachment Form table">
+                                        <TableRow>
+                                            <TableCell className="no-border-table">
+                                                <Button
+                                                    className="action-btns"
+                                                    disabled={this.props.companyId ? false : true}
+                                                    startIcon={<AttachFileIcon />}
+                                                    onClick={(e) => { document.getElementById("uploadInput").click() }}
+                                                >
+                                                    Attach File
+                                                </Button>
+                                                <input
+                                                    className="file-upload-input"
+                                                    id="uploadInput"
+                                                    type="file"
+                                                    // onChange={(e) => this.processUpload(e, this.props.category)} 
+                                                    onChange={this.props.fileUploadonChange}
+                                                />
+                                                
+                                            </TableCell>                                            
+                                        </TableRow>
+                                    </Table>
                                 </Grid>
                             </Grid>
+                            </div>
                             <div style={{ marginLeft: 10, marginTop: 1, marginBottom: 5 }}>
                                 <Grid container spacing={0}>
                                     <Grid xs={12} sm={12} md={11} lg={11}>

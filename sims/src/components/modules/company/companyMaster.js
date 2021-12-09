@@ -509,11 +509,11 @@ class companyMaster extends React.Component {
                     filelist={
                       this.state.filelist.map((item, i) => (
                         <TableRow id={"fileRow_" + item.fileName}>
-                            <TableCell align="left">
+                            <TableCell align="left"  className="no-border-table">
                                 <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
                                 <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
                             </TableCell>
-                            <TableCell align="left">
+                            <TableCell align="left" className="no-border-table">
                                 <IconButton size="small" edge="end" aria-label="delete">
                                     <DeleteIcon role={item} fontSize="small" style={{ color: '#f44336' }}
                                         onClick={(e) => this.handleDelete(e, item)} 
