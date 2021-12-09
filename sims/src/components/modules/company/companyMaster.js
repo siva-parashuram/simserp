@@ -6,6 +6,7 @@ import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import * as CF from "../../../services/functions/customfunctions";
 
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
@@ -21,11 +22,8 @@ import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
- 
-
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
-
-import Branchlistbycompany from "./branchlistbycompany";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import CompanyQuickDetails from "./companyquickdetails";
 
@@ -33,25 +31,9 @@ import MasterDataGrid from "../../compo/masterdatagrid";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
-import Pagination from "../../compo/paginationcomponent";
 import BackdropLoader from "../../compo/backdrop";
 
-
-
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
-
- 
-// document.addEventListener('keydown', function (e) {
-//   switch (e.keyCode) {
-//       case 78:
-//           document.getElementById("add_New").click();
-//           break;
-//       default:
-//           console.log("e > ", e);
-//           break;
-//   }
-// });
+import DialogCustom from "../../compo/dialogcomponent";
  
 
 const initialCss = "";
@@ -63,6 +45,13 @@ class companyMaster extends React.Component {
       pagination: {
         page: 1,
         rowsPerPage: APIURLS.pagination.rowsPerPage,
+      },
+      Dialog:{
+        open:false
+      },
+      DeleteAttachment:{
+        e:null,
+        item:null
       },
       page: 1,
       rowsPerPage: 10,
@@ -218,19 +207,15 @@ class companyMaster extends React.Component {
         this.state.urlparams +
         "&compID=" +
         item.CompanyID+ "&type=edit";
-      this.setState({
-        item: item,
-        branch: branches,
-        editUrl: editUrl,
-        selectionModel:index,
-      });
-      this.getAttachments(item.CompanyID);
+      this.setParams(item,branches,editUrl,index);      
+      
     } catch (e) {
       console.log("Error : ", e);
     } 
   }  
 
-  getAttachments=(companyId) =>{
+  setParams=(item,branches,editUrl,index)=>{
+    console.log("item : ",item);
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -242,7 +227,7 @@ class companyMaster extends React.Component {
     const formData = new FormData();
     formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
     formData.append("Token", getCookie(COOKIE.TOKEN));
-    formData.append("CompanyId", companyId);
+    formData.append("CompanyId", item.CompanyID);
     formData.append("BranchID", 0);
     formData.append("Transaction", APIURLS.TrasactionType.default);
     formData.append("TransactionNo", "");
@@ -251,12 +236,172 @@ class companyMaster extends React.Component {
     axios
       .post(FTPGetAttachmentsUrl, formData, { headers })
       .then((response) => {
-        this.setState({ filelist: response.data });
+        this.setState({
+          item: item,
+          branch: branches,
+          editUrl: editUrl,
+          selectionModel:index,
+          filelist: response.data
+        });
+        
       })
       .catch((error) => {
         console.log("error > ", error);
+        
+        
       });
   }
+
+  /*******************FILEUPLOAD STARTS************************** */
+
+  processUpload=(e)=>{
+    this.setState({ ShowLoader: true });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const formData = CF.FILE_UPLOAD_FORMDATA(ValidUser,e, "company", this.state.item.CompanyID);
+   
+    const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(FTPUploadUrl, formData, { headers })
+      .then((response) => {        
+        if (response.status === 200 || response.status === 201) {
+          this.refreshFileLists();
+        }
+        if (response.status === 403) {
+          this.setState({ ErrorPrompt: true, ShowLoader: false });
+        }
+
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ ErrorPrompt: true, ShowLoader: false });
+       
+      });
+
+  }
+
+  refreshFileLists = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const fd = new FormData();
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+    fd.append('CompanyId', this.state.item.CompanyID);
+    fd.append('BranchID', 0);
+    fd.append('Transaction', APIURLS.TrasactionType.default);
+    fd.append('TransactionNo', "");
+    fd.append('FileData', "");
+
+    console.log("getCompanyFileList > fd > ", fd);
+    axios
+      .post(FTPFILELIST, fd, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            filelist: response.data,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ filelist: [] });
+      });
+  }
+
+  downloadThisFile = (e, item) => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.FileDownload;
+
+    const fd = new FormData();
+    fd.append('FileName', item.fileName);
+    fd.append('companyId', this.state.item.CompanyID);
+    fd.append('BranchID', 0);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+
+    axios({
+      method: 'post',
+      url: Url,
+      responseType: 'blob',
+      data: fd
+    })
+      .then(function (response) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        let link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", item.fileName);
+        document.body.appendChild(link);
+        link.click();
+      });
+  }
+
+  handleDelete = (e, item) => {
+    let Dialog=this.state.Dialog;
+    Dialog.open=true;
+    let DeleteAttachment=this.state.DeleteAttachment;
+    DeleteAttachment.e=e;
+    DeleteAttachment.item=item;
+    this.setState({
+      DeleteAttachment:DeleteAttachment,
+      Dialog:Dialog
+    });
+  }
+
+  processDelete = () => {
+    let e=this.state.DeleteAttachment.e;
+    let item=this.state.DeleteAttachment.item;
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.DELETEFTPFILE;
+
+    const fd = new FormData();
+    fd.append('FileName', item.fileName);
+    fd.append('companyId', this.state.item.CompanyID);
+    fd.append('BranchID', 0);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+
+    axios
+    .post(Url, fd, { headers })
+    .then((response) => {
+      if (response.status === 200) {
+        this.refreshFileLists();
+        let Dialog=this.state.Dialog;
+        Dialog.open=false;
+        this.setState({Dialog:Dialog});
+      }
+    })
+    .catch((error) => {
+      console.log("error > ", error);
+      this.setState({ filelist: [] });
+    });
+  }
+
+  /*******************FILEUPLOAD ENDS************************** */
+
+
+  closeDialog=()=>{
+    let Dialog=this.state.Dialog;
+    Dialog.open=false;
+    this.setState({Dialog:Dialog});
+  }
+
 
    openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -278,7 +423,7 @@ class companyMaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Company Master"
+          typoTitle="Companies"
           level={1}
         />
       </Fragment>
@@ -318,24 +463,31 @@ class companyMaster extends React.Component {
         <CssBaseline />
         <BackdropLoader open={!this.state.ProgressLoader} />
 
-       
-
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
+        />
+
+        <DialogCustom
+        MessageHeader="Delete Attachment!"
+        MessageText="Do you want to delete this attachment?"
+        open={this.state.Dialog.open}
+        onClose={(e)=>this.closeDialog()}
+        onOK={(e)=>this.processDelete()}
         />
 
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             {this.state.companyData.length > 0  ? (
               <Fragment>                          
-                <MasterDataGrid
+                <MasterDataGrid              
                  selectionModel={this.state.selectionModel}
                  rows={this.state.companyData}
                  columns={this.state.columns}
                  pagination={this.state.pagination}
                  onSelectionModelChange={(e) => this.handleRowClick(e)}
                  onPageChange={handlePageChange}
+                
                 />     
                             
               </Fragment>
@@ -354,8 +506,25 @@ class companyMaster extends React.Component {
                   <CompanyQuickDetails
                     data={this.state.branch===null?[]:this.state.branch}
                     item={this.state.item}
-                    filelist={this.state.filelist}
-                    rowClicked={this.state.rowClicked}
+                    filelist={
+                      this.state.filelist.map((item, i) => (
+                        <TableRow id={"fileRow_" + item.fileName}>
+                            <TableCell align="left">
+                                <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
+                                <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
+                            </TableCell>
+                            <TableCell align="left">
+                                <IconButton size="small" edge="end" aria-label="delete">
+                                    <DeleteIcon role={item} fontSize="small" style={{ color: '#f44336' }}
+                                        onClick={(e) => this.handleDelete(e, item)} 
+                                    />
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))
+                    }
+                    rowClicked={this.state.rowClicked}     
+                    fileUploadonChange={(e)=>this.processUpload(e)}     
                   />
                 )}
               </Grid>

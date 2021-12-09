@@ -80,6 +80,23 @@ body{
   font-size: 14px !important;
 }
 
+.MuiDataGrid-toolbarContainer{
+  margin-bottom: -10px !important;
+}
+.MuiDataGrid-columnsContainer{
+  min-height: 40px !important; 
+    max-height: 40px !important;
+     line-height: 40px !important;
+
+}
+.MuiTablePagination-caption{
+  margin-left: -12px !important;
+}
+
+.MuiDataGrid-window{
+  top:40px !important;
+}
+
 .MuiAutocomplete-root{
   height: 27.81px !important;
   line-height: 27.81px !important;
@@ -670,7 +687,7 @@ cursor: pointer;
 .table-header-font{
   color:#009688 !important;
   font-weight: 545 !important;
-  text-transform: uppercase !important;
+  text-transform: initial !important;
   background-color: #fff !important;
 }
 

@@ -20,6 +20,7 @@ export const APIURL = {
   FileDownload: domain + "api/Common/FileDownload",
   FTPUPLOAD: domain + "api/Common/FileUpload",
   FTPFILELIST: domain + "api/Common/ListOfFilesFromFTP",
+  DELETEFTPFILE:domain+"api/Common/DeleteFileFromFTP",
   Login: domain + "api/users/login",
   Logout: domain + "api/users/Logout",
   addNewCompany: domain + "api/Company/CreateCompany",
@@ -504,7 +505,7 @@ export const companyMasterColumn = [
   },
   {
     field: 'CompanyName',
-    headerName: 'Company Name',
+    headerName: 'Name',
     width: 160,
     editable: false,
     headerClassName: 'table-header-font'

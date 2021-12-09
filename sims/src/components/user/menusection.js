@@ -3,6 +3,7 @@ import "./dasboard.css";
 import * as Customfunctions from "../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../services/cookie";
 import * as APIURLS from "../../routes/apiconstant";
+import * as URLS from "../../routes/constants";
 import Link from '@mui/material/Link';
 
 
@@ -159,6 +160,11 @@ class menusection extends React.Component {
     }
 
 
+    geToDashboard=()=>{
+        window.location = URLS.URLS.userDashboard + this.state.urlparams;
+    }
+
+
     render() {
 
         const toggleDrawer = (item) => {
@@ -253,6 +259,7 @@ class menusection extends React.Component {
                                     >
                                         <Button
                                             className="menusection-action-userFirstname"
+                                            onClick={()=>this.geToDashboard()}
                                         >
                                             <b>{getCookie(COOKIE.FIRSTNAME)}&nbsp;&nbsp;&nbsp;</b>
                                         </Button>

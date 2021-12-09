@@ -4,16 +4,15 @@ import * as APIURLS from "../../../routes/apiconstant";
 import React, { Fragment } from 'react';
 import axios from "axios";
 import Grid from '@material-ui/core/Grid';
-import { Divider } from '@material-ui/core';
-
+import { Divider, ListItemIcon } from '@material-ui/core';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import LinearProgress from '@mui/material/LinearProgress';
-import Getattachments from "./getattachments";
 import Button from '@mui/material/Button';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
@@ -29,26 +28,37 @@ class attachmentmaster extends React.Component {
             urlparams: "",
             ShowLoader: false,
             ErrorPrompt: false,
-            newAdded:false,
-            OldrowClicked:1,
+            fileuploaded: this.props.fileuploaded,
+            OldrowClicked: 1,
             filelist: [],
-            fileSizeError:"Uploaded file size is not accepted",
+            fileSizeError: "Upload data not accepted",
         };
     }
 
     componentDidMount() {
-        this.getBranchFileList(this.props.companyId,this.props.branchId);
+
     }
 
-     getBranchFileList=(companyId,branchId) =>{
+    fetchFileLists = () => {
+        console.log("fetchFileLists > this.props > ", this.props);
+        if (this.props.category === "company") {
+            console.log("fetchFileLists > company > ");
+            this.getCompanyFileList(this.props.companyId, 0);
+        } else {
+            this.getBranchFileList(this.props.companyId, this.props.branchId);
+        }
+
+    }
+
+    getCompanyFileList = (companyId, branchId) => {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
-        const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;              
+        const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;
         const headers = {
             "Content-Type": "application/json",
         };
-         
+
         const fd = new FormData();
         fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
         fd.append('Token', getCookie(COOKIE.TOKEN));
@@ -57,144 +67,198 @@ class attachmentmaster extends React.Component {
         fd.append('Transaction', APIURLS.TrasactionType.default);
         fd.append('TransactionNo', "");
         fd.append('FileData', "");
-    
+
+        console.log("getCompanyFileList > fd > ", fd);
         axios
-          .post(FTPFILELIST, fd, { headers })
-          .then((response) => {
-              console.log("getBranchFileList > response > ",response);
-              if(response.status===200){
-                // this.props.filelist=response.data;
-                this.setState({ filelist:response.data, ShowLoader: false,newAdded:true,OldrowClicked:this.props.rowClicked });
-              }
-            
-          })
-          .catch((error) => {
-            console.log("error > ", error);
-            this.setState({ filelist: [] });
-          });
-      }
+            .post(FTPFILELIST, fd, { headers })
+            .then((response) => {
+                console.log("getCompanyFileList > response > ", response);
+
+
+                if (response.status === 200) {
+
+                    this.setState({
+                        filelist: response.data,
+                        fileuploaded: true,
+                        ShowLoader: false
+                    });
+                }
+
+            })
+            .catch((error) => {
+                console.log("error > ", error);
+                this.setState({ filelist: [] });
+            });
+    }
+
+    getBranchFileList = (companyId, branchId) => {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;
+        const headers = {
+            "Content-Type": "application/json",
+        };
+
+        const fd = new FormData();
+        fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+        fd.append('Token', getCookie(COOKIE.TOKEN));
+        fd.append('CompanyId', companyId);
+        fd.append('BranchID', branchId);
+        fd.append('Transaction', APIURLS.TrasactionType.default);
+        fd.append('TransactionNo', "");
+        fd.append('FileData', "");
+
+        axios
+            .post(FTPFILELIST, fd, { headers })
+            .then((response) => {
+                console.log("getBranchFileList > response > ", response);
+                if (response.status === 200) {
+                    this.setState({ filelist: response.data, ShowLoader: false, newAdded: true, OldrowClicked: this.props.rowClicked });
+                }
+
+            })
+            .catch((error) => {
+                console.log("error > ", error);
+
+                this.setState({ filelist: [] });
+            });
+    }
+
+    processUpload = (e, category) => {
+        this.setState({ ShowLoader: true });
+        var filename = e.target.files[0].name;
+        var extension = e.target.files[0].type;
+        this.SWITCH(e, category);
+    }
+
+    SWITCH = (e, category) => {
+        const formData = new FormData();
+        let file = e.target.files[0];
+        switch (category) {
+            case "company":
+                let companyId = this.props.companyId;
+                formData.append('CompanyId', this.props.companyId);
+                formData.append('BranchID', 0);
+                formData.append('Transaction', APIURLS.TrasactionType.default);
+                formData.append('TransactionNo', "");
+                formData.append('FileData', file);
+                this.processUploadPost(formData, this.props.companyId, 0, 'company');
+
+                break;
+            case "branch":
+                formData.append('CompanyId', this.props.companyId);
+                formData.append('BranchID', this.props.branchId);
+                formData.append('Transaction', APIURLS.TrasactionType.default);
+                formData.append('TransactionNo', "");
+                formData.append('FileData', file);
+                this.processUploadPost(formData, this.props.companyId, this.props.branchId, 'branch');
+                break;
+
+        }
+    }
+
+    processUploadPost = (formData) => {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+        formData.append('Token', getCookie(COOKIE.TOKEN));
+
+        const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+        const headers = {
+            "Content-Type": "application/json",
+        };
+
+
+        axios
+            .post(FTPUploadUrl, formData, { headers })
+            .then((response) => {
+                this.reset();
+                if (response.status === 200 || response.status === 201) {
+                    this.fetchFileLists();
+                }
+                if (response.status === 403) {
+                    this.setState({ ErrorPrompt: true, ShowLoader: false });
+                }
+
+            })
+            .catch((error) => {
+                console.log("error > ", error);
+                this.setState({ ErrorPrompt: true, ShowLoader: false });
+                this.reset();
+            });
+
+    }
+
+
+    reset = () => {
+        document.getElementById("uploadInput").value = "";
+    }
+
+
+
+    /************************************FILE LISTING******************************************** */
+
+    handleDelete = (e, item) => {
+        this.setState({ e: e, item: item, AlertDialog: true });
+    }
+
+    processDelete = (e, item) => {
+        console.log("e > ", e);
+        console.log("item > ", item);
+        document.getElementById("fileRow_" + item.fileName).style.display = 'none';
+    }
+
+    downloadThisFile = (e, item) => {
+        console.log("------------------downloadThisFile----------------");
+        console.log("e > ", e);
+        console.log("item > ", item);
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.FileDownload;
+
+        const fd = new FormData();
+        fd.append('FileName', item.fileName);
+        fd.append('companyId', this.props.companyId);
+        fd.append('BranchID', this.props.category === "company" ? 0 : this.props.branchId);
+        fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+        fd.append('Token', getCookie(COOKIE.TOKEN));
+
+        axios({
+            method: 'post',
+            url: Url,
+            responseType: 'blob',
+            data: fd
+        })
+            .then(function (response) {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                let link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", item.fileName);
+                document.body.appendChild(link);
+                link.click();
+            });
+    }
+
+    CloseAlertDialog = () => {
+        this.setState({ AlertDialog: false });
+    }
+    CloseAlertDialogAndProcess = () => {
+        this.setState({ AlertDialog: false });
+        this.processDelete(this.state.e, this.state.item);
+    }
+
+
+    /************************************************************************************ */
 
 
     render() {
-        const processUpload = (e, type, category) => {
-            this.setState({ ShowLoader: true });
-            // let companyId=this.props.companyId;
-            // let branchId=this.props.branchId;
-            console.log("e.target > ", e.target);
-            console.log("e.target.files > ", e.target.files);
-            var filename = e.target.files[0].name;
-            var extension = e.target.files[0].type;
-            console.log("filename > ", filename);
-            console.log("extension > ", extension);
-            SWITCH(e, type, category);
-        }
 
-        const SWITCH = (e, type, category,uploadOrList) => {
-            const formData = new FormData();
-            let file = e.target.files[0];
-            // var filename = e.target.files[0].name;
-            // var extension = e.target.files[0].type;
-            switch (category) {
-                case "company":
-                    let companyId = this.props.companyId;
-                    formData.append('CompanyId', this.props.companyId);
-                    formData.append('BranchID', 0);
-                    formData.append('Transaction', APIURLS.TrasactionType.default);
-                    formData.append('TransactionNo', "");
-                    formData.append('FileData', file);
-                    processUploadPost(formData,this.props.companyId,0,'company');
-                    
-                    break;
-                case "branch":
-                    formData.append('CompanyId', this.props.companyId);
-                    formData.append('BranchID', this.props.branchId);
-                    formData.append('Transaction', APIURLS.TrasactionType.default);
-                    formData.append('TransactionNo', "");
-                    formData.append('FileData', file);
-                    processUploadPost(formData,this.props.companyId,this.props.branchId,'branch');
-                    break;
-
-            }
-        }
-
-        const processUploadPost = (formData,companyId,branchId,listing) => {
-            let ValidUser = APIURLS.ValidUser;
-            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-            ValidUser.Token = getCookie(COOKIE.TOKEN);
-            formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-            formData.append('Token', getCookie(COOKIE.TOKEN));
-
-            const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
-            const headers = {
-                "Content-Type": "application/json",
-            };
-           
-            console.log("formData > ",formData);
-
-            axios
-                .post(FTPUploadUrl, formData, { headers })
-                .then((response) => {
-                    reset();
-                    if(response.status===200 || response.status===201){
-                        if (listing === "branch") {
-                            getBranchFileList(companyId,branchId);
-                        }
-                        if (listing === "company") {
-                            getBranchFileList(companyId,0);
-                        }
-                    }
-                    if(response.status===403){
-                        this.setState({ ErrorPrompt: true, ShowLoader: false });
-                    }
-                   
-                })
-                .catch((error) => {
-                    console.log("error > ", error);
-                    this.setState({ ErrorPrompt: true, ShowLoader: false });
-                    reset();
-                });
-
-        }
-
-    
-
-        const getBranchFileList=(companyId,branchId) =>{
-            let ValidUser = APIURLS.ValidUser;
-            ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-            ValidUser.Token = getCookie(COOKIE.TOKEN);
-            const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;              
-            const headers = {
-                "Content-Type": "application/json",
-            };
-             
-            const fd = new FormData();
-            fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-            fd.append('Token', getCookie(COOKIE.TOKEN));
-            fd.append('CompanyId', companyId);
-            fd.append('BranchID', branchId);
-            fd.append('Transaction', APIURLS.TrasactionType.default);
-            fd.append('TransactionNo', "");
-            fd.append('FileData', "");
-        
-            axios
-              .post(FTPFILELIST, fd, { headers })
-              .then((response) => {
-                  console.log("getBranchFileList > response > ",response);
-                  if(response.status===200){
-                    // this.props.filelist=response.data;
-                    this.setState({ filelist:response.data, ShowLoader: false,newAdded:true,OldrowClicked:this.props.rowClicked });
-                  }
-                
-              })
-              .catch((error) => {
-                console.log("error > ", error);
-                this.setState({ filelist: [] });
-              });
-          }
-
-        const reset = () => {
-            document.getElementById("uploadInput").value = "";
-        }
 
         function Alert(props) {
             return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -209,10 +273,10 @@ class attachmentmaster extends React.Component {
 
         const closeSuccessPrompt = (event, reason) => {
             if (reason === "clickaway") {
-              return;
+                return;
             }
             this.setState({ SuccessPrompt: false });
-          };
+        };
 
         return (
             <Fragment>
@@ -248,7 +312,7 @@ class attachmentmaster extends React.Component {
 
                                                 <TableCell className="no-border-table">
                                                     <Button
-                                                        className="file-browse-btn"
+                                                        className="action-btns"
 
                                                         startIcon={<AttachFileIcon />}
                                                         onClick={(e) => { document.getElementById("uploadInput").click() }}
@@ -259,24 +323,22 @@ class attachmentmaster extends React.Component {
                                                         className="file-upload-input"
                                                         id="uploadInput"
                                                         type="file"
-                                                        onChange={(e) => processUpload(e, this.props.type, this.props.category)} />
+                                                        // onChange={(e) => this.processUpload(e, this.props.category)} 
+                                                        onChange={this.props.fileUploadonChange}
+
+                                                    />
                                                 </TableCell>
                                             </TableRow>
                                         </Table>
                                     </TableContainer>
                                 </Grid>
                             </Grid>
-                            <div style={{ marginLeft: 10, marginTop: 20, marginBottom: 20 }}>
+                            <div style={{ marginLeft: 10, marginTop: 1, marginBottom: 20 }}>
                                 <Grid container spacing={0}>
                                     <Grid xs={12} sm={12} md={11} lg={11}>
                                         <Divider />
                                     </Grid>
-                                </Grid>
-                                <Grid container spacing={0}>
-                                    <Grid xs={12} sm={12} md={11} lg={11}>
-                                        {this.state.ShowLoader === true ? (<LinearProgress />) : null}
-                                    </Grid>
-                                </Grid>
+                                </Grid>                              
                             </div>
                         </Fragment>
                     ) : null}
@@ -288,31 +350,19 @@ class attachmentmaster extends React.Component {
                             </Grid>
                         </Grid>
                     </div>
-
-                    {/*****************************Attachment List as per Props input***********************************************/}
+               
                     <div style={{ marginLeft: 10, marginTop: 20, marginBottom: 20 }}>
-                        {console.log("*********************this.props > ",this.props)}
-                        {this.props.companyId ? this.props.companyId > 0 ? (
-                            <Fragment>
-                                {(parseInt(this.props.rowClicked)>parseInt(this.state.OldrowClicked) )?(
-                                   <Getattachments
-                                    filelist={this.props.filelist}
-                                    companyId={this.props.companyId}
-                                    branchId={this.props.branchId}
-
-                                     />  
-                                ):(
-                                    this.state.newAdded===true?(<Getattachments 
-                                        filelist={this.state.filelist} 
-                                        companyId={this.props.companyId}
-                                        branchId={this.props.branchId}
-                                        />):null
-                                    
-                                )}
-                               
-                            </Fragment>
-
-                        ) : null : null}
+                        <Fragment>
+                            <Grid container spacing={0}>
+                                <Grid xs={11} sm={11} md={11} lg={11}>
+                                    <Table size="small">
+                                        <TableBody className="tableBody">
+                                            {this.props.filelist}
+                                        </TableBody>
+                                    </Table>
+                                </Grid>
+                            </Grid>
+                        </Fragment>
                     </div>
                 </div>
             </Fragment>

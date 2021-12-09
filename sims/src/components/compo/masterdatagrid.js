@@ -17,12 +17,12 @@ class masterdatagrid extends React.Component {
                     rows={this.props.rows}
                     columns={this.props.columns}
                     pageSize={10}                   
-                    // checkboxSelection={this.props.checkboxSelection}
+                    checkboxSelection={false}
                     disableSelectionOnClick={this.props.disableSelectionOnClick}
                     onSelectionModelChange={this.props.onSelectionModelChange}
                     // onEditRowsModelChange={this.props.onEditRowsModelChange}
                     components={{
-                        Toolbar: GridToolbar,
+                        Toolbar:   GridToolbar,
                       }}
                       onPageChange={this.props.onPageChange}   
                 />

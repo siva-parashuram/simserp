@@ -27,9 +27,30 @@ class companyquickdetails extends React.Component {
             showAttachments: false,
             detailsUnderlineBtnCss: "btn-bottom-border-color",  //btn-bottom-border-color
             attachmentUnderlineBtnCss: "",
-            data:this.props.data
+            data:this.props.data,
+            filelist:this.props.filelist
         };
     }
+
+   
+    tab2Html = (filelist,CompanyID,rowClicked) => {
+        let o = (
+            <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
+                {console.log("this.props > ", this.props)}
+                <Attachmentmaster
+                    filelist={filelist}
+                    category="company"
+                    type="info"
+                    companyId={CompanyID}
+                    upload={true}
+                    rowClicked={rowClicked}
+                />
+            </Grid>
+        );
+        // this.setState({ tab2Html: o });
+        return o;
+    }
+
     render() {
         const customTabButton = (e, params) => {
             if (params === "details") {
@@ -52,9 +73,10 @@ class companyquickdetails extends React.Component {
                 
                 <Grid container spacing={0}>
                     <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                        {(this.state.data.length) > 0 ? (
+                        {/* {(this.state.data.length) > 0 ? (
                             <Branchlistbycompany data={this.props.data} />
-                        ) : "No Branches"}
+                        ) : "No Branches"} */}
+                         <Branchlistbycompany data={this.props.data} />
                     </Grid>
                 </Grid>
                  
@@ -85,16 +107,24 @@ class companyquickdetails extends React.Component {
 
         const tab2Html = (
             <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
+                {console.log("this.props > ",this.props)}
                 <Attachmentmaster
-                    filelist={this.props.filelist}
+                    filelist={this.props.filelist}  
                     category="company"
                     type="info"
-                    companyId={this.props.item.companyId}
+                    companyId={this.props.item.CompanyID}
                     upload={true}
-                    rowClicked={this.props.rowClicked}
+                    fileuploaded={false}
+                    fileUploadonChange={this.props.fileUploadonChange}
                 />
             </Grid>
         );
+
+        
+        
+       
+
+
 
         return (
             <Fragment>
@@ -104,6 +134,8 @@ class companyquickdetails extends React.Component {
                     tab1Html={tab1Html}
                     tab2Html={tab2Html}
                 />
+
+              
             </Fragment>
         )
     }

@@ -152,6 +152,8 @@ class branchquickdetails extends React.Component {
             </Grid>
         );
 
+        
+
 
 
         return (

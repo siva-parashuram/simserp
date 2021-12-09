@@ -1,3 +1,6 @@
+import * as APIURLS from "../../routes/apiconstant";
+
+
 //remove particular opened branch by branch id
 export const UPDATE_BRANCH_OPEN_REMOVE = (branchId) => {
     
@@ -152,8 +155,32 @@ return valid;
 }
 
 
+/*-------------------------------------------------------------------------------------------------------------*/
 
+export const FILE_UPLOAD_FORMDATA = (ValidUser,e, category,companyId,branchId) => {
+  const formData = new FormData();
+  formData.append('UserID', parseInt(ValidUser.UserID));
+  formData.append('Token', ValidUser.Token);
+  let file = e.target.files[0];
+  switch (category) {
+      case "company":
+          formData.append('CompanyId', companyId);
+          formData.append('BranchID', 0);
+          formData.append('Transaction', APIURLS.TrasactionType.default);
+          formData.append('TransactionNo', "");
+          formData.append('FileData', file);
+          break;
+      case "branch":
+          formData.append('CompanyId', companyId);
+          formData.append('BranchID', branchId);
+          formData.append('Transaction', APIURLS.TrasactionType.default);
+          formData.append('TransactionNo', "");
+          formData.append('FileData', file);
+          break;
 
+  }
+  return formData;
+}
 
 
 
