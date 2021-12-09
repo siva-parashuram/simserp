@@ -380,7 +380,7 @@ class addnewcompany extends React.Component {
     const fd = new FormData();
     fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
     fd.append('Token', getCookie(COOKIE.TOKEN));
-    fd.append('CompanyId', this.state.company.CountryID);
+    fd.append('CompanyId', this.state.company.CompanyID);
     fd.append('BranchID', 0);
     fd.append('Transaction', APIURLS.TrasactionType.default);
     fd.append('TransactionNo', "");
@@ -1145,7 +1145,7 @@ class addnewcompany extends React.Component {
                 {this.state.item === null || this.state.item === {} ? null : (
                   <CompanyQuickDetails
                     data={this.state.company.Branch}
-                    item={this.state.type==="edit"?{CompanyID:this.state.CompanyID}:null}
+                    item={this.state.type==="edit"?{CompanyID:this.state.company.CompanyID}:null}
                     filelist={
                       this.state.filelist.map((item, i) => (
                         <TableRow id={"fileRow_" + item.fileName}>

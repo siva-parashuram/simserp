@@ -325,7 +325,6 @@ class attachmentmaster extends React.Component {
                                                         type="file"
                                                         // onChange={(e) => this.processUpload(e, this.props.category)} 
                                                         onChange={this.props.fileUploadonChange}
-
                                                     />
                                                 </TableCell>
                                             </TableRow>
@@ -333,7 +332,7 @@ class attachmentmaster extends React.Component {
                                     </TableContainer>
                                 </Grid>
                             </Grid>
-                            <div style={{ marginLeft: 10, marginTop: 1, marginBottom: 20 }}>
+                            <div style={{ marginLeft: 10, marginTop: 1, marginBottom: 5 }}>
                                 <Grid container spacing={0}>
                                     <Grid xs={12} sm={12} md={11} lg={11}>
                                         <Divider />
@@ -341,18 +340,15 @@ class attachmentmaster extends React.Component {
                                 </Grid>                              
                             </div>
                         </Fragment>
-                    ) : null}
-
-                    <div style={{ marginLeft: 10, marginBottom: 20 }}>
-                        <Grid container spacing={0}>
-                            <Grid xs={12} sm={12} md={11} lg={11}>
-                                Attachments
-                            </Grid>
-                        </Grid>
-                    </div>
+                    ) : null}                 
                
-                    <div style={{ marginLeft: 10, marginTop: 20, marginBottom: 20 }}>
+                    <div style={{ marginLeft: 10, marginTop: 5, marginBottom: 20 }}>
                         <Fragment>
+                            <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={11} lg={11}>
+                                    File List
+                                </Grid>
+                            </Grid>
                             <Grid container spacing={0}>
                                 <Grid xs={11} sm={11} md={11} lg={11}>
                                     <Table size="small">
