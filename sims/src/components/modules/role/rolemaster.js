@@ -85,7 +85,7 @@ class rolemaster extends React.Component {
           rows = data;
           this.setState({ roles: rows, ProgressLoader: true }, () => {
             if (rows.length > 0) {
-              this.InitialhandleRowClick(null, rows[0], "row_0");
+              this.handleRowClick(null, rows[0], "row_0");
             }
           });
         } else {
@@ -96,48 +96,50 @@ class rolemaster extends React.Component {
       });
   }
 
-  InitialhandleRowClick(e, item, id) {
+   handleRowClick = (e, item, id) => {
     let editUrl =
-      URLS.URLS.editModule + this.state.urlparams + "&roleID=" + item.moduleId;
-
-    this.setState({ roleId: item.roleId, editurl: editUrl }, () => {
-      this.InitialgetPageListByRoleId(item.roleId);
+      URLS.URLS.editModule +
+      this.state.urlparams +
+      "&roleID=" +
+      item.RoleID;
+    this.setState({ roleId: item.RoleID, editurl: editUrl }, () => {
+      this.getPageListByRoleId(item.RoleID);
     });
-    this.InitialremoveIsSelectedRowClasses();
+
+    this.removeIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
-  }
+  };
 
-  InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.roles.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
-  }
 
-  InitialgetPageListByRoleId(roleId) {
+   getPageListByRoleId = (roleId) => {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     const headers = {
       "Content-Type": "application/json",
     };
-    let data = APIURLS.GetRoleDetailByRoleIdData;
-    data.validUser = ValidUser;
-    data.RoleId = roleId;
+    
+
+     let reqData = {
+       validUser: ValidUser,
+       RoleId: roleId,
+     }
 
     let GetRoleDetailByRoleIdUrl = APIURLS.APIURL.GetRoleDetailByRoleId;
     axios
-      .post(GetRoleDetailByRoleIdUrl, data, { headers })
+      .post(GetRoleDetailByRoleIdUrl, reqData, { headers })
       .then((response) => {
         if (response.status === 200) {
-          this.InitialprocessPageData(response.data.roleDetailLists);
+          this.processPageData(response.data.roleDetailLists);
         } else {
         }
       })
       .catch((error) => {
         this.setState({ pages: [], ProgressLoader: true });
       });
-  }
-  InitialprocessPageData(data) {
+  };
+
+   processPageData = (data) => {
     let rows = [];
     var i = 0,
       len = data.length;
@@ -172,93 +174,23 @@ class rolemaster extends React.Component {
       rows.push(row);
       i++;
     }
-    this.setState({ pages: rows });
-  }
+    this.setState({ pages: rows },()=>{
+      this.setState({ pages: rows });
+    });
+  };
+
+   removeIsSelectedRowClasses = () => {
+    for (let i = 0; i < this.state.roles.length; i++) {
+      document.getElementById("row_" + i).className = "";
+    }
+  };
+
 
   render() {
-    const handleRowClick = (e, item, id) => {
-      let editUrl =
-        URLS.URLS.editModule +
-        this.state.urlparams +
-        "&roleID=" +
-        item.moduleId;
-      this.setState({ roleId: item.roleId, editurl: editUrl }, () => {
-        getPageListByRoleId(item.roleId);
-      });
+   
+    
 
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-    };
-
-    const getPageListByRoleId = (roleId) => {
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let data = APIURLS.GetRoleDetailByRoleIdData;
-      data.validUser = ValidUser;
-      data.RoleId = roleId;
-
-      let GetRoleDetailByRoleIdUrl = APIURLS.APIURL.GetRoleDetailByRoleId;
-      axios
-        .post(GetRoleDetailByRoleIdUrl, data, { headers })
-        .then((response) => {
-          if (response.status === 200) {
-            processPageData(response.data.roleDetailLists);
-          } else {
-          }
-        })
-        .catch((error) => {
-          this.setState({ pages: [], ProgressLoader: true });
-        });
-    };
-
-    const processPageData = (data) => {
-      let rows = [];
-      var i = 0,
-        len = data.length;
-      while (i < len) {
-        let chkAll = true;
-        if (
-          data[i].isCreate === true &&
-          data[i].isDelete === true &&
-          data[i].isPrint === true &&
-          data[i].isUpdate === true &&
-          data[i].isView === true
-        ) {
-          chkAll = true;
-        } else {
-          chkAll = false;
-        }
-        let row = {
-          id: data[i].pageId,
-          pageId: data[i].pageId,
-          pageName: data[i].pageName,
-          pageLink: data[i].pageLink,
-          moduleId: data[i].moduleID,
-          moduleName: data[i].name,
-          chkAll: chkAll,
-          IsCreate: data[i].isCreate,
-          IsUpdate: data[i].isUpdate,
-          IsDelete: data[i].isDelete,
-          IsView: data[i].isView,
-          IsPrint: data[i].isPrint,
-          isChecked: data[i].isChecked,
-        };
-        rows.push(row);
-        i++;
-      }
-      this.setState({ pages: rows });
-    };
-
-    const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.roles.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    };
-
+  
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
@@ -270,7 +202,7 @@ class rolemaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Role Master"
+          typoTitle="Role"
           level={1}
         />
       </Fragment>
@@ -291,13 +223,13 @@ class rolemaster extends React.Component {
           >
             {APIURLS.buttonTitle.add.name}
           </Button>
-          <Button
+          {/* <Button
             className="action-btns"
             startIcon={APIURLS.buttonTitle.edit.icon}
             onClick={(e) => openPage(this.state.editurl)}
           >
             {APIURLS.buttonTitle.edit.name}
-          </Button>
+          </Button> */}
         </ButtonGroup>
       </Fragment>
     );
@@ -326,7 +258,7 @@ class rolemaster extends React.Component {
                         <TableRow>
                           <TableCell className="table-header-font">#</TableCell>
                           <TableCell className="table-header-font" align="left">
-                            Role Name
+                            Name
                           </TableCell>
                         </TableRow>
                       </TableHead>
@@ -339,21 +271,11 @@ class rolemaster extends React.Component {
                                 hover
                                 key={i}
                                 onClick={(event) =>
-                                  handleRowClick(event, item, "row_" + i)
+                                  this.handleRowClick(event, item, "row_" + i)
                                 }
                               >
                                 <TableCell align="left">
-                                  <a
-                                    className="LINK tableLink"
-                                    href={
-                                      URLS.URLS.editModule +
-                                      this.state.urlparams +
-                                      "&roleID=" +
-                                      item.moduleId
-                                    }
-                                  >
-                                    {URLS.PREFIX.roleID + item.RoleID}
-                                  </a>
+                                {i+1}
                                 </TableCell>
                                 <TableCell align="left">{item.Name}</TableCell>
                               </TableRow>
@@ -386,16 +308,6 @@ class rolemaster extends React.Component {
                   </Grid>
                 </Grid>
 
-                {/* <Grid container spacing={0}>
-                    <Grid xs={12} sm={12} md={11} lg={11}>
-                      <Assignpagestorole
-                        data={{
-                          roleId: this.state.roleId,
-                          rows: this.state.pages,
-                        }}
-                      />
-                    </Grid>
-                  </Grid> */}
               </Grid>
             </Grid>
           </Grid>

@@ -52,7 +52,7 @@ class assignrole extends React.Component {
 
   render() {
     const performCheckAll = (item, e, bool) => {
-      this.setState({ roleId: this.props.roleId });
+      // this.setState({ roleId: this.props.roleId });
       console.log("performCheckAll > item > ", item);
       let rows = [];
       this.state.rows.length > 0
@@ -89,7 +89,7 @@ class assignrole extends React.Component {
     };
 
     const chkPermission = (e, item, col, bool) => {
-      this.setState({ roleId: this.props.roleId });
+      // this.setState({ roleId: this.props.roleId });
       console.log("chkPermission > item > ", item);
       console.log("chkPermission > col > ", col);
       console.log("chkPermission > bool > ", bool);
@@ -165,7 +165,6 @@ class assignrole extends React.Component {
     };
 
     const handleUpdate = () => {
-      this.setState({ roleId: this.props.roleId });
       let selectedRows = getSelectedRows();
       this.setState({ ProgressLoader: false });
       let RoleDetailList = getProcessedRoleDetailList(selectedRows);
