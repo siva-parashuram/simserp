@@ -315,6 +315,138 @@ class usermoduleassign extends React.Component {
                     <Alert onClose={closeErrorPrompt} severity="error">Error!</Alert>
                 </Snackbar>
 
+                <Grid container spacing={0}>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <Button
+                                    startIcon={APIURLS.buttonTitle.save.icon}
+                                    className="action-btns"
+                                    style={{ marginLeft: 10 }}
+                                    disabled={this.state.ModuleRoleList.length > 0 ? !this.state.updateBtnDisable : this.state.updateBtnDisable}
+                                    onClick={(e) => handleUpdate(this.props.data.userId)}
+                                >
+                                    {APIURLS.buttonTitle.save.name}
+                                </Button>
+                            </Grid>
+                        </Grid>
+
+                <Grid container spacing={0}>
+                    <Grid xs={12} sm={12} md={4} lg={4}>
+                        
+                        
+                        <Grid container spacing={0}>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <table>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><b>Branch</b></td>
+                                        <td>&nbsp;</td>
+                                        <td>
+                                            <select
+                                                className="dropdown-css"
+                                                id="branchList"
+                                                onChange={(e) => selectBranchDropdown(e, this.props.data.userId)}
+
+
+
+                                            >
+                                                <option value="0" disabled selected>-Choose-</option>
+                                                {this.props.data.List.map((item, i) => (
+                                                    item.mark === 1 ? (
+                                                        <option value={item.branchID}>{item.branchName}-({item.companyName})</option>
+                                                    ) : (
+                                                        null
+                                                    )
+                                                ))}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><b>Role</b></td>
+                                        <td>&nbsp;</td>
+                                        <td>
+                                            <select
+                                                className="dropdown-css"
+                                                id="roleList"
+                                                onChange={(e) => dropdownChange(e.target.value)}
+                                                value={this.state.UserAllotedRoleByBranch}
+                                            >
+                                                <option value="0" disabled >-Choose-</option>
+                                                {this.props.data.List.length > 0 ? this.state.roles.map((item, i) => (
+                                                    <option value={item.RoleID}>{item.Name}</option>
+                                                )) : null}
+
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid xs={12} sm={12} md={8} lg={8}>
+                        <Grid container spacing={0}>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+                                <div style={{ height: 300, width: '90%', overflowY: 'scroll', overflowX: 'hidden' }}>
+                                    <Table stickyHeader size="small" className="" aria-label="List table">
+                                        <TableHead className="table-header-background">
+                                            <TableRow>
+                                                <TableCell className="table-header-font">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="selectAllList"
+                                                        className="checkbox-css"
+                                                        onClick={(e) => checkBoxClicked({}, 'All', e.target.checked)}
+                                                    />
+                                                </TableCell>
+
+                                                <TableCell className="table-header-font" align="left">Module Name</TableCell>
+                                                <TableCell className="table-header-font" align="left">Page Name</TableCell>
+                                            </TableRow>
+                                            {
+                                                this.state.ModuleRoleList ? this.state.ModuleRoleList.map((item, i) => (
+                                                    <TableRow>
+
+                                                        <TableCell align="left">
+
+                                                            {item.isChecked === true ? (
+                                                                <input
+                                                                    type="checkbox"
+                                                                    id={"role_" + item.roleId}
+                                                                    className="checkbox-css"
+                                                                    onClick={(e) => checkBoxClicked(item, 'individual', false)}
+                                                                    checked={true}
+                                                                />
+                                                            ) : (
+                                                                <input
+                                                                    type="checkbox"
+                                                                    id={"role_" + item.roleId}
+                                                                    className="checkbox-css"
+                                                                    onClick={(e) => checkBoxClicked(item, 'individual', true)}
+                                                                    checked={false}
+                                                                />
+                                                            )}
+
+                                                        </TableCell>
+                                                        <TableCell align="left">{item.name}</TableCell>
+                                                        <TableCell align="left">{item.pageName}</TableCell>
+                                                    </TableRow>
+                                                )) : null
+                                            }
+                                        </TableHead>
+                                    </Table>
+
+                                </div>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={0}>
+                            <Grid xs={12} sm={12} md={12} lg={12}>
+
+                            </Grid>
+                        </Grid>
+
+                    </Grid>
+                </Grid>
+
                 {this.props.data.userId ? (
                     <Fragment>
                         <div style={{ height: 20 }}>&nbsp;</div>
@@ -322,123 +454,19 @@ class usermoduleassign extends React.Component {
                             <Grid xs={12} sm={12} md={4} lg={4}>
                                 <Grid container spacing={0}>
                                     <Grid xs={12} sm={12} md={12} lg={12}>
-                                        <table>
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td><b>Select Branch</b></td>
-                                                <td>&nbsp;</td>
-                                                <td>
-                                                    <select
-                                                        className="dropdown-css"
-                                                        id="branchList"
-                                                        onChange={(e) => selectBranchDropdown(e, this.props.data.userId)}
 
-
-
-                                                    >
-                                                        <option value="0" disabled selected>-Choose-</option>
-                                                        {this.props.data.List.map((item, i) => (
-                                                            item.mark === 1 ? (
-                                                                <option value={item.branchID}>{item.branchName}-({item.companyName})</option>
-                                                            ) : (
-                                                                null
-                                                            )
-                                                        ))}
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td><b>Select Role</b></td>
-                                                <td>&nbsp;</td>
-                                                <td>
-                                                    <select
-                                                        className="dropdown-css"
-                                                        id="roleList"
-                                                        onChange={(e) => dropdownChange(e.target.value)}
-                                                        value={this.state.UserAllotedRoleByBranch}
-                                                    >
-                                                        <option value="0" disabled >-Choose-</option>
-                                                        {this.props.data.List.length > 0 ? this.state.roles.map((item, i) => (
-                                                            <option value={item.RoleID}>{item.Name}</option>
-                                                        )) : null}
-
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                        </table>
                                     </Grid>
                                 </Grid>
 
-                                <Grid container spacing={0}>
-                                    <Grid xs={12} sm={12} md={12} lg={12}>
-                                        <Button
-                                        startIcon={APIURLS.buttonTitle.save.icon}
-                                            className="action-btns"
-                                            style={{ marginLeft: 10 }}
-                                            disabled={this.state.ModuleRoleList.length > 0 ? !this.state.updateBtnDisable : this.state.updateBtnDisable}
-                                            onClick={(e) => handleUpdate(this.props.data.userId)}
-                                        >
-                                             {APIURLS.buttonTitle.save.name}
-                                        </Button>
-                                    </Grid>
-                                </Grid>
+
                             </Grid>
                             <Grid xs={12} sm={12} md={8} lg={8}>
                                 <Grid container spacing={0}>
                                     <Grid xs={12} sm={12} md={12} lg={12}>
+
                                         <Grid container spacing={0}>
                                             <Grid xs={12} sm={12} md={12} lg={12}>
-                                                <div style={{ height: 300, width: '90%', overflowY: 'scroll', overflowX: 'hidden' }}>
-                                                    <Table stickyHeader size="small" className="" aria-label="List table">
-                                                        <TableHead className="table-header-background">
-                                                            <TableRow>
-                                                                <TableCell className="table-header-font">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        id="selectAllList"
-                                                                        className="checkbox-css"
-                                                                        onClick={(e) => checkBoxClicked({}, 'All', e.target.checked)}
-                                                                    />
-                                                                </TableCell>
 
-                                                                <TableCell className="table-header-font" align="left">Module Name</TableCell>
-                                                                <TableCell className="table-header-font" align="left">Page Name</TableCell>
-                                                            </TableRow>
-                                                            {
-                                                                this.state.ModuleRoleList ? this.state.ModuleRoleList.map((item, i) => (
-                                                                    <TableRow>
-
-                                                                        <TableCell align="left">
-
-                                                                            {item.isChecked === true ? (
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    id={"role_" + item.roleId}
-                                                                                    className="checkbox-css"
-                                                                                    onClick={(e) => checkBoxClicked(item, 'individual', false)}
-                                                                                    checked={true}
-                                                                                />
-                                                                            ) : (
-                                                                                <input
-                                                                                    type="checkbox"
-                                                                                    id={"role_" + item.roleId}
-                                                                                    className="checkbox-css"
-                                                                                    onClick={(e) => checkBoxClicked(item, 'individual', true)}
-                                                                                    checked={false}
-                                                                                />
-                                                                            )}
-
-                                                                        </TableCell>
-                                                                        <TableCell align="left">{item.name}</TableCell>
-                                                                        <TableCell align="left">{item.pageName}</TableCell>
-                                                                    </TableRow>
-                                                                )) : null
-                                                            }
-                                                        </TableHead>
-                                                    </Table>
-
-                                                </div>
                                             </Grid>
                                         </Grid>
                                     </Grid>

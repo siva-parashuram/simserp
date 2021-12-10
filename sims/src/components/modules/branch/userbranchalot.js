@@ -304,66 +304,76 @@ class userbranchalot extends React.Component {
                 </Grid>
                 <Grid xs={1} sm={1} md={1} lg={1}></Grid>
               </Grid>
+              <div style={{height:10}}>&nbsp;</div>
               <Grid container spacing={0}>
                 <Grid xs={1} sm={1} md={1} lg={1}></Grid>
                   <Grid xs={10} sm={10} md={10} lg={10}>
-                  <div style={{ height: 350 }}> 
-
+                  <Grid container spacing={0}>
                     {this.state.data.companyBranch.map((item, i) => (
-                      <Fragment>  
-                        <div style={{height:25,backgroundColor:'#bdbdbd'}}>
-                          <div style={{marginLeft:10}}>
-                            <h4><u>{item.companyName}</u></h4>
+                      <Fragment>
+                        <Grid xs={12} sm={12} md={3} lg={3}>
+                          <div className="custom-card">
+                            <Grid container spacing={0}>
+                              <Grid container spacing={0}>
+                                <Grid xs={12} sm={12} md={12} lg={12}>
+                                  <div style={{ textAlign: 'center' }}>
+                                    <h3><u>{item.companyName}</u></h3>
+                                  </div>
+                                </Grid>
+                              </Grid>
+                              <div style={{ marginLeft: 5,marginRight:5, overflowY: 'scroll', height: 170,width:'100%',backgroundColor:'#eceff1' }}>
+                                <Grid container spacing={0}>
+                                  <Grid xs={12} sm={12} md={12} lg={12}>
+
+                                    {item.branch.map((branchItem, j) => (
+                                      <Fragment>
+                                        <div style={{ marginLeft:5,marginRight:5 }}>
+                                        <p>
+                                          {parseInt(branchItem.mark) == 1 ? (
+                                            <input
+                                              type="checkbox"
+                                              className="checkbox-css branchchecks"
+                                              id={"branch_check_" + branchItem.branchID}
+                                              value={branchItem.branchID}
+                                              defaultChecked={true}
+                                              onChange={(e) =>
+                                                checkboxclick(
+                                                  e,
+                                                  "branch_check_" + branchItem.branchID
+                                                )
+                                              }
+                                            />
+                                          ) : (
+                                            <input
+                                              type="checkbox"
+                                              className="checkbox-css branchchecks"
+                                              id={"branch_check_" + branchItem.branchID}
+                                              value={branchItem.branchID}
+                                              defaultChecked={false}
+                                              onChange={(e) =>
+                                                checkboxclick(
+                                                  e,
+                                                  "branch_check_" + branchItem.branchID
+                                                )
+                                              }
+                                            />
+                                          )}
+                                          {branchItem.branchName}
+                                        </p>
+                                        </div>
+                                      </Fragment>
+                                    ))}
+                                  </Grid>
+                                </Grid>
+                              </div>
+                            </Grid>
+                            
                           </div>
-                        </div>
-                       
-                        <div style={{height:150,overflowY:'scroll' }}>                        
-                        {item.branch.map((branchItem, j) => (
-                          <Fragment>
-                            <div style={{ marginLeft: 20}}>
-                              <p>
-                              {parseInt(branchItem.mark) == 1 ? (
-                                    <input
-                                      type="checkbox"
-                                      className="checkbox-css branchchecks"
-                                      id={"branch_check_" + branchItem.branchID}
-                                      value={branchItem.branchID}
-                                      defaultChecked={true}
-                                      onChange={(e) =>
-                                        checkboxclick(
-                                          e,
-                                          "branch_check_" + branchItem.branchID
-                                        )
-                                      }
-                                    />
-                                  ) : (
-                                    <input
-                                      type="checkbox"
-                                      className="checkbox-css branchchecks"
-                                      id={"branch_check_" + branchItem.branchID}
-                                      value={branchItem.branchID}
-                                      defaultChecked={false}
-                                      onChange={(e) =>
-                                        checkboxclick(
-                                          e,
-                                          "branch_check_" + branchItem.branchID
-                                        )
-                                      }
-                                    />
-                                  )}
-                                {branchItem.branchName}
-                              </p>
-                            </div>
-                            <Divider/>
-                          </Fragment>
-                        ))}
-                        </div>                       
-                        <div style={{ height: 50 }}></div>
+                        </Grid>
                       </Fragment>
                     ))}
-                  </div>
-                  <div style={{ height: 20 }}></div>
-                  <div style={{ height: 20 }}></div>
+                  </Grid>                 
+
                   </Grid>
                   <Grid xs={1} sm={1} md={1} lg={1}></Grid>
               </Grid>           

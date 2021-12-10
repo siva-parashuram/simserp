@@ -56,7 +56,7 @@ class adduser extends React.Component {
         LastName: "",
         EmailID: "",
         IsAdmin: false,
-        isActive: false,
+        isActive: true,
       },
       UserID: 0,
       LoginID: "",
