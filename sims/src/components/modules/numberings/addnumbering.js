@@ -284,7 +284,7 @@ class addnumbering extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -307,8 +307,8 @@ class addnumbering extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.numberingMaster + this.state.urlparams}
-          masterLinkTitle="Numbering Master"
-          typoTitle="Add Numbering"
+          masterLinkTitle="Nos. Series"
+          typoTitle="Add Nos. Series"
           level={2}
         />
       </Fragment>
@@ -374,38 +374,38 @@ class addnumbering extends React.Component {
               <AccordionDetails key="">
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <div>
-                      <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={5} lg={5}>
-                          <SIB
-                            id="Code"
-                            label="Code"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("Code", e)}
-                            value={this.state.noSeries.Code}
-                            error={this.state.Validations.Code.errorState}
-                          />
-
-                          <SIB
-                            id="Description"
-                            label="Description"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("Description", e)}
-                            InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 50,
-                            }}
-                            value={this.state.noSeries.Description}
-                            error={
-                              this.state.Validations.Description.errorState
-                            }
-                           
-                          />
-                        </Grid>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <SIB
+                          id="Code"
+                          label="Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Code", e)}
+                          value={this.state.noSeries.Code}
+                          error={this.state.Validations.Code.errorState}
+                        />
                       </Grid>
-                    </div>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <SIB
+                          id="Description"
+                          label="Description"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Description", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 50,
+                          }}
+                          value={this.state.noSeries.Description}
+                          error={
+                            this.state.Validations.Description.errorState
+                          }
+
+                        />
+                      </Grid>
+                    </Grid>
+
                   </Grid>
                 </Grid>
               </AccordionDetails>
@@ -439,11 +439,12 @@ class addnumbering extends React.Component {
                         <tr style={{ textAlign: "center" }}>
                           <td className="table-header-font">&nbsp;</td>
                           <td className="table-header-font">Start Date</td>
+                          <td className="table-header-font">Prefix</td>
                           <td className="table-header-font">Start No</td>
                           <td className="table-header-font">Suffix</td>
-                          <td className="table-header-font">Prefix</td>
+
                           <td className="table-header-font">Increment</td>
-                          <td className="table-header-font">Last No</td>
+                          <td className="table-header-font">Last No Used</td>
                           <td className="table-header-font">&nbsp;</td>
                         </tr>
                       </thead>
@@ -473,6 +474,26 @@ class addnumbering extends React.Component {
                                   )
                                 }
                                 style={{ width: 125 }}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                }}
+                              />
+                            </td>
+                            <td>
+                              <TextField
+                                id={"prefix" + item.id}
+                                variant="outlined"
+                                size="small"
+                                onKeyDown={(e) =>
+                                  updateListValue(
+                                    "prefix",
+                                    item,
+                                    "prefix" + item.id,
+                                    "Increment" + item.id,
+                                    e
+                                  )
+                                }
+                                style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
                                 }}
@@ -519,26 +540,7 @@ class addnumbering extends React.Component {
                                 }}
                               />
                             </td>
-                            <td>
-                              <TextField
-                                id={"prefix" + item.id}
-                                variant="outlined"
-                                size="small"
-                                onKeyDown={(e) =>
-                                  updateListValue(
-                                    "prefix",
-                                    item,
-                                    "prefix" + item.id,
-                                    "Increment" + item.id,
-                                    e
-                                  )
-                                }
-                                style={{ width: 120 }}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                }}
-                              />
-                            </td>
+
                             <td>
                               <TextField
                                 type="number"

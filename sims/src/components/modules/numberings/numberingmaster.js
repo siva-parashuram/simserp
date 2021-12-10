@@ -156,7 +156,7 @@ class numberingmaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Numbering Master"
+          typoTitle="Nos. Series"
           level={1}
         />
       </Fragment>
@@ -199,9 +199,9 @@ class numberingmaster extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={12} md={5} lg={5}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={11} lg={11}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
                 {this.state.numberings.length > 0 ? (
                   <Fragment>
                     <Table
@@ -241,17 +241,7 @@ class numberingmaster extends React.Component {
                                 }
                               >
                                 <TableCell align="left">
-                                  <a
-                                    className="LINK tableLink"
-                                    href={
-                                      URLS.URLS.editNumbering +
-                                      this.state.urlparams +
-                                      "&noSeriesId=" +
-                                      item.noSeriesId
-                                    }
-                                  >
-                                    {URLS.PREFIX.noSeriesId + item.noSeriesId}
-                                  </a>
+                                 {i+1}
                                 </TableCell>
                                 <TableCell align="left">{item.code}</TableCell>
                                 <TableCell align="left">

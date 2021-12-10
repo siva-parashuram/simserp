@@ -47,7 +47,7 @@ class editnumbering extends React.Component {
       lastLno: null,
       urlparams: "",
       GeneralDetailsExpanded: true,
-      NumberingsListExpanded: false,
+      NumberingsListExpanded: true,
       ProgressLoader: true,
       initialCss: "",
       branchId: 0,
@@ -377,8 +377,8 @@ class editnumbering extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.numberingMaster + this.state.urlparams}
-          masterLinkTitle="Numbering Master"
-          typoTitle="Edit Numbering"
+          masterLinkTitle="Nos. Series"
+          typoTitle="Edit Nos. Series"
           level={2}
         />
       </Fragment>
@@ -395,7 +395,7 @@ class editnumbering extends React.Component {
             startIcon={APIURLS.buttonTitle.save.icon}
             className="action-btns"
             onClick={(e) => handleUpdate(e)}
-           
+
           >
             {APIURLS.buttonTitle.save.name}
           </Button>
@@ -419,302 +419,304 @@ class editnumbering extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
-        
 
-          <Grid container spacing={0}>
-            <Grid xs={12} sm={12} md={10} lg={10}>
-              <Accordion
-                key="numbering-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
+
+        <Grid container spacing={0}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
+            <Accordion
+              key="numbering-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
+            >
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    General Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
+                <Typography key="" className="accordion-Header-Title">
+                  General 
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <div>
-                      <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={5} lg={5}>
-                          <SIB
-                            id="Code"
-                            label="Code"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("Code", e)}
-                            value={this.state.noSeries.Code}
-                            error={this.state.Validations.Code.errorState}
-                          />
-
-                          <SIB
-                            id="Description"
-                            label="Description"
-                            variant="outlined"
-                            size="small"
-                            onChange={(e) => updateFormValue("Description", e)}
-                            InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 50,
-                            }}
-                            value={this.state.noSeries.Description}
-                            error={
-                              this.state.Validations.Description.errorState
-                            }
-                           
-                          />
-                        </Grid>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <SIB
+                          id="Code"
+                          label="Code"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Code", e)}
+                          value={this.state.noSeries.Code}
+                          error={this.state.Validations.Code.errorState}
+                        />
                       </Grid>
-                    </div>
+                      <Grid item xs={12} sm={12} md={6} lg={6}>
+                        <SIB
+                          id="Description"
+                          label="Description"
+                          variant="outlined"
+                          size="small"
+                          onChange={(e) => updateFormValue("Description", e)}
+                          InputProps={{
+                            className: "textFieldCss",
+                            maxlength: 50,
+                          }}
+                          value={this.state.noSeries.Description}
+                          error={
+                            this.state.Validations.Description.errorState
+                          }
+
+                        />
+                      </Grid>
+                    </Grid>
+
                   </Grid>
                 </Grid>
-                </AccordionDetails>
-              </Accordion>
-              <Accordion
-                key="numbering-list-Details"
-                expanded={this.state.NumberingsListExpanded}
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              key="numbering-list-Details"
+              expanded={this.state.NumberingsListExpanded}
+            >
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("NumberingsListExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("NumberingsListExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    Numberings Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="">
-                  <Grid container spacing={1}>
-                    <Grid xs={12} sm={12} md={12} lg={12}>
-                      <table>
-                        <thead>
-                          <tr style={{ textAlign: "center" }}>
-                            <td className="table-header-font">&nbsp;</td>
-                            <td className="table-header-font">Start Date</td>
-                            <td className="table-header-font">Start No</td>
-                            <td className="table-header-font">Suffix</td>
-                            <td className="table-header-font">Prefix</td>
-                            <td className="table-header-font">Increment</td>
-                            <td className="table-header-font">Last No</td>
-                            <td className="table-header-font">&nbsp;</td>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.state.numberings.map((item, i) => (
-                            <tr>
-                              <td>
-                                <ArrowRightIcon />
-                              </td>
-                              <td>
-                                <TextField
-                                  type="date"
-                                  id={"startdate" + item.id}
-                                  variant="outlined"
-                                  size="small"
-                                  defaultValue={item.StartDate}
-                                  onChange={(e) =>
-                                    updateStartDate(e.value, item)
-                                  }
-                                  onKeyDown={(e) =>
-                                    updateListValue(
-                                      "startdate",
-                                      item,
-                                      "startdate" + item.id,
-                                      "startno" + item.id,
-                                      e
-                                    )
-                                  }
-                                  style={{ width: 125 }}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                  }}
+                <Typography key="" className="accordion-Header-Title">
+                  Series
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="">
+                <Grid container spacing={1}>
+                  <Grid xs={12} sm={12} md={12} lg={12}>
+                    <table>
+                      <thead>
+                        <tr style={{ textAlign: "center" }}>
+                          <td className="table-header-font">&nbsp;</td>
+                          <td className="table-header-font">Start Date</td>
+                          <td className="table-header-font">Prefix</td>
+                          <td className="table-header-font">Start No</td>
+                          <td className="table-header-font">Suffix</td>
+                        
+                          <td className="table-header-font">Increment</td>
+                          <td className="table-header-font">Last No Used</td>
+                          <td className="table-header-font">&nbsp;</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.numberings.map((item, i) => (
+                          <tr>
+                            <td>
+                              <ArrowRightIcon />
+                            </td>
+                            <td>
+                              <TextField
+                                type="date"
+                                id={"startdate" + item.id}
+                                variant="outlined"
+                                size="small"
+                                defaultValue={item.StartDate}
+                                onChange={(e) =>
+                                  updateStartDate(e.value, item)
+                                }
+                                onKeyDown={(e) =>
+                                  updateListValue(
+                                    "startdate",
+                                    item,
+                                    "startdate" + item.id,
+                                    "startno" + item.id,
+                                    e
+                                  )
+                                }
+                                style={{ width: 150 }}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                }}
+                              />
+                            </td>
+                            <td>
+                              <TextField
+                                id={"prefix" + item.id}
+                                variant="outlined"
+                                size="small"
+                                onKeyUp={(e) =>
+                                  updateNumberingListState(
+                                    "prefix",
+                                    item,
+                                    "prefix" + item.id,
+                                    e
+                                  )
+                                }
+                                onKeyDown={(e) =>
+                                  updateListValue(
+                                    "prefix",
+                                    item,
+                                    "prefix" + item.id,
+                                    "Increment" + item.id,
+                                    e
+                                  )
+                                }
+                                style={{ width: 120 }}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                }}
+                                defaultValue={item.Prefix}
+                              />
+                            </td>
+                            <td>
+                              <TextField
+                                type="number"
+                                id={"startno" + item.id}
+                                variant="outlined"
+                                size="small"
+                                onKeyUp={(e) =>
+                                  updateNumberingListState(
+                                    "startno",
+                                    item,
+                                    "startno" + item.id,
+                                    e
+                                  )
+                                }
+                                onKeyDown={(e) =>
+                                  updateListValue(
+                                    "startno",
+                                    item,
+                                    "startno" + item.id,
+                                    "suffix" + item.id,
+                                    e
+                                  )
+                                }
+                                style={{ width: 120 }}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                }}
+                                defaultValue={item.StartNo}
+                              />
+                            </td>
+                            <td>
+                              <TextField
+                                id={"suffix" + item.id}
+                                variant="outlined"
+                                size="small"
+                                onKeyUp={(e) =>
+                                  updateNumberingListState(
+                                    "suffix",
+                                    item,
+                                    "suffix" + item.id,
+                                    e
+                                  )
+                                }
+                                onKeyDown={(e) =>
+                                  updateListValue(
+                                    "suffix",
+                                    item,
+                                    "suffix" + item.id,
+                                    "prefix" + item.id,
+                                    e
+                                  )
+                                }
+                                style={{ width: 120 }}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                }}
+                                defaultValue={item.Suffix}
+                              />
+                            </td>
+                           
+                            <td>
+                              <TextField
+                                type="number"
+                                id={"Increment" + item.id}
+                                variant="outlined"
+                                size="small"
+                                onKeyUp={(e) =>
+                                  updateNumberingListState(
+                                    "Increment",
+                                    item,
+                                    "Increment" + item.id,
+                                    e
+                                  )
+                                }
+                                onKeyDown={(e) =>
+                                  updateListValue(
+                                    "Increment",
+                                    item,
+                                    "Increment" + item.id,
+                                    "newline",
+                                    e
+                                  )
+                                }
+                                style={{ width: 120 }}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                }}
+                                defaultValue={item.Increment}
+                              />
+                            </td>
+                            <td>
+                              <TextField
+                                type="number"
+                                id={"lastno" + item.id}
+                                variant="outlined"
+                                size="small"
+                                style={{ width: 120 }}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                }}
+                                disabled={true}
+                                value={item.LastNo}
+                              />
+                            </td>
+                            <td>
+                              {item.Lno > this.state.lastLno ? (
+                                <DeleteForeverIcon
+                                  fontSize="small"
+                                  className="table-delete-icon"
+                                  onClick={(e) => deleteEntry(e, item)}
                                 />
-                              </td>
-                              <td>
-                                <TextField
-                                  type="number"
-                                  id={"startno" + item.id}
-                                  variant="outlined"
-                                  size="small"
-                                  onKeyUp={(e) =>
-                                    updateNumberingListState(
-                                      "startno",
-                                      item,
-                                      "startno" + item.id,
-                                      e
-                                    )
-                                  }
-                                  onKeyDown={(e) =>
-                                    updateListValue(
-                                      "startno",
-                                      item,
-                                      "startno" + item.id,
-                                      "suffix" + item.id,
-                                      e
-                                    )
-                                  }
-                                  style={{ width: 120 }}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                  }}
-                                  defaultValue={item.StartNo}
-                                />
-                              </td>
-                              <td>
-                                <TextField
-                                  id={"suffix" + item.id}
-                                  variant="outlined"
-                                  size="small"
-                                  onKeyUp={(e) =>
-                                    updateNumberingListState(
-                                      "suffix",
-                                      item,
-                                      "suffix" + item.id,
-                                      e
-                                    )
-                                  }
-                                  onKeyDown={(e) =>
-                                    updateListValue(
-                                      "suffix",
-                                      item,
-                                      "suffix" + item.id,
-                                      "prefix" + item.id,
-                                      e
-                                    )
-                                  }
-                                  style={{ width: 120 }}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                  }}
-                                  defaultValue={item.Suffix}
-                                />
-                              </td>
-                              <td>
-                                <TextField
-                                  id={"prefix" + item.id}
-                                  variant="outlined"
-                                  size="small"
-                                  onKeyUp={(e) =>
-                                    updateNumberingListState(
-                                      "prefix",
-                                      item,
-                                      "prefix" + item.id,
-                                      e
-                                    )
-                                  }
-                                  onKeyDown={(e) =>
-                                    updateListValue(
-                                      "prefix",
-                                      item,
-                                      "prefix" + item.id,
-                                      "Increment" + item.id,
-                                      e
-                                    )
-                                  }
-                                  style={{ width: 120 }}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                  }}
-                                  defaultValue={item.Prefix}
-                                />
-                              </td>
-                              <td>
-                                <TextField
-                                  type="number"
-                                  id={"Increment" + item.id}
-                                  variant="outlined"
-                                  size="small"
-                                  onKeyUp={(e) =>
-                                    updateNumberingListState(
-                                      "Increment",
-                                      item,
-                                      "Increment" + item.id,
-                                      e
-                                    )
-                                  }
-                                  onKeyDown={(e) =>
-                                    updateListValue(
-                                      "Increment",
-                                      item,
-                                      "Increment" + item.id,
-                                      "newline",
-                                      e
-                                    )
-                                  }
-                                  style={{ width: 120 }}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                  }}
-                                  defaultValue={item.Increment}
-                                />
-                              </td>
-                              <td>
-                                <TextField
-                                  type="number"
-                                  id={"lastno" + item.id}
-                                  variant="outlined"
-                                  size="small"
-                                  style={{ width: 120 }}
-                                  InputProps={{
-                                    className: "textFieldCss",
-                                  }}
-                                  disabled={true}
-                                  value={item.LastNo}
-                                />
-                              </td>
-                              <td>
-                                {item.Lno > this.state.lastLno ? (
-                                  <DeleteForeverIcon
-                                    fontSize="small"
-                                    className="table-delete-icon"
-                                    onClick={(e) => deleteEntry(e, item)}
-                                  />
-                                ) : null}
+                              ) : null}
 
-                                {i === this.state.numberings.length - 1 ? (
-                                  <AddIcon
-                                    fontSize="small"
-                                    className="table-add-icon"
-                                    onClick={(e) => creatNewLine()}
-                                  />
-                                ) : null}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </Grid>
+                              {i === this.state.numberings.length - 1 ? (
+                                <AddIcon
+                                  fontSize="small"
+                                  className="table-add-icon"
+                                  onClick={(e) => creatNewLine()}
+                                />
+                              ) : null}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </Grid>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
-            <Grid xs={12} sm={12} md={7} lg={7}>
-              <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}></Grid>
-              </Grid>
+                </Grid>
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+          <Grid xs={12} sm={12} md={4} lg={4}>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={11} lg={11}></Grid>
             </Grid>
           </Grid>
+        </Grid>
       </Fragment>
     );
   }
