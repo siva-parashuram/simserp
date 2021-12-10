@@ -53,12 +53,13 @@ class edituser extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      ErrorMessageProps: "",
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
       duplicateExist: false,
       users: [],
-      userBranchMappingList:[],
+      userBranchMappingList: [],
       oldEMAILID: "",
       Dialog: {
         DialogTitle: "",
@@ -75,7 +76,7 @@ class edituser extends React.Component {
         LoginID: "",
         Password: "",
         UserID: 0
-       
+
       },
       UserID: 0,
       LoginID: null,
@@ -125,7 +126,7 @@ class edituser extends React.Component {
 
 
 
-  
+
 
   getUsersList() {
     this.setState({ ProgressLoader: false });
@@ -145,7 +146,7 @@ class edituser extends React.Component {
         let rows = data;
         this.setState({ users: data, ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   getUserDetails() {
@@ -191,10 +192,10 @@ class edituser extends React.Component {
           IsAdmin: data.isAdmin,
           isActive: data.isActive,
           ProgressLoader: true,
-          DisableUpdatebtn:false,
+          DisableUpdatebtn: false,
         });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   getUserBranches(userId) {
@@ -220,8 +221,71 @@ class edituser extends React.Component {
         this.setState({ userBranchMappingList: data.userBranchMappingList });
         this.processData(data.userBranchMappingList, userId);
       })
-      .catch((error) => {});
+      .catch((error) => { });
     return userBranches;
+  }
+
+  validateData = () => {
+    let validate = false;
+    let user = this.state.user;
+
+    if (
+      user.LoginID === "" || user.LoginID.length < 5 ||
+      user.Password === "" || user.Password.length < 5 ||
+      user.FirstName === "" ||
+      user.EmailID === ""
+    ) {
+      validate = false;
+      
+
+      if (user.LoginID === "" || user.LoginID.length < 5) {
+        let v = this.state.Validations;
+        v.LoginID = {
+          errorState: true,
+          errorMssg: "",
+        };
+        this.setState({
+          Validations: v,
+        });
+      }
+      if (user.Password === "" || user.Password.length < 5) {
+        let v = this.state.Validations;
+        v.Password = {
+          errorState: true,
+          errorMssg: "",
+        };
+        this.setState({
+          Validations: v,
+        });
+      }
+      if (user.FirstName === "") {
+        let v = this.state.Validations;
+        v.FirstName = {
+          errorState: true,
+          errorMssg: "",
+        };
+        this.setState({
+          Validations: v,
+        });
+      }
+      if (user.EmailID === "") {
+        let v = this.state.Validations;
+        v.EmailID = {
+          errorState: true,
+          errorMssg: "Email  Already exist!",
+        };
+        this.setState({
+          Validations: v,
+        });
+      }
+
+     
+
+    } else {
+      validate = true;
+    }
+
+    return validate;
   }
 
   render() {
@@ -237,7 +301,7 @@ class edituser extends React.Component {
           : this.setState({ AddressDetailsExpanded: true });
       }
     };
-    
+
     const updateFormValue = (id, e) => {
       if (id === "IsActive") {
         let user = this.state.user;
@@ -350,11 +414,11 @@ class edituser extends React.Component {
         let user = this.state.user;
         user.LoginID = e.target.value;
         // this.setState({user:user});
-        if (e.target.value.length > 10) {
+        if (e.target.value.length <5) {
           let v = this.state.Validations;
           v.LoginID = {
             errorState: true,
-            errorMssg: "only 10 characters are allowed",
+            errorMssg: "",
           };
           this.setState({
             Validations: v,
@@ -376,11 +440,11 @@ class edituser extends React.Component {
         let user = this.state.user;
         user.Password = e.target.value;
         // this.setState({user:user});
-        if (e.target.value.length > 10) {
+        if (e.target.value.length <5) {
           let v = this.state.Validations;
           v.Password = {
             errorState: true,
-            errorMssg: "only 10 characters are allowed",
+            errorMssg: "",
           };
           this.setState({
             Validations: v,
@@ -397,20 +461,17 @@ class edituser extends React.Component {
         }
       }
 
-      if (id === "IsAdmin"){
+      if (id === "IsAdmin") {
         let user = this.state.user;
-        user.IsAdmin=e.target.checked
-        this.setState({user:user,IsAdmin:e.target.checked})
+        user.IsAdmin = e.target.checked
+        this.setState({ user: user, IsAdmin: e.target.checked })
       }
-      if (id === "isActive"){
+      if (id === "isActive") {
         let user = this.state.user;
-        user.isActive=e.target.checked
-        this.setState({user:user,isActive:e.target.checked})
+        user.isActive = e.target.checked
+        this.setState({ user: user, isActive: e.target.checked })
       }
-      // CheckFirstName();
-      // this.state.duplicateExist === true
-      //   ? this.setState({ DisableUpdatebtn: true })
-      //   : this.setState({ DisableUpdatebtn: false });
+      
     };
 
     const handleUpdate = () => {
@@ -420,27 +481,36 @@ class edituser extends React.Component {
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       let user = this.state.user;
-      const handleUpdateData = {
-        validUser: ValidUser,
-        users: user,
-      };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let UpdateUserUrl = APIURLS.APIURL.UpdateUser;
 
-      axios
-        .post(UpdateUserUrl, handleUpdateData, { headers })
-        .then((response) => {
-          let data = response.data;
+      let validate = this.validateData();
 
-          if (response.status === 200) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => {});
+      if (validate === true) {
+        const handleUpdateData = {
+          validUser: ValidUser,
+          users: user,
+        };
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let UpdateUserUrl = APIURLS.APIURL.UpdateUser;
+
+        axios
+          .post(UpdateUserUrl, handleUpdateData, { headers })
+          .then((response) => {
+            let data = response.data;
+
+            if (response.status === 200) {
+              this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+            }
+          })
+          .catch((error) => { });
+      } else {
+        this.setState({ ProgressLoader: true, ErrorPrompt: true, ErrorMessageProps: "Incorrect Inputs" });
+      }
+
+   
     };
 
     const dialog = (
@@ -462,7 +532,7 @@ class edituser extends React.Component {
               <Grid item xs={12} sm={12} md={1} lg={1}>
                 <IconButton
                   aria-label="ArrowBackIcon"
-                  // style={{ textAlign: 'left', marginTop: 8 }}
+                // style={{ textAlign: 'left', marginTop: 8 }}
                 >
                   <ArrowBackIcon onClick={(e) => handleClose()} />
                 </IconButton>
@@ -492,9 +562,9 @@ class edituser extends React.Component {
 
     const userBranch = <Userbranchalot UserID={this.state.user.UserID} />;
 
-    const userModuleAssign=<Usermoduleassign data={{userId:this.state.user.UserID,List:this.state.userBranchMappingList}}   />
+    const userModuleAssign = <Usermoduleassign data={{ userId: this.state.user.UserID, List: this.state.userBranchMappingList }} />
 
-    
+
 
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
@@ -507,7 +577,7 @@ class edituser extends React.Component {
           this.setState({ Dialog: Dialog });
           break;
         case "Assign Role":
-           Dialog.DialogContent = userModuleAssign;
+          Dialog.DialogContent = userModuleAssign;
           this.setState({ Dialog: Dialog });
           break;
         default:
@@ -544,7 +614,7 @@ class edituser extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.userMaster + this.state.urlparams}
-          masterLinkTitle="User Master"
+          masterLinkTitle="User"
           typoTitle="Edit User"
           level={2}
         />
@@ -571,15 +641,15 @@ class edituser extends React.Component {
             className="action-btns"
             onClick={(e) => openDialog("Assign Branch")}
           >
-           {APIURLS.buttonTitle.assignBranch.name}
+            {APIURLS.buttonTitle.assignBranch.name}
           </Button>
           <Button
-           startIcon={APIURLS.buttonTitle.assignRole.icon}
+            startIcon={APIURLS.buttonTitle.assignRole.icon}
             className="action-btns"
             onClick={(e) => openDialog("Assign Role")}
           >
-             {APIURLS.buttonTitle.assignRole.name}
-            
+            {APIURLS.buttonTitle.assignRole.name}
+
           </Button>
         </ButtonGroup>
       </Fragment>
@@ -591,6 +661,7 @@ class edituser extends React.Component {
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
+          ErrorMessageProps={this.state.ErrorMessageProps}
         />
         <SuccessSnackBar
           SuccessPrompt={this.state.SuccessPrompt}
@@ -624,7 +695,7 @@ class edituser extends React.Component {
                     style={{ minHeight: 20, height: "100%" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -653,6 +724,31 @@ class edituser extends React.Component {
                                 value={this.state.user.LastName}
                                 error={this.state.Validations.LastName.errorState}
                               />
+
+                              <SIB
+                                inputProps={{ maxLength: 10 }}
+                                id="LoginID"
+                                label="LoginID"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("LoginID", e)}
+                                value={this.state.user.LoginID}
+                                error={this.state.Validations.LoginID.errorState}
+                              />
+                              <SIB
+                              inputProps={{ maxLength: 10 }}
+                                type="password"
+                                id="Password"
+                                label="Password"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Password", e)}
+                                value={this.state.user.Password}
+                                error={this.state.Validations.Password.errorState}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
                               <SIB
 
                                 id="EmailID"
@@ -663,29 +759,7 @@ class edituser extends React.Component {
                                 value={this.state.user.EmailID}
                                 error={this.state.Validations.EmailID.errorState}
                               />
-                              <SIB
 
-                                id="LoginID"
-                                label="LoginID"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("LoginID", e)}
-                                value={this.state.user.LoginID}
-                                error={this.state.Validations.LoginID.errorState}
-                              />
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                            <Grid item xs={12} sm={12} md={5} lg={5}>
-                              <SIB
-                                type="password"
-                                id="Password"
-                                label="Password"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("Password", e)}
-                                value={this.state.user.Password}
-                                error={this.state.Validations.Password.errorState}
-                              />
                               <SSIB
                                 key="isAdmin"
                                 id="isAdmin"
@@ -710,12 +784,12 @@ class edituser extends React.Component {
                 </Accordion>
               </Grid>
             </Grid>
-          
+
           </Grid>
-          <Grid xs={12} sm={12} md={4} lg={4}>              
+          <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={12} lg={12}>
-              
+
               </Grid>
             </Grid>
           </Grid>

@@ -11,6 +11,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import SendIcon from '@mui/icons-material/Send';
 import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import AirplanemodeInactiveIcon from '@mui/icons-material/AirplanemodeInactive';
+import FaceIcon from '@mui/icons-material/Face';
+import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
  
 
 
@@ -581,8 +583,8 @@ export const userMasterColumn=[
     headerClassName: 'table-header-font'
   },
   {
-    field: 'EmailID',
-    headerName: 'Email Id',
+    field: 'LoginID',
+    headerName: 'Login ID',
     width: 160,
     editable: false,
     headerClassName: 'table-header-font'
@@ -595,20 +597,44 @@ export const userMasterColumn=[
     headerClassName: 'table-header-font'
   },
   {
-    field: 'LoginID',
-    headerName: 'Login Id',
+    field: 'LastName',
+    headerName: 'Last Name',
     width: 160,
     editable: false,
     headerClassName: 'table-header-font'
   },
   {
+    field: 'EmailID',
+    headerName: 'Email',
+    width: 200,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },  
+  
+  {
     field: 'IsActive',
     headerName: 'Status',
     width: 160,
     editable: false,
-    headerClassName: 'table-header-font'
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+           {params.value===true?(
+             <Fragment>
+              <FaceIcon  size="small" sx={{ color: '#4caf50' }}/>
+             </Fragment>
+           ):(
+            <Fragment>
+            <FaceRetouchingOffIcon size="small" sx={{ color: '#f44336' }}/>    
+            </Fragment>
+           )}
+      </Fragment>
+    ),
   },
+  
 ];
+
+
 
 export const branchMasterColumn=[
   {

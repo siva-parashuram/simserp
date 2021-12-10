@@ -251,7 +251,7 @@ class usermaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="User Master"
+          typoTitle="User"
           level={1}
         />
       </Fragment>
@@ -294,7 +294,7 @@ class usermaster extends React.Component {
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={11} lg={11}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
                 {this.state.users.length > 0 ? (
                   <Fragment>
                     <MasterDataGrid

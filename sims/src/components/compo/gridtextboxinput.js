@@ -53,6 +53,7 @@ class gridtextboxinput extends React.Component {
                   maxlength={this.props.maxlength}
                   multiline={this.props.multiline}
                   rows={this.props.rows}
+                  inputProps={this.props.inputProps}
                 />
               </Grid>
             </Grid>

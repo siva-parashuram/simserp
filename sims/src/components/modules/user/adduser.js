@@ -43,6 +43,7 @@ class adduser extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      ErrorMessageProps: "",
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisabledCreatebtn: true,
@@ -111,7 +112,71 @@ class adduser extends React.Component {
         let rows = data;
         this.setState({ users: data, ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => { });
+  }
+
+
+  validateData = () => {
+    let validate = false;
+    let user = this.state.user;
+
+    if (
+      user.LoginID === "" || user.LoginID.length < 5 ||
+      user.Password === "" || user.Password.length < 5 ||
+      user.FirstName === "" ||
+      user.EmailID === ""
+    ) {
+      validate = false;
+      
+
+      if (user.LoginID === "" || user.LoginID.length < 5) {
+        let v = this.state.Validations;
+        v.LoginID = {
+          errorState: true,
+          errorMssg: "",
+        };
+        this.setState({
+          Validations: v,
+        });
+      }
+      if (user.Password === "" || user.Password.length < 5) {
+        let v = this.state.Validations;
+        v.Password = {
+          errorState: true,
+          errorMssg: "",
+        };
+        this.setState({
+          Validations: v,
+        });
+      }
+      if (user.FirstName === "") {
+        let v = this.state.Validations;
+        v.FirstName = {
+          errorState: true,
+          errorMssg: "",
+        };
+        this.setState({
+          Validations: v,
+        });
+      }
+      if (user.EmailID === "") {
+        let v = this.state.Validations;
+        v.EmailID = {
+          errorState: true,
+          errorMssg: "Email  Already exist!",
+        };
+        this.setState({
+          Validations: v,
+        });
+      }
+
+     
+
+    } else {
+      validate = true;
+    }
+
+    return validate;
   }
 
   render() {
@@ -128,21 +193,6 @@ class adduser extends React.Component {
       }
     };
 
-    // const CheckFirstName = () => {
-    //   if (this.state.FirstName === "" || this.state.FirstName.length > 20) {
-    //     if (this.state.EmailID.length > 50 || this.state.duplicate === true) {
-    //       this.setState({ DisabledCreatebtn: true });
-    //     }else{
-    //       this.setState({ DisabledCreatebtn: true });
-    //     }
-    //   } else if (
-    //     this.state.EmailID.length > 50 ||
-    //     this.state.duplicate === true
-    //   ) {
-    //     this.setState({ DisabledCreatebtn: true });
-    //   } else {
-    //   }
-    // };
 
     const updateFormValue = (id, e) => {
       if (id === "isActive") {
@@ -224,7 +274,7 @@ class adduser extends React.Component {
       if (id === "EmailID") {
         let duplicateExist = CF.chkDuplicateName(
           this.state.users,
-          "emailId",
+          "EmailID",
           e.target.value
         );
         let user = this.state.user;
@@ -270,37 +320,56 @@ class adduser extends React.Component {
       if (id === "LoginID") {
         let user = this.state.user;
         user.LoginID = e.target.value;
-        // this.setState({user:user});
-        if (e.target.value.length > 10) {
+        let duplicateLoginIDExist = CF.chkDuplicateName(
+          this.state.users,
+          "LoginID",
+          user.LoginID
+        );
+        console.log("duplicateLoginIDExist > ", duplicateLoginIDExist);
+        if (duplicateLoginIDExist === false) {
+          if (e.target.value.length > 10 || e.target.value.length < 5) {
+            let v = this.state.Validations;
+            v.LoginID = {
+              errorState: true,
+              errorMssg: "",
+            };
+            this.setState({
+              Validations: v,
+              DisabledCreatebtn: true
+            });
+          } else {
+            let v = this.state.Validations;
+            v.LoginID = { errorState: false, errorMssg: "" };
+            this.setState({
+              Validations: v,
+              LoginID: e.target.value,
+              user: user,
+              DisabledCreatebtn: false
+            });
+          }
+        } else {
           let v = this.state.Validations;
           v.LoginID = {
             errorState: true,
-            errorMssg: "only 10 characters are allowed",
+            errorMssg: "",
           };
           this.setState({
             Validations: v,
-          });
-        } else {
-          let v = this.state.Validations;
-          v.LoginID = { errorState: false, errorMssg: "" };
-          this.setState({
-            Validations: v,
-
-            LoginID: e.target.value,
-            user: user,
+            DisabledCreatebtn: true
           });
         }
+
       }
 
       if (id === "Password") {
         let user = this.state.user;
         user.Password = e.target.value;
 
-        if (e.target.value.length > 10) {
+        if (e.target.value.length > 10 || e.target.value.length < 5) {
           let v = this.state.Validations;
           v.Password = {
             errorState: true,
-            errorMssg: "only 10 characters are allowed",
+            errorMssg: "",
           };
           this.setState({
             Validations: v,
@@ -310,21 +379,20 @@ class adduser extends React.Component {
           v.Password = { errorState: false, errorMssg: "" };
           this.setState({
             Validations: v,
-
             Password: e.target.value,
             user: user,
           });
         }
       }
-      if (id === "IsAdmin"){
+      if (id === "IsAdmin") {
         let user = this.state.user;
-        user.IsAdmin=e.target.checked
-        this.setState({user:user,IsAdmin:e.target.checked})
+        user.IsAdmin = e.target.checked
+        this.setState({ user: user, IsAdmin: e.target.checked })
       }
-      if (id === "isActive"){
+      if (id === "isActive") {
         let user = this.state.user;
-        user.isActive=e.target.checked
-        this.setState({user:user,isActive:e.target.checked})
+        user.isActive = e.target.checked
+        this.setState({ user: user, isActive: e.target.checked })
       }
 
       this.state.duplicate === true
@@ -338,27 +406,41 @@ class adduser extends React.Component {
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       let user = this.state.user;
-      const handleCreateData = {
-        validUser: ValidUser,
-        users: user,
-      };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let AddUserUrl = APIURLS.APIURL.AddUser;
 
-      axios
-        .post(AddUserUrl, handleCreateData, { headers })
-        .then((response) => {
-          let data = response.data;
+      let validate = this.validateData();
 
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => {});
+      if (validate === true) {
+        const handleCreateData = {
+          validUser: ValidUser,
+          users: user,
+        };
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let AddUserUrl = APIURLS.APIURL.AddUser;
+
+        axios
+          .post(AddUserUrl, handleCreateData, { headers })
+          .then((response) => {
+            let data = response.data;
+
+            if (response.status === 200 || response.status === 201) {
+              this.setState({ ProgressLoader: true, SuccessPrompt: true }, () => {
+                window.location = URLS.URLS.userMaster + this.state.urlparams;
+              });
+
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true, ErrorMessageProps: "" });
+            }
+          })
+          .catch((error) => {
+            this.setState({ ProgressLoader: true, ErrorPrompt: true, ErrorMessageProps: "" });
+          });
+      } else {
+        this.setState({ ProgressLoader: true, ErrorPrompt: true, ErrorMessageProps: "Incorrect Inputs" });
+      }
+
+
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -382,7 +464,7 @@ class adduser extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.userMaster + this.state.urlparams}
-          masterLinkTitle="User Master"
+          masterLinkTitle="User"
           typoTitle="Add User"
           level={2}
         />
@@ -392,19 +474,19 @@ class adduser extends React.Component {
     const buttongroupHtml = (
       <Fragment>
         <ButtonGroup
-                  size="small"
-                  variant="text"
-                  aria-label="Action Menu Button group"
-                >
-                  <Button
-                    className="action-btns"
-                    startIcon={APIURLS.buttonTitle.save.icon}
-                    onClick={handleCreate}
-                    disabled={this.state.DisabledCreatebtn}
-                  >
-                      {APIURLS.buttonTitle.save.name}
-                  </Button>
-                </ButtonGroup>
+          size="small"
+          variant="text"
+          aria-label="Action Menu Button group"
+        >
+          <Button
+            className="action-btns"
+            startIcon={APIURLS.buttonTitle.save.icon}
+            onClick={handleCreate}
+            disabled={this.state.DisabledCreatebtn}
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
+        </ButtonGroup>
       </Fragment>
     );
 
@@ -414,6 +496,7 @@ class adduser extends React.Component {
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
+          ErrorMessageProps={this.state.ErrorMessageProps}
         />
         <SuccessSnackBar
           SuccessPrompt={this.state.SuccessPrompt}
@@ -424,31 +507,31 @@ class adduser extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
-       
-          <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={6} md={6} lg={6}>
-              <Accordion
-                key="country-General-Details"
-                expanded={this.state.GeneralDetailsExpanded}
+
+        <Grid className="table-adjust" container spacing={0}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
+            <Accordion
+              key="country-General-Details"
+              expanded={this.state.GeneralDetailsExpanded}
+            >
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("GeneralDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
               >
-                <AccordionSummary
-                  className="accordion-Header-Design"
-                  expandIcon={
-                    <ExpandMoreIcon
-                      onClick={(e) =>
-                        handleAccordionClick("GeneralDetailsExpanded", e)
-                      }
-                    />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  style={{ minHeight: 20, height: "100%" }}
-                >
-                  <Typography key="" className="accordion-Header-Title">
-                    General Details
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails key="" className="AccordionDetails-css">
+                <Typography key="" className="accordion-Header-Title">
+                  General
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div>
@@ -465,40 +548,29 @@ class adduser extends React.Component {
                             error={this.state.Validations.FirstName.errorState}
                           />
                           <SIB
-                           
+
                             id="LastName"
-                            label="LastName"
+                            label="Last Name"
                             variant="outlined"
                             size="small"
                             onChange={(e) => updateFormValue("LastName", e)}
                             value={this.state.user.LastName}
                             error={this.state.Validations.LastName.errorState}
                           />
+
                           <SIB
-                           
-                           id="EmailID"
-                           label="EmailID"
-                           variant="outlined"
-                           size="small"
-                           onChange={(e) => updateFormValue("EmailID", e)}
-                           value={this.state.user.EmailID}
-                           error={this.state.Validations.EmailID.errorState}
-                         />
-                         <SIB
-                           
-                           id="LoginID"
-                           label="LoginID"
-                           variant="outlined"
-                           size="small"
-                           onChange={(e) => updateFormValue("LoginID", e)}
-                           value={this.state.user.LoginID}
-                           error={this.state.Validations.LoginID.errorState}
-                         />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                            isMandatory={true}
+                            id="LoginID"
+                            label="Login ID"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("LoginID", e)}
+                            value={this.state.user.LoginID}
+                            error={this.state.Validations.LoginID.errorState}
+                          />
                           <SIB
-                           type="password"
+                            isMandatory={true}
+                            type="password"
                             id="Password"
                             label="Password"
                             variant="outlined"
@@ -507,141 +579,46 @@ class adduser extends React.Component {
                             value={this.state.user.Password}
                             error={this.state.Validations.Password.errorState}
                           />
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                        <Grid item xs={12} sm={12} md={5} lg={5}>
+                          <SIB
+                            isMandatory={true}
+                            id="EmailID"
+                            label="Email"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => updateFormValue("EmailID", e)}
+                            value={this.state.user.EmailID}
+                            error={this.state.Validations.EmailID.errorState}
+                          />
+
                           <SSIB
-                                key="isAdmin"
-                                id="isAdmin"
-                                label="isAdmin"
-                                param={this.state.user.IsAdmin}
-                                onChange={(e) => updateFormValue("IsAdmin", e)}
-                              />
-                               <SSIB
-                                key="isActive"
-                                id="isActive"
-                                label="isActive"
-                                param={this.state.user.isActive}
-                                onChange={(e) => updateFormValue("isActive", e)}
-                              />
+                            key="isAdmin"
+                            id="isAdmin"
+                            label="Is Admin?"
+                            param={this.state.user.IsAdmin}
+                            onChange={(e) => updateFormValue("IsAdmin", e)}
+                          />
+                          <SSIB
+                            key="isActive"
+                            id="isActive"
+                            label="Is Active?"
+                            param={this.state.user.isActive}
+                            onChange={(e) => updateFormValue("isActive", e)}
+                          />
                         </Grid>
                       </Grid>
                     </div>
                   </Grid>
                 </Grid>
 
-                  {/* <TableContainer>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className="accordion-table"
-                      aria-label="company List table"
-                    >
-                      <TableBody className="tableBody">
-                        <Tablerowcelltextboxinput
-                          id="FirstName"
-                          label="FirstName"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("FirstName", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.FirstName}
-                          error={this.state.Validations.FirstName.errorState}
-                          helperText={
-                            this.state.Validations.FirstName.errorMssg
-                          }
-                        />
-
-                        <Tablerowcelltextboxinput
-                          id="LastName"
-                          label="LastName"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("LastName", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.LastName}
-                          error={this.state.Validations.LastName.errorState}
-                          helperText={this.state.Validations.LastName.errorMssg}
-                        />
-                        <Tablerowcelltextboxinput
-                          id="EmailID"
-                          label="Email ID"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("EmailID", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.EmailID}
-                          error={this.state.Validations.EmailID.errorState}
-                          helperText={this.state.Validations.EmailID.errorMssg}
-                        />
-
-                        <Tablerowcelltextboxinput
-                          id="LoginID"
-                          label="Login ID"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("LoginID", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.LoginID}
-                          error={this.state.Validations.LoginID.errorState}
-                          helperText={this.state.Validations.LoginID.errorMssg}
-                        />
-
-                        <Tablerowcelltextboxinput
-                          type="password"
-                          id="Password"
-                          label="Password"
-                          variant="outlined"
-                          size="small"
-                          onChange={(e) => updateFormValue("Password", e)}
-                          InputProps={{
-                            className: "textFieldCss",
-                            maxlength: 50,
-                          }}
-                          value={this.state.Password}
-                          error={this.state.Validations.Password.errorState}
-                          helperText={this.state.Validations.Password.errorMssg}
-                        />
-
-                        <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            is Admin?
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Switch
-                              size="small"
-                              onChange={(e) => updateFormValue("isAdmin", e)}
-                            />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell align="left" className="no-border-table">
-                            is Active?
-                          </TableCell>
-                          <TableCell align="left" className="no-border-table">
-                            <Switch
-                              size="small"
-                              onChange={(e) => updateFormValue("isActive", e)}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer> */}
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
+                
+              </AccordionDetails>
+            </Accordion>
           </Grid>
-        
+        </Grid>
+
       </Fragment>
     );
   }
