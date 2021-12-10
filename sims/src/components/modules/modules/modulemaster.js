@@ -81,7 +81,7 @@ class modulemasters extends React.Component {
           rows = data;
           this.setState({ modules: rows, ProgressLoader: true }, () => {
             if (rows.length > 0) {
-              this.InitialhandleRowClick(null, rows[0], "row_0");
+              this.handleRowClick(null, rows[0], "row_0");
             }
           });
         } else {
@@ -94,29 +94,32 @@ class modulemasters extends React.Component {
       });
   }
 
-  InitialhandleRowClick(e, item, id) {
+   handleRowClick = (e, item, id) => {
     try {
       let editUrl =
         URLS.URLS.editModule +
         this.state.urlparams +
         "&moduleId=" +
-        item.moduleId;
-      this.setState({ moduleId: item.moduleId, editurl: editUrl });
-      this.InitialremoveIsSelectedRowClasses();
-      this.InitialgetPageList(item.moduleId);
+        item.ModuleID;
+
+      this.setState({ moduleId: item.ModuleID, editurl: editUrl });
+      this.getPageList(item.ModuleID);
+
+      this.removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     } catch (err) {}
-  }
+  };
 
-  InitialremoveIsSelectedRowClasses() {
+   removeIsSelectedRowClasses = () => {
     try {
       for (let i = 0; i < this.state.modules.length; i++) {
         document.getElementById("row_" + i).className = "";
       }
     } catch (err) {}
-  }
+  };
 
-  InitialgetPageList(moduleId) {
+   getPageList = (moduleId) => {
+    console.log("getPageList > moduleId ",moduleId);
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -139,106 +142,35 @@ class modulemasters extends React.Component {
       .post(GetPageByModuleIdUrl, data, { headers })
       .then((response) => {
         if (response.status === 200) {
-          let data = response.data;
-          this.InitialresetDataList(data);
+          let data = response.data.Pages;
+
+          console.log("getPageList > moduleId > data > ",data);
+          this.resetDataList(moduleId,data);
         } else {
         }
       })
       .catch((error) => {});
-  }
+  };
 
-  InitialresetDataList(data) {
-    console.log("InitialresetDataList > data ",data);
+   resetDataList = (moduleId,data) => {
     let rows = [];
     for (let i = 0; i < data.length; i++) {
       let r = {
-        id: data[i].pageId,
-        moduleId: data[i].moduleId,
-        pageId: "PL" + data[i].pageId,
-        pageName: data[i].pageName,
-        pageLink: data[i].pageLink,
-        description: data[i].description,
+        id: data[i].PageID,
+        moduleId: moduleId,
+        pageId: data[i].PageID,
+        pageName: data[i].PageName,
+        pageLink: data[i].PageLink,
+        description: data[i].Description,
       };
       rows.push(r);
     }
 
     this.setState({ pageLinkRow: rows });
-  }
+  };
 
   render() {
-    const handleRowClick = (e, item, id) => {
-      try {
-        let editUrl =
-          URLS.URLS.editModule +
-          this.state.urlparams +
-          "&moduleId=" +
-          item.ModuleID;
-
-        this.setState({ moduleId: item.ModuleID, editurl: editUrl });
-        getPageList(item.ModuleID);
-
-        removeIsSelectedRowClasses();
-        document.getElementById(id).classList.add("selectedRow");
-      } catch (err) {}
-    };
-
-    const removeIsSelectedRowClasses = () => {
-      try {
-        for (let i = 0; i < this.state.modules.length; i++) {
-          document.getElementById("row_" + i).className = "";
-        }
-      } catch (err) {}
-    };
-
-    const getPageList = (moduleId) => {
-      console.log("getPageList > moduleId ",moduleId);
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const data = {
-        validUser: ValidUser,
-        page: {
-          PageId: 0,
-          ModuleId: moduleId,
-          PageName: null,
-          PageLink: null,
-          Description: null,
-        },
-      };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let GetPageByModuleIdUrl = APIURLS.APIURL.GetPageByModuleId;
-
-      axios
-        .post(GetPageByModuleIdUrl, data, { headers })
-        .then((response) => {
-          if (response.status === 200) {
-            let data = response.data;
-            console.log("getPageList > moduleId > data > ",data);
-              resetDataList(data);
-          } else {
-          }
-        })
-        .catch((error) => {});
-    };
-
-    const resetDataList = (data) => {
-      let rows = [];
-      for (let i = 0; i < data.length; i++) {
-        let r = {
-          id: data[i].pageId,
-          moduleId: data[i].moduleId,
-          pageId: "PL" + data[i].pageId,
-          pageName: data[i].pageName,
-          pageLink: data[i].pageLink,
-          description: data[i].description,
-        };
-        rows.push(r);
-      }
-
-      this.setState({ pageLinkRow: rows });
-    };
+   
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -246,7 +178,7 @@ class modulemasters extends React.Component {
     };
 
     const handlePageChange = (event, newPage) => {
-      this.InitialremoveIsSelectedRowClasses();
+      this.removeIsSelectedRowClasses();
       console.log("handlePageChange > event > ", event);
       console.log("handlePageChange > newPage > ", newPage);
       let pagination = this.state.pagination;
@@ -341,7 +273,7 @@ class modulemasters extends React.Component {
                                 hover
                                 key={i}
                                 onClick={(event) =>
-                                  handleRowClick(event, item, "row_" + i)
+                                  this.handleRowClick(event, item, "row_" + i)
                                 }
                               >
                                 <TableCell align="left">
@@ -351,7 +283,7 @@ class modulemasters extends React.Component {
                                       URLS.URLS.editModule +
                                       this.state.urlparams +
                                       "&moduleId=" +
-                                      item.moduleId
+                                      item.ModuleID
                                     }
                                   >
                                     {URLS.PREFIX.moduleID + item.ModuleID}

@@ -23,7 +23,7 @@ class errorSnackbar extends React.Component {
                     
                 >
                     <Alert onClose={this.props.closeErrorPrompt} severity="error" sx={{ width: '100%' }}>
-                        Error! {this.props.ErrorMessageProps===""?"":" - "+(this.props.ErrorMessageProps)}
+                        Error! {this.props.ErrorMessageProps?this.props.ErrorMessageProps===""?"":" - "+(this.props.ErrorMessageProps):null}
                     </Alert>
                 </Snackbar>
             </Fragment>

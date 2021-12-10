@@ -39,7 +39,7 @@ class editmodule extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
-      updateBtnDisable: true,
+      updateBtnDisable: false,
       Module: {
         ModuleId: 0,
         Name: "",
@@ -345,9 +345,17 @@ class editmodule extends React.Component {
       axios
         .post(UpdateModuleUrl, handleCreateData, { headers })
         .then((response) => {
-          let data = response.data;
+          let data = response.data;   
+          if(response.status===200){
+            this.setState({ErrorPrompt: false,SuccessPrompt: true});
+          }else{
+            this.setState({ErrorPrompt: true});
+          }
+
         })
-        .catch((error) => {});
+        .catch((error) => {
+          this.setState({ErrorPrompt: true});
+        });
     };
 
     const closeErrorPrompt = (event, reason) => {

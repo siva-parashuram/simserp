@@ -177,7 +177,7 @@ class addpage extends React.Component {
               onChange={(e) => this.handleDropdownChange(e, params)}
             >
               {modules.map((item, i) => (
-                <option value={item.moduleId}> {item.name}</option>
+                <option value={item.ModuleID}> {item.Name}</option>
               ))}
             </select>
           </Fragment>
