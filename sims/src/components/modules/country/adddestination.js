@@ -376,9 +376,9 @@ class adddestination extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={12} md={7} lg={7}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={9} lg={9}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
                 <Accordion
                   key="country-General-Details"
                   expanded={this.state.GeneralDetailsExpanded}
@@ -397,7 +397,7 @@ class adddestination extends React.Component {
                     style={{ minHeight: 20, height: "100%" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General 
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -525,8 +525,9 @@ class adddestination extends React.Component {
             </Grid>
           </Grid>
 
-          <Grid xs={12} sm={12} md={5} lg={5}>
+          <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={1} lg={1}></Grid>
               <Grid xs={12} sm={12} md={10} lg={10}>
                 <Destination destinations={this.state.destinations} />
               </Grid>

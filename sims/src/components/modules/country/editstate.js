@@ -390,7 +390,7 @@ class editstate extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.stateMaster + this.state.urlparams}
-          masterLinkTitle="State Master"
+          masterLinkTitle="State"
           typoTitle="Edit State"
           level={2}
         />
@@ -433,7 +433,7 @@ class editstate extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={6} md={6} lg={6}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Accordion
               key="country-General-Details"
               expanded={this.state.GeneralDetailsExpanded}
@@ -452,7 +452,7 @@ class editstate extends React.Component {
                 style={{ minHeight: 20, height: "100%" }}
               >
                 <Typography key="" className="accordion-Header-Title">
-                  General Details
+                  General
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">

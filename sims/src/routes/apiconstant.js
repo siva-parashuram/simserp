@@ -557,7 +557,7 @@ export const  stateMasterColumn=[
   },
   {
     field: 'gstcode',
-    headerName: 'Gst Code',
+    headerName: 'GST Code',
     width: 160,
     editable: false,
     headerClassName: 'table-header-font'

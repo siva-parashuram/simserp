@@ -185,7 +185,7 @@ class statemaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="State Master"
+          typoTitle="State"
           level={1}
         />
       </Fragment>
@@ -240,9 +240,9 @@ class statemaster extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={12} md={7} lg={7}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={11} lg={11}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
                 {this.state.stateData.length > 0 ? (
                   <Fragment>
 
@@ -263,10 +263,13 @@ class statemaster extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid xs={12} sm={12} md={5} lg={5}>
+          <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={10} lg={10}>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <div style={{marginLeft:10}}>
                 <Destination destinations={this.state.destinations} />
+                </div>
+                
               </Grid>
             </Grid>
           </Grid>

@@ -119,7 +119,7 @@ class editdestination extends React.Component {
     for (let i = 0; i < data.length; i++) {
       let d = {
         name: data[i].Name,
-        value: data[i].CountryId,
+        value: data[i].CountryID,
       };
       newData.push(d);
     }
@@ -140,9 +140,17 @@ class editdestination extends React.Component {
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
+        let newData=[];
+        for (let i = 0; i < data.length; i++) {
+          let d = {
+            name: data[i].name,
+            value: data[i].stateId,
+          };
+          newData.push(d);
+        }
 
         rows = data;
-        this.setState({ stateData: rows, ProgressLoader: true });
+        this.setState({ stateData: newData, ProgressLoader: true });
       })
       .catch((error) => {});
   }
@@ -315,6 +323,7 @@ class editdestination extends React.Component {
         checkName();
       }
       if (id === "CountryID") {
+        console.log("IN CountryID > e.target.value > ",e.target.value);
         this.setState({
           countryId: CF.toInt(e.target.value),
         });
@@ -426,9 +435,9 @@ class editdestination extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={12} md={7} lg={7}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={9} lg={9}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
                 <Accordion
                   key="country-General-Details"
                   expanded={this.state.GeneralDetailsExpanded}
@@ -447,7 +456,7 @@ class editdestination extends React.Component {
                     style={{ minHeight: 20, height: "100%" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -471,7 +480,7 @@ class editdestination extends React.Component {
                               />
                               <SIB
                                 id="PostCode"
-                                label="PostCode"
+                                label="Postcode"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("PostCode", e)}
@@ -493,7 +502,7 @@ class editdestination extends React.Component {
                           />
                                <SDIB
                             id="stateID"
-                            label="state"
+                            label="State"
                             size="small"
                             onChange={(e) => updateFormValue("stateID", e)}
                             value={this.state.stateId}
@@ -511,8 +520,9 @@ class editdestination extends React.Component {
             </Grid>
           </Grid>
 
-          <Grid xs={12} sm={12} md={5} lg={5}>
+          <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={1} lg={1}></Grid>
               <Grid xs={12} sm={12} md={10} lg={10}>
                 <Destination destinations={this.state.destinations} />
               </Grid>
