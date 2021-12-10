@@ -220,11 +220,11 @@ export const buttonTitle = {
     icon: <SaveIcon />,
   },
   assignBranch:{
-    name:"Assign branch",
+    name:"Assign Branch",
     icon:<AccountTreeIcon/>,
   },
   assignRole:{
-    name:"Assign role",
+    name:"Assign Role",
     icon:<BadgeIcon/>
   }
 };
