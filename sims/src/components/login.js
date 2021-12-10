@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import Sivamap from '../siva-map.jpg';
 import logo from '../logo.png';
 import * as APIURLS from "../routes/apiconstant";
-import * as CF from "../services/functions/customfunctions"; 
+import * as CF from "../services/functions/customfunctions";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -46,6 +46,7 @@ class login extends React.Component {
     super(props);
     this.state = {
       token: "",
+      ErrorMessage: "",
       ErrorPrompt: false,
       isLoggedIn: false,
       data: {},
@@ -182,6 +183,15 @@ class login extends React.Component {
     }
   }
 
+  clearCookie=()=>{
+    deleteCookie(COOKIE.USERID, null);
+    deleteCookie(COOKIE.TOKEN, null);
+    deleteCookie(COOKIE.USERID, null);
+    deleteCookie(COOKIE.ISADMIN, null);
+    deleteCookie(COOKIE.FIRSTNAME, null);
+    deleteCookie(COOKIE.BRANCH_OPEN, null);
+  }
+
   render() {
     const handleClick = (e) => {
       if (this.state.userID === "" || this.state.password === "") { } else {
@@ -199,24 +209,48 @@ class login extends React.Component {
 
         axios.post(loginUrl, data, { headers })
           .then(response => {
-
-
+            console.log("response > ", response);
             if (response.status === 200) {
-              if (response.data.head.userID === 0) {
-                this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true, disableLoginBtn: false });
-                document.getElementById("password").value = null;
-              } else {
-
+              if (response.data.head.status === "OK") {
                 let data = response.data;
                 setAllCookiesAndParams(data);
+              } else {
+                if (response.data.head.status === "DL") {
+                  let data = response.data;
+                  setAllCookiesAndParams(data);
+                }
+
+                if (response.data.head.status === "UU") {
+                  this.setState({
+                    loader: 'hideLoginScreenLoader',
+                    ErrorPrompt: true,
+                    disableLoginBtn: false,
+                    ErrorMessage: "Unknown User"
+                  });
+                }
+
+                if (response.data.head.status === "NA") {
+                  this.setState({
+                    loader: 'hideLoginScreenLoader',
+                    ErrorPrompt: true,
+                    disableLoginBtn: false,
+                    ErrorMessage: "User not Active"
+                  });
+                }
+
               }
             } else {
-              this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true, disableLoginBtn: false });
-              document.getElementById("password").value = null;
-              this.setState({ loader: 'hideLoginScreenLoader' });
+              this.setState({
+                loader: 'hideLoginScreenLoader',
+                ErrorPrompt: true,
+                disableLoginBtn: false,
+                ErrorMessage: "Something went wrong."
+              });
             }
+
           }
           ).catch(error => {
+            console.log("error > ", error);
             this.setState({ loader: 'hideLoginScreenLoader', ErrorPrompt: true, disableLoginBtn: false });
           });
 
@@ -224,8 +258,7 @@ class login extends React.Component {
     };
     const logoutUser = (e) => {
       processLogout(getCookie(COOKIE.USERID), this.state.token);
-      
-      // window.location.reload();
+
     }
 
     const processLogout = (userID, token) => {
@@ -250,14 +283,14 @@ class login extends React.Component {
             deleteCookie(COOKIE.BRANCH_OPEN, null);
             this.removeSavedState();
             CF.EMPTY_BRANCH_OPEN();  //remove all BRANCH OPEN WINDOWS from storage
-    
+
           });
         }
         ).catch(error => {
 
         });
     }
-    
+
     const menuClose = event => {
       this.setState({ anchorEl: null });
     };
@@ -282,7 +315,7 @@ class login extends React.Component {
       createCookie(COOKIE.USERID, data.head.userID, APIURLS.CTimeOut);
       createCookie(COOKIE.ISADMIN, data.head.isAdmin, APIURLS.CTimeOut);
       createCookie(COOKIE.FIRSTNAME, data.head.firstName, APIURLS.CTimeOut);
-      
+
 
       let companyList = data.companies.companyList;
       this.setState({ userCompanyList: companyList }, function () {
@@ -349,10 +382,13 @@ class login extends React.Component {
                               <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={12} lg={12}>
                                   {this.state.status === "DL" ? (
-                                    <span>You are already logged in. Kindly logout and login again</span>
+                                    <span>You are already logged in. Kindly logout and login again or <span 
+                                      class="exit-link-login"
+                                      onClick={(e)=>this.clearCookie()}
+                                      > Exit</span> </span>
                                   ) : (<CompanyList state={this.state} />)}
                                 </Grid>
-                              </Grid>                             
+                              </Grid>
                             </CardContent>
                           </Card>
                         </Paper>
@@ -405,7 +441,7 @@ class login extends React.Component {
                     </div>
 
                     <Snackbar open={this.state.ErrorPrompt} autoHideDuration={3000} onClose={closeErrorPrompt}>
-                      <Alert onClose={closeErrorPrompt} severity="warning">Looks like Something is missing!</Alert>
+                      <Alert onClose={closeErrorPrompt} severity="warning">Error! {this.state.ErrorMessage}</Alert>
                     </Snackbar>
 
                     <Menu

@@ -54,6 +54,8 @@ class assignrole extends React.Component {
     const performCheckAll = (item, e, bool) => {
       // this.setState({ roleId: this.props.roleId });
       console.log("performCheckAll > item > ", item);
+      console.log("performCheckAll > bool > ", bool);
+      console.log("performCheckAll > e > ", e);
       let rows = [];
       this.state.rows.length > 0
         ? (rows = this.state.rows)
@@ -62,7 +64,9 @@ class assignrole extends React.Component {
       let newRows = [];
       for (let i = 0; i < rows.length; i++) {
         let row = rows[i];
+        console.log("IN Loop > row > ", row);
         if (rows[i].id === item.id) {
+          console.log("IN LOOP > IF > rows[i].id === item.id > ", rows[i].id+" === "+ item.id);
           if (bool === true) {
             row.chkAll = bool;
             row.IsCreate = true;
@@ -70,9 +74,13 @@ class assignrole extends React.Component {
             row.IsPrint = true;
             row.IsUpdate = true;
             row.IsView = true;
-            row.isChecked = bool;
+            if(e==="R_CHK" || row.chkAll===true){
+              row.isChecked = bool;
+            }           
           } else {
-            row.isChecked = bool;
+            if(e==="R_CHK"){
+              row.isChecked = bool;
+            }            
             row.chkAll = bool;
             row.IsCreate = false;
             row.IsDelete = false;
@@ -111,7 +119,7 @@ class assignrole extends React.Component {
             row.IsView === false
           ) {
             row.chkAll = false;
-            row.isChecked = false;
+           
           }
           if (
             row.IsCreate === true &&
@@ -121,8 +129,34 @@ class assignrole extends React.Component {
             row.IsView === true
           ) {
             row.chkAll = true;
-            row.isChecked = true;
+          
           }
+
+          if( row.chkAll === true){
+            row.isChecked = true;   
+          }else{
+            if (
+              row.IsCreate === true ||
+              row.IsDelete === true ||
+              row.IsPrint === true ||
+              row.IsUpdate === true ||
+              row.IsView === true
+            ) {
+              row.isChecked = true;          
+            }
+  
+            if (
+              row.IsCreate === false &&
+              row.IsDelete === false &&
+              row.IsPrint === false &&
+              row.IsUpdate ===false &&
+              row.IsView === false
+            ) {
+              row.isChecked = false;          
+            }
+          }
+
+          
           newRows.push(row);
         } else {
           newRows.push(row);
@@ -166,6 +200,7 @@ class assignrole extends React.Component {
 
     const handleUpdate = () => {
       let selectedRows = getSelectedRows();
+      console.log("selectedRows > ",selectedRows);
       this.setState({ ProgressLoader: false });
       let RoleDetailList = getProcessedRoleDetailList(selectedRows);
 
@@ -236,6 +271,8 @@ class assignrole extends React.Component {
           SuccessPrompt={this.state.SuccessPrompt}
           closeSuccessPrompt={closeSuccessPrompt}
         />
+
+        {console.log("this.props.rows >",this.props.rows)}
 
         {this.props.rows ? (
           <div style={{ marginTop: -30 }}>
@@ -315,14 +352,14 @@ class assignrole extends React.Component {
                               id={"chkRow_" + item.id}
                               type="checkbox"
                               checked={true}
-                              onClick={(e) => performCheckAll(item, e, false)}
+                              onClick={(e) => performCheckAll(item, "R_CHK", false)}
                             />
                           ) : (
                             <input
                               id={"chkRow_" + item.id}
                               type="checkbox"
                               checked={false}
-                              onClick={(e) => performCheckAll(item, e, true)}
+                              onClick={(e) => performCheckAll(item, "R_CHK", true)}
                             />
                           )}
                         </TableCell>
@@ -355,7 +392,9 @@ class assignrole extends React.Component {
                                 chkPermission(e, item, "IsCreate", false)
                               }
                             />
-                          ) : (
+                          ) :null}
+                          
+                          {item.IsCreate === false ?(
                             <input
                               id={"IsCreate_checkbox_" + item.id}
                               type="checkbox"
@@ -364,7 +403,7 @@ class assignrole extends React.Component {
                                 chkPermission(e, item, "IsCreate", true)
                               }
                             />
-                          )}
+                          ):null}
                         </TableCell>
                         <TableCell className="chk-all-cell-css" align="left">
                           {item.IsUpdate === true ? (
@@ -397,7 +436,8 @@ class assignrole extends React.Component {
                                 chkPermission(e, item, "IsDelete", false)
                               }
                             />
-                          ) : (
+                          ) :null}
+                          { item.IsDelete === false ? (
                             <input
                               id={"IsDelete_checkbox_" + item.id}
                               type="checkbox"
@@ -406,7 +446,7 @@ class assignrole extends React.Component {
                                 chkPermission(e, item, "IsDelete", true)
                               }
                             />
-                          )}
+                          ):null}
                         </TableCell>
                         <TableCell className="chk-all-cell-css" align="left">
                           {item.IsView === true ? (

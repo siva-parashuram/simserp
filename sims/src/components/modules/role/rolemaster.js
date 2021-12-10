@@ -174,9 +174,7 @@ class rolemaster extends React.Component {
       rows.push(row);
       i++;
     }
-    this.setState({ pages: rows },()=>{
-      this.setState({ pages: rows });
-    });
+    this.setState({ pages: rows });
   };
 
    removeIsSelectedRowClasses = () => {

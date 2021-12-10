@@ -7,6 +7,15 @@
 
 }
 
+.exit-link-login{
+    cursor: pointer;
+    color:blue;
+}
+
+.exit-link-login:hover{
+    text-decoration: underline !important;
+}
+
 .branchListButton{
     text-transform: initial !important;
 }
