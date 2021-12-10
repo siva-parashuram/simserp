@@ -63,7 +63,7 @@ class addpage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      updateBtnDisable:true,
+      updateBtnDisable: true,
       urlparams: "",
       showDetails: true,
       addNewPageSection: false,
@@ -77,6 +77,7 @@ class addpage extends React.Component {
       pageName: null,
       pageLink: null,
       description: null,
+      PageType: null,
       createBtnDisable: true,
       moduleId: null,
       ErrorPrompt: false,
@@ -129,7 +130,7 @@ class addpage extends React.Component {
         if (response.status === 200) {
           let data = response.data;
           rows = data;
-          this.setState({ modules: rows,updateBtnDisable:false });
+          this.setState({ modules: rows, updateBtnDisable: false });
           this.updateColumns(rows);
         } else {
           this.setState({ modules: [], ProgressLoader: true });
@@ -282,7 +283,7 @@ class addpage extends React.Component {
     this.props.data.rows = rows;
   }
 
-  processResetData(data) {}
+  processResetData(data) { }
 
   InitialhandleRowClick(e, item, id) {
     let editUrl =
@@ -316,7 +317,7 @@ class addpage extends React.Component {
       }
     };
 
-    
+
 
     const onEditRowsModelChange = (e) => {
       var keys = Object.keys(e);
@@ -478,6 +479,10 @@ class addpage extends React.Component {
           });
         }
       }
+      if (id == "PageType") {
+        this.setState({ PageType: e.target.value });
+      }
+
     };
 
     const enableCreateBtn = () => {
@@ -505,14 +510,9 @@ class addpage extends React.Component {
 
     const handlecreate = (moduleId) => {
       this.setState({ ProgressLoader: false });
-
-      let pageName = this.state.pageName;
-      let pageLink = this.state.pageLink;
-      let description = this.state.description;
-
       if (
-        (pageName !== "" || pageName != null) &&
-        (pageLink !== "" || pageLink != null)
+        (this.state.pageName !== "" || this.state.pageName != null) &&
+        (this.state.pageLink !== "" || this.state.pageLink != null)
       ) {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -522,9 +522,10 @@ class addpage extends React.Component {
           page: {
             PageId: 0,
             ModuleId: moduleId,
-            PageName: pageName,
-            PageLink: pageLink,
-            Description: description,
+            PageName: this.state.pageName,
+            PageLink: this.state.pageLink,
+            Description: this.state.description,
+            PageType: parseInt(this.state.PageType)
           },
         };
         const headers = {
@@ -535,11 +536,20 @@ class addpage extends React.Component {
         axios
           .post(CreatePageUrl, data, { headers })
           .then((response) => {
-            getPageListByModuleId(moduleId);
-            document.getElementById("pageName").value = null;
-            document.getElementById("pageLink").value = null;
-            document.getElementById("description").value = null;
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            if (response.status === 201 || response.status === 200 || response.data === true || response.data === "true") {
+              getPageListByModuleId(moduleId);
+              this.setState({
+                pageName: null,
+                pageLink: null,
+                description: null,
+                PageType: null,
+                ProgressLoader: true,
+                SuccessPrompt: true
+              });
+            }
+
+
+
           })
           .catch((error) => {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -597,7 +607,7 @@ class addpage extends React.Component {
       this.setState({ ProgressLoader: true });
     };
 
-    
+
 
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -634,41 +644,30 @@ class addpage extends React.Component {
 
     const tab1Html = (
       <Fragment>
-          
+
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={12} lg={12}>
-          <div style={{ marginLeft: 10 }}>
-            <Grid container spacing={0}>
-              <Grid xs={8} sm={8} md={8} lg={8}>
-                <Button
-                  className="action-btns"
-                  startIcon={APIURLS.buttonTitle.save.icon}
-                  style={{ marginLeft: 10, marginTop: 20 }}
-                  disabled={this.state.updateBtnDisable}
-                  onClick={handleUpdate}
-                >
-                  {APIURLS.buttonTitle.save.name}
-                </Button>
+            <div style={{ marginLeft: 10 }}>
+              <Grid container spacing={0}>
+                <Grid xs={8} sm={8} md={8} lg={8}>
+                  <Button
+                    className="action-btns"
+                    startIcon={APIURLS.buttonTitle.save.icon}
+                    style={{ marginLeft: 10, marginTop: 20 }}
+                    disabled={this.state.updateBtnDisable}
+                    onClick={handleUpdate}
+                  >
+                    {APIURLS.buttonTitle.save.name}
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-            <div style={{ height: 20 }}></div>
-            <Grid container spacing={0}>
-              <Grid xs={11} sm={11} md={11} lg={11}>
-                <div style={{ height: 400, width: "100%" }}>
-                  {this.state.refreshPageLinkList ? (
-                    <DataGrid
-                      rows={this.state.rows}
-                      columns={this.state.columns}
-                      pageSize={this.state.pageSize}
-                      rowsPerPageOptions={[this.state.rowsPerPageOptions]}
-                      onEditRowsModelChange={(e) => {
-                        onEditRowsModelChange(e);
-                      }}
-                    />
-                  ) : (
-                    <Fragment>
+              <div style={{ height: 20 }}></div>
+              <Grid container spacing={0}>
+                <Grid xs={11} sm={11} md={11} lg={11}>
+                  <div style={{ height: 400, width: "100%" }}>
+                    {this.state.refreshPageLinkList ? (
                       <DataGrid
-                        rows={this.props.data.rows}
+                        rows={this.state.rows}
                         columns={this.state.columns}
                         pageSize={this.state.pageSize}
                         rowsPerPageOptions={[this.state.rowsPerPageOptions]}
@@ -676,15 +675,26 @@ class addpage extends React.Component {
                           onEditRowsModelChange(e);
                         }}
                       />
-                    </Fragment>
-                  )}
-                </div>
+                    ) : (
+                      <Fragment>
+                        <DataGrid
+                          rows={this.props.data.rows}
+                          columns={this.state.columns}
+                          pageSize={this.state.pageSize}
+                          rowsPerPageOptions={[this.state.rowsPerPageOptions]}
+                          onEditRowsModelChange={(e) => {
+                            onEditRowsModelChange(e);
+                          }}
+                        />
+                      </Fragment>
+                    )}
+                  </div>
+                </Grid>
               </Grid>
-            </Grid>
             </div>
           </Grid>
         </Grid>
-         
+
 
       </Fragment>
     );
@@ -693,67 +703,80 @@ class addpage extends React.Component {
       <Fragment>
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={12} lg={12}>
-            <div style={{ marginLeft: 10 }}>
+            <div style={{ marginLeft: 60 }}>
               <Grid container spacing={0}>
                 <Grid xs={8} sm={8} md={8} lg={8}>
                   <Button
-                    startIcon={APIURLS.buttonTitle.add.icon}
+                    className="action-btns"
+                    startIcon={APIURLS.buttonTitle.save.icon}
                     style={{ marginLeft: 5 }}
                     onClick={(e) => {
                       handlecreate(this.props.data.moduleId);
                     }}
                     disabled={this.state.createBtnDisable}
                   >
-                    {APIURLS.buttonTitle.add.name}
+                    {APIURLS.buttonTitle.save.name}
                   </Button>
                 </Grid>
-              </Grid>            
-          </div>
+              </Grid>
+            </div>
           </Grid>
-          </Grid>
+        </Grid>
 
-          <div style={{ height: 20 }}></div>
-          <Grid container spacing={0}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <div>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={5} lg={5}>
-                    <SIB
-                      id="pageName"
-                      label="Page Name"
-                      variant="outlined"
-                      size="small"
-                      onChange={(e) => updateFormValue("pageName", e)}
-                      fullWidth
-                      error={this.state.Validations.pageName.errorState}
-                    />
-                    <SIB
-                      id="pageLink"
-                      label="Page Link"
-                      variant="outlined"
-                      size="small"
-                      onChange={(e) => updateFormValue("pageLink", e)}
-                      fullWidth
-                      value={this.state.pageLink}
-                      error={this.state.Validations.pageLink.errorState}
-                    />
-                    <SIB
-                      id="description"
-                      label="Description"
-                      variant="outlined"
-                      size="small"
-                      onChange={(e) => updateFormValue("description", e)}
-                      fullWidth
-                      value={this.state.description}
-                      error={this.state.Validations.description.errorState}
-                      maxlength={20}
-                    />
-                  </Grid>
+        <div style={{ height: 30 }}></div>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={12} md={11} lg={11}>
+            <div style={{ backgroundColor: '#fff' }}>
+              <div style={{ height: 20 }}></div>
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                <Grid item xs={12} sm={12} md={8} lg={8}>
+                  <SIB
+                    id="pageName"
+                    label="Page Name"
+                    variant="outlined"
+                    size="small"
+                    onChange={(e) => updateFormValue("pageName", e)}
+                    fullWidth
+                    error={this.state.Validations.pageName.errorState}
+                  />
+                  <SIB
+                    id="pageLink"
+                    label="Page Link"
+                    variant="outlined"
+                    size="small"
+                    onChange={(e) => updateFormValue("pageLink", e)}
+                    fullWidth
+                    value={this.state.pageLink}
+                    error={this.state.Validations.pageLink.errorState}
+                  />
+                  <SIB
+                    id="description"
+                    label="Description"
+                    variant="outlined"
+                    size="small"
+                    onChange={(e) => updateFormValue("description", e)}
+                    fullWidth
+                    value={this.state.description}
+                    error={this.state.Validations.description.errorState}
+                    maxlength={20}
+                  />
+                  <SDIB
+                    id="PageType"
+                    label="Page Type"
+                    size="small"
+                    onChange={(e) => updateFormValue("PageType", e)}
+                    value={this.state.PageType}
+                    param={APIURLS.PageType}
+                  />
                 </Grid>
-              </div>
-            </Grid>
+              </Grid>
+
+              <div style={{ height: 20 }}></div>
+            </div>
           </Grid>
-         
+        </Grid>
+
       </Fragment>
     );
 

@@ -322,7 +322,7 @@ class addmodule extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.moduleMaster + this.state.urlparams}
-          masterLinkTitle="Module Master"
+          masterLinkTitle="Module"
           typoTitle="Add Module"
           level={2}
         />
@@ -385,7 +385,7 @@ class addmodule extends React.Component {
                 style={{ minHeight: 20, height: "100%" }}
               >
                 <Typography key="" className="accordion-Header-Title">
-                  General Details
+                  General 
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">

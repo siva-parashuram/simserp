@@ -200,7 +200,7 @@ class modulemasters extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Module Master"
+          typoTitle="Module"
           level={1}
         />
       </Fragment>

@@ -227,6 +227,13 @@ export const buttonTitle = {
   }
 };
 
+export const PageType = [
+  { name: "Master", value: 1 },
+  { name: "Transaction", value: 2 },
+  { name: "Analysis", value: 3 },
+  { name: "Report", value: 4 },
+];
+
 
 export const POItemType = [
   { name: "Item", value: 0 },

@@ -43,7 +43,7 @@ class griddropdowninput extends React.Component {
                 >
                   <option value="-">Select</option>
 
-                  {this.props.param.map(
+                  {this.props.param?this.props.param.map(
                     (item, i) => (
                       <option
                         value={parseInt(item.value)}
@@ -51,7 +51,7 @@ class griddropdowninput extends React.Component {
                         {item.name}
                       </option>
                     )
-                  )}
+                  ):null}
                 </select>
               </Grid>
             </Grid>
