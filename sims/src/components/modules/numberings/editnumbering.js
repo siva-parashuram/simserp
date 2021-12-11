@@ -138,9 +138,10 @@ class editnumbering extends React.Component {
               id: i,
               NoSeriesId: data.noSeriesDetailList[i].noSeriesId,
               Lno: data.noSeriesDetailList[i].lno,
-              StartDate: moment(data.noSeriesDetailList[i].startDate).format(
-                "YYYY-MM-DD"
-              ),
+              // StartDate: moment(data.noSeriesDetailList[i].startDate).format(
+              //   "YYYY-MM-DD"
+              // ),
+              StartDate: data.noSeriesDetailList[i].startDate,
               Prefix: data.noSeriesDetailList[i].prefix,
               StartNo: data.noSeriesDetailList[i].startNo,
               Suffix: data.noSeriesDetailList[i].suffix,
@@ -150,6 +151,8 @@ class editnumbering extends React.Component {
             };
             noSeriesDetailList.push(l);
           }
+
+          
 
           let lastLno = noSeriesDetailList.at(-1).Lno;
 
@@ -231,12 +234,14 @@ class editnumbering extends React.Component {
     };
 
     const updateStartDate = (date, item) => {
+      
       let numberings = this.state.numberings;
       for (let i = 0; i < numberings.length; i++) {
         if (numberings[i].id === item.id) {
           numberings[i].StartDate = date;
         }
       }
+      console.log("numberings > ",numberings);
       this.setState({ numberings: numberings });
     };
 
@@ -311,9 +316,15 @@ class editnumbering extends React.Component {
     const formatData = () => {
       let noSeriesDetailList = this.state.numberings;
 
+      console.log("formatData > noSeriesDetailList > ",noSeriesDetailList);
+
+      
       for (let i = 0; i < noSeriesDetailList.length; i++) {
+        noSeriesDetailList[i].StartDate= moment(
+          noSeriesDetailList[i].StartDate
+        ).format("MM/DD/YYYY");
         noSeriesDetailList[i].startdate = moment(
-          noSeriesDetailList[i].startdate
+          noSeriesDetailList[i].StartDate
         ).format("MM/DD/YYYY");
       }
 
@@ -328,6 +339,8 @@ class editnumbering extends React.Component {
 
       let noSeries = this.state.noSeries;
       let noSeriesDetailList = formatData();
+
+      
       let BranchId = this.state.branchId;
       const data = {
         validUser: ValidUser,
@@ -533,9 +546,11 @@ class editnumbering extends React.Component {
                                 id={"startdate" + item.id}
                                 variant="outlined"
                                 size="small"
-                                defaultValue={item.StartDate}
+                                defaultValue={moment(item.StartDate).format(
+                                  "YYYY-MM-DD"
+                                )}
                                 onChange={(e) =>
-                                  updateStartDate(e.value, item)
+                                  updateStartDate(e.target.value, item)
                                 }
                                 onKeyDown={(e) =>
                                   updateListValue(
