@@ -488,7 +488,7 @@ class editbranch extends React.Component {
             let d = {
               id: responseData[i].noSeriesId,
               value: responseData[i].noSeriesId,
-              text: responseData[i].code,
+              name: responseData[i].code,
             };
             newData.push(d);
           }
@@ -2057,6 +2057,7 @@ class editbranch extends React.Component {
                         <div>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
+                              {console.log("this.state.numberSeries > ",this.state.numberSeries)}
                               <SDIB
                                 id="LPINo"
                                 label="Local Proforma Invoice"
