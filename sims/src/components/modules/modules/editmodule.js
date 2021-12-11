@@ -39,6 +39,7 @@ class editmodule extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      PagesDetailsExpanded:false,
       updateBtnDisable: false,
       Module: {
         ModuleId: 0,
@@ -157,10 +158,10 @@ class editmodule extends React.Component {
           ? this.setState({ GeneralDetailsExpanded: false })
           : this.setState({ GeneralDetailsExpanded: true });
       }
-      if (val === "AddressDetailsExpanded") {
-        this.state.AddressDetailsExpanded === true
-          ? this.setState({ AddressDetailsExpanded: false })
-          : this.setState({ AddressDetailsExpanded: true });
+      if (val === "PagesDetailsExpanded") {
+        this.state.PagesDetailsExpanded === true
+          ? this.setState({ PagesDetailsExpanded: false })
+          : this.setState({ PagesDetailsExpanded: true });
       }
     };
 
@@ -424,7 +425,7 @@ class editmodule extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={6} md={6} lg={6}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Accordion
               key="country-General-Details"
               expanded={this.state.GeneralDetailsExpanded}
@@ -441,6 +442,9 @@ class editmodule extends React.Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 style={{ minHeight: 20, height: "100%" }}
+                onClick={(e) =>
+                  handleAccordionClick("GeneralDetailsExpanded", e)
+                }
               >
                 <Typography key="" className="accordion-Header-Title">
                   General 
@@ -499,6 +503,34 @@ class editmodule extends React.Component {
                     </TableBody>
                   </Table>
                 </TableContainer>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              key="country-General-Details"
+              expanded={this.state.PagesDetailsExpanded}
+            >
+              <AccordionSummary
+                className="accordion-Header-Design"
+                expandIcon={
+                  <ExpandMoreIcon
+                    onClick={(e) =>
+                      handleAccordionClick("PagesDetailsExpanded", e)
+                    }
+                  />
+                }
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                style={{ minHeight: 20, height: "100%" }}
+                onClick={(e) =>
+                  handleAccordionClick("PagesDetailsExpanded", e)
+                }
+              >
+                <Typography key="" className="accordion-Header-Title">
+                  Pages 
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails key="" className="AccordionDetails-css">
+               
               </AccordionDetails>
             </Accordion>
           </Grid>

@@ -192,6 +192,26 @@ class addpage extends React.Component {
         editable: true,
         filterable: true,
       },
+      {
+        field: "PageType",
+        headerName: "Page Type",
+        width: 150,
+        headerClassName: "table-header-font",
+        renderCell: (params) => (
+          <Fragment>
+            <select
+              className="dropdown-css"
+              defaultValue={params.value}
+              onChange={(e) => this.handleDropdownChange(e, params)}
+            >
+              <option value="" disabled> Select</option>
+              {APIURLS.PageType.map((item, i) => (
+                <option value={item.value}> {item.name}</option>
+              ))}
+            </select>
+          </Fragment>
+        ),
+      }
     ];
 
     this.setState({ columns: columns });
@@ -210,9 +230,14 @@ class addpage extends React.Component {
     page.PageId = PageId;
     page.ModuleId = parseInt(e.target.value);
 
+    
+  
+
     const data = APIURLS.UpdateModuleIdByPageID;
     data.validUser = ValidUser;
     data.page = page;
+
+ 
 
     const headers = {
       "Content-Type": "application/json",
@@ -246,6 +271,9 @@ class addpage extends React.Component {
     data.validUser = ValidUser;
     data.page = page;
 
+   
+
+
     const headers = {
       "Content-Type": "application/json",
     };
@@ -272,11 +300,12 @@ class addpage extends React.Component {
     let rows = [];
     for (let i = 0; i < data.length; i++) {
       let r = {
-        id: data[i].pageId,
-        pageId: URLS.PREFIX.pageID + data[i].pageId,
-        pageName: data[i].pageName,
-        pageLink: data[i].pageLink,
-        description: data[i].description,
+        id: data[i].PageId,
+        pageId: data[i].PageId,
+        pageName: data[i].PageName,
+        pageLink: data[i].PageLink,
+        description: data[i].Description,
+        PageType: data[i].PageType,
       };
       rows.push(r);
     }
@@ -366,6 +395,7 @@ class addpage extends React.Component {
           PageName: rows[i].pageName,
           PageLink: rows[i].pageLink,
           Description: rows[i].description,
+          PageType:rows[i].PageType,
         };
         page.push(p);
       }
@@ -399,7 +429,7 @@ class addpage extends React.Component {
     };
 
     const updateFormValue = (id, e) => {
-      if (id === "pageName") {
+      if (id === "PageName") {
         if (e.target.value === "" || e.target.value.length > 20) {
           let Validations = this.state.Validations;
           if (e.target.value === "") {
@@ -433,7 +463,7 @@ class addpage extends React.Component {
           });
         }
       }
-      if (id === "pageLink") {
+      if (id === "PageLink") {
         if (e.target.value === "" || e.target.value.length > 100) {
           let Validations = this.state.Validations;
           if (e.target.value === "" || e.target.value === null) {
@@ -459,7 +489,7 @@ class addpage extends React.Component {
           this.setState({ pageLink: e.target.value, Validations: Validations });
         }
       }
-      if (id === "description") {
+      if (id === "Description") {
         let Validations = this.state.Validations;
 
         if (e.target.value.length > 50) {
@@ -736,7 +766,7 @@ class addpage extends React.Component {
                     label="Page Name"
                     variant="outlined"
                     size="small"
-                    onChange={(e) => updateFormValue("pageName", e)}
+                    onChange={(e) => updateFormValue("PageName", e)}
                     fullWidth
                     error={this.state.Validations.pageName.errorState}
                   />
@@ -755,7 +785,7 @@ class addpage extends React.Component {
                     label="Description"
                     variant="outlined"
                     size="small"
-                    onChange={(e) => updateFormValue("description", e)}
+                    onChange={(e) => updateFormValue("Description", e)}
                     fullWidth
                     value={this.state.description}
                     error={this.state.Validations.description.errorState}

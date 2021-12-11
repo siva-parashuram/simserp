@@ -531,7 +531,7 @@ class editwarehouse extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.warehouseMaster + this.state.urlparams}
-          masterLinkTitle="Warehouse Master"
+          masterLinkTitle="Warehouse"
           typoTitle="Edit Warehouse"
           level={2}
         />
@@ -574,7 +574,7 @@ class editwarehouse extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={12} md={7} lg={7}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={12} lg={12}>
                 <Accordion

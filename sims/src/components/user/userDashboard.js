@@ -9,6 +9,7 @@ import Insights from "../dashboard/index/insights";
 import Activities from "../dashboard/index/activities";
 import QuickActionSection from "../dashboard/index/quickactionsection";
 import Notify from "../dashboard/index/notification";
+
  
 
 
@@ -53,6 +54,10 @@ class userDashboard extends React.Component {
     return (
       <Fragment>
          <div style={{ height: 20 }}></div>
+
+          
+
+
         <Notify/>   
        
         <div style={{ height: 20 }}></div>

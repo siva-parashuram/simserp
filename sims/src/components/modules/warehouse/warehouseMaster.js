@@ -140,7 +140,7 @@ class warehouseMaster extends React.Component {
                   backOnClick={this.props.history.goBack}
                   linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                   linkTitle="Dashboard"
-                  typoTitle="Warehouse Master"
+                  typoTitle="Warehouse"
                   level={1}
                 />
       </Fragment>
@@ -183,9 +183,9 @@ class warehouseMaster extends React.Component {
         />
        
           <Grid className="table-adjust" container spacing={0}>
-            <Grid xs={12} sm={12} md={5} lg={5}>
+            <Grid xs={12} sm={12} md={8} lg={8}>
               <Grid container spacing={0}>
-                <Grid xs={12} sm={12} md={11} lg={11}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
                   {this.state.warehouses.length>0?(
                    <Fragment>
                      <Table
@@ -220,17 +220,7 @@ class warehouseMaster extends React.Component {
                           }
                         >
                           <TableCell align="left">
-                            <a
-                              className="LINK tableLink"
-                              href={
-                                URLS.URLS.editWarehouse +
-                                this.state.urlparams +
-                                "&editwareHouseId=" +
-                                item.WareHouseID
-                              }
-                            >
-                              {URLS.PREFIX.wareHouseId + item.WareHouseID}
-                            </a>
+                            {i+1}
                           </TableCell>
                           <TableCell align="left">{item.Code}</TableCell>
                           <TableCell align="left">{item.Description}</TableCell>

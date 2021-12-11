@@ -162,6 +162,7 @@ class modulemasters extends React.Component {
         pageName: data[i].PageName,
         pageLink: data[i].PageLink,
         description: data[i].Description,
+        PageType:data[i].PageType
       };
       rows.push(r);
     }
@@ -277,17 +278,7 @@ class modulemasters extends React.Component {
                                 }
                               >
                                 <TableCell align="left">
-                                  <a
-                                    className="LINK tableLink"
-                                    href={
-                                      URLS.URLS.editModule +
-                                      this.state.urlparams +
-                                      "&moduleId=" +
-                                      item.ModuleID
-                                    }
-                                  >
-                                    {URLS.PREFIX.moduleID + item.ModuleID}
-                                  </a>
+                                  {i+1}
                                 </TableCell>
                                 <TableCell align="left">{item.Name}</TableCell>
                                 <TableCell align="left">

@@ -496,8 +496,6 @@ class poactivity extends React.Component {
     return ItemList;
   }
 
-
-
   presetSetSupplierDropdown = (PO) => {
     for (let i = 0; i < this.state.supplierList.length; i++) {
       if (this.state.supplierList[i].id === PO.SuplID) {
@@ -1989,13 +1987,13 @@ class poactivity extends React.Component {
             </Button>
           ) : null}
 
-          <Button
+          {/* <Button
             startIcon={APIURLS.buttonTitle.view.icon}
             className="action-btns"
             onClick={(e) => this.openDialog("View")}
           >
             {APIURLS.buttonTitle.view.name}
-          </Button>
+          </Button> */}
 
           <ReactToPrint
             trigger={() => {

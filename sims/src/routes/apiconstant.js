@@ -437,9 +437,10 @@ export let company = {
 export let page = {
   PageId: 0,
   ModuleId: 0,
-  PageName: null,
-  PageLink: null,
-  Description: null,
+  PageName: "",
+  PageLink: "",
+  Description: "",
+  PageType:0,
 };
 
 export let UpdateModuleIdByPageID = {
