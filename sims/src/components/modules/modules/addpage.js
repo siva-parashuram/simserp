@@ -248,7 +248,7 @@ class addpage extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           let data = response.data;
-          this.refreshPageListByModuleId(moduleId);
+          // this.refreshPageListByModuleId(moduleId);
           this.setState({ ProgressLoader: true });
         } else {
         }
@@ -405,7 +405,7 @@ class addpage extends React.Component {
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       const data = {
         validUser: ValidUser,
-        pageLists: page,
+        PageList: page,
       };
 
       const headers = {
@@ -419,7 +419,7 @@ class addpage extends React.Component {
           let data = response.data;
 
           this.setState({ updateBtnDisable: true }, () => {
-            getPageListByModuleId(moduleId);
+           // getPageListByModuleId(moduleId);
           });
           this.setState({ ProgressLoader: true });
         })
