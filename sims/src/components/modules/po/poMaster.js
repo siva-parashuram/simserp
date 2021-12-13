@@ -127,7 +127,7 @@ class poMaster extends React.Component {
 
     render() {
         const openPage = (url) => {
-            this.setState({ ProgressLoader: false });
+            // this.setState({ ProgressLoader: false });
             console.log("url > ", url);
             window.location = url;
         };

@@ -330,7 +330,7 @@ class branchMaster extends React.Component {
     }
 
     const openPage = (url) => {
-      this.setState({ ProgressLoader: false });
+      // this.setState({ ProgressLoader: false });
       window.location = url;
     };
 

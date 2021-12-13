@@ -318,6 +318,7 @@ class poactivity extends React.Component {
   }
 
   componentDidMount() {
+     
     document.addEventListener('keydown', this.onKeyDownHandler);
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -339,34 +340,43 @@ class poactivity extends React.Component {
 
     let PO = this.state.PO;
     PO.POID = CF.toInt(POID);
-    if (type === "edit") {
-      PO.POID = CF.toInt(POID);
-
-      this.getSupplierList(CF.toInt(branchId), PO.POID);
-      this.setState({ BranchID: CF.toInt(branchId) }, () => {
-      //  this.getSupplierList(CF.toInt(branchId));
-
+    if (type === "edit") {      
+      PO.POID = CF.toInt(POID);      
+      this.setState({ 
+        branchName:branchName,
+        PO: PO,
+        POID: CF.toInt(POID),
+        urlparams: urlparams,
+        BranchID: CF.toInt(branchId) ,
+        type: type,
+        typoTitle: typoTitle,
+        // ProgressLoader: false,
+      }, () => {
+        this.getSupplierList(CF.toInt(branchId), PO.POID);
       });
     }
 
-    this.setState({
-      branchName:branchName,
-      PO: PO,
-      POID: type === "edit" ? CF.toInt(POID) : 0,
-      urlparams: urlparams,
-      type: type,
-      typoTitle: typoTitle,
-      ProgressLoader: type === "add" ? true : false,
-      BranchID: CF.toInt(branchId),
-    }, () => {
-      if (type === "add") {
-         this.getSupplierList(CF.toInt(branchId)); 
-        }
-    });
+    if (type === "add") {
+      this.setState({
+        branchName:branchName,
+        PO: PO,
+        POID: type === "edit" ? CF.toInt(POID) : 0,
+        urlparams: urlparams,
+        type: type,
+        typoTitle: typoTitle,
+        ProgressLoader: true,
+        BranchID: CF.toInt(branchId),
+      }, () => {
+        this.getSupplierList(CF.toInt(branchId)); 
+      });
+
+    }
+
+    
   }
 
   getPODetails = (PO) => {
-    this.setState({ ProgressLoader: false });
+    // this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -388,8 +398,6 @@ class poactivity extends React.Component {
           let PO = ResonsePO;
           let PurchaseOrderLine = ResonsePO.PurchaseOrderLine;
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
-          
-          
 
           PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
           PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
@@ -553,7 +561,7 @@ class poactivity extends React.Component {
   }
 
   getSupplierList = (BranchID) => {
-    this.setState({ ProgressLoader: false });
+    // this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -639,7 +647,7 @@ class poactivity extends React.Component {
             FixedAsset: FixedAsset,
             DimensionsList: DimensionsList,
             IncoTermList: IncoTermList,
-            ProgressLoader: this.state.type === "edit" ? false : true
+            // ProgressLoader: this.state.type === "edit" ? false : true
           }, () => {
             if (this.state.type === "edit") {
               this.getPODetails(this.state.PO);
@@ -2096,6 +2104,8 @@ class poactivity extends React.Component {
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
+
+
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}

@@ -277,7 +277,6 @@ class editbranch extends React.Component {
 
         this.setState({
           currencyList: newD,
-          ProgressLoader: true,
         });
       })
       .catch((error) => { });
@@ -297,7 +296,7 @@ class editbranch extends React.Component {
       .then((response) => {
         let data = response.data;
 
-        this.setState({ branchData: data, ProgressLoader: true });
+        this.setState({ branchData: data });
       })
       .catch((error) => {
         this.setState({ branchData: [], ProgressLoader: true });
@@ -405,7 +404,7 @@ class editbranch extends React.Component {
       };
       newData.push(d);
     }
-    this.setState({ countryData: newData, ProgressLoader: true });
+    this.setState({ countryData: newData});
   }
 
   processCompanyData(data) {
@@ -417,7 +416,7 @@ class editbranch extends React.Component {
       };
       newData.push(d);
     }
-    this.setState({ companyData: newData, ProgressLoader: true });
+    this.setState({ companyData: newData });
   }
 
   processStateData(data) {
