@@ -452,6 +452,9 @@ class editnumbering extends React.Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 style={{ minHeight: 20, height: "100%" }}
+                onClick={(e) =>
+                  handleAccordionClick("GeneralDetailsExpanded", e)
+                }
               >
                 <Typography key="" className="accordion-Header-Title">
                   General 
@@ -512,6 +515,9 @@ class editnumbering extends React.Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 style={{ minHeight: 20, height: "100%" }}
+                onClick={(e) =>
+                  handleAccordionClick("NumberingsListExpanded", e)
+                }
               >
                 <Typography key="" className="accordion-Header-Title">
                   Series

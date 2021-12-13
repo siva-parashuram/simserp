@@ -366,9 +366,12 @@ class addnumbering extends React.Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 style={{ minHeight: 20, height: "100%" }}
+                onClick={(e) =>
+                  handleAccordionClick("GeneralDetailsExpanded", e)
+                }
               >
                 <Typography key="" className="accordion-Header-Title">
-                  General Details
+                  General 
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="">
@@ -426,9 +429,12 @@ class addnumbering extends React.Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 style={{ minHeight: 20, height: "100%" }}
+                onClick={(e) =>
+                  handleAccordionClick("NumberingsListExpanded", e)
+                }
               >
                 <Typography key="" className="accordion-Header-Title">
-                  Numberings Details
+                Series
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
@@ -473,7 +479,7 @@ class addnumbering extends React.Component {
                                     e
                                   )
                                 }
-                                style={{ width: 125 }}
+                                style={{ width: 150 }}
                                 InputProps={{
                                   className: "textFieldCss",
                                 }}
