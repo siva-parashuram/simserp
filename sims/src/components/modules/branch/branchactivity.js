@@ -5,11 +5,15 @@ import moment from "moment";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import BlankLogo from '../../../blank-logo.png';
+import BranchLogo from '../../../branches/1/logo.png';
+
 
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import DropdownInput from "../../compo/Tablerowcelldropdown";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
@@ -19,14 +23,11 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TableContainer from "@material-ui/core/TableContainer";
-
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
-import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
-import Tablerowcelldateinput from "../../compo/tablerowcelldateinput";
-import UpdateIcon from "@material-ui/icons/Update";
+
 import * as CF from "../../../services/functions/customfunctions";
 import BackdropLoader from "../../compo/backdrop";
 import ErrorSnackBar from "../../compo/errorSnackbar";
@@ -42,7 +43,8 @@ import SDTI from "../../compo/griddateinput";
 
 class editbranch extends React.Component {
   constructor(props) {
-    super(props);
+    super(props);   
+   
     this.state = {
       isLoggedIn: false,
       ProgressLoader: false,
@@ -52,6 +54,7 @@ class editbranch extends React.Component {
       GeneralDetailsExpanded: true,
       TaxationDetailsExpanded: false,
       NumberingExpanded: false,
+      LogoExpanded:false,
       disabledUpdatebtn: false,
       disabledCreatebtn: true,
       numberSeries: [],
@@ -64,7 +67,9 @@ class editbranch extends React.Component {
       oldName: "",
       duplicate: false,
       typoTitle: "",
-      type: null,
+      type: "",
+      PageType: "",
+      LogoPath:"",
       branch: {
         BranchID: 0,
         CompanyID: 0,
@@ -185,6 +190,7 @@ class editbranch extends React.Component {
       },
     };
   }
+ 
 
   componentDidMount() {
     this.getBranches();
@@ -199,11 +205,14 @@ class editbranch extends React.Component {
       let branchName = url.searchParams.get("branchName");
       let compName = url.searchParams.get("compName");
       let type = url.searchParams.get("type");
+      let PageType= url.searchParams.get("type");
+      console.log("url > ",url);
+      console.log("type > ",type);
       let editbranchId =
         type === "edit" ? url.searchParams.get("editbranchId") : 0;
 
       let typoTitle = "";
-      type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
+     type === "edit" ? (typoTitle = "Edit") : (typoTitle = "Add");
 
       let urlparams =
         "?branchId=" +
@@ -222,6 +231,7 @@ class editbranch extends React.Component {
 
       this.setState(
         {
+          PageType:PageType,
           branch: branch,
           branchId: editbranchId,
           urlparams: urlparams,
@@ -230,7 +240,10 @@ class editbranch extends React.Component {
           ProgressLoader: type === "add" ? true : false,
         },
         () => {
-          this.getBranchDetail(branch);
+          if(PageType==='edit'){
+            this.getBranchDetail(branch);
+          }
+          
         }
       );
     } else {
@@ -465,6 +478,10 @@ class editbranch extends React.Component {
     );
     this.setState({ branch: branch });
     this.getStateByCountry(CountryID);
+    if(branch.LogoName===""){}else{
+      this.getLogoPath(branch.LogoName);
+    }
+    
   };
 
   getNumberSeries(branchId) {
@@ -541,6 +558,164 @@ class editbranch extends React.Component {
     return duplicateExist;
   }
 
+  processUpload=(e)=>{
+    this.setState({ ShowLoader: true });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const formData = CF.FILE_UPLOAD_FORMDATA(ValidUser,e, "branch", CF.toInt(this.state.branch.CompanyID),CF.toInt(this.state.branch.BranchID));
+    let file = e.target.files[0];
+    console.log("file > ",file);
+    let fileName="";
+    if(file){
+      fileName=file.name;
+    }
+
+    const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(FTPUploadUrl, formData, { headers })
+      .then((response) => {        
+        if (response.status === 200 || response.status === 201) {
+         if(file){
+          let branch = this.state.branch;
+          branch.LogoName = fileName;          
+          this.setState({
+            branch: branch
+          },()=>{
+            this.handleupdate();
+            this.getLogoPath(fileName);
+          });
+           
+         }
+        }
+        if (response.status === 403) {
+          this.setState({ ErrorPrompt: true, ShowLoader: false });
+        }
+
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ ErrorPrompt: true, ShowLoader: false });
+      });
+
+  }
+
+  getLogoPath=(fileName)=>{
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      headers:{
+        "Content-Type": "application/json",
+        'Content-Disposition': 'file; filename='+fileName
+      } ,
+      responseType: 'arraybuffer'//'blob',
+      
+    };
+    let Url = APIURLS.APIURL.FileDownload;
+    const fd = new FormData();
+    fd.append('FileName', fileName);
+    fd.append('companyId', this.state.branch.CompanyID);
+    fd.append('BranchID', this.state.branch.BranchID);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+    axios
+    .post(Url, fd, { headers })
+    .then((response) => {   
+      console.log("response > ",response);    
+      let data=response.data;
+      const blob = new Blob([response.data], {type: 'image/PNG'});
+      console.log("blob > ",blob); 
+      const url = URL.createObjectURL(blob);
+      console.log("blob > url > ",url); 
+
+     
+      let preUrl="data:image/png;base64"+url;
+      console.log("blob > preUrl > ",preUrl); 
+      //document.querySelector("#branchLogoImage").src = preUrl;
+      
+      let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
+      console.log("base64ImageString > ",base64ImageString); 
+
+      let srcValue = "data:image/png;base64,"+base64ImageString;
+
+      const img = new Buffer.from(response.data).toString("ascii");
+      console.log("img > ",img); 
+
+    //  document.querySelector("#branchLogoImage").src = srcValue;
+
+      // this.setState({
+      //   LogoPath:responseUrl
+      // });
+
+    })
+    .catch((error) => {
+      console.log("error > ", error);
+      this.setState({ ErrorPrompt: true, ShowLoader: false });
+     
+    });
+
+  }
+
+   handleupdate = () => {
+    this.setState({ ProgressLoader: false });
+
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let branch = this.state.branch;
+
+    branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
+    branch.VATRegistationDate = moment(branch.VATRegistationDate).format(
+      "MM/DD/YYYY"
+    );
+    branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format(
+      "MM/DD/YYYY"
+    );
+
+    const data = {
+      validUser: ValidUser,
+      Branch: branch,
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let UpdateBranchUrl = APIURLS.APIURL.UpdateBranch;
+    axios
+      .post(UpdateBranchUrl, data, { headers })
+      .then((response) => {
+        if (
+          response.status === 200 ||
+          response.data === true ||
+          response.data === "true"
+        ) {
+          this.setState({ ProgressLoader: true, SuccessPrompt: true });
+        } else {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        }
+
+        branch.EffectiveDate = moment(branch.EffectiveDate).format(
+          "YYYY-MM-DD"
+        );
+        branch.VATRegistationDate = moment(branch.VATRegistationDate).format(
+          "YYYY-MM-DD"
+        );
+        branch.GSTRegistationDate = moment(branch.GSTRegistationDate).format(
+          "YYYY-MM-DD"
+        );
+
+        this.setState({ branch: branch });
+      })
+      .catch((error) => { });
+  };
+  
+
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -558,6 +733,13 @@ class editbranch extends React.Component {
           ? this.setState({ NumberingExpanded: false })
           : this.setState({ NumberingExpanded: true });
       }
+      if (val === "LogoExpanded") {
+        this.state.LogoExpanded === true
+          ? this.setState({ LogoExpanded: false })
+          : this.setState({ LogoExpanded: true });
+      }
+
+      
     };
 
     const updateFormValue = (param, e) => {
@@ -1464,7 +1646,7 @@ class editbranch extends React.Component {
           linkTitle="Dashboard"
           masterHref={URLS.URLS.branchMaster + this.state.urlparams}
           masterLinkTitle="Branch"
-          typoTitle={this.state.type === "edit" ? "Edit" : "Add"}
+          typoTitle={this.state.typoTitle}
           level={2}
         />
       </Fragment>
@@ -1477,7 +1659,8 @@ class editbranch extends React.Component {
           variant="text"
           aria-label="Action Menu Button group"
         >
-          {this.state.type === "edit" ? (
+          {console.log("++++++++++++++++++++++++++++this.state > ",this.state)}
+          {(this.state.PageType === "edit"|| this.state.type==="edit") ? (
             <Button
               className="action-btns"
               startIcon={APIURLS.buttonTitle.save.icon}
@@ -1488,7 +1671,7 @@ class editbranch extends React.Component {
             </Button>
           ) : null}
 
-          {this.state.type === "add" ? (
+          {(this.state.PageType === "add" || this.state.type==="add")? (
             <Button
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
@@ -1744,49 +1927,6 @@ class editbranch extends React.Component {
                               />
 
                               <SIB
-                                id="EmailID"
-                                label="EmailID"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("EmailID", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.EmailID}
-                                error={
-                                  this.state.Validations.EmailID.errorState
-                                }
-                              />
-                              <SIB
-                                id="LogoName"
-                                label="LogoName"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("LogoName", e)}
-                                InputProps={{
-                                  className: "textFieldCss",
-                                  maxlength: 50,
-                                }}
-                                value={this.state.branch.LogoName}
-                                error={
-                                  this.state.Validations.LogoName.errorState
-                                }
-                              />
-
-                              <SDTI
-                                isMandatory={true}
-                                id="EffectiveDate"
-                                label="Effective Date"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) =>
-                                  updateFormValue("EffectiveDate", e)
-                                }
-                                value={this.state.branch.EffectiveDate}
-                                error={null}
-                              />
-                              <SIB
                                 id="ContactPerson"
                                 label="ContactPerson"
                                 variant="outlined"
@@ -1804,6 +1944,51 @@ class editbranch extends React.Component {
                                     .errorState
                                 }
                               />
+
+                              <SIB
+                                id="EmailID"
+                                label="EmailID"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("EmailID", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.EmailID}
+                                error={
+                                  this.state.Validations.EmailID.errorState
+                                }
+                              />
+                              {/* <SIB
+                                id="LogoName"
+                                label="LogoName"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("LogoName", e)}
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                value={this.state.branch.LogoName}
+                                error={
+                                  this.state.Validations.LogoName.errorState
+                                }
+                              /> */}
+
+                              <SDTI
+                                isMandatory={true}
+                                id="EffectiveDate"
+                                label="Effective Date"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("EffectiveDate", e)
+                                }
+                                value={this.state.branch.EffectiveDate}
+                                error={null}
+                              />
+                              
 
 
                               <div style={{ borderStyle: 'solid', borderWidth: 1, borderColor: 'rgba(224, 224, 224, 1)' }}>
@@ -1875,7 +2060,8 @@ class editbranch extends React.Component {
                                 </div>
                               </div>
 
-
+                              
+                            
 
 
                             </Grid>
@@ -2407,6 +2593,93 @@ class editbranch extends React.Component {
                     </Grid>
                   </AccordionDetails>
                 </Accordion>
+
+                {this.state.PageType = "edit" ? (
+                  <Fragment>
+                    <Accordion
+                      key="branch-logo"
+                      expanded={this.state.LogoExpanded}
+                    >
+                      <AccordionSummary
+                        className="accordion-Header-Design"
+                        expandIcon={
+                          <ExpandMoreIcon
+                            onClick={(e) =>
+                              handleAccordionClick("LogoExpanded", e)
+                            }
+                          />
+                        }
+                        onClick={(e) =>
+                          handleAccordionClick("LogoExpanded", e)
+                        }
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        style={{ minHeight: 20, height: "100%" }}
+                      >
+                        <Typography key="" className="accordion-Header-Title">
+                          Logo
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails key="" className="AccordionDetails-css">
+                        <Grid container spacing={0}>
+                        <Grid item xs={2} sm={2} md={2} lg={2}></Grid>
+                          <Grid item xs={4} sm={4} md={4} lg={4}>
+{/* 
+                            <Button
+                              className="action-btns"
+                              startIcon={<AttachFileIcon />}
+                              onClick={(e) => { document.getElementById("uploadInput").click() }}
+                            >
+
+                              Attach File
+                            </Button> */}
+                            <input
+                              className="file-upload-input"
+                              id="uploadInput"
+                              type="file"
+                            onChange={(e)=>this.processUpload(e)}
+                            />
+                          </Grid>
+                          <Grid item xs={6} sm={6} md={6} lg={6}>
+                            <div>
+                              <div>
+                                {this.state.branch.LogoName===""?(
+                                  <img src={BlankLogo} className="App-logo" alt="logo" />
+                                ):(
+                                  <Fragment>
+                                  <img id="branchLogoImage" src={BlankLogo} className="App-logo" alt="logo" />
+
+
+                                  <IconButton aria-label="delete" size="small">
+                                    <DeleteIcon fontSize="inherit" />
+                                  </IconButton>
+                                  <IconButton aria-label="delete" size="small"
+                                  style={{color: 'color: rgb(0, 126, 135)'}}
+                                  onClick={(e) => { document.getElementById("uploadInput").click() }}
+                                  >
+                                    <AttachFileIcon fontSize="inherit" sx={{ color: 'color: rgb(0, 126, 135)'}}/>
+                                  </IconButton>
+                                   
+                                 
+                                  </Fragment>
+
+
+                                  
+                                )}                              
+                              </div>
+
+                           
+                               
+                            </div>
+                          </Grid>
+                        </Grid>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Fragment>
+                ) : null}
+
+                
+
               </Grid>
             </Grid>
           </Grid>

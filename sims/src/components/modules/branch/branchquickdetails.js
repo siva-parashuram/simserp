@@ -141,13 +141,18 @@ class branchquickdetails extends React.Component {
             <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
                 {console.log("this.props.branchItem > ",this.props.branchItem)}
                 <Attachmentmaster
-                    companyId={this.props.branchItem.CompanyID}
+                    
                     branchId={this.props.branchItem.BranchID}
-                    filelist={this.props.filelist}
-                    rowClicked={this.props.rowClicked}
+                     rowClicked={this.props.rowClicked}
                     category="branch"
                     type="info"
+                   
+
+                    filelist={this.props.filelist}                       
+                    companyId={this.props.branchItem?this.props.branchItem.CompanyID:null}
                     upload={true}
+                    fileuploaded={false}
+                    fileUploadonChange={this.props.fileUploadonChange}
                 />
             </Grid>
         );

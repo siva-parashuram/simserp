@@ -344,7 +344,7 @@ class poactivity extends React.Component {
 
       this.getSupplierList(CF.toInt(branchId), PO.POID);
       this.setState({ BranchID: CF.toInt(branchId) }, () => {
-        this.getSupplierList(CF.toInt(branchId));
+      //  this.getSupplierList(CF.toInt(branchId));
 
       });
     }

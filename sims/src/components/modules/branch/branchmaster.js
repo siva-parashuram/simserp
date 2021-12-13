@@ -4,6 +4,7 @@ import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import * as CF from "../../../services/functions/customfunctions";
 
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
@@ -21,6 +22,8 @@ import TableRow from "@material-ui/core/TableRow";
 import BranchQuickDetails from "./branchquickdetails";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import TablePagination from "@mui/material/TablePagination";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
  
 import MasterDataGrid from "../../compo/masterdatagrid";
@@ -29,6 +32,7 @@ import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import Pagination from "../../compo/paginationcomponent";
 import BackdropLoader from "../../compo/backdrop";
+import DialogCustom from "../../compo/dialogcomponent";
 
 class branchMaster extends React.Component {
   constructor(props) {
@@ -37,6 +41,13 @@ class branchMaster extends React.Component {
       pagination: {
         page: 0,
         rowsPerPage: 10,
+      },
+      Dialog:{
+        open:false
+      },
+      DeleteAttachment:{
+        e:null,
+        item:null
       },
       initialCss: "",
       isLoggedIn: false,
@@ -121,14 +132,12 @@ class branchMaster extends React.Component {
         editUrl: editUrl,
         selectionModel:index
       });
-      
-      this.getAttachments(item.CompanyID, item.BranchID);
+      this.setParams(item,editUrl,index); 
     } catch (e) {}
   }
 
-  
-
-  getAttachments(companyId, branchId) {
+  setParams=(item,editUrl,index)=>{
+    console.log("item : ",item);
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -140,8 +149,8 @@ class branchMaster extends React.Component {
     const formData = new FormData();
     formData.append("UserID", parseInt(getCookie(COOKIE.USERID)));
     formData.append("Token", getCookie(COOKIE.TOKEN));
-    formData.append("CompanyId", companyId);
-    formData.append("BranchID", branchId);
+    formData.append("CompanyId", item.CompanyID);
+    formData.append("BranchID", item.BranchID);
     formData.append("Transaction", APIURLS.TrasactionType.default);
     formData.append("TransactionNo", "");
     formData.append("FileData", "");
@@ -149,12 +158,171 @@ class branchMaster extends React.Component {
     axios
       .post(FTPGetAttachmentsUrl, formData, { headers })
       .then((response) => {
-        this.setState({ filelist: response.data });
+        this.setState({
+          branchItem: item,
+          editUrl: editUrl,
+          selectionModel:index,
+          filelist: response.data
+        });
+        
       })
       .catch((error) => {
         console.log("error > ", error);
+        
+        
       });
   }
+
+  /*******************FILEUPLOAD STARTS************************** */
+
+  processUpload=(e)=>{
+    this.setState({ ShowLoader: true });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const formData = CF.FILE_UPLOAD_FORMDATA(ValidUser,e, "branch", CF.toInt(this.state.branchItem.CompanyID),CF.toInt(this.state.branchItem.BranchID));
+   
+    const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(FTPUploadUrl, formData, { headers })
+      .then((response) => {        
+        if (response.status === 200 || response.status === 201) {
+          this.refreshFileLists();
+        }
+        if (response.status === 403) {
+          this.setState({ ErrorPrompt: true, ShowLoader: false });
+        }
+
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ ErrorPrompt: true, ShowLoader: false });
+       
+      });
+
+  }
+
+  refreshFileLists = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const fd = new FormData();
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+    fd.append('CompanyId', this.state.branchItem.CompanyID);
+    fd.append('BranchID', this.state.branchItem.BranchID);
+    fd.append('Transaction', APIURLS.TrasactionType.default);
+    fd.append('TransactionNo', "");
+    fd.append('FileData', "");
+
+    console.log("getCompanyFileList > fd > ", fd);
+    axios
+      .post(FTPFILELIST, fd, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            filelist: response.data,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ filelist: [] });
+      });
+  }
+
+  downloadThisFile = (e, item) => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.FileDownload;
+
+    const fd = new FormData();
+    fd.append('FileName', item.fileName);
+    fd.append('companyId', this.state.branchItem.CompanyID);
+    fd.append('BranchID', this.state.branchItem.BranchID);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+
+    axios({
+      method: 'post',
+      url: Url,
+      responseType: 'blob',
+      data: fd
+    })
+      .then(function (response) {
+       
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        let link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", item.fileName);
+        document.body.appendChild(link);
+        console.log("link > ",link);
+        link.click();
+      });
+  }
+
+  handleDelete = (e, item) => {
+    let Dialog=this.state.Dialog;
+    Dialog.open=true;
+    let DeleteAttachment=this.state.DeleteAttachment;
+    DeleteAttachment.e=e;
+    DeleteAttachment.item=item;
+    this.setState({
+      DeleteAttachment:DeleteAttachment,
+      Dialog:Dialog
+    });
+  }
+
+  processDelete = () => {
+    let e=this.state.DeleteAttachment.e;
+    let item=this.state.DeleteAttachment.item;
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.DELETEFTPFILE;
+
+    const fd = new FormData();
+    fd.append('FileName', item.fileName);
+    fd.append('companyId', this.state.branchItem.CompanyID);
+    fd.append('BranchID', this.state.branchItem.BranchID);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+
+    axios
+    .post(Url, fd, { headers })
+    .then((response) => {
+      if (response.status === 200) {
+        this.refreshFileLists();
+        let Dialog=this.state.Dialog;
+        Dialog.open=false;
+        this.setState({Dialog:Dialog});
+      }
+    })
+    .catch((error) => {
+      console.log("error > ", error);
+      this.setState({ filelist: [] });
+    });
+  }
+
+  closeDialog=()=>{
+    let Dialog=this.state.Dialog;
+    Dialog.open=false;
+    this.setState({Dialog:Dialog});
+  }
+
+  /*******************FILEUPLOAD ENDS************************** */
 
   render() {
     function Alert(props) {
@@ -227,6 +395,14 @@ class branchMaster extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
+<DialogCustom
+        MessageHeader="Delete Attachment!"
+        MessageText="Do you want to delete this attachment?"
+        open={this.state.Dialog.open}
+        onClose={(e)=>this.closeDialog()}
+        onOK={(e)=>this.processDelete()}
+        />
+
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
@@ -266,8 +442,23 @@ class branchMaster extends React.Component {
                       new={URLS.URLS.addBranch + this.state.urlparams}
                       edit={this.state.editUrl}
                       branchItem={this.state.branchItem}
-                      filelist={this.state.filelist}
+                      filelist={this.state.filelist.map((item, i) => (
+                        <TableRow id={"fileRow_" + item.fileName}>
+                            <TableCell align="left"  className="no-border-table">
+                                <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
+                                <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
+                            </TableCell>
+                            <TableCell align="left" className="no-border-table">
+                                <IconButton size="small" edge="end" aria-label="delete">
+                                    <DeleteIcon role={item} fontSize="small" style={{ color: '#f44336' }}
+                                        onClick={(e) => this.handleDelete(e, item)} 
+                                    />
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                       rowClicked={this.state.rowClicked}
+                      fileUploadonChange={(e)=>this.processUpload(e)}  
                     />
                   </Fragment>
                 )}
