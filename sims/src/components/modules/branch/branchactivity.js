@@ -100,6 +100,11 @@ class editbranch extends React.Component {
         IsSEZ: true,
         IsExportUnit: true,
         CurrID: 0,
+        IsGIT: false,
+        IsQuality: false,
+        IsLot: false,
+        IsTCS: false,
+        IsTDS: false,
         AllowRounding: true,
         LPINo: 0,
         EPINo: 0,
@@ -262,7 +267,7 @@ class editbranch extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   getBranches() {
@@ -305,7 +310,7 @@ class editbranch extends React.Component {
         rows = data;
         this.processCompanyData(data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   // getStateList() {
@@ -348,7 +353,7 @@ class editbranch extends React.Component {
         this.setState({ MasterCountryData: data });
         this.processCountryData(data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   getStateByCountry = (CountryID) => {
@@ -1359,7 +1364,7 @@ class editbranch extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     const handleupdate = () => {
@@ -1413,7 +1418,7 @@ class editbranch extends React.Component {
 
           this.setState({ branch: branch });
         })
-        .catch((error) => {});
+        .catch((error) => { });
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -1437,8 +1442,8 @@ class editbranch extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.branchMaster + this.state.urlparams}
-          masterLinkTitle="Branch Master"
-          typoTitle={this.state.type === "edit" ? "EDIT" : "ADD"}
+          masterLinkTitle="Branch"
+          typoTitle={this.state.type === "edit" ? "Edit" : "Add"}
           level={2}
         />
       </Fragment>
@@ -1518,7 +1523,7 @@ class editbranch extends React.Component {
                     style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -1778,25 +1783,78 @@ class editbranch extends React.Component {
                                     .errorState
                                 }
                               />
-                              <SSIB
-                                key="IsTrading"
-                                id="IsTrading"
-                                label="Is Trading?"
-                                param={this.state.branch.IsTrading}
-                                onChange={(e) =>
-                                  updateFormValue("IsTrading", e)
-                                }
-                              />
 
-                              <SSIB
-                                key="AllowRounding"
-                                id="AllowRounding"
-                                label="Allow Rounding?"
-                                param={this.state.branch.AllowRounding}
-                                onChange={(e) =>
-                                  updateFormValue("AllowRounding", e)
-                                }
-                              />
+
+                              <div style={{ borderStyle: 'solid', borderWidth: 1, borderColor: 'rgba(224, 224, 224, 1)' }}>
+                                <div style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
+                                  <Grid container spacing={0}>
+                                    <Grid item xs={12} sm={12} md={3} lg={3}>
+                                      <SSIB
+                                        key="IsLot"
+                                        id="IsLot"
+                                        label="Lot?"
+                                        param={this.state.branch.IsLot}
+                                        onChange={(e) =>
+                                          updateFormValue("IsLot", e)
+                                        }
+                                      />
+                                      <SSIB
+                                        key="IsGIT"
+                                        id="IsGIT"
+                                        label="GIT?"
+                                        param={this.state.branch.IsGIT}
+                                        onChange={(e) =>
+                                          updateFormValue("IsGIT", e)
+                                        }
+                                      />
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={9} lg={9}>
+                                      <Grid container spacing={0}>
+                                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                                          <SSIB
+                                            key="IsQuality"
+                                            id="IsQuality"
+                                            label="Quality?"
+                                            param={this.state.branch.IsQuality}
+                                            onChange={(e) =>
+                                              updateFormValue("IsQuality", e)
+                                            }
+                                          />
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                                          <SSIB
+                                            key="IsTrading"
+                                            id="IsTrading"
+                                            label="Trading?"
+                                            param={this.state.branch.IsTrading}
+                                            onChange={(e) =>
+                                              updateFormValue("IsTrading", e)
+                                            }
+                                          />
+                                        </Grid>
+                                      </Grid>
+                                      <Grid container spacing={0}>
+                                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                                          <SSIB
+                                            key="AllowRounding"
+                                            id="AllowRounding"
+                                            label="Rounding?"
+                                            param={this.state.branch.AllowRounding}
+                                            onChange={(e) =>
+                                              updateFormValue("AllowRounding", e)
+                                            }
+                                          />
+                                        </Grid>
+                                        <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </div>
+                              </div>
+
+
+
+
                             </Grid>
                           </Grid>
                         </div>
@@ -1825,7 +1883,7 @@ class editbranch extends React.Component {
                     style={{ minHeight: 20, height: "100%" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      Taxation Details
+                      Taxation
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -1909,23 +1967,52 @@ class editbranch extends React.Component {
                                 error={this.state.Validations.ARNNo.errorState}
                               />
 
-                              <SSIB
-                                key="IsSEZ"
-                                id="IsSEZ"
-                                label="Is SEZ?"
-                                param={this.state.branch.IsSEZ}
-                                onChange={(e) => updateFormValue("IsSEZ", e)}
-                              />
+                              <div style={{ borderStyle: 'solid', borderWidth: 1, borderColor: 'rgba(224, 224, 224, 1)' }}>
+                                <div style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
+                                  <Grid container spacing={0}>
+                                    <Grid item xs={12} sm={12} md={3} lg={3}>
+                                      <SSIB
+                                        key="IsSEZ"
+                                        id="IsSEZ"
+                                        label="SEZ?"
+                                        param={this.state.branch.IsSEZ}
+                                        onChange={(e) => updateFormValue("IsSEZ", e)}
+                                      />
+                                      <SSIB
+                                        key="IsTCS"
+                                        id="IsTCS"
+                                        label="TCS?"
+                                        param={this.state.branch.IsTCS}
+                                        onChange={(e) => updateFormValue("IsTCS", e)}
+                                      />
 
-                              <SSIB
-                                key="IsExportUnit"
-                                id="IsExportUnit"
-                                label="Is Export Unit?"
-                                param={this.state.branch.IsExportUnit}
-                                onChange={(e) =>
-                                  updateFormValue("IsExportUnit", e)
-                                }
-                              />
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={9} lg={9}>
+                                      <SSIB
+                                        key="IsExportUnit"
+                                        id="IsExportUnit"
+                                        label="Is Export Unit?"
+                                        param={this.state.branch.IsExportUnit}
+                                        onChange={(e) =>
+                                          updateFormValue("IsExportUnit", e)
+                                        }
+                                      />
+                                      <SSIB
+                                        key="IsTDS"
+                                        id="IsTDS"
+                                        label="TDS?"
+                                        param={this.state.branch.IsTDS}
+                                        onChange={(e) => updateFormValue("IsTDS", e)}
+                                      />
+
+                                    </Grid>
+                                  </Grid>
+                                </div>
+                              </div>
+
+
+
+
                             </Grid>
                             <Grid xs={12} sm={12} md={1} lg={1}></Grid>
                             <Grid xs={12} sm={12} md={5} lg={5}>
@@ -2057,7 +2144,7 @@ class editbranch extends React.Component {
                         <div>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
-                              {console.log("this.state.numberSeries > ",this.state.numberSeries)}
+                              {console.log("this.state.numberSeries > ", this.state.numberSeries)}
                               <SDIB
                                 id="LPINo"
                                 label="Local Proforma Invoice"

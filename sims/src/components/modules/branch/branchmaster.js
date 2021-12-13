@@ -185,7 +185,7 @@ class branchMaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Branch Master"
+          typoTitle="Branch"
           level={1}
         />
       </Fragment>

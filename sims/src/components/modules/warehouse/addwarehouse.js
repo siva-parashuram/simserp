@@ -45,10 +45,11 @@ class addwarehouse extends React.Component {
       allotModule: false,
       ProgressLoader: false,
       GeneralDetailsExpanded: true,
-      OtherDetailsExpanded: false,
+      OtherDetailsExpanded: true,
       DisableAddbtn: true,
       SuccessPrompt: false,
       ErrorPrompt: false,
+      ErrorMessageProps: "",
       duplicate: false,
       initialCss: "",
       branchId: 0,
@@ -57,21 +58,23 @@ class addwarehouse extends React.Component {
       warehouse: {
         WareHouseId: 0,
         BranchId: 0,
-        Code: null,
-        Description: null,
-        Address: null,
-        Address2: null,
-        Address3: null,
+        Code: "",
+        Description: "",
+        Address: "",
+        Address2: "",
+        Address3: "",
         IsEdi: false,
-        Ediurl: null,
+        Ediurl: "",
         EdiloginId: 0,
-        Edipassword: null,
-        ContactPerson: null,
-        EmailId: null,
+        Edipassword: "",
+        ContactPerson: "",
+        EmailId: "",
         PhoneNo: 0,
-        IsActive: false,
+        IsActive: true,
+        IsDefault: false,
       },
       WareHouseId: 0,
+      BranchID: 0,
       BranchId: 0,
       Code: null,
       Description: null,
@@ -85,7 +88,7 @@ class addwarehouse extends React.Component {
       ContactPerson: null,
       EmailId: null,
       PhoneNo: null,
-      IsActive: false,
+      IsActive: true,
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Description: { errorState: false, errorMssg: "" },
@@ -103,7 +106,7 @@ class addwarehouse extends React.Component {
   }
 
   componentDidMount() {
-    this.getWarehouses();
+
     this.getBranches();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -117,10 +120,13 @@ class addwarehouse extends React.Component {
       "&branchName=" +
       branchName;
     let warehouse = this.state.warehouse;
-    warehouse.BranchId = branchId;
+    warehouse.BranchId = CF.toInt(branchId);
     this.setState({
       urlparams: urlparams,
       branchId: branchId,
+      BranchID: parseInt(branchId)
+    }, () => {
+      this.getWarehouses();
     });
   }
 
@@ -131,10 +137,17 @@ class addwarehouse extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let GetWareHousesUrl = APIURLS.APIURL.GetWareHouses;
+    let GetWareHousesUrl = APIURLS.APIURL.GetWareHouseByBranchID;//APIURLS.APIURL.GetWareHouses;
+
+    let reqData = {
+      ValidUser: ValidUser,
+      WareHouse: {
+        BranchID: this.state.BranchID
+      }
+    };
 
     axios
-      .post(GetWareHousesUrl, ValidUser, { headers })
+      .post(GetWareHousesUrl, reqData, { headers })
       .then((response) => {
         let data = response.data;
         if (response.status === 200) {
@@ -147,7 +160,7 @@ class addwarehouse extends React.Component {
           this.setState({ warehouses: [], ProgressLoader: true });
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   getBranches() {
@@ -171,6 +184,36 @@ class addwarehouse extends React.Component {
       });
   }
 
+  chkIfDefaultWarehousePresent = () => {
+    let chk = true;
+    let warehouses = this.state.warehouses;
+    for (let i = 0; i < warehouses.length; i++) {
+      if (warehouses[i].IsDefault === true) {
+        chk = false;
+        break;
+      }
+    }
+    return chk;
+  }
+
+  finalValidateForm = () => {
+    let chk = true;
+    let warehouse = this.state.warehouse;
+
+    if (
+      warehouse.Code === "" ||
+      warehouse.Description === "" ||
+      warehouse.Address === ""
+    ) {
+      chk = false;
+    } else {
+      chk = true;
+    }
+
+
+    return chk;
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -185,30 +228,34 @@ class addwarehouse extends React.Component {
       }
     };
 
-    // const checkCode = () => {
-    //   if (this.state.Code.length > 10 || this.state.duplicate === true) {
-    //     this.setState({ DisableAddbtn: true });
-    //   }else{
-    //     this.setState({ DisableAddbtn: false });
 
-    //   }
-    // };
 
     const updateFormValue = (id, e) => {
       let warehouse = this.state.warehouse;
-      if (id === "isActive") {
+      if (id === "IsActive") {
         warehouse.IsActive = e.target.checked;
         this.setState({ warehouse: warehouse });
       }
-      // if (id === "branch") {
-      //     warehouse.BranchId = parseInt(e.target.value);
-      //     this.setState({ warehouse: warehouse });
-      // }
+      if (id === "IsDefault") {
+        if (e.target.checked === true) {
+          let chk = true;
+          chk = this.chkIfDefaultWarehousePresent(warehouse);
+          if (chk === true) {
+            warehouse.IsDefault = e.target.checked;
+            this.setState({ warehouse: warehouse });
+          } else {
+            alert("Default branch already Exist! ");
+          }
+        } else {
+          warehouse.IsDefault = e.target.checked;
+          this.setState({ warehouse: warehouse });
+        }
+      }
 
       if (id === "Code") {
         let duplicateExist = CF.chkDuplicateName(
           this.state.warehouses,
-          "code",
+          "Code",
           e.target.value
         );
 
@@ -482,35 +529,45 @@ class addwarehouse extends React.Component {
     };
 
     const handleCreate = () => {
-      //checkCode();
-      this.setState({ ProgressLoader: false });
+      let chk = this.finalValidateForm();
 
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      let warehouse = this.state.warehouse;
-      const data = {
-        validUser: ValidUser,
-        WareHouse: warehouse,
-      };
+      if (chk === true) {
+        this.setState({ ProgressLoader: false });
 
-      let Url = APIURLS.APIURL.CreateWareHouse;
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      axios
-        .post(Url, data, { headers })
-        .then((response) => {
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-            this.props.history.push(
-              URLS.URLS.warehouseMaster + this.state.urlparams
-            );
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => {});
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        let warehouse = this.state.warehouse;
+        const data = {
+          validUser: ValidUser,
+          WareHouse: warehouse,
+        };
+  
+        let Url = APIURLS.APIURL.CreateWareHouse;
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        axios
+          .post(Url, data, { headers })
+          .then((response) => {
+            if (response.status === 200 || response.status === 201) {
+              this.setState({ ProgressLoader: true, SuccessPrompt: true,ErrorMessageProps:"" });
+              this.props.history.push(
+                URLS.URLS.warehouseMaster + this.state.urlparams
+              );
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true,ErrorMessageProps:"" });
+            }
+          })
+          .catch((error) => { });
+      }else{
+        this.setState({
+          ErrorMessageProps: "Invalid Data Inputs",
+          ErrorPrompt: true
+        });
+      }
+
+     
     };
     const closeErrorPrompt = (event, reason) => {
       if (reason === "clickaway") {
@@ -565,6 +622,7 @@ class addwarehouse extends React.Component {
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
+          ErrorMessageProps={this.state.ErrorMessageProps}
         />
         <SuccessSnackBar
           SuccessPrompt={this.state.SuccessPrompt}
@@ -597,7 +655,7 @@ class addwarehouse extends React.Component {
                     style={{ minHeight: 20, height: "100%" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -607,6 +665,7 @@ class addwarehouse extends React.Component {
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
                               <SIB
+                              isMandatory={true}
                                 id="Code"
                                 label="Code"
                                 variant="outlined"
@@ -621,6 +680,7 @@ class addwarehouse extends React.Component {
                               />
 
                               <SIB
+                                isMandatory={true}
                                 id="Description"
                                 label="Description"
                                 variant="outlined"
@@ -630,13 +690,65 @@ class addwarehouse extends React.Component {
                                 }
                                 InputProps={{
                                   className: "textFieldCss",
-                                  maxlength: 10,
+                                  maxlength: 50,
                                 }}
                                 value={this.state.Description}
                                 error={
                                   this.state.Validations.Description.errorState
                                 }
                               />
+
+
+                              <SIB
+                               isMandatory={true}
+                                id="Address"
+                                label="Address Line 1"
+                                variant="outlined"
+                                size="small"
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                onChange={(e) => updateFormValue("Address", e)}
+                                value={this.state.Address}
+                                error={
+                                  this.state.Validations.Address.errorState
+                                }
+                              />
+
+                              <SIB
+                                id="Address2"
+                                label="Address Line 2"
+                                variant="outlined"
+                                size="small"
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
+                                onChange={(e) => updateFormValue("Address2", e)}
+                                value={this.state.Address2}
+                                error={
+                                  this.state.Validations.Address2.errorState
+                                }
+                              />
+
+                              <SIB
+                                id="Address3"
+                                label="Address Line 3"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("Address3", e)}
+                                value={this.state.Address3}
+                                error={
+                                  this.state.Validations.Address3.errorState
+                                }
+                              />
+
+
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+
                               <SIB
                                 id="contactPerson"
                                 label=" Contact Person"
@@ -664,21 +776,23 @@ class addwarehouse extends React.Component {
                                 onChange={(e) => updateFormValue("phoneNo", e)}
                                 InputProps={{
                                   className: "textFieldCss",
-                                  maxlength: 50,
+                                  maxlength: 20,
                                 }}
                                 value={this.state.PhoneNo}
                                 error={
                                   this.state.Validations.PhoneNo.errorState
                                 }
                               />
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                            <Grid item xs={12} sm={12} md={5} lg={5}>
+
                               <SIB
                                 id="EmailID"
                                 label="Email ID"
                                 variant="outlined"
                                 size="small"
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
                                 onChange={(e) => updateFormValue("EmailID", e)}
                                 value={this.state.EmailId}
                                 error={
@@ -686,41 +800,18 @@ class addwarehouse extends React.Component {
                                 }
                               />
 
-                              <SIB
-                                id="Address"
-                                label="Address Line 1"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("Address", e)}
-                                value={this.state.Address}
-                                error={
-                                  this.state.Validations.Address.errorState
+                              <SSIB
+                                key="IsDefault"
+                                id="IsDefault"
+                                label="Is Default?"
+                                param={this.state.warehouse.IsDefault}
+                                onChange={(e) =>
+                                  updateFormValue("IsDefault", e)
                                 }
                               />
 
-                              <SIB
-                                id="Address2"
-                                label="Address Line 2"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("Address2", e)}
-                                value={this.state.Address2}
-                                error={
-                                  this.state.Validations.Address2.errorState
-                                }
-                              />
 
-                              <SIB
-                                id="Address3"
-                                label="Address Line 3"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("Address3", e)}
-                                value={this.state.Address3}
-                                error={
-                                  this.state.Validations.Address3.errorState
-                                }
-                              />
+
 
                               <SSIB
                                 key="IsActive"
@@ -772,9 +863,12 @@ class addwarehouse extends React.Component {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     style={{ minHeight: 20, height: "100%" }}
+                    onClick={(e) =>
+                      handleAccordionClick("OtherDetailsExpanded", e)
+                    }
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      More Details
+                      EDI
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -786,7 +880,7 @@ class addwarehouse extends React.Component {
                               <SSIB
                                 key="IsEdi"
                                 id="IsEdi"
-                                label="IsEdi?"
+                                label="Is EDI?"
                                 param={this.state.IsEdi}
                                 onChange={(e) => updateFormValue("IsEdi", e)}
                               />
@@ -814,6 +908,10 @@ class addwarehouse extends React.Component {
                                 label="EDI Url"
                                 variant="outlined"
                                 size="small"
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
                                 onChange={(e) => updateFormValue("ediurl", e)}
                                 value={this.state.Ediurl}
                                 error={this.state.Validations.Ediurl.errorState}
@@ -831,7 +929,7 @@ class addwarehouse extends React.Component {
                                 }
                                 InputProps={{
                                   className: "textFieldCss",
-                                  maxlength: 10,
+                                  maxlength: 50,
                                 }}
                                 value={this.state.EdiloginId}
                                 error={
@@ -845,6 +943,10 @@ class addwarehouse extends React.Component {
                                 label="EDI Password"
                                 variant="outlined"
                                 size="small"
+                                InputProps={{
+                                  className: "textFieldCss",
+                                  maxlength: 50,
+                                }}
                                 onChange={(e) =>
                                   updateFormValue("edipassword", e)
                                 }

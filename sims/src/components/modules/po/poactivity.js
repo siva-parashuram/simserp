@@ -83,8 +83,8 @@ class poactivity extends React.Component {
       DialogStatus: false,
       isDataFetched: false,
       BranchID: 0,
-      accordion1: false,
-      accordion2: true,
+      accordion1: true,
+      accordion2: false,
       accordion3: false,
       accordion4: false,
       accordion5: false,
@@ -359,7 +359,9 @@ class poactivity extends React.Component {
       ProgressLoader: type === "add" ? true : false,
       BranchID: CF.toInt(branchId),
     }, () => {
-      if (type === "add") { this.getSupplierList(CF.toInt(branchId)); }
+      if (type === "add") {
+         this.getSupplierList(CF.toInt(branchId)); 
+        }
     });
   }
 
@@ -604,6 +606,15 @@ class poactivity extends React.Component {
             PO.IsRounding = false;
           }
 
+          for(let i=0;i<WareHouse.length;i++){
+            if(WareHouse[i].IsDefault===true){
+              PO.WareHouseID= CF.toInt(WareHouse[i].value);
+              PO.DeliveryAddress=WareHouse[i].deliveryAddress;
+              break;
+            }
+          }
+           
+
           this.setState({
             PO: PO,
             Branch: Branch,
@@ -691,7 +702,8 @@ class poactivity extends React.Component {
       let o = {
         name: data[i].Code,
         value: data[i].WareHouseID,
-        deliveryAddress: deliveryAddress
+        deliveryAddress: deliveryAddress,
+        IsDefault:data[i].IsDefault
       };
       newData.push(o);
     }

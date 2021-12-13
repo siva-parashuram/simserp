@@ -105,7 +105,7 @@ class currencymaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Currency Master"
+          typoTitle="Currency"
           level={1}
         />
       </Fragment>

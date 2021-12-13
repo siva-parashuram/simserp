@@ -308,7 +308,7 @@ class addcurrency extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.currencyMaster + this.state.urlparams}
-          masterLinkTitle="Currency Master"
+          masterLinkTitle="Currency"
           typoTitle="Add Currency"
           level={2}
         />

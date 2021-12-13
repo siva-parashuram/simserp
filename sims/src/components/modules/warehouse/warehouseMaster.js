@@ -43,7 +43,7 @@ class warehouseMaster extends React.Component {
   }
 
   componentDidMount() {
-    this.getWarehouses();
+    
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -55,8 +55,12 @@ class warehouseMaster extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+      
     this.setState({
       urlparams: urlparams,
+      BranchID:parseInt(branchId),
+    },()=>{
+      this.getWarehouses();
     });
   }
 
@@ -67,10 +71,18 @@ class warehouseMaster extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let GetWareHousesUrl = APIURLS.APIURL.GetWareHouses;
+    let GetWareHousesUrl = APIURLS.APIURL.GetWareHouseByBranchID;//APIURLS.APIURL.GetWareHouses;
+
+    let reqData = {
+      ValidUser: ValidUser,
+      WareHouse: {
+        BranchID: this.state.BranchID
+      }
+    };
+    
 
     axios
-      .post(GetWareHousesUrl, ValidUser, { headers })
+      .post(GetWareHousesUrl, reqData, { headers })
       .then((response) => {
         let data = response.data;
         if (response.status === 200) {
@@ -204,6 +216,9 @@ class warehouseMaster extends React.Component {
                           Description
                         </TableCell>
                         <TableCell className="table-header-font" align="left">
+                          Default
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
                           Status
                         </TableCell>
                       </TableRow>
@@ -224,6 +239,11 @@ class warehouseMaster extends React.Component {
                           </TableCell>
                           <TableCell align="left">{item.Code}</TableCell>
                           <TableCell align="left">{item.Description}</TableCell>
+                          <TableCell align="left">
+                            {item.IsDefault === true ? (
+                              <CheckIcon style={{ color: "blue" }} />
+                            ) :null}
+                          </TableCell>
                           <TableCell align="left">
                             {item.IsActive === true ? (
                               <CheckIcon style={{ color: "green" }} />
