@@ -205,7 +205,21 @@ class poMaster extends React.Component {
                                     />
                                 </Fragment>
                             ) : (
-                                <Tableskeleton />
+                                <Fragment>
+                                    {this.state.PODataList.length===0?(
+                                        <MasterDataGrid
+                                        selectionModel={this.state.selectionModel}
+                                        rows={[]}
+                                        columns={this.state.columns}
+                                        pagination={this.state.pagination}
+                                        // disableSelectionOnClick={false}
+                                        onSelectionModelChange={(e) => this.handleRowClick(e)}
+                                        onPageChange={handlePageChange}
+                                    />
+                                    ):null}
+                                    
+                                </Fragment>
+                                
                             )}
                         </Fragment>
                     </Grid>

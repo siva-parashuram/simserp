@@ -409,13 +409,20 @@ class poactivity extends React.Component {
           }
 
           let newPOL = [];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
+
+          let SupplierItemCategoryArray=[];
+          let data = this.getSupplierDataList(PO.SuplID);
+          SupplierItemCategoryArray=data.SupplierItemCategory
+          console.log("------------------------------> SupplierItemCategoryArray > ",SupplierItemCategoryArray);
+
           for (let i = 0; i < PurchaseOrderLine.length; i++) {
+            
             let EL = {
               POID: PO.POID,
               Type: PurchaseOrderLine[i].Type,
               LNo: PurchaseOrderLine[i].LNo,
               TypeIDList: [],
-              CategoryList: PurchaseOrderLine[i].Type === 0 ? this.state.SupplierItemCategory : [],
+              CategoryList: PurchaseOrderLine[i].Type === 0 ? SupplierItemCategoryArray : [],
               isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
               CategoryId: PurchaseOrderLine[i].CatID,
               ItemList: this.getItemList(PurchaseOrderLine[i].Type,PO.SuplID,PurchaseOrderLine[i].CatID),
@@ -551,8 +558,8 @@ class poactivity extends React.Component {
         BuyFromGSTN: PurchaseOrderLine[i].BuyFromGSTN,
         NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
         DValueID: PurchaseOrderLine[i].DValueID,
-        IsQuality: PurchaseOrderLine[i].IsQuality,
-        IsLot: PurchaseOrderLine[i].IsLot,
+        IsQuality: this.state.Branch.IsQuality===false?false:PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
+        IsLot: this.state.Branch.IsLot===false?false:PurchaseOrderLine[i].IsLot,//if branch is false- send false OR if branch is true - send actual value
         isDataProper: true,
       };
       newPOL.push(EL);
@@ -602,7 +609,7 @@ class poactivity extends React.Component {
           let IncoTermList = data.IncoTerms;
 
           let PO = this.state.PO;
-
+         
           if (Branch.IsSEZ === true) {
             PO.IsSEZPurchase = true;
           } else {
@@ -621,7 +628,7 @@ class poactivity extends React.Component {
               break;
             }
           }
-           
+          
 
           this.setState({
             PO: PO,
@@ -806,6 +813,8 @@ class poactivity extends React.Component {
         PO.PaymentTermID = data.PaymentTermID;
         PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
       }
+
+      
 
       this.setState({
         PO: PO,
@@ -1918,8 +1927,8 @@ class poactivity extends React.Component {
           "SupplyStateID": this.state.StateID,
           "GSTPercentage": PurchaseOrderLine[i].GSTPercentage,
           "DValueID": PurchaseOrderLine[i].DValueID,
-          "IsQuality": PurchaseOrderLine[i].IsQuality,
-          "IsLot": PurchaseOrderLine[i].IsLot
+          "IsQuality": this.state.Branch.IsQuality===false?false:PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
+          "IsLot": this.state.Branch.IsLot===false?false:PurchaseOrderLine[i].IsLot//if branch is false- send false OR if branch is true - send actual value
         };
         newPOL.push(o);
       }
@@ -2588,11 +2597,21 @@ class poactivity extends React.Component {
                                   }
 
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Dim.Value </TableCell>
-                                  <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
+                                  
+                                  {this.state.Branch.IsQuality===true?(
+                                     <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
+                                  ):null}
+                                 
+
+                                  {this.state.Branch.IsLot===true?(
+                                    <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
+                                  ):null}
+                                  
                                 </TableRow>
                               </TableHead>
                               <TableBody className="tableBody">
+
+                             
 
                                 {console.log("this.state.PurchaseOrderLine > ", this.state.PurchaseOrderLine)}
                                 {this.state.PurchaseOrderLine.length > 0 ? (
@@ -2865,24 +2884,31 @@ class poactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        <TableCell align="left">
-                                          <SCSI
-                                            key={"IsQuality_+i"}
-                                            id={"IsQuality_+i"}
-                                            param={item.IsQuality}
-                                            onChange={(e) => this.updateLineDetail(i, "IsQuality", e)}
+                                        {this.state.Branch.IsQuality === true ? (
+                                          <TableCell align="left">
+                                            <SCSI
+                                              key={"IsQuality_+i"}
+                                              id={"IsQuality_+i"}
+                                              param={item.IsQuality}
+                                              onChange={(e) => this.updateLineDetail(i, "IsQuality", e)}
 
-                                          />
-                                        </TableCell>
-                                        <TableCell align="left">
-                                          <SCSI
-                                            key={"IsLot_+i"}
-                                            id={"IsLot_+i"}
-                                            param={item.IsLot}
-                                            onChange={(e) => this.updateLineDetail(i, "IsLot", e)}
+                                            />
+                                          </TableCell>
+                                        ) : null}
 
-                                          />
-                                        </TableCell>
+                                        {this.state.Branch.IsLot === true ? (
+                                          <TableCell align="left">
+                                            <SCSI
+                                              key={"IsLot_+i"}
+                                              id={"IsLot_+i"}
+                                              param={item.IsLot}
+                                              onChange={(e) => this.updateLineDetail(i, "IsLot", e)}
+
+                                            />
+                                          </TableCell>
+                                        ) : null}
+                                       
+                                       
 
                                       </TableRow>
                                     ))}
