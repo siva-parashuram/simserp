@@ -34,6 +34,13 @@ class gridswitchinput extends React.Component {
           <Grid item xs={5} sm={5} md={8} lg={8}>
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
+               {this.props.isSpacing?this.props.isSpacing===true?(
+                 <Fragment>
+                   {
+                     [...Array(parseInt(this.props.space))].map((e, i) => <span key={i}>&nbsp;</span>)                   
+                   }                  
+                 </Fragment>
+               ):null:null} 
               <Switch                    
                         key={this.props.key}
                         id={this.props.id}

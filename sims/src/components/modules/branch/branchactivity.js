@@ -520,6 +520,27 @@ class editbranch extends React.Component {
     this.setState({ numberSeries: numberSeries });
   }
 
+  chkDuplicateName = (inputArray, parameter, value) => {
+    let duplicateExist = false;
+    try {
+      for (let i = 0; i < inputArray.length; i++) {
+        let v = inputArray[i][parameter];
+        v = v.toLowerCase();
+        if (v === value.toLowerCase()) {
+          if (parseInt(inputArray[i].BranchID) === parseInt(this.state.branch.BranchID)) {
+            break;
+          } else {
+            duplicateExist = true;
+            break;
+          }
+
+        }
+        
+      }
+    } catch (err) { }
+    return duplicateExist;
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -550,7 +571,7 @@ class editbranch extends React.Component {
         case "Name":
           branch[param] = e.target.value;
           let v1 = this.state.Validations;
-          let duplicateExist = CF.chkDuplicateName(
+          let duplicateExist = this.chkDuplicateName(
             this.state.branchData,
             "Name",
             e.target.value.trim().toLowerCase()
@@ -1788,7 +1809,7 @@ class editbranch extends React.Component {
                               <div style={{ borderStyle: 'solid', borderWidth: 1, borderColor: 'rgba(224, 224, 224, 1)' }}>
                                 <div style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
                                   <Grid container spacing={0}>
-                                    <Grid item xs={12} sm={12} md={3} lg={3}>
+                                    <Grid item xs={3} sm={3} md={3} lg={3}>
                                       <SSIB
                                         key="IsLot"
                                         id="IsLot"
@@ -1808,10 +1829,12 @@ class editbranch extends React.Component {
                                         }
                                       />
                                     </Grid>
-                                    <Grid item xs={12} sm={12} md={9} lg={9}>
+                                    <Grid item xs={9} sm={9} md={9} lg={9}>
                                       <Grid container spacing={0}>
-                                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                                        <Grid item xs={6} sm={6} md={6} lg={6}>
                                           <SSIB
+                                            isSpacing={true}
+                                            space={5}
                                             key="IsQuality"
                                             id="IsQuality"
                                             label="Quality?"
@@ -1821,7 +1844,7 @@ class editbranch extends React.Component {
                                             }
                                           />
                                         </Grid>
-                                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                                        <Grid item xs={6} sm={6} md={6} lg={6}>
                                           <SSIB
                                             key="IsTrading"
                                             id="IsTrading"
@@ -1834,7 +1857,7 @@ class editbranch extends React.Component {
                                         </Grid>
                                       </Grid>
                                       <Grid container spacing={0}>
-                                        <Grid item xs={12} sm={12} md={6} lg={6}>
+                                        <Grid item xs={8} sm={8} md={8} lg={8}>
                                           <SSIB
                                             key="AllowRounding"
                                             id="AllowRounding"
@@ -1845,7 +1868,7 @@ class editbranch extends React.Component {
                                             }
                                           />
                                         </Grid>
-                                        <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
+                                        
                                       </Grid>
                                     </Grid>
                                   </Grid>
