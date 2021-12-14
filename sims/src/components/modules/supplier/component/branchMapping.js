@@ -346,6 +346,9 @@ class branchMapping extends React.Component {
                           Branch
                         </TableCell>
                         <TableCell className="table-header-font" align="left">
+                          Currency
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
                           Gen.Posting Group
                         </TableCell>
                         <TableCell className="table-header-font" align="left">
@@ -366,6 +369,7 @@ class branchMapping extends React.Component {
                           <TableCell align="left">
                             {this.getNameByID("Branch", item.BranchID)}
                           </TableCell>
+                          <TableCell align="left">{item.Code}</TableCell>
                           <TableCell align="left">
                             {this.getNameByID(
                               "GeneralPostingGroup",
@@ -396,6 +400,10 @@ class branchMapping extends React.Component {
   updateFormValue = (param, e) => {
     let BranchMapping = this.state.BranchMapping;
     switch (param) {
+      case"CurrID":
+      BranchMapping[param] = e.target.value;
+      this.setParams(BranchMapping);
+      break;
       case "IsTaxExempt":
         BranchMapping[param] = e.target.checked;
         this.setParams(BranchMapping);
@@ -727,12 +735,12 @@ class branchMapping extends React.Component {
                                     <DropdownInput
                                      id="CurrID"
                                      label="Currency"
-                                      // onChange={(e) =>
-                                      //   this.updateFormValue(
-                                      //     "CurrID",
-                                      //     e
-                                      //   )
-                                      // }
+                                      onChange={(e) =>
+                                        this.updateFormValue(
+                                          "CurrID",
+                                          e
+                                        )
+                                      }
                                       value={
                                         this.state.BranchMapping.CurrID
                                       }

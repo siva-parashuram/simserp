@@ -27,6 +27,7 @@ class supplierPrice extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      BranchID:0,
       pagination: {
         page: 0,
         rowsPerPage: 10,
@@ -75,6 +76,9 @@ class supplierPrice extends React.Component {
   }
 
   componentDidMount() {
+    var url = new URL(window.location.href);
+    let branchId = url.searchParams.get("branchId");
+    this.setState({BranchID:branchId});
     this.getSupplierPrice();
     this.getBranchMapping();
     this.getAllDropdowns();
@@ -288,6 +292,7 @@ class supplierPrice extends React.Component {
       UnitPrice: item.UnitPrice,
       EmailID: item.EmailID,
       SupplierCode: item.SupplierCode,
+      BranchID: item.BranchID,
     };
 
     console.log("item > ", item);
@@ -380,6 +385,9 @@ class supplierPrice extends React.Component {
                 <TableHead className="table-header-background">
                   <TableRow>
                     <TableCell className="table-header-font">#</TableCell>
+                    
+
+                    
                     <TableCell className="table-header-font" align="left">
                       Start Date
                     </TableCell>
@@ -405,26 +413,35 @@ class supplierPrice extends React.Component {
                 </TableHead>
                 <TableBody className="tableBody">
                   {this.state.SupplierPriceList.map((item, i) => (
-                    <TableRow
-                      id={"row_" + i}
-                      key={i}
-                      onClick={(event) =>
-                        this.handleRowClick(event, item, "row_" + i, i)
-                      }
-                    >
-                      <TableCell>{i + 1}</TableCell>
-                      <TableCell align="left">
-                        {moment(item.StartDate).format("MM/DD/YYYY")}
-                      </TableCell>
-                      <TableCell align="left">
-                        {moment(item.EndDate).format("MM/DD/YYYY")}
-                      </TableCell>
-                      <TableCell align="left">{item.No}</TableCell>
-                      <TableCell align="left">{item.UOMCode}</TableCell>
-                      <TableCell align="left">{item.CurrCode}</TableCell>
-                      <TableCell align="left">{item.MinQty}</TableCell>
-                      <TableCell align="left">{item.MaxQty}</TableCell>
-                    </TableRow>
+                    <Fragment>
+                      
+                      {parseInt(this.state.BranchID)===parseInt(item.BranchID)?(
+                        <TableRow
+                        id={"row_" + i}
+                        key={i}
+                        onClick={(event) =>
+                          this.handleRowClick(event, item, "row_" + i, i)
+                        }
+                      >
+                        <TableCell>{i + 1}</TableCell>
+                       
+                        
+                        <TableCell align="left">
+                          {moment(item.StartDate).format("MM/DD/YYYY")}
+                        </TableCell>
+                        <TableCell align="left">
+                          {moment(item.EndDate).format("MM/DD/YYYY")}
+                        </TableCell>
+                        <TableCell align="left">{item.No}</TableCell>
+                        <TableCell align="left">{item.UOMCode}</TableCell>
+                        <TableCell align="left">{item.CurrCode}</TableCell>
+                        <TableCell align="left">{item.MinQty}</TableCell>
+                        <TableCell align="left">{item.MaxQty}</TableCell>
+                      </TableRow>
+                      ):null}
+                       
+                    </Fragment>
+                   
                   ))}
                 </TableBody>
               </Table>
@@ -584,6 +601,7 @@ class supplierPrice extends React.Component {
         EmailID: item.EmailID,
         UserID: CF.toInt(getCookie(COOKIE.USERID)),
         SupplierCode:item.SupplierCode,
+        BranchID: CF.toInt(item.BranchID),
       };
       newCPL.push(SupplierPrice);
     }
@@ -832,9 +850,10 @@ class supplierPrice extends React.Component {
                               onChange={(e) =>
                                 this.updateFormValue("BranchID", e)
                               }
-                              value={0}
+                              value={this.state.BranchID}//{this.state.SupplierPrice.BranchID}
                               options={this.state.BranchMappingData}
                               isMandatory={true}
+                              disabled={true}
                             />
 
                           <DateTextboxInput
