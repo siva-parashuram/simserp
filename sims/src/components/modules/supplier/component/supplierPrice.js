@@ -61,6 +61,7 @@ class supplierPrice extends React.Component {
       initialCss: "",
       listSupplierPrice: null,
       updateSupplierPrice: {},
+      BranchMappingData:[],
       SupplierPriceData: [],
       GeneralDetailsExpanded: true,
       createNewBtn: false,
@@ -96,7 +97,7 @@ class supplierPrice extends React.Component {
 
   componentDidMount() {
     this.getSupplierPrice();
-
+    this.getBranchMapping();
     this.getAllDropdowns();
   }
 
@@ -104,6 +105,48 @@ class supplierPrice extends React.Component {
     this.getCurrencyList();
     this.getItems();
     this.getUOMList();
+  };
+
+  getBranchMapping = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetSupplierBranchMappingBySuplID;
+    let data = {
+      ValidUser: ValidUser,
+      SupplierBranchMapping: {
+        SuplID: this.props.SuplID,
+      },
+    };
+    axios
+      .post(Url, data, { headers })
+      .then((response) => {
+        let data = response.data;
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Name,
+            value: data[i].BranchID,
+          };
+          newD.push(o);
+        }
+        this.setState(
+          {
+            BranchMappingData: newD,
+            ProgressLoader: true,
+          }
+        );
+      })
+      .catch((error) => {
+        this.setState({ BranchMappingData: [], ProgressLoader: true }, () => {
+          this.setState({
+            listBranchMapping: this.listBranchMapping(),
+          });
+        });
+      });
   };
 
   getCurrencyList = () => {
@@ -332,7 +375,7 @@ class supplierPrice extends React.Component {
     let o = (
       <Fragment>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={10} lg={10}>
+          <Grid xs={12} sm={12} md={12} lg={12}>
             <Button
              startIcon={APIURLS.buttonTitle.add.icon}
               className="action-btns"
@@ -348,7 +391,7 @@ class supplierPrice extends React.Component {
 
         <div style={{ height: 350, width: "100%", overflowY: "scroll" }}>
           <Grid container spacing={0}>
-            <Grid xs={12} sm={12} md={11} lg={11}>
+            <Grid xs={12} sm={12} md={12} lg={12}>
               <Table
                 stickyHeader
                 size="small"
@@ -748,7 +791,10 @@ class supplierPrice extends React.Component {
 
           {this.state.hideSidePanel === false ? (
             <Grid item xs={12} sm={12} md={4} lg={4}>
-              <div
+               <Grid container spacing={0}>
+               <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
+               <Grid item xs={11} sm={11} md={11} lg={11}>
+               <div
                style={{  marginTop: 15 }}
               >
                 <Grid container spacing={0}>
@@ -785,7 +831,7 @@ class supplierPrice extends React.Component {
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div
                       style={{
-                        height: 400,
+                        height: 470,
                         marginTop: -1,
                         overflowX: "hidden",
                         overflowY: "scroll",
@@ -793,7 +839,7 @@ class supplierPrice extends React.Component {
                         backgroundColor: "#ffffff",
                       }}
                     >
-                      <div style={{ height: 20 }}>&nbsp;</div>
+                      
                       <Table
                         stickyHeader
                         size="small"
@@ -801,6 +847,17 @@ class supplierPrice extends React.Component {
                         aria-label="SupplierPrice  table"
                       >
                         <TableBody className="tableBody">
+                            <DropdownInput
+                              id="BranchID"
+                              label="Branch"
+                              onChange={(e) =>
+                                this.updateFormValue("BranchID", e)
+                              }
+                              value={0}
+                              options={this.state.BranchMappingData}
+                              isMandatory={true}
+                            />
+
                           <DateTextboxInput
                             id="StartDate"
                             label="Start Date"
@@ -898,11 +955,14 @@ class supplierPrice extends React.Component {
                           />
                         </TableBody>
                       </Table>
-                      <div style={{ height: 20 }}>&nbsp;</div>
+                    
                     </div>
                   </Grid>
                 </Grid>
               </div>
+               </Grid>
+               </Grid>
+             
             </Grid>
           ) : null}
         </Grid>

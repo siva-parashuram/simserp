@@ -1072,7 +1072,7 @@ class supplieractivity extends React.Component {
                 {this.state.Dialog.DialogContent}
               </Grid>
             </Grid>
-            <div style={{ height: 50 }}>&nbsp;</div>
+            
           </DialogContent>
         </Dialog>
       </Fragment>
