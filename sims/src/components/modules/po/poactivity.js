@@ -1527,16 +1527,19 @@ class poactivity extends React.Component {
       case "GSTGroupID":
         o[key] = CF.toInt(e.target.value);
         let GSTGroupIDList = this.state.GSTGroupIDList;
-        if(this.state.PO.IsTaxExempt===true){
-          o.GSTPercentage=0;
-        }else{
-          for (let i = 0; i < GSTGroupIDList.length; i++) {
-            if (GSTGroupIDList[i].value === CF.toInt(e.target.value)) {
-              o.GSTPercentage = GSTGroupIDList[i].GSTPercentage;
+        if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
+          o.GSTPercentage =0.00;          
+         }else{
+          if(this.state.PO.IsTaxExempt===true){
+            o.GSTPercentage=0;
+          }else{
+            for (let i = 0; i < GSTGroupIDList.length; i++) {
+              if (GSTGroupIDList[i].value === CF.toInt(e.target.value)) {
+                o.GSTPercentage = GSTGroupIDList[i].GSTPercentage;
+              }
             }
           }
-        }
-        
+         }
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
@@ -1702,20 +1705,25 @@ class poactivity extends React.Component {
   openEditMode = (ID) => {
     console.log("-openEditMode-");
     console.log("ID -> ", ID);
+    let editUrl =
+    URLS.URLS.editPO +
+    this.state.urlparams +
+    "&editPOID=" +
+    ID + "&type=edit";
+    window.location = editUrl;
+    // let type = "edit";
+    // let POID = ID;
+    // let typoTitle = "";
+    // type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
 
-    let type = "edit";
-    let POID = ID;
-    let typoTitle = "";
-    type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
+    // let PO = this.state.PO;
+    // PO.POID = CF.toInt(POID);
 
-    let PO = this.state.PO;
-    PO.POID = CF.toInt(POID);
-
-    this.setState({
-      PO: PO,
-      type: type,
-      typoTitle: typoTitle,
-    });
+    // this.setState({
+    //   PO: PO,
+    //   type: type,
+    //   typoTitle: typoTitle,
+    // });
 
   }
 
@@ -1895,7 +1903,7 @@ class poactivity extends React.Component {
               .then((response) => {
                 console.log("response > ", response);
                 if (response.status === 201 || response.status === 200) {
-                  this.setState({ SuccessPrompt: true, ProgressLoader: true });
+                  this.setState({ SuccessPrompt: true });
                   //change to Edit mode
                   this.openEditMode(response.data.ID);
                 }
