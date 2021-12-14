@@ -1275,6 +1275,9 @@ class poactivity extends React.Component {
   }
 
   fetchPrice = (Quantity, o) => {
+    console.log("#######################  fetchPrice > Quantity > ",Quantity);
+    console.log("#######################  fetchPrice > o > ",o);
+    let UnitPrice=0.00;
     try {
       let UOMID_i = o.UOMID;
       for (let i = 0; i < o.ItemList.length; i++) {
@@ -1284,8 +1287,10 @@ class poactivity extends React.Component {
             let UOM_j = ItemPrice[j]['UOM'];
             if (UOMID_i === UOM_j) {
               let jo = ItemPrice[j];
+              console.log("#######################  fetchPrice > jo > ",jo);
               if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
-                return jo.UnitPrice;
+                console.log("#######################  fetchPrice > jo.UnitPrice > ",jo.UnitPrice);
+                UnitPrice= jo.UnitPrice;
                 break;
               }
             }
@@ -1293,8 +1298,10 @@ class poactivity extends React.Component {
         }
       }
     } catch (err) {
-      return 0;
+      console.log("err > ",err)
+      UnitPrice= 0.00;
     }
+  return UnitPrice;
   }
 
   updateLineDetail = (i, key, e) => {
@@ -1391,29 +1398,50 @@ class poactivity extends React.Component {
           o.ItemListSelected = e;
           o.TypeID = CF.toInt(e.value);
           o.GSTGroupID = e.GSTGroupID;
+         
           if (o.Type === 0) {        
            
             o.Description = e.Description1;
             o.packingDescription = e.PackingDesc1;
             o.HSNCode = e.HSNCode;
-             if(this.state.Branch.IsGST===true){
-              o.GSTPercentage = this.state.PO.IsTaxExempt===false?e.GSTPercentage:0;
-             }
-             if(this.state.Branch.IsVAT===true){
-              o.VATPercentage=this.state.PO.IsTaxExempt===false?this.state.Branch.VATPercentage:0;
-             }           
+ 
+
+           if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
+            o.GSTPercentage =0.00;
+            o.VATPercentage=0.00;
+           }else{
+            o.GSTPercentage=e.GSTPercentage;
+            o.VATPercentage=this.state.Branch.VATPercentage;
+           }
+
+
             o.UOMID = e.PurchaseUOM;
             o.ItemPostingGroupID = e.ItemPostingGroupID;
             o.TolerancePercentage = e.TolerancePercentage;
             o.IsLot = e.IsLot;
             o.IsQuality = e.IsQuality;
+            o.Quantity=1.00;
+            let Price = this.fetchPrice(1, o);
+            o.Price=parseFloat(Price);
           } else {
+
+            if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
+              o.GSTPercentage =0.00;
+              o.VATPercentage=0.00;
+             }else{
+              o.GSTPercentage=e.GSTPercentage;
+              o.VATPercentage=this.state.Branch.VATPercentage;
+             }
+
+            /*
             if(this.state.Branch.IsGST===true){
-              o.GSTPercentage = this.state.PO.IsTaxExempt===false?e.GSTPercentage:0;
+              o.GSTPercentage = (this.state.PO.IsTaxExempt===false || this.state.PO.IsImport===false || this.state.PO.IsSEZPurchase===false)?e.GSTPercentage:0;
              }
              if(this.state.Branch.IsVAT===true){
-              o.VATPercentage=this.state.PO.IsTaxExempt===false?this.state.Branch.VATPercentage:0;
+              o.VATPercentage=(this.state.PO.IsTaxExempt===false || this.state.PO.IsImport===false || this.state.PO.IsSEZPurchase===false)?this.state.Branch.VATPercentage:0;
              } 
+*/
+             
 
             o.packingDescription = "";
             o.UOMID = this.getNOSvalue();
