@@ -283,7 +283,7 @@ class addresses extends React.Component {
     let o = (
       <div
         style={{
-          height: 500,
+          height: 350,
           overflowY: "scroll",
           overflowX: "hidden",
           width: "100%",
@@ -306,9 +306,9 @@ class addresses extends React.Component {
           <div style={{ height: 10 }}>&nbsp;</div>
 
           <Grid container spacing={0}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
+            <Grid xs={11} sm={11} md={11} lg={11}>
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
                   <Accordion
                     key="SupplierAddress-General-Details"
                     expanded={this.state.GeneralDetailsExpanded}
@@ -330,7 +330,7 @@ class addresses extends React.Component {
                       style={{ minHeight: "40px", maxHeight: "40px" }}
                     >
                       <Typography key="" className="accordion-Header-Title">
-                        General Details
+                        General 
                       </Typography>
                     </AccordionSummary>
 
@@ -595,7 +595,7 @@ class addresses extends React.Component {
       <Fragment>
         <div
           style={{
-            height: 500,
+            height: 300,
             overflowY: "scroll",
             overflowX: "hidden",
             width: "100%",
@@ -1433,12 +1433,12 @@ class addresses extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div style={{ marginTop: -25 }}>
-          <Grid container spacing={6}>
-            <Grid item xs={12} sm={12} md={11} lg={11}>
+        <div style={{ marginTop: -20 }}>
+          <Grid container spacing={0}>
+            <Grid item xs={11} sm={11} md={11} lg={11}>
               &nbsp;
             </Grid>
-            <Grid item xs={12} sm={12} md={1} lg={1}>
+            <Grid item xs={1} sm={1} md={1} lg={1}>
               {this.state.FullSmallBtnArea === true ? (
                 <div>
                   {this.state.hideSidePanel === false ? (
@@ -1467,9 +1467,7 @@ class addresses extends React.Component {
               ) : null}
             </Grid>
           </Grid>
-          <div style={{ height: 10 }}>&nbsp;</div>
           <BackdropLoader open={!this.state.ProgressLoader} />
-          <div style={{ height: 10 }}>&nbsp;</div>
           <Grid container spacing={0}>
             <Grid
               item
@@ -1481,8 +1479,9 @@ class addresses extends React.Component {
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
                   <Dualtabcomponent
+                    customStyle={{ backgroundColor: 'none' }}
                     tab1name="List"
-                    tab2name={this.state.type === "EDIT" ? "EDIT" : "ADD"}
+                    tab2name={this.state.type === "EDIT" ? "EDIT" : "Add"}
                     tab1Html={this.state.listStateSupplierAddresses}
                     tab2Html={this.state.stateForm}
                   />

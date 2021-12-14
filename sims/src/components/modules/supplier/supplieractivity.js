@@ -75,6 +75,7 @@ class supplieractivity extends React.Component {
       GSTSupplierType: APIURLS.GSTSupplierType,
       MasterCountryData: [],
       SupplierData: [],
+      DropdownSupplierData:[],
       SalesPersonData: [],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
@@ -153,7 +154,7 @@ class supplieractivity extends React.Component {
   componentDidMount() {
     console.log("-----------------supplieractivity--------------");
     this.loadDropdowns();
-    // this.getSupplierList();
+     this.getSupplierList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -203,7 +204,20 @@ class supplieractivity extends React.Component {
       .then((response) => {
         let data = response.data;
         if (data.length > 0) {
-          this.setState({ SupplierData: data, ProgressLoader: true });
+          let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Name,
+            value: data[i].SuplID,
+          };
+          newD.push(o);
+        }
+          this.setState({
+            DropdownSupplierData:newD,
+            SupplierData: data, 
+            ProgressLoader: true 
+          });
+
         } else {
           this.setState({ SupplierData: data, ProgressLoader: true });
         }
@@ -264,67 +278,16 @@ class supplieractivity extends React.Component {
           };
           newD.push(o);
         }
-        this.setState({ paymentTermsData: newD, ProgressLoader: true });
+        this.setState({ paymentTermsData: newD, 
+          ProgressLoader: true
+         });
       })
       .catch((error) => {
         this.setState({ paymentTermsData: [], ProgressLoader: true });
       });
   };
 
-  // getStateList = () => {
-  //   let rows = [];
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   let GetStatesUrl = APIURLS.APIURL.GetStates;
-
-  //   axios
-  //     .post(GetStatesUrl, ValidUser, { headers })
-  //     .then((response) => {
-  //       let data = response.data;
-  //       let newData = [];
-  //       for (let i = 0; i < data.length; i++) {
-  //         let d = {
-  //           name: data[i].name,
-  //           value: data[i].stateId,
-  //         };
-  //         newData.push(d);
-  //       }
-  //       this.setState({ stateData: newData, ProgressLoader: true });
-  //     })
-  //     .catch((error) => {});
-  // };
-
-  // getCountryList = () => {
-  //   let rows = [];
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   let GetCountryUrl = APIURLS.APIURL.GetCountries;
-
-  //   axios
-  //     .post(GetCountryUrl, ValidUser, { headers })
-  //     .then((response) => {
-  //       let data = response.data;
-  //       let newData = [];
-  //       for (let i = 0; i < data.length; i++) {
-  //         let d = {
-  //           name: data[i].name,
-  //           value: data[i].countryId,
-  //         };
-  //         newData.push(d);
-  //       }
-  //       this.setState({ countryData: newData, ProgressLoader: true });
-  //     })
-  //     .catch((error) => {});
-  // };
-
+  
   getCountryList() {
     let rows = [];
     let ValidUser = APIURLS.ValidUser;
@@ -1067,358 +1030,7 @@ class supplieractivity extends React.Component {
         });
     };
 
-    // const generalform = (
-    //   <Fragment>
-    //     <Grid container spacing={0}>
-    //       <Grid item xs={12} sm={12} md={12} lg={12}>
-    //         <div>
-    //           <Grid container spacing={0}>
-    //             <Grid item xs={12} sm={12} md={5} lg={5}>
-    //               <SIB
-    //                 id="No"
-    //                 label="No"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("No", e)}
-    //                 value={this.state.Supplier.No}
-    //                 disabled={true}
-    //               />
-    //               <SIB
-    //                 id="Name"
-    //                 label="Name"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("Name", e)}
-    //                 value={this.state.Supplier.Name}
-    //                 isMandatory={true}
-    //                 error={this.state.Validations.Name.errorState}
-    //               />
-    //               <SIB
-    //                 id="Address"
-    //                 label="Address"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("Address", e)}
-    //                 value={this.state.Supplier.Address}
-    //                 error={this.state.Validations.Address.errorState}
-    //               />
-    //               <SIB
-    //                 id="Address2"
-    //                 label="Address2"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("Address2", e)}
-    //                 value={this.state.Supplier.Address2}
-    //                 error={this.state.Validations.Address2.errorState}
-    //               />
-    //               <SIB
-    //                 id="Address3"
-    //                 label="Address3"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("Address3", e)}
-    //                 value={this.state.Supplier.Address3}
-    //                 error={this.state.Validations.Address3.errorState}
-    //               />
-    //               <SIB
-    //                 id="City"
-    //                 label="City"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("City", e)}
-    //                 value={this.state.Supplier.City}
-    //                 error={this.state.Validations.City.errorState}
-    //               />
-    //               <SIB
-    //                 id="PostCode"
-    //                 label="PostCode"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("PostCode", e)}
-    //                 value={this.state.Supplier.PostCode}
-    //                 error={this.state.Validations.PostCode.errorState}
-    //               />
-    //               <SDIB
-    //                 id="CountryID"
-    //                 label="Country"
-    //                 onChange={(e) => this.updateFormValue("CountryID", e)}
-    //                 value={this.state.Supplier.CountryID}
-    //                 param={this.state.countryData}
-    //                 isMandatory={true}
-    //               />
-    //               <SDIB
-    //                 id="StateID"
-    //                 label="State"
-    //                 onChange={(e) => this.updateFormValue("StateID", e)}
-    //                 value={this.state.Supplier.StateID}
-    //                 param={this.state.stateData}
-    //               />
-    //             </Grid>
-    //             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-    //             <Grid item xs={12} sm={12} md={5} lg={5}>
-    //               <SIB
-    //                 id="ContactPerson"
-    //                 label="ContactPerson"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("ContactPerson", e)}
-    //                 value={this.state.Supplier.ContactPerson}
-    //                 error={this.state.Validations.ContactPerson.errorState}
-    //               />
-    //               <SIB
-    //                 id="EmailID"
-    //                 label="EmailID"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("EmailID", e)}
-    //                 value={this.state.Supplier.EmailID}
-    //                 error={this.state.Validations.EmailID.errorState}
-    //               />
-
-    //               <SIB
-    //                 id="Website"
-    //                 label="Website"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("Website", e)}
-    //                 value={this.state.Supplier.Website}
-    //                 error={this.state.Validations.Website.errorState}
-    //               />
-
-    //               <SIB
-    //                 id="PhoneNo"
-    //                 label="PhoneNo"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("PhoneNo", e)}
-    //                 value={this.state.Supplier.PhoneNo}
-    //                 error={this.state.Validations.PhoneNo.errorState}
-    //               />
-    //               <SIB
-    //                 id="FaxNo"
-    //                 label="FaxNo"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("FaxNo", e)}
-    //                 value={this.state.Supplier.FaxNo}
-    //                 error={this.state.Validations.FaxNo.errorState}
-    //               />
-    //               <SSIB
-    //                 key="IsGroupCompany"
-    //                 id="IsGroupCompany"
-    //                 label="IsGroupCompany"
-    //                 param={this.state.Supplier.IsGroupCompany}
-    //                 onChange={(e) => this.updateFormValue("IsGroupCompany", e)}
-    //               />
-
-    //               <SIB
-    //                 id="DueDays"
-    //                 label="Due Days"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("DueDays", e)}
-    //                 value={this.state.Supplier.DueDays}
-    //                 error={this.state.Validations.DueDays.errorState}
-    //               />
-
-    //               <SSIB
-    //                 key="IsBlock"
-    //                 id="IsBlock"
-    //                 label="IsBlock"
-    //                 param={this.state.Supplier.IsBlock}
-    //                 onChange={(e) => this.updateFormValue("IsBlock", e)}
-    //               />
-    //             </Grid>
-    //           </Grid>
-    //         </div>
-    //       </Grid>
-    //     </Grid>
-    //   </Fragment>
-    // );
-
-    // const invform = (
-    //   <Fragment>
-    //     <Grid container spacing={0}>
-    //       <Grid item xs={12} sm={12} md={12} lg={12}>
-    //         <div>
-    //           <Grid container spacing={0}>
-    //             <Grid item xs={12} sm={12} md={5} lg={5}>
-    //               <SDIB
-    //                 id="CurrID"
-    //                 label="CurrID"
-    //                 onChange={(e) => this.updateFormValue("CurrID", e)}
-    //                 value={this.state.Supplier.CurrID}
-    //                 param={this.state.currencyList}
-    //                 isMandatory={true}
-    //               />
-    //               <SDIB
-    //                 id="GeneralPostingGroupID"
-    //                 label="GeneralPosting"
-    //                 onChange={(e) =>
-    //                   this.updateFormValue("GeneralPostingGroupID", e)
-    //                 }
-    //                 value={this.state.Supplier.GeneralPostingGroupID}
-    //                 param={this.state.GeneralPostingGroupList}
-    //                 isMandatory={true}
-    //               />
-    //             </Grid>
-    //             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-    //             <Grid item xs={12} sm={12} md={5} lg={5}>
-    //               <SDIB
-    //                 id="SupplierPostingGroupID"
-    //                 label="SupplierPosting"
-    //                 onChange={(e) =>
-    //                   this.updateFormValue("SupplierPostingGroupID", e)
-    //                 }
-    //                 value={this.state.Supplier.SupplierPostingGroupID}
-    //                 param={this.state.SupplierPostingGroupList}
-    //                 isMandatory={true}
-    //               />
-
-    //               <SDBIB
-    //                 id="PaymentTermID"
-    //                 label="Payment Term"
-    //                 onChange={(e) => this.updateFormValue("PaymentTermID", e)}
-    //                 value={this.state.Supplier.PaymentTermID}
-    //                 param={this.state.paymentTermsData}
-    //                 onClick={(e) => openDialog("PaymentTerms")}
-    //               />
-
-    //               {/* <TableRow>
-    //                       <TableCell align="left" className="no-border-table">
-    //                         Payment Term
-    //                       </TableCell>
-    //                       <TableCell align="left" className="no-border-table">
-    //                         <Grid container spacing={0}>
-    //                           <Grid item xs={12} sm={12} md={10} lg={10}>
-    //                             <select
-    //                               className="dropdown-css"
-    //                               id="PaymentTermID"
-    //                               onChange={(e) =>
-    //                                 this.updateFormValue("PaymentTermID", e)
-    //                               }
-    //                               value={this.state.Supplier.PaymentTermID}
-    //                             >
-    //                               <option value="-" disabled>
-    //                                 Select
-    //                               </option>
-
-    //                               {this.state.paymentTermsData.map(
-    //                                 (item, i) => (
-    //                                   <option value={parseInt(item.value)}>
-    //                                     {item.name}
-    //                                   </option>
-    //                                 )
-    //                               )}
-    //                             </select>
-    //                           </Grid>
-    //                           <Grid item xs={12} sm={12} md={2} lg={2}>
-    //                             <button
-    //                               className="dropdowninputbtn"
-    //                               onClick={(e) => openDialog("PaymentTerms")}
-    //                             >
-    //                               ...
-    //                             </button>
-    //                           </Grid>
-    //                         </Grid>
-    //                       </TableCell>
-    //                     </TableRow> */}
-    //             </Grid>
-    //           </Grid>
-    //         </div>
-    //       </Grid>
-    //     </Grid>
-    //   </Fragment>
-    // );
-
-    // const taxinfoform = (
-    //   <Fragment>
-    //     <Grid container spacing={0}>
-    //       <Grid item xs={12} sm={12} md={12} lg={12}>
-    //         <div>
-    //           <Grid container spacing={0}>
-    //             <Grid item xs={12} sm={12} md={5} lg={5}>
-    //               <SDIB
-    //                 id="SupplierClasification"
-    //                 label="SupplierClasification"
-    //                 onChange={(e) =>
-    //                   this.updateFormValue("SupplierClasification", e)
-    //                 }
-    //                 value={this.state.Supplier.SupplierClasification}
-    //                 param={[]}
-    //               />
-    //               <SDIB
-    //                 id="TypeOfEnterprise"
-    //                 label="Type Of Enterprise"
-    //                 onChange={(e) =>
-    //                   this.updateFormValue("TypeOfEnterprise", e)
-    //                 }
-    //                 value={this.state.Supplier.TypeOfEnterprise}
-    //                 param={this.state.TypeOfEnterprise}
-    //               />
-    //               <SSIB
-    //                 key="IsTaxExempt"
-    //                 id="IsTaxExempt"
-    //                 label="IsTaxExempt"
-    //                 param={this.state.Supplier.IsTaxExempt}
-    //                 onChange={(e) => this.updateFormValue("IsTaxExempt", e)}
-    //               />
-    //               <SIB
-    //                 id="Reason"
-    //                 label="Reason"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("Reason", e)}
-    //                 value={this.state.Supplier.Reason}
-    //                 error={this.state.Validations.Reason.errorState}
-    //               />
-
-    //               <SDIB
-    //                 id="GSTSupplierType"
-    //                 label="GST SupplierType"
-    //                 onChange={(e) => this.updateFormValue("GSTSupplierType", e)}
-    //                 value={this.state.Supplier.GSTSupplierType}
-    //                 param={this.state.GSTSupplierType}
-    //               />
-    //             </Grid>
-    //             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-    //             <Grid item xs={12} sm={12} md={5} lg={5}>
-    //               <SIB
-    //                 id="GSTNo"
-    //                 label="GST No"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("GSTNo", e)}
-    //                 value={this.state.Supplier.GSTNo}
-    //                 error={this.state.Validations.GSTNo.errorState}
-    //               />
-    //               <SIB
-    //                 id="PANNo"
-    //                 label="PAN No"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("PANNo", e)}
-    //                 value={this.state.Supplier.PANNo}
-    //                 error={this.state.Validations.PANNo.errorState}
-    //               />
-
-    //               <SIB
-    //                 id="VATNo"
-    //                 label="VATNo"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => this.updateFormValue("VATNo", e)}
-    //                 value={this.state.Supplier.VATNo}
-    //                 error={this.state.Validations.VATNo.errorState}
-    //               />
-    //             </Grid>
-    //           </Grid>
-    //         </div>
-    //       </Grid>
-    //     </Grid>
-    //   </Fragment>
-    // );
-
+    
     const dialog = (
       <Fragment>
         <Dialog
@@ -1748,24 +1360,28 @@ class supplieractivity extends React.Component {
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
-      Dialog.DialogTitle = param;
+      
 
       switch (param) {
         case "Address":
+          Dialog.DialogTitle = "Address";
           Dialog.DialogContent = Address;
           this.setState({ Dialog: Dialog });
           break;
 
         case "PaymentTerms":
+          Dialog.DialogTitle = "Payment Terms";
           Dialog.DialogContent = paymentTerms;
           this.setState({ Dialog: Dialog });
           break;
 
         case "BranchMapping":
+          Dialog.DialogTitle = "Branch Mapping";
           Dialog.DialogContent = branchMapping;
           this.setState({ Dialog: Dialog });
           break;
         case "SupplierPrice":
+          Dialog.DialogTitle = "Supplier Price";
           Dialog.DialogContent = supplierPrice;
           this.setState({ Dialog: Dialog });
           break;
@@ -1987,7 +1603,20 @@ class supplieractivity extends React.Component {
                                     this.state.Validations.PostCode.errorState
                                   }
                                 />
-                                <SDIB
+                                 <SSIB
+                                  key="IsGroupCompany"
+                                  id="IsGroupCompany"
+                                  label="Is Group Company?"
+                                  param={this.state.Supplier.IsGroupCompany}
+                                  onChange={(e) =>
+                                    this.updateFormValue("IsGroupCompany", e)
+                                  }
+                                />
+                                
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                              <SDIB
                                   id="CountryID"
                                   label="Country"
                                   onChange={(e) =>
@@ -2006,9 +1635,6 @@ class supplieractivity extends React.Component {
                                   value={this.state.Supplier.StateID}
                                   param={this.state.stateData}
                                 />
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                              <Grid item xs={12} sm={12} md={5} lg={5}>
                                 <SIB
                                   id="ContactPerson"
                                   label="Contact Person"
@@ -2077,15 +1703,7 @@ class supplieractivity extends React.Component {
                                     this.state.Validations.FaxNo.errorState
                                   }
                                 />
-                                <SSIB
-                                  key="IsGroupCompany"
-                                  id="IsGroupCompany"
-                                  label="Is Group Company?"
-                                  param={this.state.Supplier.IsGroupCompany}
-                                  onChange={(e) =>
-                                    this.updateFormValue("IsGroupCompany", e)
-                                  }
-                                />
+                               
 
                                
 
@@ -2208,10 +1826,10 @@ class supplieractivity extends React.Component {
                                   id="PayToSuplID"
                                   label="Pay to Supplier"
                                   // onChange={(e) =>
-                                  //   this.updateFormValue("CurrID", e)
+                                  //   this.updateFormValue("PayToSuplID", e)
                                   // }
                                   value={0}
-                                  param={[]}
+                                  param={this.state.DropdownSupplierData}
                                   
                                 />
                               </Grid>

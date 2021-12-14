@@ -41,6 +41,8 @@ import Inputcustom from "../../../compo/inputcustom";
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import { Divider } from "@material-ui/core";
 
+import SDIB from "../../../compo/griddropdowninput";
+
 class branchMapping extends React.Component {
   constructor(props) {
     super(props);
@@ -69,6 +71,7 @@ class branchMapping extends React.Component {
       branchData: [],
       selectedOldItem: null,
       selectedOldItemIndex: null,
+      currencyList: [],
       BranchMapping: {
         ID: 0,
         SuplID: this.props.CustID,
@@ -77,6 +80,7 @@ class branchMapping extends React.Component {
         SupplierPostingGroupID: "-1",
         IsTaxExempt: false,
         Reason: "",
+        CurrID:0,
       },
     };
   }
@@ -90,7 +94,38 @@ class branchMapping extends React.Component {
   componentDidMount() {
     this.getDropdownValues();
     this.getBranchMapping();
+    this.getCurrencyList();
   }
+
+  getCurrencyList = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetCurrencies;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code,
+            value: data[i].CurrID,
+          };
+          newD.push(o);
+        }
+
+        this.setState({
+          currencyList: newD,
+        });
+      })
+      .catch((error) => { });
+  };
 
   getAllSupplierPostingGroup = () => {
     let ValidUser = APIURLS.ValidUser;
@@ -293,58 +328,63 @@ class branchMapping extends React.Component {
           </Grid>
         </Grid>
 
-        <div style={{ height: 350, width: "100%", overflowY: "scroll" }}>
+        <div style={{ height: 300, width: "100%", overflowY: "scroll" }}>
           <Grid container spacing={0}>
-            <Grid xs={12} sm={12} md={11} lg={11}>
-              <Table
-                stickyHeader
-                size="small"
-                className=""
-                aria-label="SupplierCategory List table"
-              >
-                <TableHead className="table-header-background">
-                  <TableRow>
-                    <TableCell className="table-header-font">#</TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Branch
-                    </TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      General Posting Group
-                    </TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Supplier Posting Group
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody className="tableBody">
-                  {this.state.BranchMappingDataList.map((item, i) => (
-                    <TableRow
-                      id={"row_" + i}
-                      key={i}
-                      onClick={(event) =>
-                        this.handleRowClick(event, item, "row_" + i, i)
-                      }
-                    >
-                      <TableCell align="left">{i + 1}</TableCell>
-                      <TableCell align="left">
-                        {this.getNameByID("Branch", item.BranchID)}
-                      </TableCell>
-                      <TableCell align="left">
-                        {this.getNameByID(
-                          "GeneralPostingGroup",
-                          item.GeneralPostingGroupID
-                        )}
-                      </TableCell>
-                      <TableCell align="left">
-                        {this.getNameByID(
-                          "SupplierPostingGroup",
-                          item.SupplierPostingGroupID
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+            <Grid xs={12} sm={12} md={12} lg={12}>
+              <Grid container spacing={0}>
+                <Grid xs={12} sm={12} md={12} lg={12}>
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className=""
+                    aria-label="SupplierCategory List table"
+                  >
+                    <TableHead className="table-header-background">
+                      <TableRow>
+                        <TableCell className="table-header-font">#</TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Branch
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Gen.Posting Group
+                        </TableCell>
+                        <TableCell className="table-header-font" align="left">
+                          Sup.Posting Group
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody className="tableBody">
+                      {this.state.BranchMappingDataList.map((item, i) => (
+                        <TableRow
+                          id={"row_" + i}
+                          key={i}
+                          onClick={(event) =>
+                            this.handleRowClick(event, item, "row_" + i, i)
+                          }
+                        >
+                          <TableCell align="left">{i + 1}</TableCell>
+                          <TableCell align="left">
+                            {this.getNameByID("Branch", item.BranchID)}
+                          </TableCell>
+                          <TableCell align="left">
+                            {this.getNameByID(
+                              "GeneralPostingGroup",
+                              item.GeneralPostingGroupID
+                            )}
+                          </TableCell>
+                          <TableCell align="left">
+                            {this.getNameByID(
+                              "SupplierPostingGroup",
+                              item.SupplierPostingGroupID
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Grid>
+              </Grid>
+
             </Grid>
           </Grid>
         </div>
@@ -523,7 +563,7 @@ class branchMapping extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <Grid container spacing={6}>
+        {/* <Grid container spacing={6}>
           <Grid item xs={12} sm={12} md={11} lg={11}>
             &nbsp;
           </Grid>
@@ -552,12 +592,13 @@ class branchMapping extends React.Component {
               </div>
             ) : null}
           </Grid>
-        </Grid>
+        </Grid> */}
 
         <div style={{ height: 10 }}>&nbsp;</div>
         <BackdropLoader open={!this.state.ProgressLoader} />
-        <div style={{ height: 10 }}>&nbsp;</div>
+        {/* <div style={{ height: 10 }}>&nbsp;</div> */}
 
+        <div style={{marginLeft:-10}}>
         <Grid container spacing={0}>
           <Grid
             item
@@ -580,26 +621,27 @@ class branchMapping extends React.Component {
           {this.state.hideSidePanel === false ? (
             <Grid item xs={12} sm={12} md={5} lg={5}>
               <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
+                <Grid item xs={11} sm={11} md={11} lg={11}>
                   <div
-                  // style={{ marginLeft: 10, marginTop: 45 }}
+                    style={{ marginTop: 20 }}
                   >
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={8} lg={8}>
-                        <div style={{ marginTop: -12, marginLeft: 1 }}>
-                          <h4>Detail view</h4>
+                        <div style={{  marginLeft: 1 }}>
+                          <h4>Detail</h4>
                         </div>
                       </Grid>
                       <Grid item xs={12} sm={12} md={4} lg={4}>
-                        <div>
+                        <div style={{marginTop:15}}>
                           {this.state.createNewBtn === true ? (
                             <Button
-                            startIcon={APIURLS.buttonTitle.add.icon}
+                            startIcon={APIURLS.buttonTitle.save.icon}
                               className="action-btns"
                               style={{ marginLeft: 10 }}
                               onClick={(e) => this.createBranchMapping("NEW")}
                             >
-                              {APIURLS.buttonTitle.add.name}
+                              {APIURLS.buttonTitle.save.name}
                             </Button>
                           ) : (
                             <Button
@@ -621,14 +663,13 @@ class branchMapping extends React.Component {
                         <div
                           style={{
                             height: 300,
-                            marginTop: 10,
+                            marginTop: -5,
                             overflowX: "hidden",
                             overflowY: "scroll",
                             width: "100%",
                             backgroundColor: "#ffffff",
                           }}
                         >
-                          <div style={{ height: 20 }}>&nbsp;</div>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
                               <Table
@@ -650,7 +691,7 @@ class branchMapping extends React.Component {
                                   />
                                   <DropdownInput
                                     id="GeneralPostingGroupID"
-                                    label="Gen Post Group"
+                                    label="Gen.Posting Group"
                                     onChange={(e) =>
                                       this.updateFormValue(
                                         "GeneralPostingGroupID",
@@ -666,7 +707,7 @@ class branchMapping extends React.Component {
                                   />
                                   <DropdownInput
                                     id="SupplierPostingGroupID"
-                                    label="Sup Post"
+                                    label="Sup.Posting Group"
                                     onChange={(e) =>
                                       this.updateFormValue(
                                         "SupplierPostingGroupID",
@@ -683,10 +724,30 @@ class branchMapping extends React.Component {
                                     isMandatory={true}
                                   />
 
+                                    <DropdownInput
+                                     id="CurrID"
+                                     label="Currency"
+                                      // onChange={(e) =>
+                                      //   this.updateFormValue(
+                                      //     "CurrID",
+                                      //     e
+                                      //   )
+                                      // }
+                                      value={
+                                        this.state.BranchMapping.CurrID
+                                      }
+                                      options={
+                                        this.state.currencyList
+                                      }
+                                      isMandatory={true}
+                                    />
+
+                                   
+
                                   <SwitchInput
                                     key="IsTaxExempt"
                                     id="IsTaxExempt"
-                                    label="Tax Exempt"
+                                    label="Tax Exempt?"
                                     param={this.state.BranchMapping.IsTaxExempt}
                                     onChange={(e) =>
                                       this.updateFormValue("IsTaxExempt", e)
@@ -719,6 +780,7 @@ class branchMapping extends React.Component {
             </Grid>
           ) : null}
         </Grid>
+        </div>
       </Fragment>
     );
   }

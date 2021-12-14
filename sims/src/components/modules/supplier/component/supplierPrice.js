@@ -265,6 +265,7 @@ class supplierPrice extends React.Component {
       MaxQty: item.MaxQty,
       UnitPrice: item.UnitPrice,
       EmailID: item.EmailID,
+      SupplierCode: item.SupplierCode,
     };
 
     console.log("item > ", item);
@@ -690,7 +691,7 @@ class supplierPrice extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <Grid container spacing={6}>
+        {/* <Grid container spacing={6}>
           <Grid item xs={12} sm={12} md={11} lg={11}>
             &nbsp;
           </Grid>
@@ -719,12 +720,13 @@ class supplierPrice extends React.Component {
               </div>
             ) : null}
           </Grid>
-        </Grid>
+        </Grid> */}
 
-        <div style={{ height: 10 }}>&nbsp;</div>
+        {/* <div style={{ height: 10 }}>&nbsp;</div> */}
         <BackdropLoader open={!this.state.ProgressLoader} />
-        <div style={{ height: 10 }}>&nbsp;</div>
+        {/* <div style={{ height: 10 }}>&nbsp;</div> */}
 
+        <div style={{marginLeft:-10}}>
         <Grid container spacing={0}>
           <Grid
             item
@@ -747,24 +749,24 @@ class supplierPrice extends React.Component {
           {this.state.hideSidePanel === false ? (
             <Grid item xs={12} sm={12} md={4} lg={4}>
               <div
-              // style={{ marginLeft: 10, marginTop: 45 }}
+               style={{  marginTop: 15 }}
               >
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <div style={{ marginTop: -12, marginLeft: 1 }}>
-                      <h4>Detail view</h4>
+                    <div style={{  marginLeft: 1 }}>
+                      <h4>Detail</h4>
                     </div>
                   </Grid>
                   <Grid item xs={12} sm={12} md={4} lg={4}>
-                    <div>
+                    <div style={{marginTop:12}}>
                       {this.state.createNewBtn === true ? (
                         <Button
-                        startIcon={APIURLS.buttonTitle.add.icon}
+                        startIcon={APIURLS.buttonTitle.save.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.createSupplierPrice("NEW")}
                         >
-                          {APIURLS.buttonTitle.add.name}
+                          {APIURLS.buttonTitle.save.name}
                         </Button>
                       ) : (
                         <Button
@@ -784,7 +786,7 @@ class supplierPrice extends React.Component {
                     <div
                       style={{
                         height: 400,
-                        marginTop: 10,
+                        marginTop: -1,
                         overflowX: "hidden",
                         overflowY: "scroll",
                         width: "100%",
@@ -801,7 +803,7 @@ class supplierPrice extends React.Component {
                         <TableBody className="tableBody">
                           <DateTextboxInput
                             id="StartDate"
-                            label="StartDate"
+                            label="Start Date"
                             variant="outlined"
                             size="small"
                             onChange={(e) =>
@@ -813,7 +815,7 @@ class supplierPrice extends React.Component {
                           />
                           <DateTextboxInput
                             id="EndDate"
-                            label="EndDate"
+                            label="End Date"
                             variant="outlined"
                             size="small"
                             onChange={(e) => this.updateFormValue("EndDate", e)}
@@ -823,7 +825,7 @@ class supplierPrice extends React.Component {
                           />
                           <DropdownInput
                             id="ItemID"
-                            label="ItemID"
+                            label="Item"
                             onChange={(e) => this.updateFormValue("ItemID", e)}
                             value={this.state.SupplierPrice.ItemID}
                             options={this.state.itemDataList}
@@ -839,7 +841,7 @@ class supplierPrice extends React.Component {
                           />
                           <DropdownInput
                             id="CurrID"
-                            label="CurrID"
+                            label="Currency"
                             onChange={(e) => this.updateFormValue("CurrID", e)}
                             value={this.state.SupplierPrice.CurrID}
                             options={this.state.currencyList}
@@ -904,6 +906,8 @@ class supplierPrice extends React.Component {
             </Grid>
           ) : null}
         </Grid>
+
+        </div>
       </Fragment>
     );
   }
