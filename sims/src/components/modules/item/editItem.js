@@ -1030,7 +1030,7 @@ class editItem extends React.Component {
 
       console.log("data > ", Data);
 
-      /*
+     
       axios
         .post(Url, Data, { headers })
         .then((response) => {
@@ -1042,7 +1042,7 @@ class editItem extends React.Component {
           }
         })
         .catch((error) => {});
-        */
+        
     };
 
     const breadcrumbHtml = (

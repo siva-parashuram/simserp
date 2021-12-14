@@ -83,6 +83,7 @@ class supplierPrice extends React.Component {
         MaxQty: 0,
         UnitPrice: 0,
         EmailID: "",
+        SupplierCode:"",
       },
       Validations: {
         MinQty: { errorState: false, errorMssg: "" },
@@ -123,8 +124,8 @@ class supplierPrice extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].code,
-            value: data[i].currId,
+            name: data[i].Code,
+            value: data[i].CurrID,
           };
           newD.push(o);
         }
@@ -559,6 +560,7 @@ class supplierPrice extends React.Component {
         UnitPrice: item.UnitPrice,
         EmailID: item.EmailID,
         UserID: CF.toInt(getCookie(COOKIE.USERID)),
+        SupplierCode:item.SupplierCode,
       };
       newCPL.push(SupplierPrice);
     }
@@ -842,6 +844,16 @@ class supplierPrice extends React.Component {
                             value={this.state.SupplierPrice.CurrID}
                             options={this.state.currencyList}
                             isMandatory={true}
+                          />
+
+                          <TextboxInput
+                            id="SupplierCode"
+                            label="Supplier Code"
+                            variant="outlined"
+                            size="small"
+                            onChange={(e) => this.updateFormValue("SupplierCode", e)}
+                            value={this.state.SupplierPrice.SupplierCode}
+                             
                           />
 
                           <TextboxInput
