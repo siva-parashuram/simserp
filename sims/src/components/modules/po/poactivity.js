@@ -2067,7 +2067,8 @@ class poactivity extends React.Component {
             {APIURLS.buttonTitle.view.name}
           </Button> */}
 
-          <ReactToPrint
+          {this.state.type === "edit"?(
+            <ReactToPrint
             trigger={() => {
               // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
               // to the root node of the returned component as it will be overwritten.
@@ -2082,6 +2083,9 @@ class poactivity extends React.Component {
             }}
             content={() => this.componentRef}
           />
+          ):null}
+
+          
 
           
 
