@@ -450,7 +450,7 @@ class supplierMaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Supplier Master"
+          typoTitle="Supplier"
           level={1}
         />
       </Fragment>

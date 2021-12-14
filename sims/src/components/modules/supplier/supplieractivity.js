@@ -344,7 +344,7 @@ class supplieractivity extends React.Component {
         this.setState({ MasterCountryData: data });
         this.processCountryData(data);
       })
-      .catch((error) => {});
+      .catch((error) => { });
   }
 
   getStateByCountry = (CountryID) => {
@@ -413,7 +413,7 @@ class supplieractivity extends React.Component {
           currencyList: newD,
         });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   getAllGeneralPostingGroup = () => {
@@ -440,7 +440,7 @@ class supplieractivity extends React.Component {
         }
         this.setState({ GeneralPostingGroupList: newD });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   getSupplierDetails = (Supplier) => {
@@ -1438,7 +1438,7 @@ class supplieractivity extends React.Component {
               <Grid item xs={12} sm={12} md={1} lg={1}>
                 <IconButton
                   aria-label="ArrowBackIcon"
-                  // style={{ textAlign: 'left', marginTop: 8 }}
+                // style={{ textAlign: 'left', marginTop: 8 }}
                 >
                   <ArrowBackIcon onClick={(e) => handleClose()} />
                 </IconButton>
@@ -1796,7 +1796,7 @@ class supplieractivity extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.supplierMaster + this.state.urlparams}
-          masterLinkTitle="Supplier Master"
+          masterLinkTitle="Supplier"
           typoTitle={this.state.typoTitle}
           level={2}
         />
@@ -1891,7 +1891,7 @@ class supplieractivity extends React.Component {
                     style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -1926,7 +1926,7 @@ class supplieractivity extends React.Component {
                                 />
                                 <SIB
                                   id="Address"
-                                  label="Address"
+                                  label="Address Line 1"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
@@ -1939,7 +1939,7 @@ class supplieractivity extends React.Component {
                                 />
                                 <SIB
                                   id="Address2"
-                                  label="Address2"
+                                  label="Address Line 2"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
@@ -1952,7 +1952,7 @@ class supplieractivity extends React.Component {
                                 />
                                 <SIB
                                   id="Address3"
-                                  label="Address3"
+                                  label="Address Line 3"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
@@ -1976,7 +1976,7 @@ class supplieractivity extends React.Component {
                                 />
                                 <SIB
                                   id="PostCode"
-                                  label="PostCode"
+                                  label="Postcode"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
@@ -2011,7 +2011,7 @@ class supplieractivity extends React.Component {
                               <Grid item xs={12} sm={12} md={5} lg={5}>
                                 <SIB
                                   id="ContactPerson"
-                                  label="ContactPerson"
+                                  label="Contact Person"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
@@ -2025,7 +2025,7 @@ class supplieractivity extends React.Component {
                                 />
                                 <SIB
                                   id="EmailID"
-                                  label="EmailID"
+                                  label="Email"
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
@@ -2053,7 +2053,7 @@ class supplieractivity extends React.Component {
 
                                 <SIB
                                   id="PhoneNo"
-                                  label="PhoneNo"
+                                  label="Phone No."
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
@@ -2066,7 +2066,7 @@ class supplieractivity extends React.Component {
                                 />
                                 <SIB
                                   id="FaxNo"
-                                  label="FaxNo"
+                                  label="Fax No."
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) =>
@@ -2080,31 +2080,19 @@ class supplieractivity extends React.Component {
                                 <SSIB
                                   key="IsGroupCompany"
                                   id="IsGroupCompany"
-                                  label="IsGroupCompany"
+                                  label="Is Group Company?"
                                   param={this.state.Supplier.IsGroupCompany}
                                   onChange={(e) =>
                                     this.updateFormValue("IsGroupCompany", e)
                                   }
                                 />
 
-                                <SIB
-                                  id="DueDays"
-                                  label="Due Days"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    this.updateFormValue("DueDays", e)
-                                  }
-                                  value={this.state.Supplier.DueDays}
-                                  error={
-                                    this.state.Validations.DueDays.errorState
-                                  }
-                                />
+                               
 
                                 <SSIB
                                   key="IsBlock"
                                   id="IsBlock"
-                                  label="IsBlock"
+                                  label="Is Block?"
                                   param={this.state.Supplier.IsBlock}
                                   onChange={(e) =>
                                     this.updateFormValue("IsBlock", e)
@@ -2147,7 +2135,7 @@ class supplieractivity extends React.Component {
                               <Grid item xs={12} sm={12} md={5} lg={5}>
                                 <SDIB
                                   id="CurrID"
-                                  label="CurrID"
+                                  label="Currency"
                                   onChange={(e) =>
                                     this.updateFormValue("CurrID", e)
                                   }
@@ -2157,7 +2145,7 @@ class supplieractivity extends React.Component {
                                 />
                                 <SDIB
                                   id="GeneralPostingGroupID"
-                                  label="GeneralPosting"
+                                  label="Gen.Posting Group"
                                   onChange={(e) =>
                                     this.updateFormValue(
                                       "GeneralPostingGroupID",
@@ -2170,12 +2158,10 @@ class supplieractivity extends React.Component {
                                   param={this.state.GeneralPostingGroupList}
                                   isMandatory={true}
                                 />
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                              <Grid item xs={12} sm={12} md={5} lg={5}>
+
                                 <SDIB
                                   id="SupplierPostingGroupID"
-                                  label="SupplierPosting"
+                                  label="Sup.Posting Group"
                                   onChange={(e) =>
                                     this.updateFormValue(
                                       "SupplierPostingGroupID",
@@ -2188,6 +2174,10 @@ class supplieractivity extends React.Component {
                                   param={this.state.SupplierPostingGroupList}
                                   isMandatory={true}
                                 />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+                               
 
                                 <SDBIB
                                   id="PaymentTermID"
@@ -2198,6 +2188,31 @@ class supplieractivity extends React.Component {
                                   value={this.state.Supplier.PaymentTermID}
                                   param={this.state.paymentTermsData}
                                   onClick={(e) => openDialog("PaymentTerms")}
+                                />
+
+                                <SIB
+                                  id="DueDays"
+                                  label="Due Days"
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("DueDays", e)
+                                  }
+                                  value={this.state.Supplier.DueDays}
+                                  error={
+                                    this.state.Validations.DueDays.errorState
+                                  }
+                                />
+
+                                <SDIB
+                                  id="PayToSuplID"
+                                  label="Pay to Supplier"
+                                  // onChange={(e) =>
+                                  //   this.updateFormValue("CurrID", e)
+                                  // }
+                                  value={0}
+                                  param={[]}
+                                  
                                 />
                               </Grid>
                             </Grid>
@@ -2224,7 +2239,7 @@ class supplieractivity extends React.Component {
                     style={{ minHeight: 30, maxHeight: 30, height: "100%" }}
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      Tax Information
+                      Tax
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
@@ -2236,7 +2251,7 @@ class supplieractivity extends React.Component {
                               <Grid item xs={12} sm={12} md={5} lg={5}>
                                 <SDIB
                                   id="SupplierClasification"
-                                  label="SupplierClasification"
+                                  label="Supplier Clasification"
                                   onChange={(e) =>
                                     this.updateFormValue(
                                       "SupplierClasification",
@@ -2246,21 +2261,78 @@ class supplieractivity extends React.Component {
                                   value={
                                     this.state.Supplier.SupplierClasification
                                   }
-                                  param={[]}
+                                  param={APIURLS.SupplierClasification}
                                 />
                                 <SDIB
                                   id="TypeOfEnterprise"
-                                  label="Type Of Enterprise"
+                                  label="Enterprise Type"
                                   onChange={(e) =>
                                     this.updateFormValue("TypeOfEnterprise", e)
                                   }
                                   value={this.state.Supplier.TypeOfEnterprise}
                                   param={this.state.TypeOfEnterprise}
                                 />
+
+
+                                <SIB
+                                  id="GSTNo"
+                                  label="GST No."
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("GSTNo", e)
+                                  }
+                                  value={this.state.Supplier.GSTNo}
+                                  error={
+                                    this.state.Validations.GSTNo.errorState
+                                  }
+                                />
+
+                                <SDIB
+                                  id="GSTSupplierType"
+                                  label="GST Sup.Type"
+                                  onChange={(e) =>
+                                    this.updateFormValue("GSTSupplierType", e)
+                                  }
+                                  value={this.state.Supplier.GSTSupplierType}
+                                  param={this.state.GSTSupplierType}
+                                />
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+
+                                <SIB
+                                  id="PANNo"
+                                  label="PAN No."
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("PANNo", e)
+                                  }
+                                  value={this.state.Supplier.PANNo}
+                                  error={
+                                    this.state.Validations.PANNo.errorState
+                                  }
+                                />
+
+                                <SIB
+                                  id="VATNo"
+                                  label="VAT No."
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("VATNo", e)
+                                  }
+                                  value={this.state.Supplier.VATNo}
+                                  error={
+                                    this.state.Validations.VATNo.errorState
+                                  }
+                                />
+
                                 <SSIB
                                   key="IsTaxExempt"
                                   id="IsTaxExempt"
-                                  label="IsTaxExempt"
+                                  label="Tax Exempted?"
                                   param={this.state.Supplier.IsTaxExempt}
                                   onChange={(e) =>
                                     this.updateFormValue("IsTaxExempt", e)
@@ -2277,59 +2349,6 @@ class supplieractivity extends React.Component {
                                   value={this.state.Supplier.Reason}
                                   error={
                                     this.state.Validations.Reason.errorState
-                                  }
-                                />
-
-                                <SDIB
-                                  id="GSTSupplierType"
-                                  label="GST SupplierType"
-                                  onChange={(e) =>
-                                    this.updateFormValue("GSTSupplierType", e)
-                                  }
-                                  value={this.state.Supplier.GSTSupplierType}
-                                  param={this.state.GSTSupplierType}
-                                />
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                              <Grid item xs={12} sm={12} md={5} lg={5}>
-                                <SIB
-                                  id="GSTNo"
-                                  label="GST No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    this.updateFormValue("GSTNo", e)
-                                  }
-                                  value={this.state.Supplier.GSTNo}
-                                  error={
-                                    this.state.Validations.GSTNo.errorState
-                                  }
-                                />
-                                <SIB
-                                  id="PANNo"
-                                  label="PAN No"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    this.updateFormValue("PANNo", e)
-                                  }
-                                  value={this.state.Supplier.PANNo}
-                                  error={
-                                    this.state.Validations.PANNo.errorState
-                                  }
-                                />
-
-                                <SIB
-                                  id="VATNo"
-                                  label="VATNo"
-                                  variant="outlined"
-                                  size="small"
-                                  onChange={(e) =>
-                                    this.updateFormValue("VATNo", e)
-                                  }
-                                  value={this.state.Supplier.VATNo}
-                                  error={
-                                    this.state.Validations.VATNo.errorState
                                   }
                                 />
                               </Grid>

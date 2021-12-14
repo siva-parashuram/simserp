@@ -229,6 +229,11 @@ export const buttonTitle = {
   }
 };
 
+export const SupplierClasification = [
+  { name: "N/A", value: 0 },
+  { name: "MSME", value: 1 }
+];
+
 export const PageType = [
   { name: "Master", value: 1 },
   { name: "Transaction", value: 2 },
