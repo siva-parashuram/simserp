@@ -1832,7 +1832,7 @@ class supplieractivity extends React.Component {
                                   onChange={(e) =>
                                     this.updateFormValue("PayToSuplID", e)
                                   }
-                                  value={0}
+                                  value={this.state.Supplier.PayToSuplID}
                                   param={this.state.DropdownSupplierData}
                                   
                                 />
