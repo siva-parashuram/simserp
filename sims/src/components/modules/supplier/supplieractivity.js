@@ -75,7 +75,7 @@ class supplieractivity extends React.Component {
       GSTSupplierType: APIURLS.GSTSupplierType,
       MasterCountryData: [],
       SupplierData: [],
-      DropdownSupplierData:[],
+      DropdownSupplierData: [],
       SalesPersonData: [],
       paymentTermsData: [],
       GeneralPostingGroupList: [],
@@ -104,7 +104,7 @@ class supplieractivity extends React.Component {
         TypeOfEnterprise: 0,
         GSTSupplierType: 0,
         CurrID: "-1",
-        PayToSuplID:0,
+        PayToSuplID: 0,
         DueDays: 0,
         IsBlock: false,
         SalesPersonID: 0,
@@ -155,7 +155,7 @@ class supplieractivity extends React.Component {
   componentDidMount() {
     console.log("-----------------supplieractivity--------------");
     this.loadDropdowns();
-     this.getSupplierList();
+    this.getSupplierList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -206,17 +206,17 @@ class supplieractivity extends React.Component {
         let data = response.data;
         if (data.length > 0) {
           let newD = [];
-        for (let i = 0; i < data.length; i++) {
-          let o = {
-            name: data[i].Name,
-            value: data[i].SuplID,
-          };
-          newD.push(o);
-        }
+          for (let i = 0; i < data.length; i++) {
+            let o = {
+              name: data[i].Name,
+              value: data[i].SuplID,
+            };
+            newD.push(o);
+          }
           this.setState({
-            DropdownSupplierData:newD,
-            SupplierData: data, 
-            ProgressLoader: true 
+            DropdownSupplierData: newD,
+            SupplierData: data,
+            ProgressLoader: true
           });
 
         } else {
@@ -279,16 +279,17 @@ class supplieractivity extends React.Component {
           };
           newD.push(o);
         }
-        this.setState({ paymentTermsData: newD, 
+        this.setState({
+          paymentTermsData: newD,
           ProgressLoader: true
-         });
+        });
       })
       .catch((error) => {
         this.setState({ paymentTermsData: [], ProgressLoader: true });
       });
   };
 
-  
+
   getCountryList() {
     let rows = [];
     let ValidUser = APIURLS.ValidUser;
@@ -1034,7 +1035,7 @@ class supplieractivity extends React.Component {
         });
     };
 
-    
+
     const dialog = (
       <Fragment>
         <Dialog
@@ -1076,7 +1077,7 @@ class supplieractivity extends React.Component {
                 {this.state.Dialog.DialogContent}
               </Grid>
             </Grid>
-            
+
           </DialogContent>
         </Dialog>
       </Fragment>
@@ -1364,7 +1365,7 @@ class supplieractivity extends React.Component {
     const openDialog = (param) => {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
-      
+
 
       switch (param) {
         case "Address":
@@ -1607,7 +1608,7 @@ class supplieractivity extends React.Component {
                                     this.state.Validations.PostCode.errorState
                                   }
                                 />
-                                 <SSIB
+                                <SSIB
                                   key="IsGroupCompany"
                                   id="IsGroupCompany"
                                   label="Is Group Company?"
@@ -1616,11 +1617,11 @@ class supplieractivity extends React.Component {
                                     this.updateFormValue("IsGroupCompany", e)
                                   }
                                 />
-                                
+
                               </Grid>
                               <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                               <Grid item xs={12} sm={12} md={5} lg={5}>
-                              <SDIB
+                                <SDIB
                                   id="CountryID"
                                   label="Country"
                                   onChange={(e) =>
@@ -1707,9 +1708,9 @@ class supplieractivity extends React.Component {
                                     this.state.Validations.FaxNo.errorState
                                   }
                                 />
-                               
 
-                               
+
+
 
                                 <SSIB
                                   key="IsBlock"
@@ -1799,7 +1800,6 @@ class supplieractivity extends React.Component {
                               </Grid>
                               <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                               <Grid item xs={12} sm={12} md={5} lg={5}>
-                               
 
                                 <SDBIB
                                   id="PaymentTermID"
@@ -1834,7 +1834,7 @@ class supplieractivity extends React.Component {
                                   }
                                   value={this.state.Supplier.PayToSuplID}
                                   param={this.state.DropdownSupplierData}
-                                  
+
                                 />
                               </Grid>
                             </Grid>
