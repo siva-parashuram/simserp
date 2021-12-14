@@ -104,6 +104,7 @@ class supplieractivity extends React.Component {
         TypeOfEnterprise: 0,
         GSTSupplierType: 0,
         CurrID: "-1",
+        PayToSuplID:0,
         DueDays: 0,
         IsBlock: false,
         SalesPersonID: 0,
@@ -759,7 +760,10 @@ class supplieractivity extends React.Component {
         this.setParams(Supplier);
 
         break;
-
+      case "PayToSuplID":
+        Supplier[param] = CF.toInt(e.target.value);
+        this.setParams(Supplier);
+        break;
       case "IsBlock":
         Supplier[param] = e.target.checked;
         this.setParams(Supplier);
@@ -1825,9 +1829,9 @@ class supplieractivity extends React.Component {
                                 <SDIB
                                   id="PayToSuplID"
                                   label="Pay to Supplier"
-                                  // onChange={(e) =>
-                                  //   this.updateFormValue("PayToSuplID", e)
-                                  // }
+                                  onChange={(e) =>
+                                    this.updateFormValue("PayToSuplID", e)
+                                  }
                                   value={0}
                                   param={this.state.DropdownSupplierData}
                                   
