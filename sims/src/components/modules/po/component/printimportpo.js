@@ -64,7 +64,7 @@ class printimportpo extends React.Component {
         for(let i=0;i<PurchaseOrderLine.length;i++){
             amount=parseFloat(amount)+(parseFloat(PurchaseOrderLine[i].Price)*parseFloat(PurchaseOrderLine[i].Quantity))
         }
-        return amount;
+        return amount.toFixed(2);
     }
 
     getTotalQuantity=()=>{
@@ -87,6 +87,39 @@ class printimportpo extends React.Component {
                 break;
             }
         }
+    }
+
+    getQuantity = (Quantity) => {
+        let Q = 0.00;
+        if (Quantity) {
+            Q = Quantity.toFixed(2);
+        }    
+        return Q;
+    }
+
+    getPrice  =(Price)=>{
+        let P = 0.00;
+        if (Price) {
+            P = Price.toFixed(2);
+        }    
+        return P;
+    } 
+    
+    getLineDiscPercentage =(LineDiscPercentage)=>{
+        let LDP = 0.00;
+        if (LineDiscPercentage) {
+            LDP = LineDiscPercentage.toFixed(2);
+        }    
+        return LDP;
+    }
+
+    QuantityMultiplyPrice=(Quantity,Price)=>{
+        let QP=0.00;
+        if(Quantity && Price){
+            QP=(parseFloat(Quantity) * parseFloat(Price));
+            QP=QP.toFixed(2);
+        }
+        return QP;
     }
 
 
@@ -283,11 +316,14 @@ class printimportpo extends React.Component {
                                                         {uom.value === item.UOMID ? uom.name : null}
                                                     </Fragment>
                                                 ))}
+                                            </TableCell> 
+                                            <TableCell className="po-print-no-border-table" align="right">{this.getQuantity(item.Quantity)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{this.getPrice(item.Price)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{this.getLineDiscPercentage(item.LineDiscPercentage)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">
+                                                {this.QuantityMultiplyPrice(item.Quantity,item.Price)}
+                                                
                                             </TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.Quantity.toFixed(2)}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.Price.toFixed(2)}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.LineDiscPercentage.toFixed(2)}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{(parseFloat(item.Quantity) * parseFloat(item.Price)).toFixed(2)}</TableCell>
                                            
                                             
                                         </TableRow>
@@ -302,7 +338,7 @@ class printimportpo extends React.Component {
                                         <TableCell className="po-print-no-border-table" align="right">{this.getTotalQuantity()}</TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right">{this.getTotalAmount().toFixed(2)}</TableCell>
+                                        <TableCell className="po-print-no-border-table" align="right">{this.getTotalAmount()}</TableCell>
                                         
                                          
                                     </TableRow>

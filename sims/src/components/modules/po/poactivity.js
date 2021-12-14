@@ -1446,7 +1446,7 @@ class poactivity extends React.Component {
         price = this.fetchPrice(e.target.value, o);
         console.log("IN Quantity > price slab value > ", price);
         if (price) {
-          o.Price = parseFloat(price).toFixed(2);
+          o.Price = parseFloat(price);
         } else {
           o.Price = 0;
         }
