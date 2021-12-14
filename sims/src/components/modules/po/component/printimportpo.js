@@ -28,11 +28,11 @@ class printimportpo extends React.Component {
         console.log("-------------------------------------printlocalpo-----------------------------------------------");
     }
 
-    inWords =(num)=>{
-        num=parseFloat(this.props.podata.PO.FCValue);
-        var a = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
-        var b = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
-        
+    inWords = (num) => {
+        num = parseFloat(this.props.podata.PO.FCValue);
+        var a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+        var b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
 
         if ((num = num.toString()).length > 9) return 'overflow';
         let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
@@ -45,81 +45,114 @@ class printimportpo extends React.Component {
         return str;
     }
 
-    getCurrencyName=()=>{
-        let name="";
-        let CurrencyList=this.props.podata.CurrencyList;
-        let CurrID=this.props.podata.PO.CurrID;
-        for(let i=0;i<CurrencyList.length;i++) 
-        if(parseFloat(CurrencyList[i].value)===parseFloat(CurrID))
-        name=CurrencyList[i].name; 
-       
+    getCurrencyName = () => {
+        let name = "";
+        let CurrencyList = this.props.podata.CurrencyList;
+        let CurrID = this.props.podata.PO.CurrID;
+        for (let i = 0; i < CurrencyList.length; i++)
+            if (parseFloat(CurrencyList[i].value) === parseFloat(CurrID))
+                name = CurrencyList[i].name;
+
         return name;
     }
 
 
-    getTotalAmount=()=>{
-        let amount=0.00;
-        let PurchaseOrderLine=this.props.podata.PurchaseOrderLine;
-        console.log("getTotalAmount > PurchaseOrderLine > ",PurchaseOrderLine);
-        for(let i=0;i<PurchaseOrderLine.length;i++){
-            amount=parseFloat(amount)+(parseFloat(PurchaseOrderLine[i].Price)*parseFloat(PurchaseOrderLine[i].Quantity))
-        }
+    getTotalAmount = () => {
+        let amount = 0.00;
+        let PurchaseOrderLine = this.props.podata.PurchaseOrderLine;
+        try {
+            for (let i = 0; i < PurchaseOrderLine.length; i++) {
+                let QP = (parseFloat(PurchaseOrderLine[i].Quantity) * parseFloat(PurchaseOrderLine[i].Price));
+                QP = parseFloat(QP) - ((parseFloat(QP) * parseFloat(PurchaseOrderLine[i].LineDiscPercentage)) / 100);
+                amount = parseFloat(amount) + parseFloat(QP);
+            }
+        } catch (e) { }
+
         return amount.toFixed(2);
     }
 
-    getTotalQuantity=()=>{
-        let quantity=0.00;
-        let PurchaseOrderLine=this.props.podata.PurchaseOrderLine;
-        console.log("getTotalAmount > PurchaseOrderLine > ",PurchaseOrderLine);
-        for(let i=0;i<PurchaseOrderLine.length;i++){
-            quantity=parseFloat(quantity)+parseFloat(PurchaseOrderLine[i].Quantity);
-        }
+    getTotalQuantity = () => {
+        let quantity = 0.00;
+        let PurchaseOrderLine = this.props.podata.PurchaseOrderLine;
+        try {
+            for (let i = 0; i < PurchaseOrderLine.length; i++) {
+                quantity = parseFloat(quantity) + parseFloat(PurchaseOrderLine[i].Quantity);
+            }
+        } catch (e) { }
+
         return quantity.toFixed(2);
     }
 
     getStateNameByID = () => {
         let id = this.props.podata.Supplier.StateID;
-        let StateList = this.props.podata.Supplier.StateList;      
-
-        for (let i = 0; i < StateList.length; i++) {
-            if (parseFloat(StateList[i].value) === parseFloat(id)) {
-                return StateList[i].name;
-                break;
+        let StateList = this.props.podata.Supplier.StateList;
+        try {
+            for (let i = 0; i < StateList.length; i++) {
+                if (parseFloat(StateList[i].value) === parseFloat(id)) {
+                    return StateList[i].name;
+                    break;
+                }
             }
-        }
+        } catch (e) { }
+
     }
 
     getQuantity = (Quantity) => {
         let Q = 0.00;
-        if (Quantity) {
-            Q = Quantity.toFixed(2);
-        }    
-        return Q;
+        try {
+            if (Quantity) {
+                Q = parseFloat(Quantity);
+            }
+        } catch (e) { }
+
+        return Q.toFixed(2);
     }
 
-    getPrice  =(Price)=>{
+    getPrice = (Price) => {
         let P = 0.00;
-        if (Price) {
-            P = Price.toFixed(2);
-        }    
-        return P;
-    } 
-    
-    getLineDiscPercentage =(LineDiscPercentage)=>{
-        let LDP = 0.00;
-        if (LineDiscPercentage) {
-            LDP = LineDiscPercentage.toFixed(2);
-        }    
-        return LDP;
+        try {
+            if (Price) {
+                P = parseFloat(Price);
+            }
+        } catch (e) { }
+
+        return P.toFixed(2);
     }
 
-    QuantityMultiplyPrice=(Quantity,Price)=>{
-        let QP=0.00;
-        if(Quantity && Price){
-            QP=(parseFloat(Quantity) * parseFloat(Price));
-            QP=QP.toFixed(2);
-        }
-        return QP;
+    getLineDiscPercentage = (LineDiscPercentage) => {
+        let LDP = 0.00;
+        try {
+            if (LineDiscPercentage) {
+                LDP = parseFloat(LineDiscPercentage);
+            }
+        } catch (e) { }
+
+        return LDP.toFixed(2);
+    }
+
+    QuantityMultiplyPrice = (Quantity, Price) => {
+        let QP = 0.00;
+        try {
+            if (Quantity && Price) {
+                QP = (parseFloat(Quantity) * parseFloat(Price));
+
+            }
+        } catch (e) { }
+
+        return QP.toFixed(2);
+    }
+
+    QuantityMultiplyDiscountPrice = (Quantity, Price, LineDiscPercentage) => {
+        let QP = 0.00;
+        try {
+            if (Quantity && Price) {
+                QP = (parseFloat(Quantity) * parseFloat(Price));
+                QP = parseFloat(QP) - ((parseFloat(QP) * parseFloat(LineDiscPercentage)) / 100);
+
+            }
+        } catch (e) { }
+
+        return QP.toFixed(2);
     }
 
 
@@ -138,7 +171,7 @@ class printimportpo extends React.Component {
 
         return (
             <div className="po-themeFont">
-                <style>{getPageMargins()}</style>            
+                <style>{getPageMargins()}</style>
 
                 <Grid container spacing={0}>
                     <Grid item xs={3}>
@@ -153,7 +186,7 @@ class printimportpo extends React.Component {
                             <span className="po-title">
                                 <span>Purchase Order</span><br />
                                 <span className="po-no-title">{this.props.podata.PO.No}</span><br />
-                                <span className="po-no-title">{moment(this.props.podata.PO.PODate).format('DD-MMM-YYYY')}</span>  
+                                <span className="po-no-title">{moment(this.props.podata.PO.PODate).format('DD-MMM-YYYY')}</span>
                             </span>
                         </div>
                     </Grid>
@@ -164,23 +197,23 @@ class printimportpo extends React.Component {
                         <span><b>Invoice To:</b></span><br />
                         <span className="boldHeader" >{this.props.podata.Branch.Name}</span><br />
                         <span>
-                            {(this.props.podata.Branch.Address || this.props.podata.Branch.Address!="")?(
+                            {(this.props.podata.Branch.Address || this.props.podata.Branch.Address != "") ? (
                                 <Fragment>
-                                    {this.props.podata.Branch.Address}<br/>
+                                    {this.props.podata.Branch.Address}<br />
                                 </Fragment>
-                            ):null} 
-                             {(this.props.podata.Branch.Address2 || this.props.podata.Branch.Address2!="")?(
+                            ) : null}
+                            {(this.props.podata.Branch.Address2 || this.props.podata.Branch.Address2 != "") ? (
                                 <Fragment>
-                                    {this.props.podata.Branch.Address2}<br/>
+                                    {this.props.podata.Branch.Address2}<br />
                                 </Fragment>
-                            ):null} 
-                            {(this.props.podata.Branch.Address3 || this.props.podata.Branch.Address3!="")?(
+                            ) : null}
+                            {(this.props.podata.Branch.Address3 || this.props.podata.Branch.Address3 != "") ? (
                                 <Fragment>
-                                    {this.props.podata.Branch.Address3}<br/>
+                                    {this.props.podata.Branch.Address3}<br />
                                 </Fragment>
-                            ):null} 
-                          
-                        </span> 
+                            ) : null}
+
+                        </span>
                         <span>
                             Tel-{this.props.podata.Branch.PhoneNo}
                         </span><br />
@@ -206,33 +239,33 @@ class printimportpo extends React.Component {
 
                         ) : null}
 
-                        {this.props.podata.Branch.IsVAT===true?(
-                            <span className="boldHeader">VAT No.: {this.props.podata.Branch.IsGST}</span>><br />
-                        ):null}
+                        {this.props.podata.Branch.IsVAT === true ? (
+                            <span className="boldHeader">VAT No.: {this.props.podata.Branch.IsGST}</span> > <br />
+                        ) : null}
 
-                         <span>
+                        <span>
                             <span><b>Notify/Despatch To:</b></span> {this.props.podata.Branch.ContactPerson}
-                        </span>      
-                        
+                        </span>
+
                     </Grid>
                     <Grid item xs={3}>
                         <span><b>Supplier:</b></span><br />
                         <span className="boldHeader">{this.props.podata.Supplier.Name}</span><br />
-                        {(this.props.podata.Supplier.Address || this.props.podata.Supplier.Address!="")?(
-                                <Fragment>
-                                    {this.props.podata.Supplier.Address}<br/>
-                                </Fragment>
-                            ):null} 
-                             {(this.props.podata.Supplier.Address2 || this.props.podata.Supplier.Address2!="")?(
-                                <Fragment>
-                                    {this.props.podata.Supplier.Address2}<br/>
-                                </Fragment>
-                            ):null} 
-                            {(this.props.podata.Supplier.Address3 || this.props.podata.Supplier.Address3!="")?(
-                                <Fragment>
-                                    {this.props.podata.Supplier.Address3}<br/>
-                                </Fragment>
-                            ):null} 
+                        {(this.props.podata.Supplier.Address || this.props.podata.Supplier.Address != "") ? (
+                            <Fragment>
+                                {this.props.podata.Supplier.Address}<br />
+                            </Fragment>
+                        ) : null}
+                        {(this.props.podata.Supplier.Address2 || this.props.podata.Supplier.Address2 != "") ? (
+                            <Fragment>
+                                {this.props.podata.Supplier.Address2}<br />
+                            </Fragment>
+                        ) : null}
+                        {(this.props.podata.Supplier.Address3 || this.props.podata.Supplier.Address3 != "") ? (
+                            <Fragment>
+                                {this.props.podata.Supplier.Address3}<br />
+                            </Fragment>
+                        ) : null}
 
                         <span>
                             E-mail: sales@sivatec.co
@@ -245,9 +278,9 @@ class printimportpo extends React.Component {
                             <span><b> Despatch Thru:</b></span> Your Own
                         </span><br />
                         <span>
-                            <span><b>Final Destination:</b></span><br/> 
-                           <span style={{whiteSpace:'pre-wrap'}}> {this.props.podata.PO.DeliveryAddress} </span>
-                        </span><br /> 
+                            <span><b>Final Destination:</b></span><br />
+                            <span style={{ whiteSpace: 'pre-wrap' }}> {this.props.podata.PO.DeliveryAddress} </span>
+                        </span><br />
                         <span>
                             <span><b>Despatch Date:</b></span> {moment(this.props.podata.PO.DispachDate).format('DD-MMM-YYYY')}
                         </span> <br />
@@ -259,7 +292,7 @@ class printimportpo extends React.Component {
                         <span>
                             <span><b>Ref:</b></span> {this.props.podata.PO.Reference}
                         </span><br />
-                       
+
                         <span>
                             <span><b>Terms of Payment:</b></span>{this.props.podata.PO.PaymentTerm}
                         </span><br /><br />
@@ -302,10 +335,10 @@ class printimportpo extends React.Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    
+
                                     {this.props.podata.PurchaseOrderLine.map((item, i) => (
                                         <TableRow>
-                                            <TableCell className="po-print-no-border-table" align="left" style={{verticalAlign:'top'}}>{i + 1}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="left" style={{ verticalAlign: 'top' }}>{i + 1}</TableCell>
                                             <TableCell className="po-print-no-border-table" align="left">
                                                 {item.Description}
                                             </TableCell>
@@ -316,16 +349,16 @@ class printimportpo extends React.Component {
                                                         {uom.value === item.UOMID ? uom.name : null}
                                                     </Fragment>
                                                 ))}
-                                            </TableCell> 
+                                            </TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">{this.getQuantity(item.Quantity)}</TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">{this.getPrice(item.Price)}</TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">{this.getLineDiscPercentage(item.LineDiscPercentage)}</TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">
-                                                {this.QuantityMultiplyPrice(item.Quantity,item.Price)}
-                                                
+                                                {this.QuantityMultiplyDiscountPrice(item.Quantity, item.Price, item.LineDiscPercentage)}
+
                                             </TableCell>
-                                           
-                                            
+
+
                                         </TableRow>
                                     ))}
 
@@ -339,8 +372,8 @@ class printimportpo extends React.Component {
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="right">{this.getTotalAmount()}</TableCell>
-                                        
-                                         
+
+
                                     </TableRow>
                                     <div style={{ height: 20 }}>&nbsp;</div>
                                     <TableRow>
@@ -352,29 +385,29 @@ class printimportpo extends React.Component {
                                             </b>
                                         </TableCell>
                                         <TableCell className="po-print-no-border-table" align="right" colSpan={3}>Grand Total {this.getCurrencyName()} {this.props.podata.PO.FCValue} </TableCell>
-                                        
+
                                     </TableRow>
                                 </TableBody>
                             </Table>
                         </Grid>
                     </Grid>
-                </div>              
+                </div>
 
                 <div style={{ height: 50 }}>&nbsp;</div>
                 <Grid container spacing={0}>
-                        <Grid item xs={8}></Grid>
-                        <Grid item xs={4}>
-                            <div style={{ textAlign: 'center' }}>
-                                <span>
-                                    For Siva Tec Ltd<br />
-                                    Computer generated PO does not required signature<br />
-                                  {this.props.podata.PO.Status===1?null:(
-                                      <span>Authorized by -</span>
-                                  )}  
-                                </span>
-                            </div>
-                        </Grid>
+                    <Grid item xs={8}></Grid>
+                    <Grid item xs={4}>
+                        <div style={{ textAlign: 'center' }}>
+                            <span>
+                                For Siva Tec Ltd<br />
+                                Computer generated PO does not required signature<br />
+                                {this.props.podata.PO.Status === 1 ? null : (
+                                    <span>Authorized by -</span>
+                                )}
+                            </span>
+                        </div>
                     </Grid>
+                </Grid>
 
             </div>
         );
