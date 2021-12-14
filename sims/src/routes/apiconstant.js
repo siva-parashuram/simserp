@@ -13,8 +13,9 @@ import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import AirplanemodeInactiveIcon from '@mui/icons-material/AirplanemodeInactive';
 import FaceIcon from '@mui/icons-material/Face';
 import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
- 
-
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 
 const domain = "http://192.168.10.200:8080/";
 
@@ -226,8 +227,24 @@ export const buttonTitle = {
   assignRole:{
     name:"Assign Role",
     icon:<BadgeIcon/>
+  },
+  address:{
+    name:"Address",
+    icon:<ContactMailIcon/>
+  },
+  branchmapping:{
+    name:"Branch Mapping",
+    icon:<WarehouseIcon/>
+  },
+  supplierprice:{
+    name:"Supplier Price",
+    icon:<AttachMoneyIcon/>
   }
 };
+
+
+
+
 
 export const SupplierClasification = [
   { name: "N/A", value: 0 },

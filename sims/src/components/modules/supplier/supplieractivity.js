@@ -1452,22 +1452,26 @@ class supplieractivity extends React.Component {
                 {APIURLS.buttonTitle.save.name}
               </Button>
               <Button
+                startIcon={APIURLS.buttonTitle.address.icon}
                 className="action-btns"
                 onClick={(e) => openDialog("Address")}
               >
-                Address
+                {APIURLS.buttonTitle.address.name}
+                
               </Button>
               <Button
+                startIcon={APIURLS.buttonTitle.branchmapping.icon}
                 className="action-btns"
                 onClick={(e) => openDialog("BranchMapping")}
               >
-                Branch Mapping
+               {APIURLS.buttonTitle.branchmapping.name}
               </Button>
               <Button
+                startIcon={APIURLS.buttonTitle.supplierprice.icon}
                 className="action-btns"
                 onClick={(e) => openDialog("SupplierPrice")}
               >
-                Supplier Price
+                {APIURLS.buttonTitle.supplierprice.name}
               </Button>
             </div>
           ) : null}

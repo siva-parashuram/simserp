@@ -65,6 +65,7 @@ class supplierPrice extends React.Component {
         UnitPrice: 0,
         EmailID: "",
         SupplierCode:"",
+        BranchID: 0,
       },
       Validations: {
         MinQty: { errorState: false, errorMssg: "" },
@@ -601,7 +602,7 @@ class supplierPrice extends React.Component {
         EmailID: item.EmailID,
         UserID: CF.toInt(getCookie(COOKIE.USERID)),
         SupplierCode:item.SupplierCode,
-        BranchID: CF.toInt(item.BranchID),
+        BranchID: CF.toInt(item.BranchID)===CF.toInt(this.state.BranchID)?CF.toInt(this.state.BranchID):CF.toInt(item.BranchID),  //CF.toInt(this.state.BranchID)
       };
       newCPL.push(SupplierPrice);
     }
@@ -621,7 +622,9 @@ class supplierPrice extends React.Component {
 
     switch (param) {
       case "NEW":
-        SupplierPriceList.push(this.state.SupplierPrice);
+        let SupplierPrice=this.state.SupplierPrice;
+        SupplierPrice.BranchID= this.state.BranchID;       
+        SupplierPriceList.push(SupplierPrice);
         SupplierPriceHistory = [];
         break;
       case "UPDATE":
