@@ -352,7 +352,7 @@ class printimportpo extends React.Component {
                                             </TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">{this.getQuantity(item.Quantity)}</TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">{this.getPrice(item.Price)}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{this.getLineDiscPercentage(item.LineDiscPercentage)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{item.LineDiscPercentage}</TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">
                                                 {this.QuantityMultiplyDiscountPrice(item.Quantity, item.Price, item.LineDiscPercentage)}
 
