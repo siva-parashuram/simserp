@@ -452,6 +452,13 @@ class poactivity extends React.Component {
               DValueID: PurchaseOrderLine[i].DValueID,
               IsQuality: PurchaseOrderLine[i].IsQuality,
               IsLot: PurchaseOrderLine[i].IsLot,
+              CGSTAmt: PurchaseOrderLine[i].CGSTAmt,
+              CGSTRate: PurchaseOrderLine[i].CGSTRate,
+              SGSTAmt: PurchaseOrderLine[i].SGSTAmt,
+              SGSTRate: PurchaseOrderLine[i].SGSTRate,
+              GSTBaseAmount: PurchaseOrderLine[i].GSTBaseAmount,
+              IGSTAmt: PurchaseOrderLine[i].IGSTAmt,
+              IGSTRate: PurchaseOrderLine[i].IGSTRate,
               isDataProper: true,
             };
             newPOL.push(EL);

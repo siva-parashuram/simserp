@@ -29,6 +29,7 @@ class printlocalpo extends React.Component {
     }
 
     inWords =(num)=>{
+        
         num=parseFloat(this.props.podata.PO.FCValue);
         var a = ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '];
         var b = ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'];
@@ -49,9 +50,11 @@ class printlocalpo extends React.Component {
         let name="";
         let CurrencyList=this.props.podata.CurrencyList;
         let CurrID=this.props.podata.PO.CurrID;
-        for(let i=0;i<CurrencyList.length;i++) 
-        if(parseFloat(CurrencyList[i].value)===parseFloat(CurrID))
-        name=CurrencyList[i].name; 
+        try{
+            for(let i=0;i<CurrencyList.length;i++) 
+            if(parseFloat(CurrencyList[i].value)===parseFloat(CurrID))
+            name=CurrencyList[i].name; 
+        }catch(e){}
        
         return name;
     }
@@ -61,10 +64,29 @@ class printlocalpo extends React.Component {
         let amount=0.00;
         let PurchaseOrderLine=this.props.podata.PurchaseOrderLine;
         console.log("getTotalAmount > PurchaseOrderLine > ",PurchaseOrderLine);
-        for(let i=0;i<PurchaseOrderLine.length;i++){
-            amount=parseFloat(amount)+(parseFloat(PurchaseOrderLine[i].Price)*parseFloat(PurchaseOrderLine[i].Quantity))
-        }
-        return amount;
+        try{
+            for(let i=0;i<PurchaseOrderLine.length;i++){
+                amount=parseFloat(amount)+(parseFloat(PurchaseOrderLine[i].Price)*parseFloat(PurchaseOrderLine[i].Quantity))
+            }
+        }catch(e){}
+       
+        return amount.toFixed(2);
+    }
+
+    getTotalTaxableAmount=()=>{
+        let amount=0.00;
+        let PurchaseOrderLine=this.props.podata.PurchaseOrderLine;
+        console.log("getTotalAmount > PurchaseOrderLine > ",PurchaseOrderLine);
+        try{
+            for(let i=0;i<PurchaseOrderLine.length;i++){
+                let QP=(parseFloat(PurchaseOrderLine[i].Price)*parseFloat(PurchaseOrderLine[i].Quantity));
+                let Discount=(parseFloat(QP)*parseFloat(PurchaseOrderLine[i].LineDiscPercentage))/100;
+                QP=parseFloat(QP)-parseFloat(Discount);
+                amount=parseFloat(amount)+QP;
+            }
+        }catch(e){}
+       
+        return amount.toFixed(2);
     }
 
     getTotalQuantity=()=>{
@@ -79,13 +101,147 @@ class printlocalpo extends React.Component {
 
     getStateNameByID = () => {
         let id = this.props.podata.Supplier.StateID;
-        let StateList = this.props.podata.Supplier.StateList;
-        for (let i = 0; i < StateList.length; i++) {
-            if (parseFloat(StateList[i].stateId) === parseFloat(id)) {
-                return StateList[i].name;
-                break;
+        try {
+            let StateList = this.props.podata.Supplier.StateList;
+            for (let i = 0; i < StateList.length; i++) {
+                if (parseFloat(StateList[i].stateId) === parseFloat(id)) {
+                    return StateList[i].name;
+                    break;
+                }
             }
+        } catch (e) { }
+
+    }
+
+    getQuantity = (Quantity) => {
+        let Q = 0.00;
+        try {
+            if (Quantity) {
+                Q = parseFloat(Quantity);
+            }
+        } catch (e) { }
+        return Q.toFixed(2);
+    }
+
+    getPrice = (Price) => {
+        let P = 0.00;
+        try {
+            if (Price) {
+                P = parseFloat(Price).toFixed(2);
+            }
+        } catch (e) { }
+
+        return P;
+    } 
+    
+    getLineDiscPercentage =(LineDiscPercentage)=>{
+        let LDP = 0.00;
+        try{
+            if (LineDiscPercentage) {
+                LDP = parseFloat(LineDiscPercentage).toFixed(2);
+            }  
+        }catch(e){
+
         }
+          
+        return LDP;
+    }
+
+    QuantityMultiplyPrice = (Quantity, Price) => {
+        let QP = 0.00;
+        try {
+            if (Quantity && Price) {
+                QP = (parseFloat(Quantity) * parseFloat(Price));
+
+            }
+        } catch (e) { }
+
+        return QP.toFixed(2);
+    }
+
+    getGSTBaseAmount=(GSTBaseAmount)=>{
+        let Amount=0.00;
+        try{
+            Amount=parseFloat(GSTBaseAmount); 
+        }catch(e){}
+
+      return Amount.toFixed(2);
+    }
+
+    getCGSTAmt=(CGSTAmt)=>{
+        let Amount=0.00;
+        try{
+            Amount=parseFloat(CGSTAmt); 
+        }catch(e){}
+
+      return Amount.toFixed(2); 
+    }
+
+    getSGSTAmt=(SGSTAmt)=>{
+        let Amount=0.00;
+        try{
+            Amount=parseFloat(SGSTAmt); 
+        }catch(e){}
+
+      return Amount.toFixed(2); 
+    }
+
+    getIGSTAmt=(IGSTAmt)=>{
+        let Amount=0.00;
+        try{
+            Amount=parseFloat(IGSTAmt); 
+        }catch(e){}
+
+      return Amount.toFixed(2); 
+    }
+
+   
+    
+
+    TaxableValue = (Quantity, Price, LineDiscPercentage) => {
+        let QP = 0.00;
+        try {
+            if (Quantity && Price) {
+                QP = (parseFloat(Quantity) * parseFloat(Price));
+                QP = parseFloat(QP) - ((parseFloat(QP) * parseFloat(LineDiscPercentage)) / 100);
+
+            }
+        } catch (e) { }
+
+        return QP.toFixed(2);
+    }
+
+    getCGSTSGSTAmount=(GSTPercentage,Quantity,Price,LineDiscPercentage)=>{
+        let QP=0.00;
+        let halfGSTPercentage=0.00;
+        let CGSTSGSTAmount=0.00;
+        try {
+            halfGSTPercentage = parseFloat(GSTPercentage) / 2;
+            QP = (parseFloat(Quantity) * parseFloat(Price));
+            QP = parseFloat(QP) - ((parseFloat(QP) * parseFloat(LineDiscPercentage)) / 100);
+            CGSTSGSTAmount=(parseFloat(QP)*parseFloat(halfGSTPercentage))/100;
+        } catch (ex) { }
+        return CGSTSGSTAmount.toFixed(2);
+    }
+
+    getTotalCGSTSGSTAmount=()=>{
+        let totalCGSTSGSTAmount=0.00;
+        let POL=this.props.podata.PurchaseOrderLine;
+
+        try {
+            for (let i = 0; i < POL.length; i++) {
+                let QP = 0.00;
+                let halfGSTPercentage = 0.00;
+                let CGSTSGSTAmount = 0.00;
+                halfGSTPercentage = parseFloat(POL[i].GSTPercentage) / 2;
+                QP = (parseFloat(POL[i].Quantity) * parseFloat(POL[i].Price));
+                QP = parseFloat(QP) - ((parseFloat(QP) * parseFloat(POL[i].LineDiscPercentage)) / 100);
+                CGSTSGSTAmount=(parseFloat(QP)*parseFloat(halfGSTPercentage))/100;
+                totalCGSTSGSTAmount=parseFloat(totalCGSTSGSTAmount)+parseFloat(CGSTSGSTAmount);
+            }
+        } catch (e) { }
+
+        return totalCGSTSGSTAmount.toFixed(2);
     }
 
 
@@ -331,7 +487,7 @@ class printlocalpo extends React.Component {
                                                 <td>&nbsp;</td>
                                                 <td>Amt.</td>
                                             </tr>
-                                        </TableCell>
+                                        </TableCell> 
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -350,39 +506,46 @@ class printlocalpo extends React.Component {
                                                     </Fragment>
                                                 ))}
                                             </TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.Quantity}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.Price}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{parseFloat(item.Quantity) * parseFloat(item.Price)}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.LineDiscPercentage}</TableCell>
-                                            <TableCell className="po-print-no-border-table" align="right">{item.GSTPercentage}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{this.getQuantity(item.Quantity)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{this.getPrice(item.Price)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{this.QuantityMultiplyPrice(item.Quantity,item.Price)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{this.getLineDiscPercentage(item.LineDiscPercentage)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">
+                                                
+                                            {this.getGSTBaseAmount(item.GSTBaseAmount)}
+                                            </TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">
                                             <tr>
-                                                <td>0.00</td>
+                                                <td>{item.CGSTRate}</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
-                                                <td>0.00</td>
+                                                <td>
+                                                {this.getCGSTAmt(item.CGSTAmt)}
+                                                    </td>
                                             </tr>
                                             </TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">
                                             <tr>
-                                                <td>0.00</td>
+                                                <td>{item.SGSTRate}</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
-                                                <td>0.00</td>
+                                                <td> {this.getSGSTAmt(item.SGSTAmt)}</td>
                                             </tr>
                                             </TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">
                                             <tr>
-                                                <td>0.00</td>
+                                                <td>{item.IGSTRate}</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
                                                 <td>&nbsp;</td>
-                                                <td>0.00</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>{this.getIGSTAmt(item.IGSTAmt)}</td>
                                             </tr>
                                             </TableCell>
                                         </TableRow>
@@ -396,14 +559,14 @@ class printlocalpo extends React.Component {
                                         <TableCell className="po-print-no-border-table" align="left"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="right">{this.getTotalQuantity()}</TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right">{this.getTotalAmount().toFixed(2)}</TableCell>
+                                        <TableCell className="po-print-no-border-table" align="right">{this.getTotalAmount()}</TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right">{0.00}</TableCell>
+                                        <TableCell className="po-print-no-border-table" align="right">{this.getTotalTaxableAmount()}</TableCell>
                                         <TableCell className="po-print-no-border-table" align="right">
-                                            00.00
+                                            {this.getTotalCGSTSGSTAmount()}
                                         </TableCell>
                                         <TableCell className="po-print-no-border-table" align="right">
-                                            00.00
+                                        {this.getTotalCGSTSGSTAmount()}
                                         </TableCell>
                                         <TableCell className="po-print-no-border-table" align="right">
                                             00.00
