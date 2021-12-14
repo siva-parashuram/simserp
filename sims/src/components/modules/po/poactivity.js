@@ -2085,11 +2085,6 @@ class poactivity extends React.Component {
           />
           ):null}
 
-          
-
-          
-
-
         </ButtonGroup>
       </Fragment>
     );
