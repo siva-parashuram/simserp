@@ -36,7 +36,7 @@ class poMaster extends React.Component {
                 page: 1,
                 rowsPerPage: APIURLS.pagination.rowsPerPage,
             },
-            ProgressLoader: true,
+            ProgressLoader: false,
             editBtnDisable: true,
             initialCss: "",
             urlparams: "",

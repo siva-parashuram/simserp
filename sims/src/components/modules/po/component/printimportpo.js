@@ -266,6 +266,16 @@ class printimportpo extends React.Component {
                                 {this.props.podata.Supplier.Address3}<br />
                             </Fragment>
                         ) : null}
+                          {(this.props.podata.Supplier.City || this.props.podata.Supplier.City!="")?(
+                                <Fragment>
+                                    {this.props.podata.Supplier.City}<br/>
+                                </Fragment>
+                            ):null} 
+                              {(this.props.podata.Supplier.PostCode || this.props.podata.Supplier.PostCode!="")?(
+                                <Fragment>
+                                    {this.props.podata.Supplier.PostCode}<br/>
+                                </Fragment>
+                            ):null} 
 
                         <span>
                             E-mail: sales@sivatec.co

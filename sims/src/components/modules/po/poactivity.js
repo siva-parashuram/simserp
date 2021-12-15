@@ -467,11 +467,19 @@ class poactivity extends React.Component {
           this.setState({
             PO: PO,
             PurchaseOrderLine: newPOL,
+            Name:PO.Name,
+            Address: PO.Address,
+            Address2: PO.Address2,
+            Address3:PO.Address3 ,
+            City: PO.City,
+            PostCode: PO.PostCode,
+            CountryID:PO.CountryID ,
+            StateID:PO.StateID ,
             ProgressLoader: true
           }, () => {
             this.calculateInvoiceDetails();
             this.presetSetSupplierDropdown(PO);
-            this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID), null);
+            this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID), "IG"); //initialIgnore to not set address to stateID
           });
 
         } else {
@@ -857,17 +865,33 @@ class poactivity extends React.Component {
 
         console.log("#####################3-----------------------------------> BCdata > ", BCdata);
 
-        this.setState({
-          PO: PO,
-          Name: BCdata.Name,
-          Address: BCdata.Address,
-          Address2: BCdata.Address2,
-          Address3: BCdata.Address3,
-          City: BCdata.City,
-          PostCode: BCdata.PostCode,
-          CountryID: BCdata.CountryID,
-          StateID: BCdata.StateID,
-        });
+        if(event==="IG"){
+          this.setState({
+            PO: PO,
+            // Name: BCdata.Name,
+            // Address: BCdata.Address,
+            // Address2: BCdata.Address2,
+            // Address3: BCdata.Address3,
+            // City: BCdata.City,
+            // PostCode: BCdata.PostCode,
+            // CountryID: BCdata.CountryID,
+            // StateID: BCdata.StateID,
+          });
+        }else{
+          this.setState({
+            PO: PO,
+            Name: BCdata.Name,
+            Address: BCdata.Address,
+            Address2: BCdata.Address2,
+            Address3: BCdata.Address3,
+            City: BCdata.City,
+            PostCode: BCdata.PostCode,
+            CountryID: BCdata.CountryID,
+            StateID: BCdata.StateID,
+          });
+        }
+
+       
       });
     }
     this.setState({
@@ -1867,6 +1891,16 @@ class poactivity extends React.Component {
       };
 
       let PurchaseOrder = this.state.PO;
+        //----------Added for sending Chnaged Name and adress data
+        PurchaseOrder.Name = this.state.Name;
+        PurchaseOrder.Address = this.state.Address;
+        PurchaseOrder.Address2 = this.state.Address2;
+        PurchaseOrder.Address3 = this.state.Address3;
+        PurchaseOrder.City = this.state.City;
+        PurchaseOrder.PostCode = this.state.PostCode;
+        PurchaseOrder.CountryID = this.state.CountryID;
+        PurchaseOrder.StateID = this.state.StateID;
+        //--------------------------------------------------
       PurchaseOrder.UserID = CF.toInt(getCookie(COOKIE.USERID));
       PurchaseOrder.BranchID = this.state.BranchID;
       PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY");
@@ -1936,7 +1970,21 @@ class poactivity extends React.Component {
       };
 
 
+    
+
+
       let PurchaseOrder = this.state.PO;
+      //----------Added for sending Chnaged Name and adress data
+      PurchaseOrder.Name = this.state.Name;
+      PurchaseOrder.Address = this.state.Address;
+      PurchaseOrder.Address2 = this.state.Address2;
+      PurchaseOrder.Address3 = this.state.Address3;
+      PurchaseOrder.City = this.state.City;
+      PurchaseOrder.PostCode = this.state.PostCode;
+      PurchaseOrder.CountryID = this.state.CountryID;
+      PurchaseOrder.StateID = this.state.StateID;
+      //--------------------------------------------------
+
       try { delete PurchaseOrder['PurchaseOrderLine']; } catch (err) { }
       PurchaseOrder.UserID = CF.toInt(getCookie(COOKIE.USERID));
       PurchaseOrder.BranchID = this.state.BranchID;
@@ -2156,6 +2204,7 @@ class poactivity extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
 
+        {console.log("-----------------> STATE : ",this.state)}
 
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
