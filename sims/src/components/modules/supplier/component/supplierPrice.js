@@ -44,6 +44,7 @@ class supplierPrice extends React.Component {
       BranchMappingData:[],
       SupplierPriceData: [],
       GeneralDetailsExpanded: true,
+      UpdateActionBtn:false,
       createNewBtn: false,
       updateBtn: false,
       selectedOldItemIndex: null,
@@ -390,10 +391,7 @@ class supplierPrice extends React.Component {
               >
                 <TableHead className="table-header-background">
                   <TableRow>
-                    <TableCell className="table-header-font">#</TableCell>
-                    
-
-                    
+                   
                     <TableCell className="table-header-font" align="left">
                       Start Date
                     </TableCell>
@@ -415,6 +413,10 @@ class supplierPrice extends React.Component {
                     <TableCell className="table-header-font" align="left">
                       Max Qty
                     </TableCell>
+                    <TableCell className="table-header-font" align="left">
+                    Unit Price
+                    </TableCell>
+                    
                   </TableRow>
                 </TableHead>
                 <TableBody className="tableBody">
@@ -429,7 +431,7 @@ class supplierPrice extends React.Component {
                           this.handleRowClick(event, item, "row_" + i, i)
                         }
                       >
-                        <TableCell>{i + 1}</TableCell>
+                         
                        
                         
                         <TableCell align="left">
@@ -443,6 +445,7 @@ class supplierPrice extends React.Component {
                         <TableCell align="left">{item.CurrCode}</TableCell>
                         <TableCell align="left">{item.MinQty}</TableCell>
                         <TableCell align="left">{item.MaxQty}</TableCell>
+                        <TableCell align="left">{item.UnitPrice}</TableCell>
                       </TableRow>
                       ):null}
                        
@@ -475,69 +478,91 @@ class supplierPrice extends React.Component {
         this.setParams(SupplierPrice);
         break;
       case "MinQty":
-        SupplierPrice[param] = CF.toInt(e.target.value);
+        SupplierPrice[param] = e.target.value;
         let v1 = this.state.Validations;
-        if (e.target.value.length > 8) {
+        if (isNaN(e.target.value)) {
           v1.MinQty = {
             errorState: true,
-            errorMssg: "Maximum 8 numbers allowed!",
+            errorMssg: "",
           };
-          this.setState({ Validations: v1 });
-        } else {
+          this.setState({ Validations: v1,UpdateActionBtn:true });
+          this.setParams(SupplierPrice);
+        }else{
           v1.MinQty = {
             errorState: false,
             errorMssg: "",
           };
-          this.setState({ Validations: v1 });
+          this.setState({ Validations: v1,UpdateActionBtn:false });
           this.setParams(SupplierPrice);
         }
+
+        
         break;
       case "MaxQty":
-        SupplierPrice[param] = CF.toInt(e.target.value);
+        SupplierPrice[param] = e.target.value;
         let v2 = this.state.Validations;
-        if (e.target.value.length > 8) {
+        if (isNaN(e.target.value)) {
           v2.MaxQty = {
             errorState: true,
-            errorMssg: "Maximum 8 numbers allowed!",
+            errorMssg: "",
           };
-          this.setState({ Validations: v2 });
-        } else {
+          this.setState({ Validations: v2,UpdateActionBtn:true });
+          this.setParams(SupplierPrice);
+        }else{
           v2.MaxQty = {
             errorState: false,
             errorMssg: "",
           };
-          this.setState({ Validations: v2 });
+          this.setState({ Validations: v2,UpdateActionBtn:false });
           this.setParams(SupplierPrice);
         }
+
 
         break;
       case "UnitPrice":
-        SupplierPrice[param] = CF.toInt(e.target.value);
+        SupplierPrice[param] = e.target.value;
         let v3 = this.state.Validations;
-        if (e.target.value === "" || e.target.value.length > 8) {
-          if (e.target.value === "") {
-            v3.UnitPrice = {
-              errorState: true,
-              errorMssg: "Bank inputs not allowed!",
-            };
-            this.setState({ Validations: v3 });
-          }
-
-          if (e.target.value.length > 8) {
-            v3.UnitPrice = {
-              errorState: true,
-              errorMssg: "Maximum 8 numbers allowed!",
-            };
-            this.setState({ Validations: v3 });
-          }
+        if (isNaN(e.target.value)) {
+          v3.UnitPrice = {
+            errorState: true,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v3,UpdateActionBtn:true });
+          this.setParams(SupplierPrice);
         } else {
           v3.UnitPrice = {
             errorState: false,
             errorMssg: "",
           };
-          this.setState({ Validations: v3 });
+          this.setState({ Validations: v3,UpdateActionBtn:false });
           this.setParams(SupplierPrice);
         }
+        
+        // let v3 = this.state.Validations;
+        // if (e.target.value === "" || e.target.value.length > 8) {
+        //   if (e.target.value === "") {
+        //     v3.UnitPrice = {
+        //       errorState: true,
+        //       errorMssg: "Bank inputs not allowed!",
+        //     };
+        //     this.setState({ Validations: v3 });
+        //   }
+
+        //   if (e.target.value.length > 8) {
+        //     v3.UnitPrice = {
+        //       errorState: true,
+        //       errorMssg: "Maximum 8 numbers allowed!",
+        //     };
+        //     this.setState({ Validations: v3 });
+        //   }
+        // } else {
+        //   v3.UnitPrice = {
+        //     errorState: false,
+        //     errorMssg: "",
+        //   };
+        //   this.setState({ Validations: v3 });
+        //  this.setParams(SupplierPrice);
+        //}
         break;
       case "EmailID":
         SupplierPrice[param] = e.target.value;
@@ -821,12 +846,13 @@ class supplierPrice extends React.Component {
                         </Button>
                       ) : (
                         <Button
-                        startIcon={APIURLS.buttonTitle.update.icon}
+                         disabled={this.state.UpdateActionBtn}
+                          startIcon={APIURLS.buttonTitle.save.icon}
                           className="action-btns"
                           style={{ marginLeft: 10 }}
                           onClick={(e) => this.createSupplierPrice("UPDATE")}
                         >
-                          {APIURLS.buttonTitle.update.name}
+                          {APIURLS.buttonTitle.save.name}
                         </Button>
                       )}
                     </div>
