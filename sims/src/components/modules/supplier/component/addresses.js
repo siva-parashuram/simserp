@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import IconButton from "@mui/material/IconButton";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -53,6 +54,8 @@ class addresses extends React.Component {
         page: 0,
         rowsPerPage: 10,
       },
+      addNewBtn:false,
+      updateBtn:false,
       FullSmallBtnArea: false,
       mainframeW: 12,
       hideSidePanel: true,
@@ -215,6 +218,7 @@ class addresses extends React.Component {
         console.log("dataAddress>>", data);
 
         this.setState({ AddressData: data, ProgressLoader: true }, () => {
+          this.handleRowClick(null,data[0],"row_0");
           this.setState({
             listStateSupplierAddresses: this.listStateSupplierAddresses(),
             stateForm: this.stateForm(),
@@ -679,7 +683,7 @@ class addresses extends React.Component {
     let SupplierAddress = {};
 
     if (process === "EDIT") {
-      SupplierAddress = this.state.UpdateSupplierAddress;
+      SupplierAddress = this.state.SupplierAddress;
       this.setState({ process: "EDIT" });
     } else {
       SupplierAddress = this.state.SupplierAddress;
@@ -693,7 +697,7 @@ class addresses extends React.Component {
         if (e.target.value === "" || e.target.value.length > 10) {
           if (e.target.value === "") {
             if (process === "EDIT") {
-              v1.UpdateSupplierAddress.Code = {
+              v1.SupplierAddress.Code = {
                 errorState: true,
                 errorMssg: "Cannot be blank",
               };
@@ -708,7 +712,7 @@ class addresses extends React.Component {
           }
           if (e.target.value.length > 10) {
             if (process === "EDIT") {
-              v1.UpdateSupplierAddress.Code = {
+              v1.SupplierAddress.Code = {
                 errorState: true,
                 errorMssg: "Maximum 10 characters allowed",
               };
@@ -724,7 +728,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v1.UpdateSupplierAddress.Code = {
+            v1.SupplierAddress.Code = {
               errorState: false,
               errorMssg: "",
             };
@@ -742,7 +746,7 @@ class addresses extends React.Component {
         let v2 = this.state.Validations;
         if (e.target.value.length > 100) {
           if (process === "EDIT") {
-            v2.UpdateSupplierAddress.Name = {
+            v2.SupplierAddress.Name = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
@@ -756,7 +760,7 @@ class addresses extends React.Component {
           }
         } else {
           if (process === "EDIT") {
-            v2.UpdateSupplierAddress.Name = {
+            v2.SupplierAddress.Name = {
               errorState: false,
               errorMssg: "",
             };
@@ -788,7 +792,7 @@ class addresses extends React.Component {
           }
         } else {
           if (process === "EDIT") {
-            v3.UpdateSupplierAddress.Address = {
+            v3.SupplierAddress.Address = {
               errorState: false,
               errorMssg: "",
             };
@@ -805,7 +809,7 @@ class addresses extends React.Component {
         let v4 = this.state.Validations;
         if (e.target.value.length > 100) {
           if (process === "EDIT") {
-            v4.UpdateSupplierAddress.Address2 = {
+            v4.SupplierAddress.Address2 = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
@@ -820,7 +824,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v4.UpdateSupplierAddress.Address2 = {
+            v4.SupplierAddress.Address2 = {
               errorState: false,
               errorMssg: "",
             };
@@ -837,7 +841,7 @@ class addresses extends React.Component {
         let v5 = this.state.Validations;
         if (e.target.value.length > 100) {
           if (process === "EDIT") {
-            v5.UpdateSupplierAddress.Address3 = {
+            v5.SupplierAddress.Address3 = {
               errorState: true,
               errorMssg: "Maximum 100 characters allowed",
             };
@@ -852,7 +856,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v5.UpdateSupplierAddress.Address3 = {
+            v5.SupplierAddress.Address3 = {
               errorState: false,
               errorMssg: "",
             };
@@ -869,7 +873,7 @@ class addresses extends React.Component {
         let v6 = this.state.Validations;
         if (e.target.value.length > 50) {
           if (process === "EDIT") {
-            v6.UpdateSupplierAddress.City = {
+            v6.SupplierAddress.City = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
@@ -884,7 +888,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v6.UpdateSupplierAddress.City = {
+            v6.SupplierAddress.City = {
               errorState: false,
               errorMssg: "",
             };
@@ -901,7 +905,7 @@ class addresses extends React.Component {
         let v7 = this.state.Validations;
         if (e.target.value.length > 10) {
           if (process === "EDIT") {
-            v7.UpdateSupplierAddress.PostCode = {
+            v7.SupplierAddress.PostCode = {
               errorState: true,
               errorMssg: "Maximum 10 characters allowed",
             };
@@ -916,7 +920,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v7.UpdateSupplierAddress.PostCode = {
+            v7.SupplierAddress.PostCode = {
               errorState: false,
               errorMssg: "",
             };
@@ -942,7 +946,7 @@ class addresses extends React.Component {
         let v8 = this.state.Validations;
         if (e.target.value.length > 50) {
           if (process === "EDIT") {
-            v8.UpdateSupplierAddress.ContactPerson = {
+            v8.SupplierAddress.ContactPerson = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
@@ -957,7 +961,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v8.UpdateSupplierAddress.ContactPerson = {
+            v8.SupplierAddress.ContactPerson = {
               errorState: false,
               errorMssg: "",
             };
@@ -980,7 +984,7 @@ class addresses extends React.Component {
           if (e.target.value.length > 20) {
             SupplierAddress[param] = e.target.value;
             if (process === "EDIT") {
-              v9.UpdateSupplierAddress.PhoneNo = {
+              v9.SupplierAddress.PhoneNo = {
                 errorState: true,
                 errorMssg: "Maximum 20 characters allowed",
               };
@@ -995,7 +999,7 @@ class addresses extends React.Component {
           } else {
             SupplierAddress[param] = e.target.value;
             if (process === "EDIT") {
-              v9.UpdateSupplierAddress.PhoneNo = {
+              v9.SupplierAddress.PhoneNo = {
                 errorState: false,
                 errorMssg: "",
               };
@@ -1018,7 +1022,7 @@ class addresses extends React.Component {
               break;
             case "EDIT":
               let editNum = this.state.Validations;
-              editNum.UpdateSupplierAddress.PhoneNo = {
+              editNum.SupplierAddress.PhoneNo = {
                 errorState: true,
                 errorMssg: "Enter a number",
               };
@@ -1034,7 +1038,7 @@ class addresses extends React.Component {
         let v10 = this.state.Validations;
         if (e.target.value.length > 50) {
           if (process === "EDIT") {
-            v10.UpdateSupplierAddress.EmailID = {
+            v10.SupplierAddress.EmailID = {
               errorState: true,
               errorMssg: "Maximum 50 characters allowed",
             };
@@ -1049,7 +1053,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v10.UpdateSupplierAddress.EmailID = {
+            v10.SupplierAddress.EmailID = {
               errorState: false,
               errorMssg: "",
             };
@@ -1066,7 +1070,7 @@ class addresses extends React.Component {
         let v11 = this.state.Validations;
         if (e.target.value.length > 20) {
           if (process === "EDIT") {
-            v11.UpdateSupplierAddress.VATNo = {
+            v11.SupplierAddress.VATNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
@@ -1081,7 +1085,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v11.UpdateSupplierAddress.VATNo = {
+            v11.SupplierAddress.VATNo = {
               errorState: false,
               errorMssg: "",
             };
@@ -1098,7 +1102,7 @@ class addresses extends React.Component {
         let v12 = this.state.Validations;
         if (e.target.value.length > 20) {
           if (process === "EDIT") {
-            v12.UpdateSupplierAddress.GSTNo = {
+            v12.SupplierAddress.GSTNo = {
               errorState: true,
               errorMssg: "Maximum 20 characters allowed",
             };
@@ -1113,7 +1117,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v12.UpdateSupplierAddress.GSTNo = {
+            v12.SupplierAddress.GSTNo = {
               errorState: false,
               errorMssg: "",
             };
@@ -1144,7 +1148,7 @@ class addresses extends React.Component {
         let v17 = this.state.Validations;
         if (e.target.value.length > 250) {
           if (process === "EDIT") {
-            v17.UpdateSupplierAddress.SpecialInstruction = {
+            v17.SupplierAddress.SpecialInstruction = {
               errorState: true,
               errorMssg: "Maximum 250 characters allowed",
             };
@@ -1159,7 +1163,7 @@ class addresses extends React.Component {
         } else {
           SupplierAddress[param] = e.target.value;
           if (process === "EDIT") {
-            v17.UpdateSupplierAddress.SpecialInstruction = {
+            v17.SupplierAddress.SpecialInstruction = {
               errorState: false,
               errorMssg: "",
             };
@@ -1230,15 +1234,7 @@ class addresses extends React.Component {
   };
 
   setParams = (object, process) => {
-    if (process === "EDIT") {
-      this.setState({ UpdateSupplierAddress: object });
-    } else {
-      this.setState({ SupplierAddress: object }, () => {
-        this.setState({
-          stateForm: this.stateForm(),
-        });
-      });
-    }
+    this.setState({ SupplierAddress: object });
   };
 
   AddNew = (e) => {
@@ -1263,7 +1259,7 @@ class addresses extends React.Component {
         if (response.status === 200 || response.status === 201) {
           let SupplierAddress = {
             AddressID: 0,
-            SuplID: 0,
+            SuplID: this.props.SuplID,
 
             Code: "",
             Name: "",
@@ -1313,7 +1309,7 @@ class addresses extends React.Component {
     let Url = APIURLS.APIURL.UpdateSupplierAddress;
     let reqData = {
       ValidUser: ValidUser,
-      SupplierAddressList: [this.state.UpdateSupplierAddress],
+      SupplierAddressList: [this.state.SupplierAddress],
     };
 
     console.log("ReqData>>>", reqData);
@@ -1341,7 +1337,10 @@ class addresses extends React.Component {
 
   InitialhandleRowClick(e, item, id) {
     this.setState({
-      UpdateSupplierAddress: item,
+      updateBtn:true,
+      SupplierAddress: item,
+      FullSmallBtnArea: true,
+      hideSidePanel: true,
     });
 
     this.removeIsSelectedRowClasses();
@@ -1352,7 +1351,9 @@ class addresses extends React.Component {
     try {
       this.setState(
         {
-          UpdateSupplierAddress: item,
+          addNewBtn:false,
+          updateBtn:true,
+          SupplierAddress: item,
           FullSmallBtnArea: true,
           hideSidePanel: true,
         },
@@ -1375,9 +1376,11 @@ class addresses extends React.Component {
   };
 
   expandFull = (e) => {
+
     this.setState({
       mainframeW: 12,
       hideSidePanel: true,
+       
     });
   };
 
@@ -1385,6 +1388,7 @@ class addresses extends React.Component {
     this.setState({
       mainframeW: 8,
       hideSidePanel: false,
+     
     });
   };
 
@@ -1406,6 +1410,36 @@ class addresses extends React.Component {
       });
     });
   };
+
+  createNew=(e)=>{
+    this.removeIsSelectedRowClasses();
+    let SupplierAddress = {
+      AddressID: 0,
+      SuplID:this.props.SuplID,
+      Code: "",
+      Name: "",
+      Address: "",
+      Address2: "",
+      Address3: "",
+      City: "",
+      PostCode: "",
+      CountryID: "-1",
+      StateID: 0,
+      ContactPerson: "",
+      PhoneNo: "",
+      EmailID: "",
+      VATNo: "",
+      GSTNo: "",
+      IsBlock: false,
+      SpecialInstruction: "",
+    };
+
+    this.setState({
+      updateBtn:false,
+      addNewBtn:true,
+      SupplierAddress:SupplierAddress
+    });
+  }
 
   render() {
     const closeErrorPrompt = (event, reason) => {
@@ -1433,8 +1467,8 @@ class addresses extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        <div style={{ marginTop: -20 }}>
-          <Grid container spacing={0}>
+        <div style={{ marginTop: 0 }}>
+          {/* <Grid container spacing={0}>
             <Grid item xs={11} sm={11} md={11} lg={11}>
               &nbsp;
             </Grid>
@@ -1466,8 +1500,11 @@ class addresses extends React.Component {
                 </div>
               ) : null}
             </Grid>
-          </Grid>
+          </Grid> */}
           <BackdropLoader open={!this.state.ProgressLoader} />
+
+<div style={{height:15}}>&nbsp;</div>
+
           <Grid container spacing={0}>
             <Grid
               item
@@ -1478,13 +1515,126 @@ class addresses extends React.Component {
             >
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <Dualtabcomponent
+                 
+                  {/* <Dualtabcomponent
                     customStyle={{ backgroundColor: 'none' }}
                     tab1name="List"
-                    tab2name={this.state.type === "EDIT" ? "EDIT" : "Add"}
+                    tab2name={this.state.type === "EDIT" ? "Edit" : "Add"}
                     tab1Html={this.state.listStateSupplierAddresses}
                     tab2Html={this.state.stateForm}
-                  />
+                  /> */}
+
+                  <Fragment>
+                    <Grid container spacing={0}>
+                      <Grid xs={12} sm={12} md={12} lg={12}>
+
+                        <ButtonGroup
+                          size="small"
+                          variant="text"
+                          aria-label="Action Menu Button group"
+                        >
+                          <Button
+                              startIcon={APIURLS.buttonTitle.new.icon}
+                              className="action-btns"
+                              style={{ marginLeft: 10 }}
+                              onClick={(e) => this.createNew(e)}
+                              disabled={this.state.updateBtnDisabled}
+                            >
+                              {APIURLS.buttonTitle.new.name}
+                            </Button>
+
+                          {this.state.updateBtn === true ? (
+                            <Button
+                              startIcon={APIURLS.buttonTitle.save.icon}
+                              className="action-btns"
+                              style={{ marginLeft: 10 }}
+                              onClick={(e) => this.UpdateSupplierAddress(e)}
+                              
+                            >
+                              {APIURLS.buttonTitle.save.name}
+                            </Button>
+                          ) : null}
+
+                          {this.state.addNewBtn === true ? (
+                            <Button
+                              startIcon={APIURLS.buttonTitle.save.icon}
+                              className="action-btns"
+                              style={{ marginLeft: 10 }}
+                              onClick={(e) => this.AddNew(e)}
+                              
+                            >
+                              {APIURLS.buttonTitle.save.name}
+                            </Button>
+                          ) : null}
+                          
+
+                        </ButtonGroup>
+
+                      </Grid>
+                    </Grid>
+
+                    <div
+                      style={{
+                        height: 300,
+                        overflowY: "scroll",
+                        overflowX: "hidden",
+                        width: "100%",
+                      }}
+                    >
+                      <Grid container spacing={0}>
+                        <Grid xs={12} sm={12} md={12} lg={12}>
+                          <Table
+                            stickyHeader
+                            size="small"
+                            className=""
+                            aria-label="SupplierAddress List table"
+                          >
+                            <TableHead className="table-header-background">
+                              <TableRow>
+                                <TableCell className="table-header-font">#</TableCell>
+                                
+                                <TableCell className="table-header-font" align="left">
+                                Code
+                                </TableCell>
+                                <TableCell className="table-header-font" align="left">
+                                  Name
+                                </TableCell>
+                                <TableCell className="table-header-font">Address</TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody className="tableBody">
+                              {this.getPageData(this.state.AddressData).map((item, i) => (
+                                <TableRow
+                                  id={"row_" + i}
+                                  key={i}
+                                  onClick={(event) =>
+                                    this.handleRowClick(event, item, "row_" + i)
+                                  }
+                                >
+                                  <TableCell> {i + 1}</TableCell>
+                                  <TableCell> {item.Code}</TableCell>
+                                  <TableCell> {item.Name}</TableCell>
+
+                                  <TableCell align="left">
+                                    {item.Address} {item.Address2} {item.Address3}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+
+                          <TablePagination
+                            rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
+                            component="div"
+                            count={this.state.AddressData.length}
+                            rowsPerPage={this.state.pagination.rowsPerPage}
+                            page={this.state.pagination.page}
+                            onPageChange={this.handlePageChange}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Fragment>
                 </Grid>
               </Grid>
             </Grid>
@@ -1498,7 +1648,7 @@ class addresses extends React.Component {
                       </div>
                     </Grid>
                     <Grid item xs={12} sm={12} md={4} lg={4}>
-                      <div>
+                      {/* <div>
                         <Button
                           startIcon={APIURLS.buttonTitle.update.icon}
                           className="action-btns"
@@ -1508,7 +1658,7 @@ class addresses extends React.Component {
                         >
                           {APIURLS.buttonTitle.update.name}
                         </Button>
-                      </div>
+                      </div> */}
                     </Grid>
                   </Grid>
 
@@ -1541,9 +1691,9 @@ class addresses extends React.Component {
                               variant="outlined"
                               size="small"
                               isMandatory={true}
-                              value={this.state.UpdateSupplierAddress.Code}
+                              value={this.state.SupplierAddress.Code}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .Code.errorState
                               }
                              
@@ -1556,9 +1706,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.Name}
+                              value={this.state.SupplierAddress.Name}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .Name.errorState
                               }
                             
@@ -1571,9 +1721,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.Address}
+                              value={this.state.SupplierAddress.Address}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .Address.errorState
                               }
                              
@@ -1586,9 +1736,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.Address2}
+                              value={this.state.SupplierAddress.Address2}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .Address2.errorState
                               }
                               
@@ -1601,9 +1751,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.Address3}
+                              value={this.state.SupplierAddress.Address3}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .Address3.errorState
                               }
                              
@@ -1616,9 +1766,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.City}
+                              value={this.state.SupplierAddress.City}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .City.errorState
                               }
                              
@@ -1631,9 +1781,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.PostCode}
+                              value={this.state.SupplierAddress.PostCode}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .PostCode.errorState
                               }
                               
@@ -1643,11 +1793,11 @@ class addresses extends React.Component {
                               key="IsBlock"
                               id="IsBlock"
                               label="IsBlock"
-                              param={this.state.UpdateSupplierAddress.IsBlock}
+                              param={this.state.SupplierAddress.IsBlock}
                               onChange={(e) =>
                                 this.updateFormValue("IsBlock", e, "EDIT")
                               }
-                              value={this.state.UpdateSupplierAddress.IsBlock}
+                              value={this.state.SupplierAddress.IsBlock}
                             />
 
                             <DropdownInput
@@ -1658,7 +1808,7 @@ class addresses extends React.Component {
                               }
                               options={this.state.countryData}
                               isMandatory={true}
-                              value={this.state.UpdateSupplierAddress.CountryID}
+                              value={this.state.SupplierAddress.CountryID}
                             />
                             <DropdownInput
                               id="StateID"
@@ -1667,7 +1817,7 @@ class addresses extends React.Component {
                                 this.updateFormValue("StateID", e, "EDIT")
                               }
                               options={this.state.stateData}
-                              value={this.state.UpdateSupplierAddress.StateID}
+                              value={this.state.SupplierAddress.StateID}
                             />
                             <TextboxInput
                               id="ContactPerson"
@@ -1678,10 +1828,10 @@ class addresses extends React.Component {
                               variant="outlined"
                               size="small"
                               value={
-                                this.state.UpdateSupplierAddress.ContactPerson
+                                this.state.SupplierAddress.ContactPerson
                               }
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .ContactPerson.errorState
                               }
                              
@@ -1694,9 +1844,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.PhoneNo}
+                              value={this.state.SupplierAddress.PhoneNo}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .PhoneNo.errorState
                               }
                              
@@ -1710,9 +1860,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.EmailID}
+                              value={this.state.SupplierAddress.EmailID}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .EmailID.errorState
                               }
                              
@@ -1725,9 +1875,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.VATNo}
+                              value={this.state.SupplierAddress.VATNo}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .VATNo.errorState
                               }
                              
@@ -1740,9 +1890,9 @@ class addresses extends React.Component {
                               }
                               variant="outlined"
                               size="small"
-                              value={this.state.UpdateSupplierAddress.GSTNo}
+                              value={this.state.SupplierAddress.GSTNo}
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .GSTNo.errorState
                               }
                               
@@ -1761,11 +1911,11 @@ class addresses extends React.Component {
                               variant="outlined"
                               size="small"
                               value={
-                                this.state.UpdateSupplierAddress
+                                this.state.SupplierAddress
                                   .SpecialInstruction
                               }
                               error={
-                                this.state.Validations.UpdateSupplierAddress
+                                this.state.Validations.SupplierAddress
                                   .SpecialInstruction.errorState
                               }
                               
