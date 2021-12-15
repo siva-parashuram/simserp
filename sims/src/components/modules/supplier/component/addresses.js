@@ -12,6 +12,8 @@ import TableCell from "@material-ui/core/TableCell";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
 
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -46,6 +48,7 @@ import SDIB from "../../../compo/griddropdowninput";
 import SSIB from "../../../compo/gridswitchinput";
 import SDBIB from "../../../compo/griddropdowninputwithbutton";
 
+
 class addresses extends React.Component {
   constructor(props) {
     super(props);
@@ -54,12 +57,13 @@ class addresses extends React.Component {
         page: 0,
         rowsPerPage: 10,
       },
-      addNewBtn:false,
-      updateBtn:false,
+      addNewBtn: false,
+      updateBtn: false,
       FullSmallBtnArea: false,
       mainframeW: 12,
       hideSidePanel: true,
       ErrorPrompt: false,
+      ErrorMessageProps: "",
       SuccessPrompt: false,
       ProgressLoader: true,
       AddbtnDisable: true,
@@ -72,7 +76,29 @@ class addresses extends React.Component {
       process: "",
       listStateSupplierAddresses: null,
       type: "ADD",
+      showForm: false,
+      EmptySupplierAddress: {
+        AddressID: 0,
+        SuplID: this.props.SuplID,
+        Code: "",
+        Name: "",
+        Address: "",
+        Address2: "",
+        Address3: "",
+        City: "",
+        PostCode: "",
+        CountryID: 0,
+        StateID: 0,
+        ContactPerson: "",
+        PhoneNo: "",
+        EmailID: "",
+        VATNo: "",
+        GSTNo: "",
 
+        IsBlock: false,
+
+        SpecialInstruction: "",
+      },
       UpdateSupplierAddress: {
         AddressID: 0,
         SuplID: this.props.SuplID,
@@ -218,7 +244,7 @@ class addresses extends React.Component {
         console.log("dataAddress>>", data);
 
         this.setState({ AddressData: data, ProgressLoader: true }, () => {
-          this.handleRowClick(null,data[0],"row_0");
+          // this.handleRowClick(null, data[0], "row_0");
           this.setState({
             listStateSupplierAddresses: this.listStateSupplierAddresses(),
             stateForm: this.stateForm(),
@@ -254,7 +280,7 @@ class addresses extends React.Component {
         }
         this.setState({ countryData: newData, ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   getStateList = () => {
@@ -280,7 +306,7 @@ class addresses extends React.Component {
         }
         this.setState({ stateData: newData, ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   stateForm = () => {
@@ -334,7 +360,7 @@ class addresses extends React.Component {
                       style={{ minHeight: "40px", maxHeight: "40px" }}
                     >
                       <Typography key="" className="accordion-Header-Title">
-                        General 
+                        General
                       </Typography>
                     </AccordionSummary>
 
@@ -1244,59 +1270,74 @@ class addresses extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.CreateSupplierAddress;
-    let reqData = {
-      ValidUser: ValidUser,
-      SupplierAddress: this.state.SupplierAddress,
-    };
 
-    console.log("ReqData>>>", reqData);
+    let SupplierAddress = this.state.SupplierAddress;
 
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        let data = response.data;
-        if (response.status === 200 || response.status === 201) {
-          let SupplierAddress = {
-            AddressID: 0,
-            SuplID: this.props.SuplID,
 
-            Code: "",
-            Name: "",
-            Address: "",
-            Address2: "",
-            Address3: "",
-            City: "",
-            PostCode: "",
-            CountryID: "-1",
-            StateID: 0,
-            ContactPerson: "",
-            PhoneNo: "",
-            EmailID: "",
-            VATNo: "",
-            GSTNo: "",
+    if (SupplierAddress.Code === "" || SupplierAddress.CountryID === "" || 
+    SupplierAddress.CountryID === 0 || SupplierAddress.CountryID === "-1" ||
+    SupplierAddress.Address==="" || SupplierAddress.Address.trim()==="" || SupplierAddress.Address===null
+    ) {
+      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid data" });
+      return false;
+    } else {
+      let Url = APIURLS.APIURL.CreateSupplierAddress;
+      let reqData = {
+        ValidUser: ValidUser,
+        SupplierAddress: this.state.SupplierAddress,
+      };
 
-            IsBlock: false,
+      console.log("ReqData>>>", reqData);
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201) {
+            let SupplierAddress = {
+              AddressID: 0,
+              SuplID: this.props.SuplID,
 
-            SpecialInstruction: "",
-          };
-          this.setState(
-            {
-              SupplierAddress: SupplierAddress,
-              ErrorPrompt: false,
-              SuccessPrompt: true,
-            },
-            () => {
-              this.getSupplierAddress();
-            }
-          );
-        } else {
-          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-        }
-      })
-      .catch((error) => {
-        this.setState({ ErrorPrompt: true });
-      });
+              Code: "",
+              Name: "",
+              Address: "",
+              Address2: "",
+              Address3: "",
+              City: "",
+              PostCode: "",
+              CountryID: "-1",
+              StateID: 0,
+              ContactPerson: "",
+              PhoneNo: "",
+              EmailID: "",
+              VATNo: "",
+              GSTNo: "",
+
+              IsBlock: false,
+
+              SpecialInstruction: "",
+            };
+            
+            this.setState(
+              {
+                showForm: false, updateBtn: false, addNewBtn: false,
+                SupplierAddress: SupplierAddress,
+                ErrorPrompt: false,
+                SuccessPrompt: true,
+              },
+              () => {
+                this.getSupplierAddress();
+              }
+            );
+          } else {
+            this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ErrorPrompt: true });
+        });
+    }
+
+
   };
 
   UpdateSupplierAddress = (e) => {
@@ -1306,38 +1347,53 @@ class addresses extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.UpdateSupplierAddress;
-    let reqData = {
-      ValidUser: ValidUser,
-      SupplierAddressList: [this.state.SupplierAddress],
-    };
 
-    console.log("ReqData>>>", reqData);
 
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        let data = response.data;
-        if (response.status === 200 || response.status === 201) {
-          this.setState(
-            {
-              ErrorPrompt: false,
-              SuccessPrompt: true,
-            },
-            () => this.getSupplierAddress()
-          );
-        } else {
-          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-        }
-      })
-      .catch((error) => {
-        this.setState({ ErrorPrompt: true });
-      });
+    let SupplierAddress = this.state.SupplierAddress;
+
+
+    if (SupplierAddress.Code === "" || SupplierAddress.CountryID === "" ||
+      SupplierAddress.CountryID === 0 || SupplierAddress.CountryID === "-1" ||
+      SupplierAddress.Address === "" || SupplierAddress.Address.trim() === "" || SupplierAddress.Address === null
+    ) {
+      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid data" });
+      return false;
+    } else {
+      let Url = APIURLS.APIURL.UpdateSupplierAddress;
+      let reqData = {
+        ValidUser: ValidUser,
+        SupplierAddressList: [SupplierAddress],
+      };
+
+      console.log("ReqData>>>", reqData);
+
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          let data = response.data;
+          if (response.status === 200 || response.status === 201) {
+            this.setState(
+              {
+                ErrorPrompt: false,
+                SuccessPrompt: true,
+              },
+              () => this.getSupplierAddress()
+            );
+          } else {
+            this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ErrorPrompt: true });
+        });
+    }
+
+    
   };
 
   InitialhandleRowClick(e, item, id) {
     this.setState({
-      updateBtn:true,
+      updateBtn: true,
       SupplierAddress: item,
       FullSmallBtnArea: true,
       hideSidePanel: true,
@@ -1351,11 +1407,12 @@ class addresses extends React.Component {
     try {
       this.setState(
         {
-          addNewBtn:false,
-          updateBtn:true,
+          addNewBtn: false,
+          updateBtn: true,
           SupplierAddress: item,
-          FullSmallBtnArea: true,
-          hideSidePanel: true,
+          showForm: true
+          // FullSmallBtnArea: true,
+          // hideSidePanel: true,
         },
         () => {
           this.closeExpandFull(null);
@@ -1364,7 +1421,7 @@ class addresses extends React.Component {
       // console.log("addressId>>", this.state.SupplierAddress.AddressID);
       this.removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
-    } catch (ex) {}
+    } catch (ex) { }
   };
 
   removeIsSelectedRowClasses = () => {
@@ -1372,7 +1429,7 @@ class addresses extends React.Component {
       for (let i = 0; i < this.state.AddressData.length; i++) {
         document.getElementById("row_" + i).className = "";
       }
-    } catch (ex) {}
+    } catch (ex) { }
   };
 
   expandFull = (e) => {
@@ -1380,7 +1437,7 @@ class addresses extends React.Component {
     this.setState({
       mainframeW: 12,
       hideSidePanel: true,
-       
+
     });
   };
 
@@ -1388,7 +1445,7 @@ class addresses extends React.Component {
     this.setState({
       mainframeW: 8,
       hideSidePanel: false,
-     
+
     });
   };
 
@@ -1400,22 +1457,23 @@ class addresses extends React.Component {
   };
 
   handlePageChange = (event, newPage) => {
+    this.removeIsSelectedRowClasses();
     console.log("handlePageChange > event > ", event);
     console.log("handlePageChange > newPage > ", newPage);
     let pagination = this.state.pagination;
     pagination.page = newPage;
-    this.setState({ pagination: pagination }, () => {
+    this.setState({ pagination: pagination, SupplierAddress: this.state.EmptySupplierAddress }, () => {
       this.setState({
         listStateSupplierAddresses: this.listStateSupplierAddresses(),
       });
     });
   };
 
-  createNew=(e)=>{
+  createNew = (e) => {
     this.removeIsSelectedRowClasses();
     let SupplierAddress = {
       AddressID: 0,
-      SuplID:this.props.SuplID,
+      SuplID: this.props.SuplID,
       Code: "",
       Name: "",
       Address: "",
@@ -1435,9 +1493,10 @@ class addresses extends React.Component {
     };
 
     this.setState({
-      updateBtn:false,
-      addNewBtn:true,
-      SupplierAddress:SupplierAddress
+      showForm: true,
+      updateBtn: false,
+      addNewBtn: true,
+      SupplierAddress: SupplierAddress
     });
   }
 
@@ -1461,6 +1520,7 @@ class addresses extends React.Component {
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
+          ErrorMessageProps={this.state.ErrorMessageProps}
         />
         <SuccessSnackBar
           SuccessPrompt={this.state.SuccessPrompt}
@@ -1503,19 +1563,21 @@ class addresses extends React.Component {
           </Grid> */}
           <BackdropLoader open={!this.state.ProgressLoader} />
 
-<div style={{height:15}}>&nbsp;</div>
+          <div style={{ height: 15 }}>&nbsp;</div>
 
           <Grid container spacing={0}>
             <Grid
               item
               xs={12}
               sm={12}
-              md={this.state.mainframeW}
-              lg={this.state.mainframeW}
+              // md={this.state.mainframeW}
+              // lg={this.state.mainframeW}
+              md={12}
+              lg={12}
             >
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
-                 
+
                   {/* <Dualtabcomponent
                     customStyle={{ backgroundColor: 'none' }}
                     tab1name="List"
@@ -1524,105 +1586,139 @@ class addresses extends React.Component {
                     tab2Html={this.state.stateForm}
                   /> */}
 
-                  <Fragment>
-                    <Grid container spacing={0}>
-                      <Grid xs={12} sm={12} md={12} lg={12}>
-
-                        <ButtonGroup
-                          size="small"
-                          variant="text"
-                          aria-label="Action Menu Button group"
-                        >
-                          <Button
-                              startIcon={APIURLS.buttonTitle.new.icon}
-                              className="action-btns"
-                              style={{ marginLeft: 10 }}
-                              onClick={(e) => this.createNew(e)}
-                              disabled={this.state.updateBtnDisabled}
-                            >
-                              {APIURLS.buttonTitle.new.name}
-                            </Button>
-
-                          {this.state.updateBtn === true ? (
-                            <Button
-                              startIcon={APIURLS.buttonTitle.save.icon}
-                              className="action-btns"
-                              style={{ marginLeft: 10 }}
-                              onClick={(e) => this.UpdateSupplierAddress(e)}
-                              
-                            >
-                              {APIURLS.buttonTitle.save.name}
-                            </Button>
-                          ) : null}
-
-                          {this.state.addNewBtn === true ? (
-                            <Button
-                              startIcon={APIURLS.buttonTitle.save.icon}
-                              className="action-btns"
-                              style={{ marginLeft: 10 }}
-                              onClick={(e) => this.AddNew(e)}
-                              
-                            >
-                              {APIURLS.buttonTitle.save.name}
-                            </Button>
-                          ) : null}
-                          
-
-                        </ButtonGroup>
-
-                      </Grid>
-                    </Grid>
-
-                    <div
-                      style={{
-                        height: 300,
-                        overflowY: "scroll",
-                        overflowX: "hidden",
-                        width: "100%",
-                      }}
-                    >
+                  <div style={{ marginLeft: 14 }}>
+                    <Fragment>
                       <Grid container spacing={0}>
-                        <Grid xs={12} sm={12} md={12} lg={12}>
-                          <Table
-                            stickyHeader
+                        <Grid item xs={6} sm={6} md={2} lg={2} >
+                          <Breadcrumbs aria-label="breadcrumb">
+                            <Link
+                              className="PointerOnHover"
+                              underline="hover"
+                              color="inherit"
+                              onClick={(e) => this.setState({ showForm: false, updateBtn: false, addNewBtn: false, })}
+                            >
+                              Address List
+                            </Link>
+                            {this.state.showForm === true ? (
+                              <Typography color="text.primary">Details</Typography>
+                            ) : null}
+                          </Breadcrumbs>
+                        </Grid>
+                        <Grid xs={4} sm={4} md={2} lg={2}>
+
+                          <ButtonGroup
                             size="small"
-                            className=""
-                            aria-label="SupplierAddress List table"
+                            variant="text"
+                            aria-label="Action Menu Button group"
                           >
-                            <TableHead className="table-header-background">
-                              <TableRow>
-                                <TableCell className="table-header-font">#</TableCell>
-                                
-                                <TableCell className="table-header-font" align="left">
-                                Code
-                                </TableCell>
-                                <TableCell className="table-header-font" align="left">
-                                  Name
-                                </TableCell>
-                                <TableCell className="table-header-font">Address</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody className="tableBody">
-                              {this.getPageData(this.state.AddressData).map((item, i) => (
-                                <TableRow
-                                  id={"row_" + i}
-                                  key={i}
-                                  onClick={(event) =>
-                                    this.handleRowClick(event, item, "row_" + i)
-                                  }
+
+                            {(this.state.addNewBtn === false) ? (
+
+                              <Fragment>
+                                {this.state.updateBtn === false ? (
+                                  <Button
+                                    startIcon={APIURLS.buttonTitle.add.icon}
+                                    className="action-btns"
+                                    style={{ marginLeft: 10 }}
+                                    onClick={(e) => this.createNew(e)}
+                                    disabled={this.state.updateBtnDisabled}
+                                  >
+                                    {APIURLS.buttonTitle.add.name}
+                                  </Button>
+                                ) : null}
+
+                              </Fragment>
+
+                            ) : null}
+
+
+                            {this.state.updateBtn === true ? (
+                              <Button
+                                startIcon={APIURLS.buttonTitle.save.icon}
+                                className="action-btns"
+                                style={{ marginLeft: 10 }}
+                                onClick={(e) => this.UpdateSupplierAddress(e)}
+
+                              >
+                                {APIURLS.buttonTitle.save.name}
+                              </Button>
+                            ) : null}
+
+                            {this.state.addNewBtn === true ? (
+                              <Button
+                                startIcon={APIURLS.buttonTitle.save.icon}
+                                className="action-btns"
+                                style={{ marginLeft: 10 }}
+                                onClick={(e) => this.AddNew(e)}
+
+                              >
+                                {APIURLS.buttonTitle.save.name}
+                              </Button>
+                            ) : null}
+
+
+                          </ButtonGroup>
+
+                        </Grid>
+                      </Grid>
+
+
+                      {this.state.showForm === false ? (
+                        <Fragment>
+                          <div
+                            style={{
+                              height: 350,
+                              overflowY: "scroll",
+                              overflowX: "hidden",
+                              width: "100%",
+                            }}
+                          >
+                            <Grid container spacing={0}>
+                              <Grid xs={12} sm={12} md={12} lg={12}>
+                                <Table
+                                  stickyHeader
+                                  size="small"
+                                  className=""
+                                  aria-label="SupplierAddress List table"
                                 >
-                                  <TableCell> {i + 1}</TableCell>
-                                  <TableCell> {item.Code}</TableCell>
-                                  <TableCell> {item.Name}</TableCell>
+                                  <TableHead className="table-header-background">
+                                    <TableRow>
+                                      <TableCell className="table-header-font">#</TableCell>
 
-                                  <TableCell align="left">
-                                    {item.Address} {item.Address2} {item.Address3}
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
+                                      <TableCell className="table-header-font" align="left">
+                                        Code
+                                      </TableCell>
+                                      <TableCell className="table-header-font" align="left">
+                                        Name
+                                      </TableCell>
+                                      <TableCell className="table-header-font">Address</TableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody className="tableBody">
+                                    {this.getPageData(this.state.AddressData).map((item, i) => (
+                                      <TableRow
+                                        id={"row_" + i}
+                                        key={i}
+                                        onClick={(event) =>
+                                          this.handleRowClick(event, item, "row_" + i)
+                                        }
+                                      >
+                                        <TableCell> {i + 1}</TableCell>
+                                        <TableCell> {item.Code}</TableCell>
+                                        <TableCell> {item.Name}</TableCell>
 
+                                        <TableCell align="left">
+                                          {item.Address} {item.Address2} {item.Address3}
+                                        </TableCell>
+                                      </TableRow>
+                                    ))}
+                                  </TableBody>
+                                </Table>
+
+
+                              </Grid>
+                            </Grid>
+                          </div>
                           <TablePagination
                             rowsPerPageOptions={[this.state.pagination.rowsPerPage]}
                             component="div"
@@ -1631,304 +1727,277 @@ class addresses extends React.Component {
                             page={this.state.pagination.page}
                             onPageChange={this.handlePageChange}
                           />
-                        </Grid>
-                      </Grid>
-                    </div>
-                  </Fragment>
+                        </Fragment>
+                      ) : null}
+
+                      {this.state.showForm === true ? (
+                        <Fragment>
+                          <div style={{height:20}}>&nbsp;</div>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                              <Grid container spacing={2}>
+                                <Grid item xs={6} sm={6} md={6} lg={6}>
+                                  <SIB
+                                    id="Code"
+                                    label="Code"
+                                    onChange={(e) =>
+                                      this.updateFormValue("Code", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    isMandatory={true}
+                                    value={this.state.SupplierAddress.Code}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .Code.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                  isMandatory={true}
+                                    id="Name"
+                                    label="Name"
+                                    onChange={(e) =>
+                                      this.updateFormValue("Name", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.Name}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .Name.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                  isMandatory={true}
+                                    id="Address"
+                                    label="Address"
+                                    onChange={(e) =>
+                                      this.updateFormValue("Address", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.Address}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .Address.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                    id="Address2"
+                                    label="Address2"
+                                    onChange={(e) =>
+                                      this.updateFormValue("Address2", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.Address2}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .Address2.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                    id="Address3"
+                                    label="Address3"
+                                    onChange={(e) =>
+                                      this.updateFormValue("Address3", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.Address3}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .Address3.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                    id="City"
+                                    label="City"
+                                    onChange={(e) =>
+                                      this.updateFormValue("City", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.City}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .City.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                    id="PostCode"
+                                    label="PostCode"
+                                    onChange={(e) =>
+                                      this.updateFormValue("PostCode", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.PostCode}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .PostCode.errorState
+                                    }
+
+                                  />
+
+                                  <SSIB
+                                    key="IsBlock"
+                                    id="IsBlock"
+                                    label="IsBlock"
+                                    param={this.state.SupplierAddress.IsBlock}
+                                    onChange={(e) =>
+                                      this.updateFormValue("IsBlock", e, "EDIT")
+                                    }
+                                    value={this.state.SupplierAddress.IsBlock}
+                                  />
+                                </Grid>
+                                <Grid item xs={6} sm={6} md={6} lg={6}>
+                                  <SDIB
+                                    id="CountryID"
+                                    label="Country"
+                                    onChange={(e) =>
+                                      this.updateFormValue("CountryID", e, "EDIT")
+                                    }
+                                    param={this.state.countryData}
+                                    isMandatory={true}
+                                    value={this.state.SupplierAddress.CountryID}
+
+                                  />
+                                  <SDIB
+                                    id="StateID"
+                                    label="State"
+                                    onChange={(e) =>
+                                      this.updateFormValue("StateID", e, "EDIT")
+                                    }
+                                    param={this.state.stateData}
+                                    value={this.state.SupplierAddress.StateID}
+                                  />
+                                  <SIB
+                                    id="ContactPerson"
+                                    label="Contact Person"
+                                    onChange={(e) =>
+                                      this.updateFormValue("ContactPerson", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={
+                                      this.state.SupplierAddress.ContactPerson
+                                    }
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .ContactPerson.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                    id="PhoneNo"
+                                    label="Phone No"
+                                    onChange={(e) =>
+                                      this.updateFormValue("PhoneNo", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.PhoneNo}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .PhoneNo.errorState
+                                    }
+
+                                  />
+
+                                  <SIB
+                                    id="EmailID"
+                                    label="Email ID"
+                                    onChange={(e) =>
+                                      this.updateFormValue("EmailID", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.EmailID}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .EmailID.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                    id="VATNo"
+                                    label="VATNo"
+                                    onChange={(e) =>
+                                      this.updateFormValue("VATNo", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.VATNo}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .VATNo.errorState
+                                    }
+
+                                  />
+                                  <SIB
+                                    id="GSTNo"
+                                    label="GSTNo"
+                                    onChange={(e) =>
+                                      this.updateFormValue("GSTNo", e, "EDIT")
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.SupplierAddress.GSTNo}
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .GSTNo.errorState
+                                    }
+
+                                  />
+
+                                  <SIB
+                                    id="SpecialInstruction"
+                                    label="Special Instruction"
+                                    onChange={(e) =>
+                                      this.updateFormValue(
+                                        "SpecialInstruction",
+                                        e,
+                                        "EDIT"
+                                      )
+                                    }
+                                    variant="outlined"
+                                    size="small"
+                                    value={
+                                      this.state.SupplierAddress
+                                        .SpecialInstruction
+                                    }
+                                    error={
+                                      this.state.Validations.SupplierAddress
+                                        .SpecialInstruction.errorState
+                                    }
+                                    multiline={true}
+                                    rows={5}
+                                  />
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                          <div style={{height:100}}>&nbsp;</div>
+                        </Fragment>
+                      ) : null}
+
+
+
+
+
+                    </Fragment>
+                  </div>
                 </Grid>
               </Grid>
             </Grid>
-            {this.state.hideSidePanel === false ? (
-              <Grid item xs={12} sm={12} md={4} lg={4}>
-                <div style={{ marginLeft: 10, marginTop: -5 }}>
-                  <Grid container spacing={6}>
-                    <Grid item xs={12} sm={12} md={8} lg={8}>
-                      <div style={{ marginTop: -12, marginLeft: 1 }}>
-                        <h4>Detail view</h4>
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={4} lg={4}>
-                      {/* <div>
-                        <Button
-                          startIcon={APIURLS.buttonTitle.update.icon}
-                          className="action-btns"
-                          style={{ marginLeft: 10 }}
-                          onClick={(e) => this.UpdateSupplierAddress(e)}
-                          disabled={this.state.updateBtnDisabled}
-                        >
-                          {APIURLS.buttonTitle.update.name}
-                        </Button>
-                      </div> */}
-                    </Grid>
-                  </Grid>
 
-                  <Grid container spacing={0}>
-                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                      <div
-                        style={{
-                          height: 500,
-                          marginTop: 10,
-                          overflowX: "hidden",
-                          overflowY: "scroll",
-                          width: "100%",
-                          backgroundColor: "#ffffff",
-                        }}
-                      >
-                        <div style={{ height: 20 }}>&nbsp;</div>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="SupplierAddress List table"
-                        >
-                          <TableBody className="tableBody">
-                            <TextboxInput
-                              id="Code"
-                              label="Code"
-                              onChange={(e) =>
-                                this.updateFormValue("Code", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              isMandatory={true}
-                              value={this.state.SupplierAddress.Code}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .Code.errorState
-                              }
-                             
-                            />
-                            <TextboxInput
-                              id="Name"
-                              label="Name"
-                              onChange={(e) =>
-                                this.updateFormValue("Name", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.Name}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .Name.errorState
-                              }
-                            
-                            />
-                            <TextboxInput
-                              id="Address"
-                              label="Address"
-                              onChange={(e) =>
-                                this.updateFormValue("Address", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.Address}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .Address.errorState
-                              }
-                             
-                            />
-                            <TextboxInput
-                              id="Address2"
-                              label="Address2"
-                              onChange={(e) =>
-                                this.updateFormValue("Address2", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.Address2}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .Address2.errorState
-                              }
-                              
-                            />
-                            <TextboxInput
-                              id="Address3"
-                              label="Address3"
-                              onChange={(e) =>
-                                this.updateFormValue("Address3", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.Address3}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .Address3.errorState
-                              }
-                             
-                            />
-                            <TextboxInput
-                              id="City"
-                              label="City"
-                              onChange={(e) =>
-                                this.updateFormValue("City", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.City}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .City.errorState
-                              }
-                             
-                            />
-                            <TextboxInput
-                              id="PostCode"
-                              label="PostCode"
-                              onChange={(e) =>
-                                this.updateFormValue("PostCode", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.PostCode}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .PostCode.errorState
-                              }
-                              
-                            />
-
-                            <SwitchInput
-                              key="IsBlock"
-                              id="IsBlock"
-                              label="IsBlock"
-                              param={this.state.SupplierAddress.IsBlock}
-                              onChange={(e) =>
-                                this.updateFormValue("IsBlock", e, "EDIT")
-                              }
-                              value={this.state.SupplierAddress.IsBlock}
-                            />
-
-                            <DropdownInput
-                              id="CountryID"
-                              label="Country"
-                              onChange={(e) =>
-                                this.updateFormValue("CountryID", e, "EDIT")
-                              }
-                              options={this.state.countryData}
-                              isMandatory={true}
-                              value={this.state.SupplierAddress.CountryID}
-                            />
-                            <DropdownInput
-                              id="StateID"
-                              label="State"
-                              onChange={(e) =>
-                                this.updateFormValue("StateID", e, "EDIT")
-                              }
-                              options={this.state.stateData}
-                              value={this.state.SupplierAddress.StateID}
-                            />
-                            <TextboxInput
-                              id="ContactPerson"
-                              label="Contact Person"
-                              onChange={(e) =>
-                                this.updateFormValue("ContactPerson", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={
-                                this.state.SupplierAddress.ContactPerson
-                              }
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .ContactPerson.errorState
-                              }
-                             
-                            />
-                            <TextboxInput
-                              id="PhoneNo"
-                              label="Phone No "
-                              onChange={(e) =>
-                                this.updateFormValue("PhoneNo", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.PhoneNo}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .PhoneNo.errorState
-                              }
-                             
-                            />
-
-                            <TextboxInput
-                              id="EmailID"
-                              label="Email ID"
-                              onChange={(e) =>
-                                this.updateFormValue("EmailID", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.EmailID}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .EmailID.errorState
-                              }
-                             
-                            />
-                            <TextboxInput
-                              id="VATNo"
-                              label="VATNo"
-                              onChange={(e) =>
-                                this.updateFormValue("VATNo", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.VATNo}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .VATNo.errorState
-                              }
-                             
-                            />
-                            <TextboxInput
-                              id="GSTNo"
-                              label="GSTNo"
-                              onChange={(e) =>
-                                this.updateFormValue("GSTNo", e, "EDIT")
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={this.state.SupplierAddress.GSTNo}
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .GSTNo.errorState
-                              }
-                              
-                            />
-
-                            <TextboxInput
-                              id="SpecialInstruction"
-                              label="Special Instruction"
-                              onChange={(e) =>
-                                this.updateFormValue(
-                                  "SpecialInstruction",
-                                  e,
-                                  "EDIT"
-                                )
-                              }
-                              variant="outlined"
-                              size="small"
-                              value={
-                                this.state.SupplierAddress
-                                  .SpecialInstruction
-                              }
-                              error={
-                                this.state.Validations.SupplierAddress
-                                  .SpecialInstruction.errorState
-                              }
-                              
-                            />
-                          </TableBody>
-                        </Table>
-                        <div style={{ height: 20 }}>&nbsp;</div>
-                      </div>
-                    </Grid>
-                  </Grid>
-                </div>
-              </Grid>
-            ) : null}
           </Grid>
         </div>
       </Fragment>

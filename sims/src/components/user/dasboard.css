@@ -63,8 +63,9 @@
    }
  
 
-
- 
+.PointerOnHover{
+  cursor: pointer !important;
+}
 
 
 body{
