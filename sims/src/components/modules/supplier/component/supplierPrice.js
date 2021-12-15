@@ -283,8 +283,8 @@ class supplierPrice extends React.Component {
   handleRowClick = (e, item, id, i) => {
     let SupplierPrice = {
       SuplID: item.SuplID,
-      StartDate: item.StartDate,
-      EndDate: item.EndDate,
+      StartDate: moment(item.StartDate).format("YYYY-MM-DD"),
+      EndDate: moment(item.EndDate).format("YYYY-MM-DD"),
       ItemID: item.ItemID,
       UOM: item.UOM,
       CurrID: item.CurrID,
@@ -325,11 +325,15 @@ class supplierPrice extends React.Component {
   };
 
   showAddNewPanel = (e) => {
+
+    const today = moment().format(
+      "YYYY-MM-DD"
+    );
     this.removeIsSelectedRowClasses();
     let SupplierPriceTemplate = {
       SuplID: this.props.SuplID,
-      StartDate: moment(),
-      EndDate: moment(),
+      StartDate: today,
+      EndDate: today,
       ItemID: 0,
       UOM: 0,
       CurrID: 0,
@@ -337,6 +341,7 @@ class supplierPrice extends React.Component {
       MaxQty: 0,
       UnitPrice: 0,
       EmailID: "",
+      SupplierCode:""
     };
 
     this.setState({
@@ -867,7 +872,7 @@ class supplierPrice extends React.Component {
                             onChange={(e) =>
                               this.updateFormValue("StartDate", e)
                             }
-                            defaultValue={moment(
+                            value={moment(
                               this.state.SupplierPrice.StartDate
                             ).format("YYYY-MM-DD")}
                           />
@@ -877,7 +882,7 @@ class supplierPrice extends React.Component {
                             variant="outlined"
                             size="small"
                             onChange={(e) => this.updateFormValue("EndDate", e)}
-                            defaultValue={moment(
+                            value={moment(
                               this.state.SupplierPrice.EndDate
                             ).format("YYYY-MM-DD")}
                           />
