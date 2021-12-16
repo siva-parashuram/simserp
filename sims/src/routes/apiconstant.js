@@ -176,6 +176,7 @@ export const APIURL = {
   Add_Update_PO:domain+"api/PO/Add_Update_PO",
   GetPOByBranchID:domain+"api/PO/GetPOByBranchID",
   GetPOByPOID:domain+"api/PO/GetPOByPOID",
+  Add_Update_PurchaseOrderAuthorize:domain+"api/PO/Add_Update_PurchaseOrderAuthorize",
 };
 
 export const CTimeOut = 10;
@@ -712,17 +713,17 @@ export const poMasterColumn=[
   {
     field: 'id',
     headerName: '#',
-    width: 90,
+    width: 10,
     headerClassName: 'table-header-font'
   },{
     field: 'No',
     headerName: 'No',
-    width: 150,
+    width: 120,
     headerClassName: 'table-header-font'
   },{
     field: 'PODate',
     headerName: 'PO.Date',
-    width: 150,
+    width: 125,
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
@@ -733,7 +734,7 @@ export const poMasterColumn=[
   ,{
     field: 'Status',
     headerName: 'Status',
-    width: 120,
+    width: 115,
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
@@ -752,12 +753,12 @@ export const poMasterColumn=[
   },{
     field: 'CountryName',
     headerName: 'Country',
-    width: 150,
+    width: 130,
     headerClassName: 'table-header-font'
   },{
     field: 'IsImport',
-    headerName: 'Is Import?',
-    width: 150,
+    headerName: 'Import?',
+    width: 125,
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
@@ -775,7 +776,7 @@ export const poMasterColumn=[
   },{
     field: 'Code',
     headerName: 'Currency',
-    width: 150,
+    width: 130,
     headerClassName: 'table-header-font'
   },{
     field: 'FCValue',
@@ -796,7 +797,7 @@ export const poMasterColumn=[
   },{
     field: 'ContactPerson',
     headerName: 'Contact Person',
-    width: 250,
+    width: 180,
     headerClassName: 'table-header-font'
   },
 

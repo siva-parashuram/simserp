@@ -102,7 +102,7 @@ class poMrnMaster extends React.Component {
             let item = this.state.PODataList[index - 1]; 
             console.log("handleRowClick > item > ", item);          
             let editUrl =
-                URLS.URLS.editPO +
+                URLS.URLS.doPOMRN +
                 this.state.urlparams +
                 "&editPOID=" +
                 item.POID + "&type=edit";
@@ -111,7 +111,6 @@ class poMrnMaster extends React.Component {
                 editUrl: editUrl,
                 selectionModel: index,
             });
-            //   this.getAttachments(item.POID);
         } catch (e) {
             console.log("Error : ", e);
         }
@@ -119,7 +118,6 @@ class poMrnMaster extends React.Component {
 
     render() {
         const openPage = (url) => {
-            // this.setState({ ProgressLoader: false });
             console.log("url > ", url);
             window.location = url;
         };
@@ -129,18 +127,7 @@ class poMrnMaster extends React.Component {
             pagination.page = newPage;
             this.setState({ pagination: pagination });
         };
-
-        const breadcrumbHtml = (
-            <Fragment>
-                <Breadcrumb
-                    backOnClick={this.props.history.goBack}
-                    linkHref={URLS.URLS.userDashboard + this.state.urlparams}
-                    linkTitle="Dashboard"
-                    typoTitle="PO List For MRN"
-                    level={1}
-                />
-            </Fragment>
-        );
+ 
 
         const buttongroupHtml = (
             <Fragment>
@@ -149,24 +136,15 @@ class poMrnMaster extends React.Component {
                     variant="text"
                     aria-label="Action Menu Button group"
                 >
-                    {/* <Button
-                        id="add_New"
-                        className="action-btns"
-                        startIcon={APIURLS.buttonTitle.add.icon}
-                        onClick={(e) =>
-                            openPage(URLS.URLS.addPO + this.state.urlparams + "&type=add")
-                        }
-                    >
-                        {APIURLS.buttonTitle.add.name}
-                    </Button> */}
+                   
                     <Button className="action-btns"
-                        startIcon={APIURLS.buttonTitle.edit.icon}
+                        startIcon={APIURLS.buttonTitle.add.icon}
                         onClick={(e) =>
                             openPage(this.state.editUrl)
                         }
-                        disabled={this.state.editBtnDisable}
+                        disabled={this.state.PODataList.length>0?this.state.editBtnDisable:true}
                     >
-                        {APIURLS.buttonTitle.edit.name}
+                        {APIURLS.buttonTitle.add.name}
                     </Button>
                 </ButtonGroup>
             </Fragment>
@@ -176,12 +154,12 @@ class poMrnMaster extends React.Component {
             <Fragment>
                 <BackdropLoader open={!this.state.ProgressLoader} />
                 <TopFixedRow3
-                    breadcrumb={breadcrumbHtml}
-                    buttongroup={buttongroupHtml}
+                    breadcrumb={buttongroupHtml}
+                    buttongroup={null}
                 />
 
-                <Grid className="table-adjust" container spacing={0}>
-                    <Grid xs={12} sm={12} md={8} lg={8}>
+                <Grid container spacing={0}>                
+                    <Grid xs={12} sm={12} md={12} lg={12}>
                         <Fragment>
                             {console.log("this.state.PODataList > ", this.state.PODataList)}
                             {this.state.PODataList.length > 0 ? (
@@ -215,20 +193,7 @@ class poMrnMaster extends React.Component {
                             )}
                         </Fragment>
                     </Grid>
-                    <Grid xs={12} sm={12} md={4} lg={4}>
-                        <Grid container spacing={0}>
-                            <Grid xs={12} sm={12} md={1} lg={1}>
-                                &nbsp;
-                            </Grid>
-                            <Grid xs={12} sm={12} md={11} lg={11}>
-                                <Grid container spacing={0}>
-                                    <Grid xs={12} sm={12} md={11} lg={11}>
-
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                   
                 </Grid>
 
             </Fragment>

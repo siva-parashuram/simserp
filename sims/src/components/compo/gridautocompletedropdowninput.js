@@ -40,6 +40,7 @@ class gridautocompletedropdowninput extends React.Component {
                   style={{ width: "100%" }}
                   className="autocomplete-css"
                   underlineShow={false}
+                  disabled={this.props.disabled}
                   disablePortal
                   id={this.props.id}
                   options={this.props.options}

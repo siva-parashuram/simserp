@@ -350,26 +350,10 @@ class pomrnactivity extends React.Component {
         BranchID: CF.toInt(branchId) ,
         type: type,
         typoTitle: typoTitle,
-        // ProgressLoader: false,
+       
       }, () => {
         this.getSupplierList(CF.toInt(branchId), PO.POID);
       });
-    }
-
-    if (type === "add") {
-      this.setState({
-        branchName:branchName,
-        PO: PO,
-        POID: type === "edit" ? CF.toInt(POID) : 0,
-        urlparams: urlparams,
-        type: type,
-        typoTitle: typoTitle,
-        ProgressLoader: true,
-        BranchID: CF.toInt(branchId),
-      }, () => {
-        this.getSupplierList(CF.toInt(branchId)); 
-      });
-
     }
 
     
@@ -1247,21 +1231,7 @@ class pomrnactivity extends React.Component {
     });
   }
 
-  getMRNStatus = () => {
-    let MRNSTATUS = "";
-    let status = this.state.PO.Status;
-    switch (status) {
-      case 3:
-        MRNSTATUS = "Complete";
-        break;
-      case 4:
-        MRNSTATUS = "Partially";
-        break;
-      default:
-        break;
-    }
-    return MRNSTATUS;
-  }
+ 
 
 
   handleClose = () => {
@@ -1270,51 +1240,7 @@ class pomrnactivity extends React.Component {
     this.setState({ Dialog: Dialog });
   };
 
-  // viewLocalPO= <PrintLocalPo podata={
-  //   {
-  //     Branch: this.state.Branch,
-  //     PO: this.state.PO,
-  //     PurchaseOrderLine: this.state.PurchaseOrderLine,
-  //     UOMList: this.state.UOMList,
-  //     CurrencyList: this.state.CurrencyList,
-  //     Supplier: {
-  //       Name: this.getSupplierName(),
-  //       Address: this.state.Address,
-  //       Address2: this.state.Address2,
-  //       Address3: this.state.Address3,
-  //       City: this.state.City,
-  //       PostCode: this.state.PostCode,
-  //       CountryID: this.state.CountryID,
-  //       StateID: this.state.StateID,
-  //       CountryList: this.state.CountryList,
-  //       StateList: this.state.StateList
-  //     }
-  //   }
-  // } />;
-
-  // viewImportPO =   <PrintImportPo podata={
-  //   {
-  //     Branch: this.state.Branch,
-  //     PO: this.state.PO,
-  //     PurchaseOrderLine: this.state.PurchaseOrderLine,
-  //     UOMList: this.state.UOMList,
-  //     CurrencyList: this.state.CurrencyList,
-  //     Supplier: {
-  //       Name: this.getSupplierName(),
-  //       Address: this.state.Address,
-  //       Address2: this.state.Address2,
-  //       Address3: this.state.Address3,
-  //       City: this.state.City,
-  //       PostCode: this.state.PostCode,
-  //       CountryID: this.state.CountryID,
-  //       StateID: this.state.StateID,
-  //       CountryList: this.state.CountryList,
-  //       StateList: this.state.StateList
-  //     }
-  //   }
-  // } />;
-
-
+  
 
   openDialog = (param) => {
     let Dialog = this.state.Dialog;
@@ -1811,31 +1737,7 @@ class pomrnactivity extends React.Component {
     return isProperData;
   }
 
-  //direct edit once first time entry is made
-  openEditMode = (ID) => {
-    console.log("-openEditMode-");
-    console.log("ID -> ", ID);
-    let editUrl =
-    URLS.URLS.editPO +
-    this.state.urlparams +
-    "&editPOID=" +
-    ID + "&type=edit";
-    window.location = editUrl;
-    // let type = "edit";
-    // let POID = ID;
-    // let typoTitle = "";
-    // type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
-
-    // let PO = this.state.PO;
-    // PO.POID = CF.toInt(POID);
-
-    // this.setState({
-    //   PO: PO,
-    //   type: type,
-    //   typoTitle: typoTitle,
-    // });
-
-  }
+ 
 
   calculateInvoiceDetails = () => {
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
@@ -1920,33 +1822,8 @@ class pomrnactivity extends React.Component {
     }
   }
 
-  releasePO=()=>{
-   let PO=this.state.PO;
-   PO.Status=2;
-
-   let stepper=this.state.stepper;
-   stepper.activeStep=1;
-
-   this.setState({PO:PO,stepper:stepper});
-
-  }
-
-  reopenPO=()=>{
-    let PO=this.state.PO;
-    PO.Status=1; 
-    let stepper=this.state.stepper;
-    stepper.activeStep=0;
  
-    this.setState({PO:PO,stepper:stepper});
  
-   }
-
-  // stepper: {
-  //   MRNSTATUS: 1,
-  //   activeStep: 0,
-  //   steps: ["Open", "Release", "MRN", "Short Close"],
-  //   skipped: new Set(),
-  // }
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -1995,7 +1872,7 @@ class pomrnactivity extends React.Component {
     };
 
     const AddNew = (e) => {
-      this.setState({ ProgressLoader: false,ErrorMessageProps:"" });
+      this.setState({ ProgressLoader: false, ErrorMessageProps: "" });
       console.log("Adding new");
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
@@ -2004,176 +1881,10 @@ class pomrnactivity extends React.Component {
         "Content-Type": "application/json",
       };
 
-      let PurchaseOrder = this.state.PO;
-        //----------Added for sending Chnaged Name and adress data
-        PurchaseOrder.Name = this.state.Name;
-        PurchaseOrder.Address = this.state.Address;
-        PurchaseOrder.Address2 = this.state.Address2;
-        PurchaseOrder.Address3 = this.state.Address3;
-        PurchaseOrder.City = this.state.City;
-        PurchaseOrder.PostCode = this.state.PostCode;
-        PurchaseOrder.CountryID = this.state.CountryID;
-        PurchaseOrder.StateID = this.state.StateID;
-        //--------------------------------------------------
-      PurchaseOrder.UserID = CF.toInt(getCookie(COOKIE.USERID));
-      PurchaseOrder.BranchID = this.state.BranchID;
-      PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY");
-      PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("MM/DD/YYYY");
-      PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
-      PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
-      let PurchaseOrderLineList = this.getProcessedPurchaseOrderLineList(this.state.PurchaseOrderLine);
-
-      let isProperData = this.validatePOData(PurchaseOrder);
-
-      let NoSeriesReqData = {
-        ValidUser: ValidUser,
-        DocumentNumber: {
-          NoSeriesID: this.state.PO.IsImport === true ? CF.toInt(this.state.Branch.IPONo) : CF.toInt(this.state.Branch.LPONo),
-          // BranchID:this.state.BranchID,
-          TransDate: moment().format("MM-DD-YYYY"),
-        },
-      };
-
-      let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
-      axios
-        .post(Url1, NoSeriesReqData, { headers })
-        .then((response) => {
-          if (response.status === 200) {
-            PurchaseOrder.No = response.data;
-            let reqData = {
-              ValidUser: ValidUser,
-              PurchaseOrder: PurchaseOrder,
-              PurchaseOrderLineList: PurchaseOrderLineList
-            };
-            let Url2 = APIURLS.APIURL.Add_Update_PO;
-            axios
-              .post(Url2, reqData, { headers })
-              .then((response) => {
-                console.log("response > ", response);
-                if (response.status === 201 || response.status === 200) {
-                  this.setState({ SuccessPrompt: true });
-                  //change to Edit mode
-                  this.openEditMode(response.data.ID);
-                }
-
-              })
-              .catch((error) => {
-                console.log("Main API Error");
-                this.setState({ ErrorPrompt: true, ProgressLoader: true });
-              });
-          } else {
-            this.setState({ 
-              ErrorMessageProps:"No. Series Not defined.",
-              ErrorPrompt: true, 
-              ProgressLoader: true });
-          }
-        })
-        .catch((error) => {
-          console.log("No series Error");
-          this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps:"No. Series Not defined.", });
-        });
-    };
-
-    const updatePO = (e) => {
-      this.setState({ ProgressLoader: false,ErrorMessageProps:"" });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
-
-    
-
-
-      let PurchaseOrder = this.state.PO;
-      //----------Added for sending Chnaged Name and adress data
-      PurchaseOrder.Name = this.state.Name;
-      PurchaseOrder.Address = this.state.Address;
-      PurchaseOrder.Address2 = this.state.Address2;
-      PurchaseOrder.Address3 = this.state.Address3;
-      PurchaseOrder.City = this.state.City;
-      PurchaseOrder.PostCode = this.state.PostCode;
-      PurchaseOrder.CountryID = this.state.CountryID;
-      PurchaseOrder.StateID = this.state.StateID;
-      //--------------------------------------------------
-
-      try { delete PurchaseOrder['PurchaseOrderLine']; } catch (err) { }
-      PurchaseOrder.UserID = CF.toInt(getCookie(COOKIE.USERID));
-      PurchaseOrder.BranchID = this.state.BranchID;
-      PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY") === "Invalid date" ? moment().format("MM/DD/YYYY") : moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY");
-      PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("MM/DD/YYYY");
-      PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("MM/DD/YYYY");
-      PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("MM/DD/YYYY");
-
-      let PurchaseOrderLine = this.state.PurchaseOrderLine;
-
-      let PurchaseOrderLineList = [];
-      //  PurchaseOrderLineList=this.getProcessedPurchaseOrderLineListUpdate();
-      let newPOL = [];
-      for (let i = 0; i < PurchaseOrderLine.length; i++) {
-        let o = {
-          "POID": PurchaseOrderLine[i].POID,
-          "Type": PurchaseOrderLine[i].Type,
-          "LNo": PurchaseOrderLine[i].LNo,
-          "TypeID": PurchaseOrderLine[i].TypeID,
-          "SupplierCode": PurchaseOrderLine[i].SupplierCode === null ? "" : PurchaseOrderLine[i].SupplierCode,
-          "Narration": PurchaseOrderLine[i].Narration === null ? "" : PurchaseOrderLine[i].Narration,
-          "UOMID": PurchaseOrderLine[i].UOMID,
-          "TolerancePercentage": PurchaseOrderLine[i].TolerancePercentage,
-          "Quantity": parseFloat(PurchaseOrderLine[i].Quantity),
-          "Price": parseFloat(PurchaseOrderLine[i].Price),
-          "LineDiscPercentage": PurchaseOrderLine[i].LineDiscPercentage,
-          "ItemPostingGroupID": PurchaseOrderLine[i].ItemPostingGroupID,
-          "VATPercentage": PurchaseOrderLine[i].VATPercentage,
-          "HSNCode": PurchaseOrderLine[i].HSNCode,
-          "GSTGroupID": PurchaseOrderLine[i].GSTGroupID,
-          "SupplyStateID": this.state.StateID,
-          "GSTPercentage": PurchaseOrderLine[i].GSTPercentage,
-          "DValueID": PurchaseOrderLine[i].DValueID,
-          "IsQuality": this.state.Branch.IsQuality===false?false:PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
-          "IsLot": this.state.Branch.IsLot===false?false:PurchaseOrderLine[i].IsLot//if branch is false- send false OR if branch is true - send actual value
-        };
-        newPOL.push(o);
-      }
-
-
-      let isProperData = this.validatePOData(PurchaseOrder);
-      let reqData = {
-        ValidUser: ValidUser,
-        PurchaseOrder: PurchaseOrder,
-        PurchaseOrderLineList: newPOL
-      };
-      let Url = APIURLS.APIURL.Add_Update_PO;
-      axios
-        .post(Url, reqData, { headers })
-        .then((response) => {
-          if (response.status === 201 || response.status === 200) {
-            this.setState({ SuccessPrompt: true, ProgressLoader: true });
-
-            let PO = this.state.PO;
-            PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
-            PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
-            PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
-            if (PO.AmendmentNo > 0) {
-              PO.AmendmentDate = moment(PO.AmendmentDate).format("YYYY-MM-DD");
-            } else {
-              PO.AmendmentDate = "";
-            }
-            this.setState({
-              PO:PO
-            });
-
-          }
-
-        })
-        .catch((error) => {
-          this.setState({ ErrorPrompt: true, ProgressLoader: true });
-        });
-
 
     };
+
+   
 
     const breadcrumbHtml = (
       <Fragment>
@@ -2181,9 +1892,9 @@ class pomrnactivity extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          masterHref={URLS.URLS.poMaster + this.state.urlparams}
-          masterLinkTitle="Purchase Order"
-          typoTitle={this.state.typoTitle}
+          masterHref={URLS.URLS.mrn + this.state.urlparams}
+          masterLinkTitle="MRN"
+          typoTitle={"Add"}
           level={2}
         />
       </Fragment>
@@ -2197,80 +1908,14 @@ class pomrnactivity extends React.Component {
           aria-label="Action Menu Button group"
         >
 
-
-
-          {this.state.type === "add" ? (
             <Button
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
-              onClick={(e) => AddNew(e)}
+              // onClick={(e) => AddNew(e)}
               disabled={this.state.DisableCreatebtn}
             >
               {APIURLS.buttonTitle.save.name}
             </Button>
-          ) : null}
-
-          {this.state.type === "edit" ? (
-            <Button
-              startIcon={APIURLS.buttonTitle.save.icon}
-              className="action-btns"
-              onClick={(e) => updatePO(e)}
-              disabled={this.state.DisableUpdatebtn}
-            >
-              {APIURLS.buttonTitle.save.name}
-            </Button>
-          ) : null}
-
-        
-
-          <Button
-            startIcon={APIURLS.buttonTitle.view.icon}
-            className="action-btns"
-            onClick={(e) => this.openDialog("View")}
-          >
-            {APIURLS.buttonTitle.view.name}
-          </Button>
-
-          {this.state.type === "edit"?(
-            <ReactToPrint
-            trigger={() => {
-              // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
-              // to the root node of the returned component as it will be overwritten.
-              return (
-                <Button
-                  startIcon={APIURLS.buttonTitle.print.icon}
-                  className="action-btns"
-                >
-                  {APIURLS.buttonTitle.print.name}
-                </Button>
-              );
-            }}
-            content={() => this.componentRef}
-          />
-          ):null}
-
-
-          {this.state.PO.Status === 1 ? (
-            <Button
-              startIcon={APIURLS.buttonTitle.release.icon}
-              className="action-btns"
-              onClick={(e) => this.releasePO(e)}
-
-            >
-              {APIURLS.buttonTitle.release.name}
-            </Button>
-          ) : null}
-
-          {this.state.PO.Status === 2 ? (
-            <Button
-              startIcon={APIURLS.buttonTitle.reopen.icon}
-              className="action-btns"
-              onClick={(e) => this.reopenPO(e)}
-
-            >
-              {APIURLS.buttonTitle.reopen.name}
-            </Button>
-          ) : null}
 
         </ButtonGroup>
       </Fragment>
@@ -2374,85 +2019,9 @@ class pomrnactivity extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
-        <div style={{ display: "none" }}>       
-          {this.state.PO.IsImport===false?(            
-            <PrintLocalPo podata={
-              {
-                Branch:this.state.Branch,
-                PO:this.state.PO,
-                PurchaseOrderLine:this.state.PurchaseOrderLine,
-                UOMList:this.state.UOMList,
-                CurrencyList:this.state.CurrencyList,
-                Supplier:{
-                  Name:this.getSupplierName(),
-                  Address:this.state.Address,
-                  Address2:this.state.Address2,
-                  Address3:this.state.Address3,
-                  City:this.state.City,
-                  PostCode:this.state.PostCode,
-                  CountryID:this.state.CountryID,
-                  StateID:this.state.StateID,
-                  CountryList:this.state.CountryList,
-                  StateList:this.state.StateList
-                  }
-              }
-            }  ref={el => (this.componentRef = el)} />
-          ):(
-            <PrintImportPo podata={
-              {
-                Branch:this.state.Branch,
-                PO:this.state.PO,
-                PurchaseOrderLine:this.state.PurchaseOrderLine,
-                UOMList:this.state.UOMList,
-                CurrencyList:this.state.CurrencyList,
-                Supplier:{
-                  Name:this.getSupplierName(),
-                  Address:this.state.Address,
-                  Address2:this.state.Address2,
-                  Address3:this.state.Address3,
-                  City:this.state.City,
-                  PostCode:this.state.PostCode,
-                  CountryID:this.state.CountryID,
-                  StateID:this.state.StateID,
-                  CountryList:this.state.CountryList,
-                  StateList:this.state.StateList
-                  }
-              }
-            }  ref={el => (this.componentRef = el)} />
-          )}          
-        </div>
+       
 
-        <Fragment>
-          <div style={{ height: 10 }}>&nbsp;</div>
-          <div style={{ height: 10 }}>&nbsp;</div>
-          <Grid container spacing={0}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={2} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <Stepper activeStep={this.state.stepper.activeStep}>
-                    {this.state.stepper.steps.map((label, index) => {
-                      const stepProps = {};
-                      const labelProps = {};
-                      return (
-                        <Step key={label} {...stepProps}>
-                          <StepLabel {...labelProps}>
-                            {index === 2 ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
-                             
-                          </StepLabel>
-                        </Step>
-                      );
-                    })}
-                  </Stepper>
-                </Grid>
-                <Grid item xs={12} sm={12} md={2} lg={2}></Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <div style={{ height: 10 }}>&nbsp;</div>
-          <div style={{ height: 10 }}>&nbsp;</div>
-
-        </Fragment>
+         
 
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -2488,9 +2057,18 @@ class pomrnactivity extends React.Component {
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid container spacing={0}>
                                 <Grid item xs={12} sm={12} md={11} lg={11}>
+                                <SIB
+                                    id="MRNNo"
+                                    label="No"
+                                    variant="outlined"
+                                    size="small"
+                                    value={null}
+                                    disabled={true}
+                                  />
+
                                   <SIB
                                     id="No"
-                                    label="No"
+                                    label="PO No"
                                     variant="outlined"
                                     size="small"
                                     value={this.state.PO.No}
@@ -2504,6 +2082,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.SADIB_VALUE}
                                     options={this.state.supplierList}
                                     isMandatory={true}
+                                    disabled={true}
                                   />
 
                                   <SDIB
@@ -2513,6 +2092,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.BillingID}
                                     param={this.state.SupplierAdressList}
                                     isMandatory={true}
+                                    disabled={true}
                                   />
 
                                   <SIB
@@ -2521,6 +2101,7 @@ class pomrnactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Name}
+                                    disabled={true}
                                     disabled={true}
                                   />
 
@@ -2533,6 +2114,7 @@ class pomrnactivity extends React.Component {
                                     size="small"
                                     value={this.state.Address}
                                     disabled={true}
+
                                   />
                                   <SIB
                                     id="Address2"
@@ -2592,6 +2174,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.WareHouseID}
                                     param={this.state.WarehouseList}
                                     isMandatory={true}
+                                    
                                   />
 
 
@@ -2600,7 +2183,7 @@ class pomrnactivity extends React.Component {
                                     id="IsImport"
                                     label="Import?"
                                     param={this.state.PO.IsImport}
-
+                                    disabled={true}
                                   />
 
 
@@ -2625,6 +2208,7 @@ class pomrnactivity extends React.Component {
                                       this.updateFormValue("PODate", e)
                                     }
                                     value={this.state.PO.PODate}
+                                    disabled={true}
                                   />
                                   <SDIB
                                     id="POType"
@@ -2633,110 +2217,9 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.POType}
                                     param={this.state.POTypeList}
                                     isMandatory={true}
-                                  />
-
-                                  {this.state.type === "add" ? (
-                                    <SSIB
-                                      key="amendEvent"
-                                      id="AmendmentInput"
-                                      label="Amending?"
-                                      param={false}
-                                      // onChange={(e) => this.updateFormValue("AmendmentInput", e)}
-                                      disabled={true}
-                                    />
-                                  ) : null}
-
-                                  {this.state.type === "edit" ? (
-                                    <SSIB
-                                      key="amendEvent"
-                                      id="AmendmentInput"
-                                      label="Amending?"
-                                      param={this.state.AmendmentInput.status}
-                                      onChange={(e) => this.updateFormValue("AmendmentInput", e)}
-                                      disabled={false}
-                                    />
-                                  ) : null}
-
-
-                                  <SIB
-                                    id="AmendmentNo"
-                                    label="Amendment No"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PO.AmendmentNo}
-                                    disabled={true}
-                                  />
-                                  <SDTI
-                                    id="AmendmentDate"
-                                    label="Amendment Date"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("AmendmentDate", e)
-                                    }
-                                    value={this.state.PO.AmendmentDate}
                                     disabled={true}
                                   />
 
-
-
-                                  <SDTI
-                                    isMandatory={true}
-                                    id="DispachDate"
-                                    label="Dispach Date"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("DispachDate", e)
-                                    }
-                                    value={this.state.PO.DispachDate}
-                                  />
-
-                                  <SDTI
-                                    isMandatory={true}
-                                    id="DeliveryDate"
-                                    label="Delivery Date"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("DeliveryDate", e)
-                                    }
-                                    value={this.state.PO.DeliveryDate}
-                                  />
-
-                                  <SIB
-                                    id="ContactPerson"
-                                    label="Contact Person"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PO.ContactPerson}
-                                    onChange={(e) =>
-                                      this.updateFormValue("ContactPerson", e)
-                                    }
-                                  />
-
-                                  <SIB
-                                    id="Reference"
-                                    label="Referance"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PO.Reference}
-                                    onChange={(e) =>
-                                      this.updateFormValue("Reference", e)
-                                    }
-                                  />
-
-
-                                  <SIB
-                                    id="NotifyTo"
-                                    label="Notify To"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PO.NotifyTo}
-                                    onChange={(e) =>
-                                      this.updateFormValue("NotifyTo", e)
-                                    }
-                                  />
 
                                   {/* check this section as per branch details */}
                                   {/* Start */}
@@ -2747,6 +2230,7 @@ class pomrnactivity extends React.Component {
                                     param={this.state.PO.IsSEZPurchase}
                                     onChange={(e) => this.updateFormValue("IsSEZPurchase", e)}
                                     disabled={this.state.Branch.IsSEZ === true ? false : true}
+                                     
                                   />
 
                                   <SSIB
@@ -2756,6 +2240,7 @@ class pomrnactivity extends React.Component {
                                     param={this.state.PO.IsRounding}
                                     onChange={(e) => this.updateFormValue("IsRounding", e)}
                                     disabled={this.state.Branch.AllowRounding === true ? false : true}
+                                    
                                   />
                                   {/* End */}
 
@@ -3221,6 +2706,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.CurrID}
                                     param={this.state.CurrencyList}
                                     isMandatory={true}
+                                    disabled={true}
                                   />
 
                                   <SIB
@@ -3231,6 +2717,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.ExchRate}
                                     onChange={(e) => this.updateFormValue("ExchRate", e)}
                                     isMandatory={true}
+                                    disabled={true}
                                   />
 
                                   <SDIB
@@ -3255,7 +2742,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.PaymentTermID}
                                     param={this.state.PaymentTermsList}
                                     isMandatory={true}
-
+                                    disabled={true}
                                   />
                                   <SIB
                                     id="PaymentTerm"
@@ -3265,6 +2752,7 @@ class pomrnactivity extends React.Component {
                                     size="small"
                                     value={this.state.PO.PaymentTerm}
                                     isMandatory={true}
+                                    disabled={true}
                                   />
                                   <SDIB
                                     id="SupplierPostingGroupID"
@@ -3390,6 +2878,7 @@ class pomrnactivity extends React.Component {
                                     id="IsRegistedSupplier"
                                     label="Registed Supplier?"
                                     param={this.state.PO.IsRegistedSupplier}
+                                    disabled={true}
 
                                   />
 
@@ -3422,7 +2911,7 @@ class pomrnactivity extends React.Component {
                                     id="IsTaxExempt"
                                     label="Is TaxExempt?"
                                     param={this.state.PO.IsTaxExempt}
-
+                                    disabled={true}
                                   />
 
                                   <SIB
@@ -3441,6 +2930,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.MODTaxID}
                                     param={this.state.MODTaxList}
                                     isMandatory={true}
+                                    disabled={true}
                                   />
 
                                 </Grid>
@@ -3493,7 +2983,7 @@ class pomrnactivity extends React.Component {
                                     onChange={(e) => this.updateFormValue("IncoID", e)}
                                     value={this.state.PO.IncoID}
                                     param={this.state.IncoTermList}
-
+                                    disabled={true}
                                   />
 
                                   <SIB
@@ -3505,6 +2995,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.DeliveryAddress}
                                     multiline={true}
                                     rows={5}
+                                    disabled={true}
                                   />
                                   <div style={{ height: 70 }}>&nbsp;</div>
                                 </Grid>
@@ -3521,6 +3012,7 @@ class pomrnactivity extends React.Component {
                                     onChange={(e) => this.updateFormValue("ShipmentModeID", e)}
                                     value={this.state.PO.ShipmentModeID}
                                     param={this.state.ShipmentModeList}
+                                    disabled={true}
                                   />
 
                                   <SIB
@@ -3532,6 +3024,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.SpecialInst}
                                     multiline={true}
                                     rows={5}
+                                    disabled={true}
                                   />
                                   <div style={{ height: 70 }}>&nbsp;</div>
                                 </Grid>
@@ -3561,6 +3054,7 @@ class pomrnactivity extends React.Component {
                                 value={this.state.PO.Notes}
                                 multiline={true}
                                 rows={3}
+                                disabled={true}
                               />
                             </Grid>
                           </Grid>
@@ -3599,107 +3093,7 @@ class pomrnactivity extends React.Component {
                         <Grid container spacing={0}>
                           <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                           <Grid item xs={12} sm={12} md={10} lg={10}>
-                            <div style={{ marginTop: 10 }}>
-
-                              <Grid container spacing={0}>
-                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                  <h3>Supplier Statistics</h3>
-                                </Grid>
-                              </Grid>
-                              <Grid container spacing={0}>
-                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                  <SSDV
-                                    label="Supplier No."
-                                    value="S0001"
-                                  />
-                                  <SSDV
-                                    label="Balance"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Outstanding Orders"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Outstanding Invoices"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Total"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Invoice Prepaid Amount"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Payments"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Last payment Date"
-                                    value="30/11/2021"
-                                  />
-                                </Grid>
-                              </Grid>
-
-                              <Grid container spacing={0} style={{ marginTop: 20 }}>
-                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                  <Divider />
-                                </Grid>
-                              </Grid>
-
-                              <Grid container spacing={0}>
-                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                  <h3>Supplier History</h3>
-                                </Grid>
-                              </Grid>
-
-                              <Grid container spacing={1} >
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                  <div key="paymentPendingLink" to="#" className="card-link">
-                                    <Card className="dash-activity-card2" raised={false}>
-                                      <CardContent>
-                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                          Orders
-                                        </Typography>
-                                        <Typography >
-                                          870
-                                        </Typography>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                  <div key="paymentPendingLink" to="#" className="card-link">
-                                    <Card className="dash-activity-card2" raised={false}>
-                                      <CardContent>
-                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                          Quotes
-                                        </Typography>
-                                        <Typography>
-                                          5
-                                        </Typography>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                  <div key="paymentPendingLink" to="#" className="card-link">
-                                    <Card className="dash-activity-card2" raised={false}>
-                                      <CardContent>
-                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                          Com. Pur..
-                                        </Typography>
-                                        <Typography>
-                                          1,766
-                                        </Typography>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
-                                </Grid>
-                              </Grid>
-                            </div>
+                            
                           </Grid>
                           <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                         </Grid>

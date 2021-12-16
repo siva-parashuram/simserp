@@ -9,6 +9,11 @@ import * as CF from "../../../services/functions/customfunctions";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import IconButton from "@mui/material/IconButton";
 
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import Breadcrumb from "../../compo/breadcrumb";
@@ -16,22 +21,18 @@ import Tableskeleton from "../../compo/tableskeleton";
 import BackdropLoader from "../../compo/backdrop";
 import MasterDataGrid from "../../compo/masterdatagrid";
 
-// document.addEventListener('keydown', function (e) {
-//     switch (e.keyCode) {
-//         case 78:
-//             document.getElementById("add_New").click();
-//             break;
-//         default:
-//             console.log("e > ", e);
-//             break;
-//     }
-// });
+ import PoMrnMaster from '../po/poMrnMaster';
 
 
-class poMaster extends React.Component {
+class mrn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            Dialog: {
+                DialogTitle: "",
+                DialogStatus: false,
+                DialogContent: null,
+              },
             pagination: {
                 page: 1,
                 rowsPerPage: APIURLS.pagination.rowsPerPage,
@@ -61,11 +62,11 @@ class poMaster extends React.Component {
             "&branchName=" +
             branchName;
         this.setState({ urlparams: urlparams, BranchID: branchId, editBtnDisable: false }, () => {
-            this.getPOList();
+            this.getMRNList();
         });
     }
 
-    getPOList = () => {
+    getMRNList = () => {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -77,7 +78,7 @@ class poMaster extends React.Component {
             ValidUser: ValidUser,
             PurchaseOrder: {
                 BranchID: CF.toInt(this.state.BranchID),
-                Status:0
+                Status:5
             }
         };
         axios
@@ -111,7 +112,7 @@ class poMaster extends React.Component {
             let item = this.state.PODataList[index - 1]; 
             console.log("handleRowClick > item > ", item);          
             let editUrl =
-                URLS.URLS.editPO +
+                URLS.URLS.doPOMRN +
                 this.state.urlparams +
                 "&editPOID=" +
                 item.POID + "&type=edit";
@@ -126,6 +127,8 @@ class poMaster extends React.Component {
         }
     }
 
+    
+
     render() {
         const openPage = (url) => {
             // this.setState({ ProgressLoader: false });
@@ -139,13 +142,87 @@ class poMaster extends React.Component {
             this.setState({ pagination: pagination });
         };
 
+        const POFORMRN = <PoMrnMaster/>;
+
+        const openDialog = (param) => {
+        let Dialog = this.state.Dialog;
+        Dialog.DialogStatus = true;
+  
+  
+        switch (param) {
+          case "Add":
+            Dialog.DialogTitle = "PO for MRN";
+            Dialog.DialogContent = POFORMRN;
+            this.setState({ Dialog: Dialog });
+            break;
+          default:
+            break;
+        }
+  
+        this.setState({ Dialog: Dialog });
+      };
+
+      const dialog = (
+        <Fragment>
+          <Dialog
+            fullWidth={true}
+            maxWidth="lg"
+            open={this.state.Dialog.DialogStatus}
+            aria-labelledby="dialog-title"
+            aria-describedby="dialog-description"
+            className="dialog-prompt-activity"
+          >
+            <DialogTitle
+              id="dialog-title"
+              className="dialog-area"
+              style={{ maxHeight: 50 }}
+            >
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={1} lg={1}>
+                  <IconButton
+                    aria-label="ArrowBackIcon"
+                  // style={{ textAlign: 'left', marginTop: 8 }}
+                  >
+                    <ArrowBackIcon onClick={(e) => handleClose()} />
+                  </IconButton>
+                </Grid>
+                <Grid item xs={12} sm={12} md={2} lg={2}>
+                  <div style={{ marginLeft: -50 }}>
+                    {" "}
+                    <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
+                      {" "}
+                      {this.state.Dialog.DialogTitle}{" "}
+                    </span>{" "}
+                  </div>
+                </Grid>
+              </Grid>
+            </DialogTitle>
+            <DialogContent className="dialog-area">
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  {this.state.Dialog.DialogContent}
+                </Grid>
+              </Grid>
+  
+            </DialogContent>
+          </Dialog>
+        </Fragment>
+      );
+
+      const handleClose = () => {
+        let Dialog = this.state.Dialog;
+        Dialog.DialogStatus = false;
+        this.setState({ Dialog: Dialog });
+         
+      };
+
         const breadcrumbHtml = (
             <Fragment>
                 <Breadcrumb
                     backOnClick={this.props.history.goBack}
                     linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                     linkTitle="Dashboard"
-                    typoTitle="Purchase Order"
+                    typoTitle="MRN"
                     level={1}
                 />
             </Fragment>
@@ -158,16 +235,17 @@ class poMaster extends React.Component {
                     variant="text"
                     aria-label="Action Menu Button group"
                 >
+
                     <Button
-                        id="add_New"
-                        className="action-btns"
+
                         startIcon={APIURLS.buttonTitle.add.icon}
-                        onClick={(e) =>
-                            openPage(URLS.URLS.addPO + this.state.urlparams + "&type=add")
-                        }
+                        className="action-btns"
+                         onClick={(e) => openDialog("Add")}
+                        disabled={this.state.DisableCreatebtn}
                     >
                         {APIURLS.buttonTitle.add.name}
                     </Button>
+                   
                     <Button className="action-btns"
                         startIcon={APIURLS.buttonTitle.edit.icon}
                         onClick={(e) =>
@@ -240,10 +318,13 @@ class poMaster extends React.Component {
                     </Grid>
                 </Grid>
 
+
+
+{dialog}
             </Fragment>
         )
     }
 
 }
-export default poMaster;
+export default mrn;
 

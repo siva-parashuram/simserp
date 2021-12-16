@@ -612,7 +612,8 @@ class printlocalpo extends React.Component {
                                 <span>
                                     For Siva Tec Ltd<br />
                                     Computer generated PO does not required signature<br />
-                                    Authorized by Vipul Thakkar
+                                    {this.props.podata.PO.AuthorizeName===""?"Un-Authorized":"Authorized by "+this.props.podata.PO.AuthorizeName}
+                                    {console.log("this.props > ",this.props)}
                                 </span>
                             </div>
                         </Grid>

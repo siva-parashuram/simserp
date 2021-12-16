@@ -75,6 +75,7 @@ class poactivity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      RADialogStatus:false,
       Dialog: {
         DialogTitle: "",
         DialogStatus: false,
@@ -246,6 +247,14 @@ class poactivity extends React.Component {
         IsLot: false,
         isDataProper: false,
       },
+      PurchaseOrderAuthorize:{
+        ID:0,
+        // AuthoriseDate:today,
+        Type:"",//Status
+        Details:"",
+        UserID:"",
+        POID:""
+      }
 
     };
   }
@@ -375,6 +384,24 @@ class poactivity extends React.Component {
     
   }
 
+  setStepper = (PO) => {
+    let stepper = this.state.stepper;
+    if (CF.toInt(PO.Status) === 1) {
+      stepper.activeStep = 0;
+    }
+    if (CF.toInt(PO.Status) === 2) {
+      stepper.activeStep = 1;
+    }
+    if (CF.toInt(PO.Status) === 3) {
+      stepper.activeStep = 2;
+    }
+    if (CF.toInt(PO.Status) === 4) {
+      stepper.activeStep = 3;
+    }
+
+    this.setState({ stepper: stepper });
+  }
+
   getPODetails = (PO) => {
     // this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
@@ -397,6 +424,17 @@ class poactivity extends React.Component {
           let ResonsePO = response.data;
           let PO = ResonsePO;
           let PurchaseOrderLine = ResonsePO.PurchaseOrderLine;
+          if (CF.toInt(PO.Status) > 1) {
+            this.setState({
+              accordion1: true,
+              accordion2: true,
+              accordion3: true,
+              accordion4: true,
+              accordion5: true,
+            });
+          }
+          this.setStepper(PO);
+
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
 
           PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
@@ -1269,52 +1307,7 @@ class poactivity extends React.Component {
     Dialog.DialogStatus = false;
     this.setState({ Dialog: Dialog });
   };
-
-  // viewLocalPO= <PrintLocalPo podata={
-  //   {
-  //     Branch: this.state.Branch,
-  //     PO: this.state.PO,
-  //     PurchaseOrderLine: this.state.PurchaseOrderLine,
-  //     UOMList: this.state.UOMList,
-  //     CurrencyList: this.state.CurrencyList,
-  //     Supplier: {
-  //       Name: this.getSupplierName(),
-  //       Address: this.state.Address,
-  //       Address2: this.state.Address2,
-  //       Address3: this.state.Address3,
-  //       City: this.state.City,
-  //       PostCode: this.state.PostCode,
-  //       CountryID: this.state.CountryID,
-  //       StateID: this.state.StateID,
-  //       CountryList: this.state.CountryList,
-  //       StateList: this.state.StateList
-  //     }
-  //   }
-  // } />;
-
-  // viewImportPO =   <PrintImportPo podata={
-  //   {
-  //     Branch: this.state.Branch,
-  //     PO: this.state.PO,
-  //     PurchaseOrderLine: this.state.PurchaseOrderLine,
-  //     UOMList: this.state.UOMList,
-  //     CurrencyList: this.state.CurrencyList,
-  //     Supplier: {
-  //       Name: this.getSupplierName(),
-  //       Address: this.state.Address,
-  //       Address2: this.state.Address2,
-  //       Address3: this.state.Address3,
-  //       City: this.state.City,
-  //       PostCode: this.state.PostCode,
-  //       CountryID: this.state.CountryID,
-  //       StateID: this.state.StateID,
-  //       CountryList: this.state.CountryList,
-  //       StateList: this.state.StateList
-  //     }
-  //   }
-  // } />;
-
-
+ 
 
   openDialog = (param) => {
     let Dialog = this.state.Dialog;
@@ -1920,35 +1913,175 @@ class poactivity extends React.Component {
     }
   }
 
+  updateAuthorization = (id, e) => {
+    if (id === "Details") {
+      let PurchaseOrderAuthorize = this.state.PurchaseOrderAuthorize;
+      PurchaseOrderAuthorize.Details = e.target.value;
+      this.setState({ PurchaseOrderAuthorize: PurchaseOrderAuthorize });
+    }
+  }
+
   releasePO=()=>{
-   let PO=this.state.PO;
-   PO.Status=2;
+   this.setState({ProgressLoader:false});
 
-   let stepper=this.state.stepper;
-   stepper.activeStep=1;
+   let ValidUser = APIURLS.ValidUser;
+   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+   ValidUser.Token = getCookie(COOKIE.TOKEN);
+   const headers = {
+     "Content-Type": "application/json",
+   };
 
-   this.setState({PO:PO,stepper:stepper});
+   let  PurchaseOrderAuthorize=this.state.PurchaseOrderAuthorize;
+   PurchaseOrderAuthorize.POID=this.state.PO.POID;
+  //  PurchaseOrderAuthorize.AuthoriseDate = moment(today).format("MM/DD/YYYY");
+   PurchaseOrderAuthorize.Type=2;
+   PurchaseOrderAuthorize.UserID=parseInt(getCookie(COOKIE.USERID));
+
+   if (PurchaseOrderAuthorize.Details.trim() === "") { 
+    this.setState({ErrorMessageProps:"Invalid Input",ProgressLoader:true});
+  }else{
+    let reqData = {
+      ValidUser: ValidUser,
+      PurchaseOrderAuthorize: PurchaseOrderAuthorize
+    };
+    let Url = APIURLS.APIURL.Add_Update_PurchaseOrderAuthorize;
+    axios
+    .post(Url, reqData, { headers })
+    .then((response) => {
+      if (response.status === 201 || response.status === 200) {
+        
+        let PO=this.state.PO;
+        PO.Status=2;
+     
+        let stepper=this.state.stepper;
+        stepper.activeStep=1;
+     
+        PurchaseOrderAuthorize.Details="";
+        this.setState({
+          PurchaseOrderAuthorize:PurchaseOrderAuthorize,
+          PO:PO,
+          stepper:stepper,
+          RADialogStatus:false,
+          ProgressLoader:true,
+          SuccessPrompt: true
+        });
+        this.getPODetails(PO);
+      }else{
+        let PO=this.state.PO;
+        PO.Status=1;
+        let stepper=this.state.stepper;
+        stepper.activeStep=0;
+        this.setState({   
+          PO:PO,
+          stepper:stepper,       
+          ErrorPrompt: true
+        });
+      }
+
+    })
+    .catch((error) => {
+      let PO=this.state.PO;
+        PO.Status=1;
+        let stepper=this.state.stepper;
+        stepper.activeStep=0;
+      this.setState({
+        PO:PO,
+        stepper:stepper,
+         ErrorPrompt: true, 
+         ProgressLoader: true
+         });
+    });
+  }
 
   }
 
   reopenPO=()=>{
-    let PO=this.state.PO;
-    PO.Status=1; 
-    let stepper=this.state.stepper;
-    stepper.activeStep=0;
- 
-    this.setState({PO:PO,stepper:stepper});
- 
+    this.setState({ProgressLoader:false});
+
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    let  PurchaseOrderAuthorize=this.state.PurchaseOrderAuthorize;
+    PurchaseOrderAuthorize.POID=this.state.PO.POID;
+    // PurchaseOrderAuthorize.AuthoriseDate = moment(today).format("MM/DD/YYYY");
+    PurchaseOrderAuthorize.Type=1;
+    PurchaseOrderAuthorize.UserID=parseInt(getCookie(COOKIE.USERID));
+
+
+    if (PurchaseOrderAuthorize.Details.trim() === "") { 
+      this.setState({ErrorMessageProps:"Invalid Input",ProgressLoader:true});
+    } else {
+      let reqData = {
+        ValidUser: ValidUser,
+        PurchaseOrderAuthorize: PurchaseOrderAuthorize
+      };
+      let Url = APIURLS.APIURL.Add_Update_PurchaseOrderAuthorize;
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          if (response.status === 201 || response.status === 200) {
+
+            let PO = this.state.PO;
+            PO.Status = 1;
+            let stepper = this.state.stepper;
+            stepper.activeStep = 0;
+
+            PurchaseOrderAuthorize.Details="";
+            this.setState({
+              PurchaseOrderAuthorize:PurchaseOrderAuthorize,
+              PO: PO,
+              stepper: stepper,
+              RADialogStatus: false,
+              ProgressLoader: true,
+              SuccessPrompt: true
+            });
+            this.getPODetails(PO);
+
+          } else {
+            let PO = this.state.PO;
+            PO.Status = 2;
+            let stepper = this.state.stepper;
+            stepper.activeStep = 1;
+            this.setState({
+              PO: PO,
+              stepper: stepper,
+              ErrorPrompt: true
+            });
+          }
+
+        })
+        .catch((error) => {
+          let PO = this.state.PO;
+          PO.Status = 2;
+          let stepper = this.state.stepper;
+          stepper.activeStep = 1;
+          this.setState({
+            PO: PO,
+            stepper: stepper,
+            ErrorPrompt: true,
+            ProgressLoader: true
+          });
+        });
+    }
+
    }
 
-  // stepper: {
-  //   MRNSTATUS: 1,
-  //   activeStep: 0,
-  //   steps: ["Open", "Release", "MRN", "Short Close"],
-  //   skipped: new Set(),
-  // }
+ 
 
   render() {
+
+    //to disable screen if Status is not Open
+    let disableEvents = false;
+    disableEvents = CF.toInt(this.state.PO.Status)>1?true:false;
+    const disabledStyle = { 
+      "pointer-events": disableEvents ? "none" : "unset" 
+    };
+
+
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
         this.state.accordion1 === true
@@ -2083,10 +2216,6 @@ class poactivity extends React.Component {
         "Content-Type": "application/json",
       };
 
-
-    
-
-
       let PurchaseOrder = this.state.PO;
       //----------Added for sending Chnaged Name and adress data
       PurchaseOrder.Name = this.state.Name;
@@ -2201,6 +2330,7 @@ class poactivity extends React.Component {
 
           {this.state.type === "add" ? (
             <Button
+            
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
               onClick={(e) => AddNew(e)}
@@ -2212,6 +2342,7 @@ class poactivity extends React.Component {
 
           {this.state.type === "edit" ? (
             <Button
+              style={disabledStyle}
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
               onClick={(e) => updatePO(e)}
@@ -2254,8 +2385,8 @@ class poactivity extends React.Component {
             <Button
               startIcon={APIURLS.buttonTitle.release.icon}
               className="action-btns"
-              onClick={(e) => this.releasePO(e)}
-
+              // onClick={(e) => this.releasePO(e)}
+              onClick={(e) => this.setState({RADialogStatus:true})}
             >
               {APIURLS.buttonTitle.release.name}
             </Button>
@@ -2265,8 +2396,8 @@ class poactivity extends React.Component {
             <Button
               startIcon={APIURLS.buttonTitle.reopen.icon}
               className="action-btns"
-              onClick={(e) => this.reopenPO(e)}
-
+              // onClick={(e) => this.reopenPO(e)}
+              onClick={(e) => this.setState({RADialogStatus:true})}
             >
               {APIURLS.buttonTitle.reopen.name}
             </Button>
@@ -2454,7 +2585,7 @@ class poactivity extends React.Component {
 
         </Fragment>
 
-        <Grid container spacing={0}>
+        <Grid container spacing={0} style={disabledStyle} >
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Grid className="table-adjust" container spacing={0}>
               <Grid item xs={12} sm={12} md={8} lg={8}>
@@ -2477,9 +2608,11 @@ class poactivity extends React.Component {
                     >General</Typography>
                   </AccordionSummary>
                   <AccordionDetails
-                    key="accordion1" className="AccordionDetails-css">
+                    key="accordion1" className="AccordionDetails-css" 
+                     
+                    >
                     <Fragment>
-                      <Grid container spacing={0}>
+                      <Grid container spacing={0} >
                         <Grid item xs={12} sm={12} md={12} lg={12}>
                           &nbsp;
                         </Grid>
@@ -2488,6 +2621,7 @@ class poactivity extends React.Component {
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid container spacing={0}>
                                 <Grid item xs={12} sm={12} md={11} lg={11}>
+
                                   <SIB
                                     id="No"
                                     label="No"
@@ -3737,13 +3871,61 @@ class poactivity extends React.Component {
           </DialogActions>
         </Dialog>
 
+        <Dialog
+          fullWidth={true}
+          maxWidth="xs"
+          className="dialog-prompt-activity"
+          open={this.state.RADialogStatus}
+          onClose={() => this.handleDialogClose()}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title" className="dialog-area">
+            <span style={{ color: 'red' }}>Purchase Order Status</span>
+          </DialogTitle>
+          <DialogContent className="dialog-area">
+
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                
+                <SIB
+                  isMandatory={true}
+                  id="Details"
+                  label="Comments"
+                  variant="outlined"
+                  size="small"
+                  value={this.state.PurchaseOrderAuthorize.Details}
+                  onChange={(e)=>this.updateAuthorization("Details",e)}
+                />
+
+              </Grid>
+            </Grid>
+           
+          </DialogContent>
+          <DialogActions className="dialog-area">
+            <Button className="action-btns" onClick={() => this.setState({RADialogStatus:false})}>Close</Button>
+
+            {this.state.PO.Status === 1 ? (
+              <Button 
+              startIcon={APIURLS.buttonTitle.release.icon} 
+              className="action-btns" onClick={() => this.releasePO()} >
+              Release
+              </Button>
+            ) : null}
+
+            {this.state.PO.Status === 2 ? (
+              <Button
+              startIcon={APIURLS.buttonTitle.reopen.icon} 
+              className="action-btns" onClick={() => this.reopenPO()} >
+                Reopen
+              </Button>
+            ) : null}
+            
+          </DialogActions>
+        </Dialog>
+
 
         {dialog}
-
-
-
-       
-
       </Fragment>
     );
   }

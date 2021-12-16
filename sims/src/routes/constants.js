@@ -71,7 +71,7 @@ export const URLS = {
   poMaster:"/poMaster",
   addPO:"/addPO",
   editPO:"/editPO",
-  poMrnMaster:"/poMrnMaster",
+  mrn:"/mrn",
   doPOMRN:"/doPOMRN",
   gstMaster:"/gstMaster",
   addGst:"/addGst",
