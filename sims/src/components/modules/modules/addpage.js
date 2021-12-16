@@ -463,7 +463,7 @@ class addpage extends React.Component {
           });
         }
       }
-      if (id === "PageLink") {
+      if (id === "pageLink") {
         if (e.target.value === "" || e.target.value.length > 100) {
           let Validations = this.state.Validations;
           if (e.target.value === "" || e.target.value === null) {

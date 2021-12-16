@@ -70,6 +70,9 @@ import supplierMaster from "../components/modules/supplier/supplierMaster";
 import supplieractivity from "../components/modules/supplier/supplieractivity";
 import poMaster from "../components/modules/po/poMaster";
 import poactivity from "../components/modules/po/poactivity";
+import poMrnMaster from "../components/modules/po/poMrnMaster";
+import pomrnactivity from "../components/modules/po/pomrnactivity";
+
 import gstMaster from "../components/modules/gst/gstmaster";
 import gstactivity from "../components/modules/gst/gstactivity";
 
@@ -222,6 +225,10 @@ let routes = ({ location, ...rest }) => {
           <Route path={URLS.URLS.poMaster} component={poMaster} />
           <Route path={URLS.URLS.addPO} component={poactivity} />
           <Route path={URLS.URLS.editPO} component={poactivity} />
+          <Route path={URLS.URLS.poMrnMaster} component={poMrnMaster} />
+          <Route path={URLS.URLS.doPOMRN} component={pomrnactivity} />
+
+          
           
 
           {/* Gst */}
