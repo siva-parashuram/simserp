@@ -380,9 +380,13 @@ class pomrnactivity extends React.Component {
         if (response.status === 200) {
           let ResonsePO = response.data;
           let PO = ResonsePO;
+
+          PO.FCValue=0.00;//resetting to update later on user change
+          PO.BaseValue=0.00;//resetting to update later on user change
+
           let PurchaseOrderLine = ResonsePO.PurchaseOrderLine;
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
-
+     
           PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
           PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
           PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
@@ -461,7 +465,7 @@ class pomrnactivity extends React.Component {
             StateID:PO.StateID ,
             ProgressLoader: true
           }, () => {
-            this.calculateInvoiceDetails();
+            // this.calculateInvoiceDetails();
             this.presetSetSupplierDropdown(PO);
             this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID), "IG"); //initialIgnore to not set address to stateID
           });
@@ -2706,7 +2710,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.CurrID}
                                     param={this.state.CurrencyList}
                                     isMandatory={true}
-                                    disabled={true}
+                                    
                                   />
 
                                   <SIB
@@ -2717,7 +2721,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.ExchRate}
                                     onChange={(e) => this.updateFormValue("ExchRate", e)}
                                     isMandatory={true}
-                                    disabled={true}
+                                    
                                   />
 
                                   <SDIB
@@ -2742,7 +2746,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.PaymentTermID}
                                     param={this.state.PaymentTermsList}
                                     isMandatory={true}
-                                    disabled={true}
+                                    
                                   />
                                   <SIB
                                     id="PaymentTerm"
@@ -2752,7 +2756,7 @@ class pomrnactivity extends React.Component {
                                     size="small"
                                     value={this.state.PO.PaymentTerm}
                                     isMandatory={true}
-                                    disabled={true}
+                                     
                                   />
                                   <SDIB
                                     id="SupplierPostingGroupID"
@@ -2930,7 +2934,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.MODTaxID}
                                     param={this.state.MODTaxList}
                                     isMandatory={true}
-                                    disabled={true}
+                                    
                                   />
 
                                 </Grid>
@@ -2995,7 +2999,6 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.DeliveryAddress}
                                     multiline={true}
                                     rows={5}
-                                    disabled={true}
                                   />
                                   <div style={{ height: 70 }}>&nbsp;</div>
                                 </Grid>
@@ -3012,7 +3015,6 @@ class pomrnactivity extends React.Component {
                                     onChange={(e) => this.updateFormValue("ShipmentModeID", e)}
                                     value={this.state.PO.ShipmentModeID}
                                     param={this.state.ShipmentModeList}
-                                    disabled={true}
                                   />
 
                                   <SIB
@@ -3024,7 +3026,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.SpecialInst}
                                     multiline={true}
                                     rows={5}
-                                    disabled={true}
+                                    
                                   />
                                   <div style={{ height: 70 }}>&nbsp;</div>
                                 </Grid>
