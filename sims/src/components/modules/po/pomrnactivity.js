@@ -337,7 +337,6 @@ class pomrnactivity extends React.Component {
       branchName;
 
 
-
     let PO = this.state.PO;
     PO.POID = CF.toInt(POID);
     if (type === "edit") {      
@@ -2393,7 +2392,7 @@ class pomrnactivity extends React.Component {
                                           >
                                             <option value="" >Select</option>
                                             {APIURLS.POItemType.map((op, i) => (
-                                              <option value={op.value} > {op.name}</option>
+                                              <option value={op.value}  disabled={CF.toInt(op.value)<3?true:false} > {op.name}</option>
 
                                             ))}
                                           </select>
@@ -2407,7 +2406,8 @@ class pomrnactivity extends React.Component {
                                             className="line-dropdown-css"
                                             value={item.CategoryId}
                                             onChange={(e) => this.updateLineDetail(i, "CategoryId", e)}
-                                            disabled={item.isCategoryDisabled}
+                                            // disabled={item.isCategoryDisabled}
+                                            disabled={true}
                                           >
                                             <option value="" >Select</option>
                                             {item.CategoryList.map((op, i) => (
