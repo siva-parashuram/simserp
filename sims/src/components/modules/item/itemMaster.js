@@ -136,7 +136,7 @@ class itemMaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Item Master"
+          typoTitle="Item"
           level={1}
         />
       </Fragment>
@@ -190,9 +190,9 @@ class itemMaster extends React.Component {
                   >
                     <TableHead className="table-header-background">
                       <TableRow>
-                        <TableCell className="table-header-font">#</TableCell>
+                        <TableCell className="table-header-font">No</TableCell>
                         <TableCell className="table-header-font" align="left">
-                          Item Code
+                          Code
                         </TableCell>
                         <TableCell className="table-header-font" align="left">
                           Alias

@@ -79,8 +79,8 @@ class itemquickdetails extends React.Component {
                                                     <TableCell align="right" className="no-border-table">{this.props.item.alias} </TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Item No.</TableCell>
-                                                    <TableCell align="right" className="no-border-table"> {this.props.item.itemNo}</TableCell>
+                                                    <TableCell align="left" className="no-border-table">No.</TableCell>
+                                                    <TableCell align="right" className="no-border-table"> {this.props.item.no}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">Description</TableCell>

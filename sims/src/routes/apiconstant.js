@@ -16,6 +16,10 @@ import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
+import NextPlanIcon from '@mui/icons-material/NextPlan';
+import UndoIcon from '@mui/icons-material/Undo';
+
+import Chip from '@mui/material/Chip';
 
 const domain = "http://192.168.10.200:8080/";
 
@@ -239,6 +243,14 @@ export const buttonTitle = {
   supplierprice:{
     name:"Supplier Price",
     icon:<AttachMoneyIcon/>
+  },
+  release:{
+    name:"Release",
+    icon:<NextPlanIcon/>
+  },
+  reopen:{
+    name:"Re-Open",
+    icon:<UndoIcon/>
   }
 };
 
@@ -717,7 +729,22 @@ export const poMasterColumn=[
        {moment(params.value).format("MM/DD/YYYY")}
       </Fragment>
     ),
-  },{
+  }
+  ,{
+    field: 'Status',
+    headerName: 'Status',
+    width: 120,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {params.value===1?(<Chip label="Open" size="small"/>):null}
+       {params.value===2?(<Chip label="Released"  color="primary"  size="small"/>):null}
+       {params.value===3?(<Chip label="MRN"  color="secondary"  size="small"/>):null}
+       {params.value===4?(<Chip label="Short Close"  color="success"  size="small"/>):null}
+      </Fragment>
+    ),
+  }
+  ,{
     field: 'SupplierName',
     headerName: 'Supplier Name',
     width: 250,

@@ -45,7 +45,7 @@ class poMaster extends React.Component {
             BranchID: 0,
             columns: APIURLS.poMasterColumn,
             PODataList: [],
-            selectionModel: 1,
+            selectionModel: [1],
         }
     }
     componentDidMount() {
@@ -76,7 +76,8 @@ class poMaster extends React.Component {
         let reqData = {
             ValidUser: ValidUser,
             PurchaseOrder: {
-                BranchID: CF.toInt(this.state.BranchID)
+                BranchID: CF.toInt(this.state.BranchID),
+                Status:0
             }
         };
         axios
@@ -144,7 +145,7 @@ class poMaster extends React.Component {
                     backOnClick={this.props.history.goBack}
                     linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                     linkTitle="Dashboard"
-                    typoTitle="Purchase Order Master"
+                    typoTitle="Purchase Order"
                     level={1}
                 />
             </Fragment>
@@ -199,7 +200,7 @@ class poMaster extends React.Component {
                                         rows={this.state.PODataList}
                                         columns={this.state.columns}
                                         pagination={this.state.pagination}
-                                        // disableSelectionOnClick={false}
+                                         disableSelectionOnClick={false}
                                         onSelectionModelChange={(e) => this.handleRowClick(e)}
                                         onPageChange={handlePageChange}
                                     />
@@ -212,7 +213,7 @@ class poMaster extends React.Component {
                                         rows={[]}
                                         columns={this.state.columns}
                                         pagination={this.state.pagination}
-                                        // disableSelectionOnClick={false}
+                                        disableSelectionOnClick={false}
                                         onSelectionModelChange={(e) => this.handleRowClick(e)}
                                         onPageChange={handlePageChange}
                                     />

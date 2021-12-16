@@ -142,7 +142,7 @@ class poactivity extends React.Component {
       InvoiceDetails: null,
       SADIB_VALUE: null,
       stepper: {
-        MRNSTATUS: 3,
+        MRNSTATUS: 1,
         activeStep: 0,
         steps: ["Open", "Release", "MRN", "Short Close"],
         skipped: new Set(),
@@ -1270,20 +1270,106 @@ class poactivity extends React.Component {
     this.setState({ Dialog: Dialog });
   };
 
+  // viewLocalPO= <PrintLocalPo podata={
+  //   {
+  //     Branch: this.state.Branch,
+  //     PO: this.state.PO,
+  //     PurchaseOrderLine: this.state.PurchaseOrderLine,
+  //     UOMList: this.state.UOMList,
+  //     CurrencyList: this.state.CurrencyList,
+  //     Supplier: {
+  //       Name: this.getSupplierName(),
+  //       Address: this.state.Address,
+  //       Address2: this.state.Address2,
+  //       Address3: this.state.Address3,
+  //       City: this.state.City,
+  //       PostCode: this.state.PostCode,
+  //       CountryID: this.state.CountryID,
+  //       StateID: this.state.StateID,
+  //       CountryList: this.state.CountryList,
+  //       StateList: this.state.StateList
+  //     }
+  //   }
+  // } />;
+
+  // viewImportPO =   <PrintImportPo podata={
+  //   {
+  //     Branch: this.state.Branch,
+  //     PO: this.state.PO,
+  //     PurchaseOrderLine: this.state.PurchaseOrderLine,
+  //     UOMList: this.state.UOMList,
+  //     CurrencyList: this.state.CurrencyList,
+  //     Supplier: {
+  //       Name: this.getSupplierName(),
+  //       Address: this.state.Address,
+  //       Address2: this.state.Address2,
+  //       Address3: this.state.Address3,
+  //       City: this.state.City,
+  //       PostCode: this.state.PostCode,
+  //       CountryID: this.state.CountryID,
+  //       StateID: this.state.StateID,
+  //       CountryList: this.state.CountryList,
+  //       StateList: this.state.StateList
+  //     }
+  //   }
+  // } />;
+
+
+
   openDialog = (param) => {
     let Dialog = this.state.Dialog;
     Dialog.DialogStatus = true;
-    Dialog.DialogTitle = param;
+    Dialog.DialogTitle = "View Purchase Order";
 
-    switch (param) {
-      case "View":
-        Dialog.DialogContent = <Viewpo />;
-        this.setState({ Dialog: Dialog });
-        break;
 
-      default:
-        break;
+    if(this.state.PO.IsImport===false){
+      Dialog.DialogContent = <PrintLocalPo podata={
+        {
+          Branch: this.state.Branch,
+          PO: this.state.PO,
+          PurchaseOrderLine: this.state.PurchaseOrderLine,
+          UOMList: this.state.UOMList,
+          CurrencyList: this.state.CurrencyList,
+          Supplier: {
+            Name: this.getSupplierName(),
+            Address: this.state.Address,
+            Address2: this.state.Address2,
+            Address3: this.state.Address3,
+            City: this.state.City,
+            PostCode: this.state.PostCode,
+            CountryID: this.state.CountryID,
+            StateID: this.state.StateID,
+            CountryList: this.state.CountryList,
+            StateList: this.state.StateList
+          }
+        }
+      } />;
     }
+
+    if(this.state.PO.IsImport===true){
+      Dialog.DialogContent =<PrintImportPo podata={
+          {
+            Branch: this.state.Branch,
+            PO: this.state.PO,
+            PurchaseOrderLine: this.state.PurchaseOrderLine,
+            UOMList: this.state.UOMList,
+            CurrencyList: this.state.CurrencyList,
+            Supplier: {
+              Name: this.getSupplierName(),
+              Address: this.state.Address,
+              Address2: this.state.Address2,
+              Address3: this.state.Address3,
+              City: this.state.City,
+              PostCode: this.state.PostCode,
+              CountryID: this.state.CountryID,
+              StateID: this.state.StateID,
+              CountryList: this.state.CountryList,
+              StateList: this.state.StateList
+            }
+          }
+        } />;
+    }
+   
 
     this.setState({ Dialog: Dialog });
   };
@@ -1834,6 +1920,34 @@ class poactivity extends React.Component {
     }
   }
 
+  releasePO=()=>{
+   let PO=this.state.PO;
+   PO.Status=2;
+
+   let stepper=this.state.stepper;
+   stepper.activeStep=1;
+
+   this.setState({PO:PO,stepper:stepper});
+
+  }
+
+  reopenPO=()=>{
+    let PO=this.state.PO;
+    PO.Status=1; 
+    let stepper=this.state.stepper;
+    stepper.activeStep=0;
+ 
+    this.setState({PO:PO,stepper:stepper});
+ 
+   }
+
+  // stepper: {
+  //   MRNSTATUS: 1,
+  //   activeStep: 0,
+  //   steps: ["Open", "Release", "MRN", "Short Close"],
+  //   skipped: new Set(),
+  // }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -2068,7 +2182,7 @@ class poactivity extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.poMaster + this.state.urlparams}
-          masterLinkTitle="PO Master"
+          masterLinkTitle="Purchase Order"
           typoTitle={this.state.typoTitle}
           level={2}
         />
@@ -2107,13 +2221,15 @@ class poactivity extends React.Component {
             </Button>
           ) : null}
 
-          {/* <Button
+        
+
+          <Button
             startIcon={APIURLS.buttonTitle.view.icon}
             className="action-btns"
             onClick={(e) => this.openDialog("View")}
           >
             {APIURLS.buttonTitle.view.name}
-          </Button> */}
+          </Button>
 
           {this.state.type === "edit"?(
             <ReactToPrint
@@ -2132,6 +2248,29 @@ class poactivity extends React.Component {
             content={() => this.componentRef}
           />
           ):null}
+
+
+          {this.state.PO.Status === 1 ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.release.icon}
+              className="action-btns"
+              onClick={(e) => this.releasePO(e)}
+
+            >
+              {APIURLS.buttonTitle.release.name}
+            </Button>
+          ) : null}
+
+          {this.state.PO.Status === 2 ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.reopen.icon}
+              className="action-btns"
+              onClick={(e) => this.reopenPO(e)}
+
+            >
+              {APIURLS.buttonTitle.reopen.name}
+            </Button>
+          ) : null}
 
         </ButtonGroup>
       </Fragment>
@@ -2156,8 +2295,7 @@ class poactivity extends React.Component {
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={1} lg={1}>
                 <IconButton
-                  aria-label="ArrowBackIcon"
-                // style={{ textAlign: 'left', marginTop: 8 }}
+                  aria-label="ArrowBackIcon"                
                 >
                   <ArrowBackIcon onClick={(e) => this.handleClose()} />
                 </IconButton>
@@ -2174,15 +2312,30 @@ class poactivity extends React.Component {
             </Grid>
           </DialogTitle>
           <DialogContent className="dialog-area">
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                {this.state.Dialog.DialogContent}
+            <div style={{ height: 20 }}>&nbsp;</div>
 
-                 
-               
+            {this.state.type === "edit" ? (
+              <ReactToPrint
+                trigger={() => {
+                  // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+                  // to the root node of the returned component as it will be overwritten.
+                  return (
+                    <Button
+                      startIcon={APIURLS.buttonTitle.print.icon}
+                      className="action-btns"
+                    >
+                      {APIURLS.buttonTitle.print.name}
+                    </Button>
+                  );
+                }}
+                content={() => this.componentRef}
+              />
+            ) : null}
+            <div style={{ height: 20 }}>&nbsp;</div>
+            <div style={{ marginLeft: 10, marginRight: 10 }}>
+              {this.state.Dialog.DialogContent}
+            </div>
 
-              </Grid>
-            </Grid>
             <div style={{ height: 50 }}>&nbsp;</div>
           </DialogContent>
         </Dialog>
@@ -2285,6 +2438,7 @@ class poactivity extends React.Component {
                         <Step key={label} {...stepProps}>
                           <StepLabel {...labelProps}>
                             {index === 2 ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
+                             
                           </StepLabel>
                         </Step>
                       );

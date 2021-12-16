@@ -1052,7 +1052,7 @@ class editItem extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.itemMaster + this.state.urlparams}
-          masterLinkTitle="Item Master"
+          masterLinkTitle="Item"
           typoTitle="Edit Item"
           level={2}
         />
@@ -1119,7 +1119,7 @@ class editItem extends React.Component {
                     }
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      General Details
+                      General
                     </Typography>
                   </AccordionSummary>
 
@@ -1364,7 +1364,7 @@ class editItem extends React.Component {
                     }
                   >
                     <Typography key="" className="accordion-Header-Title">
-                      Planning Details
+                      Planning
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails key="" className="AccordionDetails-css">
