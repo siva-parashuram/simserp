@@ -2301,12 +2301,11 @@ class pomrnactivity extends React.Component {
           ShipmentType:this.state.MRN.ShipmentType,
           GateEntryNo:this.state.MRN.GateEntryNo,
           GateEntryDate:this.state.MRN.GateEntryDate,
-          Remarks:this.state.PO.Remarks,
+          Remarks:this.state.PO.Notes,
           UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
   
-        let MRNLIneList=[];
-  
+        let MRNLIneList=[];  
         let PurchaseOrderLine = this.state.PurchaseOrderLine;
         for (let i = 0; i < PurchaseOrderLine.length; i++) {
           if (PurchaseOrderLine[i].isProperData === true) {
@@ -3651,7 +3650,7 @@ class pomrnactivity extends React.Component {
                                     onChange={(e) => this.updateFormValue("IncoID", e)}
                                     value={this.state.PO.IncoID}
                                     param={this.state.IncoTermList}
-                                    disabled={true}
+                                    
                                   />
 
                                 </Grid>
@@ -3698,7 +3697,7 @@ class pomrnactivity extends React.Component {
                                 value={this.state.PO.Notes}
                                 multiline={true}
                                 rows={3}
-                                disabled={true}
+                                
                               />
                             </Grid>
                           </Grid>
