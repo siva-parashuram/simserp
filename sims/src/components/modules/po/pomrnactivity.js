@@ -2172,8 +2172,14 @@ class pomrnactivity extends React.Component {
       this.setState({ PurchaseOrderLine: PurchaseOrderLine });
       this.CloseLotDialog();
     }
+  }
 
+  validateMRNData=()=>{
+    let validateMRNData=true;
 
+    //validate MRN data
+
+    return validateMRNData;
   }
 
   render() {
@@ -2232,104 +2238,116 @@ class pomrnactivity extends React.Component {
         "Content-Type": "application/json",
       };
 
-      let MRN={
-        MRNID:0,
-        No:"",
-        POID:this.state.PO.POID,
-        BranchID:this.state.PO.BranchID,
-        MRNDate:this.state.MRN.MRNDate,
-        SuplID:this.state.PO.SuplID,
-        POType:this.state.PO.POType,
-        BillingID:this.state.PO.BillingID,
-        Name:this.state.PO.Name,
-        Address:this.state.PO.Address,
-        Address2:this.state.PO.Address2,
-        Address3:this.state.PO.Address3,
-        City:this.state.PO.City,
-        PostCode:this.state.PO.PostCode,
-        CountryID:this.state.PO.CountryID,
-        StateID:this.state.PO.StateID,
-        IsImport:this.state.PO.IsImport,
-        CurrID:this.state.PO.CurrID,
-        ExchRate:this.state.PO.ExchRate,
-        FCValue:this.state.PO.FCValue,
-        BaseValue:this.state.PO.BaseValue,
-        PaymentTermID:this.state.PO.PaymentTermID,
-        PaymentTerm:this.state.PO.PaymentTerm,
-        Status:this.state.PO.Status,
-        WareHouseID:this.state.PO.WareHouseID,
-        MODTaxID:this.state.PO.MODTaxID,
-        IsRegistedSupplier:this.state.PO.IsRegistedSupplier,
-        GSTNo:this.state.PO.GSTNo,
-        VATNo:this.state.PO.VATNo,
-        IsRounding:this.state.PO.IsRounding,
-        IncoID:this.state.PO.IncoID,
-        ShipmentModeID:this.state.PO.ShipmentModeID,
-        Notes:this.state.PO.Notes,
-        IsSEZPurchase:this.state.PO.IsSEZPurchase,
-        IsTaxExempt:this.state.PO.IsTaxExempt,
-        Reason:this.state.PO.Reason,
-        GeneralPostingGroupID:this.state.PO.GeneralPostingGroupID,
-        SupplierPostingGroupID:this.state.PO.SupplierPostingGroupID,
-        SuplInvNo:this.state.MRN.SuplInvNo,
-        SuplInvDate:this.state.MRN.SuplInvDate,
-        DueDate:this.state.MRN.DueDate,
-        PayToSuplID:this.state.MRN.PayToSuplID,
-        EWayBillNo:this.state.MRN.EWayBillNo,
-        ContainerNo:this.state.MRN.ContainerNo,
-        DutyFogone:this.state.MRN.DutyFogone,
-        DutyPaid:this.state.MRN.DutyPaid,
-        GSTOrVATPaid:this.state.MRN.GSTOrVATPaid,
-        AssableValue:this.state.MRN.AssableValue,
-        BillOfEntryNo:this.state.MRN.BillOfEntryNo,
-        BillOfEntryDate:this.state.MRN.BillOfEntryDate,
-        BillOfEntryValue:this.state.MRN.BillOfEntryValue,
-        BLOrAWBNo:this.state.MRN.BLOrAWBNo,
-        BLOrAWBDate:this.state.MRN.BLOrAWBDate,
-        PortID:this.state.MRN.PortID,
-        ShipmentType:this.state.MRN.ShipmentType,
-        GateEntryNo:this.state.MRN.GateEntryNo,
-        GateEntryDate:this.state.MRN.GateEntryDate,
-        Remarks:this.state.PO.Remarks,
-        UserID: CF.toInt(getCookie(COOKIE.USERID)),
-      };
+      let validateMRNData=true;
 
-      let MRNLIneList=[];
+      validateMRNData=this.validateMRNData();
 
-      let PurchaseOrderLine=this.state.PurchaseOrderLine;
-      for(let i=0;i<PurchaseOrderLine.length;i++){
-        let obj = {
-          Type:PurchaseOrderLine[i].Type, 
-          LNo :(i+1),
-          TypeID :PurchaseOrderLine[i].TypeID,
-          SupplierCode :PurchaseOrderLine[i].SupplierCode,
-          Narration :PurchaseOrderLine[i].Narration,
-          UOMID :PurchaseOrderLine[i]['UOMID'],
-          TolerancePercentage :PurchaseOrderLine[i].TolerancePercentage,
-          POQuantity :PurchaseOrderLine[i].Quantity,
-          MRNQuantity :PurchaseOrderLine[i].MRNQuantity,
-          Price :PurchaseOrderLine[i].Price,
-          LineDiscPercentage :PurchaseOrderLine[i].LineDiscPercentage,
-          ItemPostingGroupID :PurchaseOrderLine[i].ItemPostingGroupID,
-          VATPercentage:PurchaseOrderLine[i].VATPercentage, 
-          HSNCode :PurchaseOrderLine[i].HSNCode,
-          GSTGroupID :PurchaseOrderLine[i].GSTGroupID,
-          GSTPercentage :PurchaseOrderLine[i].GSTPercentage,
-          DValueID :PurchaseOrderLine[i].DValueID,
-          IsQuality :PurchaseOrderLine[i].IsQuality,
-          IsLot :PurchaseOrderLine[i].IsLot
+      if(validateMRNData===true){
+        let MRN={
+          MRNID:0,
+          No:"",
+          POID:this.state.PO.POID,
+          BranchID:this.state.PO.BranchID,
+          MRNDate:this.state.MRN.MRNDate,
+          SuplID:this.state.PO.SuplID,
+          POType:this.state.PO.POType,
+          BillingID:this.state.PO.BillingID,
+          Name:this.state.PO.Name,
+          Address:this.state.PO.Address,
+          Address2:this.state.PO.Address2,
+          Address3:this.state.PO.Address3,
+          City:this.state.PO.City,
+          PostCode:this.state.PO.PostCode,
+          CountryID:this.state.PO.CountryID,
+          StateID:this.state.PO.StateID,
+          IsImport:this.state.PO.IsImport,
+          CurrID:this.state.PO.CurrID,
+          ExchRate:this.state.PO.ExchRate,
+          FCValue:this.state.PO.FCValue,
+          BaseValue:this.state.PO.BaseValue,
+          PaymentTermID:this.state.PO.PaymentTermID,
+          PaymentTerm:this.state.PO.PaymentTerm,
+          Status:this.state.PO.Status,
+          WareHouseID:this.state.PO.WareHouseID,
+          MODTaxID:this.state.PO.MODTaxID,
+          IsRegistedSupplier:this.state.PO.IsRegistedSupplier,
+          GSTNo:this.state.PO.GSTNo,
+          VATNo:this.state.PO.VATNo,
+          IsRounding:this.state.PO.IsRounding,
+          IncoID:this.state.PO.IncoID,
+          ShipmentModeID:this.state.PO.ShipmentModeID,
+          Notes:this.state.PO.Notes,
+          IsSEZPurchase:this.state.PO.IsSEZPurchase,
+          IsTaxExempt:this.state.PO.IsTaxExempt,
+          Reason:this.state.PO.Reason,
+          GeneralPostingGroupID:this.state.PO.GeneralPostingGroupID,
+          SupplierPostingGroupID:this.state.PO.SupplierPostingGroupID,
+          SuplInvNo:this.state.MRN.SuplInvNo,
+          SuplInvDate:this.state.MRN.SuplInvDate,
+          DueDate:this.state.MRN.DueDate,
+          PayToSuplID:this.state.MRN.PayToSuplID,
+          EWayBillNo:this.state.MRN.EWayBillNo,
+          ContainerNo:this.state.MRN.ContainerNo,
+          DutyFogone:this.state.MRN.DutyFogone,
+          DutyPaid:this.state.MRN.DutyPaid,
+          GSTOrVATPaid:this.state.MRN.GSTOrVATPaid,
+          AssableValue:this.state.MRN.AssableValue,
+          BillOfEntryNo:this.state.MRN.BillOfEntryNo,
+          BillOfEntryDate:this.state.MRN.BillOfEntryDate,
+          BillOfEntryValue:this.state.MRN.BillOfEntryValue,
+          BLOrAWBNo:this.state.MRN.BLOrAWBNo,
+          BLOrAWBDate:this.state.MRN.BLOrAWBDate,
+          PortID:this.state.MRN.PortID,
+          ShipmentType:this.state.MRN.ShipmentType,
+          GateEntryNo:this.state.MRN.GateEntryNo,
+          GateEntryDate:this.state.MRN.GateEntryDate,
+          Remarks:this.state.PO.Remarks,
+          UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
-        MRNLIneList.push(obj);
+  
+        let MRNLIneList=[];
+  
+        let PurchaseOrderLine = this.state.PurchaseOrderLine;
+        for (let i = 0; i < PurchaseOrderLine.length; i++) {
+          if (PurchaseOrderLine[i].isProperData === true) {
+            let obj = {
+              Type: PurchaseOrderLine[i].Type,
+              LNo: (i + 1),
+              TypeID: PurchaseOrderLine[i].TypeID,
+              SupplierCode: PurchaseOrderLine[i].SupplierCode,
+              Narration: PurchaseOrderLine[i].Narration,
+              UOMID: PurchaseOrderLine[i]['UOMID'],
+              TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+              POQuantity: PurchaseOrderLine[i].Quantity,
+              MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
+              Price: PurchaseOrderLine[i].Price,
+              LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
+              ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+              VATPercentage: PurchaseOrderLine[i].VATPercentage,
+              HSNCode: PurchaseOrderLine[i].HSNCode,
+              GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+              GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
+              DValueID: PurchaseOrderLine[i].DValueID,
+              IsQuality: PurchaseOrderLine[i].IsQuality,
+              IsLot: PurchaseOrderLine[i].IsLot
+            };
+            MRNLIneList.push(obj);
+          } else {
+            this.setState({ ErrorPrompt: true, ErrorMessageProps: "Improper Line Data Found.", ProgressLoader: true });
+            return false;
+          }
+  
+        }
+  
+        let reqData = {
+          ValidUser: ValidUser,
+          MRN: MRN,
+          MRNLIneList: MRNLIneList
+        };
+      }else{
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
+            return false;
       }
-
-      let reqData={
-        ValidUser:ValidUser,
-        MRN:MRN,
-        MRNLIneList:MRNLIneList
-      };
-      
-
-
 
     };
 
