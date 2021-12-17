@@ -1244,24 +1244,38 @@ class pomrnactivity extends React.Component {
 
 
   handleClose = () => {
+    this.clearLotDetails();
     let Dialog = this.state.Dialog;
     Dialog.DialogStatus = false;
     this.setState({ Dialog: Dialog });
   };
 
   
+  CloseLotDialog = () => {
+    let Dialog = this.state.Dialog;
+    Dialog.DialogStatus = false;
+    this.setState({ Dialog: Dialog });
+  };
+
+
 
   openDialog = (item) => {
-    let Dialog = this.state.Dialog;
-    Dialog.DialogStatus = true;
-    Dialog.DialogTitle = "Add Lot Details";
-    console.log("openDialog > item > ",item);
- 
-    
-    this.setState({ 
-      SelectedLotItem:item,
-      Dialog: Dialog
-     });
+
+    if (parseFloat(item.MRNQuantity) > 0) {
+      let Dialog = this.state.Dialog;
+      Dialog.DialogStatus = true;
+      Dialog.DialogTitle = "Add Lot Details";
+      console.log("openDialog > item > ", item);
+
+      this.setState({
+        SelectedLotItem: item,
+        Dialog: Dialog
+      });
+    } else {
+      this.setState({ ErrorMessageProps: "Pls enter MRN Quantity", ErrorPrompt: true });
+    }
+
+   
   };
 
   getNOSvalue = () => {
@@ -1490,7 +1504,15 @@ class pomrnactivity extends React.Component {
         this.setLineParams(PurchaseOrderLine);
         break;
       case "MRNQuantity":
-        o[key] = e.target.value;
+         let Quantity=parseFloat(o.Quantity);
+         let TolerancePercentage=parseFloat(o.TolerancePercentage);
+         let maxQuantity=parseFloat(Quantity)+(parseFloat(Quantity) * parseFloat(TolerancePercentage));
+         if(parseFloat(e.target.value)>maxQuantity){
+           this.setState({ErrorMessageProps:"MRN Quantity Exceeds Tolerance Quantity",ErrorPrompt:true});
+         }else{
+          o[key] = e.target.value;
+         }
+        
         break;
       case "Price":
         o[key] = e.target.value;
@@ -1794,7 +1816,10 @@ class pomrnactivity extends React.Component {
     let SelectedLotItem= this.state.SelectedLotItem;
     let LotDetails=SelectedLotItem.LotDetails;
     let newD=[];
+    let total=0.00;
     for(let i=0;i<LotDetails.length;i++){
+       
+      
       if(i===index){
         let ldobj=LotDetails[i];
         switch(key){
@@ -1803,8 +1828,28 @@ class pomrnactivity extends React.Component {
           newD.push(ldobj);
           break;
           case"Quantity":
-          ldobj[key]=e.target.value;
-          newD.push(ldobj);
+            ldobj[key] = e.target.value;
+            newD.push(ldobj);
+            // if(e.target.value==="" || e.target.value===null){
+            //   ldobj[key] = 0;      
+            //   newD.push(ldobj);       
+            // }else{
+            //   if (isNaN(e.target.value)) {
+            //     ldobj[key] = 0;
+            //     newD.push(ldobj);
+            //     this.setState({ ErrorPrompt: true, ErrorMessageProps: "Enter Numerical Value" });
+            //   } else {                
+            //     total = total + parseFloat(e.target.value);
+            //     if (parseFloat(total) > parseFloat(SelectedLotItem.MRNQuantity)) {
+            //       this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity Exeeds MRN Quantity." });                
+            //       return false;
+            //     } else {
+            //       ldobj[key] = e.target.value;
+            //       newD.push(ldobj);
+            //     }
+  
+            //   }
+            // }
           break;
           case"PackingUOM":
           ldobj[key]=e.target.value;
@@ -1818,12 +1863,17 @@ class pomrnactivity extends React.Component {
           break;
         }
       }else{
+        total=parseFloat(total)+parseFloat(LotDetails[i].Quantity);
         newD.push(LotDetails[i]);
       }      
     }
     SelectedLotItem.LotDetails=newD;
     this.setState({SelectedLotItem:SelectedLotItem});
   }
+
+  resetFileInput = () => {
+    document.getElementById("uploadInput").value = "";
+}
 
   ValidateLotFile=(filename)=> {
     var _validFileExtensions = [".xlsx", ".xls"];   
@@ -1838,45 +1888,77 @@ class pomrnactivity extends React.Component {
             }
         }
         
-        if (!blnValid) {
-            alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
-            return false;
-        }
+      if (!blnValid) {
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", ") });
+        this.resetFileInput();
+        return false;
+      }
     }
   
     return true;
 }
 
-  importLotFromExcel=(e)=>{
-    let SelectedLotItem=this.state.SelectedLotItem;
-    if(e.target.files[0]){
-      let file = e.target.files[0];
-      let chk=this.ValidateLotFile(file.name);
-
-      if (chk) {
+  importLotFromExcel = (e) => {
+    let SelectedLotItem = this.state.SelectedLotItem;
+    if (parseFloat(SelectedLotItem.MRNQuantity) > 0) {
+      if (e.target.files[0]) {
+        let file = e.target.files[0];
+        let chk = this.ValidateLotFile(file.name);
+  
+        if (chk) {
           let ItemRows = [];
+          let total=0.00;
+          let processNext=true;
           readXlsxFile(file).then((rows) => {
-              for (let i = 1; i < rows.length; i++) {
-                  let itemRow={
-                    LotID:0,
-                    LNo:0,
-                    MRNID:0,
-                    LotNo:rows[i][0],
-                    Quantity:rows[i][1],
-                    IsIssue:false,
-                    PackingUOM:rows[i][2],
-                    Location:rows[i][3],
-                  };
-                  ItemRows.push(itemRow);
+            for (let i = 1; i < rows.length; i++) {
+              total = parseFloat(total) + parseFloat(rows[i][1]);
+              if (total > parseFloat(SelectedLotItem.MRNQuantity)) {
+                this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Quantity exceeds MRN Quantity." });
+                SelectedLotItem.LotDetails = [];
+                this.setState({ SelectedLotItem: SelectedLotItem });
+                processNext = false;
+                break;
               }
-              SelectedLotItem.LotDetails=ItemRows;
-              this.setState({SelectedLotItem:SelectedLotItem});
+            }
+            if (processNext === true) {
+              for (let i = 1; i < rows.length; i++) {
+                let itemRow = {
+                  LotID: 0,
+                  LNo: i,
+                  MRNID: 0,
+                  LotNo: rows[i][0],
+                  Quantity: rows[i][1],
+                  IsIssue: false,
+                  PackingUOM: rows[i][2],
+                  Location: rows[i][3],
+                };
+
+
+                ItemRows.push(itemRow);
+              }
+              SelectedLotItem.LotDetails = ItemRows;
+              this.setState({ SelectedLotItem: SelectedLotItem });
+            }           
           })
-          
-      }else{
+          this.resetFileInput();
+        } else {
+          this.resetFileInput();
           return false;
+        }
       }
+     } else { 
+       this.resetFileInput();
+       this.setState({ErrorMessageProps:"Pls enter MRN Quantity",ErrorPrompt:true});
+     }
+   
   }
+
+  clearLotDetails = () => {
+    let SelectedLotItem = this.state.SelectedLotItem;
+    if (SelectedLotItem.LotDetails) {
+      SelectedLotItem.LotDetails = [];
+      this.setState({ SelectedLotItem: SelectedLotItem });
+    }
   }
 
  
@@ -1911,18 +1993,44 @@ class pomrnactivity extends React.Component {
     this.setState({SelectedLotItem:SelectedLotItem});
   }
 
-  SaveLotDetailsOfLine=()=>{
+  getTotalLotQuantity=()=>{
+    let total=0.00;
+    if (this.state.SelectedLotItem.LotDetails) {
+      let SelectedLotItem = this.state.SelectedLotItem;
+      let LotDetails = SelectedLotItem.LotDetails;
+
+      for (let i = 0; i < LotDetails.length; i++) {
+        total = parseFloat(total) + parseFloat(LotDetails[i].Quantity);
+      }
+      total = total.toFixed(2);
+    }
+    
+    return total;
+  }
+
+
+
+  SaveLotDetailsOfLine=()=>{    
     let SelectedLotItem = this.state.SelectedLotItem;
     let PurchaseOrderLine=this.state.PurchaseOrderLine;
-    let newD=[];
-    for(let i=0;i<PurchaseOrderLine.length;i++){
-      if(PurchaseOrderLine[i].LNo===SelectedLotItem.LNo){
-        newD.push(SelectedLotItem);
-      }else{
-        newD.push(PurchaseOrderLine[i]);
-      }      
+    let totalLotQuantity=this.getTotalLotQuantity();
+    if (parseFloat(totalLotQuantity) !== parseFloat(SelectedLotItem.MRNQuantity)) {
+      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity does not match MRN Quantity." });
+      return false;
+    } else {
+      let newD = [];
+      for (let i = 0; i < PurchaseOrderLine.length; i++) {
+        if (PurchaseOrderLine[i].LNo === SelectedLotItem.LNo) {
+          newD.push(SelectedLotItem);
+        } else {
+          newD.push(PurchaseOrderLine[i]);
+        }
+      }
+      this.setState({ PurchaseOrderLine: PurchaseOrderLine });
+      this.CloseLotDialog();
     }
-    this.setState({PurchaseOrderLine:PurchaseOrderLine});
+
+  
   }
 
   render() {
@@ -2562,7 +2670,7 @@ class pomrnactivity extends React.Component {
                                             value={item.MRNQuantity}
                                             onChange={(e) => this.updateLineDetail(i, "MRNQuantity", e)}
                                             align="right"
-                                             
+                                            disabled={item.LotDetails.length>0?true:false}
                                           />
                                         </TableCell>
                                         <TableCell align="right">
@@ -2765,7 +2873,7 @@ class pomrnactivity extends React.Component {
                     <Typography
                       key="Lines-Activity"
                       className="accordion-Header-Title"
-                    >Invoice Details</Typography>
+                    >Invoice</Typography>
                   </AccordionSummary>
                   <AccordionDetails
                     key="accordion3" className="AccordionDetails-css">
@@ -3203,9 +3311,7 @@ class pomrnactivity extends React.Component {
         >
           <DialogTitle
             id="dialog-title"
-            className="dialog-area"
-          // style={{ maxHeight: 50 }}
-          >
+            className="dialog-area" >
 
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={1} lg={1}>
@@ -3236,7 +3342,15 @@ class pomrnactivity extends React.Component {
                     {APIURLS.buttonTitle.save.name}
                   </Button>
 
+                  <Button
+                    startIcon={APIURLS.buttonTitle.clear.icon}
+                    className="action-btns"
+                    onClick={(e) => this.clearLotDetails()}
+                  >
+                    {APIURLS.buttonTitle.clear.name}
+                  </Button>
 
+                  
 
                   <Button
                     className="action-btns"
@@ -3263,9 +3377,26 @@ class pomrnactivity extends React.Component {
 
                 </ButtonGroup>
               </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                {this.state.SelectedLotItem.ItemListSelected ? (
+                  <Fragment>
+                    <table>
+                      <tr>
+                        <td><span className="themeFont" style={{ color: '#212121' }}>Item:</span></td>                       
+                        <td>{this.state.SelectedLotItem.ItemListSelected.name}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td><span className="themeFont" style={{ color: '#212121' }}>MRN Quantity:</span></td>                        
+                        <td>{this.state.SelectedLotItem.MRNQuantity}</td>                       
+                      </tr>
+                    </table>
+                  </Fragment>
+                ) : null}
+                
+              </Grid>
             </Grid>
 
+            
 
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -3286,6 +3417,7 @@ class pomrnactivity extends React.Component {
                     </TableRow>
                   </TableHead>
                   <TableBody className="tableBody">
+                    {console.log("+++++++++++++ --------------------- > this.state.SelectedLotItem > ",this.state.SelectedLotItem)}
                     {this.state.SelectedLotItem['LotDetails'] ? this.state.SelectedLotItem['LotDetails'].map((item, i) => (
                       <TableRow>
                         <TableCell align="left">
@@ -3335,7 +3467,7 @@ class pomrnactivity extends React.Component {
                             onChange={(e)=>this.updateLotDetail("PackingUOM",e,i)}
                           >
                             <option value="" >Select</option>
-                            {APIURLS.PackingUOM.map((op, i) => (
+                            {this.state.UOMList.map((op, i) => (
                               <option value={op.value}> {op.name}</option>
                             ))}
                           </select>
@@ -3351,6 +3483,17 @@ class pomrnactivity extends React.Component {
                         </TableCell>
                       </TableRow>
                     )) : null}
+
+                    {this.state.SelectedLotItem['LotDetails'] ? (
+                      <TableRow>
+                        <TableCell align="left"></TableCell>
+                        <TableCell align="left"><span className="themeFont" style={{ color: '#212121',fontWeight:'bold' }}>Total</span></TableCell>
+                        <TableCell align="left">{this.getTotalLotQuantity()}</TableCell>
+                        <TableCell align="left"></TableCell>
+                        <TableCell align="left"></TableCell>
+                      </TableRow>
+                    ) : null}
+                    
 
                   </TableBody>
                 </Table>

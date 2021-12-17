@@ -453,54 +453,59 @@ class poactivity extends React.Component {
           SupplierItemCategoryArray=data.SupplierItemCategory
           console.log("------------------------------> SupplierItemCategoryArray > ",SupplierItemCategoryArray);
 
-          for (let i = 0; i < PurchaseOrderLine.length; i++) {
-            
-            let EL = {
-              POID: PO.POID,
-              Type: PurchaseOrderLine[i].Type,
-              LNo: PurchaseOrderLine[i].LNo,
-              TypeIDList: [],
-              CategoryList: PurchaseOrderLine[i].Type === 0 ? SupplierItemCategoryArray : [],
-              isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
-              CategoryId: PurchaseOrderLine[i].CatID,
-              ItemList: this.getItemList(PurchaseOrderLine[i].Type,PO.SuplID,PurchaseOrderLine[i].CatID),
-              ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
-              TypeID: PurchaseOrderLine[i].value,
-              Description: PurchaseOrderLine[i].Description1,
-              packingDescription: PurchaseOrderLine[i].PackingDesc1,
-              SupplierCode: PurchaseOrderLine[i].SupplierCode,
-              Narration: PurchaseOrderLine[i].Narration,
-              UOMID: PurchaseOrderLine[i].UOMID,
-              TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
-              Quantity: PurchaseOrderLine[i].Quantity,
-              Price: PurchaseOrderLine[i].Price,
-              LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
-              LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
-              ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
-              GeneralPostingGroupList: [],
-              GeneralPostingGroupID: null,
-              VATPercentage: PurchaseOrderLine[i].VATPercentage,
-              VATAmount: PurchaseOrderLine[i].VATAmount,
-              HSNCode: PurchaseOrderLine[i].HSNCode,
-              GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
-              SupplyStateID: this.state.StateID,
-              GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
-              BuyFromGSTN: PO.GSTNo,
-              NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
-              DValueID: PurchaseOrderLine[i].DValueID,
-              IsQuality: PurchaseOrderLine[i].IsQuality,
-              IsLot: PurchaseOrderLine[i].IsLot,
-              CGSTAmt: PurchaseOrderLine[i].CGSTAmt,
-              CGSTRate: PurchaseOrderLine[i].CGSTRate,
-              SGSTAmt: PurchaseOrderLine[i].SGSTAmt,
-              SGSTRate: PurchaseOrderLine[i].SGSTRate,
-              GSTBaseAmount: PurchaseOrderLine[i].GSTBaseAmount,
-              IGSTAmt: PurchaseOrderLine[i].IGSTAmt,
-              IGSTRate: PurchaseOrderLine[i].IGSTRate,
-              isDataProper: true,
-            };
-            newPOL.push(EL);
+          try {
+            for (let i = 0; i < PurchaseOrderLine.length; i++) {
+
+              let EL = {
+                POID: PO.POID,
+                Type: PurchaseOrderLine[i].Type,
+                LNo: PurchaseOrderLine[i].LNo,
+                TypeIDList: [],
+                CategoryList: PurchaseOrderLine[i].Type === 0 ? SupplierItemCategoryArray : [],
+                isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
+                CategoryId: PurchaseOrderLine[i].CatID,
+                ItemList: this.getItemList(PurchaseOrderLine[i].Type, PO.SuplID, PurchaseOrderLine[i].CatID),
+                ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
+                TypeID: PurchaseOrderLine[i].value,
+                Description: PurchaseOrderLine[i].Description1,
+                packingDescription: PurchaseOrderLine[i].PackingDesc1,
+                SupplierCode: PurchaseOrderLine[i].SupplierCode,
+                Narration: PurchaseOrderLine[i].Narration,
+                UOMID: PurchaseOrderLine[i].UOMID,
+                TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+                Quantity: PurchaseOrderLine[i].Quantity,
+                Price: PurchaseOrderLine[i].Price,
+                LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
+                LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
+                ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+                GeneralPostingGroupList: [],
+                GeneralPostingGroupID: null,
+                VATPercentage: PurchaseOrderLine[i].VATPercentage,
+                VATAmount: PurchaseOrderLine[i].VATAmount,
+                HSNCode: PurchaseOrderLine[i].HSNCode,
+                GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+                SupplyStateID: this.state.StateID,
+                GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
+                BuyFromGSTN: PO.GSTNo,
+                NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
+                DValueID: PurchaseOrderLine[i].DValueID,
+                IsQuality: PurchaseOrderLine[i].IsQuality,
+                IsLot: PurchaseOrderLine[i].IsLot,
+                CGSTAmt: PurchaseOrderLine[i].CGSTAmt,
+                CGSTRate: PurchaseOrderLine[i].CGSTRate,
+                SGSTAmt: PurchaseOrderLine[i].SGSTAmt,
+                SGSTRate: PurchaseOrderLine[i].SGSTRate,
+                GSTBaseAmount: PurchaseOrderLine[i].GSTBaseAmount,
+                IGSTAmt: PurchaseOrderLine[i].IGSTAmt,
+                IGSTRate: PurchaseOrderLine[i].IGSTRate,
+                isDataProper: true,
+              };
+              newPOL.push(EL);
+            }
+          } catch (err) {
+            console.log("For loop PO Order Line > err > ", err);
           }
+          
 
           this.setState({
             PO: PO,

@@ -19,6 +19,7 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import NextPlanIcon from '@mui/icons-material/NextPlan';
 import UndoIcon from '@mui/icons-material/Undo';
 import FormatLineSpacingIcon from '@mui/icons-material/FormatLineSpacing';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import Chip from '@mui/material/Chip';
 
@@ -257,6 +258,10 @@ export const buttonTitle = {
   addline:{
     name:"Add line",
     icon:<FormatLineSpacingIcon/>
+  },
+  clear:{
+    name:"Clear",
+    icon:<ClearIcon/>
   }
 };
 
