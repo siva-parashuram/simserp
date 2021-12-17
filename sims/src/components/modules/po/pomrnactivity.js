@@ -1,4 +1,4 @@
-import React, { Fragment} from "react";
+import React, { Fragment } from "react";
 import axios from "axios";
 import moment from "moment";
 import ReactToPrint from 'react-to-print';
@@ -98,14 +98,17 @@ class pomrnactivity extends React.Component {
       DisableCreatebtn: true,
       DisableUpdatebtn: false,
       SnackbarStatus: false,
-      branchName:"",
-      ErrorMessageProps:"",
+      branchName: "",
+      ErrorMessageProps: "",
       currentDeleteItemLine: {},
       initialCss: "",
       urlparams: "",
       editurl: "",
       typoTitle: "",
       type: "",
+      PayToSuplList: [],
+      ShipmentTypeList: [],
+      PortList: [],
       POTypeList: APIURLS.POType,
       POItemType: APIURLS.POItemType,
       GLAccount: [],
@@ -124,6 +127,7 @@ class pomrnactivity extends React.Component {
       ItemPostingGroupList: [],
       CountryList: [],
       StateList: [],
+      PaymentTerms: [],
       PaymentTermsMasterList: [],
       PaymentTermsList: [],
       SupplierAddressMasterList: [],
@@ -250,7 +254,29 @@ class pomrnactivity extends React.Component {
         IsLot: false,
         isDataProper: false,
       },
-      SelectedLotItem:{},
+      MRN: {
+        MRNDate: today,
+        SuplInvNo: "",
+        SuplInvDate: today,
+        DueDate: null,
+        PayToSuplID: 0,
+        EWayBillNo: "",
+        ContainerNo: "",
+        DutyFogone: 0,
+        DutyPaid: 0,
+        GSTOrVATPaid: 0,
+        AssableValue: 0,
+        BillOfEntryNo: "",
+        BillOfEntryDate: null,
+        BillOfEntryValue: 0,
+        BLOrAWBNo: "",
+        BLOrAWBDate: null,
+        PortID: 0,
+        ShipmentType: 0,
+        GateEntryNo: "",
+        GateEntryDate: null,
+      },
+      SelectedLotItem: {},
     };
   }
 
@@ -322,7 +348,7 @@ class pomrnactivity extends React.Component {
   }
 
   componentDidMount() {
-     
+
     document.addEventListener('keydown', this.onKeyDownHandler);
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -343,23 +369,23 @@ class pomrnactivity extends React.Component {
 
     let PO = this.state.PO;
     PO.POID = CF.toInt(POID);
-    if (type === "edit") {      
-      PO.POID = CF.toInt(POID);      
-      this.setState({ 
-        branchName:branchName,
+    if (type === "edit") {
+      PO.POID = CF.toInt(POID);
+      this.setState({
+        branchName: branchName,
         PO: PO,
         POID: CF.toInt(POID),
         urlparams: urlparams,
-        BranchID: CF.toInt(branchId) ,
+        BranchID: CF.toInt(branchId),
         type: type,
         typoTitle: typoTitle,
-       
+
       }, () => {
         this.getSupplierList(CF.toInt(branchId), PO.POID);
       });
     }
 
-    
+
   }
 
   getPODetails = (PO) => {
@@ -384,12 +410,12 @@ class pomrnactivity extends React.Component {
           let ResonsePO = response.data;
           let PO = ResonsePO;
 
-          PO.FCValue=0.00;//resetting to update later on user change
-          PO.BaseValue=0.00;//resetting to update later on user change
+          PO.FCValue = 0.00;//resetting to update later on user change
+          PO.BaseValue = 0.00;//resetting to update later on user change
 
           let PurchaseOrderLine = ResonsePO.PurchaseOrderLine;
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
-     
+
           PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
           PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
           PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
@@ -401,13 +427,13 @@ class pomrnactivity extends React.Component {
 
           let newPOL = [];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
 
-          let SupplierItemCategoryArray=[];
+          let SupplierItemCategoryArray = [];
           let data = this.getSupplierDataList(PO.SuplID);
-          SupplierItemCategoryArray=data.SupplierItemCategory
-          console.log("------------------------------> SupplierItemCategoryArray > ",SupplierItemCategoryArray);
+          SupplierItemCategoryArray = data.SupplierItemCategory
+          console.log("------------------------------> SupplierItemCategoryArray > ", SupplierItemCategoryArray);
 
           for (let i = 0; i < PurchaseOrderLine.length; i++) {
-            
+
             let EL = {
               POID: PO.POID,
               Type: PurchaseOrderLine[i].Type,
@@ -416,7 +442,7 @@ class pomrnactivity extends React.Component {
               CategoryList: PurchaseOrderLine[i].Type === 0 ? SupplierItemCategoryArray : [],
               isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
               CategoryId: PurchaseOrderLine[i].CatID,
-              ItemList: this.getItemList(PurchaseOrderLine[i].Type,PO.SuplID,PurchaseOrderLine[i].CatID),
+              ItemList: this.getItemList(PurchaseOrderLine[i].Type, PO.SuplID, PurchaseOrderLine[i].CatID),
               ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
               TypeID: PurchaseOrderLine[i].value,
               Description: PurchaseOrderLine[i].Description1,
@@ -426,8 +452,8 @@ class pomrnactivity extends React.Component {
               UOMID: PurchaseOrderLine[i].UOMID,
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               Quantity: PurchaseOrderLine[i].Quantity,
-              MRNQuantity:0,
-              LotDetails:[],
+              MRNQuantity: 0,
+              LotDetails: [],
               Price: PurchaseOrderLine[i].Price,
               LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
               LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
@@ -460,17 +486,18 @@ class pomrnactivity extends React.Component {
           this.setState({
             PO: PO,
             PurchaseOrderLine: newPOL,
-            Name:PO.Name,
+            Name: PO.Name,
             Address: PO.Address,
             Address2: PO.Address2,
-            Address3:PO.Address3 ,
+            Address3: PO.Address3,
             City: PO.City,
             PostCode: PO.PostCode,
-            CountryID:PO.CountryID ,
-            StateID:PO.StateID ,
+            CountryID: PO.CountryID,
+            StateID: PO.StateID,
             ProgressLoader: true
           }, () => {
             // this.calculateInvoiceDetails();
+            this.calculateDueDate();
             this.presetSetSupplierDropdown(PO);
             this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID), "IG"); //initialIgnore to not set address to stateID
           });
@@ -485,10 +512,10 @@ class pomrnactivity extends React.Component {
       });
   };
 
-  getItemList = (Type,SuplID,CategoryId) => { 
-    let Supplier=this.state.supplierList;
-    let CategoryList=[];
-    let ItemList=[];
+  getItemList = (Type, SuplID, CategoryId) => {
+    let Supplier = this.state.supplierList;
+    let CategoryList = [];
+    let ItemList = [];
 
     switch (Type) {
       case 0:
@@ -566,8 +593,8 @@ class pomrnactivity extends React.Component {
         BuyFromGSTN: PurchaseOrderLine[i].BuyFromGSTN,
         NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
         DValueID: PurchaseOrderLine[i].DValueID,
-        IsQuality: this.state.Branch.IsQuality===false?false:PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
-        IsLot: this.state.Branch.IsLot===false?false:PurchaseOrderLine[i].IsLot,//if branch is false- send false OR if branch is true - send actual value
+        IsQuality: this.state.Branch.IsQuality === false ? false : PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
+        IsLot: this.state.Branch.IsLot === false ? false : PurchaseOrderLine[i].IsLot,//if branch is false- send false OR if branch is true - send actual value
         isDataProper: true,
       };
       newPOL.push(EL);
@@ -617,7 +644,7 @@ class pomrnactivity extends React.Component {
           let IncoTermList = data.IncoTerms;
 
           let PO = this.state.PO;
-         
+
           if (Branch.IsSEZ === true) {
             PO.IsSEZPurchase = true;
           } else {
@@ -629,16 +656,17 @@ class pomrnactivity extends React.Component {
             PO.IsRounding = false;
           }
 
-          for(let i=0;i<WareHouse.length;i++){
-            if(WareHouse[i].IsDefault===true){
-              PO.WareHouseID= CF.toInt(WareHouse[i].value);
-              PO.DeliveryAddress=WareHouse[i].deliveryAddress;
+          for (let i = 0; i < WareHouse.length; i++) {
+            if (WareHouse[i].IsDefault === true) {
+              PO.WareHouseID = CF.toInt(WareHouse[i].value);
+              PO.DeliveryAddress = WareHouse[i].deliveryAddress;
               break;
             }
           }
-          
+
 
           this.setState({
+            PaymentTerms: data.PaymentTerms,
             PO: PO,
             Branch: Branch,
             CountryList: Country,
@@ -664,6 +692,7 @@ class pomrnactivity extends React.Component {
             IncoTermList: IncoTermList,
             // ProgressLoader: this.state.type === "edit" ? false : true
           }, () => {
+
             if (this.state.type === "edit") {
               this.getPODetails(this.state.PO);
             }
@@ -726,7 +755,7 @@ class pomrnactivity extends React.Component {
         name: data[i].Code,
         value: data[i].WareHouseID,
         deliveryAddress: deliveryAddress,
-        IsDefault:data[i].IsDefault
+        IsDefault: data[i].IsDefault
       };
       newData.push(o);
     }
@@ -822,7 +851,7 @@ class pomrnactivity extends React.Component {
         PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
       }
 
-      
+
 
       this.setState({
         PO: PO,
@@ -858,7 +887,7 @@ class pomrnactivity extends React.Component {
 
         console.log("#####################3-----------------------------------> BCdata > ", BCdata);
 
-        if(event==="IG"){
+        if (event === "IG") {
           this.setState({
             PO: PO,
             // Name: BCdata.Name,
@@ -870,7 +899,7 @@ class pomrnactivity extends React.Component {
             // CountryID: BCdata.CountryID,
             // StateID: BCdata.StateID,
           });
-        }else{
+        } else {
           this.setState({
             PO: PO,
             Name: BCdata.Name,
@@ -884,7 +913,7 @@ class pomrnactivity extends React.Component {
           });
         }
 
-       
+
       });
     }
     this.setState({
@@ -1057,6 +1086,7 @@ class pomrnactivity extends React.Component {
 
   updateFormValue = (param, e) => {
     let PO = this.state.PO;
+    let MRN = this.state.MRN;
     switch (param) {
       case "SuplID":
         if (e) {
@@ -1103,6 +1133,88 @@ class pomrnactivity extends React.Component {
         PO.PODate = moment(e.target.value).format("YYYY-MM-DD");
         this.setParams(PO);
         break;
+      //----------MRN Parameters------------------------
+      case "SuplInvDate":
+        MRN[param] = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({ MRN: MRN });
+        break;
+      case "DueDate":
+        MRN[param] = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({ MRN: MRN });
+        break;
+      case "BillOfEntryDate":
+        MRN[param] = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({ MRN: MRN });
+        break;
+      case "BLOrAWBDate":
+        MRN[param] = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({ MRN: MRN });
+        break;
+      case "GateEntryDate":
+        MRN[param] = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({ MRN: MRN });
+        break;
+      case "MRNDate":
+        MRN[param] = moment(e.target.value).format("YYYY-MM-DD");
+        this.setState({ MRN: MRN });
+        break;
+      case "SuplInvNo":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "EWayBillNo":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "ContainerNo":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "BillOfEntryNo":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "BLOrAWBNo":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "GateEntryNo":
+        MRN[param] =e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "PayToSuplID":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "DutyFogone":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "DutyPaid":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "GSTOrVATPaid":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "AssableValue":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "BillOfEntryValue":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "PortID":
+        MRN[param] =e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      case "ShipmentType":
+        MRN[param] = e.target.value;
+        this.setState({ MRN: MRN });
+        break;
+      //-----------------------------------------    
       case "DispachDate":
         PO.DispachDate = moment(e.target.value).format("YYYY-MM-DD");
         this.setParams(PO);
@@ -1240,7 +1352,7 @@ class pomrnactivity extends React.Component {
     });
   }
 
- 
+
 
 
   handleClose = () => {
@@ -1250,7 +1362,7 @@ class pomrnactivity extends React.Component {
     this.setState({ Dialog: Dialog });
   };
 
-  
+
   CloseLotDialog = () => {
     let Dialog = this.state.Dialog;
     Dialog.DialogStatus = false;
@@ -1275,7 +1387,7 @@ class pomrnactivity extends React.Component {
       this.setState({ ErrorMessageProps: "Pls enter MRN Quantity", ErrorPrompt: true });
     }
 
-   
+
   };
 
   getNOSvalue = () => {
@@ -1289,9 +1401,9 @@ class pomrnactivity extends React.Component {
   }
 
   fetchPrice = (Quantity, o) => {
-    console.log("#######################  fetchPrice > Quantity > ",Quantity);
-    console.log("#######################  fetchPrice > o > ",o);
-    let UnitPrice=0.00;
+    console.log("#######################  fetchPrice > Quantity > ", Quantity);
+    console.log("#######################  fetchPrice > o > ", o);
+    let UnitPrice = 0.00;
     try {
       let UOMID_i = o.UOMID;
       for (let i = 0; i < o.ItemList.length; i++) {
@@ -1301,10 +1413,10 @@ class pomrnactivity extends React.Component {
             let UOM_j = ItemPrice[j]['UOM'];
             if (UOMID_i === UOM_j) {
               let jo = ItemPrice[j];
-              console.log("#######################  fetchPrice > jo > ",jo);
+              console.log("#######################  fetchPrice > jo > ", jo);
               if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
-                console.log("#######################  fetchPrice > jo.UnitPrice > ",jo.UnitPrice);
-                UnitPrice= jo.UnitPrice;
+                console.log("#######################  fetchPrice > jo.UnitPrice > ", jo.UnitPrice);
+                UnitPrice = jo.UnitPrice;
                 break;
               }
             }
@@ -1312,10 +1424,10 @@ class pomrnactivity extends React.Component {
         }
       }
     } catch (err) {
-      console.log("err > ",err)
-      UnitPrice= 0.00;
+      console.log("err > ", err)
+      UnitPrice = 0.00;
     }
-  return UnitPrice;
+    return UnitPrice;
   }
 
   updateLineDetail = (i, key, e) => {
@@ -1412,21 +1524,21 @@ class pomrnactivity extends React.Component {
           o.ItemListSelected = e;
           o.TypeID = CF.toInt(e.value);
           o.GSTGroupID = e.GSTGroupID;
-         
-          if (o.Type === 0) {        
-           
+
+          if (o.Type === 0) {
+
             o.Description = e.Description1;
             o.packingDescription = e.PackingDesc1;
             o.HSNCode = e.HSNCode;
- 
 
-           if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
-            o.GSTPercentage =0.00;
-            o.VATPercentage=0.00;
-           }else{
-            o.GSTPercentage=e.GSTPercentage;
-            o.VATPercentage=this.state.Branch.VATPercentage;
-           }
+
+            if (this.state.PO.IsTaxExempt === true || this.state.PO.IsImport === true || this.state.PO.IsSEZPurchase === true) {
+              o.GSTPercentage = 0.00;
+              o.VATPercentage = 0.00;
+            } else {
+              o.GSTPercentage = e.GSTPercentage;
+              o.VATPercentage = this.state.Branch.VATPercentage;
+            }
 
 
             o.UOMID = e.PurchaseUOM;
@@ -1434,18 +1546,18 @@ class pomrnactivity extends React.Component {
             o.TolerancePercentage = e.TolerancePercentage;
             o.IsLot = e.IsLot;
             o.IsQuality = e.IsQuality;
-            o.Quantity=1.00;
+            o.Quantity = 1.00;
             let Price = this.fetchPrice(1, o);
-            o.Price=parseFloat(Price);
+            o.Price = parseFloat(Price);
           } else {
 
-            if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
-              o.GSTPercentage =0.00;
-              o.VATPercentage=0.00;
-             }else{
-              o.GSTPercentage=e.GSTPercentage;
-              o.VATPercentage=this.state.Branch.VATPercentage;
-             }
+            if (this.state.PO.IsTaxExempt === true || this.state.PO.IsImport === true || this.state.PO.IsSEZPurchase === true) {
+              o.GSTPercentage = 0.00;
+              o.VATPercentage = 0.00;
+            } else {
+              o.GSTPercentage = e.GSTPercentage;
+              o.VATPercentage = this.state.Branch.VATPercentage;
+            }
 
             /*
             if(this.state.Branch.IsGST===true){
@@ -1455,7 +1567,7 @@ class pomrnactivity extends React.Component {
               o.VATPercentage=(this.state.PO.IsTaxExempt===false || this.state.PO.IsImport===false || this.state.PO.IsSEZPurchase===false)?this.state.Branch.VATPercentage:0;
              } 
 */
-             
+
 
             o.packingDescription = "";
             o.UOMID = this.getNOSvalue();
@@ -1465,7 +1577,7 @@ class pomrnactivity extends React.Component {
           }
           PurchaseOrderLine[i] = o;
           this.setLineParams(PurchaseOrderLine);
-        }else{
+        } else {
           o.TypeID = "";
           o.ItemListSelected = null;
           o.GSTGroupID = "";
@@ -1504,15 +1616,15 @@ class pomrnactivity extends React.Component {
         this.setLineParams(PurchaseOrderLine);
         break;
       case "MRNQuantity":
-         let Quantity=parseFloat(o.Quantity);
-         let TolerancePercentage=parseFloat(o.TolerancePercentage);
-         let maxQuantity=parseFloat(Quantity)+(parseFloat(Quantity) * parseFloat(TolerancePercentage));
-         if(parseFloat(e.target.value)>maxQuantity){
-           this.setState({ErrorMessageProps:"MRN Quantity Exceeds Tolerance Quantity",ErrorPrompt:true});
-         }else{
+        let Quantity = parseFloat(o.Quantity);
+        let TolerancePercentage = parseFloat(o.TolerancePercentage);
+        let maxQuantity = parseFloat(Quantity) + (parseFloat(Quantity) * parseFloat(TolerancePercentage));
+        if (parseFloat(e.target.value) > maxQuantity) {
+          this.setState({ ErrorMessageProps: "MRN Quantity Exceeds Tolerance Quantity", ErrorPrompt: true });
+        } else {
           o[key] = e.target.value;
-         }
-        
+        }
+
         break;
       case "Price":
         o[key] = e.target.value;
@@ -1552,19 +1664,19 @@ class pomrnactivity extends React.Component {
       case "GSTGroupID":
         o[key] = CF.toInt(e.target.value);
         let GSTGroupIDList = this.state.GSTGroupIDList;
-        if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
-          o.GSTPercentage =0.00;          
-         }else{
-          if(this.state.PO.IsTaxExempt===true){
-            o.GSTPercentage=0;
-          }else{
+        if (this.state.PO.IsTaxExempt === true || this.state.PO.IsImport === true || this.state.PO.IsSEZPurchase === true) {
+          o.GSTPercentage = 0.00;
+        } else {
+          if (this.state.PO.IsTaxExempt === true) {
+            o.GSTPercentage = 0;
+          } else {
             for (let i = 0; i < GSTGroupIDList.length; i++) {
               if (GSTGroupIDList[i].value === CF.toInt(e.target.value)) {
                 o.GSTPercentage = GSTGroupIDList[i].GSTPercentage;
               }
             }
           }
-         }
+        }
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
@@ -1625,13 +1737,13 @@ class pomrnactivity extends React.Component {
 
   validateLine = (o) => {
     let validLine = false;
-   
+
     if (
       o.Type === "" || o.Type === null ||
       o.TypeID === "" || o.TypeID === null ||
       o.Quantity === 0 ||
       o.Price === 0 ||
-      o.MRNQuantity===0
+      o.MRNQuantity === 0
     ) {
       validLine = false;
     } else {
@@ -1639,7 +1751,7 @@ class pomrnactivity extends React.Component {
         if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { validLine = true; }
       } else {
         validLine = false;
-      }       
+      }
     }
 
     this.processAddUpdateStatus(validLine);
@@ -1649,8 +1761,8 @@ class pomrnactivity extends React.Component {
 
   validateLineItems = () => {
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
-    let totalLines=PurchaseOrderLine.length;
-    let totalValids=0;
+    let totalLines = PurchaseOrderLine.length;
+    let totalValids = 0;
     for (let i = 0; i < PurchaseOrderLine.length; i++) {
       let o = PurchaseOrderLine[i];
       let validLine = false;
@@ -1663,8 +1775,8 @@ class pomrnactivity extends React.Component {
         validLine = false;
       } else {
         if (o.HSNCode) {
-          if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { 
-            validLine = true; 
+          if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else {
+            validLine = true;
             totalValids++;
           }
         } else {
@@ -1672,15 +1784,15 @@ class pomrnactivity extends React.Component {
         }
       }
     }
-    
-    let validLine=false;
-    totalLines===totalValids?validLine=true:validLine=false;
 
-    this.processAddUpdateStatus(validLine);    
+    let validLine = false;
+    totalLines === totalValids ? validLine = true : validLine = false;
+
+    this.processAddUpdateStatus(validLine);
   }
 
-  processAddUpdateStatus=(validLine)=>{
-   validLine===true?this.setState({DisableUpdatebtn:false,DisableCreatebtn:false}):this.setState({DisableUpdatebtn:true,DisableCreatebtn:false});
+  processAddUpdateStatus = (validLine) => {
+    validLine === true ? this.setState({ DisableUpdatebtn: false, DisableCreatebtn: false }) : this.setState({ DisableUpdatebtn: true, DisableCreatebtn: false });
   }
 
   getProcessedPurchaseOrderLineListUpdate = () => {
@@ -1727,7 +1839,7 @@ class pomrnactivity extends React.Component {
     return isProperData;
   }
 
- 
+
 
   calculateInvoiceDetails = () => {
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
@@ -1744,13 +1856,13 @@ class pomrnactivity extends React.Component {
       for (let i = 0; i < PurchaseOrderLine.length; i++) {
         console.log("PurchaseOrderLine[i] > ", PurchaseOrderLine[i]);
         let TAX = 0;
-        if(this.state.Branch.IsGST===true){
-          TAX=PurchaseOrderLine[i].GSTPercentage;
+        if (this.state.Branch.IsGST === true) {
+          TAX = PurchaseOrderLine[i].GSTPercentage;
         }
-        if(this.state.Branch.IsVAT===true){
-          TAX=PurchaseOrderLine[i].VATPercentage;
-        }        
-        
+        if (this.state.Branch.IsVAT === true) {
+          TAX = PurchaseOrderLine[i].VATPercentage;
+        }
+
         let itemQty = parseFloat(PurchaseOrderLine[i].Quantity);
         let itemPrice = parseFloat(PurchaseOrderLine[i].Price);
         let itemTotalQtyPrice = parseFloat(itemQty) * parseFloat(itemPrice);
@@ -1798,36 +1910,67 @@ class pomrnactivity extends React.Component {
 
 
   getCurrencyString = (price) => {
-   // return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3 }).format(price);
-   return price;
+    // return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3 }).format(price);
+    return price;
   }
 
-  getSupplierName=()=>{
-    let supplierList=this.state.supplierList;
-    console.log("getSupplierName > supplierList > ",supplierList);
-    for(let i=0;i<supplierList.length;i++){
-      if(supplierList[i].SuplID===this.state.PO.SuplID){
+  getSupplierName = () => {
+    let supplierList = this.state.supplierList;
+    console.log("getSupplierName > supplierList > ", supplierList);
+    for (let i = 0; i < supplierList.length; i++) {
+      if (supplierList[i].SuplID === this.state.PO.SuplID) {
         return supplierList[i].Name
       }
     }
   }
 
-  updateLotDetail=(key,e,index)=>{
-    let SelectedLotItem= this.state.SelectedLotItem;
-    let LotDetails=SelectedLotItem.LotDetails;
-    let newD=[];
-    let total=0.00;
-    for(let i=0;i<LotDetails.length;i++){
-       
-      
-      if(i===index){
-        let ldobj=LotDetails[i];
-        switch(key){
-          case"LotNo":
-          ldobj[key]=e.target.value;
-          newD.push(ldobj);
-          break;
-          case"Quantity":
+
+
+
+
+  calculateDueDate = () => {
+
+    let POPaymentTerm = this.state.PO.PaymentTermID;
+    let PaymentTerms = this.state.PaymentTerms;
+    let SuplInvDate = this.state.MRN.SuplInvDate;
+    let DueDays = 0;
+
+    for (let i = 0; i < PaymentTerms.length; i++) {
+      if (parseInt(PaymentTerms[i].PaymentTermID) === parseInt(POPaymentTerm)) {
+        DueDays = parseInt(PaymentTerms[i].DueDays);
+        break;
+      }
+    }
+    let calculatedNewDate = moment(SuplInvDate).add(DueDays, 'day');
+    let newDate = moment(calculatedNewDate).format("YYYY-MM-DD");
+
+    //------Setting for state referance----------
+    let MRN = this.state.MRN;
+    MRN.DueDate = newDate;
+    this.setState({ MRN: MRN });
+    //-------------------------------------------
+
+  }
+
+
+  //--------------------------------------------------------------------------------------------------
+
+  updateLotDetail = (key, e, index) => {
+    let SelectedLotItem = this.state.SelectedLotItem;
+    let LotDetails = SelectedLotItem.LotDetails;
+    let newD = [];
+    let total = 0.00;
+    for (let i = 0; i < LotDetails.length; i++) {
+
+
+      if (i === index) {
+        let ldobj = LotDetails[i];
+        switch (key) {
+          case "LotNo":
+            ldobj[key] = e.target.value;
+            newD.push(ldobj);
+            break;
+          case "Quantity":
             ldobj[key] = e.target.value;
             newD.push(ldobj);
             // if(e.target.value==="" || e.target.value===null){
@@ -1847,56 +1990,56 @@ class pomrnactivity extends React.Component {
             //       ldobj[key] = e.target.value;
             //       newD.push(ldobj);
             //     }
-  
+
             //   }
             // }
-          break;
-          case"PackingUOM":
-          ldobj[key]=e.target.value;
-          newD.push(ldobj);
-          break;
-          case"Location":
-          ldobj[key]=e.target.value;
-          newD.push(ldobj);
-          break;
+            break;
+          case "PackingUOM":
+            ldobj[key] = e.target.value;
+            newD.push(ldobj);
+            break;
+          case "Location":
+            ldobj[key] = e.target.value;
+            newD.push(ldobj);
+            break;
           default:
-          break;
+            break;
         }
-      }else{
-        total=parseFloat(total)+parseFloat(LotDetails[i].Quantity);
+      } else {
+        total = parseFloat(total) + parseFloat(LotDetails[i].Quantity);
         newD.push(LotDetails[i]);
-      }      
+      }
     }
-    SelectedLotItem.LotDetails=newD;
-    this.setState({SelectedLotItem:SelectedLotItem});
+    SelectedLotItem.LotDetails = newD;
+    this.setState({ SelectedLotItem: SelectedLotItem });
   }
 
   resetFileInput = () => {
     document.getElementById("uploadInput").value = "";
-}
+  }
 
-  ValidateLotFile=(filename)=> {
-    var _validFileExtensions = [".xlsx", ".xls"];   
+  ValidateLotFile = (filename) => {
+    var _validFileExtensions = [".xlsx", ".xls"];
     var sFileName = filename;
     if (sFileName.length > 0) {
-        var blnValid = false;
-        for (var j = 0; j < _validFileExtensions.length; j++) {
-            var sCurExtension = _validFileExtensions[j];
-            if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
-                blnValid = true;
-                break;
-            }
+      var blnValid = false;
+      for (var j = 0; j < _validFileExtensions.length; j++) {
+        var sCurExtension = _validFileExtensions[j];
+        if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+          blnValid = true;
+          break;
         }
-        
+      }
+
       if (!blnValid) {
         this.setState({ ErrorPrompt: true, ErrorMessageProps: "Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", ") });
         this.resetFileInput();
         return false;
       }
     }
-  
+
     return true;
-}
+  }
 
   importLotFromExcel = (e) => {
     let SelectedLotItem = this.state.SelectedLotItem;
@@ -1904,11 +2047,11 @@ class pomrnactivity extends React.Component {
       if (e.target.files[0]) {
         let file = e.target.files[0];
         let chk = this.ValidateLotFile(file.name);
-  
+
         if (chk) {
           let ItemRows = [];
-          let total=0.00;
-          let processNext=true;
+          let total = 0.00;
+          let processNext = true;
           readXlsxFile(file).then((rows) => {
             for (let i = 1; i < rows.length; i++) {
               total = parseFloat(total) + parseFloat(rows[i][1]);
@@ -1938,7 +2081,7 @@ class pomrnactivity extends React.Component {
               }
               SelectedLotItem.LotDetails = ItemRows;
               this.setState({ SelectedLotItem: SelectedLotItem });
-            }           
+            }
           })
           this.resetFileInput();
         } else {
@@ -1946,11 +2089,11 @@ class pomrnactivity extends React.Component {
           return false;
         }
       }
-     } else { 
-       this.resetFileInput();
-       this.setState({ErrorMessageProps:"Pls enter MRN Quantity",ErrorPrompt:true});
-     }
-   
+    } else {
+      this.resetFileInput();
+      this.setState({ ErrorMessageProps: "Pls enter MRN Quantity", ErrorPrompt: true });
+    }
+
   }
 
   clearLotDetails = () => {
@@ -1961,40 +2104,40 @@ class pomrnactivity extends React.Component {
     }
   }
 
- 
-  AddLotLine=(item)=>{
-    console.log("AddLotLine > item > ",item);
-    let lotobj={
-      LotID:0,
-      LNo:0,
-      MRNID:0,
-      LotNo:"",
-      Quantity:0,
-      IsIssue:false,
-      PackingUOM:"",
-      Location:""
+
+  AddLotLine = (item) => {
+    console.log("AddLotLine > item > ", item);
+    let lotobj = {
+      LotID: 0,
+      LNo: 0,
+      MRNID: 0,
+      LotNo: "",
+      Quantity: 0,
+      IsIssue: false,
+      PackingUOM: "",
+      Location: ""
     };
-    let LD=item.LotDetails;
+    let LD = item.LotDetails;
     LD.push(lotobj);
-    item.LotDetails=LD;
-    this.setState({SelectedLotItem:item});
+    item.LotDetails = LD;
+    this.setState({ SelectedLotItem: item });
   }
 
   LotItemDelete = (index, item) => {
     let SelectedLotItem = this.state.SelectedLotItem;
-    let LotDetails=SelectedLotItem.LotDetails;
-    let newD=[];
-    for(let i=0;i<LotDetails.length;i++){
-      if(i===index){}else{
+    let LotDetails = SelectedLotItem.LotDetails;
+    let newD = [];
+    for (let i = 0; i < LotDetails.length; i++) {
+      if (i === index) { } else {
         newD.push(LotDetails[i]);
       }
     }
-    SelectedLotItem.LotDetails=newD;
-    this.setState({SelectedLotItem:SelectedLotItem});
+    SelectedLotItem.LotDetails = newD;
+    this.setState({ SelectedLotItem: SelectedLotItem });
   }
 
-  getTotalLotQuantity=()=>{
-    let total=0.00;
+  getTotalLotQuantity = () => {
+    let total = 0.00;
     if (this.state.SelectedLotItem.LotDetails) {
       let SelectedLotItem = this.state.SelectedLotItem;
       let LotDetails = SelectedLotItem.LotDetails;
@@ -2004,16 +2147,16 @@ class pomrnactivity extends React.Component {
       }
       total = total.toFixed(2);
     }
-    
+
     return total;
   }
 
 
 
-  SaveLotDetailsOfLine=()=>{    
+  SaveLotDetailsOfLine = () => {
     let SelectedLotItem = this.state.SelectedLotItem;
-    let PurchaseOrderLine=this.state.PurchaseOrderLine;
-    let totalLotQuantity=this.getTotalLotQuantity();
+    let PurchaseOrderLine = this.state.PurchaseOrderLine;
+    let totalLotQuantity = this.getTotalLotQuantity();
     if (parseFloat(totalLotQuantity) !== parseFloat(SelectedLotItem.MRNQuantity)) {
       this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity does not match MRN Quantity." });
       return false;
@@ -2030,7 +2173,7 @@ class pomrnactivity extends React.Component {
       this.CloseLotDialog();
     }
 
-  
+
   }
 
   render() {
@@ -2089,10 +2232,108 @@ class pomrnactivity extends React.Component {
         "Content-Type": "application/json",
       };
 
+      let MRN={
+        MRNID:0,
+        No:"",
+        POID:this.state.PO.POID,
+        BranchID:this.state.PO.BranchID,
+        MRNDate:this.state.MRN.MRNDate,
+        SuplID:this.state.PO.SuplID,
+        POType:this.state.PO.POType,
+        BillingID:this.state.PO.BillingID,
+        Name:this.state.PO.Name,
+        Address:this.state.PO.Address,
+        Address2:this.state.PO.Address2,
+        Address3:this.state.PO.Address3,
+        City:this.state.PO.City,
+        PostCode:this.state.PO.PostCode,
+        CountryID:this.state.PO.CountryID,
+        StateID:this.state.PO.StateID,
+        IsImport:this.state.PO.IsImport,
+        CurrID:this.state.PO.CurrID,
+        ExchRate:this.state.PO.ExchRate,
+        FCValue:this.state.PO.FCValue,
+        BaseValue:this.state.PO.BaseValue,
+        PaymentTermID:this.state.PO.PaymentTermID,
+        PaymentTerm:this.state.PO.PaymentTerm,
+        Status:this.state.PO.Status,
+        WareHouseID:this.state.PO.WareHouseID,
+        MODTaxID:this.state.PO.MODTaxID,
+        IsRegistedSupplier:this.state.PO.IsRegistedSupplier,
+        GSTNo:this.state.PO.GSTNo,
+        VATNo:this.state.PO.VATNo,
+        IsRounding:this.state.PO.IsRounding,
+        IncoID:this.state.PO.IncoID,
+        ShipmentModeID:this.state.PO.ShipmentModeID,
+        Notes:this.state.PO.Notes,
+        IsSEZPurchase:this.state.PO.IsSEZPurchase,
+        IsTaxExempt:this.state.PO.IsTaxExempt,
+        Reason:this.state.PO.Reason,
+        GeneralPostingGroupID:this.state.PO.GeneralPostingGroupID,
+        SupplierPostingGroupID:this.state.PO.SupplierPostingGroupID,
+        SuplInvNo:this.state.MRN.SuplInvNo,
+        SuplInvDate:this.state.MRN.SuplInvDate,
+        DueDate:this.state.MRN.DueDate,
+        PayToSuplID:this.state.MRN.PayToSuplID,
+        EWayBillNo:this.state.MRN.EWayBillNo,
+        ContainerNo:this.state.MRN.ContainerNo,
+        DutyFogone:this.state.MRN.DutyFogone,
+        DutyPaid:this.state.MRN.DutyPaid,
+        GSTOrVATPaid:this.state.MRN.GSTOrVATPaid,
+        AssableValue:this.state.MRN.AssableValue,
+        BillOfEntryNo:this.state.MRN.BillOfEntryNo,
+        BillOfEntryDate:this.state.MRN.BillOfEntryDate,
+        BillOfEntryValue:this.state.MRN.BillOfEntryValue,
+        BLOrAWBNo:this.state.MRN.BLOrAWBNo,
+        BLOrAWBDate:this.state.MRN.BLOrAWBDate,
+        PortID:this.state.MRN.PortID,
+        ShipmentType:this.state.MRN.ShipmentType,
+        GateEntryNo:this.state.MRN.GateEntryNo,
+        GateEntryDate:this.state.MRN.GateEntryDate,
+        Remarks:this.state.PO.Remarks,
+        UserID: CF.toInt(getCookie(COOKIE.USERID)),
+      };
+
+      let MRNLIneList=[];
+
+      let PurchaseOrderLine=this.state.PurchaseOrderLine;
+      for(let i=0;i<PurchaseOrderLine.length;i++){
+        let obj = {
+          Type:PurchaseOrderLine[i].Type, 
+          LNo :(i+1),
+          TypeID :PurchaseOrderLine[i].TypeID,
+          SupplierCode :PurchaseOrderLine[i].SupplierCode,
+          Narration :PurchaseOrderLine[i].Narration,
+          UOMID :PurchaseOrderLine[i]['UOMID'],
+          TolerancePercentage :PurchaseOrderLine[i].TolerancePercentage,
+          POQuantity :PurchaseOrderLine[i].Quantity,
+          MRNQuantity :PurchaseOrderLine[i].MRNQuantity,
+          Price :PurchaseOrderLine[i].Price,
+          LineDiscPercentage :PurchaseOrderLine[i].LineDiscPercentage,
+          ItemPostingGroupID :PurchaseOrderLine[i].ItemPostingGroupID,
+          VATPercentage:PurchaseOrderLine[i].VATPercentage, 
+          HSNCode :PurchaseOrderLine[i].HSNCode,
+          GSTGroupID :PurchaseOrderLine[i].GSTGroupID,
+          GSTPercentage :PurchaseOrderLine[i].GSTPercentage,
+          DValueID :PurchaseOrderLine[i].DValueID,
+          IsQuality :PurchaseOrderLine[i].IsQuality,
+          IsLot :PurchaseOrderLine[i].IsLot
+        };
+        MRNLIneList.push(obj);
+      }
+
+      let reqData={
+        ValidUser:ValidUser,
+        MRN:MRN,
+        MRNLIneList:MRNLIneList
+      };
+      
+
+
 
     };
 
-   
+
 
     const breadcrumbHtml = (
       <Fragment>
@@ -2116,14 +2357,14 @@ class pomrnactivity extends React.Component {
           aria-label="Action Menu Button group"
         >
 
-            <Button
-              startIcon={APIURLS.buttonTitle.save.icon}
-              className="action-btns"
-              // onClick={(e) => AddNew(e)}
-              disabled={this.state.DisableCreatebtn}
-            >
-              {APIURLS.buttonTitle.save.name}
-            </Button>
+          <Button
+            startIcon={APIURLS.buttonTitle.save.icon}
+            className="action-btns"
+            onClick={(e) => AddNew(e)}
+             
+          >
+            {APIURLS.buttonTitle.save.name}
+          </Button>
 
         </ButtonGroup>
       </Fragment>
@@ -2131,7 +2372,7 @@ class pomrnactivity extends React.Component {
 
     const dialog = (
       <Fragment>
-      
+
       </Fragment>
     );
 
@@ -2150,7 +2391,7 @@ class pomrnactivity extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
 
-        {console.log("-----------------> STATE : ",this.state)}
+        {console.log("-----------------> STATE : ", this.state)}
 
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
@@ -2167,9 +2408,9 @@ class pomrnactivity extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
-       
 
-         
+
+
 
         <Grid container spacing={0}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -2205,7 +2446,7 @@ class pomrnactivity extends React.Component {
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                               <Grid container spacing={0}>
                                 <Grid item xs={12} sm={12} md={11} lg={11}>
-                                <SIB
+                                  <SIB
                                     id="MRNNo"
                                     label="No"
                                     variant="outlined"
@@ -2220,6 +2461,28 @@ class pomrnactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.PO.No}
+                                    disabled={true}
+                                  />
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="PODate"
+                                    label="PO Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("PODate", e)
+                                    }
+                                    value={this.state.PO.PODate}
+                                    disabled={true}
+                                  />
+                                  <SDIB
+                                    id="POType"
+                                    label="PO Type"
+                                    onChange={(e) => this.updateFormValue("POType", e)}
+                                    value={this.state.PO.POType}
+                                    param={this.state.POTypeList}
+                                    isMandatory={true}
                                     disabled={true}
                                   />
 
@@ -2253,7 +2516,7 @@ class pomrnactivity extends React.Component {
                                     disabled={true}
                                   />
 
-                                 
+
 
                                   <SIB
                                     id="Address"
@@ -2322,7 +2585,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.WareHouseID}
                                     param={this.state.WarehouseList}
                                     isMandatory={true}
-                                    
+
                                   />
 
 
@@ -2334,7 +2597,25 @@ class pomrnactivity extends React.Component {
                                     disabled={true}
                                   />
 
+                                  <SSIB
+                                    key="IsSEZPurchase"
+                                    id="IsSEZPurchase"
+                                    label="SEZ Purchase?"
+                                    param={this.state.PO.IsSEZPurchase}
+                                    onChange={(e) => this.updateFormValue("IsSEZPurchase", e)}
+                                    disabled={this.state.Branch.IsSEZ === true ? false : true}
 
+                                  />
+
+                                  <SSIB
+                                    key="IsRounding"
+                                    id="IsRounding"
+                                    label="Is Rounding?"
+                                    param={this.state.PO.IsRounding}
+                                    onChange={(e) => this.updateFormValue("IsRounding", e)}
+                                    disabled={this.state.Branch.AllowRounding === true ? false : true}
+
+                                  />
 
                                 </Grid>
                               </Grid>
@@ -2348,49 +2629,226 @@ class pomrnactivity extends React.Component {
 
                                   <SDTI
                                     isMandatory={true}
-                                    id="PODate"
-                                    label="PO Date"
+                                    id="MRNDate"
+                                    label="MRN Date"
                                     variant="outlined"
                                     size="small"
                                     onChange={(e) =>
-                                      this.updateFormValue("PODate", e)
+                                      this.updateFormValue("MRNDate", e)
                                     }
-                                    value={this.state.PO.PODate}
-                                    disabled={true}
+                                    value={this.state.MRN.MRNDate}
                                   />
-                                  <SDIB
-                                    id="POType"
-                                    label="PO Type"
-                                    onChange={(e) => this.updateFormValue("POType", e)}
-                                    value={this.state.PO.POType}
-                                    param={this.state.POTypeList}
+
+                                  <SDTI
                                     isMandatory={true}
-                                    disabled={true}
+                                    id="SuplInvDate"
+                                    label="Supl.Inv Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("SuplInvDate", e)
+                                    }
+                                    value={this.state.MRN.SuplInvDate}
+                                  />
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="DueDate"
+                                    label="Due Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("DueDate", e)
+                                    }
+                                    value={this.state.MRN.DueDate}
+                                  />
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="BillOfEntryDate"
+                                    label="Bill Of Entry Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("BillOfEntryDate", e)
+                                    }
+                                    value={this.state.MRN.BillOfEntryDate}
+                                  />
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="BLOrAWBDate"
+                                    label="BL/AWB Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("BLOrAWBDate", e)
+                                    }
+                                    value={this.state.MRN.BLOrAWBDate}
+                                  />
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="GateEntryDate"
+                                    label="Gate Entry Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("GateEntryDate", e)
+                                    }
+                                    value={this.state.MRN.GateEntryDate}
+                                  />
+
+                                  <SIB
+                                    id="SuplInvNo"
+                                    label="Supl.Inv No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.SuplInvNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("SuplInvNo", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="EWayBillNo"
+                                    label="EWay Bill No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.EWayBillNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("EWayBillNo", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="ContainerNo"
+                                    label="Container No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.ContainerNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("ContainerNo", e)
+                                    }
                                   />
 
 
-                                  {/* check this section as per branch details */}
-                                  {/* Start */}
-                                  <SSIB
-                                    key="IsSEZPurchase"
-                                    id="IsSEZPurchase"
-                                    label="SEZ Purchase?"
-                                    param={this.state.PO.IsSEZPurchase}
-                                    onChange={(e) => this.updateFormValue("IsSEZPurchase", e)}
-                                    disabled={this.state.Branch.IsSEZ === true ? false : true}
-                                     
+                                  <SIB
+                                    id="BillOfEntryNo"
+                                    label="Bill Of Entry No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.BillOfEntryNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("BillOfEntryNo", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="BLOrAWBNo"
+                                    label="BL/AWB No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.BLOrAWBNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("BLOrAWBNo", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="GateEntryNo"
+                                    label="Gate Entry No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.GateEntryNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("GateEntryNo", e)
+                                    }
                                   />
 
-                                  <SSIB
-                                    key="IsRounding"
-                                    id="IsRounding"
-                                    label="Is Rounding?"
-                                    param={this.state.PO.IsRounding}
-                                    onChange={(e) => this.updateFormValue("IsRounding", e)}
-                                    disabled={this.state.Branch.AllowRounding === true ? false : true}
-                                    
+
+                                  <SDIB
+                                    id="PayToSuplID"
+                                    label="PayToSuplID"
+                                    value={this.state.MRN.PayToSuplID}
+                                    param={this.state.PayToSuplList}
+                                    onChange={(e) =>
+                                      this.updateFormValue("PayToSuplID", e)
+                                    }
                                   />
-                                  {/* End */}
+
+                                  <SIB
+                                    id="DutyFogone"
+                                    label="DutyFogone"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.DutyFogone}
+                                    onChange={(e) =>
+                                      this.updateFormValue("DutyFogone", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="DutyPaid"
+                                    label="DutyPaid"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.DutyPaid}
+                                    onChange={(e) =>
+                                      this.updateFormValue("DutyPaid", e)
+                                    }
+                                  />
+
+
+                                  <SIB
+                                    id="GSTOrVATPaid"
+                                    label="GSTOrVATPaid"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.GSTOrVATPaid}
+                                    onChange={(e) =>
+                                      this.updateFormValue("GSTOrVATPaid", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="AssableValue"
+                                    label="AssableValue"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.AssableValue}
+                                    onChange={(e) =>
+                                      this.updateFormValue("AssableValue", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="BillOfEntryValue"
+                                    label="BillOfEntryValue"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.BillOfEntryValue}
+                                    onChange={(e) =>
+                                      this.updateFormValue("BillOfEntryValue", e)
+                                    }
+                                  />
+
+
+                                  <SDIB
+                                    id="PortID"
+                                    label="Port"
+                                    value={this.state.MRN.PortID}
+                                    param={this.state.PortList}
+                                    onChange={(e) =>
+                                      this.updateFormValue("PortID", e)
+                                    }
+                                  />
+
+                                  <SDIB
+                                    id="ShipmentType"
+                                    label="Shipment Type"
+                                    value={this.state.MRN.ShipmentType}
+                                    param={this.state.ShipmentTypeList}
+                                    onChange={(e) =>
+                                      this.updateFormValue("ShipmentType", e)
+                                    }
+                                  />
+
+
+
 
                                 </Grid>
                               </Grid>
@@ -2476,21 +2934,21 @@ class pomrnactivity extends React.Component {
                                   }
 
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Dim.Value </TableCell>
-                                  
-                                  {this.state.Branch.IsQuality===true?(
-                                     <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
-                                  ):null}
-                                 
 
-                                  {this.state.Branch.IsLot===true?(
+                                  {this.state.Branch.IsQuality === true ? (
+                                    <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
+                                  ) : null}
+
+
+                                  {this.state.Branch.IsLot === true ? (
                                     <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
-                                  ):null}
-                                  
+                                  ) : null}
+
                                 </TableRow>
                               </TableHead>
                               <TableBody className="tableBody">
 
-                             
+
 
                                 {console.log("this.state.PurchaseOrderLine > ", this.state.PurchaseOrderLine)}
                                 {this.state.PurchaseOrderLine.length > 0 ? (
@@ -2514,24 +2972,24 @@ class pomrnactivity extends React.Component {
                                                 />
                                               </Tooltip>
                                             </Fragment>
-                                           
-                                            
+
+
                                             {item.IsLot === true ? (
                                               <Fragment>
-                                              <Tooltip title="Add Lot">
-                                                <ListAltIcon
-                                                  fontSize="small"
-                                                  style={{
-                                                    color: '#2196f3',
-                                                    marginLeft: 10
-                                                  }}
-                                                  onClick={(e)=>this.openDialog(item)}
-                                                />
-                                              </Tooltip>
+                                                <Tooltip title="Add Lot">
+                                                  <ListAltIcon
+                                                    fontSize="small"
+                                                    style={{
+                                                      color: '#2196f3',
+                                                      marginLeft: 10
+                                                    }}
+                                                    onClick={(e) => this.openDialog(item)}
+                                                  />
+                                                </Tooltip>
                                               </Fragment>
                                             ) : null}
 
-                                            
+
 
                                             {
                                               (i + 1) === this.state.PurchaseOrderLine.length ? (
@@ -2550,7 +3008,7 @@ class pomrnactivity extends React.Component {
                                               ) : null
                                             }
 
-                                            
+
 
                                           </ButtonGroup>
                                         </TableCell>
@@ -2561,11 +3019,11 @@ class pomrnactivity extends React.Component {
                                             className="line-dropdown-css"
                                             value={item.Type}
                                             onChange={(e) => this.updateLineDetail(i, "Type", e)}
-                                            disabled={item.Type===0?true:false}
+                                            disabled={item.Type === 0 ? true : false}
                                           >
                                             <option value="" >Select</option>
                                             {APIURLS.POItemType.map((op, i) => (
-                                              <option value={op.value}  disabled={CF.toInt(op.value)<3?true:false} > {op.name}</option>
+                                              <option value={op.value} disabled={CF.toInt(op.value) < 3 ? true : false} > {op.name}</option>
 
                                             ))}
                                           </select>
@@ -2590,7 +3048,7 @@ class pomrnactivity extends React.Component {
                                         </TableCell>
                                         <TableCell align="left">
                                           <SCADI
-                                            
+
                                             style={{ width: '100%' }}
                                             id={"TypeID_" + i}
                                             onChange={(e, value) => this.updateLineDetail(i, "TypeID", value)}
@@ -2670,7 +3128,7 @@ class pomrnactivity extends React.Component {
                                             value={item.MRNQuantity}
                                             onChange={(e) => this.updateLineDetail(i, "MRNQuantity", e)}
                                             align="right"
-                                            disabled={item.LotDetails.length>0?true:false}
+                                            disabled={item.LotDetails.length > 0 ? true : false}
                                           />
                                         </TableCell>
                                         <TableCell align="right">
@@ -2757,7 +3215,7 @@ class pomrnactivity extends React.Component {
                                         ) : null}
 
 
-                                       
+
 
                                         {
                                           this.state.Branch.IsGST === true ? (
@@ -2829,8 +3287,8 @@ class pomrnactivity extends React.Component {
                                             />
                                           </TableCell>
                                         ) : null}
-                                       
-                                       
+
+
 
                                       </TableRow>
                                     ))}
@@ -2898,7 +3356,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.CurrID}
                                     param={this.state.CurrencyList}
                                     isMandatory={true}
-                                    
+
                                   />
 
                                   <SIB
@@ -2909,7 +3367,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.ExchRate}
                                     onChange={(e) => this.updateFormValue("ExchRate", e)}
                                     isMandatory={true}
-                                    
+
                                   />
 
                                   <SDIB
@@ -2934,7 +3392,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.PaymentTermID}
                                     param={this.state.PaymentTermsList}
                                     isMandatory={true}
-                                    
+
                                   />
                                   <SIB
                                     id="PaymentTerm"
@@ -2944,7 +3402,7 @@ class pomrnactivity extends React.Component {
                                     size="small"
                                     value={this.state.PO.PaymentTerm}
                                     isMandatory={true}
-                                     
+
                                   />
                                   <SDIB
                                     id="SupplierPostingGroupID"
@@ -3033,7 +3491,7 @@ class pomrnactivity extends React.Component {
                   </AccordionDetails>
                 </Accordion>
 
-                
+
 
                 <Accordion
                   key="a-4"
@@ -3122,7 +3580,7 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.MODTaxID}
                                     param={this.state.MODTaxList}
                                     isMandatory={true}
-                                    
+
                                   />
 
                                 </Grid>
@@ -3194,7 +3652,7 @@ class pomrnactivity extends React.Component {
                                     param={this.state.ShipmentModeList}
                                   />
 
-                                
+
                                 </Grid>
                               </Grid>
                             </Grid>
@@ -3261,7 +3719,7 @@ class pomrnactivity extends React.Component {
                         <Grid container spacing={0}>
                           <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                           <Grid item xs={12} sm={12} md={10} lg={10}>
-                            
+
                           </Grid>
                           <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                         </Grid>
@@ -3350,7 +3808,7 @@ class pomrnactivity extends React.Component {
                     {APIURLS.buttonTitle.clear.name}
                   </Button>
 
-                  
+
 
                   <Button
                     className="action-btns"
@@ -3363,7 +3821,7 @@ class pomrnactivity extends React.Component {
                     className="file-upload-input"
                     id="uploadInput"
                     type="file"
-                    onChange={(e)=>this.importLotFromExcel(e)}
+                    onChange={(e) => this.importLotFromExcel(e)}
 
                   />
 
@@ -3382,21 +3840,21 @@ class pomrnactivity extends React.Component {
                   <Fragment>
                     <table>
                       <tr>
-                        <td><span className="themeFont" style={{ color: '#212121' }}>Item:</span></td>                       
+                        <td><span className="themeFont" style={{ color: '#212121' }}>Item:</span></td>
                         <td>{this.state.SelectedLotItem.ItemListSelected.name}</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <td><span className="themeFont" style={{ color: '#212121' }}>MRN Quantity:</span></td>                        
-                        <td>{this.state.SelectedLotItem.MRNQuantity}</td>                       
+                        <td><span className="themeFont" style={{ color: '#212121' }}>MRN Quantity:</span></td>
+                        <td>{this.state.SelectedLotItem.MRNQuantity}</td>
                       </tr>
                     </table>
                   </Fragment>
                 ) : null}
-                
+
               </Grid>
             </Grid>
 
-            
+
 
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -3417,7 +3875,7 @@ class pomrnactivity extends React.Component {
                     </TableRow>
                   </TableHead>
                   <TableBody className="tableBody">
-                    {console.log("+++++++++++++ --------------------- > this.state.SelectedLotItem > ",this.state.SelectedLotItem)}
+                    {console.log("+++++++++++++ --------------------- > this.state.SelectedLotItem > ", this.state.SelectedLotItem)}
                     {this.state.SelectedLotItem['LotDetails'] ? this.state.SelectedLotItem['LotDetails'].map((item, i) => (
                       <TableRow>
                         <TableCell align="left">
@@ -3446,7 +3904,7 @@ class pomrnactivity extends React.Component {
                             variant="outlined"
                             size="small"
                             value={item.LotNo}
-                            onChange={(e)=>this.updateLotDetail("LotNo",e,i)}
+                            onChange={(e) => this.updateLotDetail("LotNo", e, i)}
                           />
                         </TableCell>
                         <TableCell align="right">
@@ -3455,7 +3913,7 @@ class pomrnactivity extends React.Component {
                             variant="outlined"
                             size="small"
                             value={item.Quantity}
-                            onChange={(e)=>this.updateLotDetail("Quantity",e,i)}
+                            onChange={(e) => this.updateLotDetail("Quantity", e, i)}
                           />
                         </TableCell>
                         <TableCell>
@@ -3464,7 +3922,7 @@ class pomrnactivity extends React.Component {
                             style={{ width: '100%' }}
                             className="line-dropdown-css"
                             value={item.PackingUOM}
-                            onChange={(e)=>this.updateLotDetail("PackingUOM",e,i)}
+                            onChange={(e) => this.updateLotDetail("PackingUOM", e, i)}
                           >
                             <option value="" >Select</option>
                             {this.state.UOMList.map((op, i) => (
@@ -3478,7 +3936,7 @@ class pomrnactivity extends React.Component {
                             variant="outlined"
                             size="small"
                             value={item.Location}
-                            onChange={(e)=>this.updateLotDetail("Location",e,i)}
+                            onChange={(e) => this.updateLotDetail("Location", e, i)}
                           />
                         </TableCell>
                       </TableRow>
@@ -3487,13 +3945,13 @@ class pomrnactivity extends React.Component {
                     {this.state.SelectedLotItem['LotDetails'] ? (
                       <TableRow>
                         <TableCell align="left"></TableCell>
-                        <TableCell align="left"><span className="themeFont" style={{ color: '#212121',fontWeight:'bold' }}>Total</span></TableCell>
+                        <TableCell align="left"><span className="themeFont" style={{ color: '#212121', fontWeight: 'bold' }}>Total</span></TableCell>
                         <TableCell align="left">{this.getTotalLotQuantity()}</TableCell>
                         <TableCell align="left"></TableCell>
                         <TableCell align="left"></TableCell>
                       </TableRow>
                     ) : null}
-                    
+
 
                   </TableBody>
                 </Table>
@@ -3510,7 +3968,7 @@ class pomrnactivity extends React.Component {
 
 
 
-       
+
 
       </Fragment>
     );
