@@ -1622,14 +1622,28 @@ class pomrnactivity extends React.Component {
         if (parseFloat(e.target.value) > maxQuantity) {
           this.setState({ ErrorMessageProps: "MRN Quantity Exceeds Tolerance Quantity", ErrorPrompt: true });
         } else {
-          o[key] = e.target.value;
+          if(isNaN(e.target.value)){
+            this.setState({ ErrorMessageProps: "MRN Quantity should be Number", ErrorPrompt: true });
+            return false;
+          }else{
+            o[key] = parseFloat(e.target.value);
+            PurchaseOrderLine[i] = o;
+            this.setLineParams(PurchaseOrderLine);
+          }
+          
         }
 
         break;
       case "Price":
-        o[key] = e.target.value;
+        if(isNaN(e.target.value)){
+          this.setState({ ErrorMessageProps: "Price should be currency", ErrorPrompt: true });
+          return false;
+        }else{
+          o[key] = e.target.value;
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
+        }
+       
         break;
       case "LineDiscPercentage":
         o[key] = e.target.value;
@@ -2248,7 +2262,7 @@ class pomrnactivity extends React.Component {
           No:"",
           POID:this.state.PO.POID,
           BranchID:this.state.PO.BranchID,
-          MRNDate:this.state.MRN.MRNDate,
+          MRNDate:moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
           SuplID:this.state.PO.SuplID,
           POType:this.state.PO.POType,
           BillingID:this.state.PO.BillingID,
@@ -2283,8 +2297,8 @@ class pomrnactivity extends React.Component {
           GeneralPostingGroupID:this.state.PO.GeneralPostingGroupID,
           SupplierPostingGroupID:this.state.PO.SupplierPostingGroupID,
           SuplInvNo:this.state.MRN.SuplInvNo,
-          SuplInvDate:this.state.MRN.SuplInvDate,
-          DueDate:this.state.MRN.DueDate,
+          SuplInvDate:moment(this.state.MRN.SuplInvDate).format("MM/DD/YYYY"),
+          DueDate:moment(this.state.MRN.DueDate).format("MM/DD/YYYY"),
           PayToSuplID:this.state.MRN.PayToSuplID,
           EWayBillNo:this.state.MRN.EWayBillNo,
           ContainerNo:this.state.MRN.ContainerNo,
@@ -2293,14 +2307,14 @@ class pomrnactivity extends React.Component {
           GSTOrVATPaid:this.state.MRN.GSTOrVATPaid,
           AssableValue:this.state.MRN.AssableValue,
           BillOfEntryNo:this.state.MRN.BillOfEntryNo,
-          BillOfEntryDate:this.state.MRN.BillOfEntryDate,
+          BillOfEntryDate:moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
           BillOfEntryValue:this.state.MRN.BillOfEntryValue,
           BLOrAWBNo:this.state.MRN.BLOrAWBNo,
-          BLOrAWBDate:this.state.MRN.BLOrAWBDate,
+          BLOrAWBDate:moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
           PortID:this.state.MRN.PortID,
           ShipmentType:this.state.MRN.ShipmentType,
           GateEntryNo:this.state.MRN.GateEntryNo,
-          GateEntryDate:this.state.MRN.GateEntryDate,
+          GateEntryDate:moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
           Remarks:this.state.PO.Notes,
           UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
@@ -2308,13 +2322,14 @@ class pomrnactivity extends React.Component {
         let MRNLIneList=[];  
         let PurchaseOrderLine = this.state.PurchaseOrderLine;
         for (let i = 0; i < PurchaseOrderLine.length; i++) {
-          if (PurchaseOrderLine[i].isProperData === true) {
+        
+          if (PurchaseOrderLine[i].isDataProper === true) {
             let obj = {
               Type: PurchaseOrderLine[i].Type,
               LNo: (i + 1),
               TypeID: PurchaseOrderLine[i].TypeID,
-              SupplierCode: PurchaseOrderLine[i].SupplierCode,
-              Narration: PurchaseOrderLine[i].Narration,
+              SupplierCode: (PurchaseOrderLine[i].SupplierCode==="" ||PurchaseOrderLine[i].SupplierCode===null)?"":PurchaseOrderLine[i].SupplierCode,
+              Narration: (PurchaseOrderLine[i].Narration===""||PurchaseOrderLine[i].Narration===null)?"":PurchaseOrderLine[i].Narration,
               UOMID: PurchaseOrderLine[i]['UOMID'],
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               POQuantity: PurchaseOrderLine[i].Quantity,
@@ -2328,7 +2343,8 @@ class pomrnactivity extends React.Component {
               GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
               DValueID: PurchaseOrderLine[i].DValueID,
               IsQuality: PurchaseOrderLine[i].IsQuality,
-              IsLot: PurchaseOrderLine[i].IsLot
+              IsLot: PurchaseOrderLine[i].IsLot,
+              LotDetails:PurchaseOrderLine[i].LotDetails
             };
             MRNLIneList.push(obj);
           } else {
@@ -2343,6 +2359,7 @@ class pomrnactivity extends React.Component {
           MRN: MRN,
           MRNLIneList: MRNLIneList
         };
+        console.log("AddNew > reqData > ",reqData);
       }else{
         this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
             return false;
@@ -3145,7 +3162,7 @@ class pomrnactivity extends React.Component {
                                             value={item.MRNQuantity}
                                             onChange={(e) => this.updateLineDetail(i, "MRNQuantity", e)}
                                             align="right"
-                                            disabled={item.LotDetails.length > 0 ? true : false}
+                                            disabled={item.LotDetails?item.LotDetails.length > 0 ? true : false:false}
                                           />
                                         </TableCell>
                                         <TableCell align="right">
