@@ -2,6 +2,7 @@ import React, { Fragment} from "react";
 import axios from "axios";
 import moment from "moment";
 import ReactToPrint from 'react-to-print';
+import readXlsxFile from 'read-excel-file';
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -10,6 +11,8 @@ import * as CF from "../../../services/functions/customfunctions";
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -40,6 +43,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
+import Tooltip from '@mui/material/Tooltip';
 
 import BackdropLoader from "../../compo/backdrop";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
@@ -84,7 +88,7 @@ class pomrnactivity extends React.Component {
       isDataFetched: false,
       BranchID: 0,
       accordion1: true,
-      accordion2: false,
+      accordion2: true,
       accordion3: false,
       accordion4: false,
       accordion5: false,
@@ -246,7 +250,7 @@ class pomrnactivity extends React.Component {
         IsLot: false,
         isDataProper: false,
       },
-
+      SelectedLotItem:{},
     };
   }
 
@@ -422,6 +426,8 @@ class pomrnactivity extends React.Component {
               UOMID: PurchaseOrderLine[i].UOMID,
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               Quantity: PurchaseOrderLine[i].Quantity,
+              MRNQuantity:0,
+              LotDetails:[],
               Price: PurchaseOrderLine[i].Price,
               LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
               LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
@@ -446,7 +452,7 @@ class pomrnactivity extends React.Component {
               GSTBaseAmount: PurchaseOrderLine[i].GSTBaseAmount,
               IGSTAmt: PurchaseOrderLine[i].IGSTAmt,
               IGSTRate: PurchaseOrderLine[i].IGSTRate,
-              isDataProper: true,
+              isDataProper: false,
             };
             newPOL.push(EL);
           }
@@ -1245,62 +1251,17 @@ class pomrnactivity extends React.Component {
 
   
 
-  openDialog = (param) => {
+  openDialog = (item) => {
     let Dialog = this.state.Dialog;
     Dialog.DialogStatus = true;
-    Dialog.DialogTitle = "View Purchase Order";
-
-
-    if(this.state.PO.IsImport===false){
-      Dialog.DialogContent = <PrintLocalPo podata={
-        {
-          Branch: this.state.Branch,
-          PO: this.state.PO,
-          PurchaseOrderLine: this.state.PurchaseOrderLine,
-          UOMList: this.state.UOMList,
-          CurrencyList: this.state.CurrencyList,
-          Supplier: {
-            Name: this.getSupplierName(),
-            Address: this.state.Address,
-            Address2: this.state.Address2,
-            Address3: this.state.Address3,
-            City: this.state.City,
-            PostCode: this.state.PostCode,
-            CountryID: this.state.CountryID,
-            StateID: this.state.StateID,
-            CountryList: this.state.CountryList,
-            StateList: this.state.StateList
-          }
-        }
-      } />;
-    }
-
-    if(this.state.PO.IsImport===true){
-      Dialog.DialogContent =<PrintImportPo podata={
-          {
-            Branch: this.state.Branch,
-            PO: this.state.PO,
-            PurchaseOrderLine: this.state.PurchaseOrderLine,
-            UOMList: this.state.UOMList,
-            CurrencyList: this.state.CurrencyList,
-            Supplier: {
-              Name: this.getSupplierName(),
-              Address: this.state.Address,
-              Address2: this.state.Address2,
-              Address3: this.state.Address3,
-              City: this.state.City,
-              PostCode: this.state.PostCode,
-              CountryID: this.state.CountryID,
-              StateID: this.state.StateID,
-              CountryList: this.state.CountryList,
-              StateList: this.state.StateList
-            }
-          }
-        } />;
-    }
-   
-
-    this.setState({ Dialog: Dialog });
+    Dialog.DialogTitle = "Add Lot Details";
+    console.log("openDialog > item > ",item);
+ 
+    
+    this.setState({ 
+      SelectedLotItem:item,
+      Dialog: Dialog
+     });
   };
 
   getNOSvalue = () => {
@@ -1528,6 +1489,9 @@ class pomrnactivity extends React.Component {
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
+      case "MRNQuantity":
+        o[key] = e.target.value;
+        break;
       case "Price":
         o[key] = e.target.value;
         PurchaseOrderLine[i] = o;
@@ -1644,7 +1608,8 @@ class pomrnactivity extends React.Component {
       o.Type === "" || o.Type === null ||
       o.TypeID === "" || o.TypeID === null ||
       o.Quantity === 0 ||
-      o.Price === 0
+      o.Price === 0 ||
+      o.MRNQuantity===0
     ) {
       validLine = false;
     } else {
@@ -1770,13 +1735,13 @@ class pomrnactivity extends React.Component {
         let itemDiscountPercentage = parseFloat(PurchaseOrderLine[i].LineDiscPercentage);
         let itemDiscountAmount = (parseFloat(itemTotalQtyPrice) * parseFloat(itemDiscountPercentage)) / 100;
         let itemTax = ((parseFloat(itemTotalQtyPrice) - parseFloat(itemDiscountAmount)) * parseFloat(TAX)) / 100;
-        Amount += parseFloat(itemTotalQtyPrice);
-        DiscountAmount += parseFloat(itemDiscountAmount);
-        TotalTax += parseFloat(itemTax);
+        // Amount += parseFloat(itemTotalQtyPrice);
+        // DiscountAmount += parseFloat(itemDiscountAmount);
+        // TotalTax += parseFloat(itemTax);
       }
 
-      FCValue = (parseFloat(Amount) - parseFloat(DiscountAmount)) + TotalTax
-      BaseValue = parseFloat(PO.ExchRate) * parseFloat(FCValue);
+      // FCValue = (parseFloat(Amount) - parseFloat(DiscountAmount)) + TotalTax
+      // BaseValue = parseFloat(PO.ExchRate) * parseFloat(FCValue);
 
       if (isNaN(Amount)) {
         Amount = 0.00;
@@ -1797,8 +1762,8 @@ class pomrnactivity extends React.Component {
         BaseValue = 0.00;
       }
 
-      PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
-      PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
+      // PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
+      // PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
     } catch (e) { }
 
     this.setState({
@@ -1825,8 +1790,140 @@ class pomrnactivity extends React.Component {
     }
   }
 
+  updateLotDetail=(key,e,index)=>{
+    let SelectedLotItem= this.state.SelectedLotItem;
+    let LotDetails=SelectedLotItem.LotDetails;
+    let newD=[];
+    for(let i=0;i<LotDetails.length;i++){
+      if(i===index){
+        let ldobj=LotDetails[i];
+        switch(key){
+          case"LotNo":
+          ldobj[key]=e.target.value;
+          newD.push(ldobj);
+          break;
+          case"Quantity":
+          ldobj[key]=e.target.value;
+          newD.push(ldobj);
+          break;
+          case"PackingUOM":
+          ldobj[key]=e.target.value;
+          newD.push(ldobj);
+          break;
+          case"Location":
+          ldobj[key]=e.target.value;
+          newD.push(ldobj);
+          break;
+          default:
+          break;
+        }
+      }else{
+        newD.push(LotDetails[i]);
+      }      
+    }
+    SelectedLotItem.LotDetails=newD;
+    this.setState({SelectedLotItem:SelectedLotItem});
+  }
+
+  ValidateLotFile=(filename)=> {
+    var _validFileExtensions = [".xlsx", ".xls"];   
+    var sFileName = filename;
+    if (sFileName.length > 0) {
+        var blnValid = false;
+        for (var j = 0; j < _validFileExtensions.length; j++) {
+            var sCurExtension = _validFileExtensions[j];
+            if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                blnValid = true;
+                break;
+            }
+        }
+        
+        if (!blnValid) {
+            alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+            return false;
+        }
+    }
+  
+    return true;
+}
+
+  importLotFromExcel=(e)=>{
+    let SelectedLotItem=this.state.SelectedLotItem;
+    if(e.target.files[0]){
+      let file = e.target.files[0];
+      let chk=this.ValidateLotFile(file.name);
+
+      if (chk) {
+          let ItemRows = [];
+          readXlsxFile(file).then((rows) => {
+              for (let i = 1; i < rows.length; i++) {
+                  let itemRow={
+                    LotID:0,
+                    LNo:0,
+                    MRNID:0,
+                    LotNo:rows[i][0],
+                    Quantity:rows[i][1],
+                    IsIssue:false,
+                    PackingUOM:rows[i][2],
+                    Location:rows[i][3],
+                  };
+                  ItemRows.push(itemRow);
+              }
+              SelectedLotItem.LotDetails=ItemRows;
+              this.setState({SelectedLotItem:SelectedLotItem});
+          })
+          
+      }else{
+          return false;
+      }
+  }
+  }
+
  
- 
+  AddLotLine=(item)=>{
+    console.log("AddLotLine > item > ",item);
+    let lotobj={
+      LotID:0,
+      LNo:0,
+      MRNID:0,
+      LotNo:"",
+      Quantity:0,
+      IsIssue:false,
+      PackingUOM:"",
+      Location:""
+    };
+    let LD=item.LotDetails;
+    LD.push(lotobj);
+    item.LotDetails=LD;
+    this.setState({SelectedLotItem:item});
+  }
+
+  LotItemDelete = (index, item) => {
+    let SelectedLotItem = this.state.SelectedLotItem;
+    let LotDetails=SelectedLotItem.LotDetails;
+    let newD=[];
+    for(let i=0;i<LotDetails.length;i++){
+      if(i===index){}else{
+        newD.push(LotDetails[i]);
+      }
+    }
+    SelectedLotItem.LotDetails=newD;
+    this.setState({SelectedLotItem:SelectedLotItem});
+  }
+
+  SaveLotDetailsOfLine=()=>{
+    let SelectedLotItem = this.state.SelectedLotItem;
+    let PurchaseOrderLine=this.state.PurchaseOrderLine;
+    let newD=[];
+    for(let i=0;i<PurchaseOrderLine.length;i++){
+      if(PurchaseOrderLine[i].LNo===SelectedLotItem.LNo){
+        newD.push(SelectedLotItem);
+      }else{
+        newD.push(PurchaseOrderLine[i]);
+      }      
+    }
+    this.setState({PurchaseOrderLine:PurchaseOrderLine});
+  }
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -1926,67 +2023,7 @@ class pomrnactivity extends React.Component {
 
     const dialog = (
       <Fragment>
-        <Dialog
-
-          fullWidth={true}
-          maxWidth="lg"
-          open={this.state.Dialog.DialogStatus}
-          aria-labelledby="PO-page-dialog-title"
-          aria-describedby="PO-page-dialog"
-          className="dialog-prompt-activity"
-        >
-          <DialogTitle
-            id="dialog-title"
-            className="dialog-area"
-            style={{ maxHeight: 50 }}
-          >
-            <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={1} lg={1}>
-                <IconButton
-                  aria-label="ArrowBackIcon"                
-                >
-                  <ArrowBackIcon onClick={(e) => this.handleClose()} />
-                </IconButton>
-              </Grid>
-              <Grid item xs={12} sm={12} md={2} lg={2}>
-                <div style={{ marginLeft: -50 }}>
-                  {" "}
-                  <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
-                    {" "}
-                    {this.state.Dialog.DialogTitle}{" "}
-                  </span>{" "}
-                </div>
-              </Grid>
-            </Grid>
-          </DialogTitle>
-          <DialogContent className="dialog-area">
-            <div style={{ height: 20 }}>&nbsp;</div>
-
-            {this.state.type === "edit" ? (
-              <ReactToPrint
-                trigger={() => {
-                  // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
-                  // to the root node of the returned component as it will be overwritten.
-                  return (
-                    <Button
-                      startIcon={APIURLS.buttonTitle.print.icon}
-                      className="action-btns"
-                    >
-                      {APIURLS.buttonTitle.print.name}
-                    </Button>
-                  );
-                }}
-                content={() => this.componentRef}
-              />
-            ) : null}
-            <div style={{ height: 20 }}>&nbsp;</div>
-            <div style={{ marginLeft: 10, marginRight: 10 }}>
-              {this.state.Dialog.DialogContent}
-            </div>
-
-            <div style={{ height: 50 }}>&nbsp;</div>
-          </DialogContent>
-        </Dialog>
+      
       </Fragment>
     );
 
@@ -2295,18 +2332,19 @@ class pomrnactivity extends React.Component {
                             >
                               <TableHead className="table-header-background">
                                 <TableRow>
-                                  <TableCell style={{ maxWidth: 50, minWidth: 50 }} className="line-table-header-font" align="left">&nbsp;</TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">&nbsp;</TableCell>
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Type</TableCell>
-                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Category</TableCell>
-                                  <TableCell style={{ maxWidth: 350, minWidth: 350 }} className="line-table-header-font" align="left">Item</TableCell>
+                                  <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Category</TableCell>
+                                  <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Item</TableCell>
 
-                                  <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Desc</TableCell>
-                                  <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Pack.Desc</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Desc</TableCell>
+                                  <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Pack.Desc</TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Sup.Code</TableCell>
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Narration</TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">UOM</TableCell>
                                   <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Quantity </TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">PO Quantity </TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">MRN Quantity </TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Unit Price </TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Disc %</TableCell>
                                   {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell> */}
@@ -2351,34 +2389,60 @@ class pomrnactivity extends React.Component {
                                   <Fragment>
                                     {this.state.PurchaseOrderLine.map((item, i) => (
                                       <TableRow className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
-                                        <TableCell align="left" style={{ maxWidth: 80, minWidth: 80 }}>
+                                        <TableCell align="left" >
                                           <ButtonGroup
                                             size="small"
                                             variant="text"
                                             aria-label="Action Menu Button group"
                                           >
-                                            <DeleteForeverIcon
-                                              fontSize="small"
-                                              style={{
-                                                color: '#e53935'
-                                              }}
-                                              onClick={(e) => this.itemDelete(i, item)}
-                                            />
+                                            <Fragment>
+                                              <Tooltip title="Delete Line">
+                                                <DeleteForeverIcon
+                                                  fontSize="small"
+                                                  style={{
+                                                    color: '#e53935'
+                                                  }}
+                                                  onClick={(e) => this.itemDelete(i, item)}
+                                                />
+                                              </Tooltip>
+                                            </Fragment>
+                                           
+                                            
+                                            {item.IsLot === true ? (
+                                              <Fragment>
+                                              <Tooltip title="Add Lot">
+                                                <ListAltIcon
+                                                  fontSize="small"
+                                                  style={{
+                                                    color: '#2196f3',
+                                                    marginLeft: 10
+                                                  }}
+                                                  onClick={(e)=>this.openDialog(item)}
+                                                />
+                                              </Tooltip>
+                                              </Fragment>
+                                            ) : null}
+
+                                            
 
                                             {
                                               (i + 1) === this.state.PurchaseOrderLine.length ? (
                                                 <Fragment>
-                                                  <AddCircleOutlineIcon
-                                                    fontSize="small"
-                                                    style={{
-                                                      color: '#00897b',
-                                                      marginLeft: 10
-                                                    }}
-                                                    onClick={(e) => this.createNewBlankLine()}
-                                                  />
+                                                  <Tooltip title="Add New Line">
+                                                    <AddCircleOutlineIcon
+                                                      fontSize="small"
+                                                      style={{
+                                                        color: '#00897b',
+                                                        marginLeft: 10
+                                                      }}
+                                                      onClick={(e) => this.createNewBlankLine()}
+                                                    />
+                                                  </Tooltip>
                                                 </Fragment>
                                               ) : null
                                             }
+
+                                            
 
                                           </ButtonGroup>
                                         </TableCell>
@@ -2389,6 +2453,7 @@ class pomrnactivity extends React.Component {
                                             className="line-dropdown-css"
                                             value={item.Type}
                                             onChange={(e) => this.updateLineDetail(i, "Type", e)}
+                                            disabled={item.Type===0?true:false}
                                           >
                                             <option value="" >Select</option>
                                             {APIURLS.POItemType.map((op, i) => (
@@ -2440,6 +2505,7 @@ class pomrnactivity extends React.Component {
                                             size="small"
                                             value={item.SupplierCode}
                                             onChange={(e) => this.updateLineDetail(i, "SupplierCode", e)}
+                                            disabled={true}
                                           />
                                         </TableCell>
                                         <TableCell align="left">
@@ -2449,6 +2515,7 @@ class pomrnactivity extends React.Component {
                                             size="small"
                                             value={item.Narration}
                                             onChange={(e) => this.updateLineDetail(i, "Narration", e)}
+                                            disabled={true}
                                           />
                                         </TableCell>
                                         <TableCell align="left">
@@ -2473,6 +2540,7 @@ class pomrnactivity extends React.Component {
                                             value={item.TolerancePercentage}
                                             onChange={(e) => this.updateLineDetail(i, "TolerancePercentage", e)}
                                             align="right"
+                                            disabled={true}
                                           />
                                         </TableCell>
                                         <TableCell align="right">
@@ -2483,6 +2551,18 @@ class pomrnactivity extends React.Component {
                                             value={item.Quantity}
                                             onChange={(e) => this.updateLineDetail(i, "Quantity", e)}
                                             align="right"
+                                            disabled={true}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          <SCI
+                                            id={"MRNQuantity_" + i}
+                                            variant="outlined"
+                                            size="small"
+                                            value={item.MRNQuantity}
+                                            onChange={(e) => this.updateLineDetail(i, "MRNQuantity", e)}
+                                            align="right"
+                                             
                                           />
                                         </TableCell>
                                         <TableCell align="right">
@@ -2990,17 +3070,6 @@ class pomrnactivity extends React.Component {
                                     disabled={true}
                                   />
 
-                                  <SIB
-                                    id="DeliveryAddress"
-                                    label="Delivery Address"
-                                    onChange={(e) => this.updateFormValue("DeliveryAddress", e)}
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PO.DeliveryAddress}
-                                    multiline={true}
-                                    rows={5}
-                                  />
-                                  <div style={{ height: 70 }}>&nbsp;</div>
                                 </Grid>
                               </Grid>
                             </Grid>
@@ -3017,18 +3086,7 @@ class pomrnactivity extends React.Component {
                                     param={this.state.ShipmentModeList}
                                   />
 
-                                  <SIB
-                                    id="SpecialInst"
-                                    label="Special Inst"
-                                    onChange={(e) => this.updateFormValue("SpecialInst", e)}
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PO.SpecialInst}
-                                    multiline={true}
-                                    rows={5}
-                                    
-                                  />
-                                  <div style={{ height: 70 }}>&nbsp;</div>
+                                
                                 </Grid>
                               </Grid>
                             </Grid>
@@ -3134,7 +3192,178 @@ class pomrnactivity extends React.Component {
         </Dialog>
 
 
-        {dialog}
+        <Dialog
+
+          fullWidth={true}
+          maxWidth="md"
+          open={this.state.Dialog.DialogStatus}
+          aria-labelledby="PO-page-dialog-title"
+          aria-describedby="PO-page-dialog"
+          className="dialog-prompt-activity"
+        >
+          <DialogTitle
+            id="dialog-title"
+            className="dialog-area"
+          // style={{ maxHeight: 50 }}
+          >
+
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}>
+                <IconButton
+                  aria-label="ArrowBackIcon"
+                >
+                  <ArrowBackIcon onClick={(e) => this.handleClose()} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12} sm={12} md={9} lg={9}>
+                {this.state.Dialog.DialogTitle}
+              </Grid>
+            </Grid>
+          </DialogTitle>
+          <DialogContent className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
+                  <Button
+                    startIcon={APIURLS.buttonTitle.save.icon}
+                    className="action-btns"
+                    onClick={(e) => this.SaveLotDetailsOfLine()}
+                  >
+                    {APIURLS.buttonTitle.save.name}
+                  </Button>
+
+
+
+                  <Button
+                    className="action-btns"
+                    startIcon={<FileUploadIcon />}
+                    onClick={(e) => { document.getElementById("uploadInput").click() }}
+                  >
+                    Attach File
+                  </Button>
+                  <input
+                    className="file-upload-input"
+                    id="uploadInput"
+                    type="file"
+                    onChange={(e)=>this.importLotFromExcel(e)}
+
+                  />
+
+                  <Button
+                    startIcon={APIURLS.buttonTitle.addline.icon}
+                    className="action-btns"
+                    onClick={(e) => this.AddLotLine(this.state.SelectedLotItem)}
+                  >
+                    {APIURLS.buttonTitle.addline.name}
+                  </Button>
+
+                </ButtonGroup>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
+            </Grid>
+
+
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+
+                <Table
+                  stickyHeader
+                  size="small"
+                  className=""
+                  aria-label="Lines List table"
+                >
+                  <TableHead className="table-header-background">
+                    <TableRow>
+                      <TableCell style={{ maxWidth: 50, minWidth: 50 }} className="line-table-header-font" align="left">&nbsp;</TableCell>
+                      <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Lot No.</TableCell>
+                      <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Quantity</TableCell>
+                      <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Packing UOM</TableCell>
+                      <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Location</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody className="tableBody">
+                    {this.state.SelectedLotItem['LotDetails'] ? this.state.SelectedLotItem['LotDetails'].map((item, i) => (
+                      <TableRow>
+                        <TableCell align="left">
+                          <ButtonGroup
+                            size="small"
+                            variant="text"
+                            aria-label="Action Menu Button group"
+                          >
+                            <Fragment>
+                              <Tooltip title="Delete Line">
+                                <DeleteForeverIcon
+                                  fontSize="small"
+                                  style={{
+                                    color: '#e53935'
+                                  }}
+                                  onClick={(e) => this.LotItemDelete(i, item)}
+                                />
+                              </Tooltip>
+                            </Fragment>
+
+                          </ButtonGroup>
+                        </TableCell>
+                        <TableCell align="left">
+                          <SCI
+                            id={"LotNo_" + i}
+                            variant="outlined"
+                            size="small"
+                            value={item.LotNo}
+                            onChange={(e)=>this.updateLotDetail("LotNo",e,i)}
+                          />
+                        </TableCell>
+                        <TableCell align="right">
+                          <SCI
+                            id={"Quantity_" + i}
+                            variant="outlined"
+                            size="small"
+                            value={item.Quantity}
+                            onChange={(e)=>this.updateLotDetail("Quantity",e,i)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <select
+                            id={"PackingUOM_" + i}
+                            style={{ width: '100%' }}
+                            className="line-dropdown-css"
+                            value={item.PackingUOM}
+                            onChange={(e)=>this.updateLotDetail("PackingUOM",e,i)}
+                          >
+                            <option value="" >Select</option>
+                            {APIURLS.PackingUOM.map((op, i) => (
+                              <option value={op.value}> {op.name}</option>
+                            ))}
+                          </select>
+                        </TableCell>
+                        <TableCell align="left">
+                          <SCI
+                            id={"Location_" + i}
+                            variant="outlined"
+                            size="small"
+                            value={item.Location}
+                            onChange={(e)=>this.updateLotDetail("Location",e,i)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    )) : null}
+
+                  </TableBody>
+                </Table>
+
+              </Grid>
+            </Grid>
+
+
+
+
+            <div style={{ height: 50 }}>&nbsp;</div>
+          </DialogContent>
+        </Dialog>
 
 
 

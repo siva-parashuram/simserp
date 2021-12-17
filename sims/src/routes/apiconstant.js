@@ -18,6 +18,7 @@ import ContactMailIcon from '@mui/icons-material/ContactMail';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import NextPlanIcon from '@mui/icons-material/NextPlan';
 import UndoIcon from '@mui/icons-material/Undo';
+import FormatLineSpacingIcon from '@mui/icons-material/FormatLineSpacing';
 
 import Chip from '@mui/material/Chip';
 
@@ -252,11 +253,21 @@ export const buttonTitle = {
   reopen:{
     name:"Re-Open",
     icon:<UndoIcon/>
+  },
+  addline:{
+    name:"Add line",
+    icon:<FormatLineSpacingIcon/>
   }
 };
 
 
-
+export const PackingUOM = [
+  { name: "Kgs", value: 0 },
+  { name: "pallets", value: 1 },
+  { name: "Liters", value: 2 },
+  { name: "CTN", value: 3 },
+  { name: "NOs", value: 3 },
+];
 
 
 export const SupplierClasification = [
