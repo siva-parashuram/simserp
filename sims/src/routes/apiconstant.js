@@ -179,6 +179,7 @@ export const APIURL = {
   GetPOByBranchID:domain+"api/PO/GetPOByBranchID",
   GetPOByPOID:domain+"api/PO/GetPOByPOID",
   Add_Update_PurchaseOrderAuthorize:domain+"api/PO/Add_Update_PurchaseOrderAuthorize",
+  Add_Update_MRN:domain+"api/PO/Add_Update_MRN",
 };
 
 export const CTimeOut = 10;
@@ -756,8 +757,9 @@ export const poMasterColumn=[
       <Fragment>
        {params.value===1?(<Chip label="Open" size="small"/>):null}
        {params.value===2?(<Chip label="Released"  color="primary"  size="small"/>):null}
-       {params.value===3?(<Chip label="MRN"  color="secondary"  size="small"/>):null}
-       {params.value===4?(<Chip label="Short Close"  color="success"  size="small"/>):null}
+       {params.value===3?(<Chip label="Complete MRN"  color="secondary"  size="small"/>):null}
+       {params.value===4?(<Chip label="Partial MRN"  color="warning"  size="small"/>):null}
+       {params.value===5?(<Chip label="Short Close"  color="success"  size="small"/>):null}
       </Fragment>
     ),
   }

@@ -2573,7 +2573,7 @@ class poactivity extends React.Component {
                       return (
                         <Step key={label} {...stepProps}>
                           <StepLabel {...labelProps}>
-                            {index === 2 ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
+                            {(index === 2 ) ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
                              
                           </StepLabel>
                         </Step>

@@ -194,8 +194,11 @@ class addnumbering extends React.Component {
 
     const updateNumberingListState = (param, item, id, e) => {
       let numberings = this.state.numberings;
-
+      
+      
       for (let i = 0; i < numberings.length; i++) {
+        console.log("numberings[i].id ----> ",numberings[i].id);
+      console.log("item.id ----> ",item.id);
         if (numberings[i].id === item.id) {
           if (param === "Increment") {
             numberings[i][param] = parseInt(e.target.value);
@@ -204,7 +207,9 @@ class addnumbering extends React.Component {
           }
         }
       }
-      this.setState({ numberings: numberings });
+      this.setState({ numberings: numberings },()=>{
+        console.log("numberings ----> ",numberings);
+      });
     };
 
     const creatNewLine = () => {
@@ -222,6 +227,7 @@ class addnumbering extends React.Component {
         LastNo: 0,
         LastNoDate: null,
       };
+      
 
       N.push(numberings);
       this.setState({ numberings: N }, () => {
@@ -262,6 +268,12 @@ class addnumbering extends React.Component {
       let noSeries = this.state.noSeries;
       let noSeriesDetailList = formatDate();
       let BranchId = this.state.branchId;
+       let numberings=this.state.numberings;
+      console.log("numberings > ",numberings);
+      console.log("noSeriesDetailList > ",noSeriesDetailList);
+
+
+      return false;
       const data = {
         validUser: ValidUser,
         noSeries: noSeries,
@@ -472,10 +484,10 @@ class addnumbering extends React.Component {
                                 }
                                 onKeyDown={(e) =>
                                   updateListValue(
-                                    "startdate",
+                                    "StartDate",
                                     item,
                                     "startdate" + item.id,
-                                    "startno" + item.id,
+                                    "prefix" + item.id,
                                     e
                                   )
                                 }
@@ -492,10 +504,10 @@ class addnumbering extends React.Component {
                                 size="small"
                                 onKeyDown={(e) =>
                                   updateListValue(
-                                    "prefix",
+                                    "Prefix",
                                     item,
                                     "prefix" + item.id,
-                                    "Increment" + item.id,
+                                    "startno" + item.id,
                                     e
                                   )
                                 }
@@ -533,10 +545,10 @@ class addnumbering extends React.Component {
                                 size="small"
                                 onKeyDown={(e) =>
                                   updateListValue(
-                                    "suffix",
+                                    "Suffix",
                                     item,
                                     "suffix" + item.id,
-                                    "prefix" + item.id,
+                                    "Increment" + item.id,
                                     e
                                   )
                                 }

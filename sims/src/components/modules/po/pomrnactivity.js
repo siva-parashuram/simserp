@@ -1188,27 +1188,27 @@ class pomrnactivity extends React.Component {
         this.setState({ MRN: MRN });
         break;
       case "DutyFogone":
-        MRN[param] = e.target.value;
+        MRN[param] = parseFloat(e.target.value);
         this.setState({ MRN: MRN });
         break;
       case "DutyPaid":
-        MRN[param] = e.target.value;
+        MRN[param] = parseFloat(e.target.value);
         this.setState({ MRN: MRN });
         break;
       case "GSTOrVATPaid":
-        MRN[param] = e.target.value;
+        MRN[param] = parseFloat(e.target.value);
         this.setState({ MRN: MRN });
         break;
       case "AssableValue":
-        MRN[param] = e.target.value;
+        MRN[param] = parseFloat(e.target.value);
         this.setState({ MRN: MRN });
         break;
       case "BillOfEntryValue":
-        MRN[param] = e.target.value;
+        MRN[param] = parseFloat(e.target.value);
         this.setState({ MRN: MRN });
         break;
       case "PortID":
-        MRN[param] = e.target.value;
+        MRN[param] = parseInt(e.target.value);
         this.setState({ MRN: MRN });
         break;
        
@@ -1637,7 +1637,7 @@ class pomrnactivity extends React.Component {
           this.setState({ ErrorMessageProps: "Price should be currency", ErrorPrompt: true });
           return false;
         } else {
-          o[key] = e.target.value;
+          o[key] = parseFloat(e.target.value);
           PurchaseOrderLine[i] = o;
           this.setLineParams(PurchaseOrderLine);
         }
@@ -1983,7 +1983,7 @@ class pomrnactivity extends React.Component {
             newD.push(ldobj);
             break;
           case "Quantity":
-            ldobj[key] = e.target.value;
+            ldobj[key] = parseFloat(e.target.value);
             newD.push(ldobj);
             // if(e.target.value==="" || e.target.value===null){
             //   ldobj[key] = 0;      
@@ -2078,12 +2078,13 @@ class pomrnactivity extends React.Component {
             if (processNext === true) {
               for (let i = 1; i < rows.length; i++) {
                 let itemRow = {
-                  LotID: 0,
+                  LotID: 0,                  
                   LNo: i,
-                  MRNID: 0,
+                  TypeID:CF.toInt(this.state.SelectedLotItem.TypeID),
+                 
                   LotNo: rows[i][0],
                   Quantity: rows[i][1],
-                  IsIssue: false,
+                  
                   PackingUOM: rows[i][2],
                   Location: rows[i][3],
                 };
@@ -2121,11 +2122,12 @@ class pomrnactivity extends React.Component {
     console.log("AddLotLine > item > ", item);
     let lotobj = {
       LotID: 0,
+      TypeID:item.TypeID,
       LNo: 0,
-      MRNID: 0,
+      
       LotNo: "",
       Quantity: 0,
-      IsIssue: false,
+      
       PackingUOM: "",
       Location: ""
     };
@@ -2201,7 +2203,7 @@ class pomrnactivity extends React.Component {
     let contobj = {
       ID: 0,
       LNo: 0,
-      MRNID: 0,
+      
       ContainerType: "",
       ContainerNo: "",    
       Remarks: ""
@@ -2238,7 +2240,7 @@ class pomrnactivity extends React.Component {
             let itemRow = {
               ID: 0,
               LNo: i,
-              MRNID: 0,
+               
               ContainerType: rows[i][0],
               ContainerNo: rows[i][1],
               Remarks: rows[i][2]
@@ -2267,6 +2269,19 @@ class pomrnactivity extends React.Component {
     //validate MRN data
 
     return validateMRNData;
+  }
+
+  openEditMode = (ID) => {
+    console.log("-openEditMode-");
+    console.log("ID -> ", ID);
+    // let editUrl =
+    // URLS.URLS.editPO +
+    // this.state.urlparams +
+    // "&editPOID=" +
+    // ID + "&type=edit";
+    // window.location = editUrl;
+    
+
   }
 
   render() {
@@ -2338,6 +2353,77 @@ class pomrnactivity extends React.Component {
       validateMRNData = this.validateMRNData();
 
       if (validateMRNData === true) {
+       
+        let Status=3;
+        let MRNLineList = [];
+        let MRNLotDetailsList=[];
+        let PurchaseOrderLine = this.state.PurchaseOrderLine;
+        for (let i = 0; i < PurchaseOrderLine.length; i++) {
+
+          if (PurchaseOrderLine[i].isDataProper === true) {
+
+            if (parseFloat(Status) === 3) {
+              if (parseFloat(PurchaseOrderLine[i].MRNQuantity) < parseFloat(PurchaseOrderLine[i].Quantity)) {
+                Status = 4;
+              }
+            }
+
+            let obj = {
+              Type: PurchaseOrderLine[i].Type,
+              LNo: (i + 1),
+              TypeID: PurchaseOrderLine[i].TypeID,
+              SupplierCode: (PurchaseOrderLine[i].SupplierCode === "" || PurchaseOrderLine[i].SupplierCode === null) ? "" : PurchaseOrderLine[i].SupplierCode,
+              Narration: (PurchaseOrderLine[i].Narration === "" || PurchaseOrderLine[i].Narration === null) ? "" : PurchaseOrderLine[i].Narration,
+              UOMID: PurchaseOrderLine[i]['UOMID'],
+              TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+              POQuantity: PurchaseOrderLine[i].Quantity,
+              MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
+              Price: PurchaseOrderLine[i].Price,
+              LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
+              ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+              VATPercentage: PurchaseOrderLine[i].VATPercentage,
+              HSNCode: PurchaseOrderLine[i].HSNCode,
+              GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+              GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
+              DValueID: PurchaseOrderLine[i].DValueID,
+              IsQuality: PurchaseOrderLine[i].IsQuality,
+              IsLot: PurchaseOrderLine[i].IsLot,
+              
+            };
+            MRNLineList.push(obj);
+            if (PurchaseOrderLine[i].LotDetails) {
+              let LotDetails = PurchaseOrderLine[i].LotDetails;
+              for (let j = 0; j < LotDetails.length; j++) {
+                let obj = LotDetails[j];
+                obj.LNo = j + 1;
+                MRNLotDetailsList.push(obj);
+              }
+            }
+            
+            // Array.prototype.push.apply(MRNLotDetailsList, LotDetails);
+
+          } else {
+            this.setState({ ErrorPrompt: true, ErrorMessageProps: "Improper Line Data Found.", ProgressLoader: true });
+            return false;
+          }
+
+        }
+
+        console.log("MRNLotDetailsList > ",MRNLotDetailsList);
+
+        let ContainerInfo = this.state.ContainerInfo;
+        let newContainerInfo=[];
+        for(let i=0;i<ContainerInfo.length;i++){
+          let obj = {
+            ID: 0,
+            LNo: i + 1,
+            Type: ContainerInfo[i].ContainerType,
+            ContainerNo: ContainerInfo[i].ContainerNo,
+            Remarks: ContainerInfo[i].Remarks
+          };
+          newContainerInfo.push(obj);
+        }
+
         let MRN = {
           MRNID: 0,
           No: "",
@@ -2362,7 +2448,7 @@ class pomrnactivity extends React.Component {
           BaseValue: this.state.PO.BaseValue,
           PaymentTermID: this.state.PO.PaymentTermID,
           PaymentTerm: this.state.PO.PaymentTerm,
-          Status: this.state.PO.Status,
+          Status: parseInt(Status),
           WareHouseID: this.state.PO.WareHouseID,
           MODTaxID: this.state.PO.MODTaxID,
           IsRegistedSupplier: this.state.PO.IsRegistedSupplier,
@@ -2387,63 +2473,74 @@ class pomrnactivity extends React.Component {
           GSTOrVATPaid: this.state.MRN.GSTOrVATPaid,
           AssableValue: this.state.MRN.AssableValue,
           BillOfEntryNo: this.state.MRN.BillOfEntryNo,
-          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
+          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
           BillOfEntryValue: this.state.MRN.BillOfEntryValue,
           BLOrAWBNo: this.state.MRN.BLOrAWBNo,
-          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
+          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
           PortID: this.state.MRN.PortID,
           
           GateEntryNo: this.state.MRN.GateEntryNo,
-          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
+          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
           Remarks: this.state.PO.Notes,
           UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
 
-        let MRNLIneList = [];
-        let PurchaseOrderLine = this.state.PurchaseOrderLine;
-        for (let i = 0; i < PurchaseOrderLine.length; i++) {
+     
 
-          if (PurchaseOrderLine[i].isDataProper === true) {
-            let obj = {
-              Type: PurchaseOrderLine[i].Type,
-              LNo: (i + 1),
-              TypeID: PurchaseOrderLine[i].TypeID,
-              SupplierCode: (PurchaseOrderLine[i].SupplierCode === "" || PurchaseOrderLine[i].SupplierCode === null) ? "" : PurchaseOrderLine[i].SupplierCode,
-              Narration: (PurchaseOrderLine[i].Narration === "" || PurchaseOrderLine[i].Narration === null) ? "" : PurchaseOrderLine[i].Narration,
-              UOMID: PurchaseOrderLine[i]['UOMID'],
-              TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
-              POQuantity: PurchaseOrderLine[i].Quantity,
-              MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
-              Price: PurchaseOrderLine[i].Price,
-              LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
-              ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
-              VATPercentage: PurchaseOrderLine[i].VATPercentage,
-              HSNCode: PurchaseOrderLine[i].HSNCode,
-              GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
-              GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
-              DValueID: PurchaseOrderLine[i].DValueID,
-              IsQuality: PurchaseOrderLine[i].IsQuality,
-              IsLot: PurchaseOrderLine[i].IsLot,
-              LotDetails: PurchaseOrderLine[i].LotDetails
-            };
-            MRNLIneList.push(obj);
-          } else {
-            this.setState({ ErrorPrompt: true, ErrorMessageProps: "Improper Line Data Found.", ProgressLoader: true });
-            return false;
-          }
-
-        }
-
-        let ContainerInfo = this.state.ContainerInfo;
-
-
-        let reqData = {
+        let NoSeriesReqData = {
           ValidUser: ValidUser,
-          MRN: MRN,
-          MRNLIneList: MRNLIneList,
-          ContainerInfo: ContainerInfo
+          DocumentNumber: {
+            NoSeriesID: CF.toInt(this.state.Branch.MRNNo),
+            TransDate: moment().format("MM-DD-YYYY"),
+          },
         };
-        console.log("AddNew > reqData > ", reqData);
+        console.log("AddNew > NoSeriesReqData > ", NoSeriesReqData);
+        
+
+        let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
+        axios
+          .post(Url1, NoSeriesReqData, { headers })
+          .then((response) => {
+            if (response.status === 200) {
+              MRN.No=response.data;
+              let reqData = {
+                ValidUser: ValidUser,
+                MRN: MRN,
+                MRNLineList: MRNLineList,
+                MRNLotDetailsList:MRNLotDetailsList,
+                MRNContainerInfoList: newContainerInfo
+              };
+              console.log("AddNew > reqData > ", reqData);
+              let Url2 = APIURLS.APIURL.Add_Update_MRN;
+              axios
+              .post(Url2, reqData, { headers })
+              .then((response) => {
+                console.log("response > ", response);
+                if (response.status === 201 || response.status === 200) {
+                  this.setState({ SuccessPrompt: true,ProgressLoader: true});
+                  // this.openEditMode();
+                }else{
+                  this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "", });
+                }
+              })
+              .catch((error) => {
+                console.log("Main API Error");
+                this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Not saved", });
+              });
+
+            }else{
+              this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not fetched.", });
+            }
+           
+
+          })
+          .catch((error) => {
+            console.log("No series Error");
+            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not defined.", });
+          });
+
+
+        
       } else {
         this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
         return false;
