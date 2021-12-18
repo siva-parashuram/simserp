@@ -92,6 +92,7 @@ class pomrnactivity extends React.Component {
       accordion3: false,
       accordion4: false,
       accordion5: false,
+      accordion6: false,
       ProgressLoader: false,
       ErrorPrompt: false,
       SuccessPrompt: false,
@@ -261,7 +262,7 @@ class pomrnactivity extends React.Component {
         DueDate: null,
         PayToSuplID: 0,
         EWayBillNo: "",
-        ContainerNo: "",
+
         DutyFogone: 0,
         DutyPaid: 0,
         GSTOrVATPaid: 0,
@@ -272,10 +273,11 @@ class pomrnactivity extends React.Component {
         BLOrAWBNo: "",
         BLOrAWBDate: null,
         PortID: 0,
-        ShipmentType: 0,
+        
         GateEntryNo: "",
         GateEntryDate: null,
       },
+      ContainerInfo: [],
       SelectedLotItem: {},
     };
   }
@@ -642,6 +644,7 @@ class pomrnactivity extends React.Component {
           let FixedAsset = data.FixedAsset;
           let DimensionsList = data.DimensionValue;
           let IncoTermList = data.IncoTerms;
+          let PortList=data.Port;
 
           let PO = this.state.PO;
 
@@ -690,6 +693,7 @@ class pomrnactivity extends React.Component {
             FixedAsset: FixedAsset,
             DimensionsList: DimensionsList,
             IncoTermList: IncoTermList,
+            PortList:PortList
             // ProgressLoader: this.state.type === "edit" ? false : true
           }, () => {
 
@@ -1166,10 +1170,7 @@ class pomrnactivity extends React.Component {
         MRN[param] = e.target.value;
         this.setState({ MRN: MRN });
         break;
-      case "ContainerNo":
-        MRN[param] = e.target.value;
-        this.setState({ MRN: MRN });
-        break;
+      
       case "BillOfEntryNo":
         MRN[param] = e.target.value;
         this.setState({ MRN: MRN });
@@ -1179,7 +1180,7 @@ class pomrnactivity extends React.Component {
         this.setState({ MRN: MRN });
         break;
       case "GateEntryNo":
-        MRN[param] =e.target.value;
+        MRN[param] = e.target.value;
         this.setState({ MRN: MRN });
         break;
       case "PayToSuplID":
@@ -1207,13 +1208,10 @@ class pomrnactivity extends React.Component {
         this.setState({ MRN: MRN });
         break;
       case "PortID":
-        MRN[param] =e.target.value;
-        this.setState({ MRN: MRN });
-        break;
-      case "ShipmentType":
         MRN[param] = e.target.value;
         this.setState({ MRN: MRN });
         break;
+       
       //-----------------------------------------    
       case "DispachDate":
         PO.DispachDate = moment(e.target.value).format("YYYY-MM-DD");
@@ -1622,28 +1620,28 @@ class pomrnactivity extends React.Component {
         if (parseFloat(e.target.value) > maxQuantity) {
           this.setState({ ErrorMessageProps: "MRN Quantity Exceeds Tolerance Quantity", ErrorPrompt: true });
         } else {
-          if(isNaN(e.target.value)){
+          if (isNaN(e.target.value)) {
             this.setState({ ErrorMessageProps: "MRN Quantity should be Number", ErrorPrompt: true });
             return false;
-          }else{
+          } else {
             o[key] = parseFloat(e.target.value);
             PurchaseOrderLine[i] = o;
             this.setLineParams(PurchaseOrderLine);
           }
-          
+
         }
 
         break;
       case "Price":
-        if(isNaN(e.target.value)){
+        if (isNaN(e.target.value)) {
           this.setState({ ErrorMessageProps: "Price should be currency", ErrorPrompt: true });
           return false;
-        }else{
+        } else {
           o[key] = e.target.value;
-        PurchaseOrderLine[i] = o;
-        this.setLineParams(PurchaseOrderLine);
+          PurchaseOrderLine[i] = o;
+          this.setLineParams(PurchaseOrderLine);
         }
-       
+
         break;
       case "LineDiscPercentage":
         o[key] = e.target.value;
@@ -1967,7 +1965,7 @@ class pomrnactivity extends React.Component {
   }
 
 
-  //--------------------------------------------------------------------------------------------------
+  //------------------------------------------LOT Details--------------------------------------------------------
 
   updateLotDetail = (key, e, index) => {
     let SelectedLotItem = this.state.SelectedLotItem;
@@ -2131,7 +2129,7 @@ class pomrnactivity extends React.Component {
       PackingUOM: "",
       Location: ""
     };
-    let LD = item.LotDetails;
+    let LD = item.LotDetails?item.LotDetails:[];
     LD.push(lotobj);
     item.LotDetails = LD;
     this.setState({ SelectedLotItem: item });
@@ -2188,8 +2186,83 @@ class pomrnactivity extends React.Component {
     }
   }
 
-  validateMRNData=()=>{
-    let validateMRNData=true;
+  //--------------------------------------------------------------------------------------------------------
+
+  clearContainerDetails = () => {
+    let ContainerInfo = this.state.ContainerInfo;
+    if (ContainerInfo) {
+      ContainerInfo = [];
+      this.setState({ ContainerInfo: ContainerInfo });
+    }
+  }
+
+  AddContainerLine = (item) => {
+    console.log("AddLotLine > item > ", item);
+    let contobj = {
+      ID: 0,
+      LNo: 0,
+      MRNID: 0,
+      ContainerType: "",
+      ContainerNo: "",    
+      Remarks: ""
+    };
+    let List = item?item:[];
+    List.push(contobj);
+     
+    this.setState({ ContainerInfo: List });
+  }
+
+  ContainerItemDelete = (index, item) => {
+    let ContainerInfo = this.state.ContainerInfo;
+    
+    let newD = [];
+    for (let i = 0; i < ContainerInfo.length; i++) {
+      if (i === index) { } else {
+        newD.push(ContainerInfo[i]);
+      }
+    }
+    this.setState({ ContainerInfo: newD });
+  }
+
+  
+  importContainerFromExcel = (e) => {
+     
+    if (e.target.files[0]) {
+      let file = e.target.files[0];
+      let chk = this.ValidateLotFile(file.name);
+
+      if (chk) {
+        let ItemRows = [];
+        readXlsxFile(file).then((rows) => {
+          for (let i = 1; i < rows.length; i++) {
+            let itemRow = {
+              ID: 0,
+              LNo: i,
+              MRNID: 0,
+              ContainerType: rows[i][0],
+              ContainerNo: rows[i][1],
+              Remarks: rows[i][2]
+            };
+            ItemRows.push(itemRow);
+          }
+          this.setState({ ContainerInfo: ItemRows });
+        })
+        this.resetFileInput();
+      } else {
+        this.resetFileInput();
+        return false;
+      }
+    }
+
+  }
+
+  resetFileInput = () => {
+    document.getElementById("ContainerUploadInput").value = "";
+  }
+  //---------------------------------------------------------------------------------------------------------
+
+  validateMRNData = () => {
+    let validateMRNData = true;
 
     //validate MRN data
 
@@ -2226,6 +2299,14 @@ class pomrnactivity extends React.Component {
           : this.setState({ accordion5: true });
       }
 
+      if (val === "accordion6") {
+        this.state.accordion6 === true
+          ? this.setState({ accordion6: false })
+          : this.setState({ accordion6: true });
+      }
+
+
+
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -2252,84 +2333,83 @@ class pomrnactivity extends React.Component {
         "Content-Type": "application/json",
       };
 
-      let validateMRNData=true;
+      let validateMRNData = true;
 
-      validateMRNData=this.validateMRNData();
+      validateMRNData = this.validateMRNData();
 
-      if(validateMRNData===true){
-        let MRN={
-          MRNID:0,
-          No:"",
-          POID:this.state.PO.POID,
-          BranchID:this.state.PO.BranchID,
-          MRNDate:moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
-          SuplID:this.state.PO.SuplID,
-          POType:this.state.PO.POType,
-          BillingID:this.state.PO.BillingID,
-          Name:this.state.PO.Name,
-          Address:this.state.PO.Address,
-          Address2:this.state.PO.Address2,
-          Address3:this.state.PO.Address3,
-          City:this.state.PO.City,
-          PostCode:this.state.PO.PostCode,
-          CountryID:this.state.PO.CountryID,
-          StateID:this.state.PO.StateID,
-          IsImport:this.state.PO.IsImport,
-          CurrID:this.state.PO.CurrID,
-          ExchRate:this.state.PO.ExchRate,
-          FCValue:this.state.PO.FCValue,
-          BaseValue:this.state.PO.BaseValue,
-          PaymentTermID:this.state.PO.PaymentTermID,
-          PaymentTerm:this.state.PO.PaymentTerm,
-          Status:this.state.PO.Status,
-          WareHouseID:this.state.PO.WareHouseID,
-          MODTaxID:this.state.PO.MODTaxID,
-          IsRegistedSupplier:this.state.PO.IsRegistedSupplier,
-          GSTNo:this.state.PO.GSTNo,
-          VATNo:this.state.PO.VATNo,
-          IsRounding:this.state.PO.IsRounding,
-          IncoID:this.state.PO.IncoID,
-          ShipmentModeID:this.state.PO.ShipmentModeID,
-          Notes:this.state.PO.Notes,
-          IsSEZPurchase:this.state.PO.IsSEZPurchase,
-          IsTaxExempt:this.state.PO.IsTaxExempt,
-          Reason:this.state.PO.Reason,
-          GeneralPostingGroupID:this.state.PO.GeneralPostingGroupID,
-          SupplierPostingGroupID:this.state.PO.SupplierPostingGroupID,
-          SuplInvNo:this.state.MRN.SuplInvNo,
-          SuplInvDate:moment(this.state.MRN.SuplInvDate).format("MM/DD/YYYY"),
-          DueDate:moment(this.state.MRN.DueDate).format("MM/DD/YYYY"),
-          PayToSuplID:this.state.MRN.PayToSuplID,
-          EWayBillNo:this.state.MRN.EWayBillNo,
-          ContainerNo:this.state.MRN.ContainerNo,
-          DutyFogone:this.state.MRN.DutyFogone,
-          DutyPaid:this.state.MRN.DutyPaid,
-          GSTOrVATPaid:this.state.MRN.GSTOrVATPaid,
-          AssableValue:this.state.MRN.AssableValue,
-          BillOfEntryNo:this.state.MRN.BillOfEntryNo,
-          BillOfEntryDate:moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
-          BillOfEntryValue:this.state.MRN.BillOfEntryValue,
-          BLOrAWBNo:this.state.MRN.BLOrAWBNo,
-          BLOrAWBDate:moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
-          PortID:this.state.MRN.PortID,
-          ShipmentType:this.state.MRN.ShipmentType,
-          GateEntryNo:this.state.MRN.GateEntryNo,
-          GateEntryDate:moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
-          Remarks:this.state.PO.Notes,
+      if (validateMRNData === true) {
+        let MRN = {
+          MRNID: 0,
+          No: "",
+          POID: this.state.PO.POID,
+          BranchID: this.state.PO.BranchID,
+          MRNDate: moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
+          SuplID: this.state.PO.SuplID,
+          POType: this.state.PO.POType,
+          BillingID: this.state.PO.BillingID,
+          Name: this.state.PO.Name,
+          Address: this.state.PO.Address,
+          Address2: this.state.PO.Address2,
+          Address3: this.state.PO.Address3,
+          City: this.state.PO.City,
+          PostCode: this.state.PO.PostCode,
+          CountryID: this.state.PO.CountryID,
+          StateID: this.state.PO.StateID,
+          IsImport: this.state.PO.IsImport,
+          CurrID: this.state.PO.CurrID,
+          ExchRate: this.state.PO.ExchRate,
+          FCValue: this.state.PO.FCValue,
+          BaseValue: this.state.PO.BaseValue,
+          PaymentTermID: this.state.PO.PaymentTermID,
+          PaymentTerm: this.state.PO.PaymentTerm,
+          Status: this.state.PO.Status,
+          WareHouseID: this.state.PO.WareHouseID,
+          MODTaxID: this.state.PO.MODTaxID,
+          IsRegistedSupplier: this.state.PO.IsRegistedSupplier,
+          GSTNo: this.state.PO.GSTNo,
+          VATNo: this.state.PO.VATNo,
+          IsRounding: this.state.PO.IsRounding,
+          IncoID: this.state.PO.IncoID,
+          ShipmentModeID: this.state.PO.ShipmentModeID,
+          Notes: this.state.PO.Notes,
+          IsSEZPurchase: this.state.PO.IsSEZPurchase,
+          IsTaxExempt: this.state.PO.IsTaxExempt,
+          Reason: this.state.PO.Reason,
+          GeneralPostingGroupID: this.state.PO.GeneralPostingGroupID,
+          SupplierPostingGroupID: this.state.PO.SupplierPostingGroupID,
+          SuplInvNo: this.state.MRN.SuplInvNo,
+          SuplInvDate: moment(this.state.MRN.SuplInvDate).format("MM/DD/YYYY"),
+          DueDate: moment(this.state.MRN.DueDate).format("MM/DD/YYYY"),
+          PayToSuplID: this.state.MRN.PayToSuplID,
+          EWayBillNo: this.state.MRN.EWayBillNo,
+          DutyFogone: this.state.MRN.DutyFogone,
+          DutyPaid: this.state.MRN.DutyPaid,
+          GSTOrVATPaid: this.state.MRN.GSTOrVATPaid,
+          AssableValue: this.state.MRN.AssableValue,
+          BillOfEntryNo: this.state.MRN.BillOfEntryNo,
+          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
+          BillOfEntryValue: this.state.MRN.BillOfEntryValue,
+          BLOrAWBNo: this.state.MRN.BLOrAWBNo,
+          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
+          PortID: this.state.MRN.PortID,
+          
+          GateEntryNo: this.state.MRN.GateEntryNo,
+          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
+          Remarks: this.state.PO.Notes,
           UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
-  
-        let MRNLIneList=[];  
+
+        let MRNLIneList = [];
         let PurchaseOrderLine = this.state.PurchaseOrderLine;
         for (let i = 0; i < PurchaseOrderLine.length; i++) {
-        
+
           if (PurchaseOrderLine[i].isDataProper === true) {
             let obj = {
               Type: PurchaseOrderLine[i].Type,
               LNo: (i + 1),
               TypeID: PurchaseOrderLine[i].TypeID,
-              SupplierCode: (PurchaseOrderLine[i].SupplierCode==="" ||PurchaseOrderLine[i].SupplierCode===null)?"":PurchaseOrderLine[i].SupplierCode,
-              Narration: (PurchaseOrderLine[i].Narration===""||PurchaseOrderLine[i].Narration===null)?"":PurchaseOrderLine[i].Narration,
+              SupplierCode: (PurchaseOrderLine[i].SupplierCode === "" || PurchaseOrderLine[i].SupplierCode === null) ? "" : PurchaseOrderLine[i].SupplierCode,
+              Narration: (PurchaseOrderLine[i].Narration === "" || PurchaseOrderLine[i].Narration === null) ? "" : PurchaseOrderLine[i].Narration,
               UOMID: PurchaseOrderLine[i]['UOMID'],
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               POQuantity: PurchaseOrderLine[i].Quantity,
@@ -2344,25 +2424,29 @@ class pomrnactivity extends React.Component {
               DValueID: PurchaseOrderLine[i].DValueID,
               IsQuality: PurchaseOrderLine[i].IsQuality,
               IsLot: PurchaseOrderLine[i].IsLot,
-              LotDetails:PurchaseOrderLine[i].LotDetails
+              LotDetails: PurchaseOrderLine[i].LotDetails
             };
             MRNLIneList.push(obj);
           } else {
             this.setState({ ErrorPrompt: true, ErrorMessageProps: "Improper Line Data Found.", ProgressLoader: true });
             return false;
           }
-  
+
         }
-  
+
+        let ContainerInfo = this.state.ContainerInfo;
+
+
         let reqData = {
           ValidUser: ValidUser,
           MRN: MRN,
-          MRNLIneList: MRNLIneList
+          MRNLIneList: MRNLIneList,
+          ContainerInfo: ContainerInfo
         };
-        console.log("AddNew > reqData > ",reqData);
-      }else{
+        console.log("AddNew > reqData > ", reqData);
+      } else {
         this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
-            return false;
+        return false;
       }
 
     };
@@ -2395,7 +2479,7 @@ class pomrnactivity extends React.Component {
             startIcon={APIURLS.buttonTitle.save.icon}
             className="action-btns"
             onClick={(e) => AddNew(e)}
-             
+
           >
             {APIURLS.buttonTitle.save.name}
           </Button>
@@ -2489,36 +2573,7 @@ class pomrnactivity extends React.Component {
                                     disabled={true}
                                   />
 
-                                  <SIB
-                                    id="No"
-                                    label="PO No"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PO.No}
-                                    disabled={true}
-                                  />
 
-                                  <SDTI
-                                    isMandatory={true}
-                                    id="PODate"
-                                    label="PO Date"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("PODate", e)
-                                    }
-                                    value={this.state.PO.PODate}
-                                    disabled={true}
-                                  />
-                                  <SDIB
-                                    id="POType"
-                                    label="PO Type"
-                                    onChange={(e) => this.updateFormValue("POType", e)}
-                                    value={this.state.PO.POType}
-                                    param={this.state.POTypeList}
-                                    isMandatory={true}
-                                    disabled={true}
-                                  />
 
                                   <SADIB
                                     id="SuplID"
@@ -2631,25 +2686,7 @@ class pomrnactivity extends React.Component {
                                     disabled={true}
                                   />
 
-                                  <SSIB
-                                    key="IsSEZPurchase"
-                                    id="IsSEZPurchase"
-                                    label="SEZ Purchase?"
-                                    param={this.state.PO.IsSEZPurchase}
-                                    onChange={(e) => this.updateFormValue("IsSEZPurchase", e)}
-                                    disabled={this.state.Branch.IsSEZ === true ? false : true}
 
-                                  />
-
-                                  <SSIB
-                                    key="IsRounding"
-                                    id="IsRounding"
-                                    label="Is Rounding?"
-                                    param={this.state.PO.IsRounding}
-                                    onChange={(e) => this.updateFormValue("IsRounding", e)}
-                                    disabled={this.state.Branch.AllowRounding === true ? false : true}
-
-                                  />
 
                                 </Grid>
                               </Grid>
@@ -2673,10 +2710,53 @@ class pomrnactivity extends React.Component {
                                     value={this.state.MRN.MRNDate}
                                   />
 
+                                  <SIB
+                                    id="No"
+                                    label="PO No"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.PO.No}
+                                    disabled={true}
+                                  />
+
+                                  <SDTI
+                                    isMandatory={true}
+                                    id="PODate"
+                                    label="PO Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("PODate", e)
+                                    }
+                                    value={this.state.PO.PODate}
+                                    disabled={true}
+                                  />
+                                  <SDIB
+                                    id="POType"
+                                    label="PO Type"
+                                    onChange={(e) => this.updateFormValue("POType", e)}
+                                    value={this.state.PO.POType}
+                                    param={this.state.POTypeList}
+                                    isMandatory={true}
+                                    disabled={true}
+                                  />
+
+                                  <SIB
+                                    isMandatory={true}
+                                    id="SuplInvNo"
+                                    label="Supplier Invoice No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.SuplInvNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("SuplInvNo", e)
+                                    }
+                                  />
+
                                   <SDTI
                                     isMandatory={true}
                                     id="SuplInvDate"
-                                    label="Supl.Inv Date"
+                                    label="Supplier Invoice Date"
                                     variant="outlined"
                                     size="small"
                                     onChange={(e) =>
@@ -2697,29 +2777,18 @@ class pomrnactivity extends React.Component {
                                     value={this.state.MRN.DueDate}
                                   />
 
-                                  <SDTI
-                                    isMandatory={true}
-                                    id="BillOfEntryDate"
-                                    label="Bill Of Entry Date"
+
+                                  <SIB
+                                    id="GateEntryNo"
+                                    label="Gate Entry No."
                                     variant="outlined"
                                     size="small"
+                                    value={this.state.MRN.GateEntryNo}
                                     onChange={(e) =>
-                                      this.updateFormValue("BillOfEntryDate", e)
+                                      this.updateFormValue("GateEntryNo", e)
                                     }
-                                    value={this.state.MRN.BillOfEntryDate}
                                   />
 
-                                  <SDTI
-                                    isMandatory={true}
-                                    id="BLOrAWBDate"
-                                    label="BL/AWB Date"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("BLOrAWBDate", e)
-                                    }
-                                    value={this.state.MRN.BLOrAWBDate}
-                                  />
 
                                   <SDTI
                                     isMandatory={true}
@@ -2733,137 +2802,10 @@ class pomrnactivity extends React.Component {
                                     value={this.state.MRN.GateEntryDate}
                                   />
 
-                                  <SIB
-                                    id="SuplInvNo"
-                                    label="Supl.Inv No."
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.SuplInvNo}
-                                    onChange={(e) =>
-                                      this.updateFormValue("SuplInvNo", e)
-                                    }
-                                  />
-                                  <SIB
-                                    id="EWayBillNo"
-                                    label="EWay Bill No."
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.EWayBillNo}
-                                    onChange={(e) =>
-                                      this.updateFormValue("EWayBillNo", e)
-                                    }
-                                  />
-                                  <SIB
-                                    id="ContainerNo"
-                                    label="Container No."
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.ContainerNo}
-                                    onChange={(e) =>
-                                      this.updateFormValue("ContainerNo", e)
-                                    }
-                                  />
-
-
-                                  <SIB
-                                    id="BillOfEntryNo"
-                                    label="Bill Of Entry No."
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.BillOfEntryNo}
-                                    onChange={(e) =>
-                                      this.updateFormValue("BillOfEntryNo", e)
-                                    }
-                                  />
-                                  <SIB
-                                    id="BLOrAWBNo"
-                                    label="BL/AWB No."
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.BLOrAWBNo}
-                                    onChange={(e) =>
-                                      this.updateFormValue("BLOrAWBNo", e)
-                                    }
-                                  />
-                                  <SIB
-                                    id="GateEntryNo"
-                                    label="Gate Entry No."
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.GateEntryNo}
-                                    onChange={(e) =>
-                                      this.updateFormValue("GateEntryNo", e)
-                                    }
-                                  />
-
-
-                                  <SDIB
-                                    id="PayToSuplID"
-                                    label="PayToSuplID"
-                                    value={this.state.MRN.PayToSuplID}
-                                    param={this.state.PayToSuplList}
-                                    onChange={(e) =>
-                                      this.updateFormValue("PayToSuplID", e)
-                                    }
-                                  />
-
-                                  <SIB
-                                    id="DutyFogone"
-                                    label="DutyFogone"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.DutyFogone}
-                                    onChange={(e) =>
-                                      this.updateFormValue("DutyFogone", e)
-                                    }
-                                  />
-                                  <SIB
-                                    id="DutyPaid"
-                                    label="DutyPaid"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.DutyPaid}
-                                    onChange={(e) =>
-                                      this.updateFormValue("DutyPaid", e)
-                                    }
-                                  />
-
-
-                                  <SIB
-                                    id="GSTOrVATPaid"
-                                    label="GSTOrVATPaid"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.GSTOrVATPaid}
-                                    onChange={(e) =>
-                                      this.updateFormValue("GSTOrVATPaid", e)
-                                    }
-                                  />
-                                  <SIB
-                                    id="AssableValue"
-                                    label="AssableValue"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.AssableValue}
-                                    onChange={(e) =>
-                                      this.updateFormValue("AssableValue", e)
-                                    }
-                                  />
-                                  <SIB
-                                    id="BillOfEntryValue"
-                                    label="BillOfEntryValue"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.BillOfEntryValue}
-                                    onChange={(e) =>
-                                      this.updateFormValue("BillOfEntryValue", e)
-                                    }
-                                  />
-
 
                                   <SDIB
                                     id="PortID"
-                                    label="Port"
+                                    label="Entry Port"
                                     value={this.state.MRN.PortID}
                                     param={this.state.PortList}
                                     onChange={(e) =>
@@ -2871,17 +2813,27 @@ class pomrnactivity extends React.Component {
                                     }
                                   />
 
-                                  <SDIB
-                                    id="ShipmentType"
-                                    label="Shipment Type"
-                                    value={this.state.MRN.ShipmentType}
-                                    param={this.state.ShipmentTypeList}
-                                    onChange={(e) =>
-                                      this.updateFormValue("ShipmentType", e)
-                                    }
+                               
+
+                                  <SSIB
+                                    key="IsSEZPurchase"
+                                    id="IsSEZPurchase"
+                                    label="SEZ Purchase?"
+                                    param={this.state.PO.IsSEZPurchase}
+                                    onChange={(e) => this.updateFormValue("IsSEZPurchase", e)}
+                                    disabled={this.state.Branch.IsSEZ === true ? false : true}
+
                                   />
 
+                                  <SSIB
+                                    key="IsRounding"
+                                    id="IsRounding"
+                                    label="Is Rounding?"
+                                    param={this.state.PO.IsRounding}
+                                    onChange={(e) => this.updateFormValue("IsRounding", e)}
+                                    disabled={this.state.Branch.AllowRounding === true ? false : true}
 
+                                  />
 
 
                                 </Grid>
@@ -3162,7 +3114,7 @@ class pomrnactivity extends React.Component {
                                             value={item.MRNQuantity}
                                             onChange={(e) => this.updateLineDetail(i, "MRNQuantity", e)}
                                             align="right"
-                                            disabled={item.LotDetails?item.LotDetails.length > 0 ? true : false:false}
+                                            disabled={item.LotDetails ? item.LotDetails.length > 0 ? true : false : false}
                                           />
                                         </TableCell>
                                         <TableCell align="right">
@@ -3413,6 +3365,17 @@ class pomrnactivity extends React.Component {
                                     disabled={true}
                                     onChange={(e) => this.updateFormValue("GeneralPostingGroupID", e)}
                                   />
+
+                                  <SDIB
+                                    id="PayToSuplID"
+                                    label="Pay To Supllier"
+                                    value={this.state.MRN.PayToSuplID}
+                                    param={this.state.PayToSuplList}
+                                    onChange={(e) =>
+                                      this.updateFormValue("PayToSuplID", e)
+                                    }
+                                  />
+
                                 </Grid>
                               </Grid>
                             </Grid>
@@ -3583,6 +3546,58 @@ class pomrnactivity extends React.Component {
                                     value={this.state.PO.VATNo}
                                     disabled={true}
                                   />
+                                  <SIB
+                                    id="BillOfEntryValue"
+                                    label="Bill Of Entry Value"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.BillOfEntryValue}
+                                    onChange={(e) =>
+                                      this.updateFormValue("BillOfEntryValue", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="BillOfEntryNo"
+                                    label="Bill Of Entry No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.BillOfEntryNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("BillOfEntryNo", e)
+                                    }
+                                  />
+                                  <SDTI
+
+                                    id="BillOfEntryDate"
+                                    label="Bill Of Entry Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("BillOfEntryDate", e)
+                                    }
+                                    value={this.state.MRN.BillOfEntryDate}
+                                  />
+                                  <SIB
+                                    id="BLOrAWBNo"
+                                    label="BL/AWB No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.BLOrAWBNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("BLOrAWBNo", e)
+                                    }
+                                  />
+                                  <SDTI
+
+                                    id="BLOrAWBDate"
+                                    label="BL/AWB Date"
+                                    variant="outlined"
+                                    size="small"
+                                    onChange={(e) =>
+                                      this.updateFormValue("BLOrAWBDate", e)
+                                    }
+                                    value={this.state.MRN.BLOrAWBDate}
+                                  />
                                 </Grid>
                               </Grid>
                             </Grid>
@@ -3616,6 +3631,59 @@ class pomrnactivity extends React.Component {
                                     isMandatory={true}
 
                                   />
+                                  <SIB
+                                    id="EWayBillNo"
+                                    label="EWay Bill No."
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.EWayBillNo}
+                                    onChange={(e) =>
+                                      this.updateFormValue("EWayBillNo", e)
+                                    }
+                                  />
+
+                                  <SIB
+                                    id="DutyFogone"
+                                    label="DutyFogone"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.DutyFogone}
+                                    onChange={(e) =>
+                                      this.updateFormValue("DutyFogone", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="DutyPaid"
+                                    label="DutyPaid"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.DutyPaid}
+                                    onChange={(e) =>
+                                      this.updateFormValue("DutyPaid", e)
+                                    }
+                                  />
+
+
+                                  <SIB
+                                    id="GSTOrVATPaid"
+                                    label="GSTOrVATPaid"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.GSTOrVATPaid}
+                                    onChange={(e) =>
+                                      this.updateFormValue("GSTOrVATPaid", e)
+                                    }
+                                  />
+                                  <SIB
+                                    id="AssableValue"
+                                    label="AssableValue"
+                                    variant="outlined"
+                                    size="small"
+                                    value={this.state.MRN.AssableValue}
+                                    onChange={(e) =>
+                                      this.updateFormValue("AssableValue", e)
+                                    }
+                                  />
 
                                 </Grid>
                               </Grid>
@@ -3630,6 +3698,174 @@ class pomrnactivity extends React.Component {
                   </AccordionDetails>
                 </Accordion>
 
+                <Accordion
+                  key="a-6"
+                  expanded={this.state.accordion6}
+                  className="accordionD"
+                >
+                  <AccordionSummary
+                    className="accordion-Header-Design"
+                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion6", e)} />}
+                    aria-controls="panel1a-content"
+                    id="accordion6"
+                    style={{ minHeight: "40px", maxHeight: "40px" }}
+                    onClick={(e) => handleAccordionClick("accordion6", e)}
+                  >
+                    <Typography
+                      key="Tax-Activity"
+                      className="accordion-Header-Title"
+                    >Container Info</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    key="accordion6" className="AccordionDetails-css">
+                    <Fragment>
+                      <Grid container spacing={0}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          &nbsp;
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          <Grid container spacing={0}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                              <ButtonGroup
+                                size="small"
+                                variant="text"
+                                aria-label="Action Menu Button group"
+                              >
+                                
+
+                                <Button
+                                  startIcon={APIURLS.buttonTitle.clear.icon}
+                                  className="action-btns"
+                                  onClick={(e) => this.clearContainerDetails()}
+                                >
+                                  {APIURLS.buttonTitle.clear.name}
+                                </Button>
+
+
+
+                                <Button
+                                  className="action-btns"
+                                  startIcon={<FileUploadIcon />}
+                                  onClick={(e) => { document.getElementById("ContainerUploadInput").click() }}
+                                >
+                                  Attach File
+                                </Button>
+                                <input
+                                  className="file-upload-input"
+                                  id="ContainerUploadInput"
+                                  type="file"
+                                  onChange={(e) => this.importContainerFromExcel(e)}
+
+                                />
+
+                                <Button
+                                  startIcon={APIURLS.buttonTitle.addline.icon}
+                                  className="action-btns"
+                                  onClick={(e) => this.AddContainerLine(this.state.ContainerInfo)}
+                                >
+                                  {APIURLS.buttonTitle.addline.name}
+                                </Button>
+
+                              </ButtonGroup>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                             
+
+                            </Grid>
+                          </Grid>
+                          <Grid container spacing={0}>
+                          {/* <Grid item xs={1} sm={1} md={1} lg={1}></Grid> */}
+                            <Grid item xs={10} sm={10} md={10} lg={10}>
+
+                              <Table
+                                stickyHeader
+                                size="small"
+                                className=""
+                                aria-label="Lines List table"
+                              >
+                                <TableHead className="table-header-background">
+                                  <TableRow>
+                                    <TableCell style={{ maxWidth: 50, minWidth: 50 }} className="line-table-header-font" align="left">&nbsp;</TableCell>
+                                    <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Container Type</TableCell>
+                                    <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Container No.</TableCell>
+                                    <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Remarks</TableCell>
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody className="tableBody">
+                                 
+                                  {this.state.ContainerInfo? this.state.ContainerInfo.map((item, i) => (
+                                    <TableRow>
+                                      <TableCell align="left">
+                                        <ButtonGroup
+                                          size="small"
+                                          variant="text"
+                                          aria-label="Action Menu Button group"
+                                        >
+                                          <Fragment>
+                                            <Tooltip title="Delete Line">
+                                              <DeleteForeverIcon
+                                                fontSize="small"
+                                                style={{
+                                                  color: '#e53935'
+                                                }}
+                                                onClick={(e) => this.ContainerItemDelete(i, item)}
+                                              />
+                                            </Tooltip>
+                                          </Fragment>
+
+                                        </ButtonGroup>
+                                      </TableCell>
+                                      <TableCell>
+                                        <select
+                                          id={"ContainerType_" + i}
+                                          style={{ width: '100%' }}
+                                          className="line-dropdown-css"
+                                          value={item.ContainerType}
+                                          onChange={(e) => this.updateContainerDetail("ContainerType", e, i)}
+                                        >
+                                          <option value="" >Select</option>
+                                          {this.state.UOMList.map((op, i) => (
+                                            <option value={op.value}> {op.name}</option>
+                                          ))}
+                                        </select>
+                                      </TableCell>
+                                      <TableCell align="left">
+                                     
+                                        <SCI
+                                          id={"ContainerNo_" + i}
+                                          variant="outlined"
+                                          size="small"
+                                          value={item.ContainerNo}
+                                          onChange={(e) => this.updateContainerDetail("ContainerNo", e, i)}
+                                        />
+                                      </TableCell>
+                                     
+                                      <TableCell align="left">
+                                        <SCI
+                                          id={"Remarks_" + i}
+                                          variant="outlined"
+                                          size="small"
+                                          value={item.Remarks}
+                                          onChange={(e) => this.updateContainerDetail("Remarks", e, i)}
+                                        />
+                                      </TableCell>
+                                    </TableRow>
+                                  )) : null}
+
+                                </TableBody>
+                              </Table>
+
+                            </Grid>
+                            <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                          &nbsp;
+                        </Grid>
+                      </Grid>
+                    </Fragment>
+                  </AccordionDetails>
+                </Accordion>
 
                 <Accordion
                   key="a-5"
@@ -3667,7 +3903,7 @@ class pomrnactivity extends React.Component {
                                     onChange={(e) => this.updateFormValue("IncoID", e)}
                                     value={this.state.PO.IncoID}
                                     param={this.state.IncoTermList}
-                                    
+
                                   />
 
                                 </Grid>
@@ -3714,7 +3950,7 @@ class pomrnactivity extends React.Component {
                                 value={this.state.PO.Notes}
                                 multiline={true}
                                 rows={3}
-                                
+
                               />
                             </Grid>
                           </Grid>
