@@ -1,7 +1,7 @@
 import './dasboard.css';
-import React, { Fragment } from 'react';
- 
+import React, { Fragment } from 'react'; 
 import { COOKIE, getCookie } from "../../services/cookie";
+import * as CF from "../../services/functions/customfunctions";
  
 import Grid from '@material-ui/core/Grid';
 
@@ -27,6 +27,8 @@ class userDashboard extends React.Component {
       getCookie(COOKIE.TOKEN) != null
     ) {
       this.setState({ isLoggedIn: true });
+      let params=CF.GET_URL_PARAMS();
+      console.log("params > ",params);
       var url = new URL(window.location.href);
       let branchId = url.searchParams.get("branchId");
       let branchName = url.searchParams.get("branchName");

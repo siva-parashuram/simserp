@@ -358,7 +358,7 @@ class mrnactivity extends React.Component {
   }
 
   componentDidMount() {
-
+    let params=CF.GET_URL_PARAMS();//constant branch parameters
     document.addEventListener('keydown', this.onKeyDownHandler);
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -369,13 +369,13 @@ class mrnactivity extends React.Component {
     let MRNID = type === "edit" ? url.searchParams.get("editMRNID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
-    let urlparams =
-      "?branchId=" +
-      branchId +
-      "&compName=" +
-      compName +
-      "&branchName=" +
-      branchName;
+    // let urlparams =
+    //   "?branchId=" +
+    //   branchId +
+    //   "&compName=" +
+    //   compName +
+    //   "&branchName=" +
+    //   branchName;
 
 
     let MRN = this.state.MRN;
@@ -386,7 +386,7 @@ class mrnactivity extends React.Component {
         branchName: branchName,
         MRN: MRN,
         POID: CF.toInt(POID),
-        urlparams: urlparams,
+        urlparams: params,
         BranchID: CF.toInt(branchId),
         type: type,
         typoTitle: typoTitle,
@@ -2398,26 +2398,25 @@ class mrnactivity extends React.Component {
   }else{
     let reqData = {
       ValidUser: ValidUser,
-      MRNPost: MRNPost
+      PostedDocument: MRNPost
     };
 
 
     console.log("reqData > ",reqData);
-    return false;
-    let Url = APIURLS.APIURL.Add_Update_PurchaseOrderAuthorize;
+    
+    let Url = APIURLS.APIURL.MRN_Post;
     axios
     .post(Url, reqData, { headers })
     .then((response) => {
       if (response.status === 201 || response.status === 200) {
-        
-        
+        this.setState({ SuccessPrompt: true, ProgressLoader: true});         
       }else{
-         
+        this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Posting Server Error", });
       }
 
     })
     .catch((error) => {
-      
+      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Network Error", ProgressLoader: true });
     });
   }
 

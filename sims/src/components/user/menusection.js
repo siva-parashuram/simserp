@@ -4,6 +4,7 @@ import * as Customfunctions from "../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../services/cookie";
 import * as APIURLS from "../../routes/apiconstant";
 import * as URLS from "../../routes/constants";
+import * as CF from "../../services/functions/customfunctions";
 import Link from '@mui/material/Link';
 
 
@@ -51,6 +52,9 @@ class menusection extends React.Component {
 
 
     getUrlParams = () => {
+        let params=CF.GET_URL_PARAMS();
+        console.log("Menusection params > ",params);
+
         var url = new URL(window.location.href);
         var branchBtnId = url.searchParams.get("branchBtnId");
         var branchId = url.searchParams.get("branchId");
@@ -64,7 +68,8 @@ class menusection extends React.Component {
             "&compName=" +compName +
             "&branchName=" +branchName;
         this.setState({
-            urlparams: urlparams,
+            // urlparams: urlparams,
+            urlparams: params,
             branchName: branchName,
             branchId: branchId
         });
@@ -185,7 +190,11 @@ class menusection extends React.Component {
             DrawerAnchor === true ? this.setState({ DrawerAnchor: false }) : this.setState({ DrawerAnchor: true });
         }
 
-        const openPage = (url) => {
+        const openPage = (pageLink) => {
+            let url="/"+pageLink+this.state.urlparams;
+            console.log("openPage > url > "+url);
+  
+          
             this.setState({ DrawerAnchor: false }, (e) => {
                 window.location = url;
             });
@@ -220,7 +229,7 @@ class menusection extends React.Component {
                                         <span
                                             key={"side-menu-LIL" + pages.pageId}
                                             className="menubar-link"
-                                            onClick={(e) => openPage(pages.pageLink + this.state.urlparams)}
+                                            onClick={(e) => openPage(pages.pageLink)}
                                         >
                                             {pages.pageName}
                                         </span>

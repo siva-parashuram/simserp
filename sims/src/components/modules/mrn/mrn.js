@@ -62,7 +62,8 @@ class mrn extends React.Component {
     }
     componentDidMount() {
         var url = new URL(window.location.href);
-        console.log("----> url.searchParams > ",url.searchParams)
+        let params=CF.GET_URL_PARAMS();
+        console.log("Menusection params > ",params);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
@@ -73,7 +74,7 @@ class mrn extends React.Component {
             compName +
             "&branchName=" +
             branchName;
-        this.setState({ urlparams: urlparams, BranchID: branchId, editBtnDisable: false }, () => {
+        this.setState({ urlparams: params, BranchID: branchId, editBtnDisable: false }, () => {
             this.getMRNList();
         });
     }
@@ -123,12 +124,15 @@ class mrn extends React.Component {
             console.log("handleRowClick > index > ", index);
             let item = this.state.PODataList[index - 1];
             console.log("handleRowClick > item > ", item);
+            let params=CF.GET_URL_PARAMS();
+            // let appendParams=CF.SETPARAMS(params,[{key:"editMRNID",value:item.MRNID},{key:"type",value:"edit"}]); 
+            // console.log("handleRowClick > item > appendParams > ", appendParams);
+            // return false;
             let editUrl =
                 URLS.URLS.editMRN +
                 this.state.urlparams +
                 "&editMRNID=" +
                 item.MRNID +
-
                 "&type=edit";
             this.setState({
                 item: item,

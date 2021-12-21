@@ -181,7 +181,8 @@ export const APIURL = {
   Add_Update_PurchaseOrderAuthorize:domain+"api/PO/Add_Update_PurchaseOrderAuthorize",
   Add_Update_MRN:domain+"api/PO/Add_Update_MRN",
   GetMRNByBranchID:domain+"api/PO/GetMRNByBranchID",
-  GetMRNByMRNID:domain+"api/PO/GetMRNByMRNID"
+  GetMRNByMRNID:domain+"api/PO/GetMRNByMRNID",
+  MRN_Post:domain+"api/po/MRN_Post",
 };
 
 export const CTimeOut = 10;

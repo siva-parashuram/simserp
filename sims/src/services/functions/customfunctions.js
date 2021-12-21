@@ -1,9 +1,26 @@
 import * as APIURLS from "../../routes/apiconstant";
 
+export const SET_BRANCH_WINDOW_PARAMS=(urlParameters)=>{   
+  let params = new URLSearchParams(urlParameters);  
+  let _BranchInitialParams="_initialParams"+"_"+urlParameters.branchId;
+  localStorage.setItem(_BranchInitialParams, "?"+params.toString());
+  return params.toString();
+}
 
+export const SETPARAMS=(initialParams,keyArray)=>{   
+  let params = new URLSearchParams(initialParams);
+  for(let i=0;i<keyArray.length;i++){
+    params.set(keyArray[i].key, keyArray[i].value);
+  }  
+  params.toString();
+  return params; 
+}
 
-export const Fixed_URL_PARAMS=(url)=>{
-  let params ="";
+export const GET_URL_PARAMS=()=>{
+  var url = new URL(window.location.href);  
+  var bid = url.searchParams.get("bid");
+  let initialParams=localStorage.getItem('_initialParams_'+bid);  
+  return initialParams.toString();
 }
 
 //remove particular opened branch by branch id

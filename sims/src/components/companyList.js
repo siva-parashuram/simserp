@@ -50,8 +50,17 @@ class CompanyList extends React.Component {
     }
 
      openBranchWindow = (url, branchId, compID, compName, branchName, name) => {
-        let branchBtnId = ("branchBtn_" + compID + "_" + branchId).toString();
-        url = url + "?branchBtnId=" + branchBtnId + "&branchId=" + branchId + "&compID=" + compID + "&compName=" + compName + "&branchName=" + name;
+        let branchBtnId = ("branchBtn_" + compID + "_" + branchId).toString();   
+        let urlParameters={
+            bid:branchId,
+            branchBtnId:branchBtnId,
+            branchId:branchId,
+            compID:compID,
+            compName:compName,
+            branchName:name
+        };
+        url = url +"?"+ CF.SET_BRANCH_WINDOW_PARAMS(urlParameters);
+        console.log("url > ",url);
         let randomnumber = Math.floor((Math.random() * 100) + 1);
         // window.open(url, '', 'fullscreen=yes');
         window.open(url,"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0, toolbar=no,resizable=1,width=500,height=400');
