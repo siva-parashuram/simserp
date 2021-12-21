@@ -1,6 +1,11 @@
 import * as APIURLS from "../../routes/apiconstant";
 
 
+
+export const Fixed_URL_PARAMS=(url)=>{
+  let params ="";
+}
+
 //remove particular opened branch by branch id
 export const UPDATE_BRANCH_OPEN_REMOVE = (branchId) => {
     

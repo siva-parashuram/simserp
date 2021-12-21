@@ -73,6 +73,7 @@ export const URLS = {
   editPO:"/editPO",
   mrn:"/mrn",
   doPOMRN:"/doPOMRN",
+  editMRN:"/editMRN",
   gstMaster:"/gstMaster",
   addGst:"/addGst",
   editGst:"/editGst"

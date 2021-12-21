@@ -72,6 +72,7 @@ import poMaster from "../components/modules/po/poMaster";
 import poactivity from "../components/modules/po/poactivity";
 import mrn from "../components/modules/mrn/mrn";
 import pomrnactivity from "../components/modules/po/pomrnactivity";
+import mrnactivity from "../components/modules/mrn/mrnactivity";
 
 import gstMaster from "../components/modules/gst/gstmaster";
 import gstactivity from "../components/modules/gst/gstactivity";
@@ -225,10 +226,11 @@ let routes = ({ location, ...rest }) => {
           <Route path={URLS.URLS.poMaster} component={poMaster} />
           <Route path={URLS.URLS.addPO} component={poactivity} />
           <Route path={URLS.URLS.editPO} component={poactivity} />
-          <Route path={URLS.URLS.mrn} component={mrn} />
           <Route path={URLS.URLS.doPOMRN} component={pomrnactivity} />
-
-          
+          <Route path={URLS.URLS.mrn} component={mrn} />
+         
+          <Route path={URLS.URLS.editMRN} component={mrnactivity} />
+           
           
 
           {/* Gst */}

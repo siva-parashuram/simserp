@@ -1985,29 +1985,10 @@ class pomrnactivity extends React.Component {
           case "Quantity":
             ldobj[key] = parseFloat(e.target.value);
             newD.push(ldobj);
-            // if(e.target.value==="" || e.target.value===null){
-            //   ldobj[key] = 0;      
-            //   newD.push(ldobj);       
-            // }else{
-            //   if (isNaN(e.target.value)) {
-            //     ldobj[key] = 0;
-            //     newD.push(ldobj);
-            //     this.setState({ ErrorPrompt: true, ErrorMessageProps: "Enter Numerical Value" });
-            //   } else {                
-            //     total = total + parseFloat(e.target.value);
-            //     if (parseFloat(total) > parseFloat(SelectedLotItem.MRNQuantity)) {
-            //       this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity Exeeds MRN Quantity." });                
-            //       return false;
-            //     } else {
-            //       ldobj[key] = e.target.value;
-            //       newD.push(ldobj);
-            //     }
-
-            //   }
-            // }
+            
             break;
           case "PackingUOM":
-            ldobj[key] = e.target.value;
+            ldobj[key] = parseInt(e.target.value);
             newD.push(ldobj);
             break;
           case "Location":
@@ -2190,6 +2171,27 @@ class pomrnactivity extends React.Component {
 
   //--------------------------------------------------------------------------------------------------------
 
+  updateContainerDetail=(key,e,index)=>{
+    this.setState({PostBtnStatus:true});//disabling post for saving
+    let ContainerInfo=this.state.ContainerInfo;
+    let newD=[];
+    for (let i = 0; i < ContainerInfo.length; i++) {
+      if (i === index) {
+        let obj = ContainerInfo[i];
+        if(key==="ContainerType"){
+          obj[key] = parseInt(e.target.value);
+        }else{
+          obj[key] = e.target.value;
+        }
+        
+        newD.push(obj);
+      }else {
+        newD.push(ContainerInfo[i]);
+      }
+    }
+    this.setState({ ContainerInfo: newD });
+  }
+
   clearContainerDetails = () => {
     let ContainerInfo = this.state.ContainerInfo;
     if (ContainerInfo) {
@@ -2271,17 +2273,8 @@ class pomrnactivity extends React.Component {
     return validateMRNData;
   }
 
-  openEditMode = (ID) => {
-    console.log("-openEditMode-");
-    console.log("ID -> ", ID);
-    // let editUrl =
-    // URLS.URLS.editPO +
-    // this.state.urlparams +
-    // "&editPOID=" +
-    // ID + "&type=edit";
-    // window.location = editUrl;
-    
-
+  openEditMode = (editUrl) => {
+     window.location = editUrl;
   }
 
   render() {
@@ -2443,9 +2436,9 @@ class pomrnactivity extends React.Component {
           StateID: this.state.PO.StateID,
           IsImport: this.state.PO.IsImport,
           CurrID: this.state.PO.CurrID,
-          ExchRate: this.state.PO.ExchRate,
-          FCValue: this.state.PO.FCValue,
-          BaseValue: this.state.PO.BaseValue,
+          ExchRate: parseFloat(this.state.PO.ExchRate),
+          FCValue: parseFloat(this.state.PO.FCValue),
+          BaseValue: parseFloat(this.state.PO.BaseValue),
           PaymentTermID: this.state.PO.PaymentTermID,
           PaymentTerm: this.state.PO.PaymentTerm,
           Status: parseInt(Status),
@@ -2473,17 +2466,40 @@ class pomrnactivity extends React.Component {
           GSTOrVATPaid: this.state.MRN.GSTOrVATPaid,
           AssableValue: this.state.MRN.AssableValue,
           BillOfEntryNo: this.state.MRN.BillOfEntryNo,
-          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
+          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY")==="Invalid date"?today:moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
           BillOfEntryValue: this.state.MRN.BillOfEntryValue,
           BLOrAWBNo: this.state.MRN.BLOrAWBNo,
-          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
+          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY")==="Invalid date"?today:moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
           PortID: this.state.MRN.PortID,
           
           GateEntryNo: this.state.MRN.GateEntryNo,
-          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
+          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY")==="Invalid date"?today:moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
           Remarks: this.state.PO.Notes,
           UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
+
+        if (MRNLotDetailsList.length === 0) {
+          let lotobj = {
+            LotID: 0,
+            TypeID: 0,
+            LNo: 0,
+            LotNo: "",
+            Quantity: 0,
+            PackingUOM:0,
+            Location: ""
+          };
+          MRNLotDetailsList.push(lotobj);
+        }
+        if (newContainerInfo.length === 0) {
+          let contobj = {
+            ID: 0,
+            LNo: 0,
+            ContainerType: 0,
+            ContainerNo: "",
+            Remarks: ""
+          };
+          newContainerInfo.push(contobj);
+        }
 
      
 
@@ -2518,7 +2534,12 @@ class pomrnactivity extends React.Component {
                 console.log("response > ", response);
                 if (response.status === 201 || response.status === 200) {
                   this.setState({ SuccessPrompt: true,ProgressLoader: true});
-                  // this.openEditMode();
+                  let editUrl =
+                  URLS.URLS.editMRN +
+                  this.state.urlparams +
+                  "&editMRNID=" +
+                  response.data.ID + "&type=edit";
+                  this.openEditMode(editUrl);
                 }else{
                   this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "", });
                 }

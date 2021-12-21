@@ -52,16 +52,17 @@ class menusection extends React.Component {
 
     getUrlParams = () => {
         var url = new URL(window.location.href);
+        var branchBtnId = url.searchParams.get("branchBtnId");
         var branchId = url.searchParams.get("branchId");
         var branchName = url.searchParams.get("branchName");
         var compName = url.searchParams.get("compName");
+        var compID = url.searchParams.get("compID");
         let urlparams =
-            "?branchId=" +
-            branchId +
-            "&compName=" +
-            compName +
-            "&branchName=" +
-            branchName;
+            "?branchBtnId="+branchBtnId+
+            "&compID="+compID+
+            "&branchId=" +branchId +
+            "&compName=" +compName +
+            "&branchName=" +branchName;
         this.setState({
             urlparams: urlparams,
             branchName: branchName,

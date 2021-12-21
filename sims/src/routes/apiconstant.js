@@ -181,6 +181,7 @@ export const APIURL = {
   Add_Update_PurchaseOrderAuthorize:domain+"api/PO/Add_Update_PurchaseOrderAuthorize",
   Add_Update_MRN:domain+"api/PO/Add_Update_MRN",
   GetMRNByBranchID:domain+"api/PO/GetMRNByBranchID",
+  GetMRNByMRNID:domain+"api/PO/GetMRNByMRNID"
 };
 
 export const CTimeOut = 10;
@@ -264,7 +265,11 @@ export const buttonTitle = {
   clear:{
     name:"Clear",
     icon:<ClearIcon/>
-  }
+  }, 
+  post:{
+    name:"Post",
+    icon:<NextPlanIcon/>
+  },
 };
 
 
@@ -823,5 +828,97 @@ export const poMasterColumn=[
 
 ];
 
+export const MRNMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 10,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'No',
+    headerName: 'No',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'PONo',
+    headerName: 'PO No.',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'PODate',
+    headerName: 'PO.Date',
+    width: 125,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {moment(params.value).format("MM/DD/YYYY")}
+      </Fragment>
+    ),
+  }
+  ,{
+    field: 'Status',
+    headerName: 'Status',
+    width: 115,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {params.value===0?(<Chip label="Open" size="small"/>):null}
+       {params.value===1?(<Chip label="Post"  color="success"  size="small"/>):null}
+      </Fragment>
+    ),
+  }
+  ,{
+    field: 'SupplierName',
+    headerName: 'Supplier Name',
+    width: 250,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'CountryName',
+    headerName: 'Country',
+    width: 130,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'IsImport',
+    headerName: 'Import?',
+    width: 125,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+           {params.value===true?(
+             <Fragment>
+               <AirplanemodeActiveIcon sx={{ color: '#009688' }}/>
+             </Fragment>
+           ):(
+            <Fragment>
+              <AirplanemodeInactiveIcon sx={{ color: '#cddc39' }}/>              
+            </Fragment>
+           )}
+      </Fragment>
+    ),
+  },{
+    field: 'Code',
+    headerName: 'Currency',
+    width: 130,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'FCValue',
+    headerName: 'FC Value',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'ExchRate',
+    headerName: 'Exch Rate',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'BaseValue',
+    headerName: 'Base Value',
+    width: 150,
+    headerClassName: 'table-header-font'
+  }
+
+
+];
  
 
