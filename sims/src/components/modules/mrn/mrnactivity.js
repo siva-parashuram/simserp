@@ -540,6 +540,17 @@ class mrnactivity extends React.Component {
               MRN.BLOrAWBDate =moment(PO.BLOrAWBDate).format("YYYY-MM-DD");
           //------------------------------------------------------------------
 
+          if (CF.toInt(MRN.Status) > 0) {
+            this.setState({
+              accordion1: true,
+              accordion2: true,
+              accordion3: true,
+              accordion4: true,
+              accordion5: true,
+              accordion6: true,
+            });
+          }
+
           this.setState({
             MRN:MRN,
             PO: PO,
@@ -1458,8 +1469,7 @@ class mrnactivity extends React.Component {
   }
 
   fetchPrice = (Quantity, o) => {
-    console.log("#######################  fetchPrice > Quantity > ", Quantity);
-    console.log("#######################  fetchPrice > o > ", o);
+     
     let UnitPrice = 0.00;
     try {
       let UOMID_i = o.UOMID;
@@ -2357,10 +2367,8 @@ class mrnactivity extends React.Component {
     return validateMRNData;
   }
 
-  openEditMode = (ID) => {
-    console.log("-openEditMode-");
-    console.log("ID -> ", ID);
-    
+  openPage = (editUrl) => {
+    window.location = editUrl;
   }
 
   updateAuthorization = (id, e) => {
@@ -2409,7 +2417,11 @@ class mrnactivity extends React.Component {
     .post(Url, reqData, { headers })
     .then((response) => {
       if (response.status === 201 || response.status === 200) {
-        this.setState({ SuccessPrompt: true, ProgressLoader: true});         
+        this.setState({ SuccessPrompt: true, ProgressLoader: true}); 
+        let editUrl =
+        URLS.URLS.mrn +
+        this.state.urlparams ;
+        this.openPage(editUrl);        
       }else{
         this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Posting Server Error", });
       }
@@ -2423,6 +2435,15 @@ class mrnactivity extends React.Component {
   }
 
   render() {
+
+    //to disable screen if Status is not Open
+    let disableEvents = false;
+    disableEvents = CF.toInt(this.state.MRN.Status) > 0 ? true : false;
+    const disabledStyle = {
+      "pointer-events": disableEvents ? "none" : "unset"
+    };
+
+
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
         this.state.accordion1 === true
@@ -2687,6 +2708,7 @@ class mrnactivity extends React.Component {
         >
 
           <Button
+            style={disabledStyle}
             startIcon={APIURLS.buttonTitle.save.icon}
             className="action-btns"
             onClick={(e) => AddNew(e)}
@@ -2751,40 +2773,10 @@ class mrnactivity extends React.Component {
 
 
 
-        <Fragment>
-          <div style={{ height: 10 }}>&nbsp;</div>
-          <div style={{ height: 10 }}>&nbsp;</div>
-          <Grid container spacing={0}>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={12} md={2} lg={2}></Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                  <Stepper activeStep={this.state.stepper.activeStep}>
-                    {this.state.stepper.steps.map((label, index) => {
-                      const stepProps = {};
-                      const labelProps = {};
-                      return (
-                        <Step key={label} {...stepProps}>
-                          <StepLabel {...labelProps}>
-                            {(index === 2) ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
-
-                          </StepLabel>
-                        </Step>
-                      );
-                    })}
-                  </Stepper>
-                </Grid>
-                <Grid item xs={12} sm={12} md={2} lg={2}></Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <div style={{ height: 10 }}>&nbsp;</div>
-          <div style={{ height: 10 }}>&nbsp;</div>
-
-        </Fragment>
+      
 
 
-        <Grid container spacing={0}>
+        <Grid container spacing={0} style={disabledStyle}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Grid className="table-adjust" container spacing={0}>
               <Grid item xs={12} sm={12} md={8} lg={8}>
