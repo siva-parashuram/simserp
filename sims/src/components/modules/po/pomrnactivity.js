@@ -1875,19 +1875,19 @@ class pomrnactivity extends React.Component {
           TAX = PurchaseOrderLine[i].VATPercentage;
         }
 
-        let itemQty = parseFloat(PurchaseOrderLine[i].Quantity);
+        let itemQty = parseFloat(PurchaseOrderLine[i].MRNQuantity);
         let itemPrice = parseFloat(PurchaseOrderLine[i].Price);
         let itemTotalQtyPrice = parseFloat(itemQty) * parseFloat(itemPrice);
         let itemDiscountPercentage = parseFloat(PurchaseOrderLine[i].LineDiscPercentage);
         let itemDiscountAmount = (parseFloat(itemTotalQtyPrice) * parseFloat(itemDiscountPercentage)) / 100;
         let itemTax = ((parseFloat(itemTotalQtyPrice) - parseFloat(itemDiscountAmount)) * parseFloat(TAX)) / 100;
-        // Amount += parseFloat(itemTotalQtyPrice);
-        // DiscountAmount += parseFloat(itemDiscountAmount);
-        // TotalTax += parseFloat(itemTax);
+        Amount += parseFloat(itemTotalQtyPrice);
+        DiscountAmount += parseFloat(itemDiscountAmount);
+        TotalTax += parseFloat(itemTax);
       }
 
-      // FCValue = (parseFloat(Amount) - parseFloat(DiscountAmount)) + TotalTax
-      // BaseValue = parseFloat(PO.ExchRate) * parseFloat(FCValue);
+      FCValue = (parseFloat(Amount) - parseFloat(DiscountAmount)) + TotalTax
+      BaseValue = parseFloat(PO.ExchRate) * parseFloat(FCValue);
 
       if (isNaN(Amount)) {
         Amount = 0.00;
@@ -1908,8 +1908,8 @@ class pomrnactivity extends React.Component {
         BaseValue = 0.00;
       }
 
-      // PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
-      // PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
+        PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
+        PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
     } catch (e) { }
 
     this.setState({

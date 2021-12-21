@@ -73,12 +73,11 @@ class mrn extends React.Component {
         const headers = {
             "Content-Type": "application/json",
         };
-        let Url = APIURLS.APIURL.GetPOByBranchID;
+        let Url = APIURLS.APIURL.GetMRNByBranchID;
         let reqData = {
             ValidUser: ValidUser,
-            PurchaseOrder: {
-                BranchID: CF.toInt(this.state.BranchID),
-                Status:5
+            MRN: {
+                BranchID: CF.toInt(this.state.BranchID)
             }
         };
         axios

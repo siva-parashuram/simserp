@@ -180,6 +180,7 @@ export const APIURL = {
   GetPOByPOID:domain+"api/PO/GetPOByPOID",
   Add_Update_PurchaseOrderAuthorize:domain+"api/PO/Add_Update_PurchaseOrderAuthorize",
   Add_Update_MRN:domain+"api/PO/Add_Update_MRN",
+  GetMRNByBranchID:domain+"api/PO/GetMRNByBranchID",
 };
 
 export const CTimeOut = 10;
