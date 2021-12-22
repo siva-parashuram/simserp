@@ -189,6 +189,7 @@ export const APIURL = {
   GetGITByGITID:domain+"api/PO/GetGITByGITID",
   GITAuthorize:domain+"api/PO/GITAuthorize",
   GetPIByBranchID:domain+"api/PO/GetPIByBranchID",
+  GetMRNBySuplID:domain+"api/PO/GetMRNBySuplID",
   Add_Update_PI:domain+"api/PO/PI",
 };
 

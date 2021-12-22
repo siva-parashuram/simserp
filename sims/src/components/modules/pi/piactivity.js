@@ -282,7 +282,8 @@ class piactivity extends React.Component {
         Details: "",
         UserID: "",
         MRNID: ""
-      }
+      },
+      MRNList:[],
     };
   }
 
@@ -1717,7 +1718,7 @@ class piactivity extends React.Component {
             this.setLineParams(PurchaseOrderLine);
 
           } else {
-            o[key] = parseFloat(e.target.value);
+            o[key] = e.target.value;
             PurchaseOrderLine[i] = o;
             this.setLineParams(PurchaseOrderLine);
           }
@@ -1824,7 +1825,7 @@ class piactivity extends React.Component {
       this.setLineParams(PurchaseOrderLine);
     }
 
-
+    this.calculateInvoiceDetails();
   }
 
   setLineParams = (object) => {
@@ -1961,7 +1962,7 @@ class piactivity extends React.Component {
           TAX = PurchaseOrderLine[i].VATPercentage;
         }
 
-        let itemQty = parseFloat(PurchaseOrderLine[i].MRNQuantity);
+        let itemQty = parseFloat(PurchaseOrderLine[i].Quantity);
         let itemPrice = parseFloat(PurchaseOrderLine[i].Price);
         let itemTotalQtyPrice = parseFloat(itemQty) * parseFloat(itemPrice);
         let itemDiscountPercentage = parseFloat(PurchaseOrderLine[i].LineDiscPercentage);
@@ -2426,8 +2427,32 @@ class piactivity extends React.Component {
 
   }
 
-  FetchSupplierMRN=()=>{
-    alert("Hi");
+  FetchSupplierMRN = () => {
+    this.setState({ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetMRNBySuplID;
+    let reqData = {
+      ValidUser: ValidUser,
+      MRN: {
+        SuplID: CF.toInt(this.state.PO.SuplID)
+      }
+    };
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        this.setState({ MRNList: data, ProgressLoader: true });
+      })
+      .catch((error) => {
+        console.log("Error > ", error);
+        this.setState({ MRNList: [], ProgressLoader: true });
+      });
   }
 
   render() {
@@ -2493,7 +2518,7 @@ class piactivity extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
-    const AddNew = (e) => {
+    const Add_Update = (e) => {
       this.setState({ ProgressLoader: false, ErrorMessageProps: "" });
       console.log("Adding new");
       let ValidUser = APIURLS.ValidUser;
@@ -2508,57 +2533,41 @@ class piactivity extends React.Component {
       validateMRNData = this.validateMRNData();
 
       if (validateMRNData === true) {
-
-
+       
+        let Status=0;
         let MRNLineList = [];
-        let MRNLotDetailsList = [];
+        let MRNLotDetailsList=[];
         let PurchaseOrderLine = this.state.PurchaseOrderLine;
         for (let i = 0; i < PurchaseOrderLine.length; i++) {
 
           if (PurchaseOrderLine[i].isDataProper === true) {
 
-
+            
 
             let obj = {
-              Type: PurchaseOrderLine[i].Type,
+              Type: parseFloat(PurchaseOrderLine[i].Type),
               LNo: (i + 1),
-              TypeID: PurchaseOrderLine[i].TypeID,
+              TypeID: parseFloat(PurchaseOrderLine[i].TypeID),
               SupplierCode: (PurchaseOrderLine[i].SupplierCode === "" || PurchaseOrderLine[i].SupplierCode === null) ? "" : PurchaseOrderLine[i].SupplierCode,
               Narration: (PurchaseOrderLine[i].Narration === "" || PurchaseOrderLine[i].Narration === null) ? "" : PurchaseOrderLine[i].Narration,
-              UOMID: PurchaseOrderLine[i]['UOMID'],
+              UOMID: parseFloat(PurchaseOrderLine[i]['UOMID']),
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
-              POQuantity: PurchaseOrderLine[i].Quantity,
-              MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
-              Price: PurchaseOrderLine[i].Price,
+              Quantity: parseFloat(PurchaseOrderLine[i].Quantity),
+              
+              Price:parseFloat(PurchaseOrderLine[i].Price),
               LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
-              ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+              ItemPostingGroupID: parseFloat(PurchaseOrderLine[i].ItemPostingGroupID),
               VATPercentage: PurchaseOrderLine[i].VATPercentage,
               HSNCode: PurchaseOrderLine[i].HSNCode,
-              GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+              GSTGroupID: parseFloat(PurchaseOrderLine[i].GSTGroupID),
               GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
-              DValueID: PurchaseOrderLine[i].DValueID,
-              IsQuality: PurchaseOrderLine[i].IsQuality,
-              IsLot: PurchaseOrderLine[i].IsLot,
-
+              DValueID: parseFloat(PurchaseOrderLine[i].DValueID),
+              
+              
             };
             MRNLineList.push(obj);
-            if (PurchaseOrderLine[i].LotDetails) {
-              let LotDetails = PurchaseOrderLine[i].LotDetails;
-              for (let j = 0; j < LotDetails.length; j++) {
-                let obj = {
-                  LNo: j + 1,
-                  Location: LotDetails[j].Location,
-                  LotID: parseInt(LotDetails[j].LotID),
-                  LotNo: LotDetails[j].LotNo,
-                  PackingUOM: parseInt(LotDetails[j].PackingUOM),
-                  Quantity: parseFloat(LotDetails[j].Quantity),
-                  TypeID: parseInt(LotDetails[j].TypeID)
-                };
-                MRNLotDetailsList.push(obj);
-              }
-            }
-
-            // Array.prototype.push.apply(MRNLotDetailsList, LotDetails);
+           
+            
 
           } else {
             this.setState({ ErrorPrompt: true, ErrorMessageProps: "Improper Line Data Found.", ProgressLoader: true });
@@ -2567,15 +2576,14 @@ class piactivity extends React.Component {
 
         }
 
-        console.log("MRNLotDetailsList > ", MRNLotDetailsList);
 
         let ContainerInfo = this.state.ContainerInfo;
-        let newContainerInfo = [];
-        for (let i = 0; i < ContainerInfo.length; i++) {
+        let newContainerInfo=[];
+        for(let i=0;i<ContainerInfo.length;i++){
           let obj = {
-            ID: ContainerInfo[i].ID,
+            ID: 0,
             LNo: i + 1,
-            Type: parseInt(ContainerInfo[i].ContainerType),
+            Type: ContainerInfo[i].ContainerType,
             ContainerNo: ContainerInfo[i].ContainerNo,
             Remarks: ContainerInfo[i].Remarks
           };
@@ -2583,11 +2591,10 @@ class piactivity extends React.Component {
         }
 
         let MRN = {
-          MRNID: CF.toInt(this.state.MRN.MRNID),
-          No: this.state.MRN.No,
-          POID: this.state.PO.POID,
+          PIID: 0,
+          No: "",
           BranchID: this.state.PO.BranchID,
-          MRNDate: moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
+          PIDate: moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
           SuplID: this.state.PO.SuplID,
           POType: this.state.PO.POType,
           BillingID: this.state.PO.BillingID,
@@ -2606,7 +2613,7 @@ class piactivity extends React.Component {
           BaseValue: parseFloat(this.state.PO.BaseValue),
           PaymentTermID: this.state.PO.PaymentTermID,
           PaymentTerm: this.state.PO.PaymentTerm,
-          Status: 0,
+          Status: parseInt(Status),
           WareHouseID: this.state.PO.WareHouseID,
           MODTaxID: this.state.PO.MODTaxID,
           IsRegistedSupplier: this.state.PO.IsRegistedSupplier,
@@ -2631,49 +2638,80 @@ class piactivity extends React.Component {
           GSTOrVATPaid: this.state.MRN.GSTOrVATPaid,
           AssableValue: this.state.MRN.AssableValue,
           BillOfEntryNo: this.state.MRN.BillOfEntryNo,
-          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY") === "Invalid date" ? "" : moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
+          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY")==="Invalid date"?today:moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
           BillOfEntryValue: this.state.MRN.BillOfEntryValue,
           BLOrAWBNo: this.state.MRN.BLOrAWBNo,
-          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY") === "Invalid date" ? "" : moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
+          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY")==="Invalid date"?today:moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
           PortID: this.state.MRN.PortID,
-
-          GateEntryNo: this.state.MRN.GateEntryNo,
-          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY") === "Invalid date" ? "" : moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
           Remarks: this.state.PO.Notes,
           UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
 
+        
 
+     
 
-        let reqData = {
+        let NoSeriesReqData = {
           ValidUser: ValidUser,
-          MRN: MRN,
-          MRNLineList: MRNLineList,
-          MRNLotDetailsList: MRNLotDetailsList,
-          MRNContainerInfoList: newContainerInfo
+          DocumentNumber: {
+            NoSeriesID: CF.toInt(this.state.Branch.PurInvNo),
+            TransDate: moment().format("MM-DD-YYYY"),
+          },
         };
-        console.log("AddNew > reqData > ", reqData);
-        let Url2 = APIURLS.APIURL.Add_Update_MRN;
-        axios
-          .post(Url2, reqData, { headers })
-          .then((response) => {
-            console.log("response > ", response);
-            if (response.status === 201 || response.status === 200) {
-              this.setState({ SuccessPrompt: true, ProgressLoader: true, PostBtnStatus: false });
+        console.log("AddNew > NoSeriesReqData > ", NoSeriesReqData);
+        
 
-            } else {
-              this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "", });
+        let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
+        axios
+          .post(Url1, NoSeriesReqData, { headers })
+          .then((response) => {
+            if (response.status === 200) {
+              MRN.No=response.data;
+              let reqData = {
+                ValidUser: ValidUser,
+                PI: MRN,
+                PILineList: MRNLineList,
+               
+                
+              };
+              console.log("AddNew > reqData > ", reqData);
+              let Url2 = APIURLS.APIURL.Add_Update_PI;
+              axios
+              .post(Url2, reqData, { headers })
+              .then((response) => {
+                console.log("response > ", response);
+                if (response.status === 201 || response.status === 200) {
+                  this.setState({ SuccessPrompt: true,ProgressLoader: true});
+                  let editUrl =
+                  URLS.URLS.editPI +
+                  this.state.urlparams +
+                  "&editPIID=" +
+                  response.data.ID + "&type=edit";
+                  // this.openEditMode(editUrl);
+                }else{
+                  this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "", });
+                }
+              })
+              .catch((error) => {
+                console.log("Main API Error");
+                this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Not saved", });
+              });
+
+            }else{
+              this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not fetched.", });
             }
+           
+
           })
           .catch((error) => {
-            console.log("Main API Error");
-            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "PI Not saved", });
+            console.log("No series Error");
+            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not defined.", });
           });
 
 
-
+        
       } else {
-        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid PI Data", ProgressLoader: true });
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
         return false;
       }
 
@@ -2707,7 +2745,7 @@ class piactivity extends React.Component {
             style={disabledStyle}
             startIcon={APIURLS.buttonTitle.save.icon}
             className="action-btns"
-            onClick={(e) => AddNew(e)}
+            onClick={(e) => Add_Update(e)}
 
           >
             {APIURLS.buttonTitle.save.name}
@@ -2880,6 +2918,7 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Address3}
+                                    onChange={(e) => this.updateFormValue("Address3", e)}
                                   />
                                   <SIB
                                     id="City"
@@ -2887,6 +2926,7 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.City}
+                                    onChange={(e) => this.updateFormValue("City", e)}
                                   />
                                   <SIB
                                     id="Postcode"
@@ -2894,6 +2934,7 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.PostCode}
+                                    onChange={(e) => this.updateFormValue("PostCode", e)}
                                   />
 
 
@@ -2902,6 +2943,7 @@ class piactivity extends React.Component {
                                     label="Country"
                                     value={this.state.CountryID}
                                     param={this.state.CountryList}
+                                    onChange={(e) => this.updateFormValue("CountryID", e)}
                                   />
 
 
@@ -2910,7 +2952,7 @@ class piactivity extends React.Component {
                                     label="State"
                                     value={this.state.StateID}
                                     param={this.state.StateList}
-                                    disabled={true}
+                                    onChange={(e) => this.updateFormValue("StateID", e)}
                                   />
 
                                   <SDIB
@@ -3101,7 +3143,7 @@ class piactivity extends React.Component {
                                   {this.state.Branch.IsVAT === true ? (
                                     <Fragment>
                                       <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">VAT % </TableCell>
-                                      {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center">VAT Amount </TableCell> */}
+                                     
                                     </Fragment>
                                   ) : null}
 
@@ -3148,23 +3190,6 @@ class piactivity extends React.Component {
                                             </Fragment>
 
 
-                                            {item.IsLot === true ? (
-                                              <Fragment>
-                                                <Tooltip title="Add Lot">
-                                                  <ListAltIcon
-                                                    fontSize="small"
-                                                    style={{
-                                                      color: '#2196f3',
-                                                      marginLeft: 10
-                                                    }}
-                                                    onClick={(e) => this.openDialog(item)}
-                                                  />
-                                                </Tooltip>
-                                              </Fragment>
-                                            ) : null}
-
-
-
                                             {
                                               (i + 1) === this.state.PurchaseOrderLine.length ? (
                                                 <Fragment>
@@ -3197,7 +3222,7 @@ class piactivity extends React.Component {
                                           >
                                             <option value="" >Select</option>
                                             {APIURLS.POItemType.map((op, i) => (
-                                              <option value={op.value} disabled={CF.toInt(op.value) < 3 ? true : false} > {op.name}</option>
+                                              <option value={op.value} > {op.name}</option>
 
                                             ))}
                                           </select>
@@ -3211,8 +3236,8 @@ class piactivity extends React.Component {
                                             className="line-dropdown-css"
                                             value={item.CategoryId}
                                             onChange={(e) => this.updateLineDetail(i, "CategoryId", e)}
-                                            // disabled={item.isCategoryDisabled}
-                                            disabled={true}
+                                            disabled={item.isCategoryDisabled}
+                                            
                                           >
                                             <option value="" >Select</option>
                                             {item.CategoryList.map((op, i) => (
@@ -3291,7 +3316,7 @@ class piactivity extends React.Component {
                                             value={item.Quantity}
                                             onChange={(e) => this.updateLineDetail(i, "Quantity", e)}
                                             align="right"
-                                            disabled={true}
+                                            
                                           />
                                         </TableCell>
                                         
@@ -3302,7 +3327,7 @@ class piactivity extends React.Component {
                                             size="small"
                                             value={item.Price}
                                             onChange={(e) => this.updateLineDetail(i, "Price", e)}
-                                            disabled={item.Type === 0 ? true : false}
+                                            // disabled={item.Type === 0 ? true : false}
                                             align="right"
                                           />
                                         </TableCell>
