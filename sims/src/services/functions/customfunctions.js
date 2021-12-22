@@ -22,9 +22,14 @@ export const GET_URL_PARAMS = () => {
     var url = new URL(window.location.href);
     var bid = url.searchParams.get("bid");
     initialParams = localStorage.getItem('_initialParams_' + bid);
+    if(initialParams===null || initialParams==='undefined' || initialParams ===undefined){
+      var bid = url.searchParams.get("branchId");
+      initialParams = localStorage.getItem('_initialParams_' + bid);
+    }
+    initialParams.toString();
   } catch (e) { }
 
-  return initialParams.toString();
+  return initialParams;
 }
 
 //remove particular opened branch by branch id

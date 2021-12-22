@@ -73,9 +73,11 @@ import poactivity from "../components/modules/po/poactivity";
 import mrn from "../components/modules/mrn/mrn";
 import pomrnactivity from "../components/modules/po/pomrnactivity";
 import mrnactivity from "../components/modules/mrn/mrnactivity";
+import gitMaster from "../components/modules/git/gitMaster";
 
 import gstMaster from "../components/modules/gst/gstmaster";
 import gstactivity from "../components/modules/gst/gstactivity";
+
 
 
 import pageNotFound from "../../src/pagenotfound";
@@ -230,6 +232,7 @@ let routes = ({ location, ...rest }) => {
           <Route path={URLS.URLS.mrn} component={mrn} />
          
           <Route path={URLS.URLS.editMRN} component={mrnactivity} />
+          <Route path={URLS.URLS.git} component={gitMaster} />
            
           
 

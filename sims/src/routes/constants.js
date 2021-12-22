@@ -76,7 +76,9 @@ export const URLS = {
   editMRN:"/editMRN",
   gstMaster:"/gstMaster",
   addGst:"/addGst",
-  editGst:"/editGst"
+  editGst:"/editGst",
+  git:"/GIT",
+  editGit:"/editGIT",
 };
 
 
