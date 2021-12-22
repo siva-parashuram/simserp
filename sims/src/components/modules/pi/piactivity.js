@@ -2548,8 +2548,7 @@ class piactivity extends React.Component {
               Type: parseFloat(PurchaseOrderLine[i].Type),
               LNo: (i + 1),
               TypeID: parseFloat(PurchaseOrderLine[i].TypeID),
-              SupplierCode: (PurchaseOrderLine[i].SupplierCode === "" || PurchaseOrderLine[i].SupplierCode === null) ? "" : PurchaseOrderLine[i].SupplierCode,
-              Narration: (PurchaseOrderLine[i].Narration === "" || PurchaseOrderLine[i].Narration === null) ? "" : PurchaseOrderLine[i].Narration,
+               
               UOMID: parseFloat(PurchaseOrderLine[i]['UOMID']),
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               Quantity: parseFloat(PurchaseOrderLine[i].Quantity),
@@ -3128,7 +3127,7 @@ class piactivity extends React.Component {
 
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Desc</TableCell>
                                   <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Pack.Desc</TableCell>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Sup.Code</TableCell>
+                                   
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Narration</TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">UOM</TableCell>
                                   <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
@@ -3263,16 +3262,7 @@ class piactivity extends React.Component {
                                           {item.packingDescription}
                                         </TableCell>
 
-                                        <TableCell align="left">
-                                          <SCI
-                                            id={"SupplierCode_" + i}
-                                            variant="outlined"
-                                            size="small"
-                                            value={item.SupplierCode}
-                                            onChange={(e) => this.updateLineDetail(i, "SupplierCode", e)}
-                                            disabled={true}
-                                          />
-                                        </TableCell>
+                                        
                                         <TableCell align="left">
                                           <SCI
                                             id={"Naration_" + i}
@@ -3280,7 +3270,7 @@ class piactivity extends React.Component {
                                             size="small"
                                             value={item.Narration}
                                             onChange={(e) => this.updateLineDetail(i, "Narration", e)}
-                                            disabled={true}
+                                            
                                           />
                                         </TableCell>
                                         <TableCell align="left">
