@@ -34,8 +34,7 @@ import PoMrnMaster from '../po/poMrnMaster';
 import Attachmentmaster from '../../ftp/attachment/attachmentmaster';
 
 
-
-class mrn extends React.Component {
+class pi extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -75,18 +74,18 @@ class mrn extends React.Component {
             // "&branchName=" +
             // branchName;
         this.setState({ urlparams: urlparams, BranchID: branchId, editBtnDisable: false }, () => {
-            this.getMRNList();
+            this.getPIList();
         });
     }
 
-    getMRNList = () => {
+    getPIList = () => {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
             "Content-Type": "application/json",
         };
-        let Url = APIURLS.APIURL.GetMRNByBranchID;
+        let Url = APIURLS.APIURL.GetPIByBranchID;
         let reqData = {
             ValidUser: ValidUser,
             MRN: {
@@ -240,7 +239,7 @@ class mrn extends React.Component {
                     backOnClick={this.props.history.goBack}
                     linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                     linkTitle="Dashboard"
-                    typoTitle="MRN"
+                    typoTitle="PI"
                     level={1}
                 />
             </Fragment>
@@ -460,5 +459,5 @@ class mrn extends React.Component {
     }
 
 }
-export default mrn;
+export default pi;
 

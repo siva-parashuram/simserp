@@ -76,6 +76,8 @@ import mrnactivity from "../components/modules/mrn/mrnactivity";
 import gitMaster from "../components/modules/git/gitMaster";
 import pogitactivity from "../components/modules/git/pogitactivity";
 import gitactivity from "../components/modules/git/gitactivity";
+import pi from "../components/modules/pi/pi";
+import piactivity from "../components/modules/pi/piactivity";
 
 import gstMaster from "../components/modules/gst/gstmaster";
 import gstactivity from "../components/modules/gst/gstactivity";
@@ -236,7 +238,9 @@ let routes = ({ location, ...rest }) => {
           <Route path={URLS.URLS.git} component={gitMaster} />         
           <Route path={URLS.URLS.doPOGIT} component={pogitactivity} />
           <Route path={URLS.URLS.editGit} component={gitactivity} />
-          
+          <Route path={URLS.URLS.PI} component={pi} />
+          <Route path={URLS.URLS.addPI} component={piactivity} />
+          <Route path={URLS.URLS.editPI} component={piactivity} />
           
 
           {/* Gst */}

@@ -187,6 +187,8 @@ export const APIURL = {
   GetGITByBranchID:domain+"api/PO/GetGITByBranchID",
   GetGITByGITID:domain+"api/PO/GetGITByGITID",
   GITAuthorize:domain+"api/PO/GITAuthorize",
+  GetPIByBranchID:domain+"api/PO/GetPIByBranchID",
+  Add_Update_PI:domain+"api/PO/PI",
 };
 
 export const CTimeOut = 10;

@@ -77,9 +77,12 @@ export const URLS = {
   gstMaster:"/gstMaster",
   addGst:"/addGst",
   editGst:"/editGst",
-  git:"/GIT",
+  git:"/GITMaster",
   doPOGIT:"/doPOGIT",
   editGit:"/editGIT",
+  PI:"/piMaster",
+  addPI:"/addPI",
+  editPI:"/editPI"
 };
 
 
