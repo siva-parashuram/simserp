@@ -1,4 +1,4 @@
-import React, { Fragment} from "react";
+import React, { Fragment } from "react";
 import axios from "axios";
 import moment from "moment";
 import ReactToPrint from 'react-to-print';
@@ -75,7 +75,7 @@ class poactivity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      RADialogStatus:false,
+      RADialogStatus: false,
       Dialog: {
         DialogTitle: "",
         DialogStatus: false,
@@ -95,8 +95,8 @@ class poactivity extends React.Component {
       DisableCreatebtn: true,
       DisableUpdatebtn: false,
       SnackbarStatus: false,
-      branchName:"",
-      ErrorMessageProps:"",
+      branchName: "",
+      ErrorMessageProps: "",
       currentDeleteItemLine: {},
       initialCss: "",
       urlparams: "",
@@ -247,13 +247,13 @@ class poactivity extends React.Component {
         IsLot: false,
         isDataProper: false,
       },
-      PurchaseOrderAuthorize:{
-        ID:0,
+      PurchaseOrderAuthorize: {
+        ID: 0,
         // AuthoriseDate:today,
-        Type:"",//Status
-        Details:"",
-        UserID:"",
-        POID:""
+        Type: "",//Status
+        Details: "",
+        UserID: "",
+        POID: ""
       }
 
     };
@@ -265,7 +265,9 @@ class poactivity extends React.Component {
         switch (e.keyCode) {
           case 13:
             console.log("SHIFT+ENTER > ");
-            this.createNewBlankLine();
+            if (CF.toInt(this.state.PO.Status) > 1) { } else {
+              this.createNewBlankLine();
+            }
             break;
           default:
             break;
@@ -327,8 +329,8 @@ class poactivity extends React.Component {
   }
 
   componentDidMount() {
-     
     document.addEventListener('keydown', this.onKeyDownHandler);
+    let params = CF.GET_URL_PARAMS();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -349,14 +351,14 @@ class poactivity extends React.Component {
 
     let PO = this.state.PO;
     PO.POID = CF.toInt(POID);
-    if (type === "edit") {      
-      PO.POID = CF.toInt(POID);      
-      this.setState({ 
-        branchName:branchName,
+    if (type === "edit") {
+      PO.POID = CF.toInt(POID);
+      this.setState({
+        branchName: branchName,
         PO: PO,
         POID: CF.toInt(POID),
-        urlparams: urlparams,
-        BranchID: CF.toInt(branchId) ,
+        urlparams: params,
+        BranchID: CF.toInt(branchId),
         type: type,
         typoTitle: typoTitle,
         // ProgressLoader: false,
@@ -367,7 +369,7 @@ class poactivity extends React.Component {
 
     if (type === "add") {
       this.setState({
-        branchName:branchName,
+        branchName: branchName,
         PO: PO,
         POID: type === "edit" ? CF.toInt(POID) : 0,
         urlparams: urlparams,
@@ -376,12 +378,12 @@ class poactivity extends React.Component {
         ProgressLoader: true,
         BranchID: CF.toInt(branchId),
       }, () => {
-        this.getSupplierList(CF.toInt(branchId)); 
+        this.getSupplierList(CF.toInt(branchId));
       });
 
     }
 
-    
+
   }
 
   setStepper = (PO) => {
@@ -448,10 +450,10 @@ class poactivity extends React.Component {
 
           let newPOL = [];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
 
-          let SupplierItemCategoryArray=[];
+          let SupplierItemCategoryArray = [];
           let data = this.getSupplierDataList(PO.SuplID);
-          SupplierItemCategoryArray=data.SupplierItemCategory
-          console.log("------------------------------> SupplierItemCategoryArray > ",SupplierItemCategoryArray);
+          SupplierItemCategoryArray = data.SupplierItemCategory
+          console.log("------------------------------> SupplierItemCategoryArray > ", SupplierItemCategoryArray);
 
           try {
             for (let i = 0; i < PurchaseOrderLine.length; i++) {
@@ -505,19 +507,19 @@ class poactivity extends React.Component {
           } catch (err) {
             console.log("For loop PO Order Line > err > ", err);
           }
-          
+
 
           this.setState({
             PO: PO,
             PurchaseOrderLine: newPOL,
-            Name:PO.Name,
+            Name: PO.Name,
             Address: PO.Address,
             Address2: PO.Address2,
-            Address3:PO.Address3 ,
+            Address3: PO.Address3,
             City: PO.City,
             PostCode: PO.PostCode,
-            CountryID:PO.CountryID ,
-            StateID:PO.StateID ,
+            CountryID: PO.CountryID,
+            StateID: PO.StateID,
             ProgressLoader: true
           }, () => {
             this.calculateInvoiceDetails();
@@ -535,10 +537,10 @@ class poactivity extends React.Component {
       });
   };
 
-  getItemList = (Type,SuplID,CategoryId) => { 
-    let Supplier=this.state.supplierList;
-    let CategoryList=[];
-    let ItemList=[];
+  getItemList = (Type, SuplID, CategoryId) => {
+    let Supplier = this.state.supplierList;
+    let CategoryList = [];
+    let ItemList = [];
 
     switch (Type) {
       case 0:
@@ -616,8 +618,8 @@ class poactivity extends React.Component {
         BuyFromGSTN: PurchaseOrderLine[i].BuyFromGSTN,
         NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
         DValueID: PurchaseOrderLine[i].DValueID,
-        IsQuality: this.state.Branch.IsQuality===false?false:PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
-        IsLot: this.state.Branch.IsLot===false?false:PurchaseOrderLine[i].IsLot,//if branch is false- send false OR if branch is true - send actual value
+        IsQuality: this.state.Branch.IsQuality === false ? false : PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
+        IsLot: this.state.Branch.IsLot === false ? false : PurchaseOrderLine[i].IsLot,//if branch is false- send false OR if branch is true - send actual value
         isDataProper: true,
       };
       newPOL.push(EL);
@@ -667,7 +669,7 @@ class poactivity extends React.Component {
           let IncoTermList = data.IncoTerms;
 
           let PO = this.state.PO;
-         
+
           if (Branch.IsSEZ === true) {
             PO.IsSEZPurchase = true;
           } else {
@@ -679,14 +681,14 @@ class poactivity extends React.Component {
             PO.IsRounding = false;
           }
 
-          for(let i=0;i<WareHouse.length;i++){
-            if(WareHouse[i].IsDefault===true){
-              PO.WareHouseID= CF.toInt(WareHouse[i].value);
-              PO.DeliveryAddress=WareHouse[i].deliveryAddress;
+          for (let i = 0; i < WareHouse.length; i++) {
+            if (WareHouse[i].IsDefault === true) {
+              PO.WareHouseID = CF.toInt(WareHouse[i].value);
+              PO.DeliveryAddress = WareHouse[i].deliveryAddress;
               break;
             }
           }
-          
+
 
           this.setState({
             PO: PO,
@@ -776,7 +778,7 @@ class poactivity extends React.Component {
         name: data[i].Code,
         value: data[i].WareHouseID,
         deliveryAddress: deliveryAddress,
-        IsDefault:data[i].IsDefault
+        IsDefault: data[i].IsDefault
       };
       newData.push(o);
     }
@@ -872,7 +874,7 @@ class poactivity extends React.Component {
         PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
       }
 
-      
+
 
       this.setState({
         PO: PO,
@@ -908,7 +910,7 @@ class poactivity extends React.Component {
 
         console.log("#####################3-----------------------------------> BCdata > ", BCdata);
 
-        if(event==="IG"){
+        if (event === "IG") {
           this.setState({
             PO: PO,
             // Name: BCdata.Name,
@@ -920,7 +922,7 @@ class poactivity extends React.Component {
             // CountryID: BCdata.CountryID,
             // StateID: BCdata.StateID,
           });
-        }else{
+        } else {
           this.setState({
             PO: PO,
             Name: BCdata.Name,
@@ -934,7 +936,7 @@ class poactivity extends React.Component {
           });
         }
 
-       
+
       });
     }
     this.setState({
@@ -1312,7 +1314,7 @@ class poactivity extends React.Component {
     Dialog.DialogStatus = false;
     this.setState({ Dialog: Dialog });
   };
- 
+
 
   openDialog = (param) => {
     let Dialog = this.state.Dialog;
@@ -1320,7 +1322,7 @@ class poactivity extends React.Component {
     Dialog.DialogTitle = "View Purchase Order";
 
 
-    if(this.state.PO.IsImport===false){
+    if (this.state.PO.IsImport === false) {
       Dialog.DialogContent = <PrintLocalPo podata={
         {
           Branch: this.state.Branch,
@@ -1344,30 +1346,30 @@ class poactivity extends React.Component {
       } />;
     }
 
-    if(this.state.PO.IsImport===true){
-      Dialog.DialogContent =<PrintImportPo podata={
-          {
-            Branch: this.state.Branch,
-            PO: this.state.PO,
-            PurchaseOrderLine: this.state.PurchaseOrderLine,
-            UOMList: this.state.UOMList,
-            CurrencyList: this.state.CurrencyList,
-            Supplier: {
-              Name: this.getSupplierName(),
-              Address: this.state.Address,
-              Address2: this.state.Address2,
-              Address3: this.state.Address3,
-              City: this.state.City,
-              PostCode: this.state.PostCode,
-              CountryID: this.state.CountryID,
-              StateID: this.state.StateID,
-              CountryList: this.state.CountryList,
-              StateList: this.state.StateList
-            }
+    if (this.state.PO.IsImport === true) {
+      Dialog.DialogContent = <PrintImportPo podata={
+        {
+          Branch: this.state.Branch,
+          PO: this.state.PO,
+          PurchaseOrderLine: this.state.PurchaseOrderLine,
+          UOMList: this.state.UOMList,
+          CurrencyList: this.state.CurrencyList,
+          Supplier: {
+            Name: this.getSupplierName(),
+            Address: this.state.Address,
+            Address2: this.state.Address2,
+            Address3: this.state.Address3,
+            City: this.state.City,
+            PostCode: this.state.PostCode,
+            CountryID: this.state.CountryID,
+            StateID: this.state.StateID,
+            CountryList: this.state.CountryList,
+            StateList: this.state.StateList
           }
-        } />;
+        }
+      } />;
     }
-   
+
 
     this.setState({ Dialog: Dialog });
   };
@@ -1383,9 +1385,9 @@ class poactivity extends React.Component {
   }
 
   fetchPrice = (Quantity, o) => {
-    console.log("#######################  fetchPrice > Quantity > ",Quantity);
-    console.log("#######################  fetchPrice > o > ",o);
-    let UnitPrice=0.00;
+    console.log("#######################  fetchPrice > Quantity > ", Quantity);
+    console.log("#######################  fetchPrice > o > ", o);
+    let UnitPrice = 0.00;
     try {
       let UOMID_i = o.UOMID;
       for (let i = 0; i < o.ItemList.length; i++) {
@@ -1395,10 +1397,10 @@ class poactivity extends React.Component {
             let UOM_j = ItemPrice[j]['UOM'];
             if (UOMID_i === UOM_j) {
               let jo = ItemPrice[j];
-              console.log("#######################  fetchPrice > jo > ",jo);
+              console.log("#######################  fetchPrice > jo > ", jo);
               if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
-                console.log("#######################  fetchPrice > jo.UnitPrice > ",jo.UnitPrice);
-                UnitPrice= jo.UnitPrice;
+                console.log("#######################  fetchPrice > jo.UnitPrice > ", jo.UnitPrice);
+                UnitPrice = jo.UnitPrice;
                 break;
               }
             }
@@ -1406,10 +1408,10 @@ class poactivity extends React.Component {
         }
       }
     } catch (err) {
-      console.log("err > ",err)
-      UnitPrice= 0.00;
+      console.log("err > ", err)
+      UnitPrice = 0.00;
     }
-  return UnitPrice;
+    return UnitPrice;
   }
 
   updateLineDetail = (i, key, e) => {
@@ -1506,21 +1508,21 @@ class poactivity extends React.Component {
           o.ItemListSelected = e;
           o.TypeID = CF.toInt(e.value);
           o.GSTGroupID = e.GSTGroupID;
-         
-          if (o.Type === 0) {        
-           
+
+          if (o.Type === 0) {
+
             o.Description = e.Description1;
             o.packingDescription = e.PackingDesc1;
             o.HSNCode = e.HSNCode;
- 
 
-           if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
-            o.GSTPercentage =0.00;
-            o.VATPercentage=0.00;
-           }else{
-            o.GSTPercentage=e.GSTPercentage;
-            o.VATPercentage=this.state.Branch.VATPercentage;
-           }
+
+            if (this.state.PO.IsTaxExempt === true || this.state.PO.IsImport === true || this.state.PO.IsSEZPurchase === true) {
+              o.GSTPercentage = 0.00;
+              o.VATPercentage = 0.00;
+            } else {
+              o.GSTPercentage = e.GSTPercentage;
+              o.VATPercentage = this.state.Branch.VATPercentage;
+            }
 
 
             o.UOMID = e.PurchaseUOM;
@@ -1528,18 +1530,18 @@ class poactivity extends React.Component {
             o.TolerancePercentage = e.TolerancePercentage;
             o.IsLot = e.IsLot;
             o.IsQuality = e.IsQuality;
-            o.Quantity=1.00;
+            o.Quantity = 1.00;
             let Price = this.fetchPrice(1, o);
-            o.Price=parseFloat(Price);
+            o.Price = parseFloat(Price);
           } else {
 
-            if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
-              o.GSTPercentage =0.00;
-              o.VATPercentage=0.00;
-             }else{
-              o.GSTPercentage=e.GSTPercentage;
-              o.VATPercentage=this.state.Branch.VATPercentage;
-             }
+            if (this.state.PO.IsTaxExempt === true || this.state.PO.IsImport === true || this.state.PO.IsSEZPurchase === true) {
+              o.GSTPercentage = 0.00;
+              o.VATPercentage = 0.00;
+            } else {
+              o.GSTPercentage = e.GSTPercentage;
+              o.VATPercentage = this.state.Branch.VATPercentage;
+            }
 
             /*
             if(this.state.Branch.IsGST===true){
@@ -1549,7 +1551,7 @@ class poactivity extends React.Component {
               o.VATPercentage=(this.state.PO.IsTaxExempt===false || this.state.PO.IsImport===false || this.state.PO.IsSEZPurchase===false)?this.state.Branch.VATPercentage:0;
              } 
 */
-             
+
 
             o.packingDescription = "";
             o.UOMID = this.getNOSvalue();
@@ -1559,7 +1561,7 @@ class poactivity extends React.Component {
           }
           PurchaseOrderLine[i] = o;
           this.setLineParams(PurchaseOrderLine);
-        }else{
+        } else {
           o.TypeID = "";
           o.ItemListSelected = null;
           o.GSTGroupID = "";
@@ -1635,19 +1637,19 @@ class poactivity extends React.Component {
       case "GSTGroupID":
         o[key] = CF.toInt(e.target.value);
         let GSTGroupIDList = this.state.GSTGroupIDList;
-        if(this.state.PO.IsTaxExempt===true || this.state.PO.IsImport===true || this.state.PO.IsSEZPurchase===true){
-          o.GSTPercentage =0.00;          
-         }else{
-          if(this.state.PO.IsTaxExempt===true){
-            o.GSTPercentage=0;
-          }else{
+        if (this.state.PO.IsTaxExempt === true || this.state.PO.IsImport === true || this.state.PO.IsSEZPurchase === true) {
+          o.GSTPercentage = 0.00;
+        } else {
+          if (this.state.PO.IsTaxExempt === true) {
+            o.GSTPercentage = 0;
+          } else {
             for (let i = 0; i < GSTGroupIDList.length; i++) {
               if (GSTGroupIDList[i].value === CF.toInt(e.target.value)) {
                 o.GSTPercentage = GSTGroupIDList[i].GSTPercentage;
               }
             }
           }
-         }
+        }
         PurchaseOrderLine[i] = o;
         this.setLineParams(PurchaseOrderLine);
         break;
@@ -1708,7 +1710,7 @@ class poactivity extends React.Component {
 
   validateLine = (o) => {
     let validLine = false;
-   
+
     if (
       o.Type === "" || o.Type === null ||
       o.TypeID === "" || o.TypeID === null ||
@@ -1721,7 +1723,7 @@ class poactivity extends React.Component {
         if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { validLine = true; }
       } else {
         validLine = false;
-      }       
+      }
     }
 
     this.processAddUpdateStatus(validLine);
@@ -1731,8 +1733,8 @@ class poactivity extends React.Component {
 
   validateLineItems = () => {
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
-    let totalLines=PurchaseOrderLine.length;
-    let totalValids=0;
+    let totalLines = PurchaseOrderLine.length;
+    let totalValids = 0;
     for (let i = 0; i < PurchaseOrderLine.length; i++) {
       let o = PurchaseOrderLine[i];
       let validLine = false;
@@ -1745,8 +1747,8 @@ class poactivity extends React.Component {
         validLine = false;
       } else {
         if (o.HSNCode) {
-          if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { 
-            validLine = true; 
+          if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else {
+            validLine = true;
             totalValids++;
           }
         } else {
@@ -1754,15 +1756,15 @@ class poactivity extends React.Component {
         }
       }
     }
-    
-    let validLine=false;
-    totalLines===totalValids?validLine=true:validLine=false;
 
-    this.processAddUpdateStatus(validLine);    
+    let validLine = false;
+    totalLines === totalValids ? validLine = true : validLine = false;
+
+    this.processAddUpdateStatus(validLine);
   }
 
-  processAddUpdateStatus=(validLine)=>{
-   validLine===true?this.setState({DisableUpdatebtn:false,DisableCreatebtn:false}):this.setState({DisableUpdatebtn:true,DisableCreatebtn:false});
+  processAddUpdateStatus = (validLine) => {
+    validLine === true ? this.setState({ DisableUpdatebtn: false, DisableCreatebtn: false }) : this.setState({ DisableUpdatebtn: true, DisableCreatebtn: false });
   }
 
   getProcessedPurchaseOrderLineListUpdate = () => {
@@ -1814,10 +1816,10 @@ class poactivity extends React.Component {
     console.log("-openEditMode-");
     console.log("ID -> ", ID);
     let editUrl =
-    URLS.URLS.editPO +
-    this.state.urlparams +
-    "&editPOID=" +
-    ID + "&type=edit";
+      URLS.URLS.editPO +
+      this.state.urlparams +
+      "&editPOID=" +
+      ID + "&type=edit";
     window.location = editUrl;
     // let type = "edit";
     // let POID = ID;
@@ -1850,13 +1852,13 @@ class poactivity extends React.Component {
       for (let i = 0; i < PurchaseOrderLine.length; i++) {
         console.log("PurchaseOrderLine[i] > ", PurchaseOrderLine[i]);
         let TAX = 0;
-        if(this.state.Branch.IsGST===true){
-          TAX=PurchaseOrderLine[i].GSTPercentage;
+        if (this.state.Branch.IsGST === true) {
+          TAX = PurchaseOrderLine[i].GSTPercentage;
         }
-        if(this.state.Branch.IsVAT===true){
-          TAX=PurchaseOrderLine[i].VATPercentage;
-        }        
-        
+        if (this.state.Branch.IsVAT === true) {
+          TAX = PurchaseOrderLine[i].VATPercentage;
+        }
+
         let itemQty = parseFloat(PurchaseOrderLine[i].Quantity);
         let itemPrice = parseFloat(PurchaseOrderLine[i].Price);
         let itemTotalQtyPrice = parseFloat(itemQty) * parseFloat(itemPrice);
@@ -1904,15 +1906,15 @@ class poactivity extends React.Component {
 
 
   getCurrencyString = (price) => {
-   // return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3 }).format(price);
-   return price;
+    // return new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3 }).format(price);
+    return price;
   }
 
-  getSupplierName=()=>{
-    let supplierList=this.state.supplierList;
-    console.log("getSupplierName > supplierList > ",supplierList);
-    for(let i=0;i<supplierList.length;i++){
-      if(supplierList[i].SuplID===this.state.PO.SuplID){
+  getSupplierName = () => {
+    let supplierList = this.state.supplierList;
+    console.log("getSupplierName > supplierList > ", supplierList);
+    for (let i = 0; i < supplierList.length; i++) {
+      if (supplierList[i].SuplID === this.state.PO.SuplID) {
         return supplierList[i].Name
       }
     }
@@ -1926,82 +1928,8 @@ class poactivity extends React.Component {
     }
   }
 
-  releasePO=()=>{
-   this.setState({ProgressLoader:false});
-
-   let ValidUser = APIURLS.ValidUser;
-   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-   ValidUser.Token = getCookie(COOKIE.TOKEN);
-   const headers = {
-     "Content-Type": "application/json",
-   };
-
-   let  PurchaseOrderAuthorize=this.state.PurchaseOrderAuthorize;
-   PurchaseOrderAuthorize.POID=this.state.PO.POID;
-  //  PurchaseOrderAuthorize.AuthoriseDate = moment(today).format("MM/DD/YYYY");
-   PurchaseOrderAuthorize.Type=2;
-   PurchaseOrderAuthorize.UserID=parseInt(getCookie(COOKIE.USERID));
-
-   if (PurchaseOrderAuthorize.Details.trim() === "") { 
-    this.setState({ErrorMessageProps:"Invalid Input",ProgressLoader:true});
-  }else{
-    let reqData = {
-      ValidUser: ValidUser,
-      PurchaseOrderAuthorize: PurchaseOrderAuthorize
-    };
-    let Url = APIURLS.APIURL.Add_Update_PurchaseOrderAuthorize;
-    axios
-    .post(Url, reqData, { headers })
-    .then((response) => {
-      if (response.status === 201 || response.status === 200) {
-        
-        let PO=this.state.PO;
-        PO.Status=2;
-     
-        let stepper=this.state.stepper;
-        stepper.activeStep=1;
-     
-        PurchaseOrderAuthorize.Details="";
-        this.setState({
-          PurchaseOrderAuthorize:PurchaseOrderAuthorize,
-          PO:PO,
-          stepper:stepper,
-          RADialogStatus:false,
-          ProgressLoader:true,
-          SuccessPrompt: true
-        });
-        this.getPODetails(PO);
-      }else{
-        let PO=this.state.PO;
-        PO.Status=1;
-        let stepper=this.state.stepper;
-        stepper.activeStep=0;
-        this.setState({   
-          PO:PO,
-          stepper:stepper,       
-          ErrorPrompt: true
-        });
-      }
-
-    })
-    .catch((error) => {
-      let PO=this.state.PO;
-        PO.Status=1;
-        let stepper=this.state.stepper;
-        stepper.activeStep=0;
-      this.setState({
-        PO:PO,
-        stepper:stepper,
-         ErrorPrompt: true, 
-         ProgressLoader: true
-         });
-    });
-  }
-
-  }
-
-  reopenPO=()=>{
-    this.setState({ProgressLoader:false});
+  releasePO = () => {
+    this.setState({ ProgressLoader: false });
 
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -2010,15 +1938,89 @@ class poactivity extends React.Component {
       "Content-Type": "application/json",
     };
 
-    let  PurchaseOrderAuthorize=this.state.PurchaseOrderAuthorize;
-    PurchaseOrderAuthorize.POID=this.state.PO.POID;
+    let PurchaseOrderAuthorize = this.state.PurchaseOrderAuthorize;
+    PurchaseOrderAuthorize.POID = this.state.PO.POID;
+    //  PurchaseOrderAuthorize.AuthoriseDate = moment(today).format("MM/DD/YYYY");
+    PurchaseOrderAuthorize.Type = 2;
+    PurchaseOrderAuthorize.UserID = parseInt(getCookie(COOKIE.USERID));
+
+    if (PurchaseOrderAuthorize.Details.trim() === "") {
+      this.setState({ ErrorMessageProps: "Invalid Input", ProgressLoader: true });
+    } else {
+      let reqData = {
+        ValidUser: ValidUser,
+        PurchaseOrderAuthorize: PurchaseOrderAuthorize
+      };
+      let Url = APIURLS.APIURL.Add_Update_PurchaseOrderAuthorize;
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          if (response.status === 201 || response.status === 200) {
+
+            let PO = this.state.PO;
+            PO.Status = 2;
+
+            let stepper = this.state.stepper;
+            stepper.activeStep = 1;
+
+            PurchaseOrderAuthorize.Details = "";
+            this.setState({
+              PurchaseOrderAuthorize: PurchaseOrderAuthorize,
+              PO: PO,
+              stepper: stepper,
+              RADialogStatus: false,
+              ProgressLoader: true,
+              SuccessPrompt: true
+            });
+            this.getPODetails(PO);
+          } else {
+            let PO = this.state.PO;
+            PO.Status = 1;
+            let stepper = this.state.stepper;
+            stepper.activeStep = 0;
+            this.setState({
+              PO: PO,
+              stepper: stepper,
+              ErrorPrompt: true
+            });
+          }
+
+        })
+        .catch((error) => {
+          let PO = this.state.PO;
+          PO.Status = 1;
+          let stepper = this.state.stepper;
+          stepper.activeStep = 0;
+          this.setState({
+            PO: PO,
+            stepper: stepper,
+            ErrorPrompt: true,
+            ProgressLoader: true
+          });
+        });
+    }
+
+  }
+
+  reopenPO = () => {
+    this.setState({ ProgressLoader: false });
+
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    let PurchaseOrderAuthorize = this.state.PurchaseOrderAuthorize;
+    PurchaseOrderAuthorize.POID = this.state.PO.POID;
     // PurchaseOrderAuthorize.AuthoriseDate = moment(today).format("MM/DD/YYYY");
-    PurchaseOrderAuthorize.Type=1;
-    PurchaseOrderAuthorize.UserID=parseInt(getCookie(COOKIE.USERID));
+    PurchaseOrderAuthorize.Type = 1;
+    PurchaseOrderAuthorize.UserID = parseInt(getCookie(COOKIE.USERID));
 
 
-    if (PurchaseOrderAuthorize.Details.trim() === "") { 
-      this.setState({ErrorMessageProps:"Invalid Input",ProgressLoader:true});
+    if (PurchaseOrderAuthorize.Details.trim() === "") {
+      this.setState({ ErrorMessageProps: "Invalid Input", ProgressLoader: true });
     } else {
       let reqData = {
         ValidUser: ValidUser,
@@ -2035,9 +2037,9 @@ class poactivity extends React.Component {
             let stepper = this.state.stepper;
             stepper.activeStep = 0;
 
-            PurchaseOrderAuthorize.Details="";
+            PurchaseOrderAuthorize.Details = "";
             this.setState({
-              PurchaseOrderAuthorize:PurchaseOrderAuthorize,
+              PurchaseOrderAuthorize: PurchaseOrderAuthorize,
               PO: PO,
               stepper: stepper,
               RADialogStatus: false,
@@ -2073,17 +2075,17 @@ class poactivity extends React.Component {
         });
     }
 
-   }
+  }
 
- 
+
 
   render() {
 
     //to disable screen if Status is not Open
     let disableEvents = false;
-    disableEvents = CF.toInt(this.state.PO.Status)>1?true:false;
-    const disabledStyle = { 
-      "pointer-events": disableEvents ? "none" : "unset" 
+    disableEvents = CF.toInt(this.state.PO.Status) > 1 ? true : false;
+    const disabledStyle = {
+      "pointer-events": disableEvents ? "none" : "unset"
     };
 
 
@@ -2133,7 +2135,7 @@ class poactivity extends React.Component {
     };
 
     const AddNew = (e) => {
-      this.setState({ ProgressLoader: false,ErrorMessageProps:"" });
+      this.setState({ ProgressLoader: false, ErrorMessageProps: "" });
       console.log("Adding new");
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
@@ -2143,16 +2145,16 @@ class poactivity extends React.Component {
       };
 
       let PurchaseOrder = this.state.PO;
-        //----------Added for sending Chnaged Name and adress data
-        PurchaseOrder.Name = this.state.Name;
-        PurchaseOrder.Address = this.state.Address;
-        PurchaseOrder.Address2 = this.state.Address2;
-        PurchaseOrder.Address3 = this.state.Address3;
-        PurchaseOrder.City = this.state.City;
-        PurchaseOrder.PostCode = this.state.PostCode;
-        PurchaseOrder.CountryID = this.state.CountryID;
-        PurchaseOrder.StateID = this.state.StateID;
-        //--------------------------------------------------
+      //----------Added for sending Chnaged Name and adress data
+      PurchaseOrder.Name = this.state.Name;
+      PurchaseOrder.Address = this.state.Address;
+      PurchaseOrder.Address2 = this.state.Address2;
+      PurchaseOrder.Address3 = this.state.Address3;
+      PurchaseOrder.City = this.state.City;
+      PurchaseOrder.PostCode = this.state.PostCode;
+      PurchaseOrder.CountryID = this.state.CountryID;
+      PurchaseOrder.StateID = this.state.StateID;
+      //--------------------------------------------------
       PurchaseOrder.UserID = CF.toInt(getCookie(COOKIE.USERID));
       PurchaseOrder.BranchID = this.state.BranchID;
       PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("MM/DD/YYYY");
@@ -2200,20 +2202,21 @@ class poactivity extends React.Component {
                 this.setState({ ErrorPrompt: true, ProgressLoader: true });
               });
           } else {
-            this.setState({ 
-              ErrorMessageProps:"No. Series Not defined.",
-              ErrorPrompt: true, 
-              ProgressLoader: true });
+            this.setState({
+              ErrorMessageProps: "No. Series Not defined.",
+              ErrorPrompt: true,
+              ProgressLoader: true
+            });
           }
         })
         .catch((error) => {
           console.log("No series Error");
-          this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps:"No. Series Not defined.", });
+          this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not defined.", });
         });
     };
 
     const updatePO = (e) => {
-      this.setState({ ProgressLoader: false,ErrorMessageProps:"" });
+      this.setState({ ProgressLoader: false, ErrorMessageProps: "" });
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -2267,8 +2270,8 @@ class poactivity extends React.Component {
           "SupplyStateID": this.state.StateID,
           "GSTPercentage": PurchaseOrderLine[i].GSTPercentage,
           "DValueID": PurchaseOrderLine[i].DValueID,
-          "IsQuality": this.state.Branch.IsQuality===false?false:PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
-          "IsLot": this.state.Branch.IsLot===false?false:PurchaseOrderLine[i].IsLot//if branch is false- send false OR if branch is true - send actual value
+          "IsQuality": this.state.Branch.IsQuality === false ? false : PurchaseOrderLine[i].IsQuality,//if branch is false- send false OR if branch is true - send actual value
+          "IsLot": this.state.Branch.IsLot === false ? false : PurchaseOrderLine[i].IsLot//if branch is false- send false OR if branch is true - send actual value
         };
         newPOL.push(o);
       }
@@ -2297,7 +2300,7 @@ class poactivity extends React.Component {
               PO.AmendmentDate = "";
             }
             this.setState({
-              PO:PO
+              PO: PO
             });
 
           }
@@ -2336,7 +2339,7 @@ class poactivity extends React.Component {
 
           {this.state.type === "add" ? (
             <Button
-            
+
               startIcon={APIURLS.buttonTitle.save.icon}
               className="action-btns"
               onClick={(e) => AddNew(e)}
@@ -2358,7 +2361,7 @@ class poactivity extends React.Component {
             </Button>
           ) : null}
 
-        
+
 
           <Button
             startIcon={APIURLS.buttonTitle.view.icon}
@@ -2368,30 +2371,30 @@ class poactivity extends React.Component {
             {APIURLS.buttonTitle.view.name}
           </Button>
 
-          {this.state.type === "edit"?(
+          {this.state.type === "edit" ? (
             <ReactToPrint
-            trigger={() => {
-              // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
-              // to the root node of the returned component as it will be overwritten.
-              return (
-                <Button
-                  startIcon={APIURLS.buttonTitle.print.icon}
-                  className="action-btns"
-                >
-                  {APIURLS.buttonTitle.print.name}
-                </Button>
-              );
-            }}
-            content={() => this.componentRef}
-          />
-          ):null}
+              trigger={() => {
+                // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+                // to the root node of the returned component as it will be overwritten.
+                return (
+                  <Button
+                    startIcon={APIURLS.buttonTitle.print.icon}
+                    className="action-btns"
+                  >
+                    {APIURLS.buttonTitle.print.name}
+                  </Button>
+                );
+              }}
+              content={() => this.componentRef}
+            />
+          ) : null}
 
 
           {this.state.PO.Status === 1 ? (
             <Button
               startIcon={APIURLS.buttonTitle.release.icon}
               className="action-btns"
-              onClick={(e) => this.setState({RADialogStatus:true})}
+              onClick={(e) => this.setState({ RADialogStatus: true })}
             >
               {APIURLS.buttonTitle.release.name}
             </Button>
@@ -2402,7 +2405,7 @@ class poactivity extends React.Component {
               startIcon={APIURLS.buttonTitle.reopen.icon}
               className="action-btns"
               // onClick={(e) => this.reopenPO(e)}
-              onClick={(e) => this.setState({RADialogStatus:true})}
+              onClick={(e) => this.setState({ RADialogStatus: true })}
             >
               {APIURLS.buttonTitle.reopen.name}
             </Button>
@@ -2431,7 +2434,7 @@ class poactivity extends React.Component {
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={1} lg={1}>
                 <IconButton
-                  aria-label="ArrowBackIcon"                
+                  aria-label="ArrowBackIcon"
                 >
                   <ArrowBackIcon onClick={(e) => this.handleClose()} />
                 </IconButton>
@@ -2493,7 +2496,7 @@ class poactivity extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
 
-      
+
 
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
@@ -2510,52 +2513,52 @@ class poactivity extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
-        <div style={{ display: "none" }}>       
-          {this.state.PO.IsImport===false?(            
+        <div style={{ display: "none" }}>
+          {this.state.PO.IsImport === false ? (
             <PrintLocalPo podata={
               {
-                Branch:this.state.Branch,
-                PO:this.state.PO,
-                PurchaseOrderLine:this.state.PurchaseOrderLine,
-                UOMList:this.state.UOMList,
-                CurrencyList:this.state.CurrencyList,
-                Supplier:{
-                  Name:this.getSupplierName(),
-                  Address:this.state.Address,
-                  Address2:this.state.Address2,
-                  Address3:this.state.Address3,
-                  City:this.state.City,
-                  PostCode:this.state.PostCode,
-                  CountryID:this.state.CountryID,
-                  StateID:this.state.StateID,
-                  CountryList:this.state.CountryList,
-                  StateList:this.state.StateList
-                  }
+                Branch: this.state.Branch,
+                PO: this.state.PO,
+                PurchaseOrderLine: this.state.PurchaseOrderLine,
+                UOMList: this.state.UOMList,
+                CurrencyList: this.state.CurrencyList,
+                Supplier: {
+                  Name: this.getSupplierName(),
+                  Address: this.state.Address,
+                  Address2: this.state.Address2,
+                  Address3: this.state.Address3,
+                  City: this.state.City,
+                  PostCode: this.state.PostCode,
+                  CountryID: this.state.CountryID,
+                  StateID: this.state.StateID,
+                  CountryList: this.state.CountryList,
+                  StateList: this.state.StateList
+                }
               }
-            }  ref={el => (this.componentRef = el)} />
-          ):(
+            } ref={el => (this.componentRef = el)} />
+          ) : (
             <PrintImportPo podata={
               {
-                Branch:this.state.Branch,
-                PO:this.state.PO,
-                PurchaseOrderLine:this.state.PurchaseOrderLine,
-                UOMList:this.state.UOMList,
-                CurrencyList:this.state.CurrencyList,
-                Supplier:{
-                  Name:this.getSupplierName(),
-                  Address:this.state.Address,
-                  Address2:this.state.Address2,
-                  Address3:this.state.Address3,
-                  City:this.state.City,
-                  PostCode:this.state.PostCode,
-                  CountryID:this.state.CountryID,
-                  StateID:this.state.StateID,
-                  CountryList:this.state.CountryList,
-                  StateList:this.state.StateList
-                  }
+                Branch: this.state.Branch,
+                PO: this.state.PO,
+                PurchaseOrderLine: this.state.PurchaseOrderLine,
+                UOMList: this.state.UOMList,
+                CurrencyList: this.state.CurrencyList,
+                Supplier: {
+                  Name: this.getSupplierName(),
+                  Address: this.state.Address,
+                  Address2: this.state.Address2,
+                  Address3: this.state.Address3,
+                  City: this.state.City,
+                  PostCode: this.state.PostCode,
+                  CountryID: this.state.CountryID,
+                  StateID: this.state.StateID,
+                  CountryList: this.state.CountryList,
+                  StateList: this.state.StateList
+                }
               }
-            }  ref={el => (this.componentRef = el)} />
-          )}          
+            } ref={el => (this.componentRef = el)} />
+          )}
         </div>
 
         <Fragment>
@@ -2573,8 +2576,8 @@ class poactivity extends React.Component {
                       return (
                         <Step key={label} {...stepProps}>
                           <StepLabel {...labelProps}>
-                            {(index === 2 ) ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
-                             
+                            {(index === 2) ? this.getMRNStatus(this.state.stepper.MRNSTATUS) : null} {label}
+
                           </StepLabel>
                         </Step>
                       );
@@ -2590,11 +2593,12 @@ class poactivity extends React.Component {
 
         </Fragment>
 
-        <Grid container spacing={0} style={disabledStyle} >
+        <Grid container spacing={0}  >
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Grid className="table-adjust" container spacing={0}>
               <Grid item xs={12} sm={12} md={8} lg={8}>
                 <Accordion
+                  style={disabledStyle}
                   key="a-1"
                   expanded={this.state.accordion1}
                   className="accordionD"
@@ -2613,9 +2617,9 @@ class poactivity extends React.Component {
                     >General</Typography>
                   </AccordionSummary>
                   <AccordionDetails
-                    key="accordion1" className="AccordionDetails-css" 
-                     
-                    >
+                    key="accordion1" className="AccordionDetails-css"
+
+                  >
                     <Fragment>
                       <Grid container spacing={0} >
                         <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -2663,7 +2667,7 @@ class poactivity extends React.Component {
                                     disabled={true}
                                   />
 
-                                 
+
 
                                   <SIB
                                     id="Address"
@@ -2939,6 +2943,7 @@ class poactivity extends React.Component {
                         <Grid xs={12} sm={12} md={12} lg={12}>
                           <div style={{ marginRight: 20 }}>
                             <Table
+                              style={disabledStyle}
                               stickyHeader
                               size="small"
                               className=""
@@ -2981,21 +2986,21 @@ class poactivity extends React.Component {
                                   }
 
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Dim.Value </TableCell>
-                                  
-                                  {this.state.Branch.IsQuality===true?(
-                                     <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
-                                  ):null}
-                                 
 
-                                  {this.state.Branch.IsLot===true?(
+                                  {this.state.Branch.IsQuality === true ? (
+                                    <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
+                                  ) : null}
+
+
+                                  {this.state.Branch.IsLot === true ? (
                                     <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
-                                  ):null}
-                                  
+                                  ) : null}
+
                                 </TableRow>
                               </TableHead>
                               <TableBody className="tableBody">
 
-                             
+
 
                                 {console.log("this.state.PurchaseOrderLine > ", this.state.PurchaseOrderLine)}
                                 {this.state.PurchaseOrderLine.length > 0 ? (
@@ -3067,7 +3072,7 @@ class poactivity extends React.Component {
                                         </TableCell>
                                         <TableCell align="left">
                                           <SCADI
-                                            
+
                                             style={{ width: '100%' }}
                                             id={"TypeID_" + i}
                                             onChange={(e, value) => this.updateLineDetail(i, "TypeID", value)}
@@ -3219,7 +3224,7 @@ class poactivity extends React.Component {
                                         ) : null}
 
 
-                                       
+
 
                                         {
                                           this.state.Branch.IsGST === true ? (
@@ -3291,8 +3296,8 @@ class poactivity extends React.Component {
                                             />
                                           </TableCell>
                                         ) : null}
-                                       
-                                       
+
+
 
                                       </TableRow>
                                     ))}
@@ -3320,6 +3325,7 @@ class poactivity extends React.Component {
                 </Accordion>
 
                 <Accordion
+                  style={disabledStyle}
                   key="a-3"
                   expanded={this.state.accordion3}
                   className="accordionD"
@@ -3492,9 +3498,10 @@ class poactivity extends React.Component {
                   </AccordionDetails>
                 </Accordion>
 
-                
+
 
                 <Accordion
+                  style={disabledStyle}
                   key="a-4"
                   expanded={this.state.accordion4}
                   className="accordionD"
@@ -3597,6 +3604,7 @@ class poactivity extends React.Component {
 
 
                 <Accordion
+                  style={disabledStyle}
                   key="a-5"
                   expanded={this.state.accordion5}
                   className="accordionD"
@@ -3892,7 +3900,7 @@ class poactivity extends React.Component {
 
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
-                
+
                 <SIB
                   isMandatory={true}
                   id="Details"
@@ -3900,32 +3908,32 @@ class poactivity extends React.Component {
                   variant="outlined"
                   size="small"
                   value={this.state.PurchaseOrderAuthorize.Details}
-                  onChange={(e)=>this.updateAuthorization("Details",e)}
+                  onChange={(e) => this.updateAuthorization("Details", e)}
                 />
 
               </Grid>
             </Grid>
-           
+
           </DialogContent>
           <DialogActions className="dialog-area">
-            <Button className="action-btns" onClick={() => this.setState({RADialogStatus:false})}>Close</Button>
+            <Button className="action-btns" onClick={() => this.setState({ RADialogStatus: false })}>Close</Button>
 
             {this.state.PO.Status === 1 ? (
-              <Button 
-              startIcon={APIURLS.buttonTitle.release.icon} 
-              className="action-btns" onClick={() => this.releasePO()} >
-              Release
+              <Button
+                startIcon={APIURLS.buttonTitle.release.icon}
+                className="action-btns" onClick={() => this.releasePO()} >
+                Release
               </Button>
             ) : null}
 
             {this.state.PO.Status === 2 ? (
               <Button
-              startIcon={APIURLS.buttonTitle.reopen.icon} 
-              className="action-btns" onClick={() => this.reopenPO()} >
+                startIcon={APIURLS.buttonTitle.reopen.icon}
+                className="action-btns" onClick={() => this.reopenPO()} >
                 Reopen
               </Button>
             ) : null}
-            
+
           </DialogActions>
         </Dialog>
 

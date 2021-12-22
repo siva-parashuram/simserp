@@ -16,10 +16,14 @@ export const SETPARAMS=(initialParams,keyArray)=>{
   return params; 
 }
 
-export const GET_URL_PARAMS=()=>{
-  var url = new URL(window.location.href);  
-  var bid = url.searchParams.get("bid");
-  let initialParams=localStorage.getItem('_initialParams_'+bid);  
+export const GET_URL_PARAMS = () => {
+  let initialParams = "";
+  try {
+    var url = new URL(window.location.href);
+    var bid = url.searchParams.get("bid");
+    initialParams = localStorage.getItem('_initialParams_' + bid);
+  } catch (e) { }
+
   return initialParams.toString();
 }
 

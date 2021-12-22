@@ -16,16 +16,7 @@ import Tableskeleton from "../../compo/tableskeleton";
 import BackdropLoader from "../../compo/backdrop";
 import MasterDataGrid from "../../compo/masterdatagrid";
 
-// document.addEventListener('keydown', function (e) {
-//     switch (e.keyCode) {
-//         case 78:
-//             document.getElementById("add_New").click();
-//             break;
-//         default:
-//             console.log("e > ", e);
-//             break;
-//     }
-// });
+ 
 
 
 class poMaster extends React.Component {
@@ -49,6 +40,7 @@ class poMaster extends React.Component {
         }
     }
     componentDidMount() {
+        let params=CF.GET_URL_PARAMS();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
@@ -60,7 +52,7 @@ class poMaster extends React.Component {
             compName +
             "&branchName=" +
             branchName;
-        this.setState({ urlparams: urlparams, BranchID: branchId, editBtnDisable: false }, () => {
+        this.setState({ urlparams: params, BranchID: branchId, editBtnDisable: false }, () => {
             this.getPOList();
         });
     }

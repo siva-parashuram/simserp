@@ -62,8 +62,8 @@ import SCI from "../../compo/customtextboxinput";
 import SCSI from "../../compo/customswitchinput";
 
 
- 
- 
+
+
 
 
 
@@ -76,7 +76,7 @@ class mrnactivity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      RADialogStatus:false,
+      RADialogStatus: false,
       Dialog: {
         DialogTitle: "",
         DialogStatus: false,
@@ -94,7 +94,7 @@ class mrnactivity extends React.Component {
       ProgressLoader: false,
       ErrorPrompt: false,
       SuccessPrompt: false,
-      PostBtnStatus:false,
+      PostBtnStatus: false,
       DisableCreatebtn: true,
       DisableUpdatebtn: false,
       SnackbarStatus: false,
@@ -255,8 +255,8 @@ class mrnactivity extends React.Component {
         isDataProper: false,
       },
       MRN: {
-        MRNID:0,
-        No:"",
+        MRNID: 0,
+        No: "",
         MRNDate: today,
         SuplInvNo: "",
         SuplInvDate: today,
@@ -274,18 +274,18 @@ class mrnactivity extends React.Component {
         BLOrAWBNo: "",
         BLOrAWBDate: null,
         PortID: 0,
-        
+
         GateEntryNo: "",
         GateEntryDate: null,
       },
       ContainerInfo: [],
       SelectedLotItem: {},
-      MRNAuthorize:{
-        ID:0,       
-        Type:"", 
-        Details:"",
-        UserID:"",
-        MRNID:""
+      MRNAuthorize: {
+        ID: 0,
+        Type: "",
+        Details: "",
+        UserID: "",
+        MRNID: ""
       }
     };
   }
@@ -296,7 +296,9 @@ class mrnactivity extends React.Component {
         switch (e.keyCode) {
           case 13:
             console.log("SHIFT+ENTER > ");
-            this.createNewBlankLine();
+            if (CF.toInt(this.state.MRN.Status) > 0) { } else {
+              this.createNewBlankLine();
+            }
             break;
           default:
             break;
@@ -358,14 +360,14 @@ class mrnactivity extends React.Component {
   }
 
   componentDidMount() {
-    let params=CF.GET_URL_PARAMS();//constant branch parameters
+    let params = CF.GET_URL_PARAMS();//constant branch parameters
     document.addEventListener('keydown', this.onKeyDownHandler);
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
     let type = url.searchParams.get("type");
-    let POID=url.searchParams.get("editPOID");
+    let POID = url.searchParams.get("editPOID");
     let MRNID = type === "edit" ? url.searchParams.get("editMRNID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
@@ -381,7 +383,7 @@ class mrnactivity extends React.Component {
     let MRN = this.state.MRN;
     MRN.MRNID = CF.toInt(MRNID);
     if (type === "edit") {
-     
+
       this.setState({
         branchName: branchName,
         MRN: MRN,
@@ -421,27 +423,27 @@ class mrnactivity extends React.Component {
           let ResonsePO = response.data;
           let PO = ResonsePO;
 
-          PO.FCValue = PO.FCValue; 
-          PO.BaseValue = PO.BaseValue; 
+          PO.FCValue = PO.FCValue;
+          PO.BaseValue = PO.BaseValue;
 
-          let ContainerInfo=[];
-          let responseCI=ResonsePO.MRNContainerInfo;
+          let ContainerInfo = [];
+          let responseCI = ResonsePO.MRNContainerInfo;
 
-          if(responseCI){
-            for(let i=0;i<responseCI.length;i++){
-              let obj={
-                ID:responseCI[i].ID,
-                LNo:responseCI[i].LNo,
-                ContainerNo:responseCI[i].ContainerNo,
-                ContainerType:parseInt(responseCI[i].Type),
-                Remarks:responseCI[i].Remarks
+          if (responseCI) {
+            for (let i = 0; i < responseCI.length; i++) {
+              let obj = {
+                ID: responseCI[i].ID,
+                LNo: responseCI[i].LNo,
+                ContainerNo: responseCI[i].ContainerNo,
+                ContainerType: parseInt(responseCI[i].Type),
+                Remarks: responseCI[i].Remarks
               };
               ContainerInfo.push(obj);
             }
           }
-         
 
-          
+
+
 
           let PurchaseOrderLine = ResonsePO.MRNLineList;
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
@@ -514,30 +516,30 @@ class mrnactivity extends React.Component {
             };
             newPOL.push(EL);
           }
-              console.log("getMRNDetails ----------> PO > ",PO);
+          console.log("getMRNDetails ----------> PO > ", PO);
           // this.state.PO.No
           //----------------------------Setting MRN Fields--------------------
-              let MRN=this.state.MRN;
-              MRN.MRNID=PO.MRNID;
-              MRN.No=PO.No;
-              MRN.Status=PO.Status;
-              MRN.SuplInvNo=PO.SuplInvNo;
-              MRN.EWayBillNo=PO.EWayBillNo;
-              MRN.DutyFogone=parseFloat(PO.DutyFogone);
-              MRN.DutyPaid=parseFloat(PO.DutyPaid);
-              MRN.GSTOrVATPaid=parseFloat(PO.GSTOrVATPaid);
-              MRN.AssableValue=parseFloat(PO.AssableValue);
-              MRN.BillOfEntryNo=PO.BillOfEntryNo;
-              MRN.BillOfEntryValue=parseFloat(PO.BillOfEntryValue);
-              MRN.BLOrAWBNo=PO.BLOrAWBNo;
-              MRN.PortID=CF.toInt(PO.PortID);
-              MRN.GateEntryNo=PO.GateEntryNo;
-              MRN.PayToSuplID=CF.toInt(PO.PayToSuplID);
-              MRN.GateEntryDate =moment(PO.GateEntryDate).format("YYYY-MM-DD");
-              MRN.MRNDate =moment(PO.MRNDate).format("YYYY-MM-DD");
-              MRN.SuplInvDate =moment(PO.SuplInvDate).format("YYYY-MM-DD");
-              MRN.BillOfEntryDate =moment(PO.BillOfEntryDate).format("YYYY-MM-DD");
-              MRN.BLOrAWBDate =moment(PO.BLOrAWBDate).format("YYYY-MM-DD");
+          let MRN = this.state.MRN;
+          MRN.MRNID = PO.MRNID;
+          MRN.No = PO.No;
+          MRN.Status = PO.Status;
+          MRN.SuplInvNo = PO.SuplInvNo;
+          MRN.EWayBillNo = PO.EWayBillNo;
+          MRN.DutyFogone = parseFloat(PO.DutyFogone);
+          MRN.DutyPaid = parseFloat(PO.DutyPaid);
+          MRN.GSTOrVATPaid = parseFloat(PO.GSTOrVATPaid);
+          MRN.AssableValue = parseFloat(PO.AssableValue);
+          MRN.BillOfEntryNo = PO.BillOfEntryNo;
+          MRN.BillOfEntryValue = parseFloat(PO.BillOfEntryValue);
+          MRN.BLOrAWBNo = PO.BLOrAWBNo;
+          MRN.PortID = CF.toInt(PO.PortID);
+          MRN.GateEntryNo = PO.GateEntryNo;
+          MRN.PayToSuplID = CF.toInt(PO.PayToSuplID);
+          MRN.GateEntryDate = moment(PO.GateEntryDate).format("YYYY-MM-DD");
+          MRN.MRNDate = moment(PO.MRNDate).format("YYYY-MM-DD");
+          MRN.SuplInvDate = moment(PO.SuplInvDate).format("YYYY-MM-DD");
+          MRN.BillOfEntryDate = moment(PO.BillOfEntryDate).format("YYYY-MM-DD");
+          MRN.BLOrAWBDate = moment(PO.BLOrAWBDate).format("YYYY-MM-DD");
           //------------------------------------------------------------------
 
           if (CF.toInt(MRN.Status) > 0) {
@@ -552,10 +554,10 @@ class mrnactivity extends React.Component {
           }
 
           this.setState({
-            MRN:MRN,
+            MRN: MRN,
             PO: PO,
             PurchaseOrderLine: newPOL,
-            ContainerInfo:ContainerInfo,
+            ContainerInfo: ContainerInfo,
             Name: PO.Name,
             Address: PO.Address,
             Address2: PO.Address2,
@@ -566,7 +568,7 @@ class mrnactivity extends React.Component {
             StateID: PO.StateID,
             ProgressLoader: true
           }, () => {
-             this.calculateInvoiceDetails();
+            this.calculateInvoiceDetails();
             this.calculateDueDate();
             this.presetSetSupplierDropdown(PO);
             this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID), "IG"); //initialIgnore to not set address to stateID
@@ -712,7 +714,7 @@ class mrnactivity extends React.Component {
           let FixedAsset = data.FixedAsset;
           let DimensionsList = data.DimensionValue;
           let IncoTermList = data.IncoTerms;
-          let PortList=data.Port;
+          let PortList = data.Port;
 
           let PO = this.state.PO;
 
@@ -761,7 +763,7 @@ class mrnactivity extends React.Component {
             FixedAsset: FixedAsset,
             DimensionsList: DimensionsList,
             IncoTermList: IncoTermList,
-            PortList:PortList
+            PortList: PortList
             // ProgressLoader: this.state.type === "edit" ? false : true
           }, () => {
 
@@ -1157,7 +1159,7 @@ class mrnactivity extends React.Component {
   }
 
   updateFormValue = (param, e) => {
-    this.setState({PostBtnStatus:true});
+    this.setState({ PostBtnStatus: true });
     let PO = this.state.PO;
     let MRN = this.state.MRN;
     switch (param) {
@@ -1239,7 +1241,7 @@ class mrnactivity extends React.Component {
         MRN[param] = e.target.value;
         this.setState({ MRN: MRN });
         break;
-      
+
       case "BillOfEntryNo":
         MRN[param] = e.target.value;
         this.setState({ MRN: MRN });
@@ -1280,7 +1282,7 @@ class mrnactivity extends React.Component {
         MRN[param] = parseInt(e.target.value);
         this.setState({ MRN: MRN });
         break;
-       
+
       //-----------------------------------------    
       case "DispachDate":
         PO.DispachDate = moment(e.target.value).format("YYYY-MM-DD");
@@ -1404,7 +1406,7 @@ class mrnactivity extends React.Component {
   }
 
   deleteSelectedItem = () => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     this.handleDialogClose();
     let currentDeleteItemLine = this.state.currentDeleteItemLine;
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
@@ -1469,7 +1471,7 @@ class mrnactivity extends React.Component {
   }
 
   fetchPrice = (Quantity, o) => {
-     
+
     let UnitPrice = 0.00;
     try {
       let UOMID_i = o.UOMID;
@@ -1498,8 +1500,8 @@ class mrnactivity extends React.Component {
   }
 
   updateLineDetail = (i, key, e) => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
-    
+    this.setState({ PostBtnStatus: true });//disabling post for saving
+
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
     let o = PurchaseOrderLine[i];
     switch (key) {
@@ -1670,7 +1672,7 @@ class mrnactivity extends React.Component {
         break;
       case "Quantity":
         let price = 0;
-        if(e.target.value || e.target.value!=""){
+        if (e.target.value || e.target.value != "") {
           price = this.fetchPrice(e.target.value, o);
           console.log("IN Quantity > price slab value > ", price);
           if (price) {
@@ -1681,18 +1683,18 @@ class mrnactivity extends React.Component {
           o[key] = e.target.value;
           PurchaseOrderLine[i] = o;
           this.setLineParams(PurchaseOrderLine);
-        }else{
+        } else {
           o.Price = 0;
           o[key] = 0;
           this.setLineParams(PurchaseOrderLine);
         }
-       
+
 
 
 
         break;
       case "MRNQuantity":
-        if(e.target.value || e.target.value!=""){
+        if (e.target.value || e.target.value != "") {
           let Quantity = parseFloat(o.Quantity);
           let TolerancePercentage = parseFloat(o.TolerancePercentage);
           let maxQuantity = parseFloat(Quantity) + (parseFloat(Quantity) * parseFloat(TolerancePercentage));
@@ -1707,9 +1709,9 @@ class mrnactivity extends React.Component {
               PurchaseOrderLine[i] = o;
               this.setLineParams(PurchaseOrderLine);
             }
-  
+
           }
-        }else{
+        } else {
           o[key] = 0;
           PurchaseOrderLine[i] = o;
           this.setLineParams(PurchaseOrderLine);
@@ -1717,24 +1719,24 @@ class mrnactivity extends React.Component {
 
         break;
       case "Price":
-        if(e.target.value || e.target.value!=""){
+        if (e.target.value || e.target.value != "") {
           if (isNaN(e.target.value)) {
             this.setState({ ErrorMessageProps: "Price should be currency", ErrorPrompt: true });
             o[key] = 0;
             PurchaseOrderLine[i] = o;
             this.setLineParams(PurchaseOrderLine);
-             
+
           } else {
             o[key] = parseFloat(e.target.value);
             PurchaseOrderLine[i] = o;
             this.setLineParams(PurchaseOrderLine);
           }
-        }else{
+        } else {
           o[key] = 0;
-            PurchaseOrderLine[i] = o;
-            this.setLineParams(PurchaseOrderLine);
+          PurchaseOrderLine[i] = o;
+          this.setLineParams(PurchaseOrderLine);
         }
-        
+
 
         break;
       case "LineDiscPercentage":
@@ -2002,8 +2004,8 @@ class mrnactivity extends React.Component {
         BaseValue = 0.00;
       }
 
-        PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
-        PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
+      PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
+      PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
     } catch (e) { }
 
     this.setState({
@@ -2062,7 +2064,7 @@ class mrnactivity extends React.Component {
   //------------------------------------------LOT Details--------------------------------------------------------
 
   updateLotDetail = (key, e, index) => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     let SelectedLotItem = this.state.SelectedLotItem;
     let LotDetails = SelectedLotItem.LotDetails;
     let newD = [];
@@ -2129,7 +2131,7 @@ class mrnactivity extends React.Component {
   }
 
   importLotFromExcel = (e) => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     let SelectedLotItem = this.state.SelectedLotItem;
     if (parseFloat(SelectedLotItem.MRNQuantity) > 0) {
       if (e.target.files[0]) {
@@ -2154,13 +2156,13 @@ class mrnactivity extends React.Component {
             if (processNext === true) {
               for (let i = 1; i < rows.length; i++) {
                 let itemRow = {
-                  LotID: 0,                  
+                  LotID: 0,
                   LNo: i,
-                  TypeID:CF.toInt(this.state.SelectedLotItem.TypeID),
-                 
+                  TypeID: CF.toInt(this.state.SelectedLotItem.TypeID),
+
                   LotNo: rows[i][0],
                   Quantity: rows[i][1],
-                  
+
                   PackingUOM: rows[i][2],
                   Location: rows[i][3],
                 };
@@ -2186,7 +2188,7 @@ class mrnactivity extends React.Component {
   }
 
   clearLotDetails = () => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     let SelectedLotItem = this.state.SelectedLotItem;
     if (SelectedLotItem.LotDetails) {
       SelectedLotItem.LotDetails = [];
@@ -2196,25 +2198,25 @@ class mrnactivity extends React.Component {
 
 
   AddLotLine = (item) => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     console.log("AddLotLine > item > ", item);
     let lotobj = {
       LotID: 0,
-      TypeID:item.TypeID,
+      TypeID: item.TypeID,
       LNo: 0,
       LotNo: "",
       Quantity: 0,
       PackingUOM: "",
       Location: ""
     };
-    let LD = item.LotDetails?item.LotDetails:[];
+    let LD = item.LotDetails ? item.LotDetails : [];
     LD.push(lotobj);
     item.LotDetails = LD;
     this.setState({ SelectedLotItem: item });
   }
 
   LotItemDelete = (index, item) => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     let SelectedLotItem = this.state.SelectedLotItem;
     let LotDetails = SelectedLotItem.LotDetails;
     let newD = [];
@@ -2243,7 +2245,7 @@ class mrnactivity extends React.Component {
   }
 
   SaveLotDetailsOfLine = () => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     let SelectedLotItem = this.state.SelectedLotItem;
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
     let totalLotQuantity = this.getTotalLotQuantity();
@@ -2266,16 +2268,16 @@ class mrnactivity extends React.Component {
 
   //--------------------------------------------------------------------------------------------------------
 
-  updateContainerDetail=(key,e,index)=>{
-    this.setState({PostBtnStatus:true});//disabling post for saving
-    let ContainerInfo=this.state.ContainerInfo;
-    let newD=[];
+  updateContainerDetail = (key, e, index) => {
+    this.setState({ PostBtnStatus: true });//disabling post for saving
+    let ContainerInfo = this.state.ContainerInfo;
+    let newD = [];
     for (let i = 0; i < ContainerInfo.length; i++) {
       if (i === index) {
         let obj = ContainerInfo[i];
         obj[key] = e.target.value;
         newD.push(obj);
-      }else {
+      } else {
         newD.push(ContainerInfo[i]);
       }
     }
@@ -2283,7 +2285,7 @@ class mrnactivity extends React.Component {
   }
 
   clearContainerDetails = () => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     let ContainerInfo = this.state.ContainerInfo;
     if (ContainerInfo) {
       ContainerInfo = [];
@@ -2294,25 +2296,25 @@ class mrnactivity extends React.Component {
 
 
   AddContainerLine = (item) => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     console.log("AddLotLine > item > ", item);
     let contobj = {
       ID: 0,
       LNo: 0,
       ContainerType: "",
-      ContainerNo: "",    
+      ContainerNo: "",
       Remarks: ""
     };
-    let List = item?item:[];
+    let List = item ? item : [];
     List.push(contobj);
-     
+
     this.setState({ ContainerInfo: List });
   }
 
   ContainerItemDelete = (index, item) => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     let ContainerInfo = this.state.ContainerInfo;
-    
+
     let newD = [];
     for (let i = 0; i < ContainerInfo.length; i++) {
       if (i === index) { } else {
@@ -2322,9 +2324,9 @@ class mrnactivity extends React.Component {
     this.setState({ ContainerInfo: newD });
   }
 
-  
+
   importContainerFromExcel = (e) => {
-    this.setState({PostBtnStatus:true});//disabling post for saving
+    this.setState({ PostBtnStatus: true });//disabling post for saving
     if (e.target.files[0]) {
       let file = e.target.files[0];
       let chk = this.ValidateLotFile(file.name);
@@ -2336,7 +2338,7 @@ class mrnactivity extends React.Component {
             let itemRow = {
               ID: 0,
               LNo: i,
-               
+
               ContainerType: rows[i][0],
               ContainerNo: rows[i][1],
               Remarks: rows[i][2]
@@ -2379,58 +2381,58 @@ class mrnactivity extends React.Component {
     }
   }
 
-  postMRN=()=>{
-   this.setState({ProgressLoader:false});
+  postMRN = () => {
+    this.setState({ ProgressLoader: false });
 
-   let ValidUser = APIURLS.ValidUser;
-   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-   ValidUser.Token = getCookie(COOKIE.TOKEN);
-   const headers = {
-     "Content-Type": "application/json",
-   };
-
- 
-
-   let  MRNAuthorize=this.state.MRNAuthorize;
-  
-
-   let MRNPost={
-    ID:0,       
-    MRNID:parseInt(this.state.MRN.MRNID), 
-    Details:MRNAuthorize.Details,
-    UserID:parseInt(getCookie(COOKIE.USERID))
-  };
-
-   if (MRNAuthorize.Details.trim() === "") { 
-    this.setState({ErrorMessageProps:"Invalid Input",ProgressLoader:true});
-  }else{
-    let reqData = {
-      ValidUser: ValidUser,
-      PostedDocument: MRNPost
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
     };
 
 
-    console.log("reqData > ",reqData);
-    
-    let Url = APIURLS.APIURL.MRN_Post;
-    axios
-    .post(Url, reqData, { headers })
-    .then((response) => {
-      if (response.status === 201 || response.status === 200) {
-        this.setState({ SuccessPrompt: true, ProgressLoader: true}); 
-        let editUrl =
-        URLS.URLS.mrn +
-        this.state.urlparams ;
-        this.openPage(editUrl);        
-      }else{
-        this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Posting Server Error", });
-      }
 
-    })
-    .catch((error) => {
-      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Network Error", ProgressLoader: true });
-    });
-  }
+    let MRNAuthorize = this.state.MRNAuthorize;
+
+
+    let MRNPost = {
+      ID: 0,
+      MRNID: parseInt(this.state.MRN.MRNID),
+      Details: MRNAuthorize.Details,
+      UserID: parseInt(getCookie(COOKIE.USERID))
+    };
+
+    if (MRNAuthorize.Details.trim() === "") {
+      this.setState({ ErrorMessageProps: "Invalid Input", ProgressLoader: true });
+    } else {
+      let reqData = {
+        ValidUser: ValidUser,
+        PostedDocument: MRNPost
+      };
+
+
+      console.log("reqData > ", reqData);
+
+      let Url = APIURLS.APIURL.MRN_Post;
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          if (response.status === 201 || response.status === 200) {
+            this.setState({ SuccessPrompt: true, ProgressLoader: true });
+            let editUrl =
+              URLS.URLS.mrn +
+              this.state.urlparams;
+            this.openPage(editUrl);
+          } else {
+            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Posting Server Error", });
+          }
+
+        })
+        .catch((error) => {
+          this.setState({ ErrorPrompt: true, ErrorMessageProps: "Network Error", ProgressLoader: true });
+        });
+    }
 
   }
 
@@ -2512,16 +2514,16 @@ class mrnactivity extends React.Component {
       validateMRNData = this.validateMRNData();
 
       if (validateMRNData === true) {
-       
-         
+
+
         let MRNLineList = [];
-        let MRNLotDetailsList=[];
+        let MRNLotDetailsList = [];
         let PurchaseOrderLine = this.state.PurchaseOrderLine;
         for (let i = 0; i < PurchaseOrderLine.length; i++) {
 
           if (PurchaseOrderLine[i].isDataProper === true) {
 
-            
+
 
             let obj = {
               Type: PurchaseOrderLine[i].Type,
@@ -2543,25 +2545,25 @@ class mrnactivity extends React.Component {
               DValueID: PurchaseOrderLine[i].DValueID,
               IsQuality: PurchaseOrderLine[i].IsQuality,
               IsLot: PurchaseOrderLine[i].IsLot,
-              
+
             };
             MRNLineList.push(obj);
             if (PurchaseOrderLine[i].LotDetails) {
               let LotDetails = PurchaseOrderLine[i].LotDetails;
               for (let j = 0; j < LotDetails.length; j++) {
                 let obj = {
-                  LNo: j+1,
+                  LNo: j + 1,
                   Location: LotDetails[j].Location,
                   LotID: parseInt(LotDetails[j].LotID),
                   LotNo: LotDetails[j].LotNo,
-                  PackingUOM:parseInt(LotDetails[j].PackingUOM),
+                  PackingUOM: parseInt(LotDetails[j].PackingUOM),
                   Quantity: parseFloat(LotDetails[j].Quantity),
                   TypeID: parseInt(LotDetails[j].TypeID)
                 };
                 MRNLotDetailsList.push(obj);
               }
             }
-            
+
             // Array.prototype.push.apply(MRNLotDetailsList, LotDetails);
 
           } else {
@@ -2571,11 +2573,11 @@ class mrnactivity extends React.Component {
 
         }
 
-        console.log("MRNLotDetailsList > ",MRNLotDetailsList);
+        console.log("MRNLotDetailsList > ", MRNLotDetailsList);
 
         let ContainerInfo = this.state.ContainerInfo;
-        let newContainerInfo=[];
-        for(let i=0;i<ContainerInfo.length;i++){
+        let newContainerInfo = [];
+        for (let i = 0; i < ContainerInfo.length; i++) {
           let obj = {
             ID: ContainerInfo[i].ID,
             LNo: i + 1,
@@ -2635,19 +2637,19 @@ class mrnactivity extends React.Component {
           GSTOrVATPaid: this.state.MRN.GSTOrVATPaid,
           AssableValue: this.state.MRN.AssableValue,
           BillOfEntryNo: this.state.MRN.BillOfEntryNo,
-          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
+          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY") === "Invalid date" ? "" : moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
           BillOfEntryValue: this.state.MRN.BillOfEntryValue,
           BLOrAWBNo: this.state.MRN.BLOrAWBNo,
-          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
+          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY") === "Invalid date" ? "" : moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
           PortID: this.state.MRN.PortID,
-          
+
           GateEntryNo: this.state.MRN.GateEntryNo,
-          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY")==="Invalid date"?"":moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
+          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY") === "Invalid date" ? "" : moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
           Remarks: this.state.PO.Notes,
           UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
-  
-      
+
+
 
         let reqData = {
           ValidUser: ValidUser,
@@ -2663,8 +2665,8 @@ class mrnactivity extends React.Component {
           .then((response) => {
             console.log("response > ", response);
             if (response.status === 201 || response.status === 200) {
-              this.setState({ SuccessPrompt: true, ProgressLoader: true, PostBtnStatus:false}); 
-              
+              this.setState({ SuccessPrompt: true, ProgressLoader: true, PostBtnStatus: false });
+
             } else {
               this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "", });
             }
@@ -2675,7 +2677,7 @@ class mrnactivity extends React.Component {
           });
 
 
-        
+
       } else {
         this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
         return false;
@@ -2722,7 +2724,7 @@ class mrnactivity extends React.Component {
             <Button
               startIcon={APIURLS.buttonTitle.post.icon}
               className="action-btns"
-              onClick={(e) => this.setState({RADialogStatus:true})}
+              onClick={(e) => this.setState({ RADialogStatus: true })}
               disabled={this.state.PostBtnStatus}
             >
               {APIURLS.buttonTitle.post.name}
@@ -2773,7 +2775,7 @@ class mrnactivity extends React.Component {
 
 
 
-      
+
 
 
         <Grid container spacing={0} >
@@ -2781,7 +2783,7 @@ class mrnactivity extends React.Component {
             <Grid className="table-adjust" container spacing={0}>
               <Grid item xs={12} sm={12} md={8} lg={8}>
                 <Accordion
-                style={disabledStyle}
+                  style={disabledStyle}
                   key="a-1"
                   expanded={this.state.accordion1}
                   className="accordionD"
@@ -3060,7 +3062,7 @@ class mrnactivity extends React.Component {
                                     }
                                   />
 
-                               
+
 
                                   <SSIB
                                     key="IsSEZPurchase"
@@ -3187,7 +3189,7 @@ class mrnactivity extends React.Component {
                                 {this.state.PurchaseOrderLine.length > 0 ? (
                                   <Fragment>
                                     {this.state.PurchaseOrderLine.map((item, i) => (
-                                      <TableRow  style={disabledStyle} className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
+                                      <TableRow style={disabledStyle} className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
                                         <TableCell align="left">
                                           <ButtonGroup
                                             size="small"
@@ -3550,7 +3552,7 @@ class mrnactivity extends React.Component {
                 </Accordion>
 
                 <Accordion
-                 style={disabledStyle}
+                  style={disabledStyle}
                   key="a-3"
                   expanded={this.state.accordion3}
                   className="accordionD"
@@ -3740,7 +3742,7 @@ class mrnactivity extends React.Component {
 
 
                 <Accordion
-                 style={disabledStyle}
+                  style={disabledStyle}
                   key="a-4"
                   expanded={this.state.accordion4}
                   className="accordionD"
@@ -3949,7 +3951,7 @@ class mrnactivity extends React.Component {
                 </Accordion>
 
                 <Accordion
-                 style={disabledStyle}
+                  style={disabledStyle}
                   key="a-6"
                   expanded={this.state.accordion6}
                   className="accordionD"
@@ -3982,7 +3984,7 @@ class mrnactivity extends React.Component {
                                 variant="text"
                                 aria-label="Action Menu Button group"
                               >
-                                
+
 
                                 <Button
                                   startIcon={APIURLS.buttonTitle.clear.icon}
@@ -4020,12 +4022,12 @@ class mrnactivity extends React.Component {
                               </ButtonGroup>
                             </Grid>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
-                             
+
 
                             </Grid>
                           </Grid>
                           <Grid container spacing={0}>
-                          {/* <Grid item xs={1} sm={1} md={1} lg={1}></Grid> */}
+                            {/* <Grid item xs={1} sm={1} md={1} lg={1}></Grid> */}
                             <Grid item xs={10} sm={10} md={10} lg={10}>
 
                               <Table
@@ -4043,8 +4045,8 @@ class mrnactivity extends React.Component {
                                   </TableRow>
                                 </TableHead>
                                 <TableBody className="tableBody">
-                                 
-                                  {this.state.ContainerInfo? this.state.ContainerInfo.map((item, i) => (
+
+                                  {this.state.ContainerInfo ? this.state.ContainerInfo.map((item, i) => (
                                     <TableRow>
                                       <TableCell align="left">
                                         <ButtonGroup
@@ -4081,7 +4083,7 @@ class mrnactivity extends React.Component {
                                         </select>
                                       </TableCell>
                                       <TableCell align="left">
-                                     
+
                                         <SCI
                                           id={"ContainerNo_" + i}
                                           variant="outlined"
@@ -4090,7 +4092,7 @@ class mrnactivity extends React.Component {
                                           onChange={(e) => this.updateContainerDetail("ContainerNo", e, i)}
                                         />
                                       </TableCell>
-                                     
+
                                       <TableCell align="left">
                                         <SCI
                                           id={"Remarks_" + i}
@@ -4119,7 +4121,7 @@ class mrnactivity extends React.Component {
                 </Accordion>
 
                 <Accordion
-                 style={disabledStyle}
+                  style={disabledStyle}
                   key="a-5"
                   expanded={this.state.accordion5}
                   className="accordionD"
@@ -4505,7 +4507,7 @@ class mrnactivity extends React.Component {
 
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
-                
+
                 <SIB
                   isMandatory={true}
                   id="Details"
@@ -4513,26 +4515,26 @@ class mrnactivity extends React.Component {
                   variant="outlined"
                   size="small"
                   value={this.state.MRNAuthorize.Details}
-                  onChange={(e)=>this.updateAuthorization("Details",e)}
+                  onChange={(e) => this.updateAuthorization("Details", e)}
                 />
 
               </Grid>
             </Grid>
-           
+
           </DialogContent>
           <DialogActions className="dialog-area">
-            <Button className="action-btns" onClick={() => this.setState({RADialogStatus:false})}>Close</Button>
+            <Button className="action-btns" onClick={() => this.setState({ RADialogStatus: false })}>Close</Button>
 
             {this.state.PO.Status === 0 ? (
-              <Button 
-              startIcon={APIURLS.buttonTitle.release.icon} 
-              className="action-btns" onClick={() => this.postMRN()} >
-              Post
+              <Button
+                startIcon={APIURLS.buttonTitle.release.icon}
+                className="action-btns" onClick={() => this.postMRN()} >
+                Post
               </Button>
             ) : null}
 
-            
-            
+
+
           </DialogActions>
         </Dialog>
 

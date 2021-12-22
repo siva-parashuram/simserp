@@ -124,7 +124,7 @@ class mrn extends React.Component {
             console.log("handleRowClick > index > ", index);
             let item = this.state.PODataList[index - 1];
             console.log("handleRowClick > item > ", item);
-            let params=CF.GET_URL_PARAMS();
+             
             // let appendParams=CF.SETPARAMS(params,[{key:"editMRNID",value:item.MRNID},{key:"type",value:"edit"}]); 
             // console.log("handleRowClick > item > appendParams > ", appendParams);
             // return false;
