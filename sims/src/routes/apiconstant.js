@@ -190,7 +190,7 @@ export const APIURL = {
   GITAuthorize:domain+"api/PO/GITAuthorize",
   GetPIByBranchID:domain+"api/PO/GetPIByBranchID",
   GetMRNBySuplID:domain+"api/PO/GetMRNBySuplID",
-  Add_Update_PI:domain+"api/PO/PI",
+  Add_Update_PI:domain+"api/PO/Add_Update_PI",
 };
 
 export const CTimeOut = 10;
