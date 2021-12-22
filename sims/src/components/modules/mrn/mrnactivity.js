@@ -2776,11 +2776,12 @@ class mrnactivity extends React.Component {
       
 
 
-        <Grid container spacing={0} style={disabledStyle}>
+        <Grid container spacing={0} >
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Grid className="table-adjust" container spacing={0}>
               <Grid item xs={12} sm={12} md={8} lg={8}>
                 <Accordion
+                style={disabledStyle}
                   key="a-1"
                   expanded={this.state.accordion1}
                   className="accordionD"
@@ -3186,8 +3187,8 @@ class mrnactivity extends React.Component {
                                 {this.state.PurchaseOrderLine.length > 0 ? (
                                   <Fragment>
                                     {this.state.PurchaseOrderLine.map((item, i) => (
-                                      <TableRow className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
-                                        <TableCell align="left" >
+                                      <TableRow  style={disabledStyle} className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
+                                        <TableCell align="left">
                                           <ButtonGroup
                                             size="small"
                                             variant="text"
@@ -3549,6 +3550,7 @@ class mrnactivity extends React.Component {
                 </Accordion>
 
                 <Accordion
+                 style={disabledStyle}
                   key="a-3"
                   expanded={this.state.accordion3}
                   className="accordionD"
@@ -3738,6 +3740,7 @@ class mrnactivity extends React.Component {
 
 
                 <Accordion
+                 style={disabledStyle}
                   key="a-4"
                   expanded={this.state.accordion4}
                   className="accordionD"
@@ -3946,6 +3949,7 @@ class mrnactivity extends React.Component {
                 </Accordion>
 
                 <Accordion
+                 style={disabledStyle}
                   key="a-6"
                   expanded={this.state.accordion6}
                   className="accordionD"
@@ -4115,6 +4119,7 @@ class mrnactivity extends React.Component {
                 </Accordion>
 
                 <Accordion
+                 style={disabledStyle}
                   key="a-5"
                   expanded={this.state.accordion5}
                   className="accordionD"
