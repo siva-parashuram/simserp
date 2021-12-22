@@ -78,6 +78,7 @@ export const URLS = {
   addGst:"/addGst",
   editGst:"/editGst",
   git:"/GIT",
+  doPOGIT:"/doPOGIT",
   editGit:"/editGIT",
 };
 

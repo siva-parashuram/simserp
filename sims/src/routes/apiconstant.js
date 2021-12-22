@@ -183,6 +183,10 @@ export const APIURL = {
   GetMRNByBranchID:domain+"api/PO/GetMRNByBranchID",
   GetMRNByMRNID:domain+"api/PO/GetMRNByMRNID",
   MRN_Post:domain+"api/po/MRN_Post",
+  Add_Update_GIT:domain+"api/PO/Add_Update_GIT",
+  GetGITByBranchID:domain+"api/PO/GetGITByBranchID",
+  GetGITByGITID:domain+"api/PO/GetGITByGITID",
+  GITAuthorize:domain+"api/PO/GITAuthorize",
 };
 
 export const CTimeOut = 10;
@@ -742,7 +746,7 @@ export const poMasterColumn=[
   },{
     field: 'No',
     headerName: 'No',
-    width: 120,
+    width:200,
     headerClassName: 'table-header-font'
   },{
     field: 'PODate',
@@ -762,11 +766,22 @@ export const poMasterColumn=[
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
-       {params.value===1?(<Chip label="Open" size="small"/>):null}
-       {params.value===2?(<Chip label="Released"  color="primary"  size="small"/>):null}
-       {params.value===3?(<Chip label="Complete MRN"  color="secondary"  size="small"/>):null}
-       {params.value===4?(<Chip label="Partial MRN"  color="warning"  size="small"/>):null}
-       {params.value===5?(<Chip label="Short Close"  color="success"  size="small"/>):null}
+        {params.row.Pick === "PO" ? (
+          <Fragment>
+            {params.value === 1 ? (<Chip label="Open" size="small" />) : null}
+            {params.value === 2 ? (<Chip label="Released" color="primary" size="small" />) : null}
+            {params.value === 3 ? (<Chip label="Complete MRN" color="secondary" size="small" />) : null}
+            {params.value === 4 ? (<Chip label="Partial MRN" color="warning" size="small" />) : null}
+            {params.value === 5 ? (<Chip label="Short Close" color="success" size="small" />) : null}
+          </Fragment>
+        ) : null}
+        {params.row.Pick === "GIT" ? (
+          <Fragment>
+            {params.value === 0 ? (<Chip label="Open" size="small" />) : null}
+            {params.value === 1 ? (<Chip label="Released" color="success" size="small" />) : null}
+          </Fragment>
+        ) : null}
+      
       </Fragment>
     ),
   }
@@ -865,6 +880,99 @@ export const MRNMasterColumn=[
       <Fragment>
        {params.value===0?(<Chip label="Open" size="small"/>):null}
        {params.value===1?(<Chip label="Post"  color="success"  size="small"/>):null}
+      </Fragment>
+    ),
+  }
+  ,{
+    field: 'SupplierName',
+    headerName: 'Supplier Name',
+    width: 250,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'CountryName',
+    headerName: 'Country',
+    width: 130,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'IsImport',
+    headerName: 'Import?',
+    width: 125,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+           {params.value===true?(
+             <Fragment>
+               <AirplanemodeActiveIcon sx={{ color: '#009688' }}/>
+             </Fragment>
+           ):(
+            <Fragment>
+              <AirplanemodeInactiveIcon sx={{ color: '#cddc39' }}/>              
+            </Fragment>
+           )}
+      </Fragment>
+    ),
+  },{
+    field: 'Code',
+    headerName: 'Currency',
+    width: 130,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'FCValue',
+    headerName: 'FC Value',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'ExchRate',
+    headerName: 'Exch Rate',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'BaseValue',
+    headerName: 'Base Value',
+    width: 150,
+    headerClassName: 'table-header-font'
+  }
+
+
+];
+
+export const GITMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 10,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'No',
+    headerName: 'No',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'PONo',
+    headerName: 'PO No.',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'PODate',
+    headerName: 'PO.Date',
+    width: 125,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {moment(params.value).format("MM/DD/YYYY")}
+      </Fragment>
+    ),
+  }
+  ,{
+    field: 'Status',
+    headerName: 'Status',
+    width: 115,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {params.value===0?(<Chip label="Open" size="small"/>):null}
+       {params.value===1?(<Chip label="Released"  color="success"  size="small"/>):null}
       </Fragment>
     ),
   }

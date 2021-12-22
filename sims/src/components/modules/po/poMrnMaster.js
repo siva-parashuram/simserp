@@ -33,6 +33,7 @@ class poMrnMaster extends React.Component {
             urlparams: "",
             item: null,
             editUrl: null,
+            branch:{},
             BranchID: 0,
             columns: APIURLS.poMasterColumn,
             PODataList: [],
@@ -40,21 +41,59 @@ class poMrnMaster extends React.Component {
         }
     }
     componentDidMount() {
+        let params=CF.GET_URL_PARAMS();
         var url = new URL(window.location.href);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
-        let urlparams =
-            "?branchId=" +
-            branchId +
-            "&compName=" +
-            compName +
-            "&branchName=" +
-            branchName;
+        let urlparams =params;
+       
+
+            // "?branchId=" +
+            // branchId +
+            // "&compName=" +
+            // compName +
+            // "&branchName=" +
+            // branchName;
         this.setState({ urlparams: urlparams, BranchID: branchId, editBtnDisable: false }, () => {
-            this.getPOList();
+            this.getBranchDetail(branchId);
+            
         });
     }
+
+    getBranchDetail(branchId) {
+        try {
+          let ValidUser = APIURLS.ValidUser;
+          ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+          ValidUser.Token = getCookie(COOKIE.TOKEN);
+          const headers = {
+            "Content-Type": "application/json",
+          };
+    
+          const data = {
+            validUser: ValidUser,
+            branch: {
+              BranchId: parseInt(branchId),
+            },
+          };
+    
+          let GetBranchUrl = APIURLS.APIURL.GetBranch;
+    
+          axios
+            .post(GetBranchUrl, data, { headers })
+            .then((response) => {
+              let data = response.data;
+              this.setState({ branch: data },()=>{
+                this.getPOList();
+              });
+            })
+            .catch((error) => {
+              this.setState({ branch: null, ProgressLoader: true });
+            });
+        } catch (ex) {
+          console.log("ex");
+        }
+      }
 
     getPOList = () => {
         let ValidUser = APIURLS.ValidUser;
@@ -76,10 +115,30 @@ class poMrnMaster extends React.Component {
             .then((response) => {
                 let data = response.data;
                 console.log("data > ", data);
-                let newData = [];
+                let newData = [];  
+                           
                 for (let i = 0; i < data.length; i++) {
-                    data[i].id = i + 1;
-                    newData.push(data[i]);
+                   
+                    if(this.props.isImport===true){
+                        if(this.state.branch.IsGIT===true){  
+                            if(this.props.isImport===data[i].IsImport){
+                                if(data[i].Status>1){}else{
+                                    if(data[i].Pick==="PO"){
+                                        data[i].id = i + 1;
+                                        newData.push(data[i]);
+                                    }
+                                   
+                                }
+                                
+                            }                           
+                        }                    
+                    }else{
+
+                        if(this.props.isImport===data[i].IsImport || data[i].Pick==="GIT"){
+                            data[i].id = i + 1;
+                            newData.push(data[i]);
+                        }  
+                    } 
                 }
                 this.setState({ PODataList: newData, ProgressLoader: true }, () => {
                     if (newData.length > 0) {
@@ -101,11 +160,41 @@ class poMrnMaster extends React.Component {
             console.log("handleRowClick > index > ", index);  
             let item = this.state.PODataList[index - 1]; 
             console.log("handleRowClick > item > ", item);          
-            let editUrl =
-                URLS.URLS.doPOMRN +
-                this.state.urlparams +
-                "&editPOID=" +
-                item.POID + "&type=edit";
+            let editUrl ="";
+
+            if(this.props.isImport===true){
+                if(this.state.branch.IsGIT===true){//consider only if in Branch GIT is true
+                    editUrl= URLS.URLS.doPOGIT +
+                    this.state.urlparams +
+                    "&editPOID=" +
+                    item.POID + "&type=edit";
+                }else{
+                    editUrl= URLS.URLS.doPOMRN +
+                    this.state.urlparams +
+                    "&editPOID=" +
+                    item.POID + "&type=edit";
+                }               
+            }else{
+                if(item.Pick==="GIT"){
+                    editUrl= URLS.URLS.doPOMRN +
+                    this.state.urlparams +
+                    "&editPOID=" +
+                    item.POID + "&type=edit"+"&Pick=GIT";
+                }
+                if(item.Pick==="PO"){
+                    editUrl= URLS.URLS.doPOMRN +
+                    this.state.urlparams +
+                    "&editPOID=" +
+                    item.POID + "&type=edit"+"&Pick=PO";
+                }
+               
+            }
+
+           
+            console.log("-----------> editUrl > ",editUrl);
+
+          
+            
             this.setState({
                 item: item,
                 editUrl: editUrl,

@@ -62,11 +62,6 @@ import SCI from "../../compo/customtextboxinput";
 import SCSI from "../../compo/customswitchinput";
 
 
-
-
-
-
-
 const today = moment().format(
   "YYYY-MM-DD"
 );
@@ -368,7 +363,7 @@ class gitactivity extends React.Component {
     let compName = url.searchParams.get("compName");
     let type = url.searchParams.get("type");
     let POID = url.searchParams.get("editPOID");
-    let MRNID = type === "edit" ? url.searchParams.get("editMRNID") : 0;
+    let MRNID = type === "edit" ? url.searchParams.get("editGITID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
     // let urlparams =
@@ -409,11 +404,14 @@ class gitactivity extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.GetMRNByMRNID;
+    let Url = APIURLS.APIURL.GetGITByGITID;
+
+    let MRN = this.state.MRN;
+
     let reqData = {
       ValidUser: ValidUser,
-      MRN: {
-        MRNID: CF.toInt(PO.MRNID)
+      GIT: {
+        GITID: CF.toInt(MRN.MRNID)
       }
     };
     axios
@@ -427,7 +425,7 @@ class gitactivity extends React.Component {
           PO.BaseValue = PO.BaseValue;
 
           let ContainerInfo = [];
-          let responseCI = ResonsePO.MRNContainerInfo;
+          let responseCI = ResonsePO.GITContainerInfo;
 
           if (responseCI) {
             for (let i = 0; i < responseCI.length; i++) {
@@ -445,7 +443,7 @@ class gitactivity extends React.Component {
 
 
 
-          let PurchaseOrderLine = ResonsePO.MRNLineList;
+          let PurchaseOrderLine = ResonsePO.GITLineList;
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
 
           PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
@@ -486,8 +484,8 @@ class gitactivity extends React.Component {
               UOMID: PurchaseOrderLine[i].UOMID,
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               Quantity: PurchaseOrderLine[i].POQuantity,
-              MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
-              LotDetails: PurchaseOrderLine[i].MRNLotDetails,
+              MRNQuantity: PurchaseOrderLine[i].GITQuantity,
+              LotDetails: PurchaseOrderLine[i].GITLotDetails,
               Price: PurchaseOrderLine[i].Price,
               LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
               LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
@@ -520,7 +518,7 @@ class gitactivity extends React.Component {
           // this.state.PO.No
           //----------------------------Setting MRN Fields--------------------
           let MRN = this.state.MRN;
-          MRN.MRNID = PO.MRNID;
+          MRN.MRNID = PO.GITID;
           MRN.No = PO.No;
           MRN.Status = PO.Status;
           MRN.SuplInvNo = PO.SuplInvNo;
@@ -2146,7 +2144,7 @@ class gitactivity extends React.Component {
             for (let i = 1; i < rows.length; i++) {
               total = parseFloat(total) + parseFloat(rows[i][1]);
               if (total > parseFloat(SelectedLotItem.MRNQuantity)) {
-                this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Quantity exceeds MRN Quantity." });
+                this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Quantity exceeds GIT Quantity." });
                 SelectedLotItem.LotDetails = [];
                 this.setState({ SelectedLotItem: SelectedLotItem });
                 processNext = false;
@@ -2182,7 +2180,7 @@ class gitactivity extends React.Component {
       }
     } else {
       this.resetFileInput();
-      this.setState({ ErrorMessageProps: "Pls enter MRN Quantity", ErrorPrompt: true });
+      this.setState({ ErrorMessageProps: "Pls enter GIT Quantity", ErrorPrompt: true });
     }
 
   }
@@ -2250,7 +2248,7 @@ class gitactivity extends React.Component {
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
     let totalLotQuantity = this.getTotalLotQuantity();
     if (parseFloat(totalLotQuantity) !== parseFloat(SelectedLotItem.MRNQuantity)) {
-      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity does not match MRN Quantity." });
+      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity does not match GIT Quantity." });
       return false;
     } else {
       let newD = [];
@@ -2396,9 +2394,12 @@ class gitactivity extends React.Component {
     let MRNAuthorize = this.state.MRNAuthorize;
 
 
-    let MRNPost = {
-      ID: 0,
-      MRNID: parseInt(this.state.MRN.MRNID),
+     
+
+    let PurchaseOrderAuthorize = {
+      ID: 0,      
+      Type:1,
+      GITID: parseInt(this.state.MRN.MRNID),
       Details: MRNAuthorize.Details,
       UserID: parseInt(getCookie(COOKIE.USERID))
     };
@@ -2408,24 +2409,24 @@ class gitactivity extends React.Component {
     } else {
       let reqData = {
         ValidUser: ValidUser,
-        PostedDocument: MRNPost
+        PurchaseOrderAuthorize: PurchaseOrderAuthorize
       };
 
 
       console.log("reqData > ", reqData);
 
-      let Url = APIURLS.APIURL.MRN_Post;
+      let Url = APIURLS.APIURL.GITAuthorize;
       axios
         .post(Url, reqData, { headers })
         .then((response) => {
           if (response.status === 201 || response.status === 200) {
             this.setState({ SuccessPrompt: true, ProgressLoader: true });
             let editUrl =
-              URLS.URLS.mrn +
+              URLS.URLS.git +
               this.state.urlparams;
             this.openPage(editUrl);
           } else {
-            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Posting Server Error", });
+            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "GIT Posting Server Error", });
           }
 
         })
@@ -2534,7 +2535,7 @@ class gitactivity extends React.Component {
               UOMID: PurchaseOrderLine[i]['UOMID'],
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               POQuantity: PurchaseOrderLine[i].Quantity,
-              MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
+              GITQuantity: PurchaseOrderLine[i].MRNQuantity,
               Price: PurchaseOrderLine[i].Price,
               LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
               ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
@@ -2589,11 +2590,11 @@ class gitactivity extends React.Component {
         }
 
         let MRN = {
-          MRNID: CF.toInt(this.state.MRN.MRNID),
+          GITID: CF.toInt(this.state.MRN.MRNID),
           No: this.state.MRN.No,
           POID: this.state.PO.POID,
           BranchID: this.state.PO.BranchID,
-          MRNDate: moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
+          GITDate: moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
           SuplID: this.state.PO.SuplID,
           POType: this.state.PO.POType,
           BillingID: this.state.PO.BillingID,
@@ -2653,13 +2654,13 @@ class gitactivity extends React.Component {
 
         let reqData = {
           ValidUser: ValidUser,
-          MRN: MRN,
-          MRNLineList: MRNLineList,
-          MRNLotDetailsList: MRNLotDetailsList,
-          MRNContainerInfoList: newContainerInfo
+          GIT: MRN,
+          GITLineList: MRNLineList,
+          GITLotDetailsList: MRNLotDetailsList,
+          GITContainerInfoList: newContainerInfo
         };
         console.log("AddNew > reqData > ", reqData);
-        let Url2 = APIURLS.APIURL.Add_Update_MRN;
+        let Url2 = APIURLS.APIURL.Add_Update_GIT;
         axios
           .post(Url2, reqData, { headers })
           .then((response) => {
@@ -2673,13 +2674,13 @@ class gitactivity extends React.Component {
           })
           .catch((error) => {
             console.log("Main API Error");
-            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Not saved", });
+            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "GIT Not saved", });
           });
 
 
 
       } else {
-        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid GIT Data", ProgressLoader: true });
         return false;
       }
 
@@ -2693,8 +2694,8 @@ class gitactivity extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          masterHref={URLS.URLS.mrn + this.state.urlparams}
-          masterLinkTitle="MRN"
+          masterHref={URLS.URLS.git + this.state.urlparams}
+          masterLinkTitle="GIT"
           typoTitle={"Edit"}
           level={2}
         />
@@ -2722,12 +2723,12 @@ class gitactivity extends React.Component {
 
           {this.state.MRN.Status === 0 ? (
             <Button
-              startIcon={APIURLS.buttonTitle.post.icon}
+              startIcon={APIURLS.buttonTitle.release.icon}
               className="action-btns"
               onClick={(e) => this.setState({ RADialogStatus: true })}
               disabled={this.state.PostBtnStatus}
             >
-              {APIURLS.buttonTitle.post.name}
+              {APIURLS.buttonTitle.release.name}
             </Button>
           ) : null}
 
@@ -2950,7 +2951,7 @@ class gitactivity extends React.Component {
                                   <SDTI
                                     isMandatory={true}
                                     id="MRNDate"
-                                    label="MRN Date"
+                                    label="GIT Date"
                                     variant="outlined"
                                     size="small"
                                     onChange={(e) =>
@@ -3145,7 +3146,7 @@ class gitactivity extends React.Component {
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">UOM</TableCell>
                                   <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">PO Quantity </TableCell>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">MRN Quantity </TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">GIT Quantity </TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Unit Price </TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Disc %</TableCell>
                                   {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell> */}
@@ -3189,7 +3190,7 @@ class gitactivity extends React.Component {
                                 {this.state.PurchaseOrderLine.length > 0 ? (
                                   <Fragment>
                                     {this.state.PurchaseOrderLine.map((item, i) => (
-                                      <TableRow style={disabledStyle} className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
+                                      <TableRow className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
                                         <TableCell align="left">
                                           <ButtonGroup
                                             size="small"
@@ -3197,22 +3198,28 @@ class gitactivity extends React.Component {
                                             aria-label="Action Menu Button group"
                                           >
                                             <Fragment>
-                                              <Tooltip title="Delete Line">
-                                                <DeleteForeverIcon
-                                                  fontSize="small"
-                                                  style={{
-                                                    color: '#e53935'
-                                                  }}
-                                                  onClick={(e) => this.itemDelete(i, item)}
-                                                />
-                                              </Tooltip>
+                                              <span style={disabledStyle}>
+                                                <Tooltip title="Delete Line">
+                                                  <DeleteForeverIcon
+
+                                                    fontSize="small"
+                                                    style={{
+                                                      color: '#e53935'
+                                                    }}
+                                                    onClick={(e) => this.itemDelete(i, item)}
+                                                  />
+                                                </Tooltip>
+                                              </span>
+
                                             </Fragment>
 
 
                                             {item.IsLot === true ? (
                                               <Fragment>
                                                 <Tooltip title="Add Lot">
+
                                                   <ListAltIcon
+                                                   
                                                     fontSize="small"
                                                     style={{
                                                       color: '#2196f3',
@@ -3225,12 +3232,13 @@ class gitactivity extends React.Component {
                                             ) : null}
 
 
-
+                                            <span style={disabledStyle}>
                                             {
                                               (i + 1) === this.state.PurchaseOrderLine.length ? (
-                                                <Fragment>
+                                                <Fragment >
                                                   <Tooltip title="Add New Line">
                                                     <AddCircleOutlineIcon
+                                                   
                                                       fontSize="small"
                                                       style={{
                                                         color: '#00897b',
@@ -3242,12 +3250,14 @@ class gitactivity extends React.Component {
                                                 </Fragment>
                                               ) : null
                                             }
+                                            </span>
+                                            
 
 
 
                                           </ButtonGroup>
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
                                           <select
                                             id={"Type_" + i}
                                             style={{ width: '100%' }}
@@ -3263,7 +3273,7 @@ class gitactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
                                           {console.log("this.state.PurchaseOrderLine > ", this.state.PurchaseOrderLine)}
                                           <select
                                             // style={{backgroundColor:'#e0f2f1'}}
@@ -3281,7 +3291,7 @@ class gitactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
                                           <SCADI
 
                                             style={{ width: '100%' }}
@@ -3299,7 +3309,7 @@ class gitactivity extends React.Component {
                                           {item.packingDescription}
                                         </TableCell>
 
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
                                           <SCI
                                             id={"SupplierCode_" + i}
                                             variant="outlined"
@@ -3309,7 +3319,7 @@ class gitactivity extends React.Component {
                                             disabled={true}
                                           />
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
                                           <SCI
                                             id={"Naration_" + i}
                                             variant="outlined"
@@ -3319,7 +3329,7 @@ class gitactivity extends React.Component {
                                             disabled={true}
                                           />
                                         </TableCell>
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
 
                                           <select
                                             style={{ width: '100%' }}
@@ -3333,7 +3343,7 @@ class gitactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" style={disabledStyle}>
                                           <SCI
                                             id={"TolerancePercentage_" + i}
                                             variant="outlined"
@@ -3344,7 +3354,7 @@ class gitactivity extends React.Component {
                                             disabled={true}
                                           />
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" style={disabledStyle}>
                                           <SCI
                                             id={"Quantity_" + i}
                                             variant="outlined"
@@ -3355,7 +3365,7 @@ class gitactivity extends React.Component {
                                             disabled={true}
                                           />
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" style={disabledStyle}>
                                           <SCI
                                             id={"MRNQuantity_" + i}
                                             variant="outlined"
@@ -3367,7 +3377,7 @@ class gitactivity extends React.Component {
                                             disabled={false}
                                           />
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" style={disabledStyle}>
                                           <SCI
                                             id={"Price_" + i}
                                             variant="outlined"
@@ -3378,7 +3388,7 @@ class gitactivity extends React.Component {
                                             align="right"
                                           />
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" style={disabledStyle}>
                                           <SCI
                                             id={"LineDiscPercentage_" + i}
                                             variant="outlined"
@@ -3398,7 +3408,7 @@ class gitactivity extends React.Component {
                                             disabled={true}
                                           />
                                         </TableCell> */}
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
                                           <select
                                             style={{ width: '100%' }}
                                             className="line-dropdown-css"
@@ -3413,7 +3423,7 @@ class gitactivity extends React.Component {
                                           </select>
                                         </TableCell>
 
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
                                           <SCI
                                             id={"HSNCode_" + i}
                                             variant="outlined"
@@ -3426,7 +3436,7 @@ class gitactivity extends React.Component {
 
                                         {this.state.Branch.IsVAT === true ? (
                                           <Fragment>
-                                            <TableCell align="right">
+                                            <TableCell align="right" style={disabledStyle}>
                                               <SCI
                                                 id={"VATPercentage_" + i}
                                                 variant="outlined"
@@ -3456,7 +3466,7 @@ class gitactivity extends React.Component {
                                         {
                                           this.state.Branch.IsGST === true ? (
                                             <Fragment>
-                                              <TableCell align="left">
+                                              <TableCell align="left" style={disabledStyle}>
                                                 <select
                                                   style={{ width: '100%' }}
                                                   className="line-dropdown-css"
@@ -3469,7 +3479,7 @@ class gitactivity extends React.Component {
                                                   ))}
                                                 </select>
                                               </TableCell>
-                                              <TableCell align="right">
+                                              <TableCell align="right" style={disabledStyle}>
                                                 <SCI
                                                   id={"GSTPercentage_" + i}
                                                   variant="outlined"
@@ -3487,7 +3497,7 @@ class gitactivity extends React.Component {
 
 
 
-                                        <TableCell align="left">
+                                        <TableCell align="left" style={disabledStyle}>
                                           <select
                                             style={{ width: '100%' }}
                                             className="line-dropdown-css"
@@ -3501,7 +3511,7 @@ class gitactivity extends React.Component {
                                           </select>
                                         </TableCell>
                                         {this.state.Branch.IsQuality === true ? (
-                                          <TableCell align="left">
+                                          <TableCell align="left" style={disabledStyle}>
                                             <SCSI
                                               key={"IsQuality_+i"}
                                               id={"IsQuality_+i"}
@@ -3513,7 +3523,7 @@ class gitactivity extends React.Component {
                                         ) : null}
 
                                         {this.state.Branch.IsLot === true ? (
-                                          <TableCell align="left">
+                                          <TableCell align="left" style={disabledStyle}>
                                             <SCSI
                                               key={"IsLot_+i"}
                                               id={"IsLot_+i"}
@@ -4308,8 +4318,8 @@ class gitactivity extends React.Component {
               </Grid>
             </Grid>
           </DialogTitle>
-          <DialogContent className="dialog-area">
-            <Grid container spacing={0}>
+          <DialogContent className="dialog-area"  style={disabledStyle}>
+            <Grid container spacing={0} >
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <ButtonGroup
                   size="small"
@@ -4380,7 +4390,7 @@ class gitactivity extends React.Component {
 
 
 
-            <Grid container spacing={0}>
+            <Grid container spacing={0} >
               <Grid item xs={12} sm={12} md={12} lg={12}>
 
                 <Table
@@ -4501,7 +4511,7 @@ class gitactivity extends React.Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title" className="dialog-area">
-            <span style={{ color: 'red' }}>MRN Status</span>
+            <span style={{ color: 'red' }}>GIT Status</span>
           </DialogTitle>
           <DialogContent className="dialog-area">
 

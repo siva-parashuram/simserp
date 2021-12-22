@@ -62,11 +62,6 @@ import SCI from "../../compo/customtextboxinput";
 import SCSI from "../../compo/customswitchinput";
 
 
-/* supporting components */
-import Viewpo from "./component/viewpo";
-
-import PrintLocalPo from "./component/printlocalpo";
-import PrintImportPo from "./component/printimportpo";
 
 
 
@@ -75,7 +70,7 @@ const today = moment().format(
 );
 
 
-class pomrnactivity extends React.Component {
+class pogitactivity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -273,13 +268,12 @@ class pomrnactivity extends React.Component {
         BLOrAWBNo: "",
         BLOrAWBDate: null,
         PortID: 0,
-        
+
         GateEntryNo: "",
         GateEntryDate: null,
       },
       ContainerInfo: [],
       SelectedLotItem: {},
-      Pick:"",
     };
   }
 
@@ -351,9 +345,8 @@ class pomrnactivity extends React.Component {
   }
 
   componentDidMount() {
-
+    let params = CF.GET_URL_PARAMS();
     document.addEventListener('keydown', this.onKeyDownHandler);
-    let params=CF.GET_URL_PARAMS();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -362,23 +355,21 @@ class pomrnactivity extends React.Component {
     let POID = type === "edit" ? url.searchParams.get("editPOID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
-    let Pick=url.searchParams.get("Pick");
-    let urlparams =params;
-      // "?branchId=" +
-      // branchId +
-      // "&compName=" +
-      // compName +
-      // "&branchName=" +
-      // branchName;
+    let urlparams = params;
+    // let urlparams =
+    //   "?branchId=" +
+    //   branchId +
+    //   "&compName=" +
+    //   compName +
+    //   "&branchName=" +
+    //   branchName;
 
-      console.log("@@@@@@@@@@@@@@@@@ Pick@@@@@@@@@@@@@@@ Pick > ",Pick);
 
     let PO = this.state.PO;
     PO.POID = CF.toInt(POID);
     if (type === "edit") {
       PO.POID = CF.toInt(POID);
       this.setState({
-        Pick:Pick,
         branchName: branchName,
         PO: PO,
         POID: CF.toInt(POID),
@@ -649,7 +640,7 @@ class pomrnactivity extends React.Component {
           let FixedAsset = data.FixedAsset;
           let DimensionsList = data.DimensionValue;
           let IncoTermList = data.IncoTerms;
-          let PortList=data.Port;
+          let PortList = data.Port;
 
           let PO = this.state.PO;
 
@@ -698,22 +689,13 @@ class pomrnactivity extends React.Component {
             FixedAsset: FixedAsset,
             DimensionsList: DimensionsList,
             IncoTermList: IncoTermList,
-            PortList:PortList
+            PortList: PortList
             // ProgressLoader: this.state.type === "edit" ? false : true
           }, () => {
 
-            if(this.state.Pick==="PO"){
-              if (this.state.type === "edit") {
-                this.getPODetails(this.state.PO);
-              }
+            if (this.state.type === "edit") {
+              this.getPODetails(this.state.PO);
             }
-            if(this.state.Pick==="GIT"){
-              if (this.state.type === "edit") {
-                this.getMRNDetails(this.state.PO);
-              }
-            }
-
-            
           });
         } else {
           // this.setState({isDataFetched:false});
@@ -741,192 +723,6 @@ class pomrnactivity extends React.Component {
         });
       });
   }
-
-  getMRNDetails = (PO) => {
-    // this.setState({ ProgressLoader: false });
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetGITByGITID;
-
-   
-
-    let reqData = {
-      ValidUser: ValidUser,
-      GIT: {
-        GITID: CF.toInt(PO.POID)
-      }
-    };
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        if (response.status === 200) {
-          let ResonsePO = response.data;
-          let PO = ResonsePO;
-
-          PO.FCValue = PO.FCValue;
-          PO.BaseValue = PO.BaseValue;
-
-          let ContainerInfo = [];
-          let responseCI = ResonsePO.GITContainerInfo;
-
-          if (responseCI) {
-            for (let i = 0; i < responseCI.length; i++) {
-              let obj = {
-                ID: responseCI[i].ID,
-                LNo: responseCI[i].LNo,
-                ContainerNo: responseCI[i].ContainerNo,
-                ContainerType: parseInt(responseCI[i].Type),
-                Remarks: responseCI[i].Remarks
-              };
-              ContainerInfo.push(obj);
-            }
-          }
-
-
-
-
-          let PurchaseOrderLine = ResonsePO.GITLineList;
-          PO.BillingID = CF.toInt(ResonsePO.BillingID);
-
-          PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
-          PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
-          PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
-
-
-          if (PO.AmendmentNo > 0) {
-            PO.AmendmentDate = moment(PO.AmendmentDate).format("YYYY-MM-DD");
-          } else {
-            PO.AmendmentDate = "";
-          }
-
-          let newPOL = [];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
-
-          let SupplierItemCategoryArray = [];
-          let data = this.getSupplierDataList(PO.SuplID);
-          SupplierItemCategoryArray = data.SupplierItemCategory
-          // console.log("------------------------------> SupplierItemCategoryArray > ", SupplierItemCategoryArray);
-
-          for (let i = 0; i < PurchaseOrderLine.length; i++) {
-
-            let EL = {
-              POID: PO.POID,
-              Type: PurchaseOrderLine[i].Type,
-              LNo: PurchaseOrderLine[i].LNo,
-              TypeIDList: [],
-              CategoryList: PurchaseOrderLine[i].Type === 0 ? SupplierItemCategoryArray : [],
-              isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
-              CategoryId: PurchaseOrderLine[i].CatID,
-              ItemList: this.getItemList(PurchaseOrderLine[i].Type, PO.SuplID, PurchaseOrderLine[i].CatID),
-              ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
-              TypeID: PurchaseOrderLine[i].value,
-              Description: PurchaseOrderLine[i].Description1,
-              packingDescription: PurchaseOrderLine[i].PackingDesc1,
-              SupplierCode: PurchaseOrderLine[i].SupplierCode,
-              Narration: PurchaseOrderLine[i].Narration,
-              UOMID: PurchaseOrderLine[i].UOMID,
-              TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
-              Quantity: PurchaseOrderLine[i].POQuantity,
-              MRNQuantity: PurchaseOrderLine[i].GITQuantity,
-              LotDetails: PurchaseOrderLine[i].GITLotDetails,
-              Price: PurchaseOrderLine[i].Price,
-              LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
-              LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
-              ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
-              GeneralPostingGroupList: [],
-              GeneralPostingGroupID: null,
-              VATPercentage: PurchaseOrderLine[i].VATPercentage,
-              VATAmount: PurchaseOrderLine[i].VATAmount,
-              HSNCode: PurchaseOrderLine[i].HSNCode,
-              GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
-              SupplyStateID: this.state.StateID,
-              GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
-              BuyFromGSTN: PO.GSTNo,
-              NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
-              DValueID: PurchaseOrderLine[i].DValueID,
-              IsQuality: PurchaseOrderLine[i].IsQuality,
-              IsLot: PurchaseOrderLine[i].IsLot,
-              CGSTAmt: PurchaseOrderLine[i].CGSTAmt,
-              CGSTRate: PurchaseOrderLine[i].CGSTRate,
-              SGSTAmt: PurchaseOrderLine[i].SGSTAmt,
-              SGSTRate: PurchaseOrderLine[i].SGSTRate,
-              GSTBaseAmount: PurchaseOrderLine[i].GSTBaseAmount,
-              IGSTAmt: PurchaseOrderLine[i].IGSTAmt,
-              IGSTRate: PurchaseOrderLine[i].IGSTRate,
-              isDataProper: true,
-            };
-            newPOL.push(EL);
-          }
-          console.log("getMRNDetails ----------> PO > ", PO);
-          // this.state.PO.No
-          //----------------------------Setting MRN Fields--------------------
-          let MRN = this.state.MRN;
-          MRN.MRNID = PO.GITID;
-          MRN.No = PO.No;
-          MRN.Status = PO.Status;
-          MRN.SuplInvNo = PO.SuplInvNo;
-          MRN.EWayBillNo = PO.EWayBillNo;
-          MRN.DutyFogone = parseFloat(PO.DutyFogone);
-          MRN.DutyPaid = parseFloat(PO.DutyPaid);
-          MRN.GSTOrVATPaid = parseFloat(PO.GSTOrVATPaid);
-          MRN.AssableValue = parseFloat(PO.AssableValue);
-          MRN.BillOfEntryNo = PO.BillOfEntryNo;
-          MRN.BillOfEntryValue = parseFloat(PO.BillOfEntryValue);
-          MRN.BLOrAWBNo = PO.BLOrAWBNo;
-          MRN.PortID = CF.toInt(PO.PortID);
-          MRN.GateEntryNo = PO.GateEntryNo;
-          MRN.PayToSuplID = CF.toInt(PO.PayToSuplID);
-          MRN.GateEntryDate = moment(PO.GateEntryDate).format("YYYY-MM-DD");
-          MRN.MRNDate = moment(PO.MRNDate).format("YYYY-MM-DD");
-          MRN.SuplInvDate = moment(PO.SuplInvDate).format("YYYY-MM-DD");
-          MRN.BillOfEntryDate = moment(PO.BillOfEntryDate).format("YYYY-MM-DD");
-          MRN.BLOrAWBDate = moment(PO.BLOrAWBDate).format("YYYY-MM-DD");
-          //------------------------------------------------------------------
-
-          if (CF.toInt(MRN.Status) > 0) {
-            this.setState({
-              accordion1: true,
-              accordion2: true,
-              accordion3: true,
-              accordion4: true,
-              accordion5: true,
-              accordion6: true,
-            });
-          }
-
-          this.setState({
-            MRN: MRN,
-            PO: PO,
-            PurchaseOrderLine: newPOL,
-            ContainerInfo: ContainerInfo,
-            Name: PO.Name,
-            Address: PO.Address,
-            Address2: PO.Address2,
-            Address3: PO.Address3,
-            City: PO.City,
-            PostCode: PO.PostCode,
-            CountryID: PO.CountryID,
-            StateID: PO.StateID,
-            ProgressLoader: true
-          }, () => {
-            this.calculateInvoiceDetails();
-            this.calculateDueDate();
-            this.presetSetSupplierDropdown(PO);
-            this.setFieldValuesOnSuplierChange(CF.toInt(PO.SuplID), "IG"); //initialIgnore to not set address to stateID
-          });
-
-        } else {
-          this.setState({ ErrorPrompt: true, ProgressLoader: true });
-        }
-      })
-      .catch((error) => {
-        console.log("Error > ", error);
-        this.setState({ ErrorPrompt: true, ProgressLoader: true });
-      });
-  };
 
   getWarehouseList = (data) => {
     let newData = [];
@@ -1370,7 +1166,7 @@ class pomrnactivity extends React.Component {
         MRN[param] = e.target.value;
         this.setState({ MRN: MRN });
         break;
-      
+
       case "BillOfEntryNo":
         MRN[param] = e.target.value;
         this.setState({ MRN: MRN });
@@ -1411,7 +1207,7 @@ class pomrnactivity extends React.Component {
         MRN[param] = parseInt(e.target.value);
         this.setState({ MRN: MRN });
         break;
-       
+
       //-----------------------------------------    
       case "DispachDate":
         PO.DispachDate = moment(e.target.value).format("YYYY-MM-DD");
@@ -1582,7 +1378,7 @@ class pomrnactivity extends React.Component {
         Dialog: Dialog
       });
     } else {
-      this.setState({ ErrorMessageProps: "Pls enter MRN Quantity", ErrorPrompt: true });
+      this.setState({ ErrorMessageProps: "Pls enter GIT Quantity", ErrorPrompt: true });
     }
 
 
@@ -2108,8 +1904,8 @@ class pomrnactivity extends React.Component {
         BaseValue = 0.00;
       }
 
-        PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
-        PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
+      PO.FCValue = PO.IsRounding === true ? parseInt(FCValue) : FCValue.toFixed(2);
+      PO.BaseValue = PO.IsRounding === true ? parseInt(BaseValue) : BaseValue.toFixed(2);
     } catch (e) { }
 
     this.setState({
@@ -2185,7 +1981,7 @@ class pomrnactivity extends React.Component {
           case "Quantity":
             ldobj[key] = parseFloat(e.target.value);
             newD.push(ldobj);
-            
+
             break;
           case "PackingUOM":
             ldobj[key] = parseInt(e.target.value);
@@ -2249,7 +2045,7 @@ class pomrnactivity extends React.Component {
             for (let i = 1; i < rows.length; i++) {
               total = parseFloat(total) + parseFloat(rows[i][1]);
               if (total > parseFloat(SelectedLotItem.MRNQuantity)) {
-                this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Quantity exceeds MRN Quantity." });
+                this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Quantity exceeds GIT Quantity." });
                 SelectedLotItem.LotDetails = [];
                 this.setState({ SelectedLotItem: SelectedLotItem });
                 processNext = false;
@@ -2259,13 +2055,13 @@ class pomrnactivity extends React.Component {
             if (processNext === true) {
               for (let i = 1; i < rows.length; i++) {
                 let itemRow = {
-                  LotID: 0,                  
+                  LotID: 0,
                   LNo: i,
-                  TypeID:CF.toInt(this.state.SelectedLotItem.TypeID),
-                 
+                  TypeID: CF.toInt(this.state.SelectedLotItem.TypeID),
+
                   LotNo: rows[i][0],
                   Quantity: rows[i][1],
-                  
+
                   PackingUOM: rows[i][2],
                   Location: rows[i][3],
                 };
@@ -2285,7 +2081,7 @@ class pomrnactivity extends React.Component {
       }
     } else {
       this.resetFileInput();
-      this.setState({ ErrorMessageProps: "Pls enter MRN Quantity", ErrorPrompt: true });
+      this.setState({ ErrorMessageProps: "Pls enter GIT Quantity", ErrorPrompt: true });
     }
 
   }
@@ -2303,16 +2099,16 @@ class pomrnactivity extends React.Component {
     console.log("AddLotLine > item > ", item);
     let lotobj = {
       LotID: 0,
-      TypeID:item.TypeID,
+      TypeID: item.TypeID,
       LNo: 0,
-      
+
       LotNo: "",
       Quantity: 0,
-      
+
       PackingUOM: "",
       Location: ""
     };
-    let LD = item.LotDetails?item.LotDetails:[];
+    let LD = item.LotDetails ? item.LotDetails : [];
     LD.push(lotobj);
     item.LotDetails = LD;
     this.setState({ SelectedLotItem: item });
@@ -2371,21 +2167,21 @@ class pomrnactivity extends React.Component {
 
   //--------------------------------------------------------------------------------------------------------
 
-  updateContainerDetail=(key,e,index)=>{
-    this.setState({PostBtnStatus:true});//disabling post for saving
-    let ContainerInfo=this.state.ContainerInfo;
-    let newD=[];
+  updateContainerDetail = (key, e, index) => {
+    this.setState({ PostBtnStatus: true });//disabling post for saving
+    let ContainerInfo = this.state.ContainerInfo;
+    let newD = [];
     for (let i = 0; i < ContainerInfo.length; i++) {
       if (i === index) {
         let obj = ContainerInfo[i];
-        if(key==="ContainerType"){
+        if (key === "ContainerType") {
           obj[key] = parseInt(e.target.value);
-        }else{
+        } else {
           obj[key] = e.target.value;
         }
-        
+
         newD.push(obj);
-      }else {
+      } else {
         newD.push(ContainerInfo[i]);
       }
     }
@@ -2405,20 +2201,20 @@ class pomrnactivity extends React.Component {
     let contobj = {
       ID: 0,
       LNo: 0,
-      
+
       ContainerType: "",
-      ContainerNo: "",    
+      ContainerNo: "",
       Remarks: ""
     };
-    let List = item?item:[];
+    let List = item ? item : [];
     List.push(contobj);
-     
+
     this.setState({ ContainerInfo: List });
   }
 
   ContainerItemDelete = (index, item) => {
     let ContainerInfo = this.state.ContainerInfo;
-    
+
     let newD = [];
     for (let i = 0; i < ContainerInfo.length; i++) {
       if (i === index) { } else {
@@ -2428,9 +2224,9 @@ class pomrnactivity extends React.Component {
     this.setState({ ContainerInfo: newD });
   }
 
-  
+
   importContainerFromExcel = (e) => {
-     
+
     if (e.target.files[0]) {
       let file = e.target.files[0];
       let chk = this.ValidateLotFile(file.name);
@@ -2442,7 +2238,7 @@ class pomrnactivity extends React.Component {
             let itemRow = {
               ID: 0,
               LNo: i,
-               
+
               ContainerType: rows[i][0],
               ContainerNo: rows[i][1],
               Remarks: rows[i][2]
@@ -2474,7 +2270,7 @@ class pomrnactivity extends React.Component {
   }
 
   openEditMode = (editUrl) => {
-     window.location = editUrl;
+    window.location = editUrl;
   }
 
   render() {
@@ -2546,20 +2342,20 @@ class pomrnactivity extends React.Component {
       validateMRNData = this.validateMRNData();
 
       if (validateMRNData === true) {
-       
-        let Status=3;
+
+        let Status = 2;
         let MRNLineList = [];
-        let MRNLotDetailsList=[];
+        let MRNLotDetailsList = [];
         let PurchaseOrderLine = this.state.PurchaseOrderLine;
         for (let i = 0; i < PurchaseOrderLine.length; i++) {
 
           if (PurchaseOrderLine[i].isDataProper === true) {
 
-            if (parseFloat(Status) === 3) {
-              if (parseFloat(PurchaseOrderLine[i].MRNQuantity) < parseFloat(PurchaseOrderLine[i].Quantity)) {
-                Status = 4;
-              }
-            }
+            // if (parseFloat(Status) === 3) {
+            //   if (parseFloat(PurchaseOrderLine[i].MRNQuantity) < parseFloat(PurchaseOrderLine[i].Quantity)) {
+            //     Status = 4;
+            //   }
+            // }
 
             let obj = {
               Type: PurchaseOrderLine[i].Type,
@@ -2570,7 +2366,7 @@ class pomrnactivity extends React.Component {
               UOMID: PurchaseOrderLine[i]['UOMID'],
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               POQuantity: PurchaseOrderLine[i].Quantity,
-              MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
+              GITQuantity: PurchaseOrderLine[i].MRNQuantity,
               Price: PurchaseOrderLine[i].Price,
               LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
               ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
@@ -2581,25 +2377,18 @@ class pomrnactivity extends React.Component {
               DValueID: PurchaseOrderLine[i].DValueID,
               IsQuality: PurchaseOrderLine[i].IsQuality,
               IsLot: PurchaseOrderLine[i].IsLot,
-              
+
             };
             MRNLineList.push(obj);
             if (PurchaseOrderLine[i].LotDetails) {
               let LotDetails = PurchaseOrderLine[i].LotDetails;
               for (let j = 0; j < LotDetails.length; j++) {
-                let obj = {
-                  LotID: 0,
-                  LNo: j + 1,
-                  TypeID: LotDetails[j].TypeID,
-                  LotNo: LotDetails[j].LotNo,
-                  Quantity: LotDetails[j].Quantity,
-                  PackingUOM: LotDetails[j].PackingUOM,
-                  Location: LotDetails[j].Location
-                };
+                let obj = LotDetails[j];
+                obj.LNo = j + 1;
                 MRNLotDetailsList.push(obj);
               }
             }
-            
+
             // Array.prototype.push.apply(MRNLotDetailsList, LotDetails);
 
           } else {
@@ -2609,11 +2398,11 @@ class pomrnactivity extends React.Component {
 
         }
 
-        console.log("MRNLotDetailsList > ",MRNLotDetailsList);
+        console.log("MRNLotDetailsList > ", MRNLotDetailsList);
 
         let ContainerInfo = this.state.ContainerInfo;
-        let newContainerInfo=[];
-        for(let i=0;i<ContainerInfo.length;i++){
+        let newContainerInfo = [];
+        for (let i = 0; i < ContainerInfo.length; i++) {
           let obj = {
             ID: 0,
             LNo: i + 1,
@@ -2625,11 +2414,11 @@ class pomrnactivity extends React.Component {
         }
 
         let MRN = {
-          MRNID: 0,
+          GITID: 0,
           No: "",
           POID: this.state.PO.POID,
           BranchID: this.state.PO.BranchID,
-          MRNDate: moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
+          GITDate: moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
           SuplID: this.state.PO.SuplID,
           POType: this.state.PO.POType,
           BillingID: this.state.PO.BillingID,
@@ -2673,14 +2462,14 @@ class pomrnactivity extends React.Component {
           GSTOrVATPaid: this.state.MRN.GSTOrVATPaid,
           AssableValue: this.state.MRN.AssableValue,
           BillOfEntryNo: this.state.MRN.BillOfEntryNo,
-          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY")==="Invalid date"?today:moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
+          BillOfEntryDate: moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY") === "Invalid date" ? today : moment(this.state.MRN.BillOfEntryDate).format("MM/DD/YYYY"),
           BillOfEntryValue: this.state.MRN.BillOfEntryValue,
           BLOrAWBNo: this.state.MRN.BLOrAWBNo,
-          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY")==="Invalid date"?today:moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
+          BLOrAWBDate: moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY") === "Invalid date" ? today : moment(this.state.MRN.BLOrAWBDate).format("MM/DD/YYYY"),
           PortID: this.state.MRN.PortID,
-          
+
           GateEntryNo: this.state.MRN.GateEntryNo,
-          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY")==="Invalid date"?today:moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
+          GateEntryDate: moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY") === "Invalid date" ? today : moment(this.state.MRN.GateEntryDate).format("MM/DD/YYYY"),
           Remarks: this.state.PO.Notes,
           UserID: CF.toInt(getCookie(COOKIE.USERID)),
         };
@@ -2692,7 +2481,7 @@ class pomrnactivity extends React.Component {
             LNo: 0,
             LotNo: "",
             Quantity: 0,
-            PackingUOM:0,
+            PackingUOM: 0,
             Location: ""
           };
           MRNLotDetailsList.push(lotobj);
@@ -2708,58 +2497,58 @@ class pomrnactivity extends React.Component {
           newContainerInfo.push(contobj);
         }
 
-     
+
 
         let NoSeriesReqData = {
           ValidUser: ValidUser,
           DocumentNumber: {
-            NoSeriesID: CF.toInt(this.state.Branch.MRNNo),
+            NoSeriesID: CF.toInt(this.state.Branch.GITNo),
             TransDate: moment().format("MM-DD-YYYY"),
           },
         };
         console.log("AddNew > NoSeriesReqData > ", NoSeriesReqData);
-        
+
 
         let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
         axios
           .post(Url1, NoSeriesReqData, { headers })
           .then((response) => {
             if (response.status === 200) {
-              MRN.No=response.data;
+              MRN.No = response.data;
               let reqData = {
                 ValidUser: ValidUser,
-                MRN: MRN,
-                MRNLineList: MRNLineList,
-                MRNLotDetailsList:MRNLotDetailsList,
-                MRNContainerInfoList: newContainerInfo
+                GIT: MRN,
+                GITLineList: MRNLineList,
+                GITLotDetailsList: MRNLotDetailsList,
+                GITContainerInfoList: newContainerInfo
               };
               console.log("AddNew > reqData > ", reqData);
-              let Url2 = APIURLS.APIURL.Add_Update_MRN;
+              let Url2 = APIURLS.APIURL.Add_Update_GIT;
               axios
-              .post(Url2, reqData, { headers })
-              .then((response) => {
-                console.log("response > ", response);
-                if (response.status === 201 || response.status === 200) {
-                  this.setState({ SuccessPrompt: true,ProgressLoader: true});
-                  let editUrl =
-                  URLS.URLS.editMRN +
-                  this.state.urlparams +
-                  "&editMRNID=" +
-                  response.data.ID + "&type=edit";
-                  this.openEditMode(editUrl);
-                }else{
-                  this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "", });
-                }
-              })
-              .catch((error) => {
-                console.log("Main API Error");
-                this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Not saved", });
-              });
+                .post(Url2, reqData, { headers })
+                .then((response) => {
+                  console.log("response > ", response);
+                  if (response.status === 201 || response.status === 200) {
+                    this.setState({ SuccessPrompt: true, ProgressLoader: true });
+                    // let editUrl =
+                    //   URLS.URLS.editMRN +
+                    //   this.state.urlparams +
+                    //   "&editMRNID=" +
+                    //   response.data.ID + "&type=edit";
+                    // this.openEditMode(editUrl);
+                  } else {
+                    this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "", });
+                  }
+                })
+                .catch((error) => {
+                  console.log("Main API Error");
+                  this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "GIT Not saved", });
+                });
 
-            }else{
+            } else {
               this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not fetched.", });
             }
-           
+
 
           })
           .catch((error) => {
@@ -2768,9 +2557,9 @@ class pomrnactivity extends React.Component {
           });
 
 
-        
+
       } else {
-        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid GIT Data", ProgressLoader: true });
         return false;
       }
 
@@ -2784,8 +2573,8 @@ class pomrnactivity extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          masterHref={URLS.URLS.mrn + this.state.urlparams}
-          masterLinkTitle="MRN"
+          masterHref={URLS.URLS.git + this.state.urlparams}
+          masterLinkTitle="GIT"
           typoTitle={"Add"}
           level={2}
         />
@@ -3026,7 +2815,7 @@ class pomrnactivity extends React.Component {
                                   <SDTI
                                     isMandatory={true}
                                     id="MRNDate"
-                                    label="MRN Date"
+                                    label="GIT Date"
                                     variant="outlined"
                                     size="small"
                                     onChange={(e) =>
@@ -3138,7 +2927,7 @@ class pomrnactivity extends React.Component {
                                     }
                                   />
 
-                               
+
 
                                   <SSIB
                                     key="IsSEZPurchase"
@@ -3221,7 +3010,7 @@ class pomrnactivity extends React.Component {
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">UOM</TableCell>
                                   <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">PO Quantity </TableCell>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">MRN Quantity </TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">GIT Quantity </TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Unit Price </TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Disc %</TableCell>
                                   {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell> */}
@@ -4056,7 +3845,7 @@ class pomrnactivity extends React.Component {
                                 variant="text"
                                 aria-label="Action Menu Button group"
                               >
-                                
+
 
                                 <Button
                                   startIcon={APIURLS.buttonTitle.clear.icon}
@@ -4094,12 +3883,12 @@ class pomrnactivity extends React.Component {
                               </ButtonGroup>
                             </Grid>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
-                             
+
 
                             </Grid>
                           </Grid>
                           <Grid container spacing={0}>
-                          {/* <Grid item xs={1} sm={1} md={1} lg={1}></Grid> */}
+                            {/* <Grid item xs={1} sm={1} md={1} lg={1}></Grid> */}
                             <Grid item xs={10} sm={10} md={10} lg={10}>
 
                               <Table
@@ -4117,8 +3906,8 @@ class pomrnactivity extends React.Component {
                                   </TableRow>
                                 </TableHead>
                                 <TableBody className="tableBody">
-                                 
-                                  {this.state.ContainerInfo? this.state.ContainerInfo.map((item, i) => (
+
+                                  {this.state.ContainerInfo ? this.state.ContainerInfo.map((item, i) => (
                                     <TableRow>
                                       <TableCell align="left">
                                         <ButtonGroup
@@ -4155,7 +3944,7 @@ class pomrnactivity extends React.Component {
                                         </select>
                                       </TableCell>
                                       <TableCell align="left">
-                                     
+
                                         <SCI
                                           id={"ContainerNo_" + i}
                                           variant="outlined"
@@ -4164,7 +3953,7 @@ class pomrnactivity extends React.Component {
                                           onChange={(e) => this.updateContainerDetail("ContainerNo", e, i)}
                                         />
                                       </TableCell>
-                                     
+
                                       <TableCell align="left">
                                         <SCI
                                           id={"Remarks_" + i}
@@ -4569,4 +4358,4 @@ class pomrnactivity extends React.Component {
     );
   }
 }
-export default pomrnactivity;
+export default pogitactivity;

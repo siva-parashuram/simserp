@@ -55,15 +55,15 @@ class gitMaster extends React.Component {
             item: null,
             editUrl: null,
             BranchID: 0,
-            columns: APIURLS.MRNMasterColumn,
+            columns: APIURLS.GITMasterColumn,
             PODataList: [],
             selectionModel: [1],
         }
     }
     componentDidMount() {
         var url = new URL(window.location.href);
-        let params=CF.GET_URL_PARAMS();
-        console.log("Menusection params > ",params);
+        let params = CF.GET_URL_PARAMS();
+        console.log("Menusection params > ", params);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
@@ -86,10 +86,10 @@ class gitMaster extends React.Component {
         const headers = {
             "Content-Type": "application/json",
         };
-        let Url = APIURLS.APIURL.GetMRNByBranchID;
+        let Url = APIURLS.APIURL.GetGITByBranchID;
         let reqData = {
             ValidUser: ValidUser,
-            MRN: {
+            GIT: {
                 BranchID: CF.toInt(this.state.BranchID),
                 Status: 0
             }
@@ -124,16 +124,14 @@ class gitMaster extends React.Component {
             console.log("handleRowClick > index > ", index);
             let item = this.state.PODataList[index - 1];
             console.log("handleRowClick > item > ", item);
-             
-            // let appendParams=CF.SETPARAMS(params,[{key:"editMRNID",value:item.MRNID},{key:"type",value:"edit"}]); 
-            // console.log("handleRowClick > item > appendParams > ", appendParams);
-            // return false;
+
             let editUrl =
-                URLS.URLS.editMRN +
+                URLS.URLS.editGit +
                 this.state.urlparams +
-                "&editMRNID=" +
-                item.MRNID +
-                "&type=edit";
+                "&editGITID=" +
+                item.GITID +
+                "&type=edit" +
+                "&pick=GIT";
             this.setState({
                 item: item,
                 editUrl: editUrl,
@@ -160,7 +158,7 @@ class gitMaster extends React.Component {
             this.setState({ pagination: pagination });
         };
 
-        const POFORMRN = <PoMrnMaster />;
+        const POFORMRN = <PoMrnMaster isImport={true} />;
 
         const openDialog = (param) => {
             let Dialog = this.state.Dialog;
@@ -375,7 +373,7 @@ class gitMaster extends React.Component {
                                                                         <Card className="dash-activity-card2" raised={false}>
                                                                             <CardContent>
                                                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                  Raised <br/>MRN
+                                                                                    Raised <br />MRN
                                                                                 </Typography>
                                                                                 <Typography >
                                                                                     870
@@ -389,7 +387,7 @@ class gitMaster extends React.Component {
                                                                         <Card className="dash-activity-card2" raised={false}>
                                                                             <CardContent>
                                                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                    Processed <br/> MRN
+                                                                                    Processed <br /> MRN
                                                                                 </Typography>
                                                                                 <Typography>
                                                                                     850
@@ -403,7 +401,7 @@ class gitMaster extends React.Component {
                                                                         <Card className="dash-activity-card2" raised={false}>
                                                                             <CardContent>
                                                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                  Pending  <br/>MRN
+                                                                                    Pending  <br />MRN
                                                                                 </Typography>
                                                                                 <Typography>
                                                                                     20
@@ -426,7 +424,7 @@ class gitMaster extends React.Component {
                                                 <Fragment>
                                                     <Grid container spacing={0}>
                                                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                                                            
+
                                                             <Attachmentmaster
                                                                 branchId={parseInt(this.state.BranchID)}
                                                                 rowClicked={false}

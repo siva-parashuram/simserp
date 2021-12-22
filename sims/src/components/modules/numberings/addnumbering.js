@@ -273,7 +273,7 @@ class addnumbering extends React.Component {
       console.log("noSeriesDetailList > ",noSeriesDetailList);
 
 
-      return false;
+     
       const data = {
         validUser: ValidUser,
         noSeries: noSeries,

@@ -286,7 +286,7 @@ class mrnactivity extends React.Component {
         Details: "",
         UserID: "",
         MRNID: ""
-      }
+      } 
     };
   }
 
@@ -371,6 +371,7 @@ class mrnactivity extends React.Component {
     let MRNID = type === "edit" ? url.searchParams.get("editMRNID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
+    let pick=url.searchParams.get("pick");
     // let urlparams =
     //   "?branchId=" +
     //   branchId +
@@ -385,6 +386,7 @@ class mrnactivity extends React.Component {
     if (type === "edit") {
 
       this.setState({
+        pick:pick,
         branchName: branchName,
         MRN: MRN,
         POID: CF.toInt(POID),
@@ -766,10 +768,13 @@ class mrnactivity extends React.Component {
             PortList: PortList
             // ProgressLoader: this.state.type === "edit" ? false : true
           }, () => {
-
+            
             if (this.state.type === "edit") {
               this.getMRNDetails(this.state.MRN);
             }
+            
+
+            
           });
         } else {
           // this.setState({isDataFetched:false});

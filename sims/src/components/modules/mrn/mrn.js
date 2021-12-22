@@ -160,7 +160,7 @@ class mrn extends React.Component {
             this.setState({ pagination: pagination });
         };
 
-        const POFORMRN = <PoMrnMaster />;
+        const POFORMRN = <PoMrnMaster isImport={false}/>;
 
         const openDialog = (param) => {
             let Dialog = this.state.Dialog;
