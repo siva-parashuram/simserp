@@ -61,18 +61,18 @@ class pi extends React.Component {
     }
     componentDidMount() {
         var url = new URL(window.location.href);
-        let params=CF.GET_URL_PARAMS();
-        console.log("Menusection params > ",params);
+        let params = CF.GET_URL_PARAMS();
+        console.log("Menusection params > ", params);
         let branchId = url.searchParams.get("branchId");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
-        let urlparams =params;
-            // "?branchId=" +
-            // branchId +
-            // "&compName=" +
-            // compName +
-            // "&branchName=" +
-            // branchName;
+        let urlparams = params;
+        // "?branchId=" +
+        // branchId +
+        // "&compName=" +
+        // compName +
+        // "&branchName=" +
+        // branchName;
         this.setState({ urlparams: urlparams, BranchID: branchId, editBtnDisable: false }, () => {
             this.getPIList();
         });
@@ -88,9 +88,9 @@ class pi extends React.Component {
         let Url = APIURLS.APIURL.GetPIByBranchID;
         let reqData = {
             ValidUser: ValidUser,
-            MRN: {
-                BranchID: CF.toInt(this.state.BranchID),
-                Status: 0
+            PI: {
+                BranchID: CF.toInt(this.state.BranchID)
+               
             }
         };
         axios
@@ -123,15 +123,13 @@ class pi extends React.Component {
             console.log("handleRowClick > index > ", index);
             let item = this.state.PODataList[index - 1];
             console.log("handleRowClick > item > ", item);
-             
-            // let appendParams=CF.SETPARAMS(params,[{key:"editMRNID",value:item.MRNID},{key:"type",value:"edit"}]); 
-            // console.log("handleRowClick > item > appendParams > ", appendParams);
-            // return false;
+
+
             let editUrl =
-                URLS.URLS.editMRN +
+                URLS.URLS.editPI +
                 this.state.urlparams +
-                "&editMRNID=" +
-                item.MRNID +
+                "&editPIID=" +
+                item.PIID +
                 "&type=edit";
             this.setState({
                 item: item,
@@ -159,79 +157,8 @@ class pi extends React.Component {
             this.setState({ pagination: pagination });
         };
 
-        const POFORMRN = <PoMrnMaster isImport={false}/>;
-
-        const openDialog = (param) => {
-            let Dialog = this.state.Dialog;
-            Dialog.DialogStatus = true;
 
 
-            switch (param) {
-                case "Add":
-                    Dialog.DialogTitle = "PO for MRN";
-                    Dialog.DialogContent = POFORMRN;
-                    this.setState({ Dialog: Dialog });
-                    break;
-                default:
-                    break;
-            }
-
-            this.setState({ Dialog: Dialog });
-        };
-
-        const dialog = (
-            <Fragment>
-                <Dialog
-                    fullWidth={true}
-                    maxWidth="lg"
-                    open={this.state.Dialog.DialogStatus}
-                    aria-labelledby="dialog-title"
-                    aria-describedby="dialog-description"
-                    className="dialog-prompt-activity"
-                >
-                    <DialogTitle
-                        id="dialog-title"
-                        className="dialog-area"
-                        style={{ maxHeight: 50 }}
-                    >
-                        <Grid container spacing={0}>
-                            <Grid item xs={12} sm={12} md={1} lg={1}>
-                                <IconButton
-                                    aria-label="ArrowBackIcon"
-                                // style={{ textAlign: 'left', marginTop: 8 }}
-                                >
-                                    <ArrowBackIcon onClick={(e) => handleClose()} />
-                                </IconButton>
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={2} lg={2}>
-                                <div style={{ marginLeft: -50 }}>
-                                    {" "}
-                                    <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
-                                        {" "}
-                                        {this.state.Dialog.DialogTitle}{" "}
-                                    </span>{" "}
-                                </div>
-                            </Grid>
-                        </Grid>
-                    </DialogTitle>
-                    <DialogContent className="dialog-area">
-                        <Grid container spacing={0}>
-                            <Grid item xs={12} sm={12} md={12} lg={12}>
-                                {this.state.Dialog.DialogContent}
-                            </Grid>
-                        </Grid>
-
-                    </DialogContent>
-                </Dialog>
-            </Fragment>
-        );
-
-        const handleClose = () => {
-            let Dialog = this.state.Dialog;
-            Dialog.DialogStatus = false;
-            this.setState({ Dialog: Dialog });
-
-        };
 
         const breadcrumbHtml = (
             <Fragment>
@@ -239,7 +166,7 @@ class pi extends React.Component {
                     backOnClick={this.props.history.goBack}
                     linkHref={URLS.URLS.userDashboard + this.state.urlparams}
                     linkTitle="Dashboard"
-                    typoTitle="PI"
+                    typoTitle="Purchase Invoice"
                     level={1}
                 />
             </Fragment>
@@ -257,7 +184,7 @@ class pi extends React.Component {
 
                         startIcon={APIURLS.buttonTitle.add.icon}
                         className="action-btns"
-                        onClick={(e) => openDialog("Add")}
+                        onClick={(e) => openPage(URLS.URLS.addPI + this.state.urlparams + "&type=add")}
                         disabled={this.state.DisableCreatebtn}
                     >
                         {APIURLS.buttonTitle.add.name}
@@ -376,7 +303,7 @@ class pi extends React.Component {
                                                                         <Card className="dash-activity-card2" raised={false}>
                                                                             <CardContent>
                                                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                  Raised <br/>MRN
+                                                                                    Raised <br />MRN
                                                                                 </Typography>
                                                                                 <Typography >
                                                                                     870
@@ -390,7 +317,7 @@ class pi extends React.Component {
                                                                         <Card className="dash-activity-card2" raised={false}>
                                                                             <CardContent>
                                                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                    Processed <br/> MRN
+                                                                                    Processed <br /> MRN
                                                                                 </Typography>
                                                                                 <Typography>
                                                                                     850
@@ -404,7 +331,7 @@ class pi extends React.Component {
                                                                         <Card className="dash-activity-card2" raised={false}>
                                                                             <CardContent>
                                                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                  Pending  <br/>MRN
+                                                                                    Pending  <br />MRN
                                                                                 </Typography>
                                                                                 <Typography>
                                                                                     20
@@ -427,7 +354,7 @@ class pi extends React.Component {
                                                 <Fragment>
                                                     <Grid container spacing={0}>
                                                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                                                            
+
                                                             <Attachmentmaster
                                                                 branchId={parseInt(this.state.BranchID)}
                                                                 rowClicked={false}
@@ -450,10 +377,6 @@ class pi extends React.Component {
                         </Grid>
                     </Grid>
                 </Grid>
-
-
-
-                {dialog}
             </Fragment>
         )
     }

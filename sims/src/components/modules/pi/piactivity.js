@@ -282,7 +282,7 @@ class piactivity extends React.Component {
         Details: "",
         UserID: "",
         MRNID: ""
-      } 
+      }
     };
   }
 
@@ -292,9 +292,7 @@ class piactivity extends React.Component {
         switch (e.keyCode) {
           case 13:
             console.log("SHIFT+ENTER > ");
-            if (CF.toInt(this.state.MRN.Status) > 0) { } else {
-              this.createNewBlankLine();
-            }
+            this.createNewBlankLine();
             break;
           default:
             break;
@@ -361,45 +359,35 @@ class piactivity extends React.Component {
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
-    let compName = url.searchParams.get("compName");
     let type = url.searchParams.get("type");
     let POID = url.searchParams.get("editPOID");
-    let MRNID = type === "edit" ? url.searchParams.get("editMRNID") : 0;
+    let MRNID = type === "edit" ? url.searchParams.get("editPIID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
-    let pick=url.searchParams.get("pick");
-    // let urlparams =
-    //   "?branchId=" +
-    //   branchId +
-    //   "&compName=" +
-    //   compName +
-    //   "&branchName=" +
-    //   branchName;
-
-
+    
+    
     let MRN = this.state.MRN;
-    MRN.MRNID = CF.toInt(MRNID);
+   
     if (type === "edit") {
-
-      this.setState({
-        pick:pick,
-        branchName: branchName,
-        MRN: MRN,
-        POID: CF.toInt(POID),
-        urlparams: params,
-        BranchID: CF.toInt(branchId),
-        type: type,
-        typoTitle: typoTitle,
-
-      }, () => {
-        this.getSupplierList(CF.toInt(branchId), CF.toInt(POID));
-      });
+      MRN.MRNID = CF.toInt(MRNID);
     }
+    this.setState({        
+      branchName: branchName,
+      MRN: MRN,
+      POID: CF.toInt(POID),
+      urlparams: params,
+      BranchID: CF.toInt(branchId),
+      type: type,
+      typoTitle: typoTitle,
+
+    }, () => {
+      this.getSupplierList(CF.toInt(branchId));
+    });
 
 
   }
 
-  getMRNDetails = (PO) => {
+  getPIDetails = (PO) => {
     // this.setState({ ProgressLoader: false });
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
@@ -764,13 +752,14 @@ class piactivity extends React.Component {
             PortList: PortList
             // ProgressLoader: this.state.type === "edit" ? false : true
           }, () => {
-            
-            if (this.state.type === "edit") {
-              this.getMRNDetails(this.state.MRN);
+            if (this.state.type === "add") {
+              this.setState({ProgressLoader:true});
             }
-            
 
-            
+            if (this.state.type === "edit") {
+              this.getPIDetails(this.state.MRN);
+            }
+
           });
         } else {
           // this.setState({isDataFetched:false});
@@ -1455,7 +1444,7 @@ class piactivity extends React.Component {
         Dialog: Dialog
       });
     } else {
-      this.setState({ ErrorMessageProps: "Pls enter MRN Quantity", ErrorPrompt: true });
+      this.setState({ ErrorMessageProps: "Pls enter PI Quantity", ErrorPrompt: true });
     }
 
 
@@ -1700,10 +1689,10 @@ class piactivity extends React.Component {
           let TolerancePercentage = parseFloat(o.TolerancePercentage);
           let maxQuantity = parseFloat(Quantity) + (parseFloat(Quantity) * parseFloat(TolerancePercentage));
           if (parseFloat(e.target.value) > maxQuantity) {
-            this.setState({ ErrorMessageProps: "MRN Quantity Exceeds Tolerance Quantity", ErrorPrompt: true });
+            this.setState({ ErrorMessageProps: "PI Quantity Exceeds Tolerance Quantity", ErrorPrompt: true });
           } else {
             if (isNaN(e.target.value)) {
-              this.setState({ ErrorMessageProps: "MRN Quantity should be Number", ErrorPrompt: true });
+              this.setState({ ErrorMessageProps: "PI Quantity should be Number", ErrorPrompt: true });
               return false;
             } else {
               o[key] = parseFloat(e.target.value);
@@ -2147,7 +2136,7 @@ class piactivity extends React.Component {
             for (let i = 1; i < rows.length; i++) {
               total = parseFloat(total) + parseFloat(rows[i][1]);
               if (total > parseFloat(SelectedLotItem.MRNQuantity)) {
-                this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Quantity exceeds MRN Quantity." });
+                this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Quantity exceeds PI Quantity." });
                 SelectedLotItem.LotDetails = [];
                 this.setState({ SelectedLotItem: SelectedLotItem });
                 processNext = false;
@@ -2183,7 +2172,7 @@ class piactivity extends React.Component {
       }
     } else {
       this.resetFileInput();
-      this.setState({ ErrorMessageProps: "Pls enter MRN Quantity", ErrorPrompt: true });
+      this.setState({ ErrorMessageProps: "Pls enter PI Quantity", ErrorPrompt: true });
     }
 
   }
@@ -2251,7 +2240,7 @@ class piactivity extends React.Component {
     let PurchaseOrderLine = this.state.PurchaseOrderLine;
     let totalLotQuantity = this.getTotalLotQuantity();
     if (parseFloat(totalLotQuantity) !== parseFloat(SelectedLotItem.MRNQuantity)) {
-      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity does not match MRN Quantity." });
+      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity does not match PI Quantity." });
       return false;
     } else {
       let newD = [];
@@ -2426,7 +2415,7 @@ class piactivity extends React.Component {
               this.state.urlparams;
             this.openPage(editUrl);
           } else {
-            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Posting Server Error", });
+            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "PI Posting Server Error", });
           }
 
         })
@@ -2435,6 +2424,10 @@ class piactivity extends React.Component {
         });
     }
 
+  }
+
+  FetchSupplierMRN=()=>{
+    alert("Hi");
   }
 
   render() {
@@ -2674,13 +2667,13 @@ class piactivity extends React.Component {
           })
           .catch((error) => {
             console.log("Main API Error");
-            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Not saved", });
+            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "PI Not saved", });
           });
 
 
 
       } else {
-        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid MRN Data", ProgressLoader: true });
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Invalid PI Data", ProgressLoader: true });
         return false;
       }
 
@@ -2694,9 +2687,9 @@ class piactivity extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          masterHref={URLS.URLS.mrn + this.state.urlparams}
-          masterLinkTitle="MRN"
-          typoTitle={"Edit"}
+          masterHref={URLS.URLS.PI + this.state.urlparams}
+          masterLinkTitle="Purchase Invoice"
+          typoTitle={this.state.typoTitle}
           level={2}
         />
       </Fragment>
@@ -2718,6 +2711,16 @@ class piactivity extends React.Component {
 
           >
             {APIURLS.buttonTitle.save.name}
+          </Button>
+
+          <Button
+            style={disabledStyle}
+            startIcon={APIURLS.buttonTitle.fetchMRN.icon}
+            className="action-btns"
+            onClick={(e) => this.FetchSupplierMRN()}
+            disabled={!this.state.isDataFetched}
+          >
+            {APIURLS.buttonTitle.fetchMRN.name}
           </Button>
 
 
@@ -2832,7 +2835,7 @@ class piactivity extends React.Component {
                                     value={this.state.SADIB_VALUE}
                                     options={this.state.supplierList}
                                     isMandatory={true}
-                                    disabled={true}
+                                    
                                   />
 
                                   <SDIB
@@ -2842,7 +2845,7 @@ class piactivity extends React.Component {
                                     value={this.state.PO.BillingID}
                                     param={this.state.SupplierAdressList}
                                     isMandatory={true}
-                                    disabled={true}
+                                     
                                   />
 
                                   <SIB
@@ -2851,8 +2854,7 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Name}
-                                    disabled={true}
-                                    disabled={true}
+                                   
                                   />
 
 
@@ -2863,7 +2865,6 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Address}
-                                    disabled={true}
 
                                   />
                                   <SIB
@@ -2872,7 +2873,6 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Address2}
-                                    disabled={true}
                                   />
                                   <SIB
                                     id="Address3"
@@ -2880,7 +2880,6 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Address3}
-                                    disabled={true}
                                   />
                                   <SIB
                                     id="City"
@@ -2888,7 +2887,6 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.City}
-                                    disabled={true}
                                   />
                                   <SIB
                                     id="Postcode"
@@ -2896,7 +2894,6 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.PostCode}
-                                    disabled={true}
                                   />
 
 
@@ -2905,7 +2902,6 @@ class piactivity extends React.Component {
                                     label="Country"
                                     value={this.state.CountryID}
                                     param={this.state.CountryList}
-                                    disabled={true}
                                   />
 
 
@@ -2951,7 +2947,7 @@ class piactivity extends React.Component {
                                   <SDTI
                                     isMandatory={true}
                                     id="MRNDate"
-                                    label="MRN Date"
+                                    label="Purchase Invoice Date"
                                     variant="outlined"
                                     size="small"
                                     onChange={(e) =>
@@ -2960,36 +2956,7 @@ class piactivity extends React.Component {
                                     value={this.state.MRN.MRNDate}
                                   />
 
-                                  <SIB
-                                    id="No"
-                                    label="PO No"
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.PO.PONo}
-                                    disabled={true}
-                                  />
-
-                                  <SDTI
-                                    isMandatory={true}
-                                    id="PODate"
-                                    label="PO Date"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("PODate", e)
-                                    }
-                                    value={this.state.PO.PODate}
-                                    disabled={true}
-                                  />
-                                  <SDIB
-                                    id="POType"
-                                    label="PO Type"
-                                    onChange={(e) => this.updateFormValue("POType", e)}
-                                    value={this.state.PO.POType}
-                                    param={this.state.POTypeList}
-                                    isMandatory={true}
-                                    disabled={true}
-                                  />
+                                  
 
                                   <SIB
                                     isMandatory={true}
@@ -3028,29 +2995,7 @@ class piactivity extends React.Component {
                                   />
 
 
-                                  <SIB
-                                    id="GateEntryNo"
-                                    label="Gate Entry No."
-                                    variant="outlined"
-                                    size="small"
-                                    value={this.state.MRN.GateEntryNo}
-                                    onChange={(e) =>
-                                      this.updateFormValue("GateEntryNo", e)
-                                    }
-                                  />
-
-
-                                  <SDTI
-                                    isMandatory={true}
-                                    id="GateEntryDate"
-                                    label="Gate Entry Date"
-                                    variant="outlined"
-                                    size="small"
-                                    onChange={(e) =>
-                                      this.updateFormValue("GateEntryDate", e)
-                                    }
-                                    value={this.state.MRN.GateEntryDate}
-                                  />
+                                 
 
 
                                   <SDIB
@@ -3145,8 +3090,8 @@ class piactivity extends React.Component {
                                   <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Narration</TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">UOM</TableCell>
                                   <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">PO Quantity </TableCell>
-                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">MRN Quantity </TableCell>
+                                  <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Quantity </TableCell>
+                                  
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Unit Price </TableCell>
                                   <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Disc %</TableCell>
                                   {/* <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="center"> Line Disc Amount</TableCell> */}
@@ -3171,14 +3116,7 @@ class piactivity extends React.Component {
 
                                   <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Dim.Value </TableCell>
 
-                                  {this.state.Branch.IsQuality === true ? (
-                                    <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">Is Quality? </TableCell>
-                                  ) : null}
-
-
-                                  {this.state.Branch.IsLot === true ? (
-                                    <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
-                                  ) : null}
+                                  
 
                                 </TableRow>
                               </TableHead>
@@ -3356,18 +3294,7 @@ class piactivity extends React.Component {
                                             disabled={true}
                                           />
                                         </TableCell>
-                                        <TableCell align="right">
-                                          <SCI
-                                            id={"MRNQuantity_" + i}
-                                            variant="outlined"
-                                            size="small"
-                                            value={item.MRNQuantity}
-                                            onChange={(e) => this.updateLineDetail(i, "MRNQuantity", e)}
-                                            align="right"
-                                            // disabled={item.LotDetails ? item.LotDetails.length > 0 ? true : false : false}
-                                            disabled={false}
-                                          />
-                                        </TableCell>
+                                        
                                         <TableCell align="right">
                                           <SCI
                                             id={"Price_" + i}
@@ -3389,23 +3316,14 @@ class piactivity extends React.Component {
                                             align="right"
                                           />
                                         </TableCell>
-                                        {/* <TableCell align="center">
-                                          <SCI
-                                            id={"LineDiscAmount_" + i}
-                                            variant="outlined"
-                                            size="small"
-                                            value={item.LineDiscAmount}
-                                            onChange={(e) => this.updateLineDetail(i, "LineDiscAmount", e)}
-                                            disabled={true}
-                                          />
-                                        </TableCell> */}
+                                       
                                         <TableCell align="left">
                                           <select
                                             style={{ width: '100%' }}
                                             className="line-dropdown-css"
                                             value={item.ItemPostingGroupID}
                                             onChange={(e) => this.updateLineDetail(i, "ItemPostingGroupID", e)}
-                                            disabled={true}
+                                            
                                           >
                                             <option value="0"> Select</option>
                                             {this.state.ItemPostingGroupList.map((op, i) => (
@@ -3501,29 +3419,7 @@ class piactivity extends React.Component {
                                             ))}
                                           </select>
                                         </TableCell>
-                                        {this.state.Branch.IsQuality === true ? (
-                                          <TableCell align="left">
-                                            <SCSI
-                                              key={"IsQuality_+i"}
-                                              id={"IsQuality_+i"}
-                                              param={item.IsQuality}
-                                              onChange={(e) => this.updateLineDetail(i, "IsQuality", e)}
-
-                                            />
-                                          </TableCell>
-                                        ) : null}
-
-                                        {this.state.Branch.IsLot === true ? (
-                                          <TableCell align="left">
-                                            <SCSI
-                                              key={"IsLot_+i"}
-                                              id={"IsLot_+i"}
-                                              param={item.IsLot}
-                                              onChange={(e) => this.updateLineDetail(i, "IsLot", e)}
-
-                                            />
-                                          </TableCell>
-                                        ) : null}
+                                        
 
 
 
@@ -3951,175 +3847,7 @@ class piactivity extends React.Component {
                   </AccordionDetails>
                 </Accordion>
 
-                <Accordion
-                  style={disabledStyle}
-                  key="a-6"
-                  expanded={this.state.accordion6}
-                  className="accordionD"
-                >
-                  <AccordionSummary
-                    className="accordion-Header-Design"
-                    expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion6", e)} />}
-                    aria-controls="panel1a-content"
-                    id="accordion6"
-                    style={{ minHeight: "40px", maxHeight: "40px" }}
-                    onClick={(e) => handleAccordionClick("accordion6", e)}
-                  >
-                    <Typography
-                      key="Tax-Activity"
-                      className="accordion-Header-Title"
-                    >Container Info</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails
-                    key="accordion6" className="AccordionDetails-css">
-                    <Fragment>
-                      <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12} md={12} lg={12}>
-                          &nbsp;
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={12}>
-                          <Grid container spacing={0}>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                              <ButtonGroup
-                                size="small"
-                                variant="text"
-                                aria-label="Action Menu Button group"
-                              >
-
-
-                                <Button
-                                  startIcon={APIURLS.buttonTitle.clear.icon}
-                                  className="action-btns"
-                                  onClick={(e) => this.clearContainerDetails()}
-                                >
-                                  {APIURLS.buttonTitle.clear.name}
-                                </Button>
-
-
-
-                                <Button
-                                  className="action-btns"
-                                  startIcon={<FileUploadIcon />}
-                                  onClick={(e) => { document.getElementById("ContainerUploadInput").click() }}
-                                >
-                                  Attach File
-                                </Button>
-                                <input
-                                  className="file-upload-input"
-                                  id="ContainerUploadInput"
-                                  type="file"
-                                  onChange={(e) => this.importContainerFromExcel(e)}
-
-                                />
-
-                                <Button
-                                  startIcon={APIURLS.buttonTitle.addline.icon}
-                                  className="action-btns"
-                                  onClick={(e) => this.AddContainerLine(this.state.ContainerInfo)}
-                                >
-                                  {APIURLS.buttonTitle.addline.name}
-                                </Button>
-
-                              </ButtonGroup>
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
-
-
-                            </Grid>
-                          </Grid>
-                          <Grid container spacing={0}>
-                            {/* <Grid item xs={1} sm={1} md={1} lg={1}></Grid> */}
-                            <Grid item xs={10} sm={10} md={10} lg={10}>
-
-                              <Table
-                                stickyHeader
-                                size="small"
-                                className=""
-                                aria-label="Lines List table"
-                              >
-                                <TableHead className="table-header-background">
-                                  <TableRow>
-                                    <TableCell style={{ maxWidth: 50, minWidth: 50 }} className="line-table-header-font" align="left">&nbsp;</TableCell>
-                                    <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Container Type</TableCell>
-                                    <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Container No.</TableCell>
-                                    <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Remarks</TableCell>
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody className="tableBody">
-
-                                  {this.state.ContainerInfo ? this.state.ContainerInfo.map((item, i) => (
-                                    <TableRow>
-                                      <TableCell align="left">
-                                        <ButtonGroup
-                                          size="small"
-                                          variant="text"
-                                          aria-label="Action Menu Button group"
-                                        >
-                                          <Fragment>
-                                            <Tooltip title="Delete Line">
-                                              <DeleteForeverIcon
-                                                fontSize="small"
-                                                style={{
-                                                  color: '#e53935'
-                                                }}
-                                                onClick={(e) => this.ContainerItemDelete(i, item)}
-                                              />
-                                            </Tooltip>
-                                          </Fragment>
-
-                                        </ButtonGroup>
-                                      </TableCell>
-                                      <TableCell>
-                                        <select
-                                          id={"ContainerType_" + i}
-                                          style={{ width: '100%' }}
-                                          className="line-dropdown-css"
-                                          value={item.ContainerType}
-                                          onChange={(e) => this.updateContainerDetail("ContainerType", e, i)}
-                                        >
-                                          <option value="" >Select</option>
-                                          {this.state.UOMList.map((op, i) => (
-                                            <option value={op.value}> {op.name}</option>
-                                          ))}
-                                        </select>
-                                      </TableCell>
-                                      <TableCell align="left">
-
-                                        <SCI
-                                          id={"ContainerNo_" + i}
-                                          variant="outlined"
-                                          size="small"
-                                          value={item.ContainerNo}
-                                          onChange={(e) => this.updateContainerDetail("ContainerNo", e, i)}
-                                        />
-                                      </TableCell>
-
-                                      <TableCell align="left">
-                                        <SCI
-                                          id={"Remarks_" + i}
-                                          variant="outlined"
-                                          size="small"
-                                          value={item.Remarks}
-                                          onChange={(e) => this.updateContainerDetail("Remarks", e, i)}
-                                        />
-                                      </TableCell>
-                                    </TableRow>
-                                  )) : null}
-
-                                </TableBody>
-                              </Table>
-
-                            </Grid>
-                            <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
-                          </Grid>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={12}>
-                          &nbsp;
-                        </Grid>
-                      </Grid>
-                    </Fragment>
-                  </AccordionDetails>
-                </Accordion>
+               
 
                 <Accordion
                   style={disabledStyle}

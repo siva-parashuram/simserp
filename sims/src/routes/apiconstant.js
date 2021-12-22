@@ -20,6 +20,7 @@ import NextPlanIcon from '@mui/icons-material/NextPlan';
 import UndoIcon from '@mui/icons-material/Undo';
 import FormatLineSpacingIcon from '@mui/icons-material/FormatLineSpacing';
 import ClearIcon from '@mui/icons-material/Clear';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 import Chip from '@mui/material/Chip';
 
@@ -277,7 +278,12 @@ export const buttonTitle = {
     name:"Post",
     icon:<NextPlanIcon/>
   },
+  fetchMRN:{
+    name:"Fetch MRN",
+    icon:<FilterListIcon/>
+  },
 };
+
 
 
 export const PackingUOM = [
