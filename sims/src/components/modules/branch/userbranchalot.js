@@ -187,6 +187,7 @@ class userbranchalot extends React.Component {
       let data = {
         validUser: ValidUser,      
         BranchID: branch,
+        UserID:parseInt(this.props.UserID)
       };
       const headers = {
         "Content-Type": "application/json",
