@@ -21,6 +21,7 @@ import UndoIcon from '@mui/icons-material/Undo';
 import FormatLineSpacingIcon from '@mui/icons-material/FormatLineSpacing';
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import MergeTypeIcon from '@mui/icons-material/MergeType';
 
 import Chip from '@mui/material/Chip';
 
@@ -191,6 +192,7 @@ export const APIURL = {
   GetPIByBranchID:domain+"api/PO/GetPIByBranchID",
   GetMRNBySuplID:domain+"api/PO/GetMRNBySuplID",
   Add_Update_PI:domain+"api/PO/Add_Update_PI",
+  GetPIByPIID:domain+"api/PO/GetPIByPIID",
 };
 
 export const CTimeOut = 10;
@@ -282,6 +284,10 @@ export const buttonTitle = {
   fetchMRN:{
     name:"Fetch MRN",
     icon:<FilterListIcon/>
+  },
+  combine: {
+    name: "Merge & Update List",
+    icon: <MergeTypeIcon />,
   },
 };
 

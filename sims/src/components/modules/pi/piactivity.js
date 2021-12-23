@@ -45,6 +45,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 import Tooltip from '@mui/material/Tooltip';
 
+import CardActions from '@mui/material/CardActions';
+import FormGroup from '@mui/material/FormGroup'; 
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Checkbox from '@mui/material/Checkbox';
+
 import BackdropLoader from "../../compo/backdrop";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import Breadcrumb from "../../compo/breadcrumb";
@@ -66,6 +72,8 @@ import SCSI from "../../compo/customswitchinput";
 const today = moment().format(
   "YYYY-MM-DD"
 );
+
+let Typecheck="";
 
 
 class piactivity extends React.Component {
@@ -284,6 +292,7 @@ class piactivity extends React.Component {
         MRNID: ""
       },
       MRNList:[],
+      selectedLineMRNList:[]
     };
   }
 
@@ -358,20 +367,30 @@ class piactivity extends React.Component {
     let params = CF.GET_URL_PARAMS();//constant branch parameters
     document.addEventListener('keydown', this.onKeyDownHandler);
     var url = new URL(window.location.href);
+    const type = url.searchParams.get("type");
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
-    let type = url.searchParams.get("type");
+   
     let POID = url.searchParams.get("editPOID");
     let MRNID = type === "edit" ? url.searchParams.get("editPIID") : 0;
     let typoTitle = "";
-    type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
+
+    Typecheck=url.searchParams.get("type");
     
+    if(type === "add" ){
+      typoTitle = "Add";
+    }else{
+      typoTitle = "Edit";
+    }
     
     let MRN = this.state.MRN;
    
     if (type === "edit") {
       MRN.MRNID = CF.toInt(MRNID);
     }
+
+   
+
     this.setState({        
       branchName: branchName,
       MRN: MRN,
@@ -396,11 +415,11 @@ class piactivity extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
-    let Url = APIURLS.APIURL.GetMRNByMRNID;
+    let Url = APIURLS.APIURL.GetPIByPIID;
     let reqData = {
       ValidUser: ValidUser,
-      MRN: {
-        MRNID: CF.toInt(PO.MRNID)
+      PI: {
+        PIID: CF.toInt(PO.MRNID)
       }
     };
     axios
@@ -416,23 +435,12 @@ class piactivity extends React.Component {
           let ContainerInfo = [];
           let responseCI = ResonsePO.MRNContainerInfo;
 
-          if (responseCI) {
-            for (let i = 0; i < responseCI.length; i++) {
-              let obj = {
-                ID: responseCI[i].ID,
-                LNo: responseCI[i].LNo,
-                ContainerNo: responseCI[i].ContainerNo,
-                ContainerType: parseInt(responseCI[i].Type),
-                Remarks: responseCI[i].Remarks
-              };
-              ContainerInfo.push(obj);
-            }
-          }
+         
 
 
 
 
-          let PurchaseOrderLine = ResonsePO.MRNLineList;
+          let PurchaseOrderLine = ResonsePO.PurchaseInvoiceLineList;
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
 
           PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
@@ -452,62 +460,64 @@ class piactivity extends React.Component {
           let data = this.getSupplierDataList(PO.SuplID);
           SupplierItemCategoryArray = data.SupplierItemCategory
           // console.log("------------------------------> SupplierItemCategoryArray > ", SupplierItemCategoryArray);
+          if (PurchaseOrderLine) {
+            for (let i = 0; i < PurchaseOrderLine.length; i++) {
 
-          for (let i = 0; i < PurchaseOrderLine.length; i++) {
-
-            let EL = {
-              POID: PO.POID,
-              Type: PurchaseOrderLine[i].Type,
-              LNo: PurchaseOrderLine[i].LNo,
-              TypeIDList: [],
-              CategoryList: PurchaseOrderLine[i].Type === 0 ? SupplierItemCategoryArray : [],
-              isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
-              CategoryId: PurchaseOrderLine[i].CatID,
-              ItemList: this.getItemList(PurchaseOrderLine[i].Type, PO.SuplID, PurchaseOrderLine[i].CatID),
-              ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
-              TypeID: PurchaseOrderLine[i].value,
-              Description: PurchaseOrderLine[i].Description1,
-              packingDescription: PurchaseOrderLine[i].PackingDesc1,
-              SupplierCode: PurchaseOrderLine[i].SupplierCode,
-              Narration: PurchaseOrderLine[i].Narration,
-              UOMID: PurchaseOrderLine[i].UOMID,
-              TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
-              Quantity: PurchaseOrderLine[i].POQuantity,
-              MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
-              LotDetails: PurchaseOrderLine[i].MRNLotDetails,
-              Price: PurchaseOrderLine[i].Price,
-              LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
-              LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
-              ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
-              GeneralPostingGroupList: [],
-              GeneralPostingGroupID: null,
-              VATPercentage: PurchaseOrderLine[i].VATPercentage,
-              VATAmount: PurchaseOrderLine[i].VATAmount,
-              HSNCode: PurchaseOrderLine[i].HSNCode,
-              GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
-              SupplyStateID: this.state.StateID,
-              GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
-              BuyFromGSTN: PO.GSTNo,
-              NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
-              DValueID: PurchaseOrderLine[i].DValueID,
-              IsQuality: PurchaseOrderLine[i].IsQuality,
-              IsLot: PurchaseOrderLine[i].IsLot,
-              CGSTAmt: PurchaseOrderLine[i].CGSTAmt,
-              CGSTRate: PurchaseOrderLine[i].CGSTRate,
-              SGSTAmt: PurchaseOrderLine[i].SGSTAmt,
-              SGSTRate: PurchaseOrderLine[i].SGSTRate,
-              GSTBaseAmount: PurchaseOrderLine[i].GSTBaseAmount,
-              IGSTAmt: PurchaseOrderLine[i].IGSTAmt,
-              IGSTRate: PurchaseOrderLine[i].IGSTRate,
-              isDataProper: true,
-            };
-            newPOL.push(EL);
+              let EL = {
+                POID: PO.PIID,
+                Type: PurchaseOrderLine[i].Type,
+                LNo: PurchaseOrderLine[i].LNo,
+                TypeIDList: [],
+                CategoryList: PurchaseOrderLine[i].Type === 0 ? SupplierItemCategoryArray : [],
+                isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
+                CategoryId: PurchaseOrderLine[i].CatID,
+                ItemList: this.getItemList(PurchaseOrderLine[i].Type, PO.SuplID, PurchaseOrderLine[i].CatID),
+                ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
+                TypeID: PurchaseOrderLine[i].value,
+                Description: PurchaseOrderLine[i].Description1,
+                packingDescription: PurchaseOrderLine[i].PackingDesc1,
+                SupplierCode: PurchaseOrderLine[i].SupplierCode,
+                Narration: PurchaseOrderLine[i].Narration,
+                UOMID: PurchaseOrderLine[i].UOMID,
+                TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+                Quantity: PurchaseOrderLine[i].Quantity,
+                MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
+                LotDetails: PurchaseOrderLine[i].MRNLotDetails,
+                Price: PurchaseOrderLine[i].Price,
+                LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
+                LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
+                ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+                GeneralPostingGroupList: [],
+                GeneralPostingGroupID: null,
+                VATPercentage: PurchaseOrderLine[i].VATPercentage,
+                VATAmount: PurchaseOrderLine[i].VATAmount,
+                HSNCode: PurchaseOrderLine[i].HSNCode,
+                GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+                SupplyStateID: this.state.StateID,
+                GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
+                BuyFromGSTN: PO.GSTNo,
+                NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
+                DValueID: PurchaseOrderLine[i].DValueID,
+                IsQuality: PurchaseOrderLine[i].IsQuality,
+                IsLot: PurchaseOrderLine[i].IsLot,
+                CGSTAmt: PurchaseOrderLine[i].CGSTAmt,
+                CGSTRate: PurchaseOrderLine[i].CGSTRate,
+                SGSTAmt: PurchaseOrderLine[i].SGSTAmt,
+                SGSTRate: PurchaseOrderLine[i].SGSTRate,
+                GSTBaseAmount: PurchaseOrderLine[i].GSTBaseAmount,
+                IGSTAmt: PurchaseOrderLine[i].IGSTAmt,
+                IGSTRate: PurchaseOrderLine[i].IGSTRate,
+                isDataProper: true,
+              };
+              newPOL.push(EL);
+            }
           }
+          
           console.log("getMRNDetails ----------> PO > ", PO);
           // this.state.PO.No
           //----------------------------Setting MRN Fields--------------------
           let MRN = this.state.MRN;
-          MRN.MRNID = PO.MRNID;
+          MRN.MRNID = PO.PIID;
           MRN.No = PO.No;
           MRN.Status = PO.Status;
           MRN.SuplInvNo = PO.SuplInvNo;
@@ -724,6 +734,8 @@ class piactivity extends React.Component {
             }
           }
 
+         
+
 
           this.setState({
             PaymentTerms: data.PaymentTerms,
@@ -750,9 +762,11 @@ class piactivity extends React.Component {
             FixedAsset: FixedAsset,
             DimensionsList: DimensionsList,
             IncoTermList: IncoTermList,
-            PortList: PortList
-            // ProgressLoader: this.state.type === "edit" ? false : true
+            PortList: PortList,
+            ProgressLoader: true
           }, () => {
+  
+
             if (this.state.type === "add") {
               this.setState({ProgressLoader:true});
             }
@@ -1151,6 +1165,7 @@ class piactivity extends React.Component {
 
   updateFormValue = (param, e) => {
     this.setState({ PostBtnStatus: true });
+
     let PO = this.state.PO;
     let MRN = this.state.MRN;
     switch (param) {
@@ -1369,7 +1384,32 @@ class piactivity extends React.Component {
 
           this.setParams(PO);
         });
-      default:
+      case "Name":
+        this.setState({ Name: e.target.value })
+        break;
+      case "Address":
+        this.setState({ Address: e.target.value })
+        break;
+      case "Address2":
+        this.setState({ Address2: e.target.value })
+        break;
+      case "Address3":
+        this.setState({ Address3: e.target.value })
+        break;
+      case "City":
+        this.setState({ City: e.target.value })
+        break;
+      case "PostCode":
+        this.setState({ PostCode: e.target.value })
+        break;
+      case "CountryID":
+        this.setState({ CountryID: parseInt(e.target.value) })
+        break;
+      case "StateID":
+        this.setState({ StateID: parseInt(e.target.value) })
+        break;
+      
+        default:                       
         break;
     }
 
@@ -1417,7 +1457,7 @@ class piactivity extends React.Component {
 
 
   handleClose = () => {
-    this.clearLotDetails();
+    
     let Dialog = this.state.Dialog;
     Dialog.DialogStatus = false;
     this.setState({ Dialog: Dialog });
@@ -2235,27 +2275,7 @@ class piactivity extends React.Component {
     return total;
   }
 
-  SaveLotDetailsOfLine = () => {
-    this.setState({ PostBtnStatus: true });//disabling post for saving
-    let SelectedLotItem = this.state.SelectedLotItem;
-    let PurchaseOrderLine = this.state.PurchaseOrderLine;
-    let totalLotQuantity = this.getTotalLotQuantity();
-    if (parseFloat(totalLotQuantity) !== parseFloat(SelectedLotItem.MRNQuantity)) {
-      this.setState({ ErrorPrompt: true, ErrorMessageProps: "Total Lot Quantity does not match PI Quantity." });
-      return false;
-    } else {
-      let newD = [];
-      for (let i = 0; i < PurchaseOrderLine.length; i++) {
-        if (PurchaseOrderLine[i].LNo === SelectedLotItem.LNo) {
-          newD.push(SelectedLotItem);
-        } else {
-          newD.push(PurchaseOrderLine[i]);
-        }
-      }
-      this.setState({ PurchaseOrderLine: PurchaseOrderLine });
-      this.CloseLotDialog();
-    }
-  }
+ 
 
   //--------------------------------------------------------------------------------------------------------
 
@@ -2428,31 +2448,227 @@ class piactivity extends React.Component {
   }
 
   FetchSupplierMRN = () => {
-    this.setState({ProgressLoader: false });
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.GetMRNBySuplID;
-    let reqData = {
-      ValidUser: ValidUser,
-      MRN: {
-        SuplID: CF.toInt(this.state.PO.SuplID)
+    this.setState({selectedLineMRNList:[]});
+    if(this.state.PurchaseOrderLine.length>0){     
+      this.setState({ MRNList: [], ProgressLoader: true,ErrorPrompt: true, ErrorMessageProps: "Clear Line Details First", });
+    }else{
+      this.setState({ProgressLoader: false });
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.GetMRNBySuplID;
+      let reqData = {
+        ValidUser: ValidUser,
+        MRN: {
+          SuplID: CF.toInt(this.state.PO.SuplID),
+          BranchID:CF.toInt(this.state.BranchID)
+        }
+      };
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          
+          if(response.status===200){
+           let data = response.data;
+           for(let i=0;i<data.length;i++){
+            data[i].isDefaultInfo=false;          
+           }
+           let Dialog=this.state.Dialog;
+           Dialog.DialogTitle="Merge MRN";          
+           Dialog.DialogStatus=true;
+           this.setState({ MRNList: data, ProgressLoader: true });
+          }else{
+            this.setState({ MRNList: [], ProgressLoader: true,ErrorPrompt: true, ErrorMessageProps: "Try Later or contact Admin", });   
+          }
+        })
+        .catch((error) => {
+          console.log("Error > ", error);
+          this.setState({ MRNList: [], ProgressLoader: true,ErrorPrompt: true, ErrorMessageProps: "Network Error", });
+        });
+    }
+
+
+   
+  }
+
+  MRNDefaultInfo=(item,e)=>{
+     let input=e.target.checked;
+    console.log("MRNDefaultInfo > input > ",input);
+    let MRNList=this.state.MRNList;
+    for(let i=0;i<MRNList.length;i++){
+      if(parseInt(item.MRNID)===parseInt(MRNList[i].MRNID)){
+        if(input===true){
+          MRNList[i].isDefaultInfo=true;
+        }else{
+          MRNList[i].isDefaultInfo=false;
+        }               
+      }else{
+        MRNList[i].isDefaultInfo=false;
       }
-    };
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        let data = response.data;
-        console.log("data > ", data);
-        this.setState({ MRNList: data, ProgressLoader: true });
-      })
-      .catch((error) => {
-        console.log("Error > ", error);
-        this.setState({ MRNList: [], ProgressLoader: true });
-      });
+    }
+    this.setState({MRNList:MRNList});
+  }
+
+  chooseMRNList = (item, e) => {
+    let selectedLineMRNList = this.state.selectedLineMRNList;
+    let MRNLineList = item.MRNLineList;
+
+    let newMRNListArray = [];
+    if (e.target.checked === true) {
+      let newArray = selectedLineMRNList.concat(item.MRNLineList);
+      newMRNListArray = newArray;
+
+    } else {
+      let newList = [];
+      for (let i = 0; i < selectedLineMRNList.length; i++) {
+        let obj = {};
+        let MRNID = 0;
+        for (let j = 0; j < MRNLineList.length; j++) {
+          if (parseInt(selectedLineMRNList[i].MRNID) === parseInt(MRNLineList[j].MRNID)) {
+            MRNID = parseInt(selectedLineMRNList[i].MRNID);
+            break;
+          }
+        }
+        if (parseInt(selectedLineMRNList[i].MRNID) === parseInt(MRNID)) { } else {
+          newList.push(selectedLineMRNList[i]);
+        }
+
+      }
+      newMRNListArray = newList;
+    }
+
+    for (let i = 0; i < newMRNListArray.length; i++) {
+      newMRNListArray[i].isSelected = false;
+    }
+
+    this.setState({ selectedLineMRNList: newMRNListArray });
+
+  }
+
+  selectMRNLine=(item,e,index)=>{
+    let selectedLineMRNList = this.state.selectedLineMRNList;
+    for(let i=0;i<selectedLineMRNList.length;i++){
+      if(i===index){
+        selectedLineMRNList[i].isSelected=e.target.checked;   
+        break;     
+      }
+    }
+    this.setState({selectedLineMRNList:selectedLineMRNList});
+  }
+
+  combileMRNs = () => {
+    let MRNList = this.state.MRNList;
+    let isDefaultSelected = false;
+    //----------------------CHECK IF DEFAULT MRN SELECTED------------
+    for (let i = 0; i < MRNList.length; i++) {
+      if (MRNList[i].isDefaultInfo === true) {
+        isDefaultSelected = true;
+        break;
+      }
+    }
+    //---------------------------------------------------------------
+
+    //----------------------COMBINE LINE LIST OBJECT------------------
+
+    let selectedLineMRNList = this.state.selectedLineMRNList;
+    let LotList=[];
+    for(let i=0;i<selectedLineMRNList.length;i++){
+      console.log("selectedLineMRNList[i].isSelected > ",selectedLineMRNList[i].isSelected);
+      if(selectedLineMRNList[i].isSelected===true){
+        let isPresent=false;
+        for(let j=0;j<LotList.length;j++){
+           if((selectedLineMRNList[i].value===LotList[j].value)  && (selectedLineMRNList[i].Type===LotList[j].Type)){
+            isPresent=true;
+             let selectedLineMRNList_MRNQuantity=parseFloat(selectedLineMRNList[i].MRNQuantity);
+             let LotList_MRNQuantity=parseFloat(LotList[j].MRNQuantity);
+             let new_MRNQuantity=parseFloat(selectedLineMRNList_MRNQuantity)+parseFloat(LotList_MRNQuantity);
+  
+             let selectedLineMRNList_Price=parseFloat(selectedLineMRNList[i].Price);
+             let LotList_Price=parseFloat(LotList[j].Price);
+             let new_Price=(parseFloat(selectedLineMRNList_Price)+parseFloat(LotList_Price))/2;
+  
+             LotList[j].MRNQuantity=new_MRNQuantity;
+             LotList[j].Price=new_Price;
+           }else{
+            
+           }
+        }
+        if(isPresent===true){}else{
+          LotList.push(selectedLineMRNList[i]);
+        }
+      }
+     
+    }
+
+    let PO=this.state.PO;
+    let PurchaseOrderLine=LotList;
+    let SupplierItemCategoryArray = [];
+    let data = this.getSupplierDataList(PO.SuplID);
+    SupplierItemCategoryArray = data.SupplierItemCategory
+    let newPOL=[];
+    if (PurchaseOrderLine) {
+      for (let i = 0; i < PurchaseOrderLine.length; i++) {
+        let EL = {
+          POID: this.state.type==="edit"?PO.PIID:0,
+          Type: PurchaseOrderLine[i].Type,
+          LNo: (i+1),
+          TypeIDList: [],
+          CategoryList: PurchaseOrderLine[i].Type === 0 ? SupplierItemCategoryArray : [],
+          isCategoryDisabled: PurchaseOrderLine[i].Type === 0 ? false : true,
+          CategoryId: PurchaseOrderLine[i].CatID,
+          ItemList: this.getItemList(PurchaseOrderLine[i].Type, PO.SuplID, PurchaseOrderLine[i].CatID),
+          ItemListSelected: { name: PurchaseOrderLine[i].name, value: PurchaseOrderLine[i].value },
+          TypeID: PurchaseOrderLine[i].value,
+          Description: PurchaseOrderLine[i].Description1,
+          packingDescription: PurchaseOrderLine[i].PackingDesc1,
+          SupplierCode: PurchaseOrderLine[i].SupplierCode,
+          Narration: PurchaseOrderLine[i].Narration,
+          UOMID: PurchaseOrderLine[i].UOMID,
+          TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
+          Quantity: PurchaseOrderLine[i].POQuantity,
+          MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
+          LotDetails: [],
+          Price: PurchaseOrderLine[i].Price,
+          LineDiscPercentage: PurchaseOrderLine[i].LineDiscPercentage,
+          LineDiscAmount: PurchaseOrderLine[i].LineDiscAmount,
+          ItemPostingGroupID: PurchaseOrderLine[i].ItemPostingGroupID,
+          GeneralPostingGroupList: [],
+          GeneralPostingGroupID: null,
+          VATPercentage: PurchaseOrderLine[i].VATPercentage,
+          VATAmount: PurchaseOrderLine[i].VATAmount,
+          HSNCode: PurchaseOrderLine[i].HSNCode,
+          GSTGroupID: PurchaseOrderLine[i].GSTGroupID,
+          SupplyStateID: this.state.StateID,
+          GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
+          BuyFromGSTN: PO.GSTNo,
+          NatureOfSupply: PurchaseOrderLine[i].NatureOfSupply,
+          DValueID: PurchaseOrderLine[i].DValueID,
+          IsQuality: PurchaseOrderLine[i].IsQuality,
+          IsLot: PurchaseOrderLine[i].IsLot,
+          CGSTAmt: PurchaseOrderLine[i].CGSTAmt,
+          CGSTRate: PurchaseOrderLine[i].CGSTRate,
+          SGSTAmt: PurchaseOrderLine[i].SGSTAmt,
+          SGSTRate: PurchaseOrderLine[i].SGSTRate,
+          GSTBaseAmount: PurchaseOrderLine[i].GSTBaseAmount,
+          IGSTAmt: PurchaseOrderLine[i].IGSTAmt,
+          IGSTRate: PurchaseOrderLine[i].IGSTRate,
+          isDataProper: true,
+        };
+        newPOL.push(EL);
+      }
+    }
+
+    
+
+    //---------------------------------------------------------------
+
+    let Dialog=this.state.Dialog;
+     Dialog.DialogStatus=false;
+    this.setState({PurchaseOrderLine:newPOL,Dialog:Dialog});
+
   }
 
   render() {
@@ -2533,22 +2749,17 @@ class piactivity extends React.Component {
       validateMRNData = this.validateMRNData();
 
       if (validateMRNData === true) {
-       
         let Status=0;
         let MRNLineList = [];
         let MRNLotDetailsList=[];
         let PurchaseOrderLine = this.state.PurchaseOrderLine;
         for (let i = 0; i < PurchaseOrderLine.length; i++) {
-
           if (PurchaseOrderLine[i].isDataProper === true) {
-
-            
-
             let obj = {
               Type: parseFloat(PurchaseOrderLine[i].Type),
               LNo: (i + 1),
-              TypeID: parseFloat(PurchaseOrderLine[i].TypeID),
-               
+              TypeID: parseFloat(PurchaseOrderLine[i].TypeID),  
+              Narration :PurchaseOrderLine[i].Narration,            
               UOMID: parseFloat(PurchaseOrderLine[i]['UOMID']),
               TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
               Quantity: parseFloat(PurchaseOrderLine[i].Quantity),
@@ -2561,13 +2772,8 @@ class piactivity extends React.Component {
               GSTGroupID: parseFloat(PurchaseOrderLine[i].GSTGroupID),
               GSTPercentage: PurchaseOrderLine[i].GSTPercentage,
               DValueID: parseFloat(PurchaseOrderLine[i].DValueID),
-              
-              
             };
             MRNLineList.push(obj);
-           
-            
-
           } else {
             this.setState({ ErrorPrompt: true, ErrorMessageProps: "Improper Line Data Found.", ProgressLoader: true });
             return false;
@@ -2575,36 +2781,22 @@ class piactivity extends React.Component {
 
         }
 
-
-        let ContainerInfo = this.state.ContainerInfo;
-        let newContainerInfo=[];
-        for(let i=0;i<ContainerInfo.length;i++){
-          let obj = {
-            ID: 0,
-            LNo: i + 1,
-            Type: ContainerInfo[i].ContainerType,
-            ContainerNo: ContainerInfo[i].ContainerNo,
-            Remarks: ContainerInfo[i].Remarks
-          };
-          newContainerInfo.push(obj);
-        }
-
         let MRN = {
-          PIID: 0,
-          No: "",
-          BranchID: this.state.PO.BranchID,
+          PIID: this.state.type==='add'?0:parseInt(this.state.MRN.MRNID),
+          No: this.state.MRN.No,
+          BranchID: parseInt(this.state.BranchID),
           PIDate: moment(this.state.MRN.MRNDate).format("MM/DD/YYYY"),
           SuplID: this.state.PO.SuplID,
-          POType: this.state.PO.POType,
+          // POType: this.state.PO.POType,
           BillingID: this.state.PO.BillingID,
-          Name: this.state.PO.Name,
-          Address: this.state.PO.Address,
-          Address2: this.state.PO.Address2,
-          Address3: this.state.PO.Address3,
-          City: this.state.PO.City,
-          PostCode: this.state.PO.PostCode,
-          CountryID: this.state.PO.CountryID,
-          StateID: this.state.PO.StateID,
+          Name: this.state.Name,
+          Address: this.state.Address,
+          Address2: this.state.Address2,
+          Address3: this.state.Address3,
+          City: this.state.City,
+          PostCode: this.state.PostCode,
+          CountryID: this.state.CountryID,
+          StateID: this.state.StateID,
           IsImport: this.state.PO.IsImport,
           CurrID: this.state.PO.CurrID,
           ExchRate: parseFloat(this.state.PO.ExchRate),
@@ -2647,9 +2839,8 @@ class piactivity extends React.Component {
         };
 
         
-
-     
-
+        
+       if(Typecheck==="add"){
         let NoSeriesReqData = {
           ValidUser: ValidUser,
           DocumentNumber: {
@@ -2706,6 +2897,40 @@ class piactivity extends React.Component {
             console.log("No series Error");
             this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not defined.", });
           });
+       }
+
+       if(Typecheck==="edit"){
+        let reqData = {
+          ValidUser: ValidUser,
+          PI: MRN,
+          PILineList: MRNLineList,        
+          
+        };
+        console.log("AddNew > reqData > ", reqData);
+         
+        let Url2 = APIURLS.APIURL.Add_Update_PI;
+        axios
+        .post(Url2, reqData, { headers })
+        .then((response) => {
+          console.log("response > ", response);
+          if (response.status === 201 || response.status === 200) {
+            this.setState({ SuccessPrompt: true,ProgressLoader: true});
+            let editUrl =
+            URLS.URLS.editPI +
+            this.state.urlparams +
+            "&editPIID=" +
+            response.data.ID + "&type=edit";
+            // this.openEditMode(editUrl);
+          }else{
+            this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "", });
+          }
+        })
+        .catch((error) => {
+          console.log("Main API Error");
+          this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "MRN Not saved", });
+        });
+       }
+          
 
 
         
@@ -2750,15 +2975,18 @@ class piactivity extends React.Component {
             {APIURLS.buttonTitle.save.name}
           </Button>
 
-          <Button
-            style={disabledStyle}
-            startIcon={APIURLS.buttonTitle.fetchMRN.icon}
-            className="action-btns"
-            onClick={(e) => this.FetchSupplierMRN()}
-            disabled={!this.state.isDataFetched}
-          >
-            {APIURLS.buttonTitle.fetchMRN.name}
-          </Button>
+         {Typecheck==="add"?(
+           <Button
+           style={disabledStyle}
+           startIcon={APIURLS.buttonTitle.fetchMRN.icon}
+           className="action-btns"
+           onClick={(e) => this.FetchSupplierMRN()}
+           disabled={!this.state.isDataFetched}
+         >
+           {APIURLS.buttonTitle.fetchMRN.name}
+         </Button>
+         ):null}
+          
 
 
           {this.state.MRN.Status === 0 ? (
@@ -2891,9 +3119,9 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Name}
-                                   
+                                    onChange={(e) => this.updateFormValue("Name", e)}
                                   />
-
+                                
 
 
                                   <SIB
@@ -2902,7 +3130,7 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Address}
-
+                                    onChange={(e) => this.updateFormValue("Address", e)}
                                   />
                                   <SIB
                                     id="Address2"
@@ -2910,6 +3138,7 @@ class piactivity extends React.Component {
                                     variant="outlined"
                                     size="small"
                                     value={this.state.Address2}
+                                    onChange={(e) => this.updateFormValue("Address2", e)}
                                   />
                                   <SIB
                                     id="Address3"
@@ -4029,7 +4258,7 @@ class piactivity extends React.Component {
         <Dialog
 
           fullWidth={true}
-          maxWidth="md"
+          maxWidth="lg"
           open={this.state.Dialog.DialogStatus}
           aria-labelledby="PO-page-dialog-title"
           aria-describedby="PO-page-dialog"
@@ -4061,175 +4290,112 @@ class piactivity extends React.Component {
                   aria-label="Action Menu Button group"
                 >
                   <Button
-                    startIcon={APIURLS.buttonTitle.save.icon}
+                    startIcon={APIURLS.buttonTitle.combine.icon}
                     className="action-btns"
-                    onClick={(e) => this.SaveLotDetailsOfLine()}
+                    onClick={(e) => this.combileMRNs()}
                   >
-                    {APIURLS.buttonTitle.save.name}
+                    {APIURLS.buttonTitle.combine.name}
                   </Button>
-
-                  <Button
-                    startIcon={APIURLS.buttonTitle.clear.icon}
-                    className="action-btns"
-                    onClick={(e) => this.clearLotDetails()}
-                  >
-                    {APIURLS.buttonTitle.clear.name}
-                  </Button>
-
-
-
-                  <Button
-                    className="action-btns"
-                    startIcon={<FileUploadIcon />}
-                    onClick={(e) => { document.getElementById("uploadInput").click() }}
-                  >
-                    Attach File
-                  </Button>
-                  <input
-                    className="file-upload-input"
-                    id="uploadInput"
-                    type="file"
-                    onChange={(e) => this.importLotFromExcel(e)}
-
-                  />
-
-                  <Button
-                    startIcon={APIURLS.buttonTitle.addline.icon}
-                    className="action-btns"
-                    onClick={(e) => this.AddLotLine(this.state.SelectedLotItem)}
-                  >
-                    {APIURLS.buttonTitle.addline.name}
-                  </Button>
-
                 </ButtonGroup>
               </Grid>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                {this.state.SelectedLotItem.ItemListSelected ? (
-                  <Fragment>
-                    <table>
-                      <tr>
-                        <td><span className="themeFont" style={{ color: '#212121' }}>Item:</span></td>
-                        <td>{this.state.SelectedLotItem.ItemListSelected.name}</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td><span className="themeFont" style={{ color: '#212121' }}>MRN Quantity:</span></td>
-                        <td>{this.state.SelectedLotItem.MRNQuantity}</td>
-                      </tr>
-                    </table>
-                  </Fragment>
-                ) : null}
-
-              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
             </Grid>
-
-
-
+            <div style={{height:10}}>&nbsp;</div>
             <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={8} sm={8} md={8} lg={8}>
+                <Grid container spacing={1}>
+                  {this.state.MRNList.map((item, i) => (
+                    <Grid item xs={4} sm={4} md={4} lg={4}>
+                      <Card sx={{ minWidth: 150 }}>
+                        <CardContent>
+                          
+                          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          <FormGroup>
+                          {
+                              item.isDefaultInfo === true ? (
+                                <Fragment>
+                                 <FormControlLabel 
+                                 control={<Switch label="Set Default" size="small" 
+                                 onClick={(e) => this.MRNDefaultInfo(item, e)} 
+                                 defaultChecked />} 
+                                 label={<span style={{color:'#009688'}}>Default</span>} />
+                                </Fragment>
+                              ) : null
+                            }
+                            {
+                              item.isDefaultInfo === false ? (
+                                <Fragment>
+                                    <Switch size="small" onClick={(e) => this.MRNDefaultInfo(item, e)} label=""/>
+                                </Fragment>
+                              ) : null
+                            }
+                          </FormGroup>
+                          </Typography>
+                          
+                          <Typography variant="h5" component="div">
+                            {item.No}
+                          </Typography>
+                          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                            {moment(item.MRNDate).format("MM/DD/YYYY")}
+                          </Typography>
+                          <Typography variant="body2">
+                             <b>FC Value : </b> {item.FCValue}<br />
+                             <b>Base Value : </b>  {item.BaseValue}
+                          </Typography>
+                        </CardContent>
+                        <CardActions >                        
+                        <Checkbox 
+                        onClick={(e)=>this.chooseMRNList(item,e)}
+                        defaultChecked={false}/>
+                        </CardActions>
+                      </Card>
+                    </Grid>
 
-                <Table
-                  stickyHeader
-                  size="small"
-                  className=""
-                  aria-label="Lines List table"
-                >
-                  <TableHead className="table-header-background">
-                    <TableRow>
-                      <TableCell style={{ maxWidth: 50, minWidth: 50 }} className="line-table-header-font" align="left">&nbsp;</TableCell>
-                      <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Lot No.</TableCell>
-                      <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Quantity</TableCell>
-                      <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Packing UOM</TableCell>
-                      <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Location</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody className="tableBody">
-                    {console.log("+++++++++++++ --------------------- > this.state.SelectedLotItem > ", this.state.SelectedLotItem)}
-                    {this.state.SelectedLotItem['LotDetails'] ? this.state.SelectedLotItem['LotDetails'].map((item, i) => (
+                  ))}
+                </Grid>
+              </Grid>
+              <Grid item xs={4} sm={4} md={4} lg={4}>
+                <div style={{ marginLeft: 5 }}>
+                  {console.log(">>>>>>>>>>>>>>>>>>>>>>>>> selectedLineMRNList >>>>>>>>>>", this.state.selectedLineMRNList)}
+                  <Table
+                    stickyHeader
+                    size="small"
+                    className=""
+                    aria-label="Lines List table">
+                    <TableHead className="table-header-background">
                       <TableRow>
-                        <TableCell align="left">
-                          <ButtonGroup
-                            size="small"
-                            variant="text"
-                            aria-label="Action Menu Button group"
-                          >
-                            <Fragment>
-                              <Tooltip title="Delete Line">
-                                <DeleteForeverIcon
-                                  fontSize="small"
-                                  style={{
-                                    color: '#e53935'
-                                  }}
-                                  onClick={(e) => this.LotItemDelete(i, item)}
-                                />
-                              </Tooltip>
-                            </Fragment>
-
-                          </ButtonGroup>
-                        </TableCell>
-                        <TableCell align="left">
-                          <SCI
-                            id={"LotNo_" + i}
-                            variant="outlined"
-                            size="small"
-                            value={item.LotNo}
-                            onChange={(e) => this.updateLotDetail("LotNo", e, i)}
-                          />
-                        </TableCell>
-                        <TableCell align="right">
-                          <SCI
-                            id={"Quantity_" + i}
-                            variant="outlined"
-                            size="small"
-                            value={item.Quantity}
-                            onChange={(e) => this.updateLotDetail("Quantity", e, i)}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <select
-                            id={"PackingUOM_" + i}
-                            style={{ width: '100%' }}
-                            className="line-dropdown-css"
-                            value={item.PackingUOM}
-                            onChange={(e) => this.updateLotDetail("PackingUOM", e, i)}
-                          >
-                            <option value="" >Select</option>
-                            {this.state.UOMList.map((op, i) => (
-                              <option value={parseInt(op.value)}> {op.name}</option>
-                            ))}
-                          </select>
-                        </TableCell>
-                        <TableCell align="left">
-                          <SCI
-                            id={"Location_" + i}
-                            variant="outlined"
-                            size="small"
-                            value={item.Location}
-                            onChange={(e) => this.updateLotDetail("Location", e, i)}
-                          />
-                        </TableCell>
+                        <TableCell className="line-table-header-font" align="left">&nbsp;</TableCell>
+                        <TableCell className="line-table-header-font" align="left">Name</TableCell>
+                        <TableCell className="line-table-header-font" align="left"> Quantity</TableCell>
+                        <TableCell className="line-table-header-font" align="left">Price</TableCell>
                       </TableRow>
-                    )) : null}
+                    </TableHead>
+                    <TableBody className="tableBody">
+                      {this.state.selectedLineMRNList.map((item, i) => (
+                        <TableRow>
+                          <TableCell align="left">
+                          <Switch 
+                           size="small" 
+                           color="warning"
+                           defaultChecked={false}
+                          onClick={(e) => this.selectMRNLine(item, e,i)} 
+                          />
+                            
+                          </TableCell>
+                          <TableCell align="left">{item.name}</TableCell>
+                          <TableCell align="left">{item.MRNQuantity}</TableCell>
+                          <TableCell align="left">{item.Price}</TableCell>
+                        </TableRow>
+                      ))}
 
-                    {this.state.SelectedLotItem['LotDetails'] ? (
-                      <TableRow>
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left"><span className="themeFont" style={{ color: '#212121', fontWeight: 'bold' }}>Total</span></TableCell>
-                        <TableCell align="left">{this.getTotalLotQuantity()}</TableCell>
-                        <TableCell align="left"></TableCell>
-                        <TableCell align="left"></TableCell>
-                      </TableRow>
-                    ) : null}
-
-
-                  </TableBody>
-                </Table>
-
+                    </TableBody>
+                  </Table>
+                </div>
+                
               </Grid>
             </Grid>
 
-
-
-
+           
             <div style={{ height: 50 }}>&nbsp;</div>
           </DialogContent>
         </Dialog>
