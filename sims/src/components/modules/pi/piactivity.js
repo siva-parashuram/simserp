@@ -292,7 +292,8 @@ class piactivity extends React.Component {
         MRNID: ""
       },
       MRNList:[],
-      selectedLineMRNList:[]
+      selectedLineMRNList:[],
+      PIMRNID:[],
     };
   }
 
@@ -2541,7 +2542,7 @@ class piactivity extends React.Component {
     }
 
     for (let i = 0; i < newMRNListArray.length; i++) {
-      newMRNListArray[i].isSelected = false;
+      newMRNListArray[i].isSelected = true;
     }
 
     this.setState({ selectedLineMRNList: newMRNListArray });
@@ -2560,6 +2561,7 @@ class piactivity extends React.Component {
   }
 
   combileMRNs = () => {
+    let PIMRNID=this.state.PIMRNID;
     let MRNList = this.state.MRNList;
     let isDefaultSelected = false;
     //----------------------CHECK IF DEFAULT MRN SELECTED------------
@@ -2598,6 +2600,7 @@ class piactivity extends React.Component {
         }
         if(isPresent===true){}else{
           LotList.push(selectedLineMRNList[i]);
+          PIMRNID.push({MRNID:selectedLineMRNList[i].MRNID});
         }
       }
      
@@ -2667,7 +2670,13 @@ class piactivity extends React.Component {
 
     let Dialog=this.state.Dialog;
      Dialog.DialogStatus=false;
-    this.setState({PurchaseOrderLine:newPOL,Dialog:Dialog});
+    this.setState({
+      PIMRNID:PIMRNID,
+      PurchaseOrderLine:newPOL,
+      Dialog:Dialog
+    },()=>{
+      this.calculateInvoiceDetails();
+    });
 
   }
 
@@ -2861,7 +2870,7 @@ class piactivity extends React.Component {
                 ValidUser: ValidUser,
                 PI: MRN,
                 PILineList: MRNLineList,
-               
+                PIMRNID:this.state.PIMRNID
                 
               };
               console.log("AddNew > reqData > ", reqData);
@@ -4377,8 +4386,8 @@ class piactivity extends React.Component {
                           <Switch 
                            size="small" 
                            color="warning"
-                           defaultChecked={false}
-                          onClick={(e) => this.selectMRNLine(item, e,i)} 
+                           defaultChecked={item.isSelected}
+                           onClick={(e) => this.selectMRNLine(item, e,i)} 
                           />
                             
                           </TableCell>
