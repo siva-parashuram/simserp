@@ -435,12 +435,7 @@ class piactivity extends React.Component {
 
           let ContainerInfo = [];
           let responseCI = ResonsePO.MRNContainerInfo;
-
-         
-
-
-
-
+    
           let PurchaseOrderLine = ResonsePO.PurchaseInvoiceLineList;
           PO.BillingID = CF.toInt(ResonsePO.BillingID);
 
@@ -1458,7 +1453,7 @@ class piactivity extends React.Component {
 
 
   handleClose = () => {
-    
+    this.setState({PIMRNID:[],selectedLineMRNList:[]});
     let Dialog = this.state.Dialog;
     Dialog.DialogStatus = false;
     this.setState({ Dialog: Dialog });
@@ -2563,14 +2558,79 @@ class piactivity extends React.Component {
   combileMRNs = () => {
     let PIMRNID=this.state.PIMRNID;
     let MRNList = this.state.MRNList;
-    let isDefaultSelected = false;
+    let NewData = {};
     //----------------------CHECK IF DEFAULT MRN SELECTED------------
     for (let i = 0; i < MRNList.length; i++) {
       if (MRNList[i].isDefaultInfo === true) {
-        isDefaultSelected = true;
+        NewData=MRNList[i];
         break;
       }
     }
+    console.log("combileMRNs > NewData > ",NewData);
+
+    //------------------------Setting PO Fields-----------------
+    let newPO=this.state.PO;
+    newPO.BillingID = CF.toInt(NewData.BillingID);
+
+    newPO.PODate = moment(NewData.PODate).format("YYYY-MM-DD");
+    newPO.DispachDate = moment(NewData.DispachDate).format("YYYY-MM-DD");
+    newPO.DeliveryDate = moment(NewData.DeliveryDate).format("YYYY-MM-DD");
+
+
+    if (newPO.AmendmentNo > 0) {
+      newPO.AmendmentDate = moment(NewData.AmendmentDate).format("YYYY-MM-DD");
+    } else {
+      newPO.AmendmentDate = "";
+    }
+ 
+    newPO.MODTaxID=CF.toInt(NewData.MODTaxID);
+   
+
+
+    //------------------------------------------
+
+     //----------------------------Setting MRN Fields--------------------
+      
+     let MRN = this.state.MRN;
+     MRN.MRNID = NewData.MRNID;
+     MRN.No = NewData.No;
+     MRN.Status = NewData.Status;
+     MRN.SuplInvNo = NewData.SuplInvNo;
+     MRN.EWayBillNo = NewData.EWayBillNo;
+     MRN.DutyFogone = parseFloat(NewData.DutyFogone);
+     MRN.DutyPaid = parseFloat(NewData.DutyPaid);
+     MRN.GSTOrVATPaid = parseFloat(NewData.GSTOrVATPaid);
+     MRN.AssableValue = parseFloat(NewData.AssableValue);
+     MRN.BillOfEntryNo = NewData.BillOfEntryNo;
+     MRN.BillOfEntryValue = parseFloat(NewData.BillOfEntryValue);
+     MRN.BLOrAWBNo = NewData.BLOrAWBNo;
+     MRN.PortID = CF.toInt(NewData.PortID);
+     MRN.GateEntryNo = NewData.GateEntryNo;
+     MRN.PayToSuplID = CF.toInt(NewData.PayToSuplID);
+     MRN.GateEntryDate = moment(NewData.GateEntryDate).format("YYYY-MM-DD");
+     MRN.MRNDate = moment(NewData.MRNDate).format("YYYY-MM-DD");
+     MRN.SuplInvDate = moment(NewData.SuplInvDate).format("YYYY-MM-DD");
+     MRN.BillOfEntryDate = moment(NewData.BillOfEntryDate).format("YYYY-MM-DD");
+     MRN.BLOrAWBDate = moment(NewData.BLOrAWBDate).format("YYYY-MM-DD");
+     //------------------------------------------------------------------
+
+     this.setState(
+      {
+        PO:newPO,
+        MRN:MRN,
+        Name: NewData.Name,
+        Address: NewData.Address,
+        Address2: NewData.Address2,
+        Address3: NewData.Address3,
+        City: NewData.City,
+        PostCode: NewData.PostCode,
+        CountryID: NewData.CountryID,
+        StateID: NewData.StateID,
+      },()=>{
+        this.calculateDueDate();
+      }
+    );
+
     //---------------------------------------------------------------
 
     //----------------------COMBINE LINE LIST OBJECT------------------
@@ -2578,7 +2638,6 @@ class piactivity extends React.Component {
     let selectedLineMRNList = this.state.selectedLineMRNList;
     let LotList=[];
     for(let i=0;i<selectedLineMRNList.length;i++){
-      console.log("selectedLineMRNList[i].isSelected > ",selectedLineMRNList[i].isSelected);
       if(selectedLineMRNList[i].isSelected===true){
         let isPresent=false;
         for(let j=0;j<LotList.length;j++){
@@ -2684,7 +2743,7 @@ class piactivity extends React.Component {
 
     //to disable screen if Status is not Open
     let disableEvents = false;
-    disableEvents = CF.toInt(this.state.MRN.Status) > 0 ? true : false;
+    //disableEvents = CF.toInt(this.state.MRN.Status) > 0 ? true : false;
     const disabledStyle = {
       "pointer-events": disableEvents ? "none" : "unset"
     };
