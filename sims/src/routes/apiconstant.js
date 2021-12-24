@@ -777,11 +777,19 @@ export const poMasterColumn=[
   ,{
     field: 'Status',
     headerName: 'Status',
-    width: 115,
+    width: 130,
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
-        {params.row.Pick === "PO" ? (
+          {params.value === 0 ? (<Chip label="Open" size="small" />) : null}
+            {params.value === 1 ? (<Chip label="Open" size="small" />) : null}
+            {params.value === 2 ? (<Chip label="Released" color="primary" size="small" />) : null}
+            {params.value === 3 ? (<Chip label="Complete MRN" color="secondary" size="small" />) : null}
+            {params.value === 4 ? (<Chip label="Partial MRN" color="warning" size="small" />) : null}
+            {params.value === 5 ? (<Chip label="Short Close" color="success" size="small" />) : null}
+          
+          {/* {params.row.Pick === "PO" ? (  
+         
           <Fragment>
             {params.value === 1 ? (<Chip label="Open" size="small" />) : null}
             {params.value === 2 ? (<Chip label="Released" color="primary" size="small" />) : null}
@@ -795,7 +803,7 @@ export const poMasterColumn=[
             {params.value === 0 ? (<Chip label="Open" size="small" />) : null}
             {params.value === 1 ? (<Chip label="Released" color="success" size="small" />) : null}
           </Fragment>
-        ) : null}
+        ) : null} */}
       
       </Fragment>
     ),
@@ -986,8 +994,8 @@ export const GITMasterColumn=[
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
-       {params.value===0?(<Chip label="Open" size="small"/>):null}
-       {params.value===1?(<Chip label="Released"  color="success"  size="small"/>):null}
+       {params.value===1?(<Chip label="Open" size="small"/>):null}
+       {params.value===2?(<Chip label="Released"  color="success"  size="small"/>):null}
       </Fragment>
     ),
   }
