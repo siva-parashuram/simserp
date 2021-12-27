@@ -193,6 +193,7 @@ export const APIURL = {
   GetMRNBySuplID:domain+"api/PO/GetMRNBySuplID",
   Add_Update_PI:domain+"api/PO/Add_Update_PI",
   GetPIByPIID:domain+"api/PO/GetPIByPIID",
+  PI_Post:domain+"api/po/PI_Post",
 };
 
 export const CTimeOut = 10;
@@ -288,6 +289,10 @@ export const buttonTitle = {
   combine: {
     name: "Merge & Update List",
     icon: <MergeTypeIcon />,
+  },
+  voucher:{
+    name: "Voucher",
+    icon: <PrintIcon />,
   },
 };
 

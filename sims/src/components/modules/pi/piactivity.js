@@ -67,7 +67,8 @@ import SCADI from "../../compo/customautocompletecomponent";
 import SCI from "../../compo/customtextboxinput";
 import SCSI from "../../compo/customswitchinput";
 
-
+import Printpi from "./component/printpi";
+import Printpivoucher from "./component/printpivoucher";
 
 const today = moment().format(
   "YYYY-MM-DD"
@@ -82,6 +83,11 @@ class piactivity extends React.Component {
     this.state = {
       RADialogStatus: false,
       Dialog: {
+        DialogTitle: "",
+        DialogStatus: false,
+        DialogContent: null,
+      },
+      VPDialog:{
         DialogTitle: "",
         DialogStatus: false,
         DialogContent: null,
@@ -176,6 +182,7 @@ class piactivity extends React.Component {
       branchTaxType: {
         name: "VAT",
       },
+      EmailID:"",
       Name: "",
       Address: "",
       Address2: "",
@@ -442,6 +449,7 @@ class piactivity extends React.Component {
           PO.PODate = moment(PO.PODate).format("YYYY-MM-DD");
           PO.DispachDate = moment(PO.DispachDate).format("YYYY-MM-DD");
           PO.DeliveryDate = moment(PO.DeliveryDate).format("YYYY-MM-DD");
+          PO.DeliveryAddress=this.getWareHousedeliveryAddressById(CF.toInt(ResonsePO.WareHouseID));
 
 
           if (PO.AmendmentNo > 0) {
@@ -546,12 +554,28 @@ class piactivity extends React.Component {
             });
           }
 
+
+          let SupplierEmailID="";
+
+          for (let i = 0; i < this.state.supplierList.length; i++) {
+            console.log("supplierList[i] > ",this.state.supplierList[i]);
+            let Address=this.state.supplierList[i].Address;
+            for(let j=0;j<Address.length;j++){
+              if(ResonsePO.BillingID===Address[j].AddressID){
+                SupplierEmailID=Address[j].EmailID;
+                break;
+              }
+            }            
+          }
+
+
           this.setState({
             MRN: MRN,
             PO: PO,
             PurchaseOrderLine: newPOL,
             ContainerInfo: ContainerInfo,
             Name: PO.Name,
+            EmailID:SupplierEmailID,
             Address: PO.Address,
             Address2: PO.Address2,
             Address3: PO.Address3,
@@ -611,6 +635,15 @@ class piactivity extends React.Component {
         break;
     }
     return ItemList;
+  }
+
+  getWareHousedeliveryAddressById = (id) => {
+    for (let i = 0; i < this.state.WarehouseList.length; i++) {
+      if (this.state.WarehouseList[i].value === id) {
+        return this.state.WarehouseList[i].deliveryAddress;
+        break;
+      }
+    }
   }
 
   presetSetSupplierDropdown = (PO) => {
@@ -977,6 +1010,7 @@ class piactivity extends React.Component {
         } else {
           this.setState({
             PO: PO,
+            EmailID:BCdata.EmailID,
             Name: BCdata.Name,
             Address: BCdata.Address,
             Address2: BCdata.Address2,
@@ -1044,6 +1078,7 @@ class piactivity extends React.Component {
       if (this.state.SupplierAddressMasterList[i].AddressID === AddressID) {
         data = {
           Name: this.state.SupplierAddressMasterList[i].Name,
+          EmailID:this.state.SupplierAddressMasterList[i].EmailID,
           Address: this.state.SupplierAddressMasterList[i].Address,
           Address2: this.state.SupplierAddressMasterList[i].Address2,
           Address3: this.state.SupplierAddressMasterList[i].Address3,
@@ -1112,6 +1147,7 @@ class piactivity extends React.Component {
     PO.VATNo = data.VATNo;
     this.setState({
       PO: PO,
+      EmailID:data.EmailID,
       Address: data.Address,
       Address2: data.Address2,
       Address3: data.Address3,
@@ -1466,10 +1502,48 @@ class piactivity extends React.Component {
     this.setState({ Dialog: Dialog });
   };
 
+  openViewPrintDialog=(param)=>{
+    if(param==="View"){
+      let VPDialog = this.state.VPDialog;
+      VPDialog.DialogStatus = true;
+      VPDialog.DialogTitle = "View Purchase Invoice";
+      VPDialog.DialogContent = <Printpi
+        pidata={
+          {
+            Branch: this.state.Branch,
+            PO: this.state.PO,
+            MRN:this.state.MRN,
+            PurchaseOrderLine: this.state.PurchaseOrderLine,
+            UOMList: this.state.UOMList,
+            CurrencyList: this.state.CurrencyList,
+            Supplier: {
+              Name: this.getSupplierName(),
+              EmailID:this.state.EmailID,
+              Address: this.state.Address,
+              Address2: this.state.Address2,
+              Address3: this.state.Address3,
+              City: this.state.City,
+              PostCode: this.state.PostCode,
+              CountryID: this.state.CountryID,
+              StateID: this.state.StateID,
+              CountryList: this.state.CountryList,
+              StateList: this.state.StateList
+            }
+          }
+        }
+      />;
+      this.setState({VPDialog:VPDialog});
+    }
+  }
+
+  handleCloseopenViewPrintDialog=()=>{
+    let VPDialog = this.state.VPDialog;
+    VPDialog.DialogStatus = false;
+    this.setState({VPDialog:VPDialog});
+  }
 
 
   openDialog = (item) => {
-
     if (parseFloat(item.MRNQuantity) > 0) {
       let Dialog = this.state.Dialog;
       Dialog.DialogStatus = true;
@@ -1483,8 +1557,6 @@ class piactivity extends React.Component {
     } else {
       this.setState({ ErrorMessageProps: "Pls enter PI Quantity", ErrorPrompt: true });
     }
-
-
   };
 
   getNOSvalue = () => {
@@ -2398,14 +2470,11 @@ class piactivity extends React.Component {
       "Content-Type": "application/json",
     };
 
-
-
     let MRNAuthorize = this.state.MRNAuthorize;
-
 
     let MRNPost = {
       ID: 0,
-      MRNID: parseInt(this.state.MRN.MRNID),
+      PIID: parseInt(this.state.MRN.MRNID),
       Details: MRNAuthorize.Details,
       UserID: parseInt(getCookie(COOKIE.USERID))
     };
@@ -2418,17 +2487,16 @@ class piactivity extends React.Component {
         PostedDocument: MRNPost
       };
 
-
       console.log("reqData > ", reqData);
 
-      let Url = APIURLS.APIURL.MRN_Post;
+      let Url = APIURLS.APIURL.PI_Post;
       axios
         .post(Url, reqData, { headers })
         .then((response) => {
           if (response.status === 201 || response.status === 200) {
-            this.setState({ SuccessPrompt: true, ProgressLoader: true });
+            this.setState({ SuccessPrompt: true, ProgressLoader: true,RADialogStatus: false });
             let editUrl =
-              URLS.URLS.mrn +
+              URLS.URLS.PI +
               this.state.urlparams;
             this.openPage(editUrl);
           } else {
@@ -2743,7 +2811,7 @@ class piactivity extends React.Component {
 
     //to disable screen if Status is not Open
     let disableEvents = false;
-    //disableEvents = CF.toInt(this.state.MRN.Status) > 0 ? true : false;
+    disableEvents = CF.toInt(this.state.MRN.Status) ===1 ? true : false;
     const disabledStyle = {
       "pointer-events": disableEvents ? "none" : "unset"
     };
@@ -3071,6 +3139,52 @@ class piactivity extends React.Component {
             </Button>
           ) : null}
 
+          <Button
+            startIcon={APIURLS.buttonTitle.view.icon}
+            className="action-btns"
+            onClick={(e) => this.openViewPrintDialog("View")}
+          >
+            {APIURLS.buttonTitle.view.name}
+          </Button>
+
+          {this.state.type === "edit" ? (
+            <ReactToPrint
+              trigger={() => {
+                // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+                // to the root node of the returned component as it will be overwritten.
+                return (
+                  <Button
+                    startIcon={APIURLS.buttonTitle.print.icon}
+                    className="action-btns"
+                  >
+                    {APIURLS.buttonTitle.print.name}
+                  </Button>
+                );
+              }}
+              content={() => this.componentRef}
+            />
+          ) : null}
+
+           
+
+          {this.state.MRN.Status === 1 ? (
+            <ReactToPrint
+              trigger={() => {
+                // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
+                // to the root node of the returned component as it will be overwritten.
+                return (
+                  <Button
+                    startIcon={APIURLS.buttonTitle.voucher.icon}
+                    className="action-btns"
+                  >
+                    {APIURLS.buttonTitle.voucher.name}
+                  </Button>
+                );
+              }}
+              content={() => this.componentRef2}
+            />
+          ) : null}
+
         </ButtonGroup>
       </Fragment>
     );
@@ -3114,9 +3228,62 @@ class piactivity extends React.Component {
         />
 
 
+        <div style={{ display: "none" }}>
+          <Printpi pidata={
+            {
+              Branch: this.state.Branch,
+              PO: this.state.PO,
+              MRN: this.state.MRN,
+              PurchaseOrderLine: this.state.PurchaseOrderLine,
+              UOMList: this.state.UOMList,
+              CurrencyList: this.state.CurrencyList,
+              Supplier: {
+                Name: this.getSupplierName(),
+                EmailID: this.state.EmailID,
+                Address: this.state.Address,
+                Address2: this.state.Address2,
+                Address3: this.state.Address3,
+                City: this.state.City,
+                PostCode: this.state.PostCode,
+                CountryID: this.state.CountryID,
+                StateID: this.state.StateID,
+                CountryList: this.state.CountryList,
+                StateList: this.state.StateList
+              }
+            }
+          } ref={el => (this.componentRef = el)} />
 
+<Printpivoucher pidata={
+            {
+              Branch: this.state.Branch,
+              PO: this.state.PO,
+              MRN: this.state.MRN,
+              PurchaseOrderLine: this.state.PurchaseOrderLine,
+              UOMList: this.state.UOMList,
+              CurrencyList: this.state.CurrencyList,
+              Supplier: {
+                Name: this.getSupplierName(),
+                EmailID: this.state.EmailID,
+                Address: this.state.Address,
+                Address2: this.state.Address2,
+                Address3: this.state.Address3,
+                City: this.state.City,
+                PostCode: this.state.PostCode,
+                CountryID: this.state.CountryID,
+                StateID: this.state.StateID,
+                CountryList: this.state.CountryList,
+                StateList: this.state.StateList
+              }
+            }
+          } ref={el => (this.componentRef2 = el)} />
 
+          
 
+        </div>
+
+       
+
+        
 
         <Grid container spacing={0} >
           <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -4482,7 +4649,7 @@ class piactivity extends React.Component {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title" className="dialog-area">
-            <span style={{ color: 'red' }}>MRN Status</span>
+            <span style={{ color: 'red' }}>Purchase Invoice Status</span>
           </DialogTitle>
           <DialogContent className="dialog-area">
 
@@ -4517,6 +4684,41 @@ class piactivity extends React.Component {
 
 
           </DialogActions>
+        </Dialog>
+
+        <Dialog
+          fullWidth={true}
+          maxWidth="lg"
+          className="dialog-prompt-activity"
+          open={this.state.VPDialog.DialogStatus}
+          onClose={() => this.handleCloseopenViewPrintDialog()}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title" className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}>
+                <IconButton
+                  aria-label="ArrowBackIcon"
+                >
+                  <ArrowBackIcon onClick={(e) => this.handleCloseopenViewPrintDialog()} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2} lg={2}>
+                <div style={{ marginLeft: -50 }}>
+                  {" "}
+                  <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
+                    {" "}
+                    {this.state.VPDialog.DialogTitle}{" "}
+                  </span>{" "}
+                </div>
+              </Grid>
+            </Grid>
+            
+          </DialogTitle>
+          <DialogContent className="dialog-area">
+           {this.state.VPDialog.DialogContent}
+          </DialogContent>          
         </Dialog>
 
 
