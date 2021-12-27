@@ -165,7 +165,27 @@ class printpivoucher extends React.Component {
         return totalCGSTSGSTAmount.toFixed(2);
     }
 
-  
+    getTotalDebit=()=>{
+        let totalDebit=0;
+        if(this.props.pidata.PIV.PurchaseInvoiceLineList){
+            let PurchaseInvoiceLineList=this.props.pidata.PIV.PurchaseInvoiceLineList;
+            for(let i=0;i<PurchaseInvoiceLineList.length;i++){
+                totalDebit=parseFloat(totalDebit)+parseFloat(PurchaseInvoiceLineList[i].DebitAmount);
+            }
+        }
+        return totalDebit.toFixed(2);
+    }
+
+    getTotalCredit=()=>{
+        let totalCredit=0;
+        if(this.props.pidata.PIV.PurchaseInvoiceLineList){
+            let PurchaseInvoiceLineList=this.props.pidata.PIV.PurchaseInvoiceLineList;
+            for(let i=0;i<PurchaseInvoiceLineList.length;i++){
+                totalCredit=parseFloat(totalCredit)+parseFloat(PurchaseInvoiceLineList[i].CreditAmount);
+            }
+        }
+        return totalCredit.toFixed(2);
+    }
 
 
     render() {
@@ -227,12 +247,12 @@ class printpivoucher extends React.Component {
                     <Grid item xs={6} style={{
                         textAlign:'left'
                     }}>
-                      <b>Voucher No: </b> kakakakakakakakakak
+                      <b>Voucher No: </b> {this.props.pidata.PIV.No}
                     </Grid>
                     <Grid item xs={6} style={{
                         textAlign:'right'
                     }}>
-                      <b>Date: </b>{moment().format('DD-MMM-YYYY')}
+                      <b>Date: </b>{moment(this.props.pidata.PIV.PIDate).format('DD-MMM-YYYY')}
                     </Grid>
                 </Grid>
                 
@@ -256,7 +276,8 @@ class printpivoucher extends React.Component {
                                                 borderColor: 'black',
                                                 borderBottomColor: 'black'
                                             }} 
-                                    align="left">Particulars</TableCell>                                       
+                                    align="left">Particulars</TableCell>   
+                                                                       
                                         <TableCell className="purchase-voucher-table" 
                                         style={{ 
                                             maxWidth: 120, 
@@ -277,11 +298,26 @@ class printpivoucher extends React.Component {
                                 </TableHead>
                                 <TableBody >
 
-                                   <TableRow>
-                                        <TableCell className="purchase-voucher-table-tablecell" align="left">-</TableCell>                                       
-                                        <TableCell className="purchase-voucher-table-tablecell" align="right">-</TableCell>
-                                        <TableCell className="purchase-voucher-table-tablecell" align="right">-</TableCell>
-                                    </TableRow>
+                                    {this.props.pidata.PIV.PurchaseInvoiceLineList ? this.props.pidata.PIV.PurchaseInvoiceLineList.map((item, i) => (
+                                        <TableRow>
+                                            <TableCell className="purchase-voucher-table-tablecell" align="left">
+                                                {item.Name}
+                                                
+                                                <div style={{
+                                                    textAlign: 'right'
+                                                }}>
+                                                    {item.DebitAmount === 0 ? "" : "Dr"}
+                                                    {item.CreditAmount === 0 ? "" : "Cr"}
+                                                </div>
+                                                
+                                                </TableCell>
+                                            
+                                            <TableCell className="purchase-voucher-table-tablecell" align="right">{item.DebitAmount===0?"":item.DebitAmount}</TableCell>
+                                            <TableCell className="purchase-voucher-table-tablecell" align="right">{item.CreditAmount===0?"":item.CreditAmount}</TableCell>
+                                        </TableRow>
+                                    )) : null}
+
+
                                     
 
                                     <TableRow>
@@ -294,7 +330,7 @@ class printpivoucher extends React.Component {
                                             <div style={{height:250}}>&nbsp;</div>
                                             <span>
                                                 <i>
-                                                    Some data inputs with come here
+                                                    {this.props.pidata.PIV.Remarks}
                                                 </i>
                                             </span>
                                             <br/>
@@ -305,10 +341,10 @@ class printpivoucher extends React.Component {
                                             </b>
                                        </TableCell>                                       
                                         <TableCell className="purchase-voucher-table-tablecell" align="right">
-                                          
+                                         
                                         </TableCell>
                                         <TableCell className="purchase-voucher-table-tablecell" align="right">
-                                           
+                                       
                                         </TableCell>
                                     </TableRow>
 
@@ -327,7 +363,7 @@ class printpivoucher extends React.Component {
                                             borderBottomColor: 'black'  
                                         }} 
                                         align="right">
-                                            155.00
+                                             {this.getTotalDebit()}
                                         </TableCell>
                                         <TableCell className="purchase-voucher-table" 
                                         style={{                                           
@@ -335,7 +371,7 @@ class printpivoucher extends React.Component {
                                             borderBottomColor: 'black'  
                                         }} 
                                         align="right">
-                                            155.00
+                                            {this.getTotalCredit()}
                                         </TableCell>
                                     </TableRow>
                                

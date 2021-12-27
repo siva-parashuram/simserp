@@ -301,6 +301,7 @@ class piactivity extends React.Component {
       MRNList: [],
       selectedLineMRNList: [],
       PIMRNID: [],
+      PIV:{},
     };
   }
 
@@ -430,6 +431,9 @@ class piactivity extends React.Component {
         PIID: CF.toInt(PO.MRNID)
       }
     };
+
+    this.getPIVdetails(CF.toInt(PO.MRNID));
+
     axios
       .post(Url, reqData, { headers })
       .then((response) => {
@@ -600,6 +604,35 @@ class piactivity extends React.Component {
         this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
   };
+
+  getPIVdetails=(PIID)=>{
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let reqData={
+      ValidUser: ValidUser,
+      PI: {
+        PIID: PIID
+      }
+    };
+    let Url = APIURLS.APIURL.GetPIVoucherByPIID;
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+         this.setState({PIV:response.data});
+        } else {
+           
+        }
+      })
+      .catch((error) => {
+        console.log("Error > ", error);
+        this.setState({ ErrorPrompt: true, ProgressLoader: true });
+      });
+  }
 
   getItemList = (Type, SuplID, CategoryId) => {
     let Supplier = this.state.supplierList;
@@ -3253,11 +3286,12 @@ class piactivity extends React.Component {
             }
           } ref={el => (this.componentRef = el)} />
 
-<Printpivoucher pidata={
+          <Printpivoucher pidata={
             {
               Branch: this.state.Branch,
               PO: this.state.PO,
               MRN: this.state.MRN,
+              PIV:this.state.PIV,
               PurchaseOrderLine: this.state.PurchaseOrderLine,
               UOMList: this.state.UOMList,
               CurrencyList: this.state.CurrencyList,
@@ -3277,7 +3311,7 @@ class piactivity extends React.Component {
             }
           } ref={el => (this.componentRef2 = el)} />
 
-          
+
 
         </div>
 

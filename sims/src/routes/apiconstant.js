@@ -194,6 +194,7 @@ export const APIURL = {
   Add_Update_PI:domain+"api/PO/Add_Update_PI",
   GetPIByPIID:domain+"api/PO/GetPIByPIID",
   PI_Post:domain+"api/po/PI_Post",
+  GetPIVoucherByPIID:domain+"api/po/GetPIVoucherByPIID",
 };
 
 export const CTimeOut = 10;
