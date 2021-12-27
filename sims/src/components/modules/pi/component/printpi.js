@@ -190,7 +190,7 @@ class printpi extends React.Component {
         const marginLeft = "25px"
         const getPageMargins = () => {
             return `@page { margin: ${marginTop} ${marginRight} ${marginBottom} ${marginLeft} !important; }  @media print {
-                @page { size: portrait; }
+                @page { size: landscape; }
               } `;
         };
 
@@ -350,11 +350,12 @@ class printpi extends React.Component {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell style={{ maxWidth: 30, minWidth: 30 }} align="left">Sr.No</TableCell>
-                                        <TableCell style={{ maxWidth: 350, minWidth: 350 }} align="left">Description</TableCell>
+                                        <TableCell style={{ maxWidth: 280, minWidth: 280 }} align="left">Description</TableCell>
                                         <TableCell style={{ maxWidth: 50, minWidth: 50 }} align="left">HSN</TableCell>
                                         <TableCell style={{ maxWidth: 80, minWidth: 80 }} align="right">Qty</TableCell>
                                         <TableCell style={{ maxWidth: 50, minWidth: 50 }} align="left">UOM</TableCell>
                                         <TableCell style={{ maxWidth: 100, minWidth: 100 }} align="right">Unit Price</TableCell>
+                                        <TableCell style={{ maxWidth: 100, minWidth: 100 }} align="right">Disc %</TableCell>
                                         <TableCell style={{ maxWidth: 80, minWidth: 80 }} align="right">Amt</TableCell>
                                         {this.props.pidata.Branch.IsGST === true ? (
                                             <Fragment>
@@ -444,6 +445,7 @@ class printpi extends React.Component {
                                                 ))}
                                             </TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">{this.getPrice(item.Price)}</TableCell>
+                                            <TableCell className="po-print-no-border-table" align="right">{this.getPrice(item.LineDiscPercentage)}</TableCell>
                                             <TableCell className="po-print-no-border-table" align="right">{this.QuantityMultiplyPrice(item.Quantity, item.Price)}</TableCell>
                                            
                                         {this.props.pidata.Branch.IsGST === true ? (
@@ -496,6 +498,7 @@ class printpi extends React.Component {
                                         <TableCell className="po-print-no-border-table" align="left"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="left"><b>TOTAL:</b></TableCell>                                         
                                         <TableCell className="po-print-no-border-table" align="right">{this.getTotalQuantity()}</TableCell>
+                                        <TableCell className="po-print-no-border-table" align="right"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="right"></TableCell>
                                         <TableCell className="po-print-no-border-table" align="right">{this.getTotalAmount()}</TableCell>
