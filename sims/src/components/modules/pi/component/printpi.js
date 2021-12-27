@@ -522,9 +522,9 @@ class printpi extends React.Component {
                                             </b>
                                         </TableCell>
                                          
-                                       
-                                        <TableCell className="po-print-no-border-table" align="right"> </TableCell>
-                                        <TableCell className="po-print-no-border-table" align="right" colSpan={2}><b>Grand Total </b> {this.getCurrencyName()} {this.props.pidata.PO.FCValue}</TableCell>
+                                        <TableCell className="po-print-no-border-table" align="right"></TableCell>
+                                        <TableCell className="po-print-no-border-table" align="right" colSpan={2}><b>Grand Total </b> {this.getCurrencyName()}</TableCell>
+                                        <TableCell className="po-print-no-border-table" align="right" > {this.props.pidata.PO.FCValue}</TableCell>
 
 
                                     </TableRow>

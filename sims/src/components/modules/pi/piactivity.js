@@ -4751,7 +4751,25 @@ class piactivity extends React.Component {
             
           </DialogTitle>
           <DialogContent className="dialog-area">
-           {this.state.VPDialog.DialogContent}
+            <div style={{ height: 20 }}>&nbsp;</div>
+            {this.state.type === "edit" ? (
+              <ReactToPrint
+                trigger={() => {
+                 
+                  return (
+                    <Button
+                      startIcon={APIURLS.buttonTitle.print.icon}
+                      className="action-btns"
+                    >
+                      {APIURLS.buttonTitle.print.name}
+                    </Button>
+                  );
+                }}
+                content={() => this.componentRef}
+              />
+            ) : null}
+             <div style={{ height: 20 }}>&nbsp;</div>
+            {this.state.VPDialog.DialogContent}
           </DialogContent>          
         </Dialog>
 
