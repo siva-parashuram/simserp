@@ -63,6 +63,7 @@ class editItemSuperCategory extends React.Component {
         HSNCode: { errorState: false, errorMssg: "" },
       },
       branchList: [],
+      checkedBranchList:[],
     };
   }
 
@@ -129,11 +130,56 @@ class editItemSuperCategory extends React.Component {
             }
           }
         }
-        this.setState({ branchList: companies, ProgressLoader: true });
+        this.setState({ branchList: companies, ProgressLoader: true },()=>{
+          this.getRestrictedBranches();
+        });
       })
       .catch((error) => {
         console.log("$$$$$$$$$ companies Error > ", error);
         this.setState({ branchList: [], ProgressLoader: true });
+      });
+  }
+
+  getRestrictedBranches=()=>{   
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetBrachesUrl = APIURLS.APIURL.GetItemSuperCategoryRestrictedBranchID;
+
+    let reqData={
+      ValidUser:ValidUser,
+      ItemSuperCategory: {
+        SuperCatID: parseInt(this.state.SuperCatID),
+      }
+    };
+
+    axios
+      .post(GetBrachesUrl, reqData, { headers })
+      .then((response) => {
+        if(response.status===200){
+         
+          let data=JSON.parse(response.data);
+          
+         let checkedBranchList=data;
+         console.log("checkedBranchList > ",checkedBranchList);
+          let branchList=this.state.branchList; 
+          for (let i = 0; i < branchList.length; i++) {
+            let BL = branchList[i].branchList;
+            for (let j = 0; j < checkedBranchList.length; j++) {
+              for (let k = 0; k < BL.length; k++) {
+                if (BL[k].BranchID === checkedBranchList[j].BranchID) {
+                  BL[k].isSelected = true;
+                }
+              }
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        this.setState({ checkedBranchList: [], ProgressLoader: true });
       });
   }
 
@@ -144,7 +190,7 @@ class editItemSuperCategory extends React.Component {
     let Data = {
       validUser: ValidUser,
       ItemSuperCategory: {
-        SuperCatID: this.state.SuperCatID,
+        SuperCatID: parseInt(this.state.SuperCatID),
       },
     };
 
@@ -165,8 +211,9 @@ class editItemSuperCategory extends React.Component {
           HSNCode: data.hsncode,
           ItemType: data.itemType,
           IsActive: data.isActive,
-          DisableUpdatebtn: false,
+          DisableUpdatebtn: false,         
           ProgressLoader: true,
+
         });
       })
       .catch((error) => { });
@@ -194,7 +241,7 @@ class editItemSuperCategory extends React.Component {
       for (let j = 0; j < BL.length; j++) {       
         if(BL[j].isSelected===true){
           let obj = {
-            SuperCatID:parseInt(this.state.SuperCatID),
+            CatID:parseInt(this.state.SuperCatID),
             BranchID:parseInt(BL[j].BranchID)
           };
           restrictList.push(obj);
@@ -211,9 +258,9 @@ class editItemSuperCategory extends React.Component {
 
     let Url=APIURLS.APIURL.UpdateItemSuperCategoryRestrictedBranch;
     axios
-      .post(Url, ValidUser, { headers })
+      .post(Url, reqData, { headers })
       .then((response) => {
-          if(response.status===200){
+          if(response.status===200 && response.data===true){
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           }else{
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -580,7 +627,11 @@ class editItemSuperCategory extends React.Component {
                               <Checkbox
                                 key={"chooseCheckbox_"+i+"_"+j}
                                 onClick={(e) => this.chooseBranch(branchItem, e,i,j)}
-                                checked={branchItem.isSelected} />  {branchItem.Name}
+                                checked={
+                                  branchItem.isSelected
+                                } />  
+                                {branchItem.Name} 
+                               
                             </span> <br />
                           </Fragment>
                         ))}

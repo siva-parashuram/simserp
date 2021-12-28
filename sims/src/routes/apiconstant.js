@@ -62,7 +62,7 @@ export const APIURL = {
   AddUser: domain + "api/users/CreateUser",
   GetUser: domain + "api/users/GetUser",
   UpdateUser: domain + "api/users/UpdateUser",
-  GetBraches: domain + "api/Branch/GetBraches",
+  GetBraches: domain + "api/Branch/GetBraches",  
   GetBranch: domain + "api/Branch/GetBranch",
   UpdateBranch: domain + "api/Branch/UpdateBranch",
   CreateBranch: domain + "api/Branch/CreateBranch",
@@ -111,6 +111,7 @@ export const APIURL = {
   GetItemSuperCategories: domain + "api/ItemMaster/GetItemSuperCategories",
   GetItemSuperCategory: domain + "api/ItemMaster/GetItemSuperCategory",
   UpdateItemSuperCategory: domain + "api/ItemMaster/UpdateItemSuperCategory",
+  GetItemSuperCategoryRestrictedBranchID:domain+"api/ItemMaster/GetItemSuperCategoryRestrictedBranchID",
   CreateItemMainCategory: domain + "api/ItemMaster/CreateItemMainCategory",
   GetItemMainCategories: domain + "api/ItemMaster/GetItemMainCategories",
   GetItemMainCategory: domain + "api/ItemMaster/GetItemMainCategory",
@@ -425,7 +426,7 @@ export const ItemType = [
     name: "Raw Material",
     value: 1
   }, {
-    name: "Work In Progres",
+    name: "Work In Progress",
     value: 2
   }
 ];
@@ -1078,12 +1079,12 @@ export const superCategoryMasterColumn=[
   },{
     field: 'code',
     headerName: 'Code',
-    width: 180,
+    width: 150,
     headerClassName: 'table-header-font'
   },{
     field: 'itemType',
     headerName: 'Type',
-    width: 180,
+    width: 150,
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
@@ -1095,7 +1096,7 @@ export const superCategoryMasterColumn=[
   {
     field: 'hsncode',
     headerName: 'HSN',
-    width: 180,
+    width: 120,
     headerClassName: 'table-header-font'
   },
   {
@@ -1106,7 +1107,7 @@ export const superCategoryMasterColumn=[
   },{
     field: 'isActive',
     headerName: 'Status',
-    width: 180,
+    width: 120,
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
@@ -1131,7 +1132,7 @@ const getItemTypeName = (value) => {
       name: "Raw Material",
       value: 1
     }, {
-      name: "Work In Progres",
+      name: "Work In Progress",
       value: 2
     }
   ];
