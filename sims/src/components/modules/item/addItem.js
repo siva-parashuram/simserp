@@ -108,6 +108,7 @@ class addItem extends React.Component {
       itemDepartmentMasterData: [],
       ItemCategoryData: [],
       UOMList: [],
+      GSTGroupList:[],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
@@ -126,6 +127,7 @@ class addItem extends React.Component {
     this.getitemDepartmentMasterData();
     this.getItemCategoryData();
     this.getUOMList();
+    this.GSTGroupList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -143,6 +145,38 @@ class addItem extends React.Component {
       urlparams: urlparams,
     });
   }
+
+  GSTGroupList = () => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetGSTGroup;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code,
+            value: data[i].GSTGroupID,
+          };
+          newD.push(o);
+        }
+
+        this.setState({
+          GSTGroupList: newD,
+          ProgressLoader: true,
+        });
+      })
+      .catch((error) => {});
+  };
 
   getUOMList = () => {
     this.setState({ ProgressLoader: false });
@@ -1598,7 +1632,7 @@ class addItem extends React.Component {
                                 onChange={(e) =>
                                   updateFormValue("GstgroupId", e)
                                 }
-                                param={[]}
+                                param={this.state.GSTGroupList}
                                 value={this.state.GstgroupId}
                               />
 

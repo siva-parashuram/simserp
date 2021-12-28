@@ -100,6 +100,7 @@ export const APIURL = {
   UpdateItem: domain + "api/ItemMaster/UpdateItem",
   GetAllItems: domain + "api/ItemMaster/GetAllItems",
   GetItem: domain + "api/ItemMaster/GetItem",
+  GetGSTGroup:domain+"api/Taxation/GetGSTGroup",
   CreateItemDepartment: domain + "api/ItemMaster/CreateItemDepartment",
   GetItemDepartments: domain + "api/ItemMaster/GetItemDepartments",
   GetItemDepartment: domain + "api/ItemMaster/GetItemDepartment",

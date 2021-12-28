@@ -109,6 +109,7 @@ class editItem extends React.Component {
       Item: {},
       ItemCategoryData: [],
       UOMList: [],
+      GSTGroupList:[],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
@@ -125,6 +126,7 @@ class editItem extends React.Component {
 
   componentDidMount() {
     this.getUOMList();
+    this.GSTGroupList();
     this.getItemCategoryData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -150,6 +152,38 @@ class editItem extends React.Component {
       }
     );
   }
+
+  GSTGroupList = () => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetGSTGroup;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].Code,
+            value: data[i].GSTGroupID,
+          };
+          newD.push(o);
+        }
+
+        this.setState({
+          GSTGroupList: newD,
+          ProgressLoader: true,
+        });
+      })
+      .catch((error) => {});
+  };
 
   getUOMList = () => {
      
@@ -1657,7 +1691,7 @@ class editItem extends React.Component {
                                 value={this.state.TolerancePercentage}
                               />
 
-                              <SIB
+                              {/* <SIB
                                 id="GSTGroupID"
                                 label="GST GroupID"
                                 variant="outlined"
@@ -1666,7 +1700,18 @@ class editItem extends React.Component {
                                   updateFormValue("GstgroupId", e)
                                 }
                                 value={this.state.GstgroupId}
+                              /> */}
+
+                              <SDIB
+                                id="GSTGroupID"
+                                label="GST GroupID"
+                                onChange={(e) =>
+                                  updateFormValue("GstgroupId", e)
+                                }
+                                param={this.state.GSTGroupList}
+                                value={this.state.GstgroupId}
                               />
+
                               <SIB
                                 id="HSNCode"
                                 label="HSN Code"
