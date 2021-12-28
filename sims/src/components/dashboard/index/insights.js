@@ -33,7 +33,7 @@ class insights extends React.Component {
             <Fragment>
                 <div style={{ marginLeft: 0 }}>
                     <Grid container spacing={0}>
-                        <Grid item xs={12} sm={12}>
+                        <Grid item xs={12} sm={12} md={12} lg={12}>
                             <div className="dash-row-header dash-header">
                                 <h1 className="dash-row-header-title">Insights</h1>
                             </div>
@@ -43,15 +43,15 @@ class insights extends React.Component {
                         
                         {userComponents.includes("component1") ?(
                             <Fragment>
-                            <Grid item  xs={12} sm={6} md={6} lg={6}>
+                            <Grid item  xs={12} sm={12} md={6} lg={6}>
                              <Component1 />
                             </Grid>                            
                             </Fragment>
                         )  : null}
                         {userComponents.includes("component2") ?(
                             <Fragment>
-                            <Grid item xs={12} sm={6} md={6} lg={6}>
-                             <Component1 />
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                             <Component2 />
                             </Grid>                            
                             </Fragment>
                         )  : null}                        

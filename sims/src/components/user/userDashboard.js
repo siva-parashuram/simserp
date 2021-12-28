@@ -65,8 +65,8 @@ class userDashboard extends React.Component {
         <div style={{ height: 20 }}></div>
         <div style={{ marginTop: -10 }}>
           <Grid container spacing={0}>
-            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-            <Grid item xs={12} sm={12} md={10} lg={10}>
+            <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
+            <Grid item xs={10} sm={10} md={10} lg={10}>
              
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -84,7 +84,7 @@ class userDashboard extends React.Component {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+            <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
           </Grid>
         </div>
       </Fragment>

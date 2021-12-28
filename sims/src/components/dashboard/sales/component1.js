@@ -16,8 +16,8 @@ class component1 extends React.Component {
     render() {
         return (
             <Fragment>
-                 
-                    <Grid item xs={12} sm={6}>
+                  <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={6} lg={6}>
                         <div style={{ display: 'flex', maxWidth: 900 }}>
                             <Chart
                                 width={600}
@@ -47,6 +47,8 @@ class component1 extends React.Component {
                             />
                         </div>
                     </Grid>
+                  </Grid>
+                   
                     
             </Fragment>
         );

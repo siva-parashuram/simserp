@@ -16,8 +16,8 @@ class component2 extends React.Component {
     render() {
         return (
             <Fragment>
-                
-                    <Grid item xs={12} sm={6}>
+                <Grid container spacing={0}>
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
                         <Chart
                             width={'600px'}
                             height={'300px'}
@@ -39,7 +39,9 @@ class component2 extends React.Component {
                             rootProps={{ 'data-testid': '2' }}
                         />
                     </Grid>
-                 
+                </Grid>
+
+
             </Fragment>
         );
     }
