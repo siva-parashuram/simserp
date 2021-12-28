@@ -22,6 +22,7 @@ import FormatLineSpacingIcon from '@mui/icons-material/FormatLineSpacing';
 import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
+import KeyIcon from '@mui/icons-material/Key';
 
 import Chip from '@mui/material/Chip';
 
@@ -105,6 +106,7 @@ export const APIURL = {
   GetItemDepartments: domain + "api/ItemMaster/GetItemDepartments",
   GetItemDepartment: domain + "api/ItemMaster/GetItemDepartment",
   UpdateItemDepartment: domain + "api/ItemMaster/UpdateItemDepartment",
+  UpdateItemSuperCategoryRestrictedBranch:domain+"api/ItemMaster/UpdateItemSuperCategoryRestrictedBranch",
   CreateItemSuperCategory: domain + "api/ItemMaster/CreateItemSuperCategory",
   GetItemSuperCategories: domain + "api/ItemMaster/GetItemSuperCategories",
   GetItemSuperCategory: domain + "api/ItemMaster/GetItemSuperCategory",
@@ -247,6 +249,10 @@ export const buttonTitle = {
   assignBranch:{
     name:"Assign Branch",
     icon:<AccountTreeIcon/>,
+  },
+  restrictBranch:{
+    name:"Restrict Branch",
+    icon:<KeyIcon/>,
   },
   assignRole:{
     name:"Assign Role",
@@ -423,6 +429,8 @@ export const ItemType = [
     value: 2
   }
 ];
+
+
 
 export const CostingMethod = [
   {
@@ -1059,5 +1067,79 @@ export const GITMasterColumn=[
 
 
 ];
+
+
+export const superCategoryMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 10,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'code',
+    headerName: 'Code',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'itemType',
+    headerName: 'Type',
+    width: 180,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+        {getItemTypeName(params.value)}
+      </Fragment>
+    )
+  }
+  ,
+  {
+    field: 'hsncode',
+    headerName: 'HSN',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'description',
+    headerName: 'Description',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'isActive',
+    headerName: 'Status',
+    width: 180,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+        {params.value === true ? (
+          <span style={{ color: "green" }}>Active</span>
+        ) : (
+          <span style={{ color: "red" }}>In-Active</span>
+        )}
+      </Fragment>
+    )
+  }
+];
  
+
+
+const getItemTypeName = (value) => {
+  const ItemType = [
+    {
+      name: "Finish Good",
+      value: 0
+    }, {
+      name: "Raw Material",
+      value: 1
+    }, {
+      name: "Work In Progres",
+      value: 2
+    }
+  ];
+  for (let i = 0; i < ItemType.length; i++) {
+    if (ItemType[i].value === value) {
+      return ItemType[i].name;
+      break;
+    }
+  }
+}
 

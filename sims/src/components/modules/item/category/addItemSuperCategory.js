@@ -226,8 +226,8 @@ class addItemSuperCategory extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.itemSuperCategoryMaster + this.state.urlparams}
-          masterLinkTitle="Item Super-Category Master"
-          typoTitle="Add..."
+          masterLinkTitle="Super Category"
+          typoTitle="Add"
           level={2}
         />
       </Fragment>
@@ -270,7 +270,7 @@ class addItemSuperCategory extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={6} md={6} lg={6}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Accordion
               key="itemCategory-General-Details"
               expanded={this.state.GeneralDetailsExpanded}

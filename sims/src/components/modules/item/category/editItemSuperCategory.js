@@ -3,20 +3,25 @@ import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-
-import TableContainer from "@material-ui/core/TableContainer";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Checkbox from '@mui/material/Checkbox';
+import CardActions from '@mui/material/CardActions';
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
 import Button from "@material-ui/core/Button";
 
-import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import UpdateIcon from "@material-ui/icons/Update";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 import "../../../user/dasboard.css";
 
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
@@ -37,6 +42,7 @@ class editItemSuperCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      DialogStatus: false,
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
@@ -56,10 +62,12 @@ class editItemSuperCategory extends React.Component {
         Description: { errorState: false, errorMssg: "" },
         HSNCode: { errorState: false, errorMssg: "" },
       },
+      branchList: [],
     };
   }
 
   componentDidMount() {
+    this.getBranches();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -79,6 +87,54 @@ class editItemSuperCategory extends React.Component {
       },
       () => this.getSuperCategory()
     );
+  }
+
+  getBranches() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let GetBrachesUrl = APIURLS.APIURL.GetBraches;
+
+    axios
+      .post(GetBrachesUrl, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let companies = [];
+
+
+        for (let i = 0; i < data.length; i++) {
+          companies.push({
+            CompanyId: data[i].company.CompanyId,
+            CompanyName: data[i].company.CompanyName,
+            branchList: []
+          });
+        }
+        let removeDuplicateCompanies = companies.filter((ele, ind) => ind === companies.findIndex(elem => elem.CompanyId === ele.CompanyId))
+        companies = removeDuplicateCompanies;
+        console.log("$$$$$$$$$ companies > ", companies);
+
+        for (let i = 0; i < data.length; i++) {
+          let obj = {
+            BranchID: data[i].BranchID,
+            Name: data[i].Name,
+            isSelected:false
+          };
+          for (let j = 0; j < companies.length; j++) {
+            if(data[i].company.CompanyId===companies[j].CompanyId){             
+              companies[j].branchList.push(obj);
+            }
+          }
+        }
+        this.setState({ branchList: companies, ProgressLoader: true });
+      })
+      .catch((error) => {
+        console.log("$$$$$$$$$ companies Error > ", error);
+        this.setState({ branchList: [], ProgressLoader: true });
+      });
   }
 
   getSuperCategory() {
@@ -113,7 +169,61 @@ class editItemSuperCategory extends React.Component {
           ProgressLoader: true,
         });
       })
-      .catch((error) => {});
+      .catch((error) => { });
+  }
+
+  chooseBranch=(item, e,index1,index2)=>{
+   let branchList=this.state.branchList;
+   branchList[index1]['branchList'][index2]['isSelected']=e.target.checked;
+   this.setState({branchList:branchList});
+  }
+
+  restrictBranch = () => {
+    this.setState({ ProgressLoader: false });
+    let branchList=this.state.branchList;
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    let restrictList=[];
+    for (let i = 0; i < branchList.length; i++) {
+      let BL = branchList[i].branchList;
+      for (let j = 0; j < BL.length; j++) {       
+        if(BL[j].isSelected===true){
+          let obj = {
+            SuperCatID:parseInt(this.state.SuperCatID),
+            BranchID:parseInt(BL[j].BranchID)
+          };
+          restrictList.push(obj);
+        }
+      }
+    }
+
+    let reqData={
+      validUser:ValidUser,
+      CatID:parseInt(this.state.SuperCatID),
+      itemSuperCategoryrestrictedBranchList:restrictList 
+    };
+    console.log("restrictBranch > reqData > ",reqData);
+
+    let Url=APIURLS.APIURL.UpdateItemSuperCategoryRestrictedBranch;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+          if(response.status===200){
+            this.setState({ ProgressLoader: true, SuccessPrompt: true });
+          }else{
+            this.setState({ ProgressLoader: true, ErrorPrompt: true });
+          }
+      })
+      .catch((error) => {
+        console.log("restrictBranch Error > ", error);
+        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+      });
+
   }
 
   render() {
@@ -263,8 +373,8 @@ class editItemSuperCategory extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.itemSuperCategoryMaster + this.state.urlparams}
-          masterLinkTitle="Item Super-Category Master"
-          typoTitle="Edit..."
+          masterLinkTitle="Super Category"
+          typoTitle="Edit"
           level={2}
         />
       </Fragment>
@@ -284,6 +394,14 @@ class editItemSuperCategory extends React.Component {
             disabled={this.state.DisableUpdatebtn}
           >
             {APIURLS.buttonTitle.save.name}
+          </Button>
+          <Button
+            startIcon={APIURLS.buttonTitle.restrictBranch.icon}
+            className="action-btns"
+            onClick={(e) => this.setState({ DialogStatus: true })}
+
+          >
+            {APIURLS.buttonTitle.restrictBranch.name}
           </Button>
         </ButtonGroup>
       </Fragment>
@@ -307,7 +425,7 @@ class editItemSuperCategory extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={6} md={6} lg={6}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Accordion
               key="itemCategory-General-Details"
               expanded={this.state.GeneralDetailsExpanded}
@@ -393,6 +511,95 @@ class editItemSuperCategory extends React.Component {
             </Accordion>
           </Grid>
         </Grid>
+
+
+        <Dialog
+          fullWidth={true}
+          maxWidth="lg"
+          className="dialog-prompt-activity"
+          open={this.state.DialogStatus}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title" className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}>
+                <IconButton
+                  aria-label="ArrowBackIcon"
+                >
+                  <ArrowBackIcon onClick={(e) => this.setState({ DialogStatus: false })} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2} lg={2}>
+                <div style={{ marginLeft: -50 }}>
+                  {" "}
+                  <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
+                    {" "}
+                    Restrict Branch
+                  </span>{" "}
+                </div>
+              </Grid>
+            </Grid>
+
+          </DialogTitle>
+          <DialogContent className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <ButtonGroup
+                  size="small"
+                  variant="text"
+                  aria-label="Action Menu Button group"
+                >
+                  <Button
+                    startIcon={APIURLS.buttonTitle.save.icon}
+                    className="action-btns"
+                    onClick={(e) => this.restrictBranch()}
+                  >
+                    {APIURLS.buttonTitle.save.name}
+                  </Button>
+                </ButtonGroup>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}></Grid>
+            </Grid>
+            <div style={{height:20}}>&nbsp;</div>
+
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <Grid container spacing={1}>
+                {this.state.branchList.map((item, i) => (
+                  <Grid item xs={12} sm={4} md={3} lg={3}>
+                    <Card  key={"card_"+i} sx={{ minWidth: 150 }}>
+                      <CardContent  key={"cardContent_"+i}>
+                        <Typography key={"Typo1_"+i} sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                          <b>{item.CompanyName}</b>
+                        </Typography>
+
+                        {item.branchList.map((branchItem, j) => (
+                          <Fragment>
+                            <span>
+                              <Checkbox
+                                key={"chooseCheckbox_"+i+"_"+j}
+                                onClick={(e) => this.chooseBranch(branchItem, e,i,j)}
+                                checked={branchItem.isSelected} />  {branchItem.Name}
+                            </span> <br />
+                          </Fragment>
+                        ))}
+ 
+                      </CardContent>
+                       
+                    </Card>
+                  </Grid>
+                   ))}
+                </Grid>
+              </Grid>
+            </Grid>
+
+        
+
+
+          </DialogContent>
+        </Dialog>
+
       </Fragment>
     );
   }

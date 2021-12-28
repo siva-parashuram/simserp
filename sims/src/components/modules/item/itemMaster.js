@@ -179,6 +179,10 @@ class itemMaster extends React.Component {
        
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
+
+            
+
+
             {this.state.itemData.length > 0 ? (
               <Fragment>
                 <TableContainer style={{ maxHeight: 440 }}>
