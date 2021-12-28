@@ -20,6 +20,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import DropdownInput from "../../../compo/Tablerowcelldropdown";
 import "../../../user/dasboard.css";
+import * as CF from "../../../../services/functions/customfunctions";
 
 import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
@@ -45,7 +46,7 @@ class addItemSuperCategory extends React.Component {
       SuccessPrompt: false,
       DisableCreatebtn: true,
       ItemTypeMaster: APIURLS.ItemType,
-      IsActive: false,
+      IsActive: true,
       ItemType: 0,
       Code: "",
       Description: "",
@@ -60,6 +61,7 @@ class addItemSuperCategory extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -75,6 +77,11 @@ class addItemSuperCategory extends React.Component {
       urlparams: urlparams,
     });
   }
+
+  openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -196,6 +203,12 @@ class addItemSuperCategory extends React.Component {
             response.status === "true"
           ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            let editUrl =
+              URLS.URLS.editItemSuperCategory +
+              this.state.urlparams +
+              "&editsuperCatId=" +
+              response.data.ID;
+            this.openPage(editUrl);
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }

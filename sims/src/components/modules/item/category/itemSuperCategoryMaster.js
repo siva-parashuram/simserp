@@ -9,6 +9,7 @@ import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
+import * as CF from "../../../../services/functions/customfunctions";
 
 import Breadcrumb from "../../../compo/breadcrumb";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
@@ -36,6 +37,7 @@ class itemSuperCategoryMaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getDataList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -49,7 +51,7 @@ class itemSuperCategoryMaster extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

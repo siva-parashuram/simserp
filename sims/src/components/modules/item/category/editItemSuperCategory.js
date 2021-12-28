@@ -23,6 +23,7 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import "../../../user/dasboard.css";
+import * as CF from "../../../../services/functions/customfunctions";
 
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import { COOKIE, getCookie } from "../../../../services/cookie";
@@ -68,6 +69,7 @@ class editItemSuperCategory extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();//constant branch parameters
     this.getBranches();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -83,7 +85,7 @@ class editItemSuperCategory extends React.Component {
       branchName;
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
         SuperCatID: SuperCatID,
       },
       () => this.getSuperCategory()

@@ -1081,6 +1081,12 @@ export const superCategoryMasterColumn=[
     headerName: 'Code',
     width: 150,
     headerClassName: 'table-header-font'
+  },
+  {
+    field: 'description',
+    headerName: 'Description',
+    width: 180,
+    headerClassName: 'table-header-font'
   },{
     field: 'itemType',
     headerName: 'Type',
@@ -1097,12 +1103,6 @@ export const superCategoryMasterColumn=[
     field: 'hsncode',
     headerName: 'HSN',
     width: 120,
-    headerClassName: 'table-header-font'
-  },
-  {
-    field: 'description',
-    headerName: 'Description',
-    width: 180,
     headerClassName: 'table-header-font'
   },{
     field: 'isActive',
