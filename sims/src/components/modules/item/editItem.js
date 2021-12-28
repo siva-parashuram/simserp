@@ -96,10 +96,10 @@ class editItem extends React.Component {
       ProfitPercentage: 0,
       GstgroupId: 0,
       Hsncode: "",
-      BaseUom: 0,
-      SalesUom: 0,
-      PurchaseUom: 0,
-      PackingUom: 0,
+      BaseUom: "-",
+      SalesUom: "-",
+      PurchaseUom: "-",
+      PackingUom: "-",
       Replenishment: 0,
       LeadTime: 0,
       IsLot: false,
@@ -108,6 +108,7 @@ class editItem extends React.Component {
       Bomid: 0,
       Item: {},
       ItemCategoryData: [],
+      UOMList: [],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
@@ -123,6 +124,7 @@ class editItem extends React.Component {
   }
 
   componentDidMount() {
+    this.getUOMList();
     this.getItemCategoryData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -148,6 +150,37 @@ class editItem extends React.Component {
       }
     );
   }
+
+  getUOMList = () => {
+     
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllUOM;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+
+        let newD = [];
+        for (let i = 0; i < data.length; i++) {
+          let o = {
+            name: data[i].name,
+            value: data[i].uomid,
+          };
+          newD.push(o);
+        }
+
+        this.setState({
+          UOMList: newD,
+        });
+      })
+      .catch((error) => {});
+  };
 
   getItemCategoryData() {
     let ValidUser = APIURLS.ValidUser;
@@ -1646,26 +1679,30 @@ class editItem extends React.Component {
                                 }
                                 
                               />
-                              <SIB
+
+
+                              <SDIB
                                 id="BaseUOM"
                                 label="Base UOM "
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("BaseUom", e)}
                                 value={this.state.BaseUom}
+                                param={this.state.UOMList}
                               />
                             </Grid>
                             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
-                              <SIB
+                              <SDIB
                                 id="SalesUOM"
                                 label="Sales UOM"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("SalesUom", e)}
                                 value={this.state.SalesUom}
+                                param={this.state.UOMList}
                               />
-                              <SIB
+                              <SDIB
                                 id="PurchaseUOM"
                                 label="Purchase UOM"
                                 variant="outlined"
@@ -1674,8 +1711,9 @@ class editItem extends React.Component {
                                   updateFormValue("PurchaseUom", e)
                                 }
                                 value={this.state.PurchaseUom}
+                                param={this.state.UOMList}
                               />
-                              <SIB
+                              <SDIB
                                 id="PackingUOM"
                                 label="Packing UOM"
                                 variant="outlined"
@@ -1684,6 +1722,7 @@ class editItem extends React.Component {
                                   updateFormValue("PackingUom", e)
                                 }
                                 value={this.state.PackingUom}
+                                param={this.state.UOMList}
                               />
                             </Grid>
                           </Grid>
