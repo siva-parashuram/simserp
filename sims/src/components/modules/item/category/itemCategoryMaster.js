@@ -17,12 +17,16 @@ import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
+import * as CF from "../../../../services/functions/customfunctions";
 
 import Loader from "../../../compo/loader";
 
 import Breadcrumb from "../../../compo/breadcrumb";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../../compo/backdrop";
+
+import MasterDataGrid from "../../../compo/masterdatagrid";
+import Tableskeleton from "../../../compo/tableskeleton";
 
 
 let rows = [];
@@ -33,6 +37,11 @@ class itemCategoryMaster extends React.Component {
       urlparams: "",
       initialCss: "",
       ProgressLoader: true,
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
+      columns:APIURLS.CategoryMasterColumn,
       ItemCategoryData: [],
       editurl: "",
       CatID: 0,
@@ -41,6 +50,7 @@ class itemCategoryMaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getItemCategoryData();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -54,7 +64,7 @@ class itemCategoryMaster extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 
@@ -71,9 +81,13 @@ class itemCategoryMaster extends React.Component {
       .post(Url, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
+       
+        for(let i=0;i<data.length;i++){
+          data[i]['id']=i+1;
+        }
         console.log("data > ", data);
         this.setState({ ItemCategoryData: data }, () => {
-          this.InitialhandleRowClick(null, data[0], "row_0");
+          this.handleRowClick([1]);
         });
         this.setState({ ProgressLoader: true });
       })
@@ -82,53 +96,42 @@ class itemCategoryMaster extends React.Component {
       });
   }
 
-  InitialhandleRowClick(e, item, id) {
-    let editUrl =
+  handleRowClick(e) {
+    try {
+      let index = e[0];      
+      let item = this.state.ItemCategoryData[index - 1]; 
+      let editUrl =
       URLS.URLS.editItemCategory +
       this.state.urlparams +
       "&editCatID=" +
-      item.catId;
-    this.setState({
-      CatID: item.catId,
-      editurl: editUrl,
-      selectedItem: item,
-      editBtnDisable: false,
-    });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
+      item.CatID;
+      this.setState({
+        CatID: item.CatID,
+        editurl: editUrl,
+        selectionModel:index
+      });
+      this.setParams(item,editUrl,index); 
+    } catch (e) {}
   }
-  InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.ItemCategoryData.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
-  }
+
+  
+
+  openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
 
   render() {
-    const handleRowClick = (e, item, id) => {
-      let editUrl =
-        URLS.URLS.editItemCategory +
-        this.state.urlparams +
-        "&editCatID=" +
-        item.catId;
-      this.setState({
-        CatID: item.catId,
-        editurl: editUrl,
-        selectedItem: item,
-        editBtnDisable: false,
-      });
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-    };
-
-    const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.ItemCategoryData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    };
-
+    
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
+    };
+
+    const handlePageChange = (event, newPage) => {     
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
     };
 
     const breadcrumbHtml = (
@@ -137,7 +140,7 @@ class itemCategoryMaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Item Category Master"
+          typoTitle="Item Category"
           level={1}
         />
       </Fragment>
@@ -182,68 +185,28 @@ class itemCategoryMaster extends React.Component {
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={10} lg={10}>
-                <Table
-                  stickyHeader
-                  size="small"
-                  className=""
-                  aria-label="Item-catagory List table"
-                >
-                  <TableHead className="table-header-background">
-                    <TableRow>
-                      <TableCell className="table-header-font">#</TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        Code
-                      </TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        Hsncode
-                      </TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        description
-                      </TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        Status
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody className="tableBody">
-                    {this.state.ItemCategoryData.map((item, i) => (
-                      <TableRow
-                        id={"row_" + i}
-                        className={this.state.initialCss}
-                        hover
-                        key={i}
-                        onClick={(event) =>
-                          handleRowClick(event, item, "row_" + i)
-                        }
-                      >
-                        <TableCell align="left">{i + 1}</TableCell>
-                        <TableCell align="left">
-                          <a
-                            className="LINK tableLink"
-                            href={
-                              URLS.URLS.editItemCategory +
-                              this.state.urlparams +
-                              "&editCatID=" +
-                              item.catId
-                            }
-                          >
-                            {item.code}
-                          </a>
-                        </TableCell>
-                        <TableCell align="left">{item.hsncode}</TableCell>
-                        <TableCell align="left">{item.description}</TableCell>
-                        <TableCell align="left">
-                          {item.isActive === true ? (
-                            <span style={{ color: "green" }}>Active</span>
-                          ) : (
-                            <span style={{ color: "red" }}>In-Active</span>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+
+              {this.state.ItemCategoryData.length > 0 ? (
+                  <Fragment>
+
+                    <MasterDataGrid
+                      selectionModel={this.state.selectionModel}
+                      rows={this.state.ItemCategoryData}
+                      columns={this.state.columns}
+                      pagination={this.state.pagination}
+                      onSelectionModelChange={(e) => this.handleRowClick(e)}
+                      onPageChange={handlePageChange}
+                    />
+
+                   
+                  </Fragment>
+                ) : (
+                  <Tableskeleton />
+                )}
+
+
+             
               </Grid>
             </Grid>
           </Grid>

@@ -1120,6 +1120,100 @@ export const superCategoryMasterColumn=[
     )
   }
 ];
+
+export const mainCategoryMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 10,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'SuperCatCode',
+    headerName: 'Super Category',
+    width: 170,
+    headerClassName: 'table-header-font'
+  }
+  ,{
+    field: 'Code',
+    headerName: 'Code',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'Description',
+    headerName: 'Description',
+    width: 180,
+    headerClassName: 'table-header-font'
+  }
+  ,
+  {
+    field: 'HSNCode',
+    headerName: 'HSN',
+    width: 120,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'IsActive',
+    headerName: 'Status',
+    width: 120,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+        {params.value === true ? (
+          <span style={{ color: "green" }}>Active</span>
+        ) : (
+          <span style={{ color: "red" }}>In-Active</span>
+        )}
+      </Fragment>
+    )
+  }
+];
+
+export const CategoryMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 10,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'MainCatCode',
+    headerName: 'Main Category',
+    width: 170,
+    headerClassName: 'table-header-font'
+  }
+  ,{
+    field: 'Code',
+    headerName: 'Code',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'Description',
+    headerName: 'Description',
+    width: 180,
+    headerClassName: 'table-header-font'
+  }
+  ,
+  {
+    field: 'HSNCode',
+    headerName: 'HSN',
+    width: 120,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'IsActive',
+    headerName: 'Status',
+    width: 120,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+        {params.value === true ? (
+          <span style={{ color: "green" }}>Active</span>
+        ) : (
+          <span style={{ color: "red" }}>In-Active</span>
+        )}
+      </Fragment>
+    )
+  }
+];
  
 
 

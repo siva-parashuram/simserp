@@ -19,21 +19,29 @@ import { COOKIE, getCookie } from "../../../../services/cookie";
 import * as APIURLS from "../../../../routes/apiconstant";
 import * as URLS from "../../../../routes/constants";
 import "../../../user/dasboard.css";
+import * as CF from "../../../../services/functions/customfunctions";
 
 import Loader from "../../../compo/loader";
 
 import Breadcrumb from "../../../compo/breadcrumb";
 import TopFixedRow3 from "../../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../../compo/backdrop";
+import MasterDataGrid from "../../../compo/masterdatagrid";
+import Tableskeleton from "../../../compo/tableskeleton";
 
 let rows = [];
 class itemMainCategoryMaster extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = {      
       urlparams: "",
       initialCss: "",
       ProgressLoader: true,
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
+      columns:APIURLS.mainCategoryMasterColumn,
       MainCategoryData: [],
       mainCatId: 0,
       editurl: "",
@@ -41,6 +49,7 @@ class itemMainCategoryMaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -54,7 +63,7 @@ class itemMainCategoryMaster extends React.Component {
       branchName;
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
       },
       () => this.getMainCategoryData()
     );
@@ -74,8 +83,12 @@ class itemMainCategoryMaster extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
+        for(let i=0;i<data.length;i++){
+          data[i]['id']=i+1;
+        }
+
         this.setState({ MainCategoryData: data }, () => {
-          this.InitialhandleRowClick(null, data[0], "row_0");
+          this.handleRowClick([1]);
         });
         this.setState({ ProgressLoader: true });
       })
@@ -84,54 +97,38 @@ class itemMainCategoryMaster extends React.Component {
       });
   }
 
-  InitialhandleRowClick(e, item, id) {
-    let editUrl =
+  handleRowClick(e) {
+    try {
+      let index = e[0];      
+      let item = this.state.MainCategoryData[index - 1]; 
+      let editUrl =
       URLS.URLS.editItemMainCategory +
       this.state.urlparams +
       "&editmainCatId=" +
-      item.mainCatId;
-    this.setState({
-      mainCatId: item.mainCatId,
-      editurl: editUrl,
-      selectedItem: item,
-      editBtnDisable: false,
-    });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
+      item.MainCatID;
+      this.setState({
+        mainCatId: item.MainCatID,
+        editurl: editUrl,
+        selectionModel:index
+      });
+      this.setParams(item,editUrl,index); 
+    } catch (e) {}
   }
-  InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.MainCategoryData.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
-  }
+
+  openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
+ 
 
   render() {
-    const handleRowClick = (e, item, id) => {
-      let editUrl =
-        URLS.URLS.editItemMainCategory +
-        this.state.urlparams +
-        "&editmainCatId=" +
-        item.mainCatId;
-      this.setState({
-        mainCatId: item.mainCatId,
-        editurl: editUrl,
-        selectedItem: item,
-        editBtnDisable: false,
-      });
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
+    const handlePageChange = (event, newPage) => {     
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
     };
 
-    const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.MainCategoryData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    };
-
-    const openPage = (url) => {
-      this.setState({ ProgressLoader: false });
-      window.location = url;
-    };
+   
 
     const breadcrumbHtml = (
       <Fragment>
@@ -139,7 +136,7 @@ class itemMainCategoryMaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Item Main-Category Master"
+          typoTitle="Main Category"
           level={1}
         />
       </Fragment>
@@ -157,7 +154,7 @@ class itemMainCategoryMaster extends React.Component {
             startIcon={APIURLS.buttonTitle.add.icon}
             className="action-btns"
             onClick={(e) =>
-              openPage(URLS.URLS.addItemMainCategory + this.state.urlparams)
+              this.openPage(URLS.URLS.addItemMainCategory + this.state.urlparams)
             }
           >
             {APIURLS.buttonTitle.add.name}
@@ -165,7 +162,7 @@ class itemMainCategoryMaster extends React.Component {
           <Button
             startIcon={APIURLS.buttonTitle.edit.icon}
             className="action-btns"
-            onClick={(e) => openPage(this.state.editurl)}
+            onClick={(e) => this.openPage(this.state.editurl)}
           >
             {APIURLS.buttonTitle.edit.name}
           </Button>
@@ -184,68 +181,27 @@ class itemMainCategoryMaster extends React.Component {
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={10} lg={10}>
-                <Table
-                  stickyHeader
-                  size="small"
-                  className=""
-                  aria-label="Item-catagory List table"
-                >
-                  <TableHead className="table-header-background">
-                    <TableRow>
-                      <TableCell className="table-header-font">#</TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        Code
-                      </TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        hsncode
-                      </TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        description
-                      </TableCell>
-                      <TableCell className="table-header-font" align="left">
-                        Status
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody className="tableBody">
-                    {this.state.MainCategoryData.map((item, i) => (
-                      <TableRow
-                        id={"row_" + i}
-                        className={this.state.initialCss}
-                        hover
-                        key={i}
-                        onClick={(event) =>
-                          handleRowClick(event, item, "row_" + i)
-                        }
-                      >
-                        <TableCell align="left">{i + 1}</TableCell>
-                        <TableCell align="left">
-                          <a
-                            className="LINK tableLink"
-                            href={
-                              URLS.URLS.editItemMainCategory +
-                              this.state.urlparams +
-                              "&editmainCatId=" +
-                              item.mainCatId
-                            }
-                          >
-                            {item.code}
-                          </a>
-                        </TableCell>
-                        <TableCell align="left">{item.hsncode}</TableCell>
-                        <TableCell align="left">{item.description}</TableCell>
-                        <TableCell align="left">
-                          {item.isActive === true ? (
-                            <span style={{ color: "green" }}>Active</span>
-                          ) : (
-                            <span style={{ color: "red" }}>In-Active</span>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+
+              {this.state.MainCategoryData.length > 0 ? (
+                  <Fragment>
+
+                    <MasterDataGrid
+                      selectionModel={this.state.selectionModel}
+                      rows={this.state.MainCategoryData}
+                      columns={this.state.columns}
+                      pagination={this.state.pagination}
+                      onSelectionModelChange={(e) => this.handleRowClick(e)}
+                      onPageChange={handlePageChange}
+                    />
+
+                   
+                  </Fragment>
+                ) : (
+                  <Tableskeleton />
+                )}
+
+
               </Grid>
             </Grid>
           </Grid>

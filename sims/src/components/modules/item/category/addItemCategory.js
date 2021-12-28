@@ -45,7 +45,7 @@ class addItemCategory extends React.Component {
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableCreatebtn: true,
-      IsActive: false,
+      IsActive: true,
       Code: "",
       Description: "",
       HSNCode: "",
@@ -107,10 +107,10 @@ class addItemCategory extends React.Component {
   processMainCategoryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
-      if (data[i].isActive === true) {
+      if (data[i].IsActive === true) {
         let d = {
-          name: data[i].code + " - " + data[i].hsncode,
-          value: data[i].mainCatId,
+          name: data[i].Code + "-" + data[i].HSNCode,
+          value: data[i].MainCatID,
         };
         newData.push(d);
       }
@@ -164,6 +164,12 @@ class addItemCategory extends React.Component {
           }
           break;
         case "MainCatID":
+          if(e.target.options[e.target.selectedIndex].text){
+            let text=e.target.options[e.target.selectedIndex].text;
+            let A=text.split("-");
+            let HSNCode=A[1];
+            this.setState({ HSNCode: HSNCode });
+          }
           this.setState({ MainCatID: e.target.value });
           break;
         case "Description":
@@ -288,8 +294,8 @@ class addItemCategory extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.itemCategoryMaster + this.state.urlparams}
-          masterLinkTitle="Item Category Master"
-          typoTitle="Add Item Category"
+          masterLinkTitle="Item Category"
+          typoTitle="Add"
           level={2}
         />
       </Fragment>
@@ -331,7 +337,7 @@ class addItemCategory extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={6} md={6} lg={6}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Accordion
               key="itemCategory-General-Details"
               expanded={this.state.GeneralDetailsExpanded}
@@ -350,7 +356,7 @@ class addItemCategory extends React.Component {
                 style={{ minHeight: 20, height: "100%" }}
               >
                 <Typography key="" className="accordion-Header-Title">
-                  General Details
+                  General
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
@@ -361,7 +367,7 @@ class addItemCategory extends React.Component {
                         <Grid item xs={12} sm={12} md={5} lg={5}>
                           <SDIB
                             id="MainCatID"
-                            label="MainCatID"
+                            label="Main Category"
                             onChange={(e) => updateFormValue("MainCatID", e)}
                             param={this.state.MainCategoryData}
                             value={this.state.MainCatID}
@@ -403,7 +409,7 @@ class addItemCategory extends React.Component {
                           <SSIB
                             key="IsActive"
                             id="IsActive"
-                            label="IsActive"
+                            label="Is Active?"
                             param={this.state.IsActive}
                             onChange={(e) => updateFormValue("IsActive", e)}
                           />
@@ -417,7 +423,7 @@ class addItemCategory extends React.Component {
                           <SSIB
                             key="IsNonStockV"
                             id="IsNonStockV"
-                            label="IsNonStockV"
+                            label="Is Stock Valuation?"
                             param={this.state.IsNonStockValuation}
                             onChange={(e) =>
                               updateFormValue("IsNonStockValuation", e)
@@ -426,14 +432,14 @@ class addItemCategory extends React.Component {
                           <SSIB
                             key="IsPriceRange"
                             id="IsPriceRange"
-                            label="IsPriceRange"
+                            label="Is Price Range?"
                             param={this.state.IsPriceRange}
                             onChange={(e) => updateFormValue("IsPriceRange", e)}
                           />
                           <SSIB
                             key="IsCustomized"
                             id="IsCustomized"
-                            label="IsCustomized"
+                            label="Is Customized?"
                             param={this.state.IsCustomized}
                             onChange={(e) => updateFormValue("IsCustomized", e)}
                           />

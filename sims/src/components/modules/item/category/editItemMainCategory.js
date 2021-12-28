@@ -18,6 +18,7 @@ import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import UpdateIcon from "@material-ui/icons/Update";
 import "../../../user/dasboard.css";
+import * as CF from "../../../../services/functions/customfunctions";
 
 import SwitchInput from "../../../compo/tablerowcellswitchinput";
 import { COOKIE, getCookie } from "../../../../services/cookie";
@@ -63,6 +64,7 @@ class editItemMainCategory extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getSuperCategoryDataList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -315,8 +317,8 @@ class editItemMainCategory extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.itemMainCategoryMaster + this.state.urlparams}
-          masterLinkTitle="Item Main-Category Master"
-          typoTitle="Edit..."
+          masterLinkTitle="Main Category"
+          typoTitle="Edit"
           level={2}
         />
       </Fragment>
@@ -358,7 +360,7 @@ class editItemMainCategory extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={6} md={6} lg={6}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Accordion
               key="itemCategory-General-Details"
               expanded={this.state.GeneralDetailsExpanded}
@@ -388,7 +390,7 @@ class editItemMainCategory extends React.Component {
                         <Grid item xs={12} sm={12} md={5} lg={5}>
                           <SDIB
                             id="SuperCatID"
-                            label="SuperCatID"
+                            label="Super Category"
                             onChange={(e) => updateFormValue("SuperCatID", e)}
                             param={this.state.SuperCategoryDataList}
                             value={this.state.SuperCatID}
@@ -427,33 +429,34 @@ class editItemMainCategory extends React.Component {
                         </Grid>
                         <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                         <Grid item xs={12} sm={12} md={5} lg={5}>
-                          <SSIB
-                            key="IsActive"
-                            id="IsActive"
-                            label="IsActive"
-                            param={this.state.IsActive}
-                            onChange={(e) => updateFormValue("IsActive", e)}
-                          />
+                          
                           <SSIB
                             key="IsTrading"
                             id="IsTrading"
-                            label="IsTrading"
+                            label="Is Trading? "
                             param={this.state.IsTrading}
                             onChange={(e) => updateFormValue("IsTrading", e)}
                           />
                           <SSIB
                             key="IsNonStockV"
                             id="IsNonStockV"
-                            label="IsNonStockV"
+                            label="Is Stock Valuaion ?"
                             param={this.state.IsNonStockV}
                             onChange={(e) => updateFormValue("IsNonStockV", e)}
                           />
                           <SSIB
                             key="IsPriceRange"
                             id="IsPriceRange"
-                            label="IsPriceRange"
+                            label="Is Price Range?"
                             param={this.state.IsPriceRange}
                             onChange={(e) => updateFormValue("IsPriceRange", e)}
+                          />
+                          <SSIB
+                            key="IsActive"
+                            id="IsActive"
+                            label="Is Active?"
+                            param={this.state.IsActive}
+                            onChange={(e) => updateFormValue("IsActive", e)}
                           />
                         </Grid>
                       </Grid>

@@ -33,7 +33,7 @@ class gridswitchinput extends React.Component {
           </Grid>
           <Grid item xs={5} sm={5} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              <Grid item xs={12} sm={12} md={12} lg={12} className="textFieldCss" >
                {this.props.isSpacing?this.props.isSpacing===true?(
                  <Fragment>
                    {
@@ -41,7 +41,8 @@ class gridswitchinput extends React.Component {
                    }                  
                  </Fragment>
                ):null:null} 
-              <Switch                    
+              <Switch    
+                             
                         key={this.props.key}
                         id={this.props.id}
                         size="small"

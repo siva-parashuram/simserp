@@ -74,7 +74,7 @@ class addItemSuperCategory extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 
