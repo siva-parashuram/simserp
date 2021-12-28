@@ -116,6 +116,11 @@ class addItemMainCategory extends React.Component {
     this.setState({ SuperCategoryDataList: newData });
   }
 
+  openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -345,7 +350,7 @@ class addItemMainCategory extends React.Component {
                 style={{ minHeight: 20, height: "100%" }}
               >
                 <Typography key="" className="accordion-Header-Title">
-                  General Details
+                  General
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
