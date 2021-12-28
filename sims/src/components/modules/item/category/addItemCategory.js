@@ -118,6 +118,11 @@ class addItemCategory extends React.Component {
     this.setState({ MainCategoryData: newData, ProgressLoader: true });
   }
 
+  openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -264,6 +269,12 @@ class addItemCategory extends React.Component {
             response.status === "true"
           ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            let editUrl =
+            URLS.URLS.editItemCategory +
+            this.state.urlparams +
+            "&editCatID=" +
+            response.data.ID;
+            this.openPage(editUrl);
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }

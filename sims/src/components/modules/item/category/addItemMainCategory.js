@@ -247,6 +247,12 @@ class addItemMainCategory extends React.Component {
             response.status === "true"
           ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            let editUrl =
+            URLS.URLS.editItemMainCategory +
+            this.state.urlparams +
+            "&editmainCatId=" +
+            response.data.ID;
+            this.openPage(editUrl);
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
