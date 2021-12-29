@@ -123,6 +123,8 @@ class editItem extends React.Component {
         CertificateNo: { errorState: false, errorMssg: "" },
         Reason: { errorState: false, errorMssg: "" },
         Hsncode: { errorState: false, errorMssg: "" },
+        NetWeight: { errorState: false, errorMssg: "" },
+        GrossWeight: { errorState: false, errorMssg: "" },
       },
     };
   }
@@ -502,6 +504,9 @@ class editItem extends React.Component {
       if (Description1.trim() === "") { v1.Description1 = { errorState: true, errorMssg: "" }; }
       if (PackingDesc1.trim() === "") { v1.PackingDesc1 = { errorState: true, errorMssg: "" }; }
       if (Hsncode.trim() === "") { v1.Hsncode = { errorState: true, errorMssg: "" }; }
+      if(parseFloat(this.state.NetWeight)<=0){ v1.NetWeight = { errorState: true, errorMssg: "" }; }
+      if(parseFloat(this.state.GrossWeight)<=0){ v1.GrossWeight = { errorState: true, errorMssg: "" }; }
+
       this.setState({ Validations: v1 });
     }
 
@@ -564,11 +569,11 @@ class editItem extends React.Component {
           if (e.target.value.length > 20) {
             v1.Code = { errorState: true, errorMssg: "Maximum 20 characters" };
             this.setState({ Validations: v1 });
-            setStateParam({}, param, e.target.value);
+            setStateParam({}, param, e.target.value.trim());
           } else {
             v1.Code = { errorState: false, errorMssg: "" };
             this.setState({ Validations: v1 });
-            setStateParam({}, param, e.target.value);
+            setStateParam({}, param, e.target.value.trim());
           }
 
           break;
@@ -1158,12 +1163,12 @@ class editItem extends React.Component {
             ItemID: CF.toInt(this.state.ItemId),
             No: CF.toString(this.state.No),
             ItemType: CF.toInt(this.state.ItemType),
-            Code: CF.toString(this.state.Code),
-            Alias: CF.toString(this.state.Alias),
-            Description1: CF.toString(this.state.Description1),
-            Description2: CF.toString(this.state.Description2),
-            PackingDesc1: CF.toString(this.state.PackingDesc1),
-            PackingDesc2: CF.toString(this.state.PackingDesc2),
+            Code: CF.toString(this.state.Code).trim(),
+            Alias: CF.toString(this.state.Alias).trim(),
+            Description1: CF.toString(this.state.Description1).trim(),
+            Description2: CF.toString(this.state.Description2).trim(),
+            PackingDesc1: CF.toString(this.state.PackingDesc1).trim(),
+            PackingDesc2: CF.toString(this.state.PackingDesc2).trim(),
             ItemDeptID: CF.toInt(this.state.ItemDeptId),
             CatID: CF.toInt(this.state.CatId),
             IsActive: this.state.IsActive,
@@ -1171,10 +1176,10 @@ class editItem extends React.Component {
             IsNonStockValuation: this.state.IsNonStockValuation,
             IsCustomized: this.state.IsCustomized,
             IsCertified: this.state.IsCertified,
-            CertificateNo: this.state.CertificateNo,
+            CertificateNo: this.state.CertificateNo.trim(),
             IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
-            Location: CF.toString(this.state.Location),
-            BarcodeNo: CF.toString(this.state.BarcodeNo),
+            Location: CF.toString(this.state.Location).trim(),
+            BarcodeNo: CF.toString(this.state.BarcodeNo).trim(),
             CartonHeight: CF.toFloat(this.state.CartonHeight),
             CartonLength: CF.toFloat(this.state.CartonLength),
             CartonWidth: CF.toFloat(this.state.CartonWidth),
@@ -1189,7 +1194,7 @@ class editItem extends React.Component {
             ShipperQuantiry: CF.toFloat(this.state.ShipperQuantiry),
             CBMPerShipper: CF.toFloat(this.state.CbmperShipper),
             IsDiscontine: this.state.IsDiscontine,
-            Reason: CF.toString(this.state.Reason),
+            Reason: CF.toString(this.state.Reason).trim(),
             UserID: CF.toInt(getCookie(COOKIE.USERID)),
             ModifyDate: this.state.ModifyDate,
             TolerancePercentage: CF.toFloat(this.state.TolerancePercentage),
@@ -1864,7 +1869,7 @@ class editItem extends React.Component {
                                 error={
                                   this.state.Validations.Hsncode.errorState
                                 }
-
+                                isMandatory={true}
                               />
 
 
