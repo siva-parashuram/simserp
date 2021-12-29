@@ -431,6 +431,16 @@ class editItem extends React.Component {
       });
   }
 
+  setFormInputAsPerItemType=(ItemType)=>{
+    try{
+      if(parseInt(ItemType)===1){
+      this.setState({Replenishment:1});
+      }else{
+        this.setState({Replenishment:0});
+      }
+    }catch(err){}   
+  }
+
   validateFormData=()=>{
     let validate=false;
 
@@ -451,6 +461,8 @@ class editItem extends React.Component {
 
     return validate;
   }
+
+ 
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -1063,6 +1075,7 @@ class editItem extends React.Component {
         .then((response) => {
           let data = response.data;
           console.log("data > ", data);
+          this.setFormInputAsPerItemType(data);
           this.setState({ ItemType: data, ProgressLoader: true });
         })
         .catch((error) => {

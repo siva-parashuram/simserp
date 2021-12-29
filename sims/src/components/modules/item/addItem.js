@@ -351,8 +351,7 @@ class addItem extends React.Component {
       }else{
         this.setState({Replenishment:0});
       }
-    }catch(err){}
-   
+    }catch(err){}   
   }
 
   validateFormData=()=>{
