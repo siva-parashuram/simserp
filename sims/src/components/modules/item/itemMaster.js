@@ -49,6 +49,7 @@ class itemMaster extends React.Component {
   }
 
   componentDidMount() {
+    this.performancecheck();
     let params = CF.GET_URL_PARAMS();
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
@@ -70,6 +71,41 @@ class itemMaster extends React.Component {
     }
   }
 
+  performancecheck = () => {
+    var arr = new Array(10000).fill().map((d, i) => ++i)
+
+
+    let t0 = performance.now();
+    for (var i = 0; i < arr.length; i++) {
+      arr[i] = arr[i]
+    }
+    let t1 = performance.now();
+    console.log(`For-Loop through array a million times took ${t1 - t0} milliseconds.`);
+
+    let t2 = performance.now();
+    arr.map(item => item)
+
+    let t3 = performance.now();
+    console.log(`.Map through array a million times took ${t3 - t2} milliseconds.`);
+
+    //An array size of 1,000
+    arr = new Array(10000).fill().map((d, i) => ++i)
+
+
+    t0 = performance.now();
+    for (var i = 0; i < arr.length; i++) {
+      arr[i] = arr[i]
+    }
+    t1 = performance.now();
+    console.log(`For-Loop through array a thousand times took ${t1 - t0} milliseconds.`);
+
+    t2 = performance.now();
+    arr.map(item => item)
+
+    t3 = performance.now();
+    console.log(`.Map through array a thousand times took ${t3 - t2} milliseconds.`);
+  }
+
   getItems() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -84,9 +120,12 @@ class itemMaster extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
-        for(let i=0;i<data.length;i++){
-          data[i].id=i+1;
-        }
+        data.map((item,i)=>{
+          item.id=i+1;
+        })
+        // for(let i=0;i<data.length;i++){
+        //   data[i].id=i+1;
+        // }
         this.setState({ itemData: data }, () => {
           this.handleRowClick([1]);
         });
