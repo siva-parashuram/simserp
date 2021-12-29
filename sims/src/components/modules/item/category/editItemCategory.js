@@ -51,6 +51,7 @@ class editItemCategory extends React.Component {
       IsTrading: false,
       IsNonStockValuation: false,
       IsPriceRange: false,
+      ItemCategoryData:[],
       MainCategoryData: [],
       MainCatID: 0,
       IsCustomized: false,
@@ -76,6 +77,8 @@ class editItemCategory extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+
+      this.getItemCategoryData();
     this.setState(
       {
         urlparams: urlparams,
@@ -85,6 +88,28 @@ class editItemCategory extends React.Component {
         this.getItemCategory();
       }
     );
+  }
+
+  getItemCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+       
+        this.setState({ ItemCategoryData: data });
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
   }
 
   getMainCategoryData() {
@@ -161,6 +186,18 @@ class editItemCategory extends React.Component {
       .catch((error) => {});
   }
 
+  checkDuplicate=(value,id)=>{
+    let duplicateExist=false;
+    let ItemCategoryData=this.state.ItemCategoryData;
+    for(let i=0;i<ItemCategoryData.length;i++){
+      if((ItemCategoryData[i].Code.toUpperCase()===value.toUpperCase()) && (ItemCategoryData[i].CatID!=id)){
+        duplicateExist=true;
+        break;
+      }
+    }
+    return duplicateExist;
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -173,36 +210,50 @@ class editItemCategory extends React.Component {
       switch (param) {
         case "Code":
           let v1 = this.state.Validations;
-          if (e.target.value === "" || e.target.value.length > 20) {
-            if (e.target.value === "") {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Blank inputs not allowed",
-              };
-              this.setState({
-                Validations: v1,
-                Code: e.target.value,
-                DisableUpdatebtn: true,
-              });
-            }
-            if (e.target.value.length > 20) {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Maximum 20 characters allowed",
-              };
-              this.setState({
-                Validations: v1,
-                DisableUpdatebtn: true,
-                Code: e.target.value,
-              });
-            }
-          } else {
-            v1.Code = { errorState: false, errorMssg: "" };
+          let duplicateExist=this.checkDuplicate(e.target.value,this.state.CatID);
+          if(duplicateExist){
+            v1.Code = {
+              errorState: true,
+            };
             this.setState({
               Validations: v1,
+              ErrorPrompt:true,
               Code: e.target.value,
-              DisableUpdatebtn: false,
+              ErrorMessageProps:"Duplicate Code Exist",
+              DisableCreatebtn: true,
             });
+          }else{
+            if (e.target.value === "" || e.target.value.length > 20) {
+              if (e.target.value === "") {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Blank inputs not allowed",
+                };
+                this.setState({
+                  Validations: v1,
+                  Code: e.target.value,
+                  DisableUpdatebtn: true,
+                });
+              }
+              if (e.target.value.length > 20) {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Maximum 20 characters allowed",
+                };
+                this.setState({
+                  Validations: v1,
+                  DisableUpdatebtn: true,
+                  Code: e.target.value,
+                });
+              }
+            } else {
+              v1.Code = { errorState: false, errorMssg: "" };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value,
+                DisableUpdatebtn: false,
+              });
+            }
           }
           break;
         case "MainCatID":
