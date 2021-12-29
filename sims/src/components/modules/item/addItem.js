@@ -112,6 +112,7 @@ class addItem extends React.Component {
       UOMList: [],
       GSTGroupList:[],
       SpecIDList:[],
+      ItemPostingGroupList:[],
       Validations: {
 
         Code: { errorState: false, errorMssg: "" },
@@ -134,6 +135,7 @@ class addItem extends React.Component {
     this.getUOMList();
     this.GSTGroupList();
     this.getSpecIDList();
+    this.getAllItemPostingGroup();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -261,6 +263,28 @@ class addItem extends React.Component {
         this.setState({ ProgressLoader: true });
       });
   }
+
+  getAllItemPostingGroup = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllItemPostingGroup;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        let newD=[];
+        for(let i=0;i<data.length;i++){
+          newD.push({name:data[i].Code,value:data[i].ItemPostingGroupID});
+        } 
+        this.setState({ ItemPostingGroupList: newD });
+      })
+      .catch((error) => {});
+  };
 
   processItemCategoryData(data) {
     let newData = [];
@@ -1637,7 +1661,7 @@ class addItem extends React.Component {
                                 onChange={(e) =>
                                   updateFormValue("ItemPostingGroupID", e)
                                 }
-                                param={APIURLS.ItemPostingGroup}
+                                param={this.state.ItemPostingGroupList}
                                 value={this.state.ItemPostingGroupID}
                                 isMandatory={true}
                               />

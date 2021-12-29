@@ -112,6 +112,7 @@ class editItem extends React.Component {
       UOMList: [],
       GSTGroupList: [],
       SpecIDList: [],
+      ItemPostingGroupList:[],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
@@ -132,6 +133,7 @@ class editItem extends React.Component {
     this.GSTGroupList();
     this.getItemCategoryData();
     this.getSpecIDList();
+    this.getAllItemPostingGroup();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -156,6 +158,28 @@ class editItem extends React.Component {
       }
     );
   }
+
+  getAllItemPostingGroup = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllItemPostingGroup;
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);
+        let newD=[];
+        for(let i=0;i<data.length;i++){
+          newD.push({name:data[i].Code,value:data[i].ItemPostingGroupID});
+        } 
+        this.setState({ ItemPostingGroupList: newD });
+      })
+      .catch((error) => {});
+  };
 
   getSpecIDList = () => {
     this.setState({ ProgressLoader: false });
@@ -441,22 +465,44 @@ class editItem extends React.Component {
     }catch(err){}   
   }
 
-  validateFormData=()=>{
-    let validate=false;
+  validateFormData = () => {
+    let validate = false;
 
-    let CatId =this.state.CatId;
-    let Code =this.state.Code;
-    let Description1 =this.state.Description1;
-    let PackingDesc1 =this.state.PackingDesc1;
+    let CatId = this.state.CatId;
+    let Code = this.state.Code;
+    let Description1 = this.state.Description1;
+    let PackingDesc1 = this.state.PackingDesc1;
+    let Hsncode= this.state.Hsncode;
+    let BaseUom= this.state.BaseUom;
+    let ItemPostingGroupID= this.state.ItemPostingGroupID;
+
+    let netGrossWeightChk=false;
+    if(this.state.ItemType===0){
+          if(parseFloat(this.state.NetWeight)>0 && parseFloat(this.state.GrossWeight)>0){
+            netGrossWeightChk=true;
+          }
+    }
 
     let v1 = this.state.Validations;
-    if(parseInt(CatId)>0 && Code.trim()!=""  && Description1.trim()!="" && PackingDesc1.trim()!=""){
-      validate=true;
-    }else{      
-      if(Code.trim()===""){v1.Code = { errorState: true, errorMssg: "" };}
-      if(Description1.trim()===""){v1.Description1 = { errorState: true, errorMssg: "" };}
-      if(PackingDesc1.trim()===""){v1.PackingDesc1 = { errorState: true, errorMssg: "" };}
-      this.setState({Validations:v1});      
+    if (
+      parseInt(CatId) > 0 &&
+      parseInt(BaseUom) > 0 &&
+      parseInt(ItemPostingGroupID) > 0 &&
+      Code.trim() != "" &&
+      Description1.trim() != "" &&
+      PackingDesc1.trim() != "" &&
+      Hsncode.trim() != "" &&
+      netGrossWeightChk===true
+      
+
+    ) {
+      validate = true;
+    } else {
+      if (Code.trim() === "") { v1.Code = { errorState: true, errorMssg: "" }; }
+      if (Description1.trim() === "") { v1.Description1 = { errorState: true, errorMssg: "" }; }
+      if (PackingDesc1.trim() === "") { v1.PackingDesc1 = { errorState: true, errorMssg: "" }; }
+      if (Hsncode.trim() === "") { v1.Hsncode = { errorState: true, errorMssg: "" }; }
+      this.setState({ Validations: v1 });
     }
 
     return validate;
@@ -604,7 +650,7 @@ class editItem extends React.Component {
           setStateParam({}, param, e.target.value);
           break;
         case "CatId":
-          setStateParam({}, param, e.target.value);
+          
           fetchItemType(e.target.value);
           break;
         case "IsTrading":
@@ -1075,8 +1121,17 @@ class editItem extends React.Component {
         .then((response) => {
           let data = response.data;
           console.log("data > ", data);
-          this.setFormInputAsPerItemType(data);
-          this.setState({ ItemType: data, ProgressLoader: true });
+          if(parseInt(data)===parseInt(this.state.ItemType)){
+            this.setFormInputAsPerItemType(data);
+           this.setState({ 
+             CatId:parseInt(value),
+             ItemType: data, 
+             ProgressLoader: true });
+            
+          }else{
+            this.setState({ ProgressLoader: true,ErrorPrompt:true,ErrorMessageProps:"Category Can be changed as per same Item Type" });
+          }
+          
         })
         .catch((error) => {
           this.setState({ ProgressLoader: true });
@@ -1276,6 +1331,7 @@ class editItem extends React.Component {
                                 param={this.state.ItemCategoryData}
                                 value={this.state.CatId}
                                 isMandatory={true}
+
                               />
 
 
@@ -1659,8 +1715,9 @@ class editItem extends React.Component {
                                 onChange={(e) =>
                                   updateFormValue("ItemPostingGroupID", e)
                                 }
-                                param={APIURLS.ItemPostingGroup}
+                                param={this.state.ItemPostingGroupList}
                                 value={this.state.ItemPostingGroupID}
+                                isMandatory={true}
                               />
 
                               <SDIB
@@ -1682,6 +1739,7 @@ class editItem extends React.Component {
                                   updateFormValue("NetWeight", e)
                                 }
                                 value={this.state.NetWeight}
+                                isMandatory={this.state.ItemType===0?true:false}
                               />
                               <SIB
                                 id="GrossWeight"
@@ -1692,6 +1750,7 @@ class editItem extends React.Component {
                                   updateFormValue("GrossWeight", e)
                                 }
                                 value={this.state.GrossWeight}
+                                isMandatory={this.state.ItemType===0?true:false}
                               />
                               {/* 
                               <SIB
@@ -1821,6 +1880,7 @@ class editItem extends React.Component {
                                 onChange={(e) => updateFormValue("BaseUom", e)}
                                 value={this.state.BaseUom}
                                 param={this.state.UOMList}
+                                isMandatory={true}
                               />
                               <SDIB
                                 id="SalesUOM"
