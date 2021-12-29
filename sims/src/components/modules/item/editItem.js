@@ -44,6 +44,7 @@ class editItem extends React.Component {
       Updatebtn: false,
       SuccessPrompt: false,
       ErrorPrompt: false,
+      ErrorMessageProps:"",
       ProgressLoader: true,
       urlparams: "",
       itemDepartmentMasterData: [],
@@ -428,6 +429,27 @@ class editItem extends React.Component {
       .catch((error) => {
         this.setState({ ProgressLoader: true });
       });
+  }
+
+  validateFormData=()=>{
+    let validate=false;
+
+    let CatId =this.state.CatId;
+    let Code =this.state.Code;
+    let Description1 =this.state.Description1;
+    let PackingDesc1 =this.state.PackingDesc1;
+
+    let v1 = this.state.Validations;
+    if(parseInt(CatId)>0 && Code.trim()!=""  && Description1.trim()!="" && PackingDesc1.trim()!=""){
+      validate=true;
+    }else{      
+      if(Code.trim()===""){v1.Code = { errorState: true, errorMssg: "" };}
+      if(Description1.trim()===""){v1.Description1 = { errorState: true, errorMssg: "" };}
+      if(PackingDesc1.trim()===""){v1.PackingDesc1 = { errorState: true, errorMssg: "" };}
+      this.setState({Validations:v1});      
+    }
+
+    return validate;
   }
 
   render() {
@@ -1049,93 +1071,103 @@ class editItem extends React.Component {
     };
 
     const processUpdateItem = () => {
-      this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let Url = APIURLS.APIURL.UpdateItem;
-      let Data = {
-        validUser: ValidUser,
-        Item: {
-          ItemID: CF.toInt(this.state.ItemId),
-          No: CF.toString(this.state.No),
-          ItemType: CF.toInt(this.state.ItemType),
-          Code: CF.toString(this.state.Code),
-          Alias: CF.toString(this.state.Alias),
-          Description1: CF.toString(this.state.Description1),
-          Description2: CF.toString(this.state.Description2),
-          PackingDesc1: CF.toString(this.state.PackingDesc1),
-          PackingDesc2: CF.toString(this.state.PackingDesc2),
-          ItemDeptID: CF.toInt(this.state.ItemDeptId),
-          CatID: CF.toInt(this.state.CatId),
-          IsActive: this.state.IsActive,
-          IsTrading: this.state.IsTrading,
-          IsNonStockValuation: this.state.IsNonStockValuation,
-          IsCustomized: this.state.IsCustomized,
-          IsCertified: this.state.IsCertified,
-          CertificateNo: this.state.CertificateNo,
-          IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
-          Location: CF.toString(this.state.Location),
-          BarcodeNo: CF.toString(this.state.BarcodeNo),
-          CartonHeight: CF.toFloat(this.state.CartonHeight),
-          CartonLength: CF.toFloat(this.state.CartonLength),
-          CartonWidth: CF.toFloat(this.state.CartonWidth),
-          NetWeight: CF.toFloat(this.state.NetWeight),
-          GrossWeight: CF.toFloat(this.state.GrossWeight),
-          WarningLevel: CF.toFloat(this.state.WarningLevel),
-          MinStockLevel: CF.toFloat(this.state.MinStockLevel),
-          AMSF: CF.toFloat(this.state.Amsf),
-          MSF: CF.toFloat(this.state.Msf),
-          BSF: CF.toFloat(this.state.Bsf),
-          MOQ: CF.toFloat(this.state.Moq),
-          ShipperQuantiry: CF.toFloat(this.state.ShipperQuantiry),
-          CBMPerShipper: CF.toFloat(this.state.CbmperShipper),
-          IsDiscontine: this.state.IsDiscontine,
-          Reason: CF.toString(this.state.Reason),
-          UserID: CF.toInt(getCookie(COOKIE.USERID)),
-          ModifyDate: this.state.ModifyDate,
-          TolerancePercentage: CF.toFloat(this.state.TolerancePercentage),
-          IsQuality: this.state.IsQuality,
-          SpecID: CF.toInt(this.state.SpecId),
-          AllowNegativeStock: this.state.AllowNegativeStock,
-          ItemPostingGroupID: CF.toInt(this.state.ItemPostingGroupID),
-          CostingMethod: CF.toInt(this.state.CostingMethod),
-          StandardCost: CF.toFloat(this.state.StandardCost),
-          IndirectCostPercentage: CF.toFloat(this.state.IndirectCostPercentage),
-          ProfitPercentage: CF.toFloat(this.state.ProfitPercentage),
-          GSTGroupID: CF.toInt(this.state.GstgroupId),
-          HSNCode: this.state.Hsncode,
-          BaseUOM: CF.toInt(this.state.BaseUom),
-          SalesUOM: CF.toInt(this.state.SalesUom),
-          PurchaseUOM: CF.toInt(this.state.PurchaseUom),
-          PackingUOM: CF.toInt(this.state.PackingUom),
-          Replenishment: CF.toInt(this.state.Replenishment),
-          LeadTime: CF.toFloat(this.state.LeadTime),
-          IsLot: this.state.IsLot,
-          ManufacturingPolicy: CF.toInt(this.state.ManufacturingPolicy),
-          RoutingID: CF.toInt(this.state.RoutingId),
-          BOMID: CF.toInt(this.state.Bomid),
-        },
-      };
+      let validate=this.validateFormData();
 
-      console.log("data > ", Data);
+      if (validate === true) {
+        this.setState({ ProgressLoader: false });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+  
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.UpdateItem;
+        let Data = {
+          validUser: ValidUser,
+          Item: {
+            ItemID: CF.toInt(this.state.ItemId),
+            No: CF.toString(this.state.No),
+            ItemType: CF.toInt(this.state.ItemType),
+            Code: CF.toString(this.state.Code),
+            Alias: CF.toString(this.state.Alias),
+            Description1: CF.toString(this.state.Description1),
+            Description2: CF.toString(this.state.Description2),
+            PackingDesc1: CF.toString(this.state.PackingDesc1),
+            PackingDesc2: CF.toString(this.state.PackingDesc2),
+            ItemDeptID: CF.toInt(this.state.ItemDeptId),
+            CatID: CF.toInt(this.state.CatId),
+            IsActive: this.state.IsActive,
+            IsTrading: this.state.IsTrading,
+            IsNonStockValuation: this.state.IsNonStockValuation,
+            IsCustomized: this.state.IsCustomized,
+            IsCertified: this.state.IsCertified,
+            CertificateNo: this.state.CertificateNo,
+            IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
+            Location: CF.toString(this.state.Location),
+            BarcodeNo: CF.toString(this.state.BarcodeNo),
+            CartonHeight: CF.toFloat(this.state.CartonHeight),
+            CartonLength: CF.toFloat(this.state.CartonLength),
+            CartonWidth: CF.toFloat(this.state.CartonWidth),
+            NetWeight: CF.toFloat(this.state.NetWeight),
+            GrossWeight: CF.toFloat(this.state.GrossWeight),
+            WarningLevel: CF.toFloat(this.state.WarningLevel),
+            MinStockLevel: CF.toFloat(this.state.MinStockLevel),
+            AMSF: CF.toFloat(this.state.Amsf),
+            MSF: CF.toFloat(this.state.Msf),
+            BSF: CF.toFloat(this.state.Bsf),
+            MOQ: CF.toFloat(this.state.Moq),
+            ShipperQuantiry: CF.toFloat(this.state.ShipperQuantiry),
+            CBMPerShipper: CF.toFloat(this.state.CbmperShipper),
+            IsDiscontine: this.state.IsDiscontine,
+            Reason: CF.toString(this.state.Reason),
+            UserID: CF.toInt(getCookie(COOKIE.USERID)),
+            ModifyDate: this.state.ModifyDate,
+            TolerancePercentage: CF.toFloat(this.state.TolerancePercentage),
+            IsQuality: this.state.IsQuality,
+            SpecID: CF.toInt(this.state.SpecId),
+            AllowNegativeStock: this.state.AllowNegativeStock,
+            ItemPostingGroupID: CF.toInt(this.state.ItemPostingGroupID),
+            CostingMethod: CF.toInt(this.state.CostingMethod),
+            StandardCost: CF.toFloat(this.state.StandardCost),
+            IndirectCostPercentage: CF.toFloat(this.state.IndirectCostPercentage),
+            ProfitPercentage: CF.toFloat(this.state.ProfitPercentage),
+            GSTGroupID: CF.toInt(this.state.GstgroupId),
+            HSNCode: this.state.Hsncode,
+            BaseUOM: CF.toInt(this.state.BaseUom),
+            SalesUOM: CF.toInt(this.state.SalesUom),
+            PurchaseUOM: CF.toInt(this.state.PurchaseUom),
+            PackingUOM: CF.toInt(this.state.PackingUom),
+            Replenishment: CF.toInt(this.state.Replenishment),
+            LeadTime: CF.toFloat(this.state.LeadTime),
+            IsLot: this.state.IsLot,
+            ManufacturingPolicy: CF.toInt(this.state.ManufacturingPolicy),
+            RoutingID: CF.toInt(this.state.RoutingId),
+            BOMID: CF.toInt(this.state.Bomid),
+          },
+        };
+  
+        console.log("data > ", Data);
+  
+  
+        axios
+          .post(Url, Data, { headers })
+          .then((response) => {
+            let data = response.data;
+            if (response.status === 200 || response.status === 201) {
+              this.setState({ ProgressLoader: true, SuccessPrompt: true });
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+            }
+          })
+          .catch((error) => { });
+      }else{
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Input Data Not Proper" });
+      }
 
 
-      axios
-        .post(Url, Data, { headers })
-        .then((response) => {
-          let data = response.data;
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => { });
+     
 
     };
 
@@ -1176,6 +1208,7 @@ class editItem extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+        ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />

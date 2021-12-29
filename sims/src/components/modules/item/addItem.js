@@ -40,6 +40,7 @@ class addItem extends React.Component {
       WarehouseDetailsExpanded: false,
       InvoicingDetailsExpanded: false,
       ReplenishmentDetailsExpanded: false,
+      ErrorMessageProps:"",
       SuccessPrompt: false,
       ErrorPrompt: false,
       ProgressLoader: true,
@@ -112,6 +113,7 @@ class addItem extends React.Component {
       GSTGroupList:[],
       SpecIDList:[],
       Validations: {
+
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
         Description1: { errorState: false, errorMssg: "" },
@@ -340,6 +342,38 @@ class addItem extends React.Component {
         break;
       }
     }
+  }
+
+  setFormInputAsPerItemType=(ItemType)=>{
+    try{
+      if(parseInt(ItemType)===1){
+      this.setState({Replenishment:1});
+      }else{
+        this.setState({Replenishment:0});
+      }
+    }catch(err){}
+   
+  }
+
+  validateFormData=()=>{
+    let validate=false;
+
+    let CatId =this.state.CatId;
+    let Code =this.state.Code;
+    let Description1 =this.state.Description1;
+    let PackingDesc1 =this.state.PackingDesc1;
+
+    let v1 = this.state.Validations;
+    if(parseInt(CatId)>0 && Code.trim()!=""  && Description1.trim()!="" && PackingDesc1.trim()!=""){
+      validate=true;
+    }else{      
+      if(Code.trim()===""){v1.Code = { errorState: true, errorMssg: "" };}
+      if(Description1.trim()===""){v1.Description1 = { errorState: true, errorMssg: "" };}
+      if(PackingDesc1.trim()===""){v1.PackingDesc1 = { errorState: true, errorMssg: "" };}
+      this.setState({Validations:v1});      
+    }
+
+    return validate;
   }
 
    
@@ -963,6 +997,7 @@ class addItem extends React.Component {
         .then((response) => {
           let data = response.data;
           console.log("data > ", data);
+          this.setFormInputAsPerItemType(data);
           this.setState({ ItemType: data, ProgressLoader: true });
         })
         .catch((error) => {
@@ -972,132 +1007,141 @@ class addItem extends React.Component {
     };
 
     const processCreateItem = () => {
-      this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-      let ItemType = CF.toInt(this.state.ItemType);
-      let NoSeriesID = 0;
-      if (ItemType === 0) {
-        NoSeriesID = 4;
-      }
-      if (ItemType === 1) {
-        NoSeriesID = 5;
-      }
-      if (ItemType === 2) {
-        NoSeriesID = 6;
-      }
+     let validate=this.validateFormData();
 
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let reqData = {
-        ValidUser: ValidUser,
-        DocumentNumber: {
-          NoSeriesID: NoSeriesID,
-          TransDate: moment().format("MM-DD-YYYY"),
-        },
-      };
-      let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
+      if (validate === true) {
+        this.setState({ ProgressLoader: false });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-      axios
-        .post(Url1, reqData, { headers })
-        .then((response) => {
-          let NoData = response.data;
-          console.log("---> No Series DATA > ", NoData);
+        let ItemType = CF.toInt(this.state.ItemType);
+        let NoSeriesID = 0;
+        if (ItemType === 0) {
+          NoSeriesID = 4;
+        }
+        if (ItemType === 1) {
+          NoSeriesID = 5;
+        }
+        if (ItemType === 2) {
+          NoSeriesID = 6;
+        }
 
-          let Item = {
-            No: CF.toString(NoData),
-            ItemType: CF.toInt(this.state.ItemType),
-            Code: CF.toString(this.state.Code),
-            Alias: CF.toString(this.state.Alias),
-            Description1: CF.toString(this.state.Description1),
-            Description2: CF.toString(this.state.Description2),
-            PackingDesc1: CF.toString(this.state.PackingDesc1),
-            PackingDesc2: CF.toString(this.state.PackingDesc2),
-            ItemDeptId: CF.toInt(this.state.ItemDeptId),
-            CatId: CF.toInt(this.state.CatId),
-            IsActive: this.state.IsActive,
-            IsTrading: this.state.IsTrading,
-            IsNonStockValuation: this.state.IsNonStockValuation,
-            IsCustomized: this.state.IsCustomized,
-            IsCertified: this.state.IsCertified,
-            CertificateNo: this.state.CertificateNo,
-            IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
-            Location: CF.toString(this.state.Location),
-            BarcodeNo: CF.toString(this.state.BarcodeNo),
-            CartonHeight: CF.toFloat(this.state.CartonHeight),
-            CartonLength: CF.toFloat(this.state.CartonLength),
-            CartonWidth: CF.toFloat(this.state.CartonWidth),
-            NetWeight: CF.toFloat(this.state.NetWeight),
-            GrossWeight: CF.toFloat(this.state.GrossWeight),
-            WarningLevel: CF.toFloat(this.state.WarningLevel),
-            MinStockLevel: CF.toFloat(this.state.MinStockLevel),
-            Amsf: CF.toFloat(this.state.Amsf),
-            Msf: CF.toFloat(this.state.Msf),
-            Bsf: CF.toFloat(this.state.Bsf),
-            Moq: CF.toFloat(this.state.Moq),
-            ShipperQuantiry: CF.toFloat(this.state.ShipperQuantiry),
-            CbmperShipper: CF.toFloat(this.state.CbmperShipper),
-            IsDiscontine: this.state.IsDiscontine,
-            Reason: CF.toString(this.state.Reason),
-            UserId: CF.toInt(getCookie(COOKIE.USERID)),
-            ModifyDate: this.state.ModifyDate,
-            TolerancePercentage: CF.toFloat(this.state.TolerancePercentage),
-            IsQuality: this.state.IsQuality,
-            SpecId: CF.toInt(this.state.SpecId),
-            AllowNegativeStock: this.state.AllowNegativeStock,
-            ItemPostingGroupID: CF.toInt(this.state.ItemPostingGroupID),
-            CostingMethod: CF.toInt(this.state.CostingMethod),
-            StandardCost: CF.toFloat(this.state.StandardCost),
-            IndirectCostPercentage: CF.toFloat(
-              this.state.IndirectCostPercentage
-            ),
-            ProfitPercentage: CF.toFloat(this.state.ProfitPercentage),
-            GstgroupId: CF.toInt(this.state.GstgroupId),
-            Hsncode: this.state.Hsncode,
-            BaseUom: CF.toInt(this.state.BaseUom),
-            SalesUom: CF.toInt(this.state.SalesUom),
-            PurchaseUom: CF.toInt(this.state.PurchaseUom),
-            PackingUom: CF.toInt(this.state.PackingUom),
-            Replenishment: CF.toInt(this.state.Replenishment),
-            LeadTime: CF.toFloat(this.state.LeadTime),
-            IsLot: this.state.IsLot,
-            ManufacturingPolicy: CF.toInt(this.state.ManufacturingPolicy),
-            RoutingId: CF.toInt(this.state.RoutingId),
-            Bomid: CF.toInt(this.state.Bomid),
-          };
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let reqData = {
+          ValidUser: ValidUser,
+          DocumentNumber: {
+            NoSeriesID: NoSeriesID,
+            TransDate: moment().format("MM-DD-YYYY"),
+          },
+        };
+        let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
 
-          let Url = APIURLS.APIURL.CreateItem;
-          let ReqData = {
-            validUser: ValidUser,
-            Item: Item,
-          };
-          console.log("ReqData > ", ReqData);
-          axios
-            .post(Url, ReqData, { headers })
-            .then((response) => {
-              let data = response.data;
-              if (
-                response.status === 200 ||
-                response.status === 201 ||
-                response.status === true ||
-                response.status === "true"
-              ) {
-                this.setState({ ProgressLoader: true, SuccessPrompt: true });
-                this.openPage(URLS.URLS.itemMaster + this.state.urlparams);
-              } else {
+        axios
+          .post(Url1, reqData, { headers })
+          .then((response) => {
+            let NoData = response.data;
+            console.log("---> No Series DATA > ", NoData);
+
+            let Item = {
+              No: CF.toString(NoData),
+              ItemType: CF.toInt(this.state.ItemType),
+              Code: CF.toString(this.state.Code),
+              Alias: CF.toString(this.state.Alias),
+              Description1: CF.toString(this.state.Description1),
+              Description2: CF.toString(this.state.Description2),
+              PackingDesc1: CF.toString(this.state.PackingDesc1),
+              PackingDesc2: CF.toString(this.state.PackingDesc2),
+              ItemDeptId: CF.toInt(this.state.ItemDeptId),
+              CatId: CF.toInt(this.state.CatId),
+              IsActive: this.state.IsActive,
+              IsTrading: this.state.IsTrading,
+              IsNonStockValuation: this.state.IsNonStockValuation,
+              IsCustomized: this.state.IsCustomized,
+              IsCertified: this.state.IsCertified,
+              CertificateNo: this.state.CertificateNo,
+              IsSaleEvenQuantity: this.state.IsSaleEvenQuantity,
+              Location: CF.toString(this.state.Location),
+              BarcodeNo: CF.toString(this.state.BarcodeNo),
+              CartonHeight: CF.toFloat(this.state.CartonHeight),
+              CartonLength: CF.toFloat(this.state.CartonLength),
+              CartonWidth: CF.toFloat(this.state.CartonWidth),
+              NetWeight: CF.toFloat(this.state.NetWeight),
+              GrossWeight: CF.toFloat(this.state.GrossWeight),
+              WarningLevel: CF.toFloat(this.state.WarningLevel),
+              MinStockLevel: CF.toFloat(this.state.MinStockLevel),
+              Amsf: CF.toFloat(this.state.Amsf),
+              Msf: CF.toFloat(this.state.Msf),
+              Bsf: CF.toFloat(this.state.Bsf),
+              Moq: CF.toFloat(this.state.Moq),
+              ShipperQuantiry: CF.toFloat(this.state.ShipperQuantiry),
+              CbmperShipper: CF.toFloat(this.state.CbmperShipper),
+              IsDiscontine: this.state.IsDiscontine,
+              Reason: CF.toString(this.state.Reason),
+              UserId: CF.toInt(getCookie(COOKIE.USERID)),
+              ModifyDate: this.state.ModifyDate,
+              TolerancePercentage: CF.toFloat(this.state.TolerancePercentage),
+              IsQuality: this.state.IsQuality,
+              SpecId: CF.toInt(this.state.SpecId),
+              AllowNegativeStock: this.state.AllowNegativeStock,
+              ItemPostingGroupID: CF.toInt(this.state.ItemPostingGroupID),
+              CostingMethod: CF.toInt(this.state.CostingMethod),
+              StandardCost: CF.toFloat(this.state.StandardCost),
+              IndirectCostPercentage: CF.toFloat(
+                this.state.IndirectCostPercentage
+              ),
+              ProfitPercentage: CF.toFloat(this.state.ProfitPercentage),
+              GstgroupId: CF.toInt(this.state.GstgroupId),
+              Hsncode: this.state.Hsncode,
+              BaseUom: CF.toInt(this.state.BaseUom),
+              SalesUom: CF.toInt(this.state.SalesUom),
+              PurchaseUom: CF.toInt(this.state.PurchaseUom),
+              PackingUom: CF.toInt(this.state.PackingUom),
+              Replenishment: CF.toInt(this.state.Replenishment),
+              LeadTime: CF.toFloat(this.state.LeadTime),
+              IsLot: this.state.IsLot,
+              ManufacturingPolicy: CF.toInt(this.state.ManufacturingPolicy),
+              RoutingId: CF.toInt(this.state.RoutingId),
+              Bomid: CF.toInt(this.state.Bomid),
+            };
+
+            let Url = APIURLS.APIURL.CreateItem;
+            let ReqData = {
+              validUser: ValidUser,
+              Item: Item,
+            };
+            console.log("ReqData > ", ReqData);
+            axios
+              .post(Url, ReqData, { headers })
+              .then((response) => {
+                let data = response.data;
+                if (
+
+                  response.status === 201 ||
+                  response.data.status === true ||
+                  response.data.status === "true"
+                ) {
+                  this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                  // this.openPage(URLS.URLS.itemMaster + this.state.urlparams);
+                } else {
+                  this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                }
+              })
+              .catch((error) => {
                 this.setState({ ProgressLoader: true, ErrorPrompt: true });
-              }
-            })
-            .catch((error) => {
-              this.setState({ ProgressLoader: true, ErrorPrompt: true });
-            });
-        })
-        .catch((error) => {
-          this.setState({ ErrorPrompt: true, Loader: true });
-        });
+              });
+          })
+          .catch((error) => {
+            this.setState({ ErrorPrompt: true, Loader: true });
+          });
+      } else {
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Input Data Not Proper" });
+      }
+
+   
     };
 
     const breadcrumbHtml = (
@@ -1137,6 +1181,7 @@ class addItem extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+        ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />
