@@ -409,7 +409,7 @@ class addItemSuperCategory extends React.Component {
                           <SSIB
                             key="IsActive"
                             id="IsActive"
-                            label="IsActive"
+                            label="Is Active ?"
                             param={this.state.IsActive}
                             onChange={(e) => updateFormValue("IsActive", e)}
                           />

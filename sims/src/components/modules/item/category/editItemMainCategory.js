@@ -516,7 +516,7 @@ class editItemMainCategory extends React.Component {
                           <SSIB
                             key="IsNonStockV"
                             id="IsNonStockV"
-                            label="Is Stock Valuaion ?"
+                            label="Non Stk Valuaion?"
                             param={this.state.IsNonStockV}
                             onChange={(e) => updateFormValue("IsNonStockV", e)}
                           />

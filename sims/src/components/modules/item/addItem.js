@@ -1205,7 +1205,7 @@ class addItem extends React.Component {
 
                               <SIB
                                 id="ItemNo"
-                                label="Item No"
+                                label="Item No."
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("ItemNo", e)}
@@ -1330,7 +1330,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsNonStockValuation"
                                 id="IsNonStockValuation"
-                                label="Is Stock Valuation ?"
+                                label="Non Stk Valuation?"
                                 param={this.state.IsNonStockValuation}
                                 onChange={(e) =>
                                   updateFormValue("IsNonStockValuation", e)
@@ -1359,7 +1359,7 @@ class addItem extends React.Component {
 
                               <SIB
                                 id="CertificateNo"
-                                label="Certificate No"
+                                label="Certificate No."
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>

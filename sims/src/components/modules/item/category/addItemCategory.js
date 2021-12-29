@@ -487,7 +487,7 @@ class addItemCategory extends React.Component {
                           <SSIB
                             key="IsNonStockV"
                             id="IsNonStockV"
-                            label="Is Stock Valuation?"
+                            label="Non Stk Valuation?"
                             param={this.state.IsNonStockValuation}
                             onChange={(e) =>
                               updateFormValue("IsNonStockValuation", e)
