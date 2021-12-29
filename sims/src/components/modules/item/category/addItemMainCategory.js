@@ -42,9 +42,11 @@ class addItemMainCategory extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableCreatebtn: false,
+
       IsActive: true,
       mainCatId: 0,
       Code: "",
@@ -54,6 +56,7 @@ class addItemMainCategory extends React.Component {
       IsTrading: false,
       IsNonStockV: false,
       IsPriceRange: false,
+      MainCategoryData:[],
       SuperCategoryDataList: [],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
@@ -76,11 +79,35 @@ class addItemMainCategory extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+
+      this.getMainCategoryData();
     this.setState({
       urlparams: urlparams,
     });
     this.getSuperCategoryDataList();
   }
+
+  getMainCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemMainCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);        
+        this.setState({ MainCategoryData: data });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
 
   getSuperCategoryDataList() {
     let ValidUser = APIURLS.ValidUser;
@@ -108,12 +135,24 @@ class addItemMainCategory extends React.Component {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].code + " - " + data[i].hsncode,
+        name: data[i].code + "-" + data[i].hsncode,
         value: data[i].superCatId,
       };
       newData.push(d);
     }
     this.setState({ SuperCategoryDataList: newData });
+  }
+
+  checkDuplicate=(value)=>{
+    let duplicateExist=false;
+    let MainCategoryData=this.state.MainCategoryData;
+    for(let i=0;i<MainCategoryData.length;i++){
+      if(MainCategoryData[i].Code.toUpperCase()===value.toUpperCase()){
+        duplicateExist=true;
+        break;
+      }
+    }
+    return duplicateExist;
   }
 
   openPage = (url) => {
@@ -134,39 +173,61 @@ class addItemMainCategory extends React.Component {
       switch (param) {
         case "Code":
           let v1 = this.state.Validations;
-          if (e.target.value === "" || e.target.value.length > 20) {
-            if (e.target.value === "") {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Blank inputs not allowed",
-              };
-              this.setState({
-                Validations: v1,
-                Code: e.target.value,
-                DisableCreatebtn: true,
-              });
-            }
-            if (e.target.value.length > 20) {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Maximum 20 characters allowed",
-              };
-              this.setState({
-                Validations: v1,
-                DisableCreatebtn: true,
-                Code: e.target.value,
-              });
-            }
-          } else {
-            v1.Code = { errorState: false, errorMssg: "" };
+          let duplicateExist=this.checkDuplicate(e.target.value);
+          if(duplicateExist){
+            v1.Code = {
+              errorState: true,
+            };
             this.setState({
               Validations: v1,
+              ErrorPrompt:true,
               Code: e.target.value,
-              DisableCreatebtn: false,
+              ErrorMessageProps:"Duplicate Code Exist",
+              DisableCreatebtn: true,
             });
+          }else{
+            
+            if (e.target.value === "" || e.target.value.length > 20) {
+              if (e.target.value === "") {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Blank inputs not allowed",
+                };
+                this.setState({
+                  Validations: v1,
+                  Code: e.target.value,
+                  DisableCreatebtn: true,
+                });
+              }
+              if (e.target.value.length > 20) {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Maximum 20 characters allowed",
+                };
+                this.setState({
+                  Validations: v1,
+                  DisableCreatebtn: true,
+                  Code: e.target.value,
+                });
+              }
+            } else {
+              v1.Code = { errorState: false, errorMssg: "" };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value,
+                DisableCreatebtn: false,
+              });
+            }
           }
+         
           break;
         case "SuperCatID":
+          if(e.target.options[e.target.selectedIndex].text){
+            let text=e.target.options[e.target.selectedIndex].text;
+            let A=text.split("-");
+            let HSNCode=A[1];
+            this.setState({ HSNCode: HSNCode });
+          }
           this.setState({ SuperCatID: e.target.value });
           break;
         case "Description":
@@ -318,6 +379,7 @@ class addItemMainCategory extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />

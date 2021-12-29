@@ -42,9 +42,11 @@ class editItemMainCategory extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
+      MainCategoryData:[],
       SuperCategoryDataList: [],
       IsActive: false,
       mainCatId: 0,
@@ -78,6 +80,7 @@ class editItemMainCategory extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+      this.getMainCategoryData();
     this.setState(
       {
         urlparams: urlparams,
@@ -88,6 +91,29 @@ class editItemMainCategory extends React.Component {
       }
     );
   }
+
+
+  getMainCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemMainCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        console.log("data > ", data);        
+        this.setState({ MainCategoryData: data });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
   getSuperCategoryDataList() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -114,7 +140,7 @@ class editItemMainCategory extends React.Component {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].code + " - " + data[i].hsncode,
+        name: data[i].code + "-" + data[i].hsncode,
         value: data[i].superCatId,
       };
       newData.push(d);
@@ -143,6 +169,20 @@ class editItemMainCategory extends React.Component {
         let data = response.data;
         console.log("data > ", data);
 
+        let duplicateExist=this.checkDuplicate(data.code,data.mainCatId);
+        let v1 = this.state.Validations;
+        if(duplicateExist){
+          v1.Code = {
+            errorState: true,
+          };
+          this.setState({
+            Validations: v1,
+            ErrorPrompt:true,             
+            ErrorMessageProps:"Duplicate Code Exist",
+            DisableCreatebtn: true,
+          });
+        }
+
         this.setState({
           ItemMainCategory: data,
           mainCatId: data.mainCatId,
@@ -154,11 +194,25 @@ class editItemMainCategory extends React.Component {
           IsNonStockV: data.isNonStockValuation,
           IsPriceRange: data.isPriceRange,
           IsActive: data.isActive,
-          DisableUpdatebtn: false,
+          DisableUpdatebtn: duplicateExist===true?true:false,
           ProgressLoader: true,
         });
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(" error > ",error);
+      });
+  }
+
+  checkDuplicate=(value,id)=>{
+    let duplicateExist=false;
+    let MainCategoryData=this.state.MainCategoryData;
+    for(let i=0;i<MainCategoryData.length;i++){
+      if( (MainCategoryData[i].Code.toUpperCase()===value.toUpperCase()) && (MainCategoryData[i].MainCatID!=id)){
+        duplicateExist=true;
+        break;
+      }
+    }
+    return duplicateExist;
   }
 
   render() {
@@ -172,36 +226,57 @@ class editItemMainCategory extends React.Component {
     const updateFormValue = (param, e) => {
       switch (param) {
         case "Code":
+
           let v1 = this.state.Validations;
-          if (e.target.value === "" || e.target.value.length > 20) {
-            if (e.target.value === "") {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Blank inputs not allowed",
-              };
-              this.setState({
-                Validations: v1,
-                Code: e.target.value,
-                DisableUpdatebtn: true,
-              });
-            }
-            if (e.target.value.length > 20) {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Maximum 20 characters allowed",
-              };
-              this.setState({ Validations: v1, DisableUpdatebtn: true });
-            }
-          } else {
-            v1.Code = { errorState: false, errorMssg: "" };
+          let duplicateExist=this.checkDuplicate(e.target.value,this.state.mainCatId);
+          if(duplicateExist){
+            v1.Code = {
+              errorState: true,
+            };
             this.setState({
               Validations: v1,
-              Code: e.target.value,
-              DisableUpdatebtn: false,
+              ErrorPrompt:true,
+              Code: e.target.value.toUpperCase(),
+              ErrorMessageProps:"Duplicate Code Exist",
+              DisableCreatebtn: true,
             });
+          }else{
+            if (e.target.value === "" || e.target.value.length > 20) {
+              if (e.target.value === "") {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Blank inputs not allowed",
+                };
+                this.setState({
+                  Validations: v1,
+                  Code: e.target.value,
+                  DisableUpdatebtn: true,
+                });
+              }
+              if (e.target.value.length > 20) {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Maximum 20 characters allowed",
+                };
+                this.setState({ Validations: v1, DisableUpdatebtn: true });
+              }
+            } else {
+              v1.Code = { errorState: false, errorMssg: "" };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value.toUpperCase(),
+                DisableUpdatebtn: false,
+              });
+            }
           }
           break;
         case "SuperCatID":
+          if(e.target.options[e.target.selectedIndex].text){
+            let text=e.target.options[e.target.selectedIndex].text;
+            let A=text.split("-");
+            let HSNCode=A[1];
+            this.setState({ HSNCode: HSNCode });
+          }
           this.setState({ SuperCatID: e.target.value });
           break;
         case "Description":
@@ -347,6 +422,7 @@ class editItemMainCategory extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />
