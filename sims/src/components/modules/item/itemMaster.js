@@ -25,6 +25,8 @@ import Itemquickdetails from "./itemquickdetails";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../compo/backdrop";
 import MasterDataGrid from "../../compo/masterdatagrid";
+import ErrorSnackBar from "../../compo/errorSnackbar";
+import SuccessSnackBar from "../../compo/successSnackbar";
 
 
 class itemMaster extends React.Component {
@@ -35,7 +37,10 @@ class itemMaster extends React.Component {
         page: 0,
         rowsPerPage: 10,
       },
-      columns:APIURLS.itemMasterColumn,
+      columns: APIURLS.itemMasterColumn,
+      SuccessPrompt: false,
+      ErrorPrompt: false,
+      ErrorMessageProps: "",
       ProgressLoader: false,
       isLoggedIn: false,
       editBtnDisable: true,
@@ -44,12 +49,16 @@ class itemMaster extends React.Component {
       editurl: "",
       itemData: [],
       selectedItem: {},
-      ItemID:null
+      ItemID: null
     };
   }
 
+  componentWillMount() {
+
+  }
+
   componentDidMount() {
-    this.performancecheck();
+    this.getItems();
     let params = CF.GET_URL_PARAMS();
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
@@ -65,52 +74,18 @@ class itemMaster extends React.Component {
         "&branchName=" +
         branchName;
       this.setState({ urlparams: params });
-      this.getItems();
+
     } else {
       this.setState({ isLoggedIn: false });
     }
   }
 
-  performancecheck = () => {
-    var arr = new Array(10000).fill().map((d, i) => ++i)
 
-
-    let t0 = performance.now();
-    for (var i = 0; i < arr.length; i++) {
-      arr[i] = arr[i]
-    }
-    let t1 = performance.now();
-    console.log(`For-Loop through array a million times took ${t1 - t0} milliseconds.`);
-
-    let t2 = performance.now();
-    arr.map(item => item)
-
-    let t3 = performance.now();
-    console.log(`.Map through array a million times took ${t3 - t2} milliseconds.`);
-
-    //An array size of 1,000
-    arr = new Array(10000).fill().map((d, i) => ++i)
-
-
-    t0 = performance.now();
-    for (var i = 0; i < arr.length; i++) {
-      arr[i] = arr[i]
-    }
-    t1 = performance.now();
-    console.log(`For-Loop through array a thousand times took ${t1 - t0} milliseconds.`);
-
-    t2 = performance.now();
-    arr.map(item => item)
-
-    t3 = performance.now();
-    console.log(`.Map through array a thousand times took ${t3 - t2} milliseconds.`);
-  }
 
   getItems() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
-
     let Url = APIURLS.APIURL.GetAllItems;
     const headers = {
       "Content-Type": "application/json",
@@ -118,51 +93,60 @@ class itemMaster extends React.Component {
     axios
       .post(Url, ValidUser, { headers })
       .then((response) => {
-        let data = response.data;
-        console.log("data > ", data);
-        data.map((item,i)=>{
-          item.id=i+1;
-        })
-        // for(let i=0;i<data.length;i++){
-        //   data[i].id=i+1;
-        // }
-        this.setState({ itemData: data }, () => {
-          this.handleRowClick([1]);
-        });
-        this.setState({ ProgressLoader: true });
+        if (response.status === 200) {
+          this.setState({ ProgressLoader: true, itemData: response.data }, () => {
+            this.handleRowClick([1]);
+          });
+        }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+      });
   }
 
-   handleRowClick = (e) => {
+  handleRowClick = (e) => {
 
     try {
-      let index = e[0];      
-      let item = this.state.itemData[index - 1]; 
+      let index = e[0];
+      let item = this.state.itemData[index - 1];
       let editUrl =
-      URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + item.ItemID;
+        URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + item.ItemID;
 
       this.setState({
         ItemID: item.ItemID,
         editurl: editUrl,
         editBtnDisable: false,
         selectedItem: item,
-        selectionModel:index
+        selectionModel: index
       });
 
-    } catch (e) {}
+    } catch (e) { }
 
-   
+
   };
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
     window.location = url;
   };
- 
+
 
   render() {
-   
+
+    const closeErrorPrompt = (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      this.setState({ ErrorPrompt: false });
+    };
+
+    const closeSuccessPrompt = (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      this.setState({ SuccessPrompt: false });
+    };
+
 
     const breadcrumbHtml = (
       <Fragment>
@@ -203,7 +187,7 @@ class itemMaster extends React.Component {
       </Fragment>
     );
 
-    const handlePageChange = (event, newPage) => {     
+    const handlePageChange = (event, newPage) => {
       let pagination = this.state.pagination;
       pagination.page = newPage;
       this.setState({ pagination: pagination });
@@ -212,17 +196,28 @@ class itemMaster extends React.Component {
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
+
+        <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+        <SuccessSnackBar
+          SuccessPrompt={this.state.SuccessPrompt}
+          closeSuccessPrompt={closeSuccessPrompt}
+        />
+
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
         />
-       
+
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
 
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={12} lg={12}>
-              {this.state.itemData.length > 0 ? (
+                {this.state.itemData.length > 0 ? (
                   <Fragment>
 
                     <MasterDataGrid
@@ -234,7 +229,7 @@ class itemMaster extends React.Component {
                       onPageChange={handlePageChange}
                     />
 
-                   
+
                   </Fragment>
                 ) : (
                   <Tableskeleton />
@@ -243,7 +238,7 @@ class itemMaster extends React.Component {
               </Grid>
             </Grid>
 
-          
+
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
