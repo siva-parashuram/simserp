@@ -1432,7 +1432,7 @@ class addItem extends React.Component {
                             <Grid item xs={12} sm={12} md={5} lg={5}>
                               <SIB
                                 id="CartonHeight"
-                                label="Carton Height"
+                                label="Height"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1442,7 +1442,7 @@ class addItem extends React.Component {
                               />
                               <SIB
                                 id="CartonLength"
-                                label="Carton Length"
+                                label="Length"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1452,7 +1452,7 @@ class addItem extends React.Component {
                               />
                               <SIB
                                 id="CartonWidth"
-                                label="Carton Width"
+                                label="Width"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1474,7 +1474,7 @@ class addItem extends React.Component {
                               />
                               <SIB
                                 id="MinStockLevel"
-                                label="MinStock Level"
+                                label="MSL"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1549,7 +1549,7 @@ class addItem extends React.Component {
 
                               <SDIB
                                 id="SpecID"
-                                label="SpecID"
+                                label="Specification"
                                 onChange={(e) => updateFormValue("SpecId", e)}
                                 param={this.state.SpecIDList}
                                 value={this.state.SpecId}
@@ -1685,7 +1685,7 @@ class addItem extends React.Component {
                             <Grid item xs={12} sm={12} md={5} lg={5}>
                               <SIB
                                 id="TolerancePercentage"
-                                label="Tolerance Percentage"
+                                label="Tolerance %"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1696,7 +1696,7 @@ class addItem extends React.Component {
 
                               <SDIB
                                 id="GSTGroupID"
-                                label="GST GroupID"
+                                label="GST Group"
                                 onChange={(e) =>
                                   updateFormValue("GstgroupId", e)
                                 }
@@ -1716,16 +1716,18 @@ class addItem extends React.Component {
                                 }
                               />
 
-                              <SDIB
+                            
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+
+                            <SDIB
                                 id="BaseUOM"
-                                label="Base UOM "
+                                label="Base UOM"
                                 onChange={(e) => updateFormValue("BaseUom", e)}
                                 param={this.state.UOMList}
                                 value={this.state.BaseUom}
                               />
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                            <Grid item xs={12} sm={12} md={5} lg={5}>
                               <SDIB
                                 id="SalesUOM"
                                 label="Sales UOM"
@@ -1824,24 +1826,26 @@ class addItem extends React.Component {
                             </Grid>
                             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
-                              <SIB
+ 
+                              <SDIB
                                 id="RoutingID"
-                                label="RoutingID "
-                                variant="outlined"
-                                size="small"
+                                label="Routing"
                                 onChange={(e) =>
                                   updateFormValue("RoutingId", e)
                                 }
+                                param={[]}
                                 value={this.state.RoutingId}
                               />
-                              <SIB
+
+                              <SDIB
                                 id="BOMID"
-                                label="BOMID "
-                                variant="outlined"
-                                size="small"
+                                label="BOM"
                                 onChange={(e) => updateFormValue("Bomid", e)}
+                                param={[]}
                                 value={this.state.Bomid}
                               />
+
+ 
                             </Grid>
                           </Grid>
                         </div>

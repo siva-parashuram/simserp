@@ -1712,7 +1712,7 @@ class editItem extends React.Component {
                             <Grid item xs={12} sm={12} md={5} lg={5}>
                               <SIB
                                 id="TolerancePercentage"
-                                label="Tolerance Percentage"
+                                label="Tolerance %"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1734,12 +1734,12 @@ class editItem extends React.Component {
 
                               <SDIB
                                 id="GSTGroupID"
-                                label="GST GroupID"
+                                label="GST Group"
                                 onChange={(e) =>
                                   updateFormValue("GstgroupId", e)
                                 }
                                 param={this.state.GSTGroupList}
-                                value={this.state.GstgroupId}
+                                value={this.state.GstgroupId}   
                               />
 
                               <SIB
