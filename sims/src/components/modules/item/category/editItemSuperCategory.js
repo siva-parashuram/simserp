@@ -47,6 +47,7 @@ class editItemSuperCategory extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableUpdatebtn: true,
@@ -65,6 +66,7 @@ class editItemSuperCategory extends React.Component {
       },
       branchList: [],
       checkedBranchList:[],
+      DataList:[],
     };
   }
 
@@ -83,13 +85,38 @@ class editItemSuperCategory extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+      this.getDataList();
     this.setState(
       {
         urlparams: params,
-        SuperCatID: SuperCatID,
+        SuperCatID: parseInt(SuperCatID),
       },
       () => this.getSuperCategory()
     );
+  }
+
+  
+  getDataList() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemSuperCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        
+        console.log("data > ", data);
+        this.setState({ DataList: data });
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
   }
 
   getBranches() {
@@ -275,6 +302,19 @@ class editItemSuperCategory extends React.Component {
 
   }
 
+  checkDuplicate=(value,id)=>{
+
+    let duplicateExist=false;
+    let DataList=this.state.DataList;
+    for(let i=0;i<DataList.length;i++){
+      if( (DataList[i].code.toUpperCase()===value.toUpperCase())  && (DataList[i].superCatId!=id)){
+        duplicateExist=true;
+        break;
+      }
+    }
+    return duplicateExist;
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -287,33 +327,49 @@ class editItemSuperCategory extends React.Component {
       switch (param) {
         case "Code":
           let v1 = this.state.Validations;
-          if (e.target.value === "" || e.target.value.length > 10) {
-            if (e.target.value === "") {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Blank inputs not allowed",
-              };
-              this.setState({
-                Validations: v1,
-                Code: e.target.value,
-                DisableUpdatebtn: true,
-              });
-            }
-            if (e.target.value.length > 10) {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Maximum 10 characters allowed",
-              };
-              this.setState({ Validations: v1, DisableUpdatebtn: true });
-            }
-          } else {
-            v1.Code = { errorState: false, errorMssg: "" };
+          let duplicateExist=this.checkDuplicate(e.target.value,this.state.SuperCatID);
+          if(duplicateExist){
+            v1.Code = {
+              errorState: true,
+            };
             this.setState({
               Validations: v1,
-              Code: e.target.value,
-              DisableUpdatebtn: false,
+              ErrorPrompt:true,
+              Code: e.target.value.toUpperCase(),
+              ErrorMessageProps:"Duplicate Code Exist",
+              DisableCreatebtn: true,
             });
+          }else{
+            if (e.target.value === "" || e.target.value.length > 10) {
+              if (e.target.value === "") {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Blank inputs not allowed",
+                };
+                this.setState({
+                  Validations: v1,
+                  Code: e.target.value,
+                  DisableUpdatebtn: true,
+                });
+              }
+              if (e.target.value.length > 10) {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Maximum 10 characters allowed",
+                };
+                this.setState({ Validations: v1, DisableUpdatebtn: true });
+              }
+            } else {
+              v1.Code = { errorState: false, errorMssg: "" };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value.toUpperCase(),
+                DisableUpdatebtn: false,
+              });
+            }
           }
+
+
           break;
         case "Name":
           this.setState({ Name: e.target.value });
@@ -460,6 +516,7 @@ class editItemSuperCategory extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />

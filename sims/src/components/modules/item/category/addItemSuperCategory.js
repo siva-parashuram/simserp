@@ -42,6 +42,7 @@ class addItemSuperCategory extends React.Component {
       urlparams: "",
       ProgressLoader: true,
       GeneralDetailsExpanded: true,
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableCreatebtn: true,
@@ -52,6 +53,7 @@ class addItemSuperCategory extends React.Component {
       Description: "",
       HSNCode: "",
       SuperCatID: 0,
+      DataList:[],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Description: { errorState: false, errorMssg: "" },
@@ -73,9 +75,45 @@ class addItemSuperCategory extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+      this.getDataList();
     this.setState({
       urlparams: params,
     });
+  }
+
+  getDataList() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemSuperCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+        
+        console.log("data > ", data);
+        this.setState({ DataList: data });
+        this.setState({ ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
+  checkDuplicate=(value)=>{
+    let duplicateExist=false;
+    let DataList=this.state.DataList;
+    for(let i=0;i<DataList.length;i++){
+      if(DataList[i].code.toUpperCase()===value.toUpperCase()){
+        duplicateExist=true;
+        break;
+      }
+    }
+    return duplicateExist;
   }
 
   openPage = (url) => {
@@ -96,36 +134,50 @@ class addItemSuperCategory extends React.Component {
       switch (param) {
         case "Code":
           let v1 = this.state.Validations;
-          if (e.target.value === "" || e.target.value.length > 10) {
-            if (e.target.value === "") {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Blank inputs not allowed",
-              };
-              this.setState({
-                Validations: v1,
-                Code: e.target.value,
-                DisableCreatebtn: true,
-              });
-            }
-            if (e.target.value.length > 10) {
-              v1.Code = {
-                errorState: true,
-                errorMssg: "Maximum 10 characters allowed",
-              };
-              this.setState({
-                Validations: v1,
-                DisableCreatebtn: true,
-                Code: e.target.value,
-              });
-            }
-          } else {
-            v1.Code = { errorState: false, errorMssg: "" };
+          let duplicateExist=this.checkDuplicate(e.target.value);
+          if(duplicateExist){
+            v1.Code = {
+              errorState: true,
+            };
             this.setState({
               Validations: v1,
+              ErrorPrompt:true,
               Code: e.target.value,
-              DisableCreatebtn: false,
+              ErrorMessageProps:"Duplicate Code Exist",
+              DisableCreatebtn: true,
             });
+          }else{
+            if (e.target.value === "" || e.target.value.length > 10) {
+              if (e.target.value === "") {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Blank inputs not allowed",
+                };
+                this.setState({
+                  Validations: v1,
+                  Code: e.target.value,
+                  DisableCreatebtn: true,
+                });
+              }
+              if (e.target.value.length > 10) {
+                v1.Code = {
+                  errorState: true,
+                  errorMssg: "Maximum 10 characters allowed",
+                };
+                this.setState({
+                  Validations: v1,
+                  DisableCreatebtn: true,
+                  Code: e.target.value,
+                });
+              }
+            } else {
+              v1.Code = { errorState: false, errorMssg: "" };
+              this.setState({
+                Validations: v1,
+                Code: e.target.value,
+                DisableCreatebtn: false,
+              });
+            }
           }
           break;
       
@@ -269,6 +321,7 @@ class addItemSuperCategory extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />

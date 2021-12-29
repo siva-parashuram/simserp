@@ -181,7 +181,7 @@ class addItemMainCategory extends React.Component {
             this.setState({
               Validations: v1,
               ErrorPrompt:true,
-              Code: e.target.value,
+              Code: e.target.value.toUpperCase(),
               ErrorMessageProps:"Duplicate Code Exist",
               DisableCreatebtn: true,
             });
