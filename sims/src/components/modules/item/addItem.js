@@ -354,22 +354,44 @@ class addItem extends React.Component {
     }catch(err){}   
   }
 
-  validateFormData=()=>{
-    let validate=false;
+  validateFormData = () => {
+    let validate = false;
 
-    let CatId =this.state.CatId;
-    let Code =this.state.Code;
-    let Description1 =this.state.Description1;
-    let PackingDesc1 =this.state.PackingDesc1;
+    let CatId = this.state.CatId;
+    let Code = this.state.Code;
+    let Description1 = this.state.Description1;
+    let PackingDesc1 = this.state.PackingDesc1;
+    let Hsncode= this.state.Hsncode;
+    let BaseUom= this.state.BaseUom;
+    let ItemPostingGroupID= this.state.ItemPostingGroupID;
+
+    let netGrossWeightChk=false;
+    if(this.state.ItemType===0){
+          if(parseFloat(this.state.NetWeight)>0 && parseFloat(this.state.GrossWeight)>0){
+            netGrossWeightChk=true;
+          }
+    }
 
     let v1 = this.state.Validations;
-    if(parseInt(CatId)>0 && Code.trim()!=""  && Description1.trim()!="" && PackingDesc1.trim()!=""){
-      validate=true;
-    }else{      
-      if(Code.trim()===""){v1.Code = { errorState: true, errorMssg: "" };}
-      if(Description1.trim()===""){v1.Description1 = { errorState: true, errorMssg: "" };}
-      if(PackingDesc1.trim()===""){v1.PackingDesc1 = { errorState: true, errorMssg: "" };}
-      this.setState({Validations:v1});      
+    if (
+      parseInt(CatId) > 0 &&
+      parseInt(BaseUom) > 0 &&
+      parseInt(ItemPostingGroupID) > 0 &&
+      Code.trim() != "" &&
+      Description1.trim() != "" &&
+      PackingDesc1.trim() != "" &&
+      Hsncode.trim() != "" &&
+      netGrossWeightChk===true
+      
+
+    ) {
+      validate = true;
+    } else {
+      if (Code.trim() === "") { v1.Code = { errorState: true, errorMssg: "" }; }
+      if (Description1.trim() === "") { v1.Description1 = { errorState: true, errorMssg: "" }; }
+      if (PackingDesc1.trim() === "") { v1.PackingDesc1 = { errorState: true, errorMssg: "" }; }
+      if (Hsncode.trim() === "") { v1.Hsncode = { errorState: true, errorMssg: "" }; }
+      this.setState({ Validations: v1 });
     }
 
     return validate;
@@ -1617,6 +1639,7 @@ class addItem extends React.Component {
                                 }
                                 param={APIURLS.ItemPostingGroup}
                                 value={this.state.ItemPostingGroupID}
+                                isMandatory={true}
                               />
 
                               <SDIB
@@ -1638,6 +1661,7 @@ class addItem extends React.Component {
                                   updateFormValue("NetWeight", e)
                                 }
                                 value={this.state.NetWeight}
+                                isMandatory={this.state.ItemType===0?true:false}
                               />
                               <SIB
                                 id="GrossWeight"
@@ -1648,6 +1672,7 @@ class addItem extends React.Component {
                                   updateFormValue("GrossWeight", e)
                                 }
                                 value={this.state.GrossWeight}
+                                isMandatory={this.state.ItemType===0?true:false}
                               />
 {/* 
                               <SIB
@@ -1758,6 +1783,7 @@ class addItem extends React.Component {
                                 error={
                                   this.state.Validations.Hsncode.errorState
                                 }
+                                isMandatory={true}
                               />
 
                             
@@ -1771,6 +1797,7 @@ class addItem extends React.Component {
                                 onChange={(e) => updateFormValue("BaseUom", e)}
                                 param={this.state.UOMList}
                                 value={this.state.BaseUom}
+                                isMandatory={true}
                               />
                               <SDIB
                                 id="SalesUOM"
