@@ -14,7 +14,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import moment from "moment";
- 
+
 import Attachmentmaster from '../../ftp/attachment/attachmentmaster';
 
 class itemquickdetails extends React.Component {
@@ -23,9 +23,9 @@ class itemquickdetails extends React.Component {
         this.state = {
             showDetails: true,
             showAttachments: false,
-            detailsUnderlineBtnCss: "btn-bottom-border-color",  
+            detailsUnderlineBtnCss: "btn-bottom-border-color",
             attachmentUnderlineBtnCss: "",
-             
+
         };
     }
     render() {
@@ -39,7 +39,7 @@ class itemquickdetails extends React.Component {
         }
 
         const openPage = (url) => {
-           
+
             this.setState({ ProgressLoader: false });
             window.location = url;
         }
@@ -70,50 +70,76 @@ class itemquickdetails extends React.Component {
                         <Fragment>
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                                   
+
                                     <TableContainer>
                                         <Table stickyHeader size="small" className="accordion-table" aria-label="table">
                                             <TableBody className="tableBody">
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">Alias</TableCell>
-                                                    <TableCell align="right" className="no-border-table">{this.props.item.alias} </TableCell>
+                                                    <TableCell align="right" className="no-border-table">{this.props.item.Alias} </TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">No.</TableCell>
-                                                    <TableCell align="right" className="no-border-table"> {this.props.item.no}</TableCell>
+                                                    <TableCell align="right" className="no-border-table"> {this.props.item.No}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Description</TableCell>
+                                                    <TableCell align="left" className="no-border-table">Description1</TableCell>
                                                     <TableCell align="right" className="no-border-table">
-                                                        {this.props.item.description1} <br/>
-                                                        {this.props.item.description2} 
-                                                        </TableCell>
+                                                        {this.props.item.Description1}
+                                                    </TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Packing Description</TableCell>
+                                                    <TableCell align="left" className="no-border-table">Description2</TableCell>
                                                     <TableCell align="right" className="no-border-table">
-                                                        {this.props.item.packingDesc1} <br/>
-                                                        {this.props.item.packingDesc2} 
-                                                        </TableCell>
+                                                        {this.props.item.Description2}
+                                                    </TableCell>
                                                 </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">Packing Description1</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.PackingDesc1}
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">Packing Description2</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.PackingDesc2}
+                                                    </TableCell>
+                                                </TableRow>
+                                                {this.props.item.CertificateNo === "" ? null : (
+                                                    <TableRow>
+                                                        <TableCell align="left" className="no-border-table">Certificate No</TableCell>
+                                                        <TableCell align="right" className="no-border-table">
+                                                            {this.props.item.CertificateNo}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )}
+
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">UOM</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.UOMCode}
+                                                    </TableCell>
+                                                </TableRow>
+
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">Standard Cost</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.StandardCost}
+                                                    </TableCell>
+                                                </TableRow>
+
+
+
+
+
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">Modified On</TableCell>
                                                     <TableCell align="right" className="no-border-table">
-                                                        {moment(this.props.item.modifyDate).format("MM/DD/YYYY HH:mm:ss")}  
-                                                        </TableCell>
+                                                        {moment(this.props.item.ModifyDate).format("MM/DD/YYYY HH:mm:ss")}
+                                                    </TableCell>
                                                 </TableRow>
 
-                                                {this.props.item.certificateNo===""?null:(
-                                                    <TableRow>
-                                                    <TableCell align="left" className="no-border-table">Certificate No</TableCell>
-                                                    <TableCell align="right" className="no-border-table">
-                                                        {this.props.item.certificateNo}  
-                                                        </TableCell>
-                                                </TableRow>
-                                                )}
-                                                
-                                                
-                                                 
 
                                             </TableBody>
                                         </Table>
@@ -125,13 +151,13 @@ class itemquickdetails extends React.Component {
                                     <div style={{ height: 20 }}></div>
                                 </Grid>
                             </Grid>
-                           
+
                         </Fragment>
 
                     ) : null}
                     {this.state.showAttachments === true ? (
                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                              Attachments comes here
+                            Attachments comes here
                         </Grid>
                     ) : null}
 

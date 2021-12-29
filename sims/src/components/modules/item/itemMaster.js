@@ -4,6 +4,7 @@ import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import * as CF from "../../../services/functions/customfunctions";
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -23,25 +24,32 @@ import Tableskeleton from "../../compo/tableskeleton";
 import Itemquickdetails from "./itemquickdetails";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../compo/backdrop";
-
+import MasterDataGrid from "../../compo/masterdatagrid";
 
 
 class itemMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
+      columns:APIURLS.itemMasterColumn,
       ProgressLoader: false,
       isLoggedIn: false,
       editBtnDisable: true,
       initialCss: "",
       urlparams: "",
-      editUrl: "",
+      editurl: "",
       itemData: [],
       selectedItem: {},
+      ItemID:null
     };
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
@@ -55,7 +63,7 @@ class itemMaster extends React.Component {
         compName +
         "&branchName=" +
         branchName;
-      this.setState({ urlparams: urlparams });
+      this.setState({ urlparams: params });
       this.getItems();
     } else {
       this.setState({ isLoggedIn: false });
@@ -76,59 +84,46 @@ class itemMaster extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
+        for(let i=0;i<data.length;i++){
+          data[i].id=i+1;
+        }
         this.setState({ itemData: data }, () => {
-          this.InitialhandleRowClick(null, data[0], "row_0");
+          this.handleRowClick([1]);
         });
         this.setState({ ProgressLoader: true });
       })
       .catch((error) => {});
   }
 
-  InitialhandleRowClick(e, item, id) {
-    let editUrl =
-      URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + item.itemId;
-    this.setState({
-      moduleId: item.moduleId,
-      editurl: editUrl,
-      selectedItem: item,
-      editBtnDisable: false,
-    });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
-  }
-  InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.itemData.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
-  }
+   handleRowClick = (e) => {
 
-  render() {
-    const handleRowClick = (e, item, id) => {
+    try {
+      let index = e[0];      
+      let item = this.state.itemData[index - 1]; 
       let editUrl =
-        URLS.URLS.editItem +
-        this.state.urlparams +
-        "&edititemId=" +
-        item.itemId;
+      URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + item.ItemID;
+
       this.setState({
-        moduleId: item.moduleId,
+        ItemID: item.ItemID,
         editurl: editUrl,
         editBtnDisable: false,
         selectedItem: item,
+        selectionModel:index
       });
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-    };
 
-    const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.itemData.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    };
+    } catch (e) {}
 
-    const openPage = (url) => {
-      this.setState({ ProgressLoader: false });
-      window.location = url;
-    };
+   
+  };
+
+  openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
+  };
+ 
+
+  render() {
+   
 
     const breadcrumbHtml = (
       <Fragment>
@@ -153,14 +148,14 @@ class itemMaster extends React.Component {
           <Button
             className="action-btns"
             startIcon={APIURLS.buttonTitle.add.icon}
-            onClick={(e) => openPage(URLS.URLS.addItem + this.state.urlparams)}
+            onClick={(e) => this.openPage(URLS.URLS.addItem + this.state.urlparams)}
           >
             {APIURLS.buttonTitle.add.name}
           </Button>
           <Button
             className="action-btns"
             startIcon={APIURLS.buttonTitle.edit.icon}
-            onClick={(e) => openPage(this.state.editurl)}
+            onClick={(e) => this.openPage(this.state.editurl)}
             disabled={this.state.editBtnDisable}
           >
             {APIURLS.buttonTitle.edit.name}
@@ -168,6 +163,12 @@ class itemMaster extends React.Component {
         </ButtonGroup>
       </Fragment>
     );
+
+    const handlePageChange = (event, newPage) => {     
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
+    };
 
     return (
       <Fragment>
@@ -180,64 +181,30 @@ class itemMaster extends React.Component {
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
 
-            
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
+              {this.state.itemData.length > 0 ? (
+                  <Fragment>
 
+                    <MasterDataGrid
+                      selectionModel={this.state.selectionModel}
+                      rows={this.state.itemData}
+                      columns={this.state.columns}
+                      pagination={this.state.pagination}
+                      onSelectionModelChange={(e) => this.handleRowClick(e)}
+                      onPageChange={handlePageChange}
+                    />
 
-            {this.state.itemData.length > 0 ? (
-              <Fragment>
-                <TableContainer style={{ maxHeight: 440 }}>
-                  <Table
-                    stickyHeader
-                    size="small"
-                    className=""
-                    aria-label="item List table"
-                  >
-                    <TableHead className="table-header-background">
-                      <TableRow>
-                        <TableCell className="table-header-font">No</TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Code
-                        </TableCell>
-                        <TableCell className="table-header-font" align="left">
-                          Alias
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody className="tableBody">
-                      {this.state.itemData.map((item, i) => (
-                        <TableRow
-                          id={"row_" + i}
-                          className={this.state.initialCss}
-                          hover
-                          key={i}
-                          onClick={(event) =>
-                            handleRowClick(event, item, "row_" + i)
-                          }
-                        >
-                          <TableCell align="left">
-                            <a
-                              className="LINK tableLink"
-                              href={
-                                URLS.URLS.editItem +
-                                this.state.urlparams +
-                                "&edititemId=" +
-                                item.itemId
-                              }
-                            >
-                              {item.no}
-                            </a>
-                          </TableCell>
-                          <TableCell align="left">{item.code}</TableCell>
-                          <TableCell align="left">{item.alias}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </Fragment>
-            ) : (
-              <Tableskeleton />
-            )}
+                   
+                  </Fragment>
+                ) : (
+                  <Tableskeleton />
+                )}
+
+              </Grid>
+            </Grid>
+
+          
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>

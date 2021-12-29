@@ -91,6 +91,9 @@ class discount extends React.Component {
   }
 
   componentDidMount() {
+    var url = new URL(window.location.href);
+    let branchId = url.searchParams.get("branchId");
+    this.setState({BranchID:parseInt(branchId)});
     this.getDiscount();
     this.getBranches();
   }
@@ -111,8 +114,8 @@ class discount extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].name,
-            value: data[i].branchId,
+            name: data[i].Name,
+            value: data[i].BranchID,
           };
           newD.push(o);
         }
@@ -570,9 +573,10 @@ class discount extends React.Component {
                                     onChange={(e) =>
                                       this.updateFormValue("BranchID", e)
                                     }
-                                    value={this.state.Discount.BranchID}
+                                    value={this.state.BranchID}
                                     options={this.state.branchData}
                                     isMandatory={true}
+                                    disabled={true}
                                   />
 
                                   <DateTextboxInput

@@ -22,7 +22,7 @@ class masterdatagrid extends React.Component {
                     onSelectionModelChange={this.props.onSelectionModelChange}
                     // onEditRowsModelChange={this.props.onEditRowsModelChange}
                     components={{
-                        Toolbar:   GridToolbar,
+                        Toolbar:   GridToolbar,                        
                       }}
                       onPageChange={this.props.onPageChange}   
                 />

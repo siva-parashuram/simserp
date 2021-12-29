@@ -56,9 +56,9 @@ class addItem extends React.Component {
       PackingDesc1: "",
       PackingDesc2: "",
       ItemDeptId: 0,
-      CatId: 0,
+      CatId: 0,     
+      IsActive: true,
       IsTrading: false,
-      IsActive: false,
       IsNonStockValuation: false,
       IsCustomized: false,
       IsSaleEvenQuantity: false,
@@ -124,6 +124,7 @@ class addItem extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getitemDepartmentMasterData();
     this.getItemCategoryData();
     this.getUOMList();
@@ -142,7 +143,7 @@ class addItem extends React.Component {
       branchName;
 
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 
@@ -236,10 +237,14 @@ class addItem extends React.Component {
   processItemCategoryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
-      if (data[i].isActive === true) {
+      if (data[i].IsActive === true) {
         let d = {
-          name: data[i].code + " - " + data[i].hsncode,
-          value: data[i].catId,
+          name: data[i].Code,
+          value: data[i].CatID,
+          HSNCode:data[i].HSNCode,
+          IsCustomized:data[i].IsCustomized,
+          IsNonStockValuation:data[i].IsNonStockValuation,
+          IsTrading:data[i].IsTrading
         };
         newData.push(d);
       }
@@ -279,7 +284,7 @@ class addItem extends React.Component {
     for (let i = 0; i < data.length; i++) {
       if (data[i].isActive === true) {
         let d = {
-          name: data[i].code + " - " + data[i].name,
+          name: data[i].code + "-" + data[i].name,
           value: data[i].itemDeptId,
         };
         newData.push(d);
@@ -292,6 +297,23 @@ class addItem extends React.Component {
 
       console.log("ItemDeptID>>", ItemDeptID);
     });
+  }
+
+  initializeFormInputs=(CatID)=>{
+    let ItemCategoryData=this.state.ItemCategoryData;
+    console.log("CatID >>", CatID);
+    console.log("ItemCategoryData >>", ItemCategoryData);
+    for(let i=0;i<ItemCategoryData.length;i++){
+      if(parseInt(ItemCategoryData[i].value)===parseInt(CatID)){
+        this.setState({
+          Hsncode:ItemCategoryData[i].HSNCode,
+          IsTrading: ItemCategoryData[i].IsTrading,
+          IsNonStockValuation: ItemCategoryData[i].IsNonStockValuation,
+          IsCustomized: ItemCategoryData[i].IsCustomized,
+        });
+        break;
+      }
+    }
   }
 
   openPage = (url) => {
@@ -439,6 +461,7 @@ class addItem extends React.Component {
           setStateParam({}, param, e.target.value);
           break;
         case "CatId":
+          this.initializeFormInputs(e.target.value);
           setStateParam({}, param, e.target.value);
           fetchItemType(e.target.value);
           break;
@@ -1055,7 +1078,7 @@ class addItem extends React.Component {
           linkTitle="Dashboard"
           masterHref={URLS.URLS.itemMaster + this.state.urlparams}
           masterLinkTitle="Item"
-          typoTitle="Add Item"
+          typoTitle="Add"
           level={2}
         />
       </Fragment>
@@ -1134,22 +1157,13 @@ class addItem extends React.Component {
                             <Grid item xs={12} sm={12} md={5} lg={5}>
                               <SDIB
                                 id="CatID"
-                                label="ItemCat"
+                                label="Category"
                                 onChange={(e) => updateFormValue("CatId", e)}
                                 param={this.state.ItemCategoryData}
                                 value={this.state.CatId}
                                 isMandatory={true}
                               />
-                              <SDIB
-                                id="ItemDeptID"
-                                label="ItemDept"
-                                onChange={(e) =>
-                                  updateFormValue("ItemDeptId", e)
-                                }
-                                param={this.state.itemDepartmentMasterData}
-                                value={this.state.ItemDeptId}
-                                isMandatory={true}
-                              />
+                              
                               <SDIB
                                 id="ItemType"
                                 label="Item Type"
@@ -1161,7 +1175,7 @@ class addItem extends React.Component {
 
                               <SIB
                                 id="ItemNo"
-                                label="ItemNo"
+                                label="Item No"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) => updateFormValue("ItemNo", e)}
@@ -1191,7 +1205,7 @@ class addItem extends React.Component {
                               />
                               <SIB
                                 id="Description1"
-                                label="Description 1"
+                                label="Description"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1219,7 +1233,7 @@ class addItem extends React.Component {
 
                               <SIB
                                 id="PackingDesc1"
-                                label="PackingDesc 1"
+                                label="Packing Desc"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1229,10 +1243,11 @@ class addItem extends React.Component {
                                 error={
                                   this.state.Validations.PackingDesc1.errorState
                                 }
+                                isMandatory={true}
                               />
                               <SIB
                                 id="PackingDesc2"
-                                label="PackingDesc 2"
+                                label="Packing Desc 2"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1243,13 +1258,32 @@ class addItem extends React.Component {
                                   this.state.Validations.PackingDesc2.errorState
                                 }
                               />
+                              <SSIB
+                                key="IsSaleEvenQuantity"
+                                id="IsSaleEvenQuantity"
+                                label="Sale Even Quantity ?"
+                                param={this.state.IsSaleEvenQuantity}
+                                onChange={(e) =>
+                                  updateFormValue("IsSaleEvenQuantity", e)
+                                }
+                              />
                             </Grid>
                             <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
+                            <SDIB
+                                id="ItemDeptID"
+                                label="Item Department"
+                                onChange={(e) =>
+                                  updateFormValue("ItemDeptId", e)
+                                }
+                                param={this.state.itemDepartmentMasterData}
+                                value={this.state.ItemDeptId}
+                              />
+
                               <SSIB
                                 key="IsTrading"
                                 id="IsTrading"
-                                label="IsTrading"
+                                label="Is Trading ?"
                                 param={this.state.IsTrading}
                                 onChange={(e) =>
                                   updateFormValue("IsTrading", e)
@@ -1259,14 +1293,14 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsActive"
                                 id="IsActive"
-                                label="IsActive"
+                                label="Is Active ?"
                                 param={this.state.IsActive}
                                 onChange={(e) => updateFormValue("IsActive", e)}
                               />
                               <SSIB
                                 key="IsNonStockValuation"
                                 id="IsNonStockValuation"
-                                label="IsNonStockValuation"
+                                label="Is Stock Valuation ?"
                                 param={this.state.IsNonStockValuation}
                                 onChange={(e) =>
                                   updateFormValue("IsNonStockValuation", e)
@@ -1275,26 +1309,18 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsCustomized"
                                 id="IsCustomized"
-                                label="IsCustomized"
+                                label="Is Customized ?"
                                 param={this.state.IsCustomized}
                                 onChange={(e) =>
                                   updateFormValue("IsCustomized", e)
                                 }
                               />
-                              <SSIB
-                                key="IsSaleEvenQuantity"
-                                id="IsSaleEvenQuantity"
-                                label="IsSaleEvenQuantity"
-                                param={this.state.IsSaleEvenQuantity}
-                                onChange={(e) =>
-                                  updateFormValue("IsSaleEvenQuantity", e)
-                                }
-                              />
+                              
 
                               <SSIB
                                 key="IsCertified"
                                 id="IsCertified"
-                                label="IsCertified"
+                                label="Is Certified ?"
                                 param={this.state.IsCertified}
                                 onChange={(e) =>
                                   updateFormValue("IsCertified", e)
@@ -1303,7 +1329,7 @@ class addItem extends React.Component {
 
                               <SIB
                                 id="CertificateNo"
-                                label="CertificateNo"
+                                label="Certificate No"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1320,7 +1346,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsDiscontine"
                                 id="IsDiscontine"
-                                label="IsDiscontine"
+                                label="Is Discontine ?"
                                 param={this.state.IsDiscontine}
                                 onChange={(e) =>
                                   updateFormValue("IsDiscontine", e)

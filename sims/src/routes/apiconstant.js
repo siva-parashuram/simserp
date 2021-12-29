@@ -1214,6 +1214,52 @@ export const CategoryMasterColumn=[
     )
   }
 ];
+
+export const itemMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 10,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'ItemType',
+    headerName: 'Type',
+    width: 120,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+        {getItemTypeName(params.value)}
+      </Fragment>
+    )
+  },{
+    field: 'No',
+    headerName: 'No',
+    width: 100,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'CatCode',
+    headerName: 'Category',
+    width: 130,
+    headerClassName: 'table-header-font'
+  }  
+  ,{
+    field: 'Code',
+    headerName: 'Code',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'Alias',
+    headerName: 'Alias',
+    width: 150,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'Description1',
+    headerName: 'Description',
+    width: 250,
+    headerClassName: 'table-header-font'
+  }
+
+];
  
 
 

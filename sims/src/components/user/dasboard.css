@@ -1320,5 +1320,5 @@ cursor: pointer;
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #b2dfdb;   /*#555*/
+    background: #009688;   /*#555  #b2dfdb  */
   }

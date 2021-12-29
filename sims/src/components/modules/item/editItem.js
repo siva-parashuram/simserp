@@ -125,6 +125,7 @@ class editItem extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getUOMList();
     this.GSTGroupList();
     this.getItemCategoryData();
@@ -143,7 +144,7 @@ class editItem extends React.Component {
 
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
         ItemId: ItemId,
       },
       () => {
@@ -241,10 +242,11 @@ class editItem extends React.Component {
   processItemCategoryData(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
-      if (data[i].isActive === true) {
+      if (data[i].IsActive === true) {
         let d = {
-          name: data[i].code + " - " + data[i].hsncode,
-          value: data[i].catId,
+          name: data[i].Code,
+          value: data[i].CatID,
+          HSNCode:data[i].HSNCode
         };
         newData.push(d);
       }
@@ -1198,7 +1200,7 @@ class editItem extends React.Component {
                             <Grid item xs={12} sm={12} md={5} lg={5}>
                               <SDIB
                                 id="CatID"
-                                label="ItemCat"
+                                label="Category"
                                 onChange={(e) => updateFormValue("CatId", e)}
                                 param={this.state.ItemCategoryData}
                                 value={this.state.CatId}
@@ -1207,7 +1209,7 @@ class editItem extends React.Component {
 
                               <SDIB
                                 id="ItemDeptID"
-                                label="ItemDept"
+                                label="Item Department"
                                 onChange={(e) =>
                                   updateFormValue("ItemDeptId", e)
                                 }
