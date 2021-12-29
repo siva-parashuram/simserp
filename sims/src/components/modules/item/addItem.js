@@ -110,6 +110,7 @@ class addItem extends React.Component {
       ItemCategoryData: [],
       UOMList: [],
       GSTGroupList:[],
+      SpecIDList:[],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
@@ -130,6 +131,7 @@ class addItem extends React.Component {
     this.getItemCategoryData();
     this.getUOMList();
     this.GSTGroupList();
+    this.getSpecIDList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -147,6 +149,29 @@ class addItem extends React.Component {
       urlparams: params,
     });
   }
+
+  getSpecIDList = () => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetSpecification;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+         
+        this.setState({
+          SpecIDList: data,
+          ProgressLoader: true,
+        });
+      })
+      .catch((error) => {});
+  };
 
   GSTGroupList = () => {
     this.setState({ ProgressLoader: false });
@@ -1435,26 +1460,7 @@ class addItem extends React.Component {
                                 }
                                 value={this.state.CartonWidth}
                               />
-                              <SIB
-                                id="NetWeight"
-                                label="Net Weight"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) =>
-                                  updateFormValue("NetWeight", e)
-                                }
-                                value={this.state.NetWeight}
-                              />
-                              <SIB
-                                id="GrossWeight"
-                                label="Gross Weight"
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) =>
-                                  updateFormValue("GrossWeight", e)
-                                }
-                                value={this.state.GrossWeight}
-                              />
+                              
                               <SIB
                                 type="number"
                                 id="WarningLevel"
@@ -1540,15 +1546,15 @@ class addItem extends React.Component {
                                   updateFormValue("IsQuality", e)
                                 }
                               />
-                              <SIB
-                                type="number"
+
+                              <SDIB
                                 id="SpecID"
                                 label="SpecID"
-                                variant="outlined"
-                                size="small"
                                 onChange={(e) => updateFormValue("SpecId", e)}
+                                param={this.state.SpecIDList}
                                 value={this.state.SpecId}
                               />
+
                               <SSIB
                                 key="AllowNegativeStock"
                                 id="AllowNegativeStock"
@@ -1577,6 +1583,27 @@ class addItem extends React.Component {
                                 }
                                 param={APIURLS.CostingMethod}
                                 value={this.state.CostingMethod}
+                              />
+
+                              <SIB
+                                id="NetWeight"
+                                label="Net Weight"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("NetWeight", e)
+                                }
+                                value={this.state.NetWeight}
+                              />
+                              <SIB
+                                id="GrossWeight"
+                                label="Gross Weight"
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) =>
+                                  updateFormValue("GrossWeight", e)
+                                }
+                                value={this.state.GrossWeight}
                               />
 {/* 
                               <SIB

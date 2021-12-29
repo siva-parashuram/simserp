@@ -804,7 +804,9 @@ cursor: pointer;
 
 
 
-
+.switchFieldCss{
+  height: 30px !important;
+}
 
 
 .textFieldCss{

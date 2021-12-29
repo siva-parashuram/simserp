@@ -110,6 +110,7 @@ class editItem extends React.Component {
       ItemCategoryData: [],
       UOMList: [],
       GSTGroupList:[],
+      SpecIDList:[],
       Validations: {
         Code: { errorState: false, errorMssg: "" },
         Alias: { errorState: false, errorMssg: "" },
@@ -129,6 +130,7 @@ class editItem extends React.Component {
     this.getUOMList();
     this.GSTGroupList();
     this.getItemCategoryData();
+    this.getSpecIDList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -153,6 +155,29 @@ class editItem extends React.Component {
       }
     );
   }
+
+  getSpecIDList = () => {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetSpecification;
+
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+         
+        this.setState({
+          SpecIDList: data,
+          ProgressLoader: true,
+        });
+      })
+      .catch((error) => {});
+  };
 
   GSTGroupList = () => {
     this.setState({ ProgressLoader: false });
@@ -1576,15 +1601,16 @@ class editItem extends React.Component {
                                   updateFormValue("IsQuality", e)
                                 }
                               />
-                              <SIB
-                                type="number"
+
+                              <SDIB
                                 id="SpecID"
                                 label="SpecID"
-                                variant="outlined"
-                                size="small"
                                 onChange={(e) => updateFormValue("SpecId", e)}
+                                param={this.state.SpecIDList}
                                 value={this.state.SpecId}
                               />
+
+                               
                               <SSIB
                                 key="AllowNegativeStock"
                                 id="AllowNegativeStock"

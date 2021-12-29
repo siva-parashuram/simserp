@@ -158,6 +158,7 @@ export const APIURL = {
   GetAllSalesPerson: domain + "api/Customer/GetAllSalesPerson",
   UpdateSalesPerson: domain + "api/Customer/UpdateSalesPerson",
   GetAllUOM: domain + "api/Common/GetAllUOM",
+  GetSpecification:domain + "api/Common/GetSpecification",
   Add_UpdateCustomerPrice: domain + "api/Customer/Add_UpdateCustomerPrice",
   GetCustomerPriceByCustID: domain + "api/Customer/GetCustomerPriceByCustID",
   CreateCustomerBranchMapping: domain + "api/Customer/CreateCustomerBranchMapping",
