@@ -1376,7 +1376,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsDiscontine"
                                 id="IsDiscontine"
-                                label="Is Discontine ?"
+                                label="Is Discontinue ?"
                                 param={this.state.IsDiscontine}
                                 onChange={(e) =>
                                   updateFormValue("IsDiscontine", e)
@@ -1816,7 +1816,7 @@ class addItem extends React.Component {
 
                               <SDIB
                                 id="ManufacturingPolicy"
-                                label="Manufacturing Policy"
+                                label="Manuf. Policy"
                                 onChange={(e) =>
                                   updateFormValue("ManufacturingPolicy", e)
                                 }
@@ -1893,22 +1893,26 @@ class addItem extends React.Component {
                                 value={this.state.Location}
                               />
 
-                              <SIB
+                              
+                              <SSIB
+                                key="IsLot"
+                                id="IsLot"
+                                label="Is Lot ?"
+                                param={this.state.IsLot}
+                                onChange={(e) => updateFormValue("IsLot", e)}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
+                            <Grid item xs={12} sm={12} md={5} lg={5}>
+                            <SIB
                                 id="BarcodeNo"
-                                label="Barcode No"
+                                label="Barcode"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
                                   updateFormValue("BarcodeNo", e)
                                 }
                                 value={this.state.BarcodeNo}
-                              />
-                              <SSIB
-                                key="IsLot"
-                                id="IsLot"
-                                label="IsLot"
-                                param={this.state.IsLot}
-                                onChange={(e) => updateFormValue("IsLot", e)}
                               />
                             </Grid>
                           </Grid>
