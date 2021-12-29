@@ -1614,7 +1614,7 @@ class editItem extends React.Component {
                                 param={APIURLS.CostingMethod}
                                 value={this.state.CostingMethod}
                               />
-
+{/* 
                               <SIB
                                 id="StandardCost"
                                 label="Standard Cost"
@@ -1644,7 +1644,9 @@ class editItem extends React.Component {
                                   updateFormValue("ProfitPercentage", e)
                                 }
                                 value={this.state.ProfitPercentage}
-                              />
+                              /> */}
+
+
                             </Grid>
                           </Grid>
                         </div>

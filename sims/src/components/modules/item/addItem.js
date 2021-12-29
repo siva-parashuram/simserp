@@ -105,6 +105,7 @@ class addItem extends React.Component {
       IsLot: false,
       Location: "",
       BarcodeNo: "",
+      Price:0.00,
       itemDepartmentMasterData: [],
       ItemCategoryData: [],
       UOMList: [],
@@ -315,6 +316,8 @@ class addItem extends React.Component {
       }
     }
   }
+
+   
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -890,6 +893,8 @@ class addItem extends React.Component {
         default:
           break;
       }
+
+       
     };
 
     const setStateParam = (validations, key, value) => {
@@ -1518,7 +1523,7 @@ class addItem extends React.Component {
                               />
                               <SIB
                                 id="CBMPerShipper"
-                                label="CBMPer Shipper"
+                                label="CBM/Shipper"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1529,7 +1534,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsQuality"
                                 id="IsQuality"
-                                label="IsQuality"
+                                label="Is Quality ?"
                                 param={this.state.IsQuality}
                                 onChange={(e) =>
                                   updateFormValue("IsQuality", e)
@@ -1547,7 +1552,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="AllowNegativeStock"
                                 id="AllowNegativeStock"
-                                label="AllowNegativeStock"
+                                label="Negative Stock ?"
                                 param={this.state.AllowNegativeStock}
                                 onChange={(e) =>
                                   updateFormValue("AllowNegativeStock", e)
@@ -1573,7 +1578,7 @@ class addItem extends React.Component {
                                 param={APIURLS.CostingMethod}
                                 value={this.state.CostingMethod}
                               />
-
+{/* 
                               <SIB
                                 id="StandardCost"
                                 label="Standard Cost"
@@ -1586,7 +1591,7 @@ class addItem extends React.Component {
                               />
                               <SIB
                                 id="IndirectCostPercentage"
-                                label="Indirect Cost Percentage"
+                                label="Indirect Cost %"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1596,7 +1601,7 @@ class addItem extends React.Component {
                               />
                               <SIB
                                 id="ProfitPercentage"
-                                label="Profit Percentage"
+                                label="Profit %"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -1604,6 +1609,16 @@ class addItem extends React.Component {
                                 }
                                 value={this.state.ProfitPercentage}
                               />
+
+                              <SIB
+                                id="ItemPriceDisplay"
+                                label="Price"
+                                variant="outlined"
+                                size="small"                               
+                                value={this.state.Price}
+                                disabled={true}
+                              /> */}
+
                             </Grid>
                           </Grid>
                         </div>
