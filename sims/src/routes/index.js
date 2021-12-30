@@ -88,7 +88,6 @@ import gstactivity from "../components/modules/gst/gstactivity";
 import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
 import Ftptest from "../components/ftp/ftptest";
-import Header from "../components/user/userheaderconstants";
 import Nav from "../components/user/nav";
 import Menusection from "../components/user/menusection";
 
@@ -104,10 +103,9 @@ let routes = ({ location, ...rest }) => {
           <div className="fixedElement">
             <Nav navBranchNameTitle={branchName} />
           </div>
-          <Header branchName={branchName} />
+          <div style={{ marginTop: 48 }}></div>
           <Menusection />
         </Fragment>
-
       )}
       <div style={{
         //  marginLeft:  
