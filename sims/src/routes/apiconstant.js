@@ -25,6 +25,10 @@ import MergeTypeIcon from '@mui/icons-material/MergeType';
 import KeyIcon from '@mui/icons-material/Key';
 
 import Chip from '@mui/material/Chip';
+import Link from "@material-ui/core/Link";
+
+import * as CF from "../services/functions/customfunctions";
+import * as URLS from "../routes/constants";
 
 const domain = "http://192.168.10.200:8080/";
 
@@ -1229,14 +1233,26 @@ export const itemMasterColumn=[
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
-        {getItemTypeName(params.value)}
+       {getItemTypeName(params.value)}
       </Fragment>
     )
   },{
     field: 'No',
     headerName: 'No',
     width: 100,
-    headerClassName: 'table-header-font'
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+        <Link
+          className="LINK tableLink"
+          color="inherit"
+           href={URLS.URLS.editItem + CF.GET_URL_PARAMS() + "&edititemId=" + params.row.ItemID}  
+        >   
+           {params.value}
+        </Link>
+       
+      </Fragment>
+    )
   },{
     field: 'CatCode',
     headerName: 'Category',

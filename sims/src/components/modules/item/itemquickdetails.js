@@ -136,7 +136,8 @@ class itemquickdetails extends React.Component {
                                                 <TableRow>
                                                     <TableCell align="left" className="no-border-table">Modified On</TableCell>
                                                     <TableCell align="right" className="no-border-table">
-                                                        {moment(this.props.item.ModifyDate).format("MM/DD/YYYY HH:mm:ss")}
+
+                                                        {this.props.item.ModifyDate?moment(this.props.item.ModifyDate).format("MM/DD/YYYY HH:mm:ss"):null}
                                                     </TableCell>
                                                 </TableRow>
 

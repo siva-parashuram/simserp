@@ -1,6 +1,26 @@
 import React, { Fragment } from 'react';
-import { DataGrid, GridToolbar } from '@material-ui/data-grid';
+import { 
+    DataGrid, 
+    GridToolbar,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarDensitySelector,
+    gridClasses } from '@mui/x-data-grid';
 import '../user/dasboard.css';
+
+
+function CustomToolbar() {
+    return (
+      <GridToolbarContainer className={gridClasses.toolbarContainer}>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+            <GridToolbarExport />
+      </GridToolbarContainer>
+    );
+  }
 
 
 class masterdatagrid extends React.Component {
@@ -17,14 +37,15 @@ class masterdatagrid extends React.Component {
                     rows={this.props.rows}
                     columns={this.props.columns}
                     pageSize={10}                   
-                    checkboxSelection={false}
+                    checkboxSelection={this.props.checkboxSelection}
                     disableSelectionOnClick={this.props.disableSelectionOnClick}
                     onSelectionModelChange={this.props.onSelectionModelChange}
                     // onEditRowsModelChange={this.props.onEditRowsModelChange}
                     components={{
-                        Toolbar:   GridToolbar,                        
+                        Toolbar:   CustomToolbar,                        
                       }}
-                      onPageChange={this.props.onPageChange}   
+                    onPageChange={this.props.onPageChange}   
+                     
                 />
             </div>
 

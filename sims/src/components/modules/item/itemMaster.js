@@ -49,7 +49,8 @@ class itemMaster extends React.Component {
       editurl: "",
       itemData: [],
       selectedItem: {},
-      ItemID: null
+      ItemID: null,
+      BranchID:0,
     };
   }
 
@@ -58,7 +59,7 @@ class itemMaster extends React.Component {
   }
 
   componentDidMount() {
-    this.getItems();
+    
     let params = CF.GET_URL_PARAMS();
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
@@ -73,7 +74,10 @@ class itemMaster extends React.Component {
         compName +
         "&branchName=" +
         branchName;
-      this.setState({ urlparams: params });
+        console.log("branchId > ",branchId);
+      this.setState({ urlparams: params,BranchID: branchId},()=>{
+        this.getItems();
+      });
 
     } else {
       this.setState({ isLoggedIn: false });
@@ -90,12 +94,18 @@ class itemMaster extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
+
+    
+    let reqData={
+      ValidUser:ValidUser,
+      BranchID:parseInt(this.state.BranchID)
+    };
     axios
-      .post(Url, ValidUser, { headers })
+      .post(Url, reqData, { headers })
       .then((response) => {
         if (response.status === 200) {
           this.setState({ ProgressLoader: true, itemData: response.data }, () => {
-            this.handleRowClick([1]);
+          //  this.handleRowClick([1]);
           });
         }
       })
@@ -105,22 +115,45 @@ class itemMaster extends React.Component {
   }
 
   handleRowClick = (e) => {
+  console.log("handleRowClick > e > ",e);
 
-    try {
-      let index = e[0];
-      let item = this.state.itemData[index - 1];
-      let editUrl =
-        URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + item.ItemID;
-
+    if(e.length>1){
       this.setState({
-        ItemID: item.ItemID,
-        editurl: editUrl,
-        editBtnDisable: false,
-        selectedItem: item,
-        selectionModel: index
-      });
+        // selectionModel: 0,
+         editBtnDisable: true,
+         ItemID: 0,
+         selectedItem: {},
+       });
+    }else{
+      try {
+        let index = e[0];
+  
+        if(index===this.state.selectionModel){
+          this.setState({
+           // selectionModel: 0,
+            editBtnDisable: true,
+            ItemID: 0,
+            selectedItem: {},
+          });
+        }else{
+          let item = this.state.itemData[index - 1];
+          let editUrl =
+            URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + item.ItemID;
+    
+          this.setState({
+            ItemID: item.ItemID,
+            editurl: editUrl,
+            editBtnDisable: false,
+            selectedItem: item,
+           // selectionModel: index
+          });
+        }
+      } catch (err) {
+        console.log("handleRowClick > errr > ",err);
+       }
+    }    
 
-    } catch (e) { }
+    
 
 
   };
@@ -221,12 +254,14 @@ class itemMaster extends React.Component {
                   <Fragment>
 
                     <MasterDataGrid
-                      selectionModel={this.state.selectionModel}
+                      // selectionModel={this.state.selectionModel}
                       rows={this.state.itemData}
                       columns={this.state.columns}
                       pagination={this.state.pagination}
                       onSelectionModelChange={(e) => this.handleRowClick(e)}
                       onPageChange={handlePageChange}
+                      checkboxSelection={true}
+                       
                     />
 
 
