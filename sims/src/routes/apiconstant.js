@@ -1233,7 +1233,7 @@ export const itemMasterColumn=[
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
-       {getItemTypeName(params.value)}
+       {params.row.ItemTypeName}
       </Fragment>
     )
   },{

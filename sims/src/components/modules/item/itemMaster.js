@@ -254,13 +254,13 @@ class itemMaster extends React.Component {
                   <Fragment>
 
                     <MasterDataGrid
-                      // selectionModel={this.state.selectionModel}
+                      selectionModel={this.state.selectionModel}
                       rows={this.state.itemData}
                       columns={this.state.columns}
                       pagination={this.state.pagination}
                       onSelectionModelChange={(e) => this.handleRowClick(e)}
                       onPageChange={handlePageChange}
-                      checkboxSelection={true}
+                      
                        
                     />
 

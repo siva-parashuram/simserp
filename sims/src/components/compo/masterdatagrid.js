@@ -18,6 +18,7 @@ function CustomToolbar() {
             <GridToolbarFilterButton />
             <GridToolbarDensitySelector />
             <GridToolbarExport />
+            
       </GridToolbarContainer>
     );
   }
