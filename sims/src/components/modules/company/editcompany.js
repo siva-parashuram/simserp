@@ -113,6 +113,7 @@ class editcompany extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getCountryList();
     this.getCompanyList();
     // this.getStateList();
@@ -130,7 +131,7 @@ class editcompany extends React.Component {
       branchName;
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
         CompanyID: CompanyID,
       },
       () => {

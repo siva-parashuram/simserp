@@ -106,7 +106,7 @@ class editwarehouse extends React.Component {
   }
 
   componentDidMount() {
-
+    let params = CF.GET_URL_PARAMS();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -124,7 +124,7 @@ class editwarehouse extends React.Component {
     warehouse.BranchId = branchId;
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
         editwareHouseId: editwareHouseId,
         warehouse: warehouse,
         BranchID: CF.toInt(branchId)

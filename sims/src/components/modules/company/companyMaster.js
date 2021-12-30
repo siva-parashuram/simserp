@@ -81,6 +81,7 @@ class companyMaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     if (getCookie(COOKIE.USERID) != null) {
       this.getCompanyList();
        
@@ -100,7 +101,7 @@ class companyMaster extends React.Component {
         branchName: branchName,
         branchId: branchId,
         compName: compName,
-        urlparams: urlparams,
+        urlparams: params,
       });
     } else {
       this.setState({ isLoggedIn: false });

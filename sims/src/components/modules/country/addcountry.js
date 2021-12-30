@@ -72,6 +72,7 @@ class addcountry extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getZones();
     this.getCountryList();
     var url = new URL(window.location.href);
@@ -86,7 +87,7 @@ class addcountry extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
   getCountryList() {

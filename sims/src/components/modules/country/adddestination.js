@@ -67,6 +67,7 @@ class adddestination extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getAllDestinations();
     this.getCountryList();
     this.getStateList();
@@ -82,7 +83,7 @@ class adddestination extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

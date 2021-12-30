@@ -74,6 +74,7 @@ class addcurrency extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getCOAList();
     this.getList();
     var url = new URL(window.location.href);
@@ -88,7 +89,7 @@ class addcurrency extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

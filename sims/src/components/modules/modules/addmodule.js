@@ -63,6 +63,7 @@ class addmodule extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getModules();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -76,7 +77,7 @@ class addmodule extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

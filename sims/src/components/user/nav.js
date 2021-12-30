@@ -50,7 +50,8 @@ const StyledMessageBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export default function ButtonAppBar() {
+ 
+export default function ButtonAppBar({navBranchNameTitle}) {
   const classes = useStyles();
   const [name, setname] = React.useState("");
   const [branchName, setbranchName] = React.useState("");
@@ -152,6 +153,8 @@ export default function ButtonAppBar() {
     }
   }
 
+   
+
   return (
     <Fragment>
       <div className={classes.root}>
@@ -159,7 +162,7 @@ export default function ButtonAppBar() {
         <AppBar className="navDiv" position="static">
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
-              {branchName} - {name}
+              {/* {branchName} - {name} */} {navBranchNameTitle}
             </Typography>
 
             <IconButton

@@ -4,7 +4,7 @@ import Header from "../../user/userheaderconstants";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
-import * as Customfunctions from "../../../services/functions/customfunctions";
+import * as CF from "../../../services/functions/customfunctions";
 
 import React, { Fragment } from "react";
 import axios from "axios";
@@ -46,6 +46,7 @@ class rolemaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getRoles();
 
     var url = new URL(window.location.href);
@@ -61,7 +62,7 @@ class rolemaster extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import "../../user/dasboard.css";
-
+import * as CF from "../../../services/functions/customfunctions";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
@@ -45,6 +45,7 @@ class modulemasters extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getModules();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -59,7 +60,7 @@ class modulemasters extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

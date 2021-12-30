@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import {
   Switch,
   Route,
@@ -6,6 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import * as URLS from "./constants";
+import * as CF from "../services/functions/customfunctions";
 
 import LoginPage from "../components/login";
 
@@ -88,13 +89,25 @@ import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
 import Ftptest from "../components/ftp/ftptest";
 import Header from "../components/user/userheaderconstants";
+import Nav from "../components/user/nav";
+import Menusection from "../components/user/menusection";
+
+const branchName = new URL(window.location.href).searchParams.get("branchName") + "-" + new URL(window.location.href).searchParams.get("name");
+
 
 let routes = ({ location, ...rest }) => {
   return (
     <Router>
       {window.location.pathname === "/" ||
         window.location.pathname === "/loginExpired" ? null : (
-        <Header />
+        <Fragment>
+          <div className="fixedElement">
+            <Nav navBranchNameTitle={branchName} />
+          </div>
+          <Header branchName={branchName} />
+          <Menusection />
+        </Fragment>
+
       )}
       <div style={{
         //  marginLeft:  
@@ -233,15 +246,15 @@ let routes = ({ location, ...rest }) => {
           <Route path={URLS.URLS.addPO} component={poactivity} />
           <Route path={URLS.URLS.editPO} component={poactivity} />
           <Route path={URLS.URLS.doPOMRN} component={pomrnactivity} />
-          <Route path={URLS.URLS.mrn} component={mrn} />         
+          <Route path={URLS.URLS.mrn} component={mrn} />
           <Route path={URLS.URLS.editMRN} component={mrnactivity} />
-          <Route path={URLS.URLS.git} component={gitMaster} />         
+          <Route path={URLS.URLS.git} component={gitMaster} />
           <Route path={URLS.URLS.doPOGIT} component={pogitactivity} />
           <Route path={URLS.URLS.editGit} component={gitactivity} />
           <Route path={URLS.URLS.PI} component={pi} />
           <Route path={URLS.URLS.addPI} component={piactivity} />
           <Route path={URLS.URLS.editPI} component={piactivity} />
-          
+
 
           {/* Gst */}
           <Route path={URLS.URLS.gstMaster} component={gstMaster} />

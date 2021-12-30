@@ -106,7 +106,7 @@ class addwarehouse extends React.Component {
   }
 
   componentDidMount() {
-
+    let params = CF.GET_URL_PARAMS();
     this.getBranches();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -122,7 +122,7 @@ class addwarehouse extends React.Component {
     let warehouse = this.state.warehouse;
     warehouse.BranchId = CF.toInt(branchId);
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
       branchId: branchId,
       BranchID: parseInt(branchId)
     }, () => {

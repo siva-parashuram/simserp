@@ -58,6 +58,7 @@ class addrole extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getRoles();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -72,7 +73,7 @@ class addrole extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

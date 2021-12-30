@@ -108,6 +108,7 @@ class addnewcompany extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getCompanyList();
     this.getCountryList();
 
@@ -137,7 +138,7 @@ class addnewcompany extends React.Component {
     }
 
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
       company: company,
       CompanyID: CompanyID,
       type: type,

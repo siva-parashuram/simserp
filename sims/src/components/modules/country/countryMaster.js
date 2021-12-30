@@ -19,6 +19,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
+import * as CF from "../../../services/functions/customfunctions";
 
 import Destination from "./destination";
 import Statesbycountry from "./statesbycountry";
@@ -52,6 +53,7 @@ class countryMaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getCountryList();
 
     var url = new URL(window.location.href);
@@ -66,7 +68,7 @@ class countryMaster extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

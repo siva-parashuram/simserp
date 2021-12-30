@@ -24,6 +24,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
+import * as CF from "../../../services/functions/customfunctions";
 import Header from "../../user/userheaderconstants";
 import BackdropLoader from "../../compo/backdrop";
 
@@ -42,6 +43,7 @@ class currencymaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -55,7 +57,7 @@ class currencymaster extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
   }
 

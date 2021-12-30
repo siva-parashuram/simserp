@@ -65,6 +65,7 @@ class editdestination extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getAllDestinations();
     this.getCountryList();
     this.getStateList();
@@ -83,7 +84,7 @@ class editdestination extends React.Component {
       branchName;
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
         destinationId: destinationId,
         countryId: countryId,
       },

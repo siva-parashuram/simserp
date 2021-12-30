@@ -3,6 +3,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
+import * as CF from "../../../services/functions/customfunctions";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -43,7 +44,7 @@ class warehouseMaster extends React.Component {
   }
 
   componentDidMount() {
-    
+    let params = CF.GET_URL_PARAMS();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -57,7 +58,7 @@ class warehouseMaster extends React.Component {
       branchName;
       
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
       BranchID:parseInt(branchId),
     },()=>{
       this.getWarehouses();

@@ -10,11 +10,11 @@ class userheaderconstatnts extends React.Component {
   render() {
     return (
       <Fragment>
-        <div className="fixedElement">
-          <Nav />
-        </div>
+        {/* <div className="fixedElement">
+          <Nav navBranchNameTitle={this.props.branchName}/>
+        </div> */}
         <div style={{ marginTop: 48 }}></div>
-        <Menusection />
+        {/* <Menusection /> */}
       </Fragment>
     );
   }

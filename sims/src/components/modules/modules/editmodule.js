@@ -65,6 +65,7 @@ class editmodule extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getModules();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -83,7 +84,7 @@ class editmodule extends React.Component {
     Module.ModuleId = CF.toInt(moduleId);
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
         ModuleId: moduleId,
         Module: Module,
       },

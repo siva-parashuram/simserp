@@ -74,6 +74,7 @@ class editcountry extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getCountryList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -92,7 +93,7 @@ class editcountry extends React.Component {
     country.CountryId = parseInt(countryID);
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
         country: country,
       },
       () => {
