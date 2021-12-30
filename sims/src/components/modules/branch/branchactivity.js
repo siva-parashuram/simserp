@@ -752,11 +752,12 @@ class editbranch extends React.Component {
         case "Name":
           branch[param] = e.target.value;
           let v1 = this.state.Validations;
-          let duplicateExist = this.chkDuplicateName(
-            this.state.branchData,
-            "Name",
-            e.target.value.trim().toLowerCase()
-          );
+          let duplicateExist =false;
+          // let duplicateExist = this.chkDuplicateName(
+          //   this.state.branchData,
+          //   "Name",
+          //   e.target.value.trim().toLowerCase()
+          // );
           // this.setState({ duplicate: duplicateExist });
           if (
             e.target.value === "" ||

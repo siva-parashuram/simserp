@@ -41,7 +41,7 @@ class griddropdowninputwithbutton extends React.Component {
                   onChange={this.props.onChange}
                   value={this.props.value}
                 >
-                  <option value="-">Select</option>
+                  <option value="0">Select</option>
 
                   {this.props.param.map(
                     (item, i) => (

@@ -317,12 +317,13 @@ class addbranch extends React.Component {
       }
 
       if (id === "Name") {
-        let duplicateExist = CF.chkDuplicateName(
-          this.state.branchData,
-          "name",
-          e.target.value
-        );
-        // this.setState({ duplicate: duplicateExist });
+        let duplicateExist =false;
+        
+        // CF.chkDuplicateName(
+        //   this.state.branchData,
+        //   "name",
+        //   e.target.value
+        // );
         let branch = this.state.branch;
         branch.name = e.target.value;
         if (

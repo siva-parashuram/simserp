@@ -802,7 +802,7 @@ export const poMasterColumn=[
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
-          {params.value === 0 ? (<Chip label="Open" size="small" />) : null}
+          {params.value === 0 ? (<Chip label="Open" color="success"  size="small" />) : null}
             {params.value === 1 ? (<Chip label="Open" size="small" />) : null}
             {params.value === 2 ? (<Chip label="Released" color="primary" size="small" />) : null}
             {params.value === 3 ? (<Chip label="Complete MRN" color="secondary" size="small" />) : null}
@@ -897,11 +897,6 @@ export const MRNMasterColumn=[
   },{
     field: 'No',
     headerName: 'No',
-    width: 180,
-    headerClassName: 'table-header-font'
-  },{
-    field: 'PONo',
-    headerName: 'PO No.',
     width: 180,
     headerClassName: 'table-header-font'
   },{

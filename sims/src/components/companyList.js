@@ -57,7 +57,8 @@ class CompanyList extends React.Component {
             branchId:branchId,
             compID:compID,
             compName:compName,
-            branchName:name
+            branchName:name,
+            name:branchName,
         };
         url = url +"?"+ CF.SET_BRANCH_WINDOW_PARAMS(urlParameters);
         console.log("url > ",url);
@@ -122,7 +123,7 @@ class CompanyList extends React.Component {
                                                     size="small"
                                                     variant="outlined"
                                                     className="branchListButton"
-                                                    onClick={(e) => openBranchDashboard(URLS.URLS.userDashboard, branchItem.branchID, item.compID, item.compName, branchItem.branchName, branchItem.name)}
+                                                    onClick={(e) => openBranchDashboard(URLS.URLS.userDashboard, branchItem.branchID, item.compID, item.compName, branchItem.branchName,  branchItem.name)}
                                                 >
                                                     {branchItem.branchName}
                                                 </Button>

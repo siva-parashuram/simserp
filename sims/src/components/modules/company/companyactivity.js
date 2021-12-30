@@ -616,7 +616,11 @@ class addnewcompany extends React.Component {
           }
           break;
         case "StateID":
-          company[param] = CF.toInt(e.target.value);
+          let StateID=CF.toInt(e.target.value);
+          if(StateID===null){
+            StateID=0;
+          }
+          company[param] = (StateID===null || StateID==='null')?0:StateID;
           this.setParams(company);
           break;
         case "PhoneNo":

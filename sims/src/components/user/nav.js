@@ -52,6 +52,7 @@ const StyledMessageBadge = styled(Badge)(({ theme }) => ({
 
 export default function ButtonAppBar() {
   const classes = useStyles();
+  const [name, setname] = React.useState("");
   const [branchName, setbranchName] = React.useState("");
   const [branchId, setbranchId] = React.useState("");
   const [compName, setcompName] = React.useState("");
@@ -85,6 +86,7 @@ export default function ButtonAppBar() {
       let branchName = url.searchParams.get("branchName");
       let compName = url.searchParams.get("compName");
       let branchBtnId = url.searchParams.get("branchBtnId");
+      let name=url.searchParams.get("name");
 
       if (
         token === "null" ||
@@ -103,6 +105,7 @@ export default function ButtonAppBar() {
         setisLoggedIn(false);
         window.close();
       } else {
+        setname(name);
         setbranchName(branchName);
         setbranchId(branchId);
         setcompName(compName);
@@ -155,7 +158,7 @@ export default function ButtonAppBar() {
         <AppBar className="navDiv" position="static">
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
-              {branchName}
+              {branchName} - {name}
             </Typography>
 
             <IconButton
