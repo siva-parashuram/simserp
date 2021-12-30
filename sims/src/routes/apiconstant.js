@@ -746,7 +746,7 @@ export const branchMasterColumn=[
   {
     field: 'Name',
     headerName: 'Branch Name',
-    width: 160,
+    width: 250,
     editable: false,
     headerClassName: 'table-header-font'
   },

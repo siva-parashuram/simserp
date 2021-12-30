@@ -65,6 +65,7 @@ class branchMaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     if (getCookie(COOKIE.USERID) != null) {
       this.setState({ isLoggedIn: true });
       var url = new URL(window.location.href);
@@ -80,7 +81,7 @@ class branchMaster extends React.Component {
         branchName;
       this.setState(
         {
-          urlparams: urlparams,
+          urlparams: params,
         },
         () => {
           this.getBranches();

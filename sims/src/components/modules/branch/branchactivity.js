@@ -71,6 +71,7 @@ class editbranch extends React.Component {
       PageType: "",
       LogoPath:"",
       branch: {
+        IsActive: true,
         BranchID: 0,
         CompanyID: 0,
         Name: "",
@@ -193,6 +194,7 @@ class editbranch extends React.Component {
  
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getBranches();
     this.getCompanyList();
     this.getCountryList();
@@ -234,7 +236,7 @@ class editbranch extends React.Component {
           PageType:PageType,
           branch: branch,
           branchId: editbranchId,
-          urlparams: urlparams,
+          urlparams: params,
           type: type,
           typoTitle: typoTitle,
           ProgressLoader: type === "add" ? true : false,
@@ -1994,7 +1996,7 @@ class editbranch extends React.Component {
                               <div style={{ borderStyle: 'solid', borderWidth: 1, borderColor: 'rgba(224, 224, 224, 1)' }}>
                                 <div style={{ marginLeft: 10, marginRight: 10, marginTop: 10 }}>
                                   <Grid container spacing={0}>
-                                    <Grid item xs={3} sm={3} md={3} lg={3}>
+                                    <Grid item xs={4} sm={4} md={4} lg={4}>
                                       <SSIB
                                         key="IsLot"
                                         id="IsLot"
@@ -2013,8 +2015,17 @@ class editbranch extends React.Component {
                                           updateFormValue("IsGIT", e)
                                         }
                                       />
+                                       <SSIB
+                                            key="IsActive"
+                                            id="IsActive"
+                                            label="Active?"
+                                            param={this.state.branch.IsActive}
+                                            onChange={(e) =>
+                                              updateFormValue("IsActive", e)
+                                            }
+                                          />
                                     </Grid>
-                                    <Grid item xs={9} sm={9} md={9} lg={9}>
+                                    <Grid item xs={8} sm={8} md={8} lg={8}>
                                       <Grid container spacing={0}>
                                         <Grid item xs={6} sm={6} md={6} lg={6}>
                                           <SSIB
@@ -2053,8 +2064,11 @@ class editbranch extends React.Component {
                                             }
                                           />
                                         </Grid>
-                                        
                                       </Grid>
+                                       
+                                      
+
+
                                     </Grid>
                                   </Grid>
                                 </div>

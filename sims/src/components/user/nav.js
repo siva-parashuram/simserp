@@ -76,8 +76,9 @@ export default function ButtonAppBar() {
 
 
   useEffect(() => {
-   
+    let params = CF.GET_URL_PARAMS();
     if (getCookie(COOKIE.USERID) != null) {
+
       let token = getCookie(COOKIE.TOKEN);
       let FIRSTNAME = getCookie(COOKIE.FIRSTNAME);
       let initialName = FIRSTNAME.charAt(0).toUpperCase();
