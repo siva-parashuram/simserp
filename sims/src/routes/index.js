@@ -79,11 +79,8 @@ import pogitactivity from "../components/modules/git/pogitactivity";
 import gitactivity from "../components/modules/git/gitactivity";
 import pi from "../components/modules/pi/pi";
 import piactivity from "../components/modules/pi/piactivity";
-
 import gstMaster from "../components/modules/gst/gstmaster";
 import gstactivity from "../components/modules/gst/gstactivity";
-
-
 
 import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
@@ -107,9 +104,8 @@ let routes = ({ location, ...rest }) => {
           <Menusection />
         </Fragment>
       )}
-      <div style={{
-        //  marginLeft:  
-      }}>
+      <div>
+
         <Switch>
           <Route path={URLS.URLS.LoginPage} exact component={LoginPage} />
           <Route path={URLS.URLS.userDashboard} component={userDashboard} />
@@ -149,8 +145,6 @@ let routes = ({ location, ...rest }) => {
           {/* <Route path={URLS.URLS.editBranch} component={editBranch} />
           <Route path={URLS.URLS.addBranch} component={addBranch} /> */}
 
-
-
           {/* Module Routes*/}
           <Route path={URLS.URLS.moduleMaster} component={moduleMaster} />
           <Route path={URLS.URLS.addModule} component={addModule} />
@@ -174,55 +168,19 @@ let routes = ({ location, ...rest }) => {
           <Route path={URLS.URLS.itemMaster} component={itemMaster} />
           <Route path={URLS.URLS.addItem} component={addItem} />
           <Route path={URLS.URLS.editItem} component={editItem} />
-          <Route
-            path={URLS.URLS.itemCategoryMaster}
-            component={itemCategoryMaster}
-          />
+          <Route path={URLS.URLS.itemCategoryMaster} component={itemCategoryMaster} />
           <Route path={URLS.URLS.addItemCategory} component={addItemCategory} />
-          <Route
-            path={URLS.URLS.editItemCategory}
-            component={editItemCategory}
-          />
-          <Route
-            path={URLS.URLS.itemMainCategoryMaster}
-            component={itemMainCategoryMaster}
-          />
-          <Route
-            path={URLS.URLS.addItemMainCategory}
-            component={addItemMainCategory}
-          />
-          <Route
-            path={URLS.URLS.editItemMainCategory}
-            component={editItemMainCategory}
-          />
-          <Route
-            path={URLS.URLS.itemSuperCategoryMaster}
-            component={itemSuperCategoryMaster}
-          />
-          <Route
-            path={URLS.URLS.addItemSuperCategory}
-            component={addItemSuperCategory}
-          />
-          <Route
-            path={URLS.URLS.editItemSuperCategory}
-            component={editItemSuperCategory}
-          />
-          <Route
-            path={URLS.URLS.itemDepartmentMaster}
-            component={itemDepartmentMaster}
-          />
-          <Route
-            path={URLS.URLS.addItemDepartment}
-            component={addItemDepartment}
-          />
-          <Route
-            path={URLS.URLS.editItemDepartment}
-            component={editItemDepartment}
-          />
-          <Route
-            path={URLS.URLS.postingGroupMaster}
-            component={postingGroupMaster}
-          />
+          <Route path={URLS.URLS.editItemCategory} component={editItemCategory} />
+          <Route path={URLS.URLS.itemMainCategoryMaster} component={itemMainCategoryMaster} />
+          <Route path={URLS.URLS.addItemMainCategory} component={addItemMainCategory} />
+          <Route path={URLS.URLS.editItemMainCategory} component={editItemMainCategory} />
+          <Route path={URLS.URLS.itemSuperCategoryMaster} component={itemSuperCategoryMaster} />
+          <Route path={URLS.URLS.addItemSuperCategory} component={addItemSuperCategory} />
+          <Route path={URLS.URLS.editItemSuperCategory} component={editItemSuperCategory} />
+          <Route path={URLS.URLS.itemDepartmentMaster} component={itemDepartmentMaster} />
+          <Route path={URLS.URLS.addItemDepartment} component={addItemDepartment} />
+          <Route path={URLS.URLS.editItemDepartment} component={editItemDepartment} />
+          <Route path={URLS.URLS.postingGroupMaster} component={postingGroupMaster} />
 
           {/* Chart of Account */}
           <Route path={URLS.URLS.coa} component={coaMaster} />

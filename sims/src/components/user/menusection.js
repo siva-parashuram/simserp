@@ -38,8 +38,8 @@ class menusection extends React.Component {
             moduleHeader: [],
             moduleLinks: [],
             userPermissionLists: [],
-            mobileMenuAnchor:null,
-            mobileMenuPopupOpen:false,
+            mobileMenuAnchor: null,
+            mobileMenuPopupOpen: false,
             DrawerAnchor: false,
             pages: [],
             selectedModuleName: null,
@@ -52,8 +52,8 @@ class menusection extends React.Component {
 
 
     getUrlParams = () => {
-        let params=CF.GET_URL_PARAMS();
-        console.log("Menusection params > ",params);
+        let params = CF.GET_URL_PARAMS();
+        console.log("Menusection params > ", params);
 
         var url = new URL(window.location.href);
         var branchBtnId = url.searchParams.get("branchBtnId");
@@ -62,11 +62,11 @@ class menusection extends React.Component {
         var compName = url.searchParams.get("compName");
         var compID = url.searchParams.get("compID");
         let urlparams =
-            "?branchBtnId="+branchBtnId+
-            "&compID="+compID+
-            "&branchId=" +branchId +
-            "&compName=" +compName +
-            "&branchName=" +branchName;
+            "?branchBtnId=" + branchBtnId +
+            "&compID=" + compID +
+            "&branchId=" + branchId +
+            "&compName=" + compName +
+            "&branchName=" + branchName;
         this.setState({
             // urlparams: urlparams,
             urlparams: params,
@@ -161,15 +161,14 @@ class menusection extends React.Component {
     };
 
 
-    mobileMenuPopupClose=()=>{
-        this.setState({mobileMenuPopupOpen:false});
+    mobileMenuPopupClose = () => {
+        this.setState({ mobileMenuPopupOpen: false });
     }
 
 
-    geToDashboard=()=>{
+    geToDashboard = () => {
         window.location = URLS.URLS.userDashboard + this.state.urlparams;
     }
-
 
     render() {
 
@@ -191,10 +190,8 @@ class menusection extends React.Component {
         }
 
         const openPage = (pageLink) => {
-            let url="/"+pageLink+this.state.urlparams;
-            console.log("openPage > url > "+url);
-  
-          
+            let url = "/" + pageLink + this.state.urlparams;
+            console.log("openPage > url > " + url);
             this.setState({ DrawerAnchor: false }, (e) => {
                 window.location = url;
             });
@@ -246,13 +243,13 @@ class menusection extends React.Component {
 
 
         const handleMBClick = (event) => {
-            console.log("event.currentTarget > ",event.currentTarget);
+            console.log("event.currentTarget > ", event.currentTarget);
             this.setState({
-                mobileMenuAnchor:event.currentTarget,
-                mobileMenuPopupOpen:true
+                mobileMenuAnchor: event.currentTarget,
+                mobileMenuPopupOpen: true
             });
-            
-          };
+
+        };
 
 
         return (
@@ -269,7 +266,7 @@ class menusection extends React.Component {
                                     >
                                         <Button
                                             className="menusection-action-userFirstname"
-                                            onClick={()=>this.geToDashboard()}
+                                            onClick={() => this.geToDashboard()}
                                         >
                                             <b>{getCookie(COOKIE.FIRSTNAME)}&nbsp;&nbsp;&nbsp;</b>
                                         </Button>
@@ -280,17 +277,17 @@ class menusection extends React.Component {
                                         </Button>
                                         {this.state.moduleHeader.map((item, i) => (
                                             <Fragment>
-                                                <div style={{ 
+                                                <div style={{
                                                     marginRight: 15,
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     flexWrap: 'wrap',
-                                                    }} >                                                     
+                                                }} >
                                                     <Link
                                                         className="topMenuLink"
                                                         onClick={(e) => toggleDrawer(item)}
                                                     >
-                                                      {item.name}
+                                                        {item.name}
                                                     </Link>
                                                 </div>
                                             </Fragment>
@@ -299,9 +296,9 @@ class menusection extends React.Component {
                                 </div>
                             </Grid>
                             <Grid item xs={1} sm={1} md={1} lg={1}>
-                                <div style={{marginTop:14}}>
-                                    <MenuIcon                                     
-                                     className="menuiconBtn"
+                                <div style={{ marginTop: 14 }}>
+                                    <MenuIcon
+                                        className="menuiconBtn"
                                     />
                                 </div>
                             </Grid>
@@ -310,7 +307,7 @@ class menusection extends React.Component {
                     <div className="mobileOnly">
                         <Grid container spacing={0} >
                             <Grid item xs={11} sm={11} md={11} lg={11}>
-                            <div style={{ marginTop: 10, marginLeft: 10 }}>
+                                <div style={{ marginTop: 10, marginLeft: 10 }}>
                                     <ButtonGroup
                                         size="small"
                                         variant="text"
@@ -325,7 +322,7 @@ class menusection extends React.Component {
                                             disabled={true}
                                         >
                                             &nbsp;
-                                        </Button>                                      
+                                        </Button>
                                     </ButtonGroup>
                                 </div>
                             </Grid>
@@ -348,24 +345,24 @@ class menusection extends React.Component {
                                             'aria-labelledby': 'mobile-menu-button',
                                         }}
                                         PaperProps={{
-                                            elevation:2,
-                                           
-                                          }}
+                                            elevation: 2,
+
+                                        }}
                                     >
-                                       
+
                                         {this.state.moduleHeader.map((item, i) => (
                                             <MenuItem>
-                                                <div style={{ 
+                                                <div style={{
                                                     marginRight: 15,
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     flexWrap: 'wrap',
-                                                    }} >                                                     
+                                                }} >
                                                     <Link
                                                         className="topMenuLink"
                                                         onClick={(e) => toggleDrawer(item)}
                                                     >
-                                                      {item.name}
+                                                        {item.name}
                                                     </Link>
                                                 </div>
                                             </MenuItem>
@@ -377,7 +374,7 @@ class menusection extends React.Component {
                     </div>
                 </div>
 
-                
+
 
                 <Drawer
                     open={this.state.DrawerAnchor}
