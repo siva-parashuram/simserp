@@ -88,7 +88,7 @@ import Ftptest from "../components/ftp/ftptest";
 import Nav from "../components/user/nav";
 import Menusection from "../components/user/menusection";
 
-const branchName = new URL(window.location.href).searchParams.get("branchName") + "-" + new URL(window.location.href).searchParams.get("name");
+const branchName = new URL(window.location.href).searchParams.get("branchName") + " - " + new URL(window.location.href).searchParams.get("name");
 
 
 let routes = ({ location, ...rest }) => {
