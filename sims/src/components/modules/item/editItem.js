@@ -32,10 +32,13 @@ import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 
+import Itemquickdetails from "./itemquickdetails";
+
 class editItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      BranchID:0,
       GeneralDetailsExpanded: true,
       PlanningDetailsExpanded: false,
       WarehouseDetailsExpanded: false,
@@ -126,6 +129,7 @@ class editItem extends React.Component {
         NetWeight: { errorState: false, errorMssg: "" },
         GrossWeight: { errorState: false, errorMssg: "" },
       },
+      selectedItem:{}
     };
   }
 
@@ -153,6 +157,7 @@ class editItem extends React.Component {
       {
         urlparams: params,
         ItemId: ItemId,
+        BranchID:branchId,
       },
       () => {
         this.getItem();
@@ -350,6 +355,7 @@ class editItem extends React.Component {
     ValidUser.Token = getCookie(COOKIE.TOKEN);
     let Data = {
       validUser: ValidUser,
+      // BranchID:parseInt(this.state.BranchID),
       Item: {
         ItemId: parseInt(this.state.ItemId),
       },
@@ -365,7 +371,26 @@ class editItem extends React.Component {
         let data = response.data;
         console.log("getItem > Response data > ", data);
         this.fetchItemType(data.catId);
+
+        let selectedItem = {
+          Alias: data.alias,
+          No: data.no,
+          Description1: data.description1,
+          Description2: data.description2,
+          PackingDesc1: data.packingDesc1,
+          PackingDesc2: data.packingDesc2,
+          CertificateNo: data.certificateNo,
+          UOMCode: "",
+          StockQty: 0,
+          GITQty: 0,
+          POQty: 0,
+          OrderQty: 0,
+          ProductionQty: 0,
+          StandardCost: data.standardCost,
+          ModifyDate: data.modifyDate
+        };
         this.setState({
+          selectedItem:selectedItem,  
           Item: data,
           ItemId: data.itemId,
           No: data.no,
@@ -1339,8 +1364,6 @@ class editItem extends React.Component {
 
                               />
 
-
-
                               <SDIB
                                 id="ItemType"
                                 label="Item Type"
@@ -2089,7 +2112,9 @@ class editItem extends React.Component {
             </Grid>
             <div style={{ height: 50 }}></div>
           </Grid>
-          <Grid item xs={4}></Grid>
+          <Grid item  xs={12} sm={12} md={4} lg={4}>
+          <Itemquickdetails item={this.state.selectedItem} />
+          </Grid>
         </Grid>
       </Fragment>
     );

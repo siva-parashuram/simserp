@@ -389,11 +389,22 @@ class addItem extends React.Component {
     let BaseUom= this.state.BaseUom;
     let ItemPostingGroupID= this.state.ItemPostingGroupID;
 
+    console.log("CatId > ",CatId);
+    console.log("Code > ",Code);
+    console.log("Description1 > ",Description1);
+    console.log("PackingDesc1 > ",PackingDesc1);
+    console.log("Hsncode > ",Hsncode);
+    console.log("BaseUom > ",BaseUom);
+    console.log("ItemPostingGroupID > ",ItemPostingGroupID);
+    console.log("this.state.ItemType > ",this.state.ItemType);
+
     let netGrossWeightChk=false;
-    if(this.state.ItemType===0){
+    if(parseInt(this.state.ItemType)===0){
           if(parseFloat(this.state.NetWeight)>0 && parseFloat(this.state.GrossWeight)>0){
             netGrossWeightChk=true;
           }
+    }else{
+      netGrossWeightChk=true;
     }
 
     let v1 = this.state.Validations;
@@ -1170,7 +1181,7 @@ class addItem extends React.Component {
                   response.data.status === "true"
                 ) {
                   this.setState({ ProgressLoader: true, SuccessPrompt: true });
-                  // this.openPage(URLS.URLS.itemMaster + this.state.urlparams);
+                  // this.openPage(URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + data.ID);
                 } else {
                   this.setState({ ProgressLoader: true, ErrorPrompt: true });
                 }
