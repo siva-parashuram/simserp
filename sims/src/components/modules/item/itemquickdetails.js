@@ -123,14 +123,47 @@ class itemquickdetails extends React.Component {
                                                 </TableRow>
 
                                                 <TableRow>
+                                                    <TableCell align="left" className="no-border-table">Stock Quantity</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.StockQty}
+                                                    </TableCell>
+                                                </TableRow>
+
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">GIT Quantity</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.GITQty}
+                                                    </TableCell>
+                                                </TableRow>
+
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">PO Quantity</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.POQty}
+                                                    </TableCell>
+                                                </TableRow>
+
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">Order Quantity</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.OrderQty}
+                                                    </TableCell>
+                                                </TableRow>
+
+                                                <TableRow>
+                                                    <TableCell align="left" className="no-border-table">Production Quantity</TableCell>
+                                                    <TableCell align="right" className="no-border-table">
+                                                        {this.props.item.ProductionQty}
+                                                    </TableCell>
+                                                </TableRow>
+
+
+                                                <TableRow>
                                                     <TableCell align="left" className="no-border-table">Standard Cost</TableCell>
                                                     <TableCell align="right" className="no-border-table">
                                                         {this.props.item.StandardCost}
                                                     </TableCell>
                                                 </TableRow>
-
-
-
 
 
                                                 <TableRow>
