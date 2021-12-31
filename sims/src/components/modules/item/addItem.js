@@ -1181,7 +1181,7 @@ class addItem extends React.Component {
                   response.data.status === "true"
                 ) {
                   this.setState({ ProgressLoader: true, SuccessPrompt: true });
-                  // this.openPage(URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + data.ID);
+                  this.openPage(URLS.URLS.editItem + this.state.urlparams + "&edititemId=" + data.ID);
                 } else {
                   this.setState({ ProgressLoader: true, ErrorPrompt: true });
                 }
