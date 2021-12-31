@@ -105,7 +105,7 @@ class itemMaster extends React.Component {
       .then((response) => {
         if (response.status === 200) {
           this.setState({ ProgressLoader: true, itemData: response.data }, () => {
-          //  this.handleRowClick([1]);
+           this.handleRowClick([1]);
           });
         }
       })
@@ -119,7 +119,7 @@ class itemMaster extends React.Component {
 
     if(e.length>1){
       this.setState({
-        // selectionModel: 0,
+        selectionModel: 0,
          editBtnDisable: true,
          ItemID: 0,
          selectedItem: {},
@@ -130,7 +130,7 @@ class itemMaster extends React.Component {
   
         if(index===this.state.selectionModel){
           this.setState({
-           // selectionModel: 0,
+           selectionModel: 0,
             editBtnDisable: true,
             ItemID: 0,
             selectedItem: {},
@@ -145,7 +145,7 @@ class itemMaster extends React.Component {
             editurl: editUrl,
             editBtnDisable: false,
             selectedItem: item,
-           // selectionModel: index
+           selectionModel: index
           });
         }
       } catch (err) {

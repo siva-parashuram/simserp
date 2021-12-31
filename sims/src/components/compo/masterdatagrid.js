@@ -17,7 +17,7 @@ function CustomToolbar() {
             <GridToolbarColumnsButton />
             <GridToolbarFilterButton />
             <GridToolbarDensitySelector />
-            <GridToolbarExport />
+            {/* <GridToolbarExport /> */}
             
       </GridToolbarContainer>
     );
@@ -31,6 +31,7 @@ class masterdatagrid extends React.Component {
     }
     // componentDidMount() { }
     render() {
+
         return (
             <div style={{ height: 520, width: '100%' }}>
                 <DataGrid
