@@ -27,16 +27,22 @@ import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import Dualtabcomponent from "../../compo/dualtabcomponent";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import MasterDataGrid from "../../compo/masterdatagrid";
 
 class supplierMaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       ProgressLoader: false,
       editBtnDisable: true,
       initialCss: "",
       urlparams: "",
       editUrl: "",
+      columns: APIURLS.supplierMasterColumn,
       SupplierData: [],
     };
   }
@@ -71,7 +77,7 @@ class supplierMaster extends React.Component {
         let data = response.data;
         if (data.length > 0) {
           this.setState({ SupplierData: data, ProgressLoader: true }, () => {
-            this.handleRowClick(null, data[0], "row_0");
+            this.handleRowClick([1]);
           });
         } else {
           this.setState({ SupplierData: data, ProgressLoader: true });
@@ -82,28 +88,28 @@ class supplierMaster extends React.Component {
       });
   };
 
-  handleRowClick = (e, item, id) => {
-    let editUrl =
+  handleRowClick = (e) => {
+    try{
+      let index = e[0];
+      let item = this.state.SupplierData[index - 1];
+      let editUrl =
       URLS.URLS.editSupplier +
       this.state.urlparams +
       "&editSuplID=" +
-      item.SuplID;
-    editUrl = editUrl + "&type=edit";
-    this.setState({
-      SuplID: item.SuplID,
-      editUrl: editUrl,
-      editBtnDisable: false,
-    });
+      item.SuplID+"&type=edit";
+      this.setState({
+        SuplID: item.SuplID,
+        editUrl: editUrl,
+        editBtnDisable: false,
+        selectedItem: item,
+        selectionModel: index
+      });
 
-    this.removeIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
+    }catch(err){}
+     
   };
 
-  removeIsSelectedRowClasses = () => {
-    for (let i = 0; i < this.state.SupplierData.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
-  };
+  
 
   render() {
     const openPage = (url) => {
@@ -111,65 +117,35 @@ class supplierMaster extends React.Component {
       window.location = url;
     };
 
+    const handlePageChange = (event, newPage) => {
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
+    };
+
     const customerList = (
       <Fragment>
+
         {this.state.SupplierData.length > 0 ? (
           <Fragment>
-            <TableContainer style={{ maxHeight: 440 }}>
-              <Table
-                stickyHeader
-                size="small"
-                className=""
-                aria-label="item List table"
-              >
-                <TableHead className="table-header-background">
-                  <TableRow>
-                    <TableCell className="table-header-font">#</TableCell>
-                    <TableCell className="table-header-font">No</TableCell>
 
-                    <TableCell className="table-header-font" align="left">
-                      Name
-                    </TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      EmailID
-                    </TableCell>
-                    <TableCell className="table-header-font" align="left">
-                      Contact
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody className="tableBody">
-                  {this.state.SupplierData.map((item, i) => (
-                    <TableRow
-                      id={"row_" + i}
-                      className={this.state.initialCss}
-                      hover
-                      key={i}
-                      onClick={(event) =>
-                        this.handleRowClick(event, item, "row_" + i)
-                      }
-                    >
-                      <TableCell align="left">{i + 1}</TableCell>
-                      <TableCell align="left">
-                        <a
-                          className="LINK tableLink"
-                          onClick={(e) => openPage(this.state.editUrl)}
-                        >
-                          {item.No}
-                        </a>
-                      </TableCell>
-                      <TableCell align="left">{item.Name}</TableCell>
-                      <TableCell align="left">{item.EmailID}</TableCell>
-                      <TableCell align="left">{item.ContactPerson}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <MasterDataGrid
+              selectionModel={this.state.selectionModel}
+              rows={this.state.SupplierData}
+              columns={this.state.columns}
+              pagination={this.state.pagination}
+              onSelectionModelChange={(e) => this.handleRowClick(e)}
+              onPageChange={handlePageChange}
+
+
+            />
+
+
           </Fragment>
         ) : (
           <Tableskeleton />
         )}
+
       </Fragment>
     );
 
@@ -487,6 +463,8 @@ class supplierMaster extends React.Component {
         </ButtonGroup>
       </Fragment>
     );
+
+   
 
     return (
       <Fragment>

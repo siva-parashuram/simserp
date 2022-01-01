@@ -1614,7 +1614,7 @@ class supplieractivity extends React.Component {
                                 <SSIB
                                   key="IsGroupCompany"
                                   id="IsGroupCompany"
-                                  label="Is Group Company?"
+                                  label="Group Company?"
                                   param={this.state.Supplier.IsGroupCompany}
                                   onChange={(e) =>
                                     this.updateFormValue("IsGroupCompany", e)
@@ -1718,7 +1718,7 @@ class supplieractivity extends React.Component {
                                 <SSIB
                                   key="IsBlock"
                                   id="IsBlock"
-                                  label="Is Block?"
+                                  label="Block?"
                                   param={this.state.Supplier.IsBlock}
                                   onChange={(e) =>
                                     this.updateFormValue("IsBlock", e)

@@ -1273,6 +1273,54 @@ export const itemMasterColumn=[
   }
 
 ];
+
+
+export const supplierMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 10,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'No',
+    headerName: 'No',
+    width: 100,
+    headerClassName: 'table-header-font',
+  },
+  {
+    field: 'Name',
+    headerName: 'Name',
+    width: 200,
+    headerClassName: 'table-header-font',
+  },
+  {
+    field: 'CountryName',
+    headerName: 'Country',
+    width: 120,
+    headerClassName: 'table-header-font',
+  },
+  {
+    field: 'CurrCode',
+    headerName: 'Currency',
+    width: 120,
+    headerClassName: 'table-header-font',
+  }
+  ,
+  {
+    field: 'EmailID',
+    headerName: 'Email',
+    width: 200,
+    headerClassName: 'table-header-font',
+  }
+  ,
+  {
+    field: 'ContactPerson',
+    headerName: '	Contact',
+    width: 200,
+    headerClassName: 'table-header-font',
+  }
+];
  
 
 
