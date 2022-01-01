@@ -125,6 +125,8 @@ class addItem extends React.Component {
         CertificateNo: { errorState: false, errorMssg: "" },
         Reason: { errorState: false, errorMssg: "" },
         Hsncode: { errorState: false, errorMssg: "" },
+        BaseUom: { errorState: false, errorMssg: "" },
+        ItemPostingGroupID: { errorState: false, errorMssg: "" },
       },
     };
   }
@@ -428,6 +430,26 @@ class addItem extends React.Component {
     ) {
       validate = true;
     } else {
+
+      if(parseInt(BaseUom)===0){
+        v1.BaseUom = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Base UOM Not Selected" });
+        try{
+          document.getElementById("BaseUom").focus();
+        }catch(ex){
+          console.log("Error > ex > ",ex);
+        }
+      }
+
+      if(parseInt(ItemPostingGroupID)===0){
+        v1.ItemPostingGroupID = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Posting Group Not Selected" });
+        try{
+          document.getElementById("ItemPostingGroupID").focus();
+        }catch(ex){
+          console.log("Error > ex > ",ex);
+        }
+      }
 
       if(duplicate===true){
         v1.Code = { errorState: true, errorMssg: "" }; 

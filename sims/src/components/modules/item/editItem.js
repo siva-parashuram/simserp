@@ -95,16 +95,16 @@ class editItem extends React.Component {
       SpecId: 0,
       AllowNegativeStock: false,
       ItemPostingGroupID: 0,
-      CostingMethod: "-",
+      CostingMethod: 0,
       StandardCost: 0,
       IndirectCostPercentage: 0,
       ProfitPercentage: 0,
       GstgroupId: 0,
       Hsncode: "",
-      BaseUom: "-",
-      SalesUom: "-",
-      PurchaseUom: "-",
-      PackingUom: "-",
+      BaseUom: 0,
+      SalesUom: 0,
+      PurchaseUom: 0,
+      PackingUom: 0,
       Replenishment: 0,
       LeadTime: 0,
       IsLot: false,
@@ -129,6 +129,8 @@ class editItem extends React.Component {
         Hsncode: { errorState: false, errorMssg: "" },
         NetWeight: { errorState: false, errorMssg: "" },
         GrossWeight: { errorState: false, errorMssg: "" },
+        BaseUom: { errorState: false, errorMssg: "" },
+        ItemPostingGroupID: { errorState: false, errorMssg: "" },  
       },
       selectedItem:{}
     };
@@ -565,12 +567,26 @@ class editItem extends React.Component {
     ) {
       validate = true;
     } else {
-
+         
       if(parseInt(BaseUom)===0){
-        
+        v1.BaseUom = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Base UOM Not Selected" });
+        try{
+          document.getElementById("BaseUom").focus();
+        }catch(ex){
+          console.log("Error > ex > ",ex);
+        }
       }
 
-      if(parseInt(ItemPostingGroupID)===0){}
+      if(parseInt(ItemPostingGroupID)===0){
+        v1.ItemPostingGroupID = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Posting Group Not Selected" });
+        try{
+          document.getElementById("ItemPostingGroupID").focus();
+        }catch(ex){
+          console.log("Error > ex > ",ex);
+        }
+      }
 
       if (Code.trim() === "") { 
         v1.Code = { errorState: true, errorMssg: "" }; 
