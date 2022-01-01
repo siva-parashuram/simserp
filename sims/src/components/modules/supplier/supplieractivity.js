@@ -60,6 +60,7 @@ class supplieractivity extends React.Component {
       accordion2: false,
       accordion3: false,
       ProgressLoader: false,
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       DisableCreatebtn: true,
@@ -473,6 +474,7 @@ class supplieractivity extends React.Component {
           }
 
           if(duplicate===false){
+            this.setState({ErrorMessageProps:""});
             let v2 = this.state.Validations;
             Supplier[param] = e.target.value;
             if (e.target.value === "" || e.target.value.length > 100) {
@@ -938,6 +940,69 @@ class supplieractivity extends React.Component {
     }
   };
 
+  validateData=()=>{
+    let isvalidData=true;
+    let Name=this.state.Supplier.Name;
+    let CountryID=this.state.Supplier.CountryID;
+    let CurrID=this.state.Supplier.CurrID;
+    let GeneralPostingGroupID=this.state.Supplier.GeneralPostingGroupID;
+    let SupplierPostingGroupID=this.state.Supplier.SupplierPostingGroupID;
+
+
+
+    let Nameduplicate=this.chkIfDuplicatePresent(Name.trim());
+    let Validations = this.state.Validations;
+
+    console.log("Name > ",Name);
+    console.log("CountryID > ",CountryID);
+    console.log("CurrID > ",CurrID);
+    console.log("GeneralPostingGroupID > ",GeneralPostingGroupID);
+    console.log("SupplierPostingGroupID > ",SupplierPostingGroupID);
+    console.log("Nameduplicate > ",Nameduplicate);
+
+    console.log("parseInt(CountryID) > ",parseInt(CountryID));
+    
+    if(
+      Name!==""  &&
+      parseInt(CountryID)>0 &&
+      parseInt(CurrID)>0 &&
+      parseInt(GeneralPostingGroupID)>0 &&
+      parseInt(SupplierPostingGroupID)>0  &&
+      Nameduplicate===false
+    ){
+      isvalidData=true;
+    }else{
+      
+      if(Name===""){
+        Validations.Name.errorState=true;
+        this.setState({Validations:Validations,ErrorPrompt: true,ErrorMessageProps:"Name is Mandatory"});
+      }
+      if(parseInt(CountryID)===0 || parseInt(CountryID)===-1){        
+        this.setState({ErrorMessageProps:"Country is Mandatory",ErrorPrompt: true});
+      }
+      if(parseInt(CurrID)===0 || parseInt(CurrID)===-1){        
+        this.setState({ErrorMessageProps:"Currency is Mandatory",ErrorPrompt: true});
+      }
+      if(parseInt(GeneralPostingGroupID)===0 || parseInt(GeneralPostingGroupID)===-1){
+        this.setState({ErrorMessageProps:"General Posting Group is Mandatory",ErrorPrompt: true});
+      }
+      if(parseInt(SupplierPostingGroupID)===0 || parseInt(SupplierPostingGroupID)===-1){
+        this.setState({ErrorMessageProps:"Supplier Posting Group is Mandatory",ErrorPrompt: true});
+      }
+      if( Nameduplicate===true){
+        let Validations = this.state.Validations;
+        Validations.Name.errorState=true;
+        this.setState({Validations:Validations,ErrorPrompt: true,ErrorMessageProps:"Duplicate Name Already Exist"});
+      }
+      isvalidData=false;
+    }
+
+    console.log("isvalidData > ",isvalidData);
+
+
+  return isvalidData;
+  }
+
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
     window.location = url;
@@ -977,6 +1042,12 @@ class supplieractivity extends React.Component {
     };
 
     const AddNew = (e) => {
+
+     let isvalidData=true;
+     isvalidData=this.validateData();
+      
+
+     if(isvalidData===true){
       this.setState({ Loader: false });
       console.log("Adding new");
       let ValidUser = APIURLS.ValidUser;
@@ -1034,6 +1105,11 @@ class supplieractivity extends React.Component {
         .catch((error) => {
           this.setState({ ErrorPrompt: true, Loader: true });
         });
+     }else{
+      
+     }
+
+  
     };
 
     const updateSupplier = (e) => {
@@ -1513,6 +1589,7 @@ class supplieractivity extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />
