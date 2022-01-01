@@ -92,8 +92,8 @@ class supplieractivity extends React.Component {
         Address3: "",
         City: "",
         PostCode: "",
-        CountryID: "-1",
-        StateID: 12,
+        CountryID: 0,
+        StateID: 0,
         Website: "",
         PhoneNo: "",
         FaxNo: "",
@@ -102,13 +102,13 @@ class supplieractivity extends React.Component {
         PaymentTermID: 0,
         TypeOfEnterprise: 0,
         GSTSupplierType: 0,
-        CurrID: "-1",
+        CurrID: 0,
         PayToSuplID: 0,
         DueDays: 0,
         IsBlock: false,
         SalesPersonID: 0,
-        GeneralPostingGroupID: "-1",
-        SupplierPostingGroupID: "-1",
+        GeneralPostingGroupID: 0,
+        SupplierPostingGroupID: 0,
         IsTaxExempt: false,
         Reason: "",
         GSTSupplierType: 0,
@@ -979,20 +979,25 @@ class supplieractivity extends React.Component {
       }
       if(parseInt(CountryID)===0 || parseInt(CountryID)===-1){        
         this.setState({ErrorMessageProps:"Country is Mandatory",ErrorPrompt: true});
+        return false;
       }
       if(parseInt(CurrID)===0 || parseInt(CurrID)===-1){        
         this.setState({ErrorMessageProps:"Currency is Mandatory",ErrorPrompt: true});
+        return false;
       }
       if(parseInt(GeneralPostingGroupID)===0 || parseInt(GeneralPostingGroupID)===-1){
         this.setState({ErrorMessageProps:"General Posting Group is Mandatory",ErrorPrompt: true});
+        return false;
       }
       if(parseInt(SupplierPostingGroupID)===0 || parseInt(SupplierPostingGroupID)===-1){
         this.setState({ErrorMessageProps:"Supplier Posting Group is Mandatory",ErrorPrompt: true});
+        return false;
       }
       if( Nameduplicate===true){
         let Validations = this.state.Validations;
         Validations.Name.errorState=true;
         this.setState({Validations:Validations,ErrorPrompt: true,ErrorMessageProps:"Duplicate Name Already Exist"});
+        return false;
       }
       isvalidData=false;
     }
@@ -1089,7 +1094,10 @@ class supplieractivity extends React.Component {
                   SuccessPrompt: true,
                   Loader: true,
                 });
-                this.openPage(URLS.URLS.supplierMaster + this.state.urlparams);
+                this.openPage(URLS.URLS.editSupplier +
+                  this.state.urlparams +
+                  "&editSuplID=" +
+                  data.ID + "&type=edit");
               } else {
                 this.setState({
                   ErrorPrompt: true,
@@ -1741,7 +1749,7 @@ class supplieractivity extends React.Component {
                                   value={this.state.Supplier.CountryID}
                                   param={this.state.countryData}
                                   isMandatory={true}
-                                />
+                                />  {console.log("$$ ---------------------------> this.state.Supplier.StateID > ",this.state.Supplier.StateID)}
                                 <SDIB
                                   id="StateID"
                                   label="State"

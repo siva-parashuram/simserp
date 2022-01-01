@@ -42,7 +42,7 @@ class griddropdowninput extends React.Component {
                   value={this.props.value}
                   disabled={this.props.disabled}
                 >
-                  <option value="-">Select</option>
+                  <option value="0">Select</option>
                   {this.props.param?this.props.param.map(
                     (item, i) => (
                       <option
