@@ -31,7 +31,7 @@ import * as CF from "../services/functions/customfunctions";
 import * as URLS from "../routes/constants";
 
 // const domain = "http://192.168.10.200:8080/";
-const domain = "http://49.248.147.178:8087/";
+const domain = "http://49.248.147.178:8080/";
 
 export const APIURL = {
   FileDownload: domain + "api/Common/FileDownload",
