@@ -374,7 +374,7 @@ class editItem extends React.Component {
       .then((response) => {
         let data = response.data;
         console.log("getItem > Response data > ", data);
-        this.fetchItemType(data.catId);
+        this.fetchItemType(data.CatID);
 
         let stateData= {
           selectedItem:data,  
