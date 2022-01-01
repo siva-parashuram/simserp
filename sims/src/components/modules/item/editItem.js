@@ -50,6 +50,7 @@ class editItem extends React.Component {
       ErrorMessageProps:"",
       ProgressLoader: true,
       urlparams: "",
+      itemDataList:[],
       itemDepartmentMasterData: [],
       ItemTypeMaster: APIURLS.ItemType,
       ItemId: 0,
@@ -135,6 +136,7 @@ class editItem extends React.Component {
 
   componentDidMount() {
     let params = CF.GET_URL_PARAMS();
+    this.getItems();
     this.getUOMList();
     this.GSTGroupList();
     this.getItemCategoryData();
@@ -476,51 +478,47 @@ class editItem extends React.Component {
     }catch(err){}   
   }
 
-  // validateFormData = () => {
-  //   let validate = false;
+  getItems() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Url = APIURLS.APIURL.GetAllItems;
+    const headers = {
+      "Content-Type": "application/json",
+    };
 
-  //   let CatId = this.state.CatId;
-  //   let Code = this.state.Code;
-  //   let Description1 = this.state.Description1;
-  //   let PackingDesc1 = this.state.PackingDesc1;
-  //   let Hsncode= this.state.Hsncode;
-  //   let BaseUom= this.state.BaseUom;
-  //   let ItemPostingGroupID= this.state.ItemPostingGroupID;
+    
+    let reqData={
+      ValidUser:ValidUser,
+      BranchID:0
+    };
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({ ProgressLoader: true, itemDataList: response.data });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+      });
+  }
 
-  //   let netGrossWeightChk=false;
-  //   if(this.state.ItemType===0){
-  //         if(parseFloat(this.state.NetWeight)>0 && parseFloat(this.state.GrossWeight)>0){
-  //           netGrossWeightChk=true;
-  //         }
-  //   }
+  chkIfDuplicatePresent=(input)=>{
+    let duplicatePresent=false;
+    try{
+      let itemDataList=this.state.itemDataList;
+      for(let i=0;i<itemDataList.length;i++){
+        if((itemDataList[i].Code).trim().toUpperCase()===input.toUpperCase()){
+          duplicatePresent=true;
+        }
+      }
 
-  //   let v1 = this.state.Validations;
-  //   if (
-  //     parseInt(CatId) > 0 &&
-  //     parseInt(BaseUom) > 0 &&
-  //     parseInt(ItemPostingGroupID) > 0 &&
-  //     Code.trim() != "" &&
-  //     Description1.trim() != "" &&
-  //     PackingDesc1.trim() != "" &&
-  //     Hsncode.trim() != "" &&
-  //     netGrossWeightChk===true
-      
+    }catch(err){
 
-  //   ) {
-  //     validate = true;
-  //   } else {
-  //     if (Code.trim() === "") { v1.Code = { errorState: true, errorMssg: "" }; }
-  //     if (Description1.trim() === "") { v1.Description1 = { errorState: true, errorMssg: "" }; }
-  //     if (PackingDesc1.trim() === "") { v1.PackingDesc1 = { errorState: true, errorMssg: "" }; }
-  //     if (Hsncode.trim() === "") { v1.Hsncode = { errorState: true, errorMssg: "" }; }
-  //     if(parseFloat(this.state.NetWeight)<=0){ v1.NetWeight = { errorState: true, errorMssg: "" }; }
-  //     if(parseFloat(this.state.GrossWeight)<=0){ v1.GrossWeight = { errorState: true, errorMssg: "" }; }
-
-  //     this.setState({ Validations: v1 });
-  //   }
-
-  //   return validate;
-  // }
+    }
+    return duplicatePresent;
+  }
 
   validateFormData = () => {
     let validate = false;
@@ -665,14 +663,25 @@ class editItem extends React.Component {
           break;
         case "Code":
           let v1 = this.state.Validations;
-          if (e.target.value.length > 20) {
-            v1.Code = { errorState: true, errorMssg: "Maximum 20 characters" };
-            this.setState({ Validations: v1 });
-            setStateParam({}, param, e.target.value.trim());
-          } else {
-            v1.Code = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v1 });
-            setStateParam({}, param, e.target.value.trim());
+          let duplicate=false;
+          if(e.target.value){
+            duplicate=this.chkIfDuplicatePresent(e.target.value.trim());
+          }
+          if(duplicate===false){
+            
+            if (e.target.value.length > 20) {
+              v1.Code = { errorState: true, errorMssg: "Maximum 20 characters" };
+              this.setState({ Validations: v1 });
+              setStateParam({}, param, e.target.value)
+            } else {
+              v1.Code = { errorState: false, errorMssg: "" };
+              this.setState({ Validations: v1 });
+              setStateParam({}, param, e.target.value);
+            }
+          }else{
+            setStateParam({}, param, e.target.value);
+            this.setState({ ErrorPrompt: true, ErrorMessageProps: "Item Code Already Exist" });
+            v1.Code = { errorState: true, errorMssg: "" }; 
           }
 
           break;
@@ -1243,7 +1252,6 @@ class editItem extends React.Component {
     };
 
     const processUpdateItem = () => {
-
       let validate=this.validateFormData();
 
       if (validate === true) {
@@ -1338,9 +1346,6 @@ class editItem extends React.Component {
         // this.setState({ ErrorPrompt: true, ErrorMessageProps: "Input Data Not Proper" });
       }
 
-
-     
-
     };
 
     const breadcrumbHtml = (
@@ -1428,6 +1433,16 @@ class editItem extends React.Component {
                         <div>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
+                            <SIB
+                                id="ItemNo"
+                                label="Item No."
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("ItemNo", e)}
+                                value={this.state.No}
+                                disabled={true}
+                                isMandatory={true}
+                              />
                               <SDIB
                                 id="CatID"
                                 label="Category"
@@ -1445,17 +1460,6 @@ class editItem extends React.Component {
                                 param={APIURLS.ItemType}
                                 value={this.state.ItemType}
                                 disabled={true}
-                              />
-
-                              <SIB
-                                id="ItemNo"
-                                label="Item No."
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("ItemNo", e)}
-                                value={this.state.No}
-                                disabled={true}
-                                isMandatory={true}
                               />
 
                               <SIB

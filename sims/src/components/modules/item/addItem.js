@@ -35,6 +35,7 @@ class addItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      BranchID:0,
       GeneralDetailsExpanded: true,
       PlanningDetailsExpanded: false,
       WarehouseDetailsExpanded: false,
@@ -47,7 +48,7 @@ class addItem extends React.Component {
       Disablebtn:false,
       urlparams: "",
       ItemTypeMaster: APIURLS.ItemType,
-
+      itemDataList:[],
       ItemType: APIURLS.ItemType[0].value,
       No: "",
       Code: "",
@@ -130,6 +131,7 @@ class addItem extends React.Component {
 
   componentDidMount() {
     let params = CF.GET_URL_PARAMS();
+    this.getItems();
     this.getitemDepartmentMasterData();
     this.getItemCategoryData();
     this.getUOMList();
@@ -151,6 +153,7 @@ class addItem extends React.Component {
 
     this.setState({
       urlparams: params,
+      BranchID:branchId
     });
   }
 
@@ -389,6 +392,8 @@ class addItem extends React.Component {
     let BaseUom= this.state.BaseUom;
     let ItemPostingGroupID= this.state.ItemPostingGroupID;
 
+    let duplicate=this.chkIfDuplicatePresent(Code.trim());
+
     console.log("CatId > ",CatId);
     console.log("Code > ",Code);
     console.log("Description1 > ",Description1);
@@ -397,6 +402,7 @@ class addItem extends React.Component {
     console.log("BaseUom > ",BaseUom);
     console.log("ItemPostingGroupID > ",ItemPostingGroupID);
     console.log("this.state.ItemType > ",this.state.ItemType);
+    console.log("duplicate Code > ",duplicate);
 
     let netGrossWeightChk=false;
     if(parseInt(this.state.ItemType)===0){
@@ -416,12 +422,18 @@ class addItem extends React.Component {
       Description1.trim() != "" &&
       PackingDesc1.trim() != "" &&
       Hsncode.trim() != "" &&
-      netGrossWeightChk===true
-      
+      netGrossWeightChk===true &&
+      duplicate===false      
 
     ) {
       validate = true;
     } else {
+
+      if(duplicate===true){
+        v1.Code = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Item Code Already Exist" });
+      }
+
       if (Code.trim() === "") { 
         v1.Code = { errorState: true, errorMssg: "" }; 
         this.setState({ ErrorPrompt: true, ErrorMessageProps: "Code Not Entered" });
@@ -470,6 +482,47 @@ class addItem extends React.Component {
   }
 
   
+  getItems() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    let Url = APIURLS.APIURL.GetAllItems;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    
+    let reqData={
+      ValidUser:ValidUser,
+      BranchID:0
+    };
+    axios
+      .post(Url, reqData, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({ ProgressLoader: true, itemDataList: response.data });
+        }
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true, ErrorPrompt: true });
+      });
+  }
+
+  chkIfDuplicatePresent=(input)=>{
+    let duplicatePresent=false;
+    try{
+      let itemDataList=this.state.itemDataList;
+      for(let i=0;i<itemDataList.length;i++){
+        if((itemDataList[i].Code).trim().toUpperCase()===input.toUpperCase()){
+          duplicatePresent=true;
+        }
+      }
+
+    }catch(err){
+
+    }
+    return duplicatePresent;
+  }
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -527,15 +580,26 @@ class addItem extends React.Component {
           break;
         case "Code":
           let v1 = this.state.Validations;
-          if (e.target.value.length > 20) {
-            v1.Code = { errorState: true, errorMssg: "Maximum 20 characters" };
-            this.setState({ Validations: v1 });
-            setStateParam({}, param, e.target.value)
-          } else {
-            v1.Code = { errorState: false, errorMssg: "" };
-            this.setState({ Validations: v1 });
-            setStateParam({}, param, e.target.value);
+          let duplicate=false;
+          if(e.target.value){
+            duplicate=this.chkIfDuplicatePresent(e.target.value.trim());
           }
+          if(duplicate===false){
+            
+            if (e.target.value.length > 20) {
+              v1.Code = { errorState: true, errorMssg: "Maximum 20 characters" };
+              this.setState({ Validations: v1 });
+              setStateParam({}, param, e.target.value)
+            } else {
+              v1.Code = { errorState: false, errorMssg: "" };
+              this.setState({ Validations: v1 });
+              setStateParam({}, param, e.target.value);
+            }
+          }else{
+            setStateParam({}, param, e.target.value);
+            this.setState({ ErrorPrompt: true, ErrorMessageProps: "Item Code Already Exist" });
+            v1.Code = { errorState: true, errorMssg: "" }; 
+          }       
 
           break;
         case "Alias":
@@ -1100,7 +1164,6 @@ class addItem extends React.Component {
     };
 
     const processCreateItem = () => {
-
      let validate=this.validateFormData();
 
       if (validate === true) {
@@ -1233,7 +1296,6 @@ class addItem extends React.Component {
       } else {
        
       }
-
    
     };
 
@@ -1323,6 +1385,16 @@ class addItem extends React.Component {
                         <div>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={5} lg={5}>
+                            <SIB
+                                id="ItemNo"
+                                label="Item No."
+                                variant="outlined"
+                                size="small"
+                                onChange={(e) => updateFormValue("ItemNo", e)}
+                                value={this.state.No}
+                                disabled={true}
+                                isMandatory={true}
+                              />
                               <SDIB
                                 id="CatID"
                                 label="Category"
@@ -1339,17 +1411,6 @@ class addItem extends React.Component {
                                 param={APIURLS.ItemType}
                                 value={this.state.ItemType}
                                 disabled={true}
-                              />
-
-                              <SIB
-                                id="ItemNo"
-                                label="Item No."
-                                variant="outlined"
-                                size="small"
-                                onChange={(e) => updateFormValue("ItemNo", e)}
-                                value={this.state.No}
-                                disabled={true}
-                                isMandatory={true}
                               />
 
                               <SIB
