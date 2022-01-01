@@ -447,37 +447,68 @@ class supplieractivity extends React.Component {
     this.getStateByCountry(CountryID);
   };
 
+  chkIfDuplicatePresent=(input)=>{
+    let duplicatePresent=false;
+    try{
+      let itemDataList=this.state.SupplierData;
+      for(let i=0;i<itemDataList.length;i++){
+        if((itemDataList[i].Name).trim().toUpperCase()===input.toUpperCase()){
+          duplicatePresent=true;
+        }
+      }
+
+    }catch(err){
+
+    }
+    return duplicatePresent;
+  }
+
   updateFormValue = (param, e) => {
     let Supplier = this.state.Supplier;
     switch (param) {
       case "Name":
-        let v2 = this.state.Validations;
-        Supplier[param] = e.target.value;
-        if (e.target.value === "" || e.target.value.length > 100) {
-          if (e.target.value === "") {
-            v2.Name = { errorState: true, errorMssg: "Cannot be blank!" };
-
-            this.setState({
-              Validations: v2,
-              DisableCreatebtn: true,
-              DisableUpdatebtn: true,
-            });
+        let duplicate=false;
+          if(e.target.value){
+            duplicate=this.chkIfDuplicatePresent(e.target.value.trim());
           }
-          if (e.target.value.length > 100) {
-            v2.Name = {
-              errorState: true,
-              errorMssg: "Maximum 100 characters allowed!",
-            };
 
-            this.setState({ Validations: v2 });
+          if(duplicate===false){
+            let v2 = this.state.Validations;
+            Supplier[param] = e.target.value;
+            if (e.target.value === "" || e.target.value.length > 100) {
+              if (e.target.value === "") {
+                v2.Name = { errorState: true, errorMssg: "Cannot be blank!" };
+    
+                this.setState({
+                  Validations: v2,
+                  DisableCreatebtn: true,
+                  DisableUpdatebtn: true,
+                });
+              }
+              if (e.target.value.length > 100) {
+                v2.Name = {
+                  errorState: true,
+                  errorMssg: "Maximum 100 characters allowed!",
+                };
+    
+                this.setState({ Validations: v2 });
+              }
+            } else {
+              v2.Name = { errorState: false, errorMssg: "" };
+    
+              this.setState({ Validations: v2 });
+    
+              this.setParams(Supplier);
+            }
+          }else{
+            let vdup = this.state.Validations;
+            Supplier[param] = e.target.value;
+            this.setParams(Supplier);
+            this.setState({ ErrorPrompt: true, ErrorMessageProps: "Name Already Exist" });
+            vdup.Name = { errorState: true, errorMssg: "" }; 
           }
-        } else {
-          v2.Name = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v2 });
-
-          this.setParams(Supplier);
-        }
+       
+       
 
         break;
 
@@ -1711,8 +1742,6 @@ class supplieractivity extends React.Component {
                                     this.state.Validations.FaxNo.errorState
                                   }
                                 />
-
-
 
 
                                 <SSIB
