@@ -152,6 +152,7 @@ class supplieractivity extends React.Component {
 
   componentDidMount() {
     console.log("-----------------supplieractivity--------------");
+    let params = CF.GET_URL_PARAMS();
     this.loadDropdowns();
     this.getSupplierList();
     var url = new URL(window.location.href);
@@ -180,7 +181,7 @@ class supplieractivity extends React.Component {
     this.setState({
       Supplier: Supplier,
       SuplID: type === "edit" ? CF.toInt(SuplID) : 0,
-      urlparams: urlparams,
+      urlparams: params,
       type: type,
       typoTitle: typoTitle,
       ProgressLoader: type === "add" ? true : false,

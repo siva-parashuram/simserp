@@ -45,8 +45,8 @@ class gridtextboxinput extends React.Component {
                   variant={this.props.variant}
                   size={this.props.size}
                   onChange={this.props.onChange}
-                  defaultValue={this.props.value}
-                  value={this.props.value}
+                  defaultValue={this.props.defaultValue}
+                  value={this.props.value}                  
                   error={this.props.error}
                   helperText={this.props.helperText}
                   disabled={this.props.disabled}
@@ -54,6 +54,8 @@ class gridtextboxinput extends React.Component {
                   multiline={this.props.multiline}
                   rows={this.props.rows}
                   inputProps={this.props.inputProps}
+                  onBlur={this.props.onBlur}
+
                 />
               </Grid>
             </Grid>

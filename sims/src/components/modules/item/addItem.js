@@ -1276,7 +1276,7 @@ class addItem extends React.Component {
                 let data = response.data;
                 if (
 
-                  response.status === 201 ||
+                  response.status === 201 || response.status === 200 ||
                   response.data.status === true ||
                   response.data.status === "true"
                 ) {
@@ -1561,10 +1561,10 @@ class addItem extends React.Component {
                                 label="Certificate No."
                                 variant="outlined"
                                 size="small"
-                                onChange={(e) =>
+                                onBlur={(e) =>
                                   updateFormValue("CertificateNo", e)
                                 }
-                                value={this.state.CertificateNo}
+                                defaultValue={this.state.CertificateNo}
                                 disabled={!this.state.IsCertified}
                                 error={
                                   this.state.Validations.CertificateNo

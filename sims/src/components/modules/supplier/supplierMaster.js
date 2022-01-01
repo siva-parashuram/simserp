@@ -4,6 +4,7 @@ import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import * as CF from "../../../services/functions/customfunctions";
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -40,6 +41,7 @@ class supplierMaster extends React.Component {
     };
   }
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getSupplierList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -52,7 +54,7 @@ class supplierMaster extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    this.setState({ urlparams: urlparams });
+    this.setState({ urlparams: params });
   }
 
   getSupplierList = () => {

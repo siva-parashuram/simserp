@@ -374,8 +374,7 @@ class editItem extends React.Component {
         console.log("getItem > Response data > ", data);
         this.fetchItemType(data.catId);
 
-     
-        this.setState({
+        let stateData= {
           selectedItem:data,  
           Item: data,
           ItemId: data.ItemID,
@@ -437,7 +436,9 @@ class editItem extends React.Component {
           RoutingId: data.RoutingID,
           Bomid: data.BOMID,
           ProgressLoader: true,
-        });
+        };
+     
+        this.setState(stateData);
       })
       .catch((error) => { });
   }
@@ -564,6 +565,13 @@ class editItem extends React.Component {
     ) {
       validate = true;
     } else {
+
+      if(parseInt(BaseUom)===0){
+        
+      }
+
+      if(parseInt(ItemPostingGroupID)===0){}
+
       if (Code.trim() === "") { 
         v1.Code = { errorState: true, errorMssg: "" }; 
         this.setState({ ErrorPrompt: true, ErrorMessageProps: "Code Not Entered" });
@@ -784,6 +792,7 @@ class editItem extends React.Component {
           break;
 
         case "CertificateNo":
+          this.setState({CertificateNo:e.target.value});
           let v7 = this.state.Validations;
           if (e.target.value.length > 50) {
             v7.CertificateNo = {
@@ -1611,10 +1620,8 @@ class editItem extends React.Component {
                                 id="CertificateNo"
                                 label="Certificate No."
                                 variant="outlined"
-                                size="small"
-                                onChange={(e) =>
-                                  updateFormValue("CertificateNo", e)
-                                }
+                                size="small"                                
+                                onChange={(e) =>  updateFormValue("CertificateNo", e)}
                                 value={this.state.CertificateNo}
                                 disabled={!this.state.IsCertified}
                                 error={
@@ -2191,7 +2198,7 @@ class editItem extends React.Component {
             <div style={{ height: 50 }}></div>
           </Grid>
           <Grid item  xs={12} sm={12} md={4} lg={4}>
-          <Itemquickdetails item={this.state.selectedItem} />
+          <Itemquickdetails item={this.state} />
           </Grid>
         </Grid>
       </Fragment>
