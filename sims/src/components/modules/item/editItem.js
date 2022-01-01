@@ -476,6 +476,52 @@ class editItem extends React.Component {
     }catch(err){}   
   }
 
+  // validateFormData = () => {
+  //   let validate = false;
+
+  //   let CatId = this.state.CatId;
+  //   let Code = this.state.Code;
+  //   let Description1 = this.state.Description1;
+  //   let PackingDesc1 = this.state.PackingDesc1;
+  //   let Hsncode= this.state.Hsncode;
+  //   let BaseUom= this.state.BaseUom;
+  //   let ItemPostingGroupID= this.state.ItemPostingGroupID;
+
+  //   let netGrossWeightChk=false;
+  //   if(this.state.ItemType===0){
+  //         if(parseFloat(this.state.NetWeight)>0 && parseFloat(this.state.GrossWeight)>0){
+  //           netGrossWeightChk=true;
+  //         }
+  //   }
+
+  //   let v1 = this.state.Validations;
+  //   if (
+  //     parseInt(CatId) > 0 &&
+  //     parseInt(BaseUom) > 0 &&
+  //     parseInt(ItemPostingGroupID) > 0 &&
+  //     Code.trim() != "" &&
+  //     Description1.trim() != "" &&
+  //     PackingDesc1.trim() != "" &&
+  //     Hsncode.trim() != "" &&
+  //     netGrossWeightChk===true
+      
+
+  //   ) {
+  //     validate = true;
+  //   } else {
+  //     if (Code.trim() === "") { v1.Code = { errorState: true, errorMssg: "" }; }
+  //     if (Description1.trim() === "") { v1.Description1 = { errorState: true, errorMssg: "" }; }
+  //     if (PackingDesc1.trim() === "") { v1.PackingDesc1 = { errorState: true, errorMssg: "" }; }
+  //     if (Hsncode.trim() === "") { v1.Hsncode = { errorState: true, errorMssg: "" }; }
+  //     if(parseFloat(this.state.NetWeight)<=0){ v1.NetWeight = { errorState: true, errorMssg: "" }; }
+  //     if(parseFloat(this.state.GrossWeight)<=0){ v1.GrossWeight = { errorState: true, errorMssg: "" }; }
+
+  //     this.setState({ Validations: v1 });
+  //   }
+
+  //   return validate;
+  // }
+
   validateFormData = () => {
     let validate = false;
 
@@ -487,11 +533,22 @@ class editItem extends React.Component {
     let BaseUom= this.state.BaseUom;
     let ItemPostingGroupID= this.state.ItemPostingGroupID;
 
+    console.log("CatId > ",CatId);
+    console.log("Code > ",Code);
+    console.log("Description1 > ",Description1);
+    console.log("PackingDesc1 > ",PackingDesc1);
+    console.log("Hsncode > ",Hsncode);
+    console.log("BaseUom > ",BaseUom);
+    console.log("ItemPostingGroupID > ",ItemPostingGroupID);
+    console.log("this.state.ItemType > ",this.state.ItemType);
+
     let netGrossWeightChk=false;
-    if(this.state.ItemType===0){
+    if(parseInt(this.state.ItemType)===0){
           if(parseFloat(this.state.NetWeight)>0 && parseFloat(this.state.GrossWeight)>0){
             netGrossWeightChk=true;
           }
+    }else{
+      netGrossWeightChk=true;
     }
 
     let v1 = this.state.Validations;
@@ -509,19 +566,52 @@ class editItem extends React.Component {
     ) {
       validate = true;
     } else {
-      if (Code.trim() === "") { v1.Code = { errorState: true, errorMssg: "" }; }
-      if (Description1.trim() === "") { v1.Description1 = { errorState: true, errorMssg: "" }; }
-      if (PackingDesc1.trim() === "") { v1.PackingDesc1 = { errorState: true, errorMssg: "" }; }
-      if (Hsncode.trim() === "") { v1.Hsncode = { errorState: true, errorMssg: "" }; }
-      if(parseFloat(this.state.NetWeight)<=0){ v1.NetWeight = { errorState: true, errorMssg: "" }; }
-      if(parseFloat(this.state.GrossWeight)<=0){ v1.GrossWeight = { errorState: true, errorMssg: "" }; }
-
+      if (Code.trim() === "") { 
+        v1.Code = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Code Not Entered" });
+        try{
+          document.getElementById("Code").focus();
+        }catch(ex){
+          console.log("Error > ex > ",ex);
+        }
+        
+        return false;
+      }
+      if (Description1.trim() === "") {
+        v1.Description1 = { errorState: true, errorMssg: "" };
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Description Not Entered" });
+        try {
+          document.getElementById("Description1").focus();
+        } catch (ex) {
+          console.log("Error > ex > ", ex);
+        }
+        return false;
+      }
+      if (PackingDesc1.trim() === "") {
+         v1.PackingDesc1 = { errorState: true, errorMssg: "" }; 
+         this.setState({ ErrorPrompt: true, ErrorMessageProps: "PackingDesc Not Entered" });
+         try {
+           document.getElementById("PackingDesc1").focus();
+         } catch (ex) {
+           console.log("Error > ex > ", ex);
+         }
+         return false;
+        }
+      if (Hsncode.trim() === "") { 
+        v1.Hsncode = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Hsncode Not Entered" });
+        try {
+          document.getElementById("Hsncode").focus();
+        } catch (ex) {
+          console.log("Error > ex > ", ex);
+        }
+        return false;
+      }
       this.setState({ Validations: v1 });
     }
 
     return validate;
   }
-
  
 
   render() {
@@ -1245,7 +1335,7 @@ class editItem extends React.Component {
           })
           .catch((error) => { });
       }else{
-        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Input Data Not Proper" });
+        // this.setState({ ErrorPrompt: true, ErrorMessageProps: "Input Data Not Proper" });
       }
 
 
@@ -1469,7 +1559,7 @@ class editItem extends React.Component {
                               <SSIB
                                 key="IsTrading"
                                 id="IsTrading"
-                                label="Is Trading ?"
+                                label="Trading ?"
                                 param={this.state.IsTrading}
                                 onChange={(e) =>
                                   updateFormValue("IsTrading", e)
@@ -1479,7 +1569,7 @@ class editItem extends React.Component {
                               <SSIB
                                 key="IsActive"
                                 id="IsActive"
-                                label="Is Active ?"
+                                label="Active ?"
                                 param={this.state.IsActive}
                                 onChange={(e) => updateFormValue("IsActive", e)}
                               />
@@ -1495,7 +1585,7 @@ class editItem extends React.Component {
                               <SSIB
                                 key="IsCustomized"
                                 id="IsCustomized"
-                                label="Is Customized ?"
+                                label="Customized ?"
                                 param={this.state.IsCustomized}
                                 onChange={(e) =>
                                   updateFormValue("IsCustomized", e)
@@ -1506,7 +1596,7 @@ class editItem extends React.Component {
                               <SSIB
                                 key="IsCertified"
                                 id="IsCertified"
-                                label="Is Certified ? "
+                                label="Certified ? "
                                 param={this.state.IsCertified}
                                 onChange={(e) =>
                                   updateFormValue("IsCertified", e)
@@ -1532,7 +1622,7 @@ class editItem extends React.Component {
                               <SSIB
                                 key="IsDiscontine"
                                 id="IsDiscontine"
-                                label="Is Discontinue ?"
+                                label="Discontinue ?"
                                 param={this.state.IsDiscontine}
                                 onChange={(e) =>
                                   updateFormValue("IsDiscontine", e)
@@ -1695,7 +1785,7 @@ class editItem extends React.Component {
                               <SSIB
                                 key="IsQuality"
                                 id="IsQuality"
-                                label="Is Quality ?"
+                                label="Quality ?"
                                 param={this.state.IsQuality}
                                 onChange={(e) =>
                                   updateFormValue("IsQuality", e)
@@ -2067,7 +2157,7 @@ class editItem extends React.Component {
                               <SSIB
                                 key="IsLot"
                                 id="IsLot"
-                                label="Is Lot ?"
+                                label="Lot Active ?"
                                 param={this.state.IsLot}
                                 onChange={(e) => updateFormValue("IsLot", e)}
                               />

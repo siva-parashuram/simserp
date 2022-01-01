@@ -422,17 +422,54 @@ class addItem extends React.Component {
     ) {
       validate = true;
     } else {
-      if (Code.trim() === "") { v1.Code = { errorState: true, errorMssg: "" }; }
-      if (Description1.trim() === "") { v1.Description1 = { errorState: true, errorMssg: "" }; }
-      if (PackingDesc1.trim() === "") { v1.PackingDesc1 = { errorState: true, errorMssg: "" }; }
-      if (Hsncode.trim() === "") { v1.Hsncode = { errorState: true, errorMssg: "" }; }
+      if (Code.trim() === "") { 
+        v1.Code = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Code Not Entered" });
+        try{
+          document.getElementById("Code").focus();
+        }catch(ex){
+          console.log("Error > ex > ",ex);
+        }
+        
+        return false;
+      }
+      if (Description1.trim() === "") {
+        v1.Description1 = { errorState: true, errorMssg: "" };
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Description Not Entered" });
+        try {
+          document.getElementById("Description1").focus();
+        } catch (ex) {
+          console.log("Error > ex > ", ex);
+        }
+        return false;
+      }
+      if (PackingDesc1.trim() === "") {
+         v1.PackingDesc1 = { errorState: true, errorMssg: "" }; 
+         this.setState({ ErrorPrompt: true, ErrorMessageProps: "PackingDesc Not Entered" });
+         try {
+           document.getElementById("PackingDesc1").focus();
+         } catch (ex) {
+           console.log("Error > ex > ", ex);
+         }
+         return false;
+        }
+      if (Hsncode.trim() === "") { 
+        v1.Hsncode = { errorState: true, errorMssg: "" }; 
+        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Hsncode Not Entered" });
+        try {
+          document.getElementById("Hsncode").focus();
+        } catch (ex) {
+          console.log("Error > ex > ", ex);
+        }
+        return false;
+      }
       this.setState({ Validations: v1 });
     }
 
     return validate;
   }
 
-   
+  
 
   openPage = (url) => {
     this.setState({ ProgressLoader: false });
@@ -1194,7 +1231,7 @@ class addItem extends React.Component {
             this.setState({ ErrorPrompt: true, Loader: true });
           });
       } else {
-        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Input Data Not Proper" });
+       
       }
 
    
@@ -1414,7 +1451,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsTrading"
                                 id="IsTrading"
-                                label="Is Trading ?"
+                                label="Trading ?"
                                 param={this.state.IsTrading}
                                 onChange={(e) =>
                                   updateFormValue("IsTrading", e)
@@ -1424,7 +1461,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsActive"
                                 id="IsActive"
-                                label="Is Active ?"
+                                label="Active ?"
                                 param={this.state.IsActive}
                                 onChange={(e) => updateFormValue("IsActive", e)}
                               />
@@ -1440,7 +1477,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsCustomized"
                                 id="IsCustomized"
-                                label="Is Customized ?"
+                                label="Customized ?"
                                 param={this.state.IsCustomized}
                                 onChange={(e) =>
                                   updateFormValue("IsCustomized", e)
@@ -1451,7 +1488,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsCertified"
                                 id="IsCertified"
-                                label="Is Certified ?"
+                                label="Certified ?"
                                 param={this.state.IsCertified}
                                 onChange={(e) =>
                                   updateFormValue("IsCertified", e)
@@ -1477,7 +1514,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsDiscontine"
                                 id="IsDiscontine"
-                                label="Is Discontinue ?"
+                                label="Discontinue ?"
                                 param={this.state.IsDiscontine}
                                 onChange={(e) =>
                                   updateFormValue("IsDiscontine", e)
@@ -2003,7 +2040,7 @@ class addItem extends React.Component {
                               <SSIB
                                 key="IsLot"
                                 id="IsLot"
-                                label="Is Lot ?"
+                                label="Lot Active ?"
                                 param={this.state.IsLot}
                                 onChange={(e) => updateFormValue("IsLot", e)}
                               />
