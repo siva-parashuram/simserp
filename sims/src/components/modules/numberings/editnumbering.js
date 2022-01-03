@@ -136,23 +136,23 @@ class editnumbering extends React.Component {
 
           let noSeriesDetailList = [];
 
-          if(data.noSeriesDetailList){
+          if(data.NoSeriesDetails){
             try{
-              for (let i = 0; i < data.noSeriesDetailList.length; i++) {
+              for (let i = 0; i < data.NoSeriesDetails.length; i++) {
                 let l = {
                   id: i,
-                  NoSeriesId: data.noSeriesDetailList[i].noSeriesId,
-                  Lno: data.noSeriesDetailList[i].lno,
+                  NoSeriesId: data.NoSeriesDetails[i].noSeriesId,
+                  Lno: data.NoSeriesDetails[i].LNo,
                   // StartDate: moment(data.noSeriesDetailList[i].startDate).format(
                   //   "YYYY-MM-DD"
                   // ),
-                  StartDate: data.noSeriesDetailList[i].startDate,
-                  Prefix: data.noSeriesDetailList[i].prefix,
-                  StartNo: data.noSeriesDetailList[i].startNo,
-                  Suffix: data.noSeriesDetailList[i].suffix,
-                  Increment: data.noSeriesDetailList[i].increment,
-                  LastNo: data.noSeriesDetailList[i].lastNo,
-                  LastNoDate: data.noSeriesDetailList[i].lastNoDate,
+                  StartDate: data.NoSeriesDetails[i].StartDate,
+                  Prefix: data.NoSeriesDetails[i].Prefix,
+                  StartNo: data.NoSeriesDetails[i].StartNo,
+                  Suffix: data.NoSeriesDetails[i].Suffix,
+                  Increment: data.NoSeriesDetails[i].Increment,
+                  LastNo: data.NoSeriesDetails[i].LastNo,
+                  LastNoDate: data.NoSeriesDetails[i].LastNoDate,
                 };
                 noSeriesDetailList.push(l);
               }
