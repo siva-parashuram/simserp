@@ -411,7 +411,7 @@ class addnumbering extends React.Component {
     };
 
     const handleCreate = (e) => {
-
+      let v = this.state.Validations;
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -425,7 +425,11 @@ class addnumbering extends React.Component {
         let BranchId = this.state.branchId;
         let numberings = this.state.numberings;
         if (noSeries.Code !== "") {
-          this.setState({ ProgressLoader: false });
+
+          let isPresent=false;
+          isPresent=this.chkIfDuplicateExist(noSeries.Code);
+          if(isPresent===false){
+            this.setState({ ProgressLoader: false });
           let newList = [];
           for (let i = 0; i < noSeriesDetailList.length; i++) {
             let obj = {
@@ -465,8 +469,17 @@ class addnumbering extends React.Component {
               }
             })
             .catch((error) => { });
+          }else{
+            v.Code = {
+              errorState: true,
+              errorMssg: "",
+            };
+            this.setState({ Validations: v });
+            this.setState({ ErrorMessageProps: "Code Already Exist", ErrorPrompt: true });
+          }
+          
         } else {
-          let v = this.state.Validations;
+          
           v.Code = {
             errorState: true,
             errorMssg: "",

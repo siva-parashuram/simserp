@@ -45,6 +45,7 @@ class editnumbering extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      NoSeriesMstData:[],
       lastLno: null,
       urlparams: "",
       GeneralDetailsExpanded: true,
@@ -98,11 +99,51 @@ class editnumbering extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+
+      this.getList(parseInt(branchId));
     this.setState({
       urlparams: params,
       branchId: branchId,
     });
     this.getNumberingList(branchId, USERID, noSeriesId);
+  }
+
+  getList(branchId) {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllNoSeriesByBranchId;
+
+    let data = {
+      ValidUser: ValidUser,
+      BranchId: parseInt(branchId),
+    };
+
+    axios
+      .post(Url, data, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200) {
+          this.setState({NoSeriesMstData:data,ProgressLoader: true});
+        } else {
+          this.setState({
+            NoSeriesMstData: [],
+            ProgressLoader: true,
+            ErrorPrompt: true,
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          NoSeriesMstData: [],
+          ProgressLoader: true,
+          ErrorPrompt: true,
+        });
+      });
   }
 
   getNumberingList(branchId, USERID, noSeriesId) {
@@ -191,6 +232,18 @@ class editnumbering extends React.Component {
     //    noSeries.UserId=parseInt(USERID);
 
     // this.setState({ numberings: N,noSeries:noSeries });
+  }
+
+  chkIfDuplicateExist=(value)=>{
+    let isPresent=false;
+    let NoSeriesMstData=this.state.NoSeriesMstData;
+    for(let i=0;i<NoSeriesMstData.length;i++){
+      if(NoSeriesMstData[i].Code.toUpperCase()===value.trim().toUpperCase()){
+        isPresent=true;
+        break;
+      }
+    }
+    return isPresent;
   }
 
   render() {
