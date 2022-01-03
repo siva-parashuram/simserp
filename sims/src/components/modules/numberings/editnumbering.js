@@ -125,36 +125,41 @@ class editnumbering extends React.Component {
 
         if (response.status === 200) {
           let d = {
-            NoSeriesId: data.noSeries.noSeriesId,
-            Code: data.noSeries.code,
-            Description: data.noSeries.description,
-            BranchId: data.noSeries.branchId,
-            UserId: data.noSeries.userId,
-            CreationDate: data.noSeries.creationDate,
+            NoSeriesId: data.NoSeriesID,
+            Code: data.Code,
+            Description: data.Description,
+            BranchId: data.BranchID,
+            UserId: data.UserID,
+            CreationDate: "",
           };
           let noSeries = d;
 
           let noSeriesDetailList = [];
-          for (let i = 0; i < data.noSeriesDetailList.length; i++) {
-            let l = {
-              id: i,
-              NoSeriesId: data.noSeriesDetailList[i].noSeriesId,
-              Lno: data.noSeriesDetailList[i].lno,
-              // StartDate: moment(data.noSeriesDetailList[i].startDate).format(
-              //   "YYYY-MM-DD"
-              // ),
-              StartDate: data.noSeriesDetailList[i].startDate,
-              Prefix: data.noSeriesDetailList[i].prefix,
-              StartNo: data.noSeriesDetailList[i].startNo,
-              Suffix: data.noSeriesDetailList[i].suffix,
-              Increment: data.noSeriesDetailList[i].increment,
-              LastNo: data.noSeriesDetailList[i].lastNo,
-              LastNoDate: data.noSeriesDetailList[i].lastNoDate,
-            };
-            noSeriesDetailList.push(l);
-          }
 
-          
+          if(data.noSeriesDetailList){
+            try{
+              for (let i = 0; i < data.noSeriesDetailList.length; i++) {
+                let l = {
+                  id: i,
+                  NoSeriesId: data.noSeriesDetailList[i].noSeriesId,
+                  Lno: data.noSeriesDetailList[i].lno,
+                  // StartDate: moment(data.noSeriesDetailList[i].startDate).format(
+                  //   "YYYY-MM-DD"
+                  // ),
+                  StartDate: data.noSeriesDetailList[i].startDate,
+                  Prefix: data.noSeriesDetailList[i].prefix,
+                  StartNo: data.noSeriesDetailList[i].startNo,
+                  Suffix: data.noSeriesDetailList[i].suffix,
+                  Increment: data.noSeriesDetailList[i].increment,
+                  LastNo: data.noSeriesDetailList[i].lastNo,
+                  LastNoDate: data.noSeriesDetailList[i].lastNoDate,
+                };
+                noSeriesDetailList.push(l);
+              }
+            }catch(ex){
+              console.log("ex > ",ex);
+            }
+          }
 
           let lastLno = noSeriesDetailList.at(-1).Lno;
 
@@ -173,6 +178,7 @@ class editnumbering extends React.Component {
         }
       })
       .catch((error) => {
+        console.log("error > ",error);
         this.setState({
           numberings: [],
           ProgressLoader: true,

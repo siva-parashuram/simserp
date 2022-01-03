@@ -80,16 +80,10 @@ class numberingmaster extends React.Component {
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-
-        let noSeriesDetailList=data.noSeriesDetailList;
-        for(let i=0;i<noSeriesDetailList.length;i++){
-          noSeriesDetailList[i].id=i+1;
-        }
-
         if (response.status === 200) {
           this.setState(
             {
-              numberings:noSeriesDetailList,
+              numberings:data,
               ProgressLoader: true,
             },
             () => {
@@ -123,7 +117,7 @@ class numberingmaster extends React.Component {
       URLS.URLS.editNumbering +
       this.state.urlparams +
       "&noSeriesId=" +
-      item.noSeriesId;
+      item.NoSeriesID;
 
     this.setState({ editurl: editUrl,selectionModel: index });
     }catch(err){}

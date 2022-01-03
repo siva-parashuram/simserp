@@ -1329,22 +1329,22 @@ export const numberingMasterColumn=[
     width: 10,
     headerClassName: 'table-header-font'
   }, {
-    field: 'code',
+    field: 'Code',
     headerName: 'Code',
     width: 180,
     headerClassName: 'table-header-font'
   },{
-    field: 'description',
+    field: 'Description',
     headerName: 'Description',
     width: 180,
     headerClassName: 'table-header-font'
   },{
-    field: 'startNo',
+    field: 'StartNo',
     headerName: 'Starting No',
     width: 180,
     headerClassName: 'table-header-font'
   },{
-    field: 'lastNo',
+    field: 'LastNo',
     headerName: 'Ending No',
     width: 180,
     headerClassName: 'table-header-font'
