@@ -27,6 +27,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
+import * as CF from "../../../services/functions/customfunctions";
 
 import moment from "moment";
 import Tablerowcelltextboxinput from "../../compo/tablerowcelltextboxinput";
@@ -83,6 +84,7 @@ class editnumbering extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     let USERID = getCookie(COOKIE.USERID);
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -97,7 +99,7 @@ class editnumbering extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
       branchId: branchId,
     });
     this.getNumberingList(branchId, USERID, noSeriesId);

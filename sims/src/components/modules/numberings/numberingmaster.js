@@ -17,6 +17,7 @@ import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import "../../user/dasboard.css";
+import * as CF from "../../../services/functions/customfunctions";
 
 import ButtonGroup from "@mui/material/ButtonGroup";
 import AddIcon from "@material-ui/icons/Add";
@@ -50,6 +51,7 @@ class numberingmaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
@@ -62,7 +64,7 @@ class numberingmaster extends React.Component {
       "&branchName=" +
       branchName;
     this.setState({
-      urlparams: urlparams,
+      urlparams: params,
     });
     this.getList(branchId);
   }

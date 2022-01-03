@@ -80,6 +80,7 @@ class addnumbering extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     let USERID = getCookie(COOKIE.USERID);
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -94,7 +95,7 @@ class addnumbering extends React.Component {
       branchName;
     this.setState(
       {
-        urlparams: urlparams,
+        urlparams: params,
         branchId: branchId,
       },
       () => this.getNumberingList(branchId, USERID)
@@ -600,6 +601,14 @@ class addnumbering extends React.Component {
                                   fontSize="small"
                                   className="table-delete-icon"
                                   onClick={(e) => deleteEntry(e, item)}
+                                />
+                              ) : null}
+
+                              {i === this.state.numberings.length - 1 ? (
+                                <AddIcon
+                                  fontSize="small"
+                                  className="table-add-icon"
+                                  onClick={(e) => creatNewLine()}
                                 />
                               ) : null}
                             </td>
