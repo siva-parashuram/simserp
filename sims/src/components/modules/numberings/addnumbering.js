@@ -50,7 +50,7 @@ class addnumbering extends React.Component {
       branchId: 0,
       numberings: [],
       startdate: null,
-      ErrorMessageProps:"",
+      ErrorMessageProps: "",
       ErrorPrompt: false,
       SuccessPrompt: false,
       noSeries: {
@@ -117,41 +117,41 @@ class addnumbering extends React.Component {
     this.setState({ numberings: N, noSeries: noSeries });
   }
 
-  validateNumberLineEntry=()=>{
+  validateNumberLineEntry = () => {
     let numberings = this.state.numberings;
-    let isProper=true;
-    for(let i=0;i<numberings.length;i++){
-      if(
-        numberings[i].StartDate===null ||
-        parseInt(numberings[i].StartNo)===0 || numberings[i].StartNo==="" ||
-        parseInt(numberings[i].Increment)===0 || numberings[i].Increment===""
-        ){
-          isProper=false;
-          break;
-        }else{
-          isProper=true;
-        }
+    let isProper = true;
+    for (let i = 0; i < numberings.length; i++) {
+      if (
+        numberings[i].StartDate === null ||
+        parseInt(numberings[i].StartNo) === 0 || numberings[i].StartNo === "" ||
+        parseInt(numberings[i].Increment) === 0 || numberings[i].Increment === ""
+      ) {
+        isProper = false;
+        break;
+      } else {
+        isProper = true;
+      }
     }
     return isProper;
   }
 
-  updateNumbering=(key,item,e,index)=>{    
-    
+  updateNumbering = (key, item, e, index) => {
+
     switch (key) {
       case "StartDate":
-            this.updateNumberingList(key,e.target.value,index);
+        this.updateNumberingList(key, e.target.value, index);
         break;
-        case "Prefix":
-          this.updateNumberingList(key,e.target.value,index);
+      case "Prefix":
+        this.updateNumberingList(key, e.target.value, index);
         break;
-        case "StartNo":
-          this.updateNumberingList(key,e.target.value,index);
+      case "StartNo":
+        this.updateNumberingList(key, e.target.value, index);
         break;
-        case "Suffix":
-          this.updateNumberingList(key,e.target.value,index);
+      case "Suffix":
+        this.updateNumberingList(key, e.target.value, index);
         break;
-        case "Increment":
-          this.updateNumberingList(key,e.target.value,index);
+      case "Increment":
+        this.updateNumberingList(key, e.target.value, index);
         break;
       default:
         break;
@@ -159,14 +159,14 @@ class addnumbering extends React.Component {
 
   }
 
-  updateNumberingList=(key,value,index)=>{
-    let numberings = this.state.numberings; 
-    for(let i=0;i<numberings.length;i++){
-        if(i===index){
-          numberings[i][key]=value;
-        }
+  updateNumberingList = (key, value, index) => {
+    let numberings = this.state.numberings;
+    for (let i = 0; i < numberings.length; i++) {
+      if (i === index) {
+        numberings[i][key] = value;
+      }
     }
-    this.setState({numberings:numberings});
+    this.setState({ numberings: numberings });
   }
 
   onEnterMovement = (param, item, id, nextid, e) => {
@@ -201,18 +201,16 @@ class addnumbering extends React.Component {
     } catch (err) {
       console.log("onEnterMovement > err > ", err);
     }
-
-
   };
 
-   creatNewLine = () => {
-      
+  creatNewLine = () => {
+
     let N = this.state.numberings;
-    
-    let isProper=true;
-    isProper=this.validateNumberLineEntry();
-    if(isProper===true){
-      this.setState({ErrorMessageProps:""});
+
+    let isProper = true;
+    isProper = this.validateNumberLineEntry();
+    if (isProper === true) {
+      this.setState({ ErrorMessageProps: "" });
       let newID = N.length + 1;
       let numberings = {
         id: newID,
@@ -230,10 +228,15 @@ class addnumbering extends React.Component {
       this.setState({ numberings: N }, () => {
         document.getElementById("startdate" + newID).focus();
       });
-    }else{
-       this.setState({ErrorMessageProps:"Start Date,Start No & Increment is required", ErrorPrompt: true});
+    } else {
+      this.setState({ ErrorMessageProps: "Start Date,Start No & Increment is required", ErrorPrompt: true });
     }
 
+  };
+
+   openPage = (url) => {
+    this.setState({ ProgressLoader: false });
+    window.location = url;
   };
 
   render() {
@@ -284,17 +287,17 @@ class addnumbering extends React.Component {
       }
     };
 
-    
+
 
     const creatNewLine = () => {
-      
+
       let N = this.state.numberings;
-      
-      let isProper=true;
-      isProper=this.validateNumberLineEntry();
-      console.log("II > isProper > ",isProper);
-      if(isProper===true){
-        this.setState({ErrorMessageProps:""});
+
+      let isProper = true;
+      isProper = this.validateNumberLineEntry();
+      console.log("II > isProper > ", isProper);
+      if (isProper === true) {
+        this.setState({ ErrorMessageProps: "" });
         let newID = N.length + 1;
         let numberings = {
           id: newID,
@@ -312,8 +315,8 @@ class addnumbering extends React.Component {
         this.setState({ numberings: N }, () => {
           document.getElementById("startdate" + newID).focus();
         });
-      }else{
-         this.setState({ErrorMessageProps:"Start Date,Start No & Increment is required", ErrorPrompt: true});
+      } else {
+        this.setState({ ErrorMessageProps: "Start Date,Start No & Increment is required", ErrorPrompt: true });
       }
 
     };
@@ -343,43 +346,68 @@ class addnumbering extends React.Component {
     };
 
     const handleCreate = (e) => {
-      this.setState({ ProgressLoader: false });
+      
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-      let noSeries = this.state.noSeries;
-      let noSeriesDetailList = formatDate();
-      let BranchId = this.state.branchId;
-       let numberings=this.state.numberings;
-      console.log("numberings > ",numberings);
-      console.log("noSeriesDetailList > ",noSeriesDetailList);
+      let isProper = true;
+      isProper = this.validateNumberLineEntry();
+      if (isProper === true) {
+        this.setState({ ProgressLoader: false });
+        this.setState({ ErrorMessageProps: "" });
+        let noSeries = this.state.noSeries;
+        let noSeriesDetailList = formatDate();
+        let BranchId = this.state.branchId;
+        let numberings = this.state.numberings;
+
+        let newList=[];
+        for(let i=0;i<noSeriesDetailList.length;i++){
+          let obj={
+            "NoSeriesId": 0,
+            "Lno": noSeriesDetailList[i].Lno,
+            "StartDate": noSeriesDetailList[i].StartDate,
+            "Prefix": noSeriesDetailList[i].Prefix,
+            "StartNo": noSeriesDetailList[i].StartNo,
+            "Suffix": noSeriesDetailList[i].Suffix,
+            "Increment": noSeriesDetailList[i].Increment
+          };
+          newList.push(obj);
+        }
 
 
-     
-      const data = {
-        validUser: ValidUser,
-        noSeries: noSeries,
-        BranchId: parseInt(BranchId),
-        noSeriesDetailList: noSeriesDetailList,
-      };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let Url = APIURLS.APIURL.CreateNoSeries;
+        const data = {
+          validUser: ValidUser,
+          noSeries: noSeries,
+          BranchId: parseInt(BranchId),
+          noSeriesDetailList: newList,
+        };
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.CreateNoSeries;
 
-      axios
-        .post(Url, data, { headers })
-        .then((response) => {
-          let data = response.data;
+        axios
+          .post(Url, data, { headers })
+          .then((response) => {
+            let data = response.data;
 
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => { });
+            if (response.status === 200 || response.status === 201) {              
+              this.setState({ ProgressLoader: true, SuccessPrompt: true });
+              this.openPage(URLS.URLS.editNumbering +
+                this.state.urlparams +
+                "&noSeriesId=" +
+                data.ID + "&type=edit");
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+            }
+          })
+          .catch((error) => { });
+      } else {
+        this.setState({ ErrorMessageProps: "Number Series List is Invalid", ErrorPrompt: true });
+      }
+
+
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -467,7 +495,7 @@ class addnumbering extends React.Component {
                 }
               >
                 <Typography key="" className="accordion-Header-Title">
-                  General 
+                  General
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="">
@@ -530,7 +558,7 @@ class addnumbering extends React.Component {
                 }
               >
                 <Typography key="" className="accordion-Header-Title">
-                Series
+                  Series
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key="" className="AccordionDetails-css">
@@ -562,9 +590,9 @@ class addnumbering extends React.Component {
                                 id={"startdate" + item.id}
                                 variant="outlined"
                                 size="small"
-                                defaultValue={item.StartDate}                                 
-                                onKeyDown={(e) =>this.onEnterMovement("StartDate",item,"startdate" + item.id,"prefix" + item.id,e)}
-                                onChange={(e)=>this.updateNumbering("StartDate",item,e,i)}
+                                defaultValue={item.StartDate}
+                                onKeyDown={(e) => this.onEnterMovement("StartDate", item, "startdate" + item.id, "prefix" + item.id, e)}
+                                onChange={(e) => this.updateNumbering("StartDate", item, e, i)}
                                 style={{ width: 150 }}
                                 InputProps={{
                                   className: "textFieldCss",
@@ -576,8 +604,8 @@ class addnumbering extends React.Component {
                                 id={"prefix" + item.id}
                                 variant="outlined"
                                 size="small"
-                                onKeyDown={(e) =>this.onEnterMovement("Prefix",item,"prefix" + item.id,"startno" + item.id,e)}
-                                onChange={(e)=>this.updateNumbering("Prefix",item,e,i)}
+                                onKeyDown={(e) => this.onEnterMovement("Prefix", item, "prefix" + item.id, "startno" + item.id, e)}
+                                onChange={(e) => this.updateNumbering("Prefix", item, e, i)}
                                 style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
@@ -590,8 +618,8 @@ class addnumbering extends React.Component {
                                 id={"startno" + item.id}
                                 variant="outlined"
                                 size="small"
-                                onKeyDown={(e) =>this.onEnterMovement("startno",item,"startno" + item.id,"suffix" + item.id,e)}
-                                onChange={(e)=>this.updateNumbering("StartNo",item,e,i)}
+                                onKeyDown={(e) => this.onEnterMovement("startno", item, "startno" + item.id, "suffix" + item.id, e)}
+                                onChange={(e) => this.updateNumbering("StartNo", item, e, i)}
                                 style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
@@ -603,8 +631,8 @@ class addnumbering extends React.Component {
                                 id={"suffix" + item.id}
                                 variant="outlined"
                                 size="small"
-                                onKeyDown={(e) =>this.onEnterMovement("Suffix",item,"suffix" + item.id,"Increment" + item.id,e)}
-                                onChange={(e)=>this.updateNumbering("Suffix",item,e,i)}
+                                onKeyDown={(e) => this.onEnterMovement("Suffix", item, "suffix" + item.id, "Increment" + item.id, e)}
+                                onChange={(e) => this.updateNumbering("Suffix", item, e, i)}
                                 style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
@@ -618,8 +646,8 @@ class addnumbering extends React.Component {
                                 id={"Increment" + item.id}
                                 variant="outlined"
                                 size="small"
-                                onKeyDown={(e) =>this.onEnterMovement("Increment",item,"Increment" + item.id,"newline",e)}
-                                onChange={(e)=>this.updateNumbering("Increment",item,e,i)}
+                                onKeyDown={(e) => this.onEnterMovement("Increment", item, "Increment" + item.id, "newline", e)}
+                                onChange={(e) => this.updateNumbering("Increment", item, e, i)}
                                 style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
