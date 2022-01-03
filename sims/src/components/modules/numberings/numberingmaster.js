@@ -28,18 +28,24 @@ import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../compo/backdrop";
-
+import MasterDataGrid from "../../compo/masterdatagrid";
 
 
 class numberingmaster extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      pagination: {
+        page: 0,
+        rowsPerPage: 10,
+      },
       urlparams: "",
       ProgressLoader: true,
       initialCss: "",
       numberings: [],
       editurl: null,
+      columns: APIURLS.numberingMasterColumn,
+      selectionModel:[1]
     };
   }
 
@@ -81,19 +87,20 @@ class numberingmaster extends React.Component {
       .then((response) => {
         let data = response.data;
 
+        let noSeriesDetailList=data.noSeriesDetailList;
+        for(let i=0;i<noSeriesDetailList.length;i++){
+          noSeriesDetailList[i].id=i+1;
+        }
+
         if (response.status === 200) {
           this.setState(
             {
-              numberings: data.noSeriesDetailList,
+              numberings:noSeriesDetailList,
               ProgressLoader: true,
             },
             () => {
               if (this.state.numberings.length > 0) {
-                this.InitialhandleRowClick(
-                  null,
-                  this.state.numberings[0],
-                  "row_0"
-                );
+                this.handleRowClick([1]);
               }
             }
           );
@@ -109,45 +116,35 @@ class numberingmaster extends React.Component {
       });
   }
 
-  InitialhandleRowClick(e, item, id) {
-    let editUrl =
+   handleRowClick = (e) => {
+    try{
+      let index = e[0];
+      let item = this.state.numberings[index - 1];
+      let editUrl =
       URLS.URLS.editNumbering +
       this.state.urlparams +
       "&noSeriesId=" +
       item.noSeriesId;
 
-    this.setState({ editurl: editUrl });
-    this.InitialremoveIsSelectedRowClasses();
-    document.getElementById(id).classList.add("selectedRow");
-  }
-
-  InitialremoveIsSelectedRowClasses() {
-    for (let i = 0; i < this.state.numberings.length; i++) {
-      document.getElementById("row_" + i).className = "";
-    }
-  }
+    this.setState({ editurl: editUrl,selectionModel: index });
+    }catch(err){}
+   
+   
+  
+  };
 
   render() {
-    const handleRowClick = (e, item, id) => {
-      let editUrl =
-        URLS.URLS.editNumbering +
-        this.state.urlparams +
-        "&noSeriesId=" +
-        item.noSeriesId;
-      this.setState({ editurl: editUrl });
-      removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-    };
-
-    const removeIsSelectedRowClasses = () => {
-      for (let i = 0; i < this.state.numberings.length; i++) {
-        document.getElementById("row_" + i).className = "";
-      }
-    };
+    
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
+    };
+
+    const handlePageChange = (event, newPage) => {
+      let pagination = this.state.pagination;
+      pagination.page = newPage;
+      this.setState({ pagination: pagination });
     };
 
     const breadcrumbHtml = (
@@ -202,66 +199,29 @@ class numberingmaster extends React.Component {
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={12} lg={12}>
+
+
                 {this.state.numberings.length > 0 ? (
                   <Fragment>
-                    <Table
-                      stickyHeader
-                      size="small"
-                      className=""
-                      aria-label="Country List table"
-                    >
-                      <TableHead className="table-header-background">
-                        <TableRow>
-                          <TableCell className="table-header-font">#</TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Code
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Description
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            Starting No
-                          </TableCell>
-                          <TableCell className="table-header-font" align="left">
-                            {" "}
-                            Ending No
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody className="tableBody">
-                        {this.state.numberings.length > 0
-                          ? this.state.numberings.map((item, i) => (
-                              <TableRow
-                                id={"row_" + i}
-                                className={this.state.initialCss}
-                                hover
-                                key={i}
-                                onClick={(event) =>
-                                  handleRowClick(event, item, "row_" + i)
-                                }
-                              >
-                                <TableCell align="left">
-                                 {i+1}
-                                </TableCell>
-                                <TableCell align="left">{item.code}</TableCell>
-                                <TableCell align="left">
-                                  {item.description}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {item.startNo}
-                                </TableCell>
-                                <TableCell align="left">
-                                  {item.lastNo}
-                                </TableCell>
-                              </TableRow>
-                            ))
-                          : null}
-                      </TableBody>
-                    </Table>
+
+                    <MasterDataGrid
+                      selectionModel={this.state.selectionModel}
+                      rows={this.state.numberings}
+                      columns={this.state.columns}
+                      pagination={this.state.pagination}
+                      onSelectionModelChange={(e) => this.handleRowClick(e)}
+                      onPageChange={handlePageChange}
+
+
+                    />
+
+
                   </Fragment>
                 ) : (
                   <Tableskeleton />
                 )}
+
+                 
               </Grid>
             </Grid>
           </Grid>

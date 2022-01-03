@@ -1322,6 +1322,36 @@ export const supplierMasterColumn=[
   }
 ];
  
+export const numberingMasterColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 10,
+    headerClassName: 'table-header-font'
+  }, {
+    field: 'code',
+    headerName: 'Code',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'description',
+    headerName: 'Description',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'startNo',
+    headerName: 'Starting No',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'lastNo',
+    headerName: 'Ending No',
+    width: 180,
+    headerClassName: 'table-header-font'
+  },
+
+  
+];
 
 
 const getItemTypeName = (value) => {
