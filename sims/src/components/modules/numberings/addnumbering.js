@@ -42,6 +42,7 @@ class addnumbering extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      NoSeriesMstData:[],
       urlparams: "",
       GeneralDetailsExpanded: true,
       NumberingsListExpanded: true,
@@ -94,6 +95,7 @@ class addnumbering extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+      this.getList(parseInt(branchId));
     this.setState(
       {
         urlparams: params,
@@ -101,6 +103,44 @@ class addnumbering extends React.Component {
       },
       () => this.getNumberingList(branchId, USERID)
     );
+  }
+
+  getList(branchId) {
+    this.setState({ ProgressLoader: false });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.GetAllNoSeriesByBranchId;
+
+    let data = {
+      ValidUser: ValidUser,
+      BranchId: parseInt(branchId),
+    };
+
+    axios
+      .post(Url, data, { headers })
+      .then((response) => {
+        let data = response.data;
+        if (response.status === 200) {
+          this.setState({NoSeriesMstData:data,ProgressLoader: true});
+        } else {
+          this.setState({
+            NoSeriesMstData: [],
+            ProgressLoader: true,
+            ErrorPrompt: true,
+          });
+        }
+      })
+      .catch((error) => {
+        this.setState({
+          NoSeriesMstData: [],
+          ProgressLoader: true,
+          ErrorPrompt: true,
+        });
+      });
   }
 
   getNumberingList(branchId, USERID) {
@@ -234,10 +274,23 @@ class addnumbering extends React.Component {
 
   };
 
-   openPage = (url) => {
+  openPage = (url) => {
     this.setState({ ProgressLoader: false });
     window.location = url;
   };
+
+
+  chkIfDuplicateExist=(value)=>{
+    let isPresent=false;
+    let NoSeriesMstData=this.state.NoSeriesMstData;
+    for(let i=0;i<NoSeriesMstData.length;i++){
+      if(NoSeriesMstData[i].Code.toUpperCase()===value.trim().toUpperCase()){
+        isPresent=true;
+        break;
+      }
+    }
+    return isPresent;
+  }
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -256,19 +309,31 @@ class addnumbering extends React.Component {
     const updateFormValue = (id, e) => {
       let noSeries = this.state.noSeries;
       if (id === "Code") {
-        if (e.target.value.length > 20) {
-          let v = this.state.Validations;
+        let v = this.state.Validations;
+        let isPresent=false;
+        isPresent=this.chkIfDuplicateExist(e.target.value);
+        if(isPresent===false){
+          if (e.target.value.length > 20) {           
+            v.Code = {
+              errorState: true,
+              errorMssg: "Only 20 characters allowed!",
+            };
+            this.setState({ Validations: v });
+          } else {
+            noSeries.Code = e.target.value;            
+            v.Code = { errorState: false, errorMssg: "" };
+            this.setState({ noSeries: noSeries, Validations: v });
+          }
+        }else{
+          noSeries.Code = e.target.value;   
           v.Code = {
             errorState: true,
-            errorMssg: "Only 20 characters allowed!",
+            errorMssg: "",
           };
-          this.setState({ Validations: v });
-        } else {
-          noSeries.Code = e.target.value;
-          let v = this.state.Validations;
-          v.Code = { errorState: false, errorMssg: "" };
           this.setState({ noSeries: noSeries, Validations: v });
         }
+         
+        
       }
       if (id === "Description") {
         if (e.target.value.length > 50) {
@@ -346,7 +411,7 @@ class addnumbering extends React.Component {
     };
 
     const handleCreate = (e) => {
-      
+
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -354,55 +419,62 @@ class addnumbering extends React.Component {
       let isProper = true;
       isProper = this.validateNumberLineEntry();
       if (isProper === true) {
-        this.setState({ ProgressLoader: false });
         this.setState({ ErrorMessageProps: "" });
         let noSeries = this.state.noSeries;
         let noSeriesDetailList = formatDate();
         let BranchId = this.state.branchId;
         let numberings = this.state.numberings;
-
-        let newList=[];
-        for(let i=0;i<noSeriesDetailList.length;i++){
-          let obj={
-            "NoSeriesId": 0,
-            "Lno": noSeriesDetailList[i].Lno,
-            "StartDate": noSeriesDetailList[i].StartDate,
-            "Prefix": noSeriesDetailList[i].Prefix,
-            "StartNo": noSeriesDetailList[i].StartNo,
-            "Suffix": noSeriesDetailList[i].Suffix,
-            "Increment": noSeriesDetailList[i].Increment
+        if (noSeries.Code !== "") {
+          this.setState({ ProgressLoader: false });
+          let newList = [];
+          for (let i = 0; i < noSeriesDetailList.length; i++) {
+            let obj = {
+              "NoSeriesId": 0,
+              "Lno": noSeriesDetailList[i].Lno,
+              "StartDate": noSeriesDetailList[i].StartDate,
+              "Prefix": noSeriesDetailList[i].Prefix,
+              "StartNo": noSeriesDetailList[i].StartNo,
+              "Suffix": noSeriesDetailList[i].Suffix,
+              "Increment": noSeriesDetailList[i].Increment
+            };
+            newList.push(obj);
+          }
+          const data = {
+            validUser: ValidUser,
+            noSeries: noSeries,
+            BranchId: parseInt(BranchId),
+            noSeriesDetailList: newList,
           };
-          newList.push(obj);
+          const headers = {
+            "Content-Type": "application/json",
+          };
+          let Url = APIURLS.APIURL.CreateNoSeries;
+          axios
+            .post(Url, data, { headers })
+            .then((response) => {
+              let data = response.data;
+
+              if (response.status === 200 || response.status === 201) {
+                this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                this.openPage(URLS.URLS.editNumbering +
+                  this.state.urlparams +
+                  "&noSeriesId=" +
+                  data.ID + "&type=edit");
+              } else {
+                this.setState({ ProgressLoader: true, ErrorPrompt: true });
+              }
+            })
+            .catch((error) => { });
+        } else {
+          let v = this.state.Validations;
+          v.Code = {
+            errorState: true,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v });
+          this.setState({ ErrorMessageProps: "Code is Mandatory", ErrorPrompt: true });
         }
 
-
-        const data = {
-          validUser: ValidUser,
-          noSeries: noSeries,
-          BranchId: parseInt(BranchId),
-          noSeriesDetailList: newList,
-        };
-        const headers = {
-          "Content-Type": "application/json",
-        };
-        let Url = APIURLS.APIURL.CreateNoSeries;
-
-        axios
-          .post(Url, data, { headers })
-          .then((response) => {
-            let data = response.data;
-
-            if (response.status === 200 || response.status === 201) {              
-              this.setState({ ProgressLoader: true, SuccessPrompt: true });
-              this.openPage(URLS.URLS.editNumbering +
-                this.state.urlparams +
-                "&noSeriesId=" +
-                data.ID + "&type=edit");
-            } else {
-              this.setState({ ProgressLoader: true, ErrorPrompt: true });
-            }
-          })
-          .catch((error) => { });
       } else {
         this.setState({ ErrorMessageProps: "Number Series List is Invalid", ErrorPrompt: true });
       }
