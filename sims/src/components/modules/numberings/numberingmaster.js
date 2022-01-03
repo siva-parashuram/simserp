@@ -1,17 +1,10 @@
 import React, { Fragment } from "react";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+ 
 import Button from "@material-ui/core/Button";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+ 
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -20,11 +13,8 @@ import "../../user/dasboard.css";
 import * as CF from "../../../services/functions/customfunctions";
 
 import ButtonGroup from "@mui/material/ButtonGroup";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@mui/icons-material/Edit";
 
-import Loader from "../../compo/loader";
-
+import ErrorSnackBar from "../../compo/errorSnackbar";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
@@ -42,6 +32,8 @@ class numberingmaster extends React.Component {
       },
       urlparams: "",
       ProgressLoader: true,
+      ErrorMessageProps:"",
+      ErrorPrompt:false,
       initialCss: "",
       numberings: [],
       editurl: null,
@@ -107,6 +99,11 @@ class numberingmaster extends React.Component {
             }
           );
         } else {
+          this.setState({
+            numberings: [],
+            ProgressLoader: true,
+            ErrorPrompt: true,
+          });
         }
       })
       .catch((error) => {
@@ -136,6 +133,14 @@ class numberingmaster extends React.Component {
   };
 
   render() {
+
+    
+    const closeErrorPrompt = (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      this.setState({ ErrorPrompt: false });
+    };
     
 
     const openPage = (url) => {
@@ -192,6 +197,13 @@ class numberingmaster extends React.Component {
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
+
+        <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
