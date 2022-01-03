@@ -399,7 +399,7 @@ class editnumbering extends React.Component {
           linkTitle="Dashboard"
           masterHref={URLS.URLS.numberingMaster + this.state.urlparams}
           masterLinkTitle="Nos. Series"
-          typoTitle="Edit Nos. Series"
+          typoTitle="Edit"
           level={2}
         />
       </Fragment>

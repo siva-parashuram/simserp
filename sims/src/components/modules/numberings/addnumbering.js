@@ -44,12 +44,13 @@ class addnumbering extends React.Component {
     this.state = {
       urlparams: "",
       GeneralDetailsExpanded: true,
-      NumberingsListExpanded: false,
+      NumberingsListExpanded: true,
       ProgressLoader: true,
       initialCss: "",
       branchId: 0,
       numberings: [],
-      startdate: "2021-10-06",
+      startdate: null,
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       noSeries: {
@@ -103,7 +104,7 @@ class addnumbering extends React.Component {
   }
 
   getNumberingList(branchId, USERID) {
-    let today = moment().format("MM/DD/YYYY");
+    let today = null;//moment().format("MM/DD/YYYY");
     let N = [];
     let numberings = this.state.noSeriesDetailList;
     numberings.StartDate = today;
@@ -115,6 +116,125 @@ class addnumbering extends React.Component {
 
     this.setState({ numberings: N, noSeries: noSeries });
   }
+
+  validateNumberLineEntry=()=>{
+    let numberings = this.state.numberings;
+    let isProper=true;
+    for(let i=0;i<numberings.length;i++){
+      if(
+        numberings[i].StartDate===null ||
+        parseInt(numberings[i].StartNo)===0 || numberings[i].StartNo==="" ||
+        parseInt(numberings[i].Increment)===0 || numberings[i].Increment===""
+        ){
+          isProper=false;
+          break;
+        }else{
+          isProper=true;
+        }
+    }
+    return isProper;
+  }
+
+  updateNumbering=(key,item,e,index)=>{    
+    
+    switch (key) {
+      case "StartDate":
+            this.updateNumberingList(key,e.target.value,index);
+        break;
+        case "Prefix":
+          this.updateNumberingList(key,e.target.value,index);
+        break;
+        case "StartNo":
+          this.updateNumberingList(key,e.target.value,index);
+        break;
+        case "Suffix":
+          this.updateNumberingList(key,e.target.value,index);
+        break;
+        case "Increment":
+          this.updateNumberingList(key,e.target.value,index);
+        break;
+      default:
+        break;
+    }
+
+  }
+
+  updateNumberingList=(key,value,index)=>{
+    let numberings = this.state.numberings; 
+    for(let i=0;i<numberings.length;i++){
+        if(i===index){
+          numberings[i][key]=value;
+        }
+    }
+    this.setState({numberings:numberings});
+  }
+
+  onEnterMovement = (param, item, id, nextid, e) => {
+    let mandatory = ["StartDate", "startno", "Increment"];
+    if (e.keyCode === 9) {
+      console.log("--------------------STOP HERE----------------------");
+      e.preventDefault();
+    }
+    try {
+      if (e.key === "Enter" || e.keyCode === 18) {
+        let value = e.target.value; //document.getElementById(id).value;
+        if (mandatory.includes(param) === true) {
+          if (value === "" || value === null || value === 0 || value < 0 || value.toString().trim() === "") {
+            this.setState({ ErrorMessageProps: "Input Cannot be Blank", ErrorPrompt: true });
+          }
+          else {
+            if (nextid === "newline") {
+              this.creatNewLine();
+            } else {
+              document.getElementById(nextid).focus();
+            }
+          }
+        } else {
+          this.setState({ ErrorMessageProps: "" });
+          if (nextid === "newline") {
+            this.creatNewLine();
+          } else {
+            document.getElementById(nextid).focus();
+          }
+        }
+      }
+    } catch (err) {
+      console.log("onEnterMovement > err > ", err);
+    }
+
+
+  };
+
+   creatNewLine = () => {
+      
+    let N = this.state.numberings;
+    
+    let isProper=true;
+    isProper=this.validateNumberLineEntry();
+    if(isProper===true){
+      this.setState({ErrorMessageProps:""});
+      let newID = N.length + 1;
+      let numberings = {
+        id: newID,
+        NoSeriesId: 0,
+        Lno: newID,
+        StartDate: null,
+        Prefix: null,
+        StartNo: 0,
+        Suffix: null,
+        Increment: 0,
+        LastNo: 0,
+        LastNoDate: null,
+      };
+      N.push(numberings);
+      this.setState({ numberings: N }, () => {
+        document.getElementById("startdate" + newID).focus();
+      });
+    }else{
+       this.setState({ErrorMessageProps:"Start Date,Start No & Increment is required", ErrorPrompt: true});
+    }
+
+  };
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -164,76 +284,38 @@ class addnumbering extends React.Component {
       }
     };
 
-    const updateStartDate = (date, item) => {
-      let numberings = this.state.numberings;
-      for (let i = 0; i < numberings.length; i++) {
-        if (numberings[i].id === item.id) {
-          numberings[i].StartDate = date;
-        }
-      }
-      this.setState({ numberings: numberings });
-    };
-
-    const updateListValue = (param, item, id, nextid, e) => {
-      if (e.key === "Enter") {
-        let value = document.getElementById(id).value;
-
-        if (value === "" || value === null) {
-          // alert("Cannot be blank!");
-        } else {
-          updateNumberingListState(param, item, id, e);
-
-          if (nextid === "newline") {
-            // alert("Creating next Line.");
-            creatNewLine();
-          } else {
-            document.getElementById(nextid).focus();
-          }
-        }
-      }
-    };
-
-    const updateNumberingListState = (param, item, id, e) => {
-      let numberings = this.state.numberings;
-      
-      
-      for (let i = 0; i < numberings.length; i++) {
-        console.log("numberings[i].id ----> ",numberings[i].id);
-      console.log("item.id ----> ",item.id);
-        if (numberings[i].id === item.id) {
-          if (param === "Increment") {
-            numberings[i][param] = parseInt(e.target.value);
-          } else {
-            numberings[i][param] = e.target.value;
-          }
-        }
-      }
-      this.setState({ numberings: numberings },()=>{
-        console.log("numberings ----> ",numberings);
-      });
-    };
+    
 
     const creatNewLine = () => {
-      let N = this.state.numberings;
-      let newID = N.length + 1;
-      let numberings = {
-        id: newID,
-        NoSeriesId: 0,
-        Lno: newID,
-        StartDate: null,
-        Prefix: null,
-        StartNo: 0,
-        Suffix: null,
-        Increment: 0,
-        LastNo: 0,
-        LastNoDate: null,
-      };
       
+      let N = this.state.numberings;
+      
+      let isProper=true;
+      isProper=this.validateNumberLineEntry();
+      console.log("II > isProper > ",isProper);
+      if(isProper===true){
+        this.setState({ErrorMessageProps:""});
+        let newID = N.length + 1;
+        let numberings = {
+          id: newID,
+          NoSeriesId: 0,
+          Lno: newID,
+          StartDate: null,
+          Prefix: null,
+          StartNo: 0,
+          Suffix: null,
+          Increment: 0,
+          LastNo: 0,
+          LastNoDate: null,
+        };
+        N.push(numberings);
+        this.setState({ numberings: N }, () => {
+          document.getElementById("startdate" + newID).focus();
+        });
+      }else{
+         this.setState({ErrorMessageProps:"Start Date,Start No & Increment is required", ErrorPrompt: true});
+      }
 
-      N.push(numberings);
-      this.setState({ numberings: N }, () => {
-        document.getElementById("startdate" + newID).focus();
-      });
     };
 
     const deleteEntry = (e, item) => {
@@ -321,7 +403,7 @@ class addnumbering extends React.Component {
           linkTitle="Dashboard"
           masterHref={URLS.URLS.numberingMaster + this.state.urlparams}
           masterLinkTitle="Nos. Series"
-          typoTitle="Add Nos. Series"
+          typoTitle="Add"
           level={2}
         />
       </Fragment>
@@ -349,6 +431,7 @@ class addnumbering extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />
@@ -479,19 +562,9 @@ class addnumbering extends React.Component {
                                 id={"startdate" + item.id}
                                 variant="outlined"
                                 size="small"
-                                defaultValue={item.StartDate}
-                                onChange={(e) =>
-                                  updateStartDate(e.target.value, item)
-                                }
-                                onKeyDown={(e) =>
-                                  updateListValue(
-                                    "StartDate",
-                                    item,
-                                    "startdate" + item.id,
-                                    "prefix" + item.id,
-                                    e
-                                  )
-                                }
+                                defaultValue={item.StartDate}                                 
+                                onKeyDown={(e) =>this.onEnterMovement("StartDate",item,"startdate" + item.id,"prefix" + item.id,e)}
+                                onChange={(e)=>this.updateNumbering("StartDate",item,e,i)}
                                 style={{ width: 150 }}
                                 InputProps={{
                                   className: "textFieldCss",
@@ -503,15 +576,8 @@ class addnumbering extends React.Component {
                                 id={"prefix" + item.id}
                                 variant="outlined"
                                 size="small"
-                                onKeyDown={(e) =>
-                                  updateListValue(
-                                    "Prefix",
-                                    item,
-                                    "prefix" + item.id,
-                                    "startno" + item.id,
-                                    e
-                                  )
-                                }
+                                onKeyDown={(e) =>this.onEnterMovement("Prefix",item,"prefix" + item.id,"startno" + item.id,e)}
+                                onChange={(e)=>this.updateNumbering("Prefix",item,e,i)}
                                 style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
@@ -524,15 +590,8 @@ class addnumbering extends React.Component {
                                 id={"startno" + item.id}
                                 variant="outlined"
                                 size="small"
-                                onKeyDown={(e) =>
-                                  updateListValue(
-                                    "startno",
-                                    item,
-                                    "startno" + item.id,
-                                    "suffix" + item.id,
-                                    e
-                                  )
-                                }
+                                onKeyDown={(e) =>this.onEnterMovement("startno",item,"startno" + item.id,"suffix" + item.id,e)}
+                                onChange={(e)=>this.updateNumbering("StartNo",item,e,i)}
                                 style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
@@ -544,15 +603,8 @@ class addnumbering extends React.Component {
                                 id={"suffix" + item.id}
                                 variant="outlined"
                                 size="small"
-                                onKeyDown={(e) =>
-                                  updateListValue(
-                                    "Suffix",
-                                    item,
-                                    "suffix" + item.id,
-                                    "Increment" + item.id,
-                                    e
-                                  )
-                                }
+                                onKeyDown={(e) =>this.onEnterMovement("Suffix",item,"suffix" + item.id,"Increment" + item.id,e)}
+                                onChange={(e)=>this.updateNumbering("Suffix",item,e,i)}
                                 style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
@@ -566,15 +618,8 @@ class addnumbering extends React.Component {
                                 id={"Increment" + item.id}
                                 variant="outlined"
                                 size="small"
-                                onKeyDown={(e) =>
-                                  updateListValue(
-                                    "Increment",
-                                    item,
-                                    "Increment" + item.id,
-                                    "newline",
-                                    e
-                                  )
-                                }
+                                onKeyDown={(e) =>this.onEnterMovement("Increment",item,"Increment" + item.id,"newline",e)}
+                                onChange={(e)=>this.updateNumbering("Increment",item,e,i)}
                                 style={{ width: 120 }}
                                 InputProps={{
                                   className: "textFieldCss",
