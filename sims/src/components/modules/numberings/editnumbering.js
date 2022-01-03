@@ -263,19 +263,32 @@ class editnumbering extends React.Component {
     const updateFormValue = (id, e) => {
       let noSeries = this.state.noSeries;
       if (id === "Code") {
-        if (e.target.value.length > 20) {
-          let v = this.state.Validations;
+        let v = this.state.Validations;
+        let isPresent=false;
+          isPresent=this.chkIfDuplicateExist(e.target.value);
+          if(isPresent===false){
+            if (e.target.value.length > 20) {
+              
+              v.Code = {
+                errorState: true,
+                errorMssg: "Only 20 characters allowed!",
+              };
+              this.setState({ Validations: v });
+            } else {
+              noSeries.Code = e.target.value;               
+              v.Code = { errorState: false, errorMssg: "" };
+              this.setState({ noSeries: noSeries, Validations: v });
+            }
+          }else{
+            noSeries.Code = e.target.value;   
           v.Code = {
             errorState: true,
-            errorMssg: "Only 20 characters allowed!",
+            errorMssg: "",
           };
-          this.setState({ Validations: v });
-        } else {
-          noSeries.Code = e.target.value;
-          let v = this.state.Validations;
-          v.Code = { errorState: false, errorMssg: "" };
           this.setState({ noSeries: noSeries, Validations: v });
-        }
+          }
+
+       
       }
       if (id === "Description") {
         if (e.target.value.length > 50) {
