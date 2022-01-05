@@ -503,15 +503,15 @@ class editbranch extends React.Component {
       .post(Url, data, { headers })
       .then((response) => {
         let data = response.data;
-
+       
         if (response.status === 200) {
           let newData = [];
-          let responseData = data.noSeriesDetailList;
+          let responseData = data; //.noSeriesDetailList;
           for (let i = 0; i < responseData.length; i++) {
             let d = {
-              id: responseData[i].noSeriesId,
-              value: responseData[i].noSeriesId,
-              name: responseData[i].code,
+              id: responseData[i].NoSeriesID,
+              value: responseData[i].NoSeriesID,
+              name: responseData[i].Code,
             };
             newData.push(d);
           }
@@ -520,6 +520,7 @@ class editbranch extends React.Component {
             ProgressLoader: true,
           });
         } else {
+         
           this.setState({
             numberSeries: [],
             ProgressLoader: true,
@@ -528,6 +529,7 @@ class editbranch extends React.Component {
         }
       })
       .catch((error) => {
+        console.log("getNumberSeries > error > ",error);
         this.setState({
           numberSeries: [],
           ProgressLoader: true,
@@ -626,25 +628,25 @@ class editbranch extends React.Component {
     axios
     .post(Url, fd, { headers })
     .then((response) => {   
-      console.log("response > ",response);    
+     // console.log("response > ",response);    
       let data=response.data;
       const blob = new Blob([response.data], {type: 'image/PNG'});
-      console.log("blob > ",blob); 
+      //console.log("blob > ",blob); 
       const url = URL.createObjectURL(blob);
-      console.log("blob > url > ",url); 
+      //console.log("blob > url > ",url); 
 
      
       let preUrl="data:image/png;base64"+url;
-      console.log("blob > preUrl > ",preUrl); 
+     // console.log("blob > preUrl > ",preUrl); 
       //document.querySelector("#branchLogoImage").src = preUrl;
       
       let base64ImageString = Buffer.from(response.data, 'binary').toString('base64')
-      console.log("base64ImageString > ",base64ImageString); 
+      //console.log("base64ImageString > ",base64ImageString); 
 
       let srcValue = "data:image/png;base64,"+base64ImageString;
 
       const img = new Buffer.from(response.data).toString("ascii");
-      console.log("img > ",img); 
+      //console.log("img > ",img); 
 
     //  document.querySelector("#branchLogoImage").src = srcValue;
 
