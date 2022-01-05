@@ -1,25 +1,37 @@
 import "./dasboard.css";
-import { COOKIE, getCookie, deleteCookie } from "../../services/cookie";
-import * as URLS from "../../routes/constants";
-import * as CF from "../../services/functions/customfunctions"; 
+import { COOKIE, getCookie } from "../../services/cookie";
+import * as CF from "../../services/functions/customfunctions";
 import React, { Fragment, useEffect } from "react";
+import { styled } from '@mui/material/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import Logincheck from "./logincheck";
-import PowerSettingsNewSharpIcon from "@mui/icons-material/PowerSettingsNewSharp";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@material-ui/core/Grid";
+
 import Avatar from "@mui/material/Avatar";
 import Badge from '@mui/material/Badge';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import Popover from '@mui/material/Popover';
 
-import Chatapp from "../modules/chat/chatapp";
+import PowerSettingsNewSharpIcon from "@mui/icons-material/PowerSettingsNewSharp";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import FolderSpecialIcon from '@mui/icons-material/FolderSpecial';
+import AddToDriveIcon from '@mui/icons-material/AddToDrive';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-import { styled } from '@mui/material/styles';
+import Slide from '@mui/material/Slide';
+
+import Logincheck from "./logincheck";
+import Chatapp from "../modules/chat/chatapp";
+import Fms from "../modules/fms/fms";
+
+
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
@@ -50,8 +62,11 @@ const StyledMessageBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
- 
-export default function ButtonAppBar({navBranchNameTitle}) {
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export default function ButtonAppBar({ navBranchNameTitle }) {
   const classes = useStyles();
   const [name, setname] = React.useState("");
   const [branchName, setbranchName] = React.useState("");
@@ -66,6 +81,7 @@ export default function ButtonAppBar({navBranchNameTitle}) {
   const [notificationCount, setnotificationCount] = React.useState(1);
   const [messageNotificationCount, setmessageNotificationCount] = React.useState(1);
   const [MessageanchorEl, setMessageAnchorEl] = React.useState(null);
+  const [FMSDialog, setFMSDialog] = React.useState(false);
 
   const openMessage = Boolean(MessageanchorEl);
   const id = openMessage ? 'simple-popover' : undefined;
@@ -88,7 +104,7 @@ export default function ButtonAppBar({navBranchNameTitle}) {
       let branchName = url.searchParams.get("branchName");
       let compName = url.searchParams.get("compName");
       let branchBtnId = url.searchParams.get("branchBtnId");
-      let name=url.searchParams.get("name");
+      let name = url.searchParams.get("name");
 
       if (
         token === "null" ||
@@ -137,7 +153,7 @@ export default function ButtonAppBar({navBranchNameTitle}) {
     window.close();
   };
 
-  const updateBRANCH_OPEN = (branchId) => {    
+  const updateBRANCH_OPEN = (branchId) => {
     let BRANCH_OPEN = localStorage.getItem('BRANCH_OPEN');
     if (BRANCH_OPEN) {
       var BRANCH_OPENArray = BRANCH_OPEN.split(",").map(Number);
@@ -153,7 +169,7 @@ export default function ButtonAppBar({navBranchNameTitle}) {
     }
   }
 
-   
+
 
   return (
     <Fragment>
@@ -165,14 +181,16 @@ export default function ButtonAppBar({navBranchNameTitle}) {
               {/* {branchName} - {name} */} {navBranchNameTitle}
             </Typography>
 
-            <IconButton
+            <IconButton onClick={(e)=>setFMSDialog(true)}>
+              <AddToDriveIcon style={{ color: "white" }}/>
+            </IconButton>
 
-            >
+            <IconButton>
               <StyledMessageBadge
                 badgeContent={messageNotificationCount}
                 aria-describedby={id} onClick={handleMessageClick}
               >
-                <ChatBubbleOutlineIcon />
+                <ChatBubbleOutlineIcon style={{ color: "white" }}/>
               </StyledMessageBadge>
 
             </IconButton>
@@ -202,13 +220,37 @@ export default function ButtonAppBar({navBranchNameTitle}) {
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
-            
+
           }}
         >
           <Chatapp />
         </Popover>
 
+        <Dialog
+          fullWidth={true}
+          maxWidth="xl"
+          TransitionComponent={Transition}
+          className="dialog-prompt-activity"
+          open={FMSDialog}
+          aria-labelledby="fms-dialog-title"
+          aria-describedby="fms-dialog-description"
+        >
+          <DialogTitle id="fms-dialog-title" className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}>
+                <IconButton
+                  aria-label="ArrowBackIcon"
+                >
+                  <ArrowBackIcon onClick={(e) => setFMSDialog(false)} />
+                </IconButton>
+              </Grid>
+            </Grid>
 
+          </DialogTitle>
+          <DialogContent className="dialog-area">            
+            <Fms/>
+          </DialogContent>
+        </Dialog>
 
 
       </div>
