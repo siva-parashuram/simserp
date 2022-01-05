@@ -503,9 +503,8 @@ export const ItemPostingGroup = [
 
 
 export const TrasactionType = {
-  PO: "",
-  SO: "",
-
+  PO: "PO",
+  SO: "SO",
   default: ""
 };
 

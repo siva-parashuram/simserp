@@ -1707,7 +1707,7 @@ class editbranch extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={12} md={9} lg={9}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={1}>
               <Grid xs={12} sm={12} md={12} lg={12}>
                 <Accordion
@@ -2699,7 +2699,7 @@ class editbranch extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid xs={12} sm={12} md={3} lg={3}></Grid>
+          <Grid xs={12} sm={12} md={4} lg={4}></Grid>
         </Grid>
       </Fragment>
     );

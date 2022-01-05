@@ -35,17 +35,24 @@ import CardContent from "@material-ui/core/CardContent";
 import { Divider } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import TextField from "@mui/material/TextField";
+
+import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableBody from "@material-ui/core/TableBody";
 
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import BackdropLoader from "../../compo/backdrop";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import Breadcrumb from "../../compo/breadcrumb";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import SuccessSnackBar from "../../compo/successSnackbar";
+import Dualtabcomponent from "../../compo/dualtabcomponent";
+import DialogCustom from "../../compo/dialogcomponent";
 
 import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
@@ -77,6 +84,13 @@ class poactivity extends React.Component {
     super(props);
     this.state = {
       RADialogStatus: false,
+      CustomDialog: {
+        open: false
+      },
+      DeleteAttachment: {
+        e: null,
+        item: null
+      },
       Dialog: {
         DialogTitle: "",
         DialogStatus: false,
@@ -255,7 +269,8 @@ class poactivity extends React.Component {
         Details: "",
         UserID: "",
         POID: ""
-      }
+      },
+      filelist: [],
 
     };
   }
@@ -340,30 +355,32 @@ class poactivity extends React.Component {
     let POID = type === "edit" ? url.searchParams.get("editPOID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
-    let urlparams =
-      "?branchId=" +
-      branchId +
-      "&compName=" +
-      compName +
-      "&branchName=" +
-      branchName;
+    let urlparams =params;
+      // "?branchId=" +
+      // branchId +
+      // "&compName=" +
+      // compName +
+      // "&branchName=" +
+      // branchName;
 
-
+      let compID = url.searchParams.get("compID");
 
     let PO = this.state.PO;
     PO.POID = CF.toInt(POID);
     if (type === "edit") {
       PO.POID = CF.toInt(POID);
       this.setState({
+        compID:parseInt(compID),
         branchName: branchName,
         PO: PO,
         POID: CF.toInt(POID),
-        urlparams: params,
+        urlparams: urlparams,
         BranchID: CF.toInt(branchId),
         type: type,
         typoTitle: typoTitle,
         // ProgressLoader: false,
       }, () => {
+        this.getAttachedFileList();
         this.getSupplierList(CF.toInt(branchId), PO.POID);
       });
     }
@@ -2078,7 +2095,158 @@ class poactivity extends React.Component {
 
   }
 
+    //----------------------FILE UPLOAD-----------------------------
 
+    getAttachedFileList = () => {
+
+      const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
+      const headers = {
+          "Content-Type": "application/json",
+      };
+      const formData = new FormData();
+      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+      formData.append('Token', getCookie(COOKIE.TOKEN));
+      formData.append("CompanyId", parseInt(this.state.compID));
+      formData.append("BranchID", parseInt(this.state.BranchID));
+      formData.append("Transaction", APIURLS.TrasactionType.PO);
+      formData.append("TransactionNo", parseInt(this.state.PO.POID));
+      formData.append("FileData", "");
+      axios
+          .post(FTPGetAttachmentsUrl, formData, { headers })
+          .then((response) => {
+              this.setState({
+                  filelist: response.data
+              });
+
+          })
+          .catch((error) => {
+              console.log("error > ", error);
+          });
+
+  }
+
+  processUpload = (e) => {
+      this.setState({ ShowLoader: true });
+      let file = e.target.files[0];
+      const formData = new FormData();
+      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+      formData.append('Token', getCookie(COOKIE.TOKEN));
+      formData.append('CompanyId', parseInt(this.state.compID));
+      formData.append('BranchID', parseInt(this.state.BranchID));
+      formData.append("Transaction", APIURLS.TrasactionType.PO);
+      formData.append("TransactionNo", parseInt(this.state.PO.POID));
+      formData.append('FileData', file);
+
+      const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+      const headers = {
+          "Content-Type": "application/json",
+      };
+      axios
+          .post(FTPUploadUrl, formData, { headers })
+          .then((response) => {
+              if (response.status === 200 || response.status === 201) {
+                  this.getAttachedFileList();
+              }
+              if (response.status === 403) {
+                  this.setState({ ErrorPrompt: true, ShowLoader: false });
+              }
+
+          })
+          .catch((error) => {
+              console.log("error > ", error);
+              this.setState({ ErrorPrompt: true, ShowLoader: false });
+
+          });
+
+  }
+
+  downloadThisFile = (e, item) => {
+       
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.FileDownload;    
+      const formData = new FormData();        
+      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+      formData.append('Token', getCookie(COOKIE.TOKEN));
+      formData.append('CompanyId', parseInt(this.state.compID));
+      formData.append('BranchID', parseInt(this.state.BranchID));
+      formData.append("Transaction", APIURLS.TrasactionType.PO);
+      formData.append("TransactionNo", parseInt(this.state.PO.POID));
+      formData.append('FileName', item.fileName);
+  
+      axios({
+        method: 'post',
+        url: Url,
+        responseType: 'blob',
+        data: formData
+      })
+        .then(function (response) {   
+            
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          let link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", item.fileName);
+          document.body.appendChild(link);
+          console.log("link > ", link);
+          link.click();
+        });
+    }
+
+    handleDelete = (e, item) => {
+      let Dialog = this.state.CustomDialog;
+      Dialog.open = true;
+      let DeleteAttachment = this.state.DeleteAttachment;
+      DeleteAttachment.e = e;
+      DeleteAttachment.item = item;
+      this.setState({
+        DeleteAttachment: DeleteAttachment,
+        CustomDialog: Dialog
+      });
+    }
+
+    processDelete = () => {
+      let e = this.state.DeleteAttachment.e;
+      let item = this.state.DeleteAttachment.item;
+  
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.DELETEFTPFILE;
+
+      const formData = new FormData();        
+      formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+      formData.append('Token', getCookie(COOKIE.TOKEN));
+      formData.append('CompanyId', parseInt(this.state.compID));
+      formData.append('BranchID', parseInt(this.state.BranchID));
+      formData.append("Transaction", APIURLS.TrasactionType.PO);
+      formData.append("TransactionNo", parseInt(this.state.PO.POID));
+      formData.append('FileName', item.fileName);
+  
+      axios
+        .post(Url, formData, { headers })
+        .then((response) => {
+          if (response.status === 200) {
+            this.getAttachedFileList();
+            this.closeDialog();
+          }
+        })
+        .catch((error) => {
+          console.log("error > ", error);
+          this.setState({ filelist: [] });
+        });
+    }
+  
+    closeDialog = () => {
+      let Dialog = this.state.CustomDialog;
+      Dialog.open = false;
+      this.setState({ CustomDialog: Dialog });
+    }
+
+  //--------------------------------------------------------------
 
   render() {
 
@@ -2362,15 +2530,17 @@ class poactivity extends React.Component {
             </Button>
           ) : null}
 
+          {this.state.type === "edit" ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.view.icon}
+              className="action-btns"
+              onClick={(e) => this.openDialog("View")}
+            >
+              {APIURLS.buttonTitle.view.name}
+            </Button>
+          ) : null}
 
-
-          <Button
-            startIcon={APIURLS.buttonTitle.view.icon}
-            className="action-btns"
-            onClick={(e) => this.openDialog("View")}
-          >
-            {APIURLS.buttonTitle.view.name}
-          </Button>
+          
 
           {this.state.type === "edit" ? (
             <ReactToPrint
@@ -2390,27 +2560,33 @@ class poactivity extends React.Component {
             />
           ) : null}
 
+          {this.state.type === "edit" ? (
+            <Fragment>
+              {this.state.PO.Status === 1 ? (
+                <Button
+                  startIcon={APIURLS.buttonTitle.release.icon}
+                  className="action-btns"
+                  onClick={(e) => this.setState({ RADialogStatus: true })}
+                >
+                  {APIURLS.buttonTitle.release.name}
+                </Button>
+              ) : null}
 
-          {this.state.PO.Status === 1 ? (
-            <Button
-              startIcon={APIURLS.buttonTitle.release.icon}
-              className="action-btns"
-              onClick={(e) => this.setState({ RADialogStatus: true })}
-            >
-              {APIURLS.buttonTitle.release.name}
-            </Button>
+              {this.state.PO.Status === 2 ? (
+                <Button
+                  startIcon={APIURLS.buttonTitle.reopen.icon}
+                  className="action-btns"
+                  // onClick={(e) => this.reopenPO(e)}
+                  onClick={(e) => this.setState({ RADialogStatus: true })}
+                >
+                  {APIURLS.buttonTitle.reopen.name}
+                </Button>
+              ) : null}
+            </Fragment>
           ) : null}
 
-          {this.state.PO.Status === 2 ? (
-            <Button
-              startIcon={APIURLS.buttonTitle.reopen.icon}
-              className="action-btns"
-              // onClick={(e) => this.reopenPO(e)}
-              onClick={(e) => this.setState({ RADialogStatus: true })}
-            >
-              {APIURLS.buttonTitle.reopen.name}
-            </Button>
-          ) : null}
+
+         
 
         </ButtonGroup>
       </Fragment>
@@ -2483,6 +2659,343 @@ class poactivity extends React.Component {
     );
 
 
+    const tab1Html = (
+      <Fragment>
+          <div className="sidenav-fixedheight-scroll">
+              <Grid container spacing={0}>
+                  <Grid
+                      xs={12}
+                      sm={12}
+                      md={11}
+                      lg={11}
+                      style={{ backgroundColor: "#fff" }}
+                  >
+
+                      <TableContainer>
+                          <Table
+                              stickyHeader
+                              size="small"
+                              className="accordion-table"
+                              aria-label="table"
+                          >
+                              <TableBody className="tableBody">
+                                  <TableRow>
+                                      <TableCell align="left" className="no-border-table">
+                                          PO No
+                                      </TableCell>
+                                      <TableCell align="right" className="no-border-table">
+                                          {this.state.PO.No}
+                                      </TableCell>
+                                  </TableRow>
+                                  <TableRow>
+                                      <TableCell align="left" className="no-border-table">
+                                          Name
+                                      </TableCell>
+                                      <TableCell align="right" className="no-border-table">
+                                          {this.state.PO.SupplierName}
+                                      </TableCell>
+                                  </TableRow>
+                                  <TableRow>
+                                      <TableCell align="left" className="no-border-table">
+                                          Contact Person
+                                      </TableCell>
+                                      <TableCell align="right" className="no-border-table">
+                                          {this.state.PO.ContactPerson}
+                                      </TableCell>
+                                  </TableRow>
+                                  <TableRow>
+                                      <TableCell align="left" className="no-border-table">
+                                          Email
+                                      </TableCell>
+                                      <TableCell align="right" className="no-border-table">
+                                          {this.state.PO.EmailID}
+                                      </TableCell>
+                                  </TableRow>
+                                  <TableRow>
+                                      <TableCell align="left" className="no-border-table">
+                                          Phone No.
+                                      </TableCell>
+                                      <TableCell align="right" className="no-border-table">
+                                          {this.state.PO.PhoneNo}
+                                      </TableCell>
+                                  </TableRow>
+                              </TableBody>
+                          </Table>
+                      </TableContainer>
+                  </Grid>
+              </Grid>
+              <Grid container spacing={0}>
+                  <Grid
+                      xs={12}
+                      sm={12}
+                      md={11}
+                      lg={11}
+                      style={{ backgroundColor: "#fff" }}
+                  >
+                      <div style={{ height: 20 }}></div>
+                  </Grid>
+              </Grid>
+              <Grid
+                  container
+                  spacing={0}
+                  style={{ marginLeft: 10, marginRight: 10 }}
+              >
+                  <Grid
+                      item
+                      xs={12}
+                      sm={12}
+                      md={11}
+                      lg={11}
+                      style={{ backgroundColor: "#fff" }}
+                  >
+                      <Grid container spacing={1}>
+                          <Grid item xs={12} sm={12} md={4} lg={4}>
+                              <div key="paymentPendingLink" to="#" className="card-link">
+                                  <Card className="dash-activity-card2" raised={false}>
+                                      <CardContent>
+                                          <Typography
+                                              color="textSecondary"
+                                              style={{ fontSize: 12, color: "#fff" }}
+                                              noWrap={false}
+                                              gutterBottom
+                                          >
+                                              Ongoing Purchases
+                                          </Typography>
+                                          <Typography>000</Typography>
+                                      </CardContent>
+                                  </Card>
+                              </div>
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={4} lg={4}>
+                              <div key="paymentPendingLink" to="#" className="card-link">
+                                  <Card className="dash-activity-card2" raised={false}>
+                                      <CardContent>
+                                          <Typography
+                                              color="textSecondary"
+                                              style={{ fontSize: 12, color: "#fff" }}
+                                              noWrap={false}
+                                              gutterBottom
+                                          >
+                                              Total Purchases &nbsp;&nbsp;&nbsp;
+                                          </Typography>
+                                          <Typography>000</Typography>
+                                      </CardContent>
+                                  </Card>
+                              </div>
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={4} lg={4}>
+                              <div key="paymentPendingLink" to="#" className="card-link">
+                                  <Card className="dash-activity-card2" raised={false}>
+                                      <CardContent>
+                                          <Typography
+                                              color="textSecondary"
+                                              style={{ fontSize: 12, color: "#fff" }}
+                                              noWrap={false}
+                                              gutterBottom
+                                          >
+                                              PO Raised &nbsp;&nbsp;&nbsp;
+                                          </Typography>
+                                          <Typography>000</Typography>
+                                      </CardContent>
+                                  </Card>
+                              </div>
+                          </Grid>
+                      </Grid>
+                  </Grid>
+              </Grid>
+              <Grid container spacing={0}>
+                  <Grid
+                      xs={12}
+                      sm={12}
+                      md={11}
+                      lg={11}
+                      style={{ backgroundColor: "#fff" }}
+                  >
+                      <div style={{ height: 40 }}></div>
+                  </Grid>
+              </Grid>
+              <Grid container spacing={0}>
+                  <Grid
+                      xs={12}
+                      sm={12}
+                      md={11}
+                      lg={11}
+                      style={{ backgroundColor: "#fff" }}
+                  >
+                      <div style={{ marginLeft: 30, marginRight: 20 }}>
+                          <Divider />
+                      </div>
+                  </Grid>
+              </Grid>
+              <Grid container spacing={0}>
+                  <Grid
+                      xs={12}
+                      sm={12}
+                      md={11}
+                      lg={11}
+                      style={{ backgroundColor: "#fff" }}
+                  >
+                      <div style={{ height: 20 }}></div>
+                  </Grid>
+              </Grid>
+
+              <Grid container spacing={0}>
+                  <Grid
+                      xs={12}
+                      sm={12}
+                      md={10}
+                      lg={10}
+                      style={{ backgroundColor: "#fff" }}
+                  >
+
+                      {/* <TableContainer>
+                <Table
+                  stickyHeader
+                  size="small"
+                  className="accordion-table"
+                  aria-label="table"
+                >
+                  <TableBody className="tableBody">
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        Balance
+                      </TableCell>
+                      <TableCell align="right" className="no-border-table">
+                        000
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        <span className="inside-table-cell-bold">Sales</span>
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        className="no-border-table"
+                      ></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        Balance
+                      </TableCell>
+                      <TableCell align="right" className="no-border-table">
+                        000
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        Balance
+                      </TableCell>
+                      <TableCell align="right" className="no-border-table">
+                        000
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        Balance
+                      </TableCell>
+                      <TableCell align="right" className="no-border-table">
+                        000
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        <span className="inside-table-cell-bold">Payments</span>
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        className="no-border-table"
+                      ></TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        Balance
+                      </TableCell>
+                      <TableCell align="right" className="no-border-table">
+                        000
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        Balance
+                      </TableCell>
+                      <TableCell align="right" className="no-border-table">
+                        000
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left" className="no-border-table">
+                        Balance
+                      </TableCell>
+                      <TableCell align="right" className="no-border-table">
+                        000
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer> */}
+                  </Grid>
+              </Grid>
+          </div>
+      </Fragment>
+  );
+
+  const tab2Html = (
+      <Fragment>
+          <div className="sidenav-fixedheight-scroll">
+              <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: "#fff" }} >
+                      <TableContainer>
+                          <Table stickyHeader size="small" className="" aria-label="Attachment Form table">
+                              <TableRow>
+                                  <TableCell className="no-border-table">
+                                      <Button
+                                          className="action-btns"
+                                          startIcon={<AttachFileIcon />}
+                                          onClick={(e) => { document.getElementById("uploadInput").click() }}
+                                      >
+                                          Attach File
+                                      </Button>
+                                      <input
+                                          className="file-upload-input"
+                                          id="uploadInput"
+                                          type="file"
+                                          onChange={(e) => this.processUpload(e)}
+                                      />
+
+                                  </TableCell>
+                              </TableRow>
+                          </Table>
+                      </TableContainer>
+                  </Grid>
+              </Grid>
+              <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: "#fff" }} >
+                      <Table size="small">
+                          <TableBody className="tableBody">
+                              {this.state.filelist.map((item, i) => (
+                                  <TableRow id={"fileRow_" + item.fileName}>
+                                      <TableCell align="left" className="no-border-table">
+                                          <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
+                                          <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
+                                      </TableCell>
+                                      <TableCell align="left" className="no-border-table">
+                                          <IconButton size="small" edge="end" aria-label="delete">
+                                              <DeleteIcon role={item} fontSize="small" style={{ color: '#f44336' }}
+                                                  onClick={(e) => this.handleDelete(e, item)}
+                                              />
+                                          </IconButton>
+                                      </TableCell>
+                                  </TableRow>
+                              ))}
+                          </TableBody>
+                      </Table>
+
+                  </Grid>
+              </Grid>
+
+          </div>
+      </Fragment>
+  );
 
     const isStepOptional = (step) => {
       return step === 1;
@@ -2497,7 +3010,13 @@ class poactivity extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
 
-
+        <DialogCustom
+          MessageHeader="Delete Attachment!"
+          MessageText="Do you want to delete this attachment?"
+          open={this.state.CustomDialog.open}
+          onClose={(e) => this.closeDialog()}
+          onOK={(e) => this.processDelete()}
+        />
 
         <ErrorSnackBar
           ErrorPrompt={this.state.ErrorPrompt}
@@ -3742,117 +4261,25 @@ class poactivity extends React.Component {
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={11} lg={11}>
-                    <div style={{ marginLeft: 10, backgroundColor: '#ffffff', height: 550, overflowY: 'scroll' }}>
-                      <div style={{ marginLeft: 10 }}>
-                        <Grid container spacing={0}>
-                          <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                          <Grid item xs={12} sm={12} md={10} lg={10}>
-                            <div style={{ marginTop: 10 }}>
-
-                              <Grid container spacing={0}>
-                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                  <h3>Supplier Statistics</h3>
-                                </Grid>
-                              </Grid>
-                              <Grid container spacing={0}>
-                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                  <SSDV
-                                    label="Supplier No."
-                                    value="S0001"
-                                  />
-                                  <SSDV
-                                    label="Balance"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Outstanding Orders"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Outstanding Invoices"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Total"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Invoice Prepaid Amount"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Payments"
-                                    value="00000.00"
-                                  />
-                                  <SSDV
-                                    label="Last payment Date"
-                                    value="30/11/2021"
-                                  />
-                                </Grid>
-                              </Grid>
-
-                              <Grid container spacing={0} style={{ marginTop: 20 }}>
-                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                  <Divider />
-                                </Grid>
-                              </Grid>
-
-                              <Grid container spacing={0}>
-                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                  <h3>Supplier History</h3>
-                                </Grid>
-                              </Grid>
-
-                              <Grid container spacing={1} >
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                  <div key="paymentPendingLink" to="#" className="card-link">
-                                    <Card className="dash-activity-card2" raised={false}>
-                                      <CardContent>
-                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                          Orders
-                                        </Typography>
-                                        <Typography >
-                                          870
-                                        </Typography>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                  <div key="paymentPendingLink" to="#" className="card-link">
-                                    <Card className="dash-activity-card2" raised={false}>
-                                      <CardContent>
-                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                          Quotes
-                                        </Typography>
-                                        <Typography>
-                                          5
-                                        </Typography>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                  <div key="paymentPendingLink" to="#" className="card-link">
-                                    <Card className="dash-activity-card2" raised={false}>
-                                      <CardContent>
-                                        <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                          Com. Pur..
-                                        </Typography>
-                                        <Typography>
-                                          1,766
-                                        </Typography>
-                                      </CardContent>
-                                    </Card>
-                                  </div>
-                                </Grid>
-                              </Grid>
-                            </div>
-                          </Grid>
-                          <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
-                        </Grid>
-                      </div>
-                    </div>
+                    <Grid container spacing={0}>
+                      <Grid
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        style={{ backgroundColor: "#fff" }}
+                      >
+                        {this.state.type === "add"?null:(
+                          <Dualtabcomponent
+                          tab1name="Details"
+                          tab2name="Attachments"
+                          tab1Html={tab1Html}
+                          tab2Html={tab2Html}
+                        />
+                        )}
+                        
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>

@@ -160,9 +160,9 @@ class supplierMaster extends React.Component {
               lg={11}
               style={{ backgroundColor: "#fff" }}
             >
-              <div style={{ marginTop: 5, marginLeft: 15 }}>
+              {/* <div style={{ marginTop: 5, marginLeft: 15 }}>
                 <h4 style={{ color: "#000000" }}>Customer Sales history</h4>
-              </div>
+              </div> */}
               <TableContainer>
                 <Table
                   stickyHeader
@@ -173,7 +173,7 @@ class supplierMaster extends React.Component {
                   <TableBody className="tableBody">
                     <TableRow>
                       <TableCell align="left" className="no-border-table">
-                        Customer No
+                        Supplier No
                       </TableCell>
                       <TableCell align="right" className="no-border-table">
                         123456
@@ -400,6 +400,8 @@ class supplierMaster extends React.Component {
         </div>
       </Fragment>
     );
+
+    
 
     const sideDataNavigation = (
       <Fragment>

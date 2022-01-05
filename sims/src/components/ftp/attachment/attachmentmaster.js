@@ -37,7 +37,7 @@ class attachmentmaster extends React.Component {
 
     componentDidMount() {
 
-    }
+    } 
 
     fetchFileLists = () => {
         console.log("fetchFileLists > this.props > ", this.props);

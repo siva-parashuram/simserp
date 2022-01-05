@@ -94,10 +94,10 @@ class branchquickdetails extends React.Component {
                                     <Card className="dash-activity-card2" raised={false}>
                                         <CardContent>
                                             <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                Total Customers
+                                                Total <br/>Customers
                                             </Typography>
                                             <Typography >
-                                                870
+                                                {this.props.branchItem.TotalCustomer}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -108,10 +108,10 @@ class branchquickdetails extends React.Component {
                                     <Card className="dash-activity-card2" raised={false}>
                                         <CardContent>
                                             <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                Total Sales &nbsp;&nbsp;&nbsp;
+                                                Total Sales <br/>&nbsp;&nbsp;&nbsp;
                                             </Typography>
                                             <Typography>
-                                                5,735
+                                            {this.props.branchItem.TotalSO}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -122,10 +122,10 @@ class branchquickdetails extends React.Component {
                                     <Card className="dash-activity-card2" raised={false}>
                                         <CardContent>
                                             <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                PO Raised &nbsp;&nbsp;&nbsp;
+                                                PO Raised <br/>&nbsp;&nbsp;&nbsp;
                                             </Typography>
                                             <Typography>
-                                                1,766
+                                            {this.props.branchItem.TotalPO}
                                             </Typography>
                                         </CardContent>
                                     </Card>
