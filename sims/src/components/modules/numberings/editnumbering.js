@@ -50,6 +50,7 @@ class editnumbering extends React.Component {
       urlparams: "",
       GeneralDetailsExpanded: true,
       NumberingsListExpanded: true,
+      ErrorMessageProps:"",
       ProgressLoader: true,
       initialCss: "",
       branchId: 0,
@@ -246,6 +247,24 @@ class editnumbering extends React.Component {
     return isPresent;
   }
 
+  validateNumberLineEntry = () => {
+    let numberings = this.state.numberings;
+    let isProper = true;
+    for (let i = 0; i < numberings.length; i++) {
+      if (
+        numberings[i].StartDate === null ||
+        parseInt(numberings[i].StartNo) === 0 || numberings[i].StartNo === "" ||
+        parseInt(numberings[i].Increment) === 0 || numberings[i].Increment === ""
+      ) {
+        isProper = false;
+        break;
+      } else {
+        isProper = true;
+      }
+    }
+    return isProper;
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -414,6 +433,16 @@ class editnumbering extends React.Component {
       let noSeries = this.state.noSeries;
       let noSeriesDetailList = formatData();
 
+      let isProper = true;
+      isProper = this.validateNumberLineEntry();
+
+      if (isProper === true) {
+
+      }else {
+        this.setState({ ErrorMessageProps: "Number Series List is Invalid", ErrorPrompt: true });
+      }
+
+
       
       let BranchId = this.state.branchId;
       const data = {
@@ -494,6 +523,7 @@ class editnumbering extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />
