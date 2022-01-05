@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Divider } from "@material-ui/core";
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+
 
 import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
@@ -22,6 +22,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import Breadcrumb from "../../compo/breadcrumb";
@@ -280,14 +281,6 @@ class poMaster extends React.Component {
         formData.append("TransactionNo", parseInt(this.state.item.POID));
         formData.append('FileName', item.fileName);
     
-    
-        // const fd = new FormData();
-        // fd.append('FileName', item.fileName);
-        // fd.append('companyId', this.state.branchItem.CompanyID);
-        // fd.append('BranchID', this.state.branchItem.BranchID);
-        // fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
-        // fd.append('Token', getCookie(COOKIE.TOKEN));
-    
         axios
           .post(Url, formData, { headers })
           .then((response) => {
@@ -535,30 +528,7 @@ class poMaster extends React.Component {
                             </div>
                         </Grid>
                     </Grid>
-                    <Grid container spacing={0}>
-                        <Grid
-                            xs={12}
-                            sm={12}
-                            md={11}
-                            lg={11}
-                            style={{ backgroundColor: "#fff" }}
-                        >
-                            <div style={{ height: 20 }}></div>
-                        </Grid>
-                    </Grid>
-
-                    <Grid container spacing={0}>
-                        <Grid
-                            xs={12}
-                            sm={12}
-                            md={10}
-                            lg={10}
-                            style={{ backgroundColor: "#fff" }}
-                        >
-
-                        
-                        </Grid>
-                    </Grid>
+                    
                 </div>
             </Fragment>
         );
