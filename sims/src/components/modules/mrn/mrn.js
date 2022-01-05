@@ -167,7 +167,7 @@ class mrn extends React.Component {
         formData.append("CompanyId", parseInt(this.state.compID));
         formData.append("BranchID", parseInt(this.state.BranchID));
         formData.append("Transaction", APIURLS.TrasactionType.MRN);
-        formData.append("TransactionNo", parseInt(this.state.item.POID));
+        formData.append("TransactionNo", parseInt(this.state.item.MRNID));
         formData.append("FileData", "");
         axios
             .post(FTPGetAttachmentsUrl, formData, { headers })
@@ -192,7 +192,7 @@ class mrn extends React.Component {
         formData.append('CompanyId', parseInt(this.state.compID));
         formData.append('BranchID', parseInt(this.state.BranchID));
         formData.append("Transaction", APIURLS.TrasactionType.MRN);
-        formData.append("TransactionNo", parseInt(this.state.item.POID));
+        formData.append("TransactionNo", parseInt(this.state.item.MRNID));
         formData.append('FileData', file);
 
         const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
@@ -233,7 +233,7 @@ class mrn extends React.Component {
         formData.append('CompanyId', parseInt(this.state.compID));
         formData.append('BranchID', parseInt(this.state.BranchID));
         formData.append("Transaction", APIURLS.TrasactionType.MRN);
-        formData.append("TransactionNo", parseInt(this.state.item.POID));
+        formData.append("TransactionNo", parseInt(this.state.item.MRNID));
         formData.append('FileName', item.fileName);
 
         axios({
@@ -281,7 +281,7 @@ class mrn extends React.Component {
         formData.append('CompanyId', parseInt(this.state.compID));
         formData.append('BranchID', parseInt(this.state.BranchID));
         formData.append("Transaction", APIURLS.TrasactionType.MRN);
-        formData.append("TransactionNo", parseInt(this.state.item.POID));
+        formData.append("TransactionNo", parseInt(this.state.item.MRNID));
         formData.append('FileName', item.fileName);
 
 

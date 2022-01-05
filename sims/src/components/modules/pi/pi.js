@@ -23,12 +23,17 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import Breadcrumb from "../../compo/breadcrumb";
 import Tableskeleton from "../../compo/tableskeleton";
 import BackdropLoader from "../../compo/backdrop";
 import MasterDataGrid from "../../compo/masterdatagrid";
+
 import Dualtabcomponent from '../../compo/dualtabcomponent';
+import DialogCustom from "../../compo/dialogcomponent";
 
 import PoMrnMaster from '../po/poMrnMaster';
 import Attachmentmaster from '../../ftp/attachment/attachmentmaster';
@@ -38,6 +43,13 @@ class pi extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            CustomDialog: {
+                open: false
+            },
+            DeleteAttachment: {
+                e: null,
+                item: null
+            },
             Dialog: {
                 DialogTitle: "",
                 DialogStatus: false,
@@ -51,12 +63,14 @@ class pi extends React.Component {
             editBtnDisable: true,
             initialCss: "",
             urlparams: "",
-            item: null,
-            editUrl: null,
+            item: {},
+            editUrl: "",
             BranchID: 0,
+            compID:0,
             columns: APIURLS.MRNMasterColumn,
             PODataList: [],
             selectionModel: [1],
+            filelist: [],
         }
     }
     componentDidMount() {
@@ -64,6 +78,7 @@ class pi extends React.Component {
         let params = CF.GET_URL_PARAMS();
         console.log("Menusection params > ", params);
         let branchId = url.searchParams.get("branchId");
+        let compID = url.searchParams.get("compID");
         let branchName = url.searchParams.get("branchName");
         let compName = url.searchParams.get("compName");
         let urlparams = params;
@@ -73,7 +88,7 @@ class pi extends React.Component {
         // compName +
         // "&branchName=" +
         // branchName;
-        this.setState({ urlparams: urlparams, BranchID: branchId, editBtnDisable: false }, () => {
+        this.setState({ urlparams: urlparams, BranchID: branchId, compID: parseInt(compID), editBtnDisable: false }, () => {
             this.getPIList();
         });
     }
@@ -90,7 +105,7 @@ class pi extends React.Component {
             ValidUser: ValidUser,
             PI: {
                 BranchID: CF.toInt(this.state.BranchID)
-               
+
             }
         };
         axios
@@ -135,6 +150,8 @@ class pi extends React.Component {
                 item: item,
                 editUrl: editUrl,
                 selectionModel: index,
+            },()=>{
+                this.getAttachedFileList();
             });
 
         } catch (e) {
@@ -142,7 +159,159 @@ class pi extends React.Component {
         }
     }
 
+    //----------------------FILE UPLOAD-----------------------------
 
+    getAttachedFileList = () => {
+
+        const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        const formData = new FormData();
+        formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+        formData.append('Token', getCookie(COOKIE.TOKEN));
+        formData.append("CompanyId", parseInt(this.state.compID));
+        formData.append("BranchID", parseInt(this.state.BranchID));
+        formData.append("Transaction", APIURLS.TrasactionType.PI);
+        formData.append("TransactionNo", parseInt(this.state.item.PIID));
+        formData.append("FileData", "");
+        axios
+            .post(FTPGetAttachmentsUrl, formData, { headers })
+            .then((response) => {
+                this.setState({
+                    filelist: response.data
+                });
+
+            })
+            .catch((error) => {
+                console.log("error > ", error);
+            });
+
+    }
+
+    processUpload = (e) => {
+        this.setState({ ShowLoader: true });
+        let file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+        formData.append('Token', getCookie(COOKIE.TOKEN));
+        formData.append('CompanyId', parseInt(this.state.compID));
+        formData.append('BranchID', parseInt(this.state.BranchID));
+        formData.append("Transaction", APIURLS.TrasactionType.PI);
+        formData.append("TransactionNo", parseInt(this.state.item.PIID));
+        formData.append('FileData', file);
+
+        const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        axios
+            .post(FTPUploadUrl, formData, { headers })
+            .then((response) => {
+                if (response.status === 200 || response.status === 201) {
+                    this.getAttachedFileList();
+                }
+                if (response.status === 403) {
+                    this.setState({ ErrorPrompt: true, ShowLoader: false });
+                }
+
+            })
+            .catch((error) => {
+                console.log("error > ", error);
+                this.setState({ ErrorPrompt: true, ShowLoader: false });
+
+            });
+
+    }
+
+    downloadThisFile = (e, item) => {
+
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.FileDownload;
+        const formData = new FormData();
+        formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+        formData.append('Token', getCookie(COOKIE.TOKEN));
+        formData.append('CompanyId', parseInt(this.state.compID));
+        formData.append('BranchID', parseInt(this.state.BranchID));
+        formData.append("Transaction", APIURLS.TrasactionType.PI);
+        formData.append("TransactionNo", parseInt(this.state.item.PIID));
+        formData.append('FileName', item.fileName);
+
+        axios({
+            method: 'post',
+            url: Url,
+            responseType: 'blob',
+            data: formData
+        })
+            .then(function (response) {
+
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                let link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", item.fileName);
+                document.body.appendChild(link);
+                console.log("link > ", link);
+                link.click();
+            });
+    }
+
+    handleDelete = (e, item) => {
+        let Dialog = this.state.CustomDialog;
+        Dialog.open = true;
+        let DeleteAttachment = this.state.DeleteAttachment;
+        DeleteAttachment.e = e;
+        DeleteAttachment.item = item;
+        this.setState({
+            DeleteAttachment: DeleteAttachment,
+            CustomDialog: Dialog
+        });
+    }
+
+    processDelete = () => {
+        let e = this.state.DeleteAttachment.e;
+        let item = this.state.DeleteAttachment.item;
+
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.DELETEFTPFILE;
+
+        const formData = new FormData();
+        formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+        formData.append('Token', getCookie(COOKIE.TOKEN));
+        formData.append('CompanyId', parseInt(this.state.compID));
+        formData.append('BranchID', parseInt(this.state.BranchID));
+        formData.append("Transaction", APIURLS.TrasactionType.PI);
+        formData.append("TransactionNo", parseInt(this.state.item.PIID));
+        formData.append('FileName', item.fileName);
+
+
+        axios
+            .post(Url, formData, { headers })
+            .then((response) => {
+                if (response.status === 200) {
+                    this.getAttachedFileList();
+                    this.closeDialog();
+                }
+            })
+            .catch((error) => {
+                console.log("error > ", error);
+                this.setState({ filelist: [] });
+            });
+    }
+
+    closeDialog = () => {
+        let Dialog = this.state.CustomDialog;
+        Dialog.open = false;
+        this.setState({ CustomDialog: Dialog });
+    }
+
+    //--------------------------------------------------------------
 
     render() {
         const openPage = (url) => {
@@ -203,12 +372,176 @@ class pi extends React.Component {
             </Fragment>
         );
 
+        const tab1Html = (
+            <Fragment>
+                <div className="sidenav-fixedheight-scroll">
+                    <Grid container spacing={0}>
+                        {console.log("MRN item > ", this.state.item)}
+                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
+                            <TableContainer>
+                                <Table stickyHeader size="small" className="accordion-table" aria-label="table">
+                                    <TableBody className="tableBody">
+                                        <TableRow>
+                                            <TableCell align="left" className="no-border-table">No.</TableCell>
+                                            <TableCell align="right" className="no-border-table"> {this.state.item.No}</TableCell>
+                                        </TableRow>
+                                       
+                                        <TableRow>
+                                            <TableCell align="left" className="no-border-table">PI Date.</TableCell>
+                                            <TableCell align="right" className="no-border-table">{this.state.item.PIDate}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell align="left" className="no-border-table">Supplier Name</TableCell>
+                                            <TableCell align="right" className="no-border-table">{this.state.item.SupplierName}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell align="left" className="no-border-table">Country</TableCell>
+                                            <TableCell align="right" className="no-border-table">{this.state.item.CountryName}</TableCell>
+                                        </TableRow>
+
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={0}>
+                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                            <div style={{ height: 20 }}></div>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={0} style={{ marginLeft: 15 }}>
+                        <Grid item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                            <Grid container spacing={1} >
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                    <div key="paymentPendingLink" to="#" className="card-link">
+                                        <Card className="dash-activity-card2" raised={false}>
+                                            <CardContent>
+                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                    FC Value
+                                                </Typography>
+                                                <Typography >
+                                                    {this.state.item.FCValue ? this.state.item.FCValue.toFixed(2) : null}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                    <div key="paymentPendingLink" to="#" className="card-link">
+                                        <Card className="dash-activity-card2" raised={false}>
+                                            <CardContent>
+                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                    Base Value
+                                                </Typography>
+                                                <Typography>
+                                                    {this.state.item.BaseValue ? this.state.item.BaseValue.toFixed(2) : null}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
+                                    <div key="paymentPendingLink" to="#" className="card-link">
+                                        <Card className="dash-activity-card2" raised={false}>
+                                            <CardContent>
+                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                                                    Exch Rate
+                                                </Typography>
+                                                <Typography>
+                                                    {this.state.item.ExchRate ? this.state.item.ExchRate.toFixed(2) : null}
+                                                </Typography>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={0}>
+                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+                            <div style={{ height: 20 }}></div>
+                        </Grid>
+                    </Grid>
+                </div>
+            </Fragment>
+        );
+
+        const tab2Html = (
+            <Fragment>
+                <div className="sidenav-fixedheight-scroll">
+                    <Grid container spacing={0}>
+                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: "#fff" }} >
+                            <TableContainer>
+                                <Table stickyHeader size="small" className="" aria-label="Attachment Form table">
+                                    <TableRow>
+                                        <TableCell className="no-border-table">
+                                            <Button
+                                                disabled={this.state.item.Status === 0 ? false : true}
+                                                className="action-btns"
+                                                startIcon={<AttachFileIcon />}
+                                                onClick={(e) => { document.getElementById("uploadInput").click() }}
+                                            >
+                                                Attach File
+                                            </Button>
+                                            <input
+                                                className="file-upload-input"
+                                                id="uploadInput"
+                                                type="file"
+                                                onChange={(e) => this.processUpload(e)}
+                                            />
+
+                                        </TableCell>
+                                    </TableRow>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={0}>
+
+                        <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: "#fff" }} >
+                            <Table size="small">
+                                <TableBody className="tableBody">
+                                    {this.state.filelist.map((item, i) => (
+                                        <TableRow id={"fileRow_" + item.fileName}>
+                                            <TableCell align="left" className="no-border-table">
+                                                <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
+                                                <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
+                                            </TableCell>
+                                            <TableCell align="left" className="no-border-table">
+                                                <IconButton size="small" edge="end" aria-label="delete">
+                                                    <DeleteIcon
+                                                        role={item} fontSize="small" style={{ color: '#f44336' }}
+                                                        onClick={this.state.item.Status === 0 ? (e) => this.handleDelete(e, item) : null}
+
+                                                    />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+
+                        </Grid>
+                    </Grid>
+
+                </div>
+            </Fragment>
+        );
+
         return (
             <Fragment>
                 <BackdropLoader open={!this.state.ProgressLoader} />
                 <TopFixedRow3
                     breadcrumb={breadcrumbHtml}
                     buttongroup={buttongroupHtml}
+                />
+
+                <DialogCustom
+                    MessageHeader="Delete Attachment!"
+                    MessageText="Do you want to delete this attachment?"
+                    open={this.state.CustomDialog.open}
+                    onClose={(e) => this.closeDialog()}
+                    onOK={(e) => this.processDelete()}
                 />
 
                 <Grid className="table-adjust" container spacing={0}>
@@ -253,124 +586,17 @@ class pi extends React.Component {
                             </Grid>
                             <Grid xs={12} sm={12} md={11} lg={11}>
                                 <Grid container spacing={0}>
-                                    <Grid xs={12} sm={12} md={11} lg={11}>
-                                        <Dualtabcomponent
-                                            tab1name="Details"
-                                            tab2name="Attachments"
-                                            tab1Html={
-                                                <Fragment>
-                                                    <Grid container spacing={0}>
-                                                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-                                                            <TableContainer>
-                                                                <Table stickyHeader size="small" className="accordion-table" aria-label="table">
-                                                                    <TableBody className="tableBody">
-                                                                        <TableRow>
-                                                                            <TableCell align="left" className="no-border-table">No.</TableCell>
-                                                                            <TableCell align="right" className="no-border-table"> -</TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell align="left" className="no-border-table">PO No.</TableCell>
-                                                                            <TableCell align="right" className="no-border-table">-</TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell align="left" className="no-border-table">PO Date.</TableCell>
-                                                                            <TableCell align="right" className="no-border-table">-</TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell align="left" className="no-border-table">Supplier Name</TableCell>
-                                                                            <TableCell align="right" className="no-border-table">-</TableCell>
-                                                                        </TableRow>
-                                                                        <TableRow>
-                                                                            <TableCell align="left" className="no-border-table">Type</TableCell>
-                                                                            <TableCell align="right" className="no-border-table">-</TableCell>
-                                                                        </TableRow>
-
-                                                                    </TableBody>
-                                                                </Table>
-                                                            </TableContainer>
-                                                        </Grid>
-                                                    </Grid>
-                                                    <Grid container spacing={0}>
-                                                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
-                                                            <div style={{ height: 20 }}></div>
-                                                        </Grid>
-                                                    </Grid>
-                                                    <Grid container spacing={0} style={{ marginLeft: 15 }}>
-                                                        <Grid item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
-                                                            <Grid container spacing={1} >
-                                                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                                                    <div key="paymentPendingLink" to="#" className="card-link">
-                                                                        <Card className="dash-activity-card2" raised={false}>
-                                                                            <CardContent>
-                                                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                    Raised <br />MRN
-                                                                                </Typography>
-                                                                                <Typography >
-                                                                                    870
-                                                                                </Typography>
-                                                                            </CardContent>
-                                                                        </Card>
-                                                                    </div>
-                                                                </Grid>
-                                                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                                                    <div key="paymentPendingLink" to="#" className="card-link">
-                                                                        <Card className="dash-activity-card2" raised={false}>
-                                                                            <CardContent>
-                                                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                    Processed <br /> MRN
-                                                                                </Typography>
-                                                                                <Typography>
-                                                                                    850
-                                                                                </Typography>
-                                                                            </CardContent>
-                                                                        </Card>
-                                                                    </div>
-                                                                </Grid>
-                                                                <Grid item xs={12} sm={12} md={3} lg={3}  >
-                                                                    <div key="paymentPendingLink" to="#" className="card-link">
-                                                                        <Card className="dash-activity-card2" raised={false}>
-                                                                            <CardContent>
-                                                                                <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                                                    Pending  <br />MRN
-                                                                                </Typography>
-                                                                                <Typography>
-                                                                                    20
-                                                                                </Typography>
-                                                                            </CardContent>
-                                                                        </Card>
-                                                                    </div>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Grid>
-                                                    <Grid container spacing={0}>
-                                                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
-                                                            <div style={{ height: 20 }}></div>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Fragment>
-                                            }
-                                            tab2Html={
-                                                <Fragment>
-                                                    <Grid container spacing={0}>
-                                                        <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
-
-                                                            <Attachmentmaster
-                                                                branchId={parseInt(this.state.BranchID)}
-                                                                rowClicked={false}
-                                                                category="mrn"
-                                                                type="info"
-                                                                filelist={[]}
-                                                                companyId={1}
-                                                                upload={true}
-                                                                fileuploaded={false}
-                                                                fileUploadonChange={null}
-                                                            />
-                                                        </Grid>
-                                                    </Grid>
-                                                </Fragment>
-                                            }
-                                        />
+                                    <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: "#fff" }}>
+                                        <Grid container spacing={0}>
+                                            <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: "#fff" }}>
+                                                <Dualtabcomponent
+                                                    tab1name="Details"
+                                                    tab2name="Attachments"
+                                                    tab1Html={tab1Html}
+                                                    tab2Html={tab2Html}
+                                                />
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
