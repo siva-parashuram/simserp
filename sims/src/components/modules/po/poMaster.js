@@ -467,9 +467,9 @@ class poMaster extends React.Component {
                                                     noWrap={false}
                                                     gutterBottom
                                                 >
-                                                    Ongoing Purchases
+                                                    FC Value
                                                 </Typography>
-                                                <Typography>000</Typography>
+                                                <Typography>{this.state.item.FCValue?this.state.item.FCValue.toFixed(2):null} </Typography>
                                             </CardContent>
                                         </Card>
                                     </div>
@@ -484,9 +484,9 @@ class poMaster extends React.Component {
                                                     noWrap={false}
                                                     gutterBottom
                                                 >
-                                                    Total Purchases &nbsp;&nbsp;&nbsp;
+                                                    Base Value &nbsp;&nbsp;&nbsp;
                                                 </Typography>
-                                                <Typography>000</Typography>
+                                                <Typography>{this.state.item.BaseValue?this.state.item.BaseValue.toFixed(2):null}</Typography>
                                             </CardContent>
                                         </Card>
                                     </div>
@@ -501,9 +501,9 @@ class poMaster extends React.Component {
                                                     noWrap={false}
                                                     gutterBottom
                                                 >
-                                                    PO Raised &nbsp;&nbsp;&nbsp;
+                                                    Exch Rate &nbsp;&nbsp;&nbsp;
                                                 </Typography>
-                                                <Typography>000</Typography>
+                                                <Typography>{this.state.item.ExchRate?this.state.item.ExchRate.toFixed(2):null}</Typography>
                                             </CardContent>
                                         </Card>
                                     </div>
@@ -556,91 +556,7 @@ class poMaster extends React.Component {
                             style={{ backgroundColor: "#fff" }}
                         >
 
-                            {/* <TableContainer>
-                      <Table
-                        stickyHeader
-                        size="small"
-                        className="accordion-table"
-                        aria-label="table"
-                      >
-                        <TableBody className="tableBody">
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              Balance
-                            </TableCell>
-                            <TableCell align="right" className="no-border-table">
-                              000
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              <span className="inside-table-cell-bold">Sales</span>
-                            </TableCell>
-                            <TableCell
-                              align="right"
-                              className="no-border-table"
-                            ></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              Balance
-                            </TableCell>
-                            <TableCell align="right" className="no-border-table">
-                              000
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              Balance
-                            </TableCell>
-                            <TableCell align="right" className="no-border-table">
-                              000
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              Balance
-                            </TableCell>
-                            <TableCell align="right" className="no-border-table">
-                              000
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              <span className="inside-table-cell-bold">Payments</span>
-                            </TableCell>
-                            <TableCell
-                              align="right"
-                              className="no-border-table"
-                            ></TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              Balance
-                            </TableCell>
-                            <TableCell align="right" className="no-border-table">
-                              000
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              Balance
-                            </TableCell>
-                            <TableCell align="right" className="no-border-table">
-                              000
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell align="left" className="no-border-table">
-                              Balance
-                            </TableCell>
-                            <TableCell align="right" className="no-border-table">
-                              000
-                            </TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </TableContainer> */}
+                        
                         </Grid>
                     </Grid>
                 </div>
@@ -649,6 +565,7 @@ class poMaster extends React.Component {
 
         const tab2Html = (
             <Fragment>
+                {console.log("$$$$$$$ Selected Side tab ITEM > ",this.state.item)}
                 <div className="sidenav-fixedheight-scroll">
                     <Grid container spacing={0}>
                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: "#fff" }} >
@@ -657,6 +574,7 @@ class poMaster extends React.Component {
                                     <TableRow>
                                         <TableCell className="no-border-table">
                                             <Button
+                                                disabled={this.state.item.Status===0?false:true}
                                                 className="action-btns"
                                                 startIcon={<AttachFileIcon />}
                                                 onClick={(e) => { document.getElementById("uploadInput").click() }}
@@ -688,8 +606,10 @@ class poMaster extends React.Component {
                                             </TableCell>
                                             <TableCell align="left" className="no-border-table">
                                                 <IconButton size="small" edge="end" aria-label="delete">
-                                                    <DeleteIcon role={item} fontSize="small" style={{ color: '#f44336' }}
-                                                        onClick={(e) => this.handleDelete(e, item)}
+                                                    <DeleteIcon                                                     
+                                                        role={item} fontSize="small" style={{ color: '#f44336' }}
+                                                        onClick={this.state.item.Status===0?(e) => this.handleDelete(e, item):null}
+                                                        
                                                     />
                                                 </IconButton>
                                             </TableCell>
