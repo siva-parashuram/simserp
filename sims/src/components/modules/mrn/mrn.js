@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import axios from "axios";
+import moment from 'moment';
+
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -457,7 +459,7 @@ class mrn extends React.Component {
                                         </TableRow>
                                         <TableRow>
                                             <TableCell align="left" className="no-border-table">PO Date.</TableCell>
-                                            <TableCell align="right" className="no-border-table">{this.state.item.PODate}</TableCell>
+                                            <TableCell align="right" className="no-border-table">{moment(this.state.item.PODate).format("MM/DD/YYYY")}</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell align="left" className="no-border-table">Supplier Name</TableCell>

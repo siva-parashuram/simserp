@@ -3412,7 +3412,7 @@ class piactivity extends React.Component {
                                  
                                   <TableRow>
                                       <TableCell align="left" className="no-border-table">PI Date.</TableCell>
-                                      <TableCell align="right" className="no-border-table">{this.state.PO.PODate}</TableCell>
+                                      <TableCell align="right" className="no-border-table">{moment(this.state.PO.PODate).format("MM/DD/YYYY")}</TableCell>
                                   </TableRow>
                                   <TableRow>
                                       <TableCell align="left" className="no-border-table">Supplier Name</TableCell>

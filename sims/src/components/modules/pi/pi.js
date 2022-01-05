@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import axios from "axios";
+import moment from 'moment';
+
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -385,7 +387,7 @@ class pi extends React.Component {
                                        
                                         <TableRow>
                                             <TableCell align="left" className="no-border-table">PI Date.</TableCell>
-                                            <TableCell align="right" className="no-border-table">{this.state.item.PIDate}</TableCell>
+                                            <TableCell align="right" className="no-border-table">{moment(this.state.item.PIDate).format("MM/DD/YYYY")}</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell align="left" className="no-border-table">Supplier Name</TableCell>
