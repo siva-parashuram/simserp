@@ -58,6 +58,7 @@ class editnumbering extends React.Component {
       startdate: "2021-10-06",
       SuccessPrompt: false,
       ErrorPrompt: false,
+      noSeriesId:0,
       noSeries: {
         NoSeriesId: 0,
         Code: null,
@@ -105,6 +106,7 @@ class editnumbering extends React.Component {
     this.setState({
       urlparams: params,
       branchId: branchId,
+      noSeriesId:noSeriesId
     });
     this.getNumberingList(branchId, USERID, noSeriesId);
   }
@@ -239,10 +241,13 @@ class editnumbering extends React.Component {
     let isPresent=false;
     let NoSeriesMstData=this.state.NoSeriesMstData;
     for(let i=0;i<NoSeriesMstData.length;i++){
-      if(NoSeriesMstData[i].Code.toUpperCase()===value.trim().toUpperCase()){
-        isPresent=true;
-        break;
+      if(parseInt(NoSeriesMstData[i].NoSeriesID)===parseInt(this.state.noSeriesId)){}else{
+        if(NoSeriesMstData[i].Code.toUpperCase()===value.trim().toUpperCase()){
+          isPresent=true;
+          break;
+        }
       }
+      
     }
     return isPresent;
   }
@@ -425,7 +430,7 @@ class editnumbering extends React.Component {
     };
 
     const handleUpdate = (e) => {
-      this.setState({ ProgressLoader: false });
+      
       let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -437,6 +442,60 @@ class editnumbering extends React.Component {
       isProper = this.validateNumberLineEntry();
 
       if (isProper === true) {
+        let BranchId = this.state.branchId;
+        let v = this.state.Validations;
+        if (noSeries.Code !== "") {
+
+          let isPresent=false;
+          isPresent=this.chkIfDuplicateExist(noSeries.Code);
+          if(isPresent===false){
+            this.setState({ ProgressLoader: false });
+            const data = {
+              validUser: ValidUser,
+              noSeries: noSeries,
+              BranchId: parseInt(BranchId),
+              noSeriesDetailList: noSeriesDetailList,
+            };
+            const headers = {
+              "Content-Type": "application/json",
+            };
+            let Url = APIURLS.APIURL.UpdateNoSeries;
+      
+            axios
+              .post(Url, data, { headers })
+              .then((response) => {
+                let data = response.data;
+      
+                if (response.status === 200 || response.status === 201) {
+                  this.setState({ ProgressLoader: true, SuccessPrompt: true });
+                } else {
+                  this.setState({ ProgressLoader: true, ErrorPrompt: true });
+                }
+              })
+              .catch((error) => {
+                this.setState({ ProgressLoader: true, ErrorPrompt: true });
+              });
+          }else{
+            v.Code = {
+              errorState: true,
+              errorMssg: "",
+            };
+            this.setState({ Validations: v });
+            this.setState({ ErrorMessageProps: "Code Already Exist", ErrorPrompt: true });
+          }
+
+         
+        }else {
+          
+          v.Code = {
+            errorState: true,
+            errorMssg: "",
+          };
+          this.setState({ Validations: v });
+          this.setState({ ErrorMessageProps: "Code is Mandatory", ErrorPrompt: true });
+        }
+
+     
 
       }else {
         this.setState({ ErrorMessageProps: "Number Series List is Invalid", ErrorPrompt: true });
@@ -444,32 +503,7 @@ class editnumbering extends React.Component {
 
 
       
-      let BranchId = this.state.branchId;
-      const data = {
-        validUser: ValidUser,
-        noSeries: noSeries,
-        BranchId: parseInt(BranchId),
-        noSeriesDetailList: noSeriesDetailList,
-      };
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let Url = APIURLS.APIURL.UpdateNoSeries;
-
-      axios
-        .post(Url, data, { headers })
-        .then((response) => {
-          let data = response.data;
-
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-          } else {
-            this.setState({ ProgressLoader: true, ErrorPrompt: true });
-          }
-        })
-        .catch((error) => {
-          this.setState({ ProgressLoader: true, ErrorPrompt: true });
-        });
+    
     };
 
     const closeErrorPrompt = (event, reason) => {
