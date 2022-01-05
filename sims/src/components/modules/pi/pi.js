@@ -35,9 +35,6 @@ import MasterDataGrid from "../../compo/masterdatagrid";
 import Dualtabcomponent from '../../compo/dualtabcomponent';
 import DialogCustom from "../../compo/dialogcomponent";
 
-import PoMrnMaster from '../po/poMrnMaster';
-import Attachmentmaster from '../../ftp/attachment/attachmentmaster';
-
 
 class pi extends React.Component {
     constructor(props) {

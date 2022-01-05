@@ -66,7 +66,7 @@ class gitMaster extends React.Component {
             item: {},
             editUrl: "",
             BranchID: 0,
-            compID:0,
+            compID: 0,
             columns: APIURLS.GITMasterColumn,
             PODataList: [],
             selectionModel: [1],
@@ -150,7 +150,7 @@ class gitMaster extends React.Component {
                 item: item,
                 editUrl: editUrl,
                 selectionModel: index,
-            },()=>{
+            }, () => {
                 this.getAttachedFileList();
             });
 
@@ -446,7 +446,7 @@ class gitMaster extends React.Component {
             <Fragment>
                 <div className="sidenav-fixedheight-scroll">
                     <Grid container spacing={0}>
-                        {console.log("MRN item > ",this.state.item)}
+                        {console.log("MRN item > ", this.state.item)}
                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
                             <TableContainer>
                                 <Table stickyHeader size="small" className="accordion-table" aria-label="table">
@@ -490,10 +490,10 @@ class gitMaster extends React.Component {
                                         <Card className="dash-activity-card2" raised={false}>
                                             <CardContent>
                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                FC Value
+                                                    FC Value
                                                 </Typography>
                                                 <Typography >
-                                                {this.state.item.FCValue?this.state.item.FCValue.toFixed(2):null}
+                                                    {this.state.item.FCValue ? this.state.item.FCValue.toFixed(2) : null}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -504,10 +504,10 @@ class gitMaster extends React.Component {
                                         <Card className="dash-activity-card2" raised={false}>
                                             <CardContent>
                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                Base Value
+                                                    Base Value
                                                 </Typography>
                                                 <Typography>
-                                                {this.state.item.BaseValue?this.state.item.BaseValue.toFixed(2):null}
+                                                    {this.state.item.BaseValue ? this.state.item.BaseValue.toFixed(2) : null}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -518,10 +518,10 @@ class gitMaster extends React.Component {
                                         <Card className="dash-activity-card2" raised={false}>
                                             <CardContent>
                                                 <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
-                                                Exch Rate
+                                                    Exch Rate
                                                 </Typography>
                                                 <Typography>
-                                                {this.state.item.ExchRate?this.state.item.ExchRate.toFixed(2):null}
+                                                    {this.state.item.ExchRate ? this.state.item.ExchRate.toFixed(2) : null}
                                                 </Typography>
                                             </CardContent>
                                         </Card>
@@ -609,7 +609,7 @@ class gitMaster extends React.Component {
                     buttongroup={buttongroupHtml}
                 />
 
-<DialogCustom
+                <DialogCustom
                     MessageHeader="Delete Attachment!"
                     MessageText="Do you want to delete this attachment?"
                     open={this.state.CustomDialog.open}
@@ -658,7 +658,7 @@ class gitMaster extends React.Component {
                                 &nbsp;
                             </Grid>
                             <Grid xs={12} sm={12} md={11} lg={11}>
-                            <Grid container spacing={0}>
+                                <Grid container spacing={0}>
                                     <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: "#fff" }}>
                                         <Grid container spacing={0}>
                                             <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: "#fff" }}>
@@ -677,7 +677,7 @@ class gitMaster extends React.Component {
                     </Grid>
                 </Grid>
 
-                 
+
 
                 {dialog}
             </Fragment>

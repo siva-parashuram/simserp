@@ -389,9 +389,9 @@ class mrn extends React.Component {
         );
 
         const handleClose = () => {
-            let Dialog = this.state.CustomDialog;
+            let Dialog = this.state.Dialog;
             Dialog.DialogStatus = false;
-            this.setState({ CustomDialog: Dialog });
+            this.setState({ Dialog: Dialog });
 
         };
 

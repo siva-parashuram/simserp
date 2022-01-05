@@ -122,13 +122,22 @@ class poMrnMaster extends React.Component {
                     if(this.props.isImport===true){
                         if(this.state.branch.IsGIT===true){  
                             if(this.props.isImport===data[i].IsImport){
-                                if(data[i].Status>1){}else{
-                                    if(data[i].Pick==="PO"){
-                                        data[i].id = i + 1;
-                                        newData.push(data[i]);
-                                    }
+                                if(data[i].Pick==="PO"){
+                                    data[i].id = i + 1;
+                                    newData.push(data[i]);
+                                }  
+                                // if(data[i].Status===2){
+                                //     if(data[i].Pick==="PO"){
+                                //         data[i].id = i + 1;
+                                //         newData.push(data[i]);
+                                //     }  
+                                // }else{
+                                //     if(data[i].Pick==="PO"){
+                                //         data[i].id = i + 1;
+                                //         newData.push(data[i]);
+                                //     }
                                    
-                                }
+                                // }
                                 
                             }                           
                         }                    
