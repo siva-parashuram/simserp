@@ -129,7 +129,7 @@ class supplierMaster extends React.Component {
      
   };
 
-   //----------------------FILE UPLOAD-----------------------------
+//----------------------FILE UPLOAD-----------------------------
 
    getAttachedFileList = () => {
 

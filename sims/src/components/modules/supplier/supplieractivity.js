@@ -20,6 +20,9 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -46,10 +49,19 @@ import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 import SDBIB from "../../compo/griddropdowninputwithbutton";
 
+import DialogCustom from "../../compo/dialogcomponent";
+
 class supplieractivity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      CustomDialog: {
+        open: false
+    },
+    DeleteAttachment: {
+        e: null,
+        item: null
+    },
       Dialog: {
         DialogTitle: "",
         DialogStatus: false,
@@ -139,6 +151,8 @@ class supplieractivity extends React.Component {
         ContactPerson: { errorState: false, errorMssg: "" },
         EmailID: { errorState: false, errorMssg: "" },
       },
+      filelist: [],
+      compID:0,
     };
   }
 
@@ -157,6 +171,7 @@ class supplieractivity extends React.Component {
     this.loadDropdowns();
     this.getSupplierList();
     var url = new URL(window.location.href);
+    let compID = url.searchParams.get("compID");
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
@@ -180,6 +195,7 @@ class supplieractivity extends React.Component {
     }
 
     this.setState({
+      compID:parseInt(compID),
       Supplier: Supplier,
       SuplID: type === "edit" ? CF.toInt(SuplID) : 0,
       urlparams: params,
@@ -187,7 +203,10 @@ class supplieractivity extends React.Component {
       typoTitle: typoTitle,
       ProgressLoader: type === "add" ? true : false,
       BranchID: CF.toInt(branchId),
+    },()=>{
+      this.getAttachedFileList();
     });
+
 
     console.log("On load state > ", this.state);
   }
@@ -1036,6 +1055,160 @@ class supplieractivity extends React.Component {
     window.location = url;
   };
 
+  //----------------------FILE UPLOAD-----------------------------
+
+  getAttachedFileList = () => {
+
+    const FTPGetAttachmentsUrl = APIURLS.APIURL.FTPFILELIST;
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    const formData = new FormData();
+    formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    formData.append('Token', getCookie(COOKIE.TOKEN));
+    formData.append("CompanyId", 0);
+    formData.append("BranchID", 0);
+    formData.append("Transaction", APIURLS.TrasactionType.Supplier);
+    formData.append("TransactionNo", parseInt(this.state.SuplID));
+    formData.append("FileData", "");
+    axios
+        .post(FTPGetAttachmentsUrl, formData, { headers })
+        .then((response) => {
+            this.setState({
+                filelist: response.data
+            });
+
+        })
+        .catch((error) => {
+            console.log("error > ", error);
+        });
+
+}
+
+processUpload = (e) => {
+    this.setState({ ShowLoader: true });
+    let file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    formData.append('Token', getCookie(COOKIE.TOKEN));
+    formData.append('CompanyId', 0);
+    formData.append('BranchID', 0);
+    formData.append("Transaction", APIURLS.TrasactionType.Supplier);
+    formData.append("TransactionNo", parseInt(this.state.SuplID));
+    formData.append('FileData', file);
+
+    const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    axios
+        .post(FTPUploadUrl, formData, { headers })
+        .then((response) => {
+            if (response.status === 200 || response.status === 201) {
+                this.getAttachedFileList();
+            }
+            if (response.status === 403) {
+                this.setState({ ErrorPrompt: true, ShowLoader: false });
+            }
+
+        })
+        .catch((error) => {
+            console.log("error > ", error);
+            this.setState({ ErrorPrompt: true, ShowLoader: false });
+
+        });
+
+}
+
+downloadThisFile = (e, item) => {
+
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.FileDownload;
+    const formData = new FormData();
+    formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    formData.append('Token', getCookie(COOKIE.TOKEN));
+    formData.append('CompanyId', 0);
+    formData.append('BranchID', 0);
+    formData.append("Transaction", APIURLS.TrasactionType.Supplier);
+    formData.append("TransactionNo", parseInt(this.state.SuplID));
+    formData.append('FileName', item.fileName);
+
+    axios({
+        method: 'post',
+        url: Url,
+        responseType: 'blob',
+        data: formData
+    })
+        .then(function (response) {
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            let link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", item.fileName);
+            document.body.appendChild(link);
+            console.log("link > ", link);
+            link.click();
+        });
+}
+
+handleDelete = (e, item) => {
+    let Dialog = this.state.CustomDialog;
+    Dialog.open = true;
+    let DeleteAttachment = this.state.DeleteAttachment;
+    DeleteAttachment.e = e;
+    DeleteAttachment.item = item;
+    this.setState({
+        DeleteAttachment: DeleteAttachment,
+        CustomDialog: Dialog
+    });
+}
+
+processDelete = () => {
+    let e = this.state.DeleteAttachment.e;
+    let item = this.state.DeleteAttachment.item;
+
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.DELETEFTPFILE;
+
+    const formData = new FormData();
+    formData.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    formData.append('Token', getCookie(COOKIE.TOKEN));
+    formData.append('CompanyId', 0);
+    formData.append('BranchID', 0);
+    formData.append("Transaction", APIURLS.TrasactionType.Supplier);
+    formData.append("TransactionNo", parseInt(this.state.SuplID));
+    formData.append('FileName', item.fileName);
+
+
+    axios
+        .post(Url, formData, { headers })
+        .then((response) => {
+            if (response.status === 200) {
+                this.getAttachedFileList();
+                this.closeDialog();
+            }
+        })
+        .catch((error) => {
+            console.log("error > ", error);
+            this.setState({ filelist: [] });
+        });
+}
+
+closeDialog = () => {
+    let Dialog = this.state.CustomDialog;
+    Dialog.open = false;
+    this.setState({ CustomDialog: Dialog });
+}
+
+//--------------------------------------------------------------
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
@@ -1345,6 +1518,67 @@ class supplieractivity extends React.Component {
       </Fragment>
     );
 
+    const tab2Html = (
+      <Fragment>
+          <div className="sidenav-fixedheight-scroll">
+              <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: "#fff" }} >
+                      <TableContainer>
+                          <Table stickyHeader size="small" className="" aria-label="Attachment Form table">
+                              <TableRow>
+                                  <TableCell className="no-border-table">
+                                      <Button
+                                          className="action-btns"
+                                          startIcon={<AttachFileIcon />}
+                                          onClick={(e) => { document.getElementById("uploadInput").click() }}
+                                      >
+                                          Attach File
+                                      </Button>
+                                      <input
+                                          className="file-upload-input"
+                                          id="uploadInput"
+                                          type="file"
+                                          onChange={(e) => this.processUpload(e)}
+                                      />
+
+                                  </TableCell>
+                              </TableRow>
+                          </Table>
+                      </TableContainer>
+                  </Grid>
+              </Grid>
+              <Grid container spacing={0}>
+
+                  <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: "#fff" }} >
+                      <Table size="small">
+                          <TableBody className="tableBody">
+                              {this.state.filelist.map((item, i) => (
+                                  <TableRow id={"fileRow_" + item.fileName}>
+                                      <TableCell align="left" className="no-border-table">
+                                          <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
+                                          <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
+                                      </TableCell>
+                                      <TableCell align="left" className="no-border-table">
+                                          <IconButton size="small" edge="end" aria-label="delete">
+                                              <DeleteIcon
+                                                  role={item} fontSize="small" style={{ color: '#f44336' }}
+                                                  onClick={(e) => this.handleDelete(e, item)}
+
+                                              />
+                                          </IconButton>
+                                      </TableCell>
+                                  </TableRow>
+                              ))}
+                          </TableBody>
+                      </Table>
+
+                  </Grid>
+              </Grid>
+
+          </div>
+      </Fragment>
+  );
+
     const sideDataNavigation = (
       <Fragment>
         <Grid container spacing={0}>
@@ -1359,7 +1593,7 @@ class supplieractivity extends React.Component {
               tab1name="Details"
               tab2name="Attachments"
               tab1Html={tab1Html}
-              tab2Html={null}
+              tab2Html={tab2Html}
             />
           </Grid>
         </Grid>
@@ -1492,6 +1726,15 @@ class supplieractivity extends React.Component {
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
+
+        <DialogCustom
+          MessageHeader="Delete Attachment!"
+          MessageText="Do you want to delete this attachment?"
+          open={this.state.CustomDialog.open}
+          onClose={(e) => this.closeDialog()}
+          onOK={(e) => this.processDelete()}
+        />
+
         <ErrorSnackBar
           ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
