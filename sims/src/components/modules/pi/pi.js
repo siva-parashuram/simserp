@@ -374,8 +374,7 @@ class pi extends React.Component {
         const tab1Html = (
             <Fragment>
                 <div className="sidenav-fixedheight-scroll">
-                    <Grid container spacing={0}>
-                        {console.log("MRN item > ", this.state.item)}
+                    <Grid container spacing={0}>                        
                         <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }} >
                             <TableContainer>
                                 <Table stickyHeader size="small" className="accordion-table" aria-label="table">

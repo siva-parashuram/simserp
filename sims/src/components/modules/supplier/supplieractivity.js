@@ -273,9 +273,9 @@ class supplieractivity extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name:
-              data[i].Code + "-" + data[i].Description + "-" + data[i].DueDays,
+            name:data[i].Code,
             value: data[i].PaymentTermID,
+            DueDays:data[i].DueDays
           };
           newD.push(o);
         }
@@ -397,7 +397,7 @@ class supplieractivity extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].Code + "-" + data[i].Description,
+            name: data[i].Code ,
             value: data[i].GeneralPostingGroupID,
           };
           newD.push(o);
@@ -462,6 +462,18 @@ class supplieractivity extends React.Component {
 
     }
     return duplicatePresent;
+  }
+
+  setDueDate=(paymentTermID)=>{
+    let paymentTermsData=this.state.paymentTermsData;
+    for(let i=0;i<paymentTermsData.length;i++){
+      if(parseInt(paymentTermsData[i].value)===parseInt(paymentTermID)){
+        let Supplier = this.state.Supplier;
+        Supplier.DueDays=parseInt(paymentTermsData[i].DueDays);
+        this.setState({Supplier:Supplier});
+        break;
+      }
+    }
   }
 
   updateFormValue = (param, e) => {
@@ -678,21 +690,30 @@ class supplieractivity extends React.Component {
         break;
       case "DueDays":
         let v11 = this.state.Validations;
-        Supplier[param] = CF.toInt(e.target.value);
-        if (e.target.value.length > 2) {
-          v11.DueDays = {
-            errorState: true,
-            errorMssg: "Maximum 2 Numbers allowed!",
-          };
-
-          this.setState({ Validations: v11 });
-        } else {
-          v11.DueDays = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v11 });
-
+        if(isNaN(CF.toInt(e.target.value))){          
+          
+          if(e.target.value.trim()===""){
+            Supplier[param] = e.target.value;
+          }          
           this.setParams(Supplier);
+        }else{
+          Supplier[param] = CF.toInt(e.target.value);
+          if (e.target.value.length > 3) {
+            v11.DueDays = {
+              errorState: true,
+              errorMssg: "",
+            };
+  
+            this.setState({ Validations: v11 });
+          } else {
+            v11.DueDays = { errorState: false, errorMssg: "" };
+  
+            this.setState({ Validations: v11 });
+  
+            this.setParams(Supplier);
+          }
         }
+       
         break;
       case "ContactPerson":
         let v22 = this.state.Validations;
@@ -783,7 +804,9 @@ class supplieractivity extends React.Component {
         break;
 
       case "PaymentTermID":
-        console.log("Setting PaymentTermID");
+        console.log("-------------Setting PaymentTermID----------------");
+        console.log("e.target.value > ",e.target.value);
+        this.setDueDate(e.target.value);
         Supplier[param] = CF.toInt(e.target.value);
         this.setParams(Supplier);
         break;
@@ -1199,253 +1222,126 @@ class supplieractivity extends React.Component {
 
     const tab1Html = (
       <Fragment>
-        <div className="sidenav-fixedheight-scroll">
-          <Grid container spacing={0}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={11}
-              lg={11}
-              style={{ backgroundColor: "#fff" }}
-            >
-              <div style={{ marginTop: 5, marginLeft: 15 }}>
-                <h4 style={{ color: "#000000" }}>Supplier Sales history</h4>
-              </div>
-              <TableContainer>
-                <Table
-                  stickyHeader
-                  size="small"
-                  className="accordion-table"
-                  aria-label="table"
-                >
-                  <TableBody className="tableBody">
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        Suplier No
-                      </TableCell>
-                      <TableCell align="right" className="no-border-table">
-                        123456
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
+        <Grid container spacing={0}>
+          <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: "#fff" }} >
+            <div style={{ marginTop: 5, marginLeft: 15 }}>
+              <h4 style={{ color: "#000000" }}>Supplier Statistics</h4>
+            </div>
+            <TableContainer>
+              <Table stickyHeader size="small" className="accordion-table" aria-label="table" >
+                <TableBody className="tableBody">
+                  <TableRow>
+                    <TableCell align="left" className="no-border-table">
+                      Supplier No.
+                    </TableCell>
+                    <TableCell align="right" className="no-border-table">
+                      {this.state.Supplier.No}
+                    </TableCell>
+                  </TableRow>                  
+                  <TableRow>
+                    <TableCell align="left" className="no-border-table">
+                      Balance
+                    </TableCell>
+                    <TableCell align="right" className="no-border-table">
+                      000
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left" className="no-border-table">
+                      Balance(LCY)
+                    </TableCell>
+                    <TableCell align="right" className="no-border-table">
+                      000
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left" className="no-border-table">
+                      Overdue Amount(LCY)
+                    </TableCell>
+                    <TableCell align="right" className="no-border-table">
+                      000
+                    </TableCell>
+                  </TableRow>                
+                  <TableRow>
+                    <TableCell align="left" className="no-border-table">
+                      Payment(LCY)
+                    </TableCell>
+                    <TableCell align="right" className="no-border-table">
+                      000
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left" className="no-border-table">
+                      Last Payment Date
+                    </TableCell>
+                    <TableCell align="right" className="no-border-table">
+                      {moment().format("MM/DD/YYYY")}
+                    </TableCell>
+                  </TableRow>
+                  
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
-          <Grid container spacing={0}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={11}
-              lg={11}
-              style={{ backgroundColor: "#fff" }}
-            >
-              <div style={{ height: 20 }}></div>
-            </Grid>
+        </Grid>
+        <Grid container spacing={0}>
+          <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+            <div style={{ height: 20 }}></div>
           </Grid>
-          <Grid
-            container
-            spacing={0}
-            style={{ marginLeft: 10, marginRight: 10 }}
-          >
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={11}
-              lg={11}
-              style={{ backgroundColor: "#fff" }}
-            >
-              <Grid container spacing={1}>
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <div key="paymentPendingLink" to="#" className="card-link">
-                    <Card className="dash-activity-card2" raised={false}>
-                      <CardContent>
-                        <Typography
-                          color="textSecondary"
-                          style={{ fontSize: 12, color: "#fff" }}
-                          noWrap={false}
-                          gutterBottom
-                        >
-                          Ongoing Sales
-                        </Typography>
-                        <Typography>000</Typography>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </Grid>
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <div key="paymentPendingLink" to="#" className="card-link">
-                    <Card className="dash-activity-card2" raised={false}>
-                      <CardContent>
-                        <Typography
-                          color="textSecondary"
-                          style={{ fontSize: 12, color: "#fff" }}
-                          noWrap={false}
-                          gutterBottom
-                        >
-                          Total Sales &nbsp;&nbsp;&nbsp;
-                        </Typography>
-                        <Typography>0,000</Typography>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </Grid>
-                <Grid item xs={12} sm={12} md={4} lg={4}>
-                  <div key="paymentPendingLink" to="#" className="card-link">
-                    <Card className="dash-activity-card2" raised={false}>
-                      <CardContent>
-                        <Typography
-                          color="textSecondary"
-                          style={{ fontSize: 12, color: "#fff" }}
-                          noWrap={false}
-                          gutterBottom
-                        >
-                          PO Raised &nbsp;&nbsp;&nbsp;
-                        </Typography>
-                        <Typography>0,000</Typography>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </Grid>
+        </Grid>
+        <Grid container spacing={0} style={{ marginLeft: 15 }}>
+          <Grid item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+            <Grid container spacing={1} >
+              <Grid item xs={12} sm={12} md={4} lg={4}  >
+                <div key="paymentPendingLink" to="#" className="card-link">
+                  <Card className="dash-activity-card2" raised={false}>
+                    <CardContent>
+                      <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                        Orders
+                      </Typography>
+                      <Typography >
+                        000
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </div>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4}  >
+                <div key="paymentPendingLink" to="#" className="card-link">
+                  <Card className="dash-activity-card2" raised={false}>
+                    <CardContent>
+                      <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                        Invoices
+                      </Typography>
+                      <Typography>
+                        0000
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </div>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4}  >
+                <div key="paymentPendingLink" to="#" className="card-link">
+                  <Card className="dash-activity-card2" raised={false}>
+                    <CardContent>
+                      <Typography color="textSecondary" style={{ fontSize: 12, color: '#fff' }} noWrap={false} gutterBottom>
+                        Debit Note
+                      </Typography>
+                      <Typography>
+                        0000
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </div>
               </Grid>
             </Grid>
           </Grid>
-          <Grid container spacing={0}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={11}
-              lg={11}
-              style={{ backgroundColor: "#fff" }}
-            >
-              <div style={{ height: 40 }}></div>
-            </Grid>
+        </Grid>
+        <Grid container spacing={0}>
+          <Grid xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
+            <div style={{ height: 20 }}></div>
           </Grid>
-          <Grid container spacing={0}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={11}
-              lg={11}
-              style={{ backgroundColor: "#fff" }}
-            >
-              <div style={{ marginLeft: 30, marginRight: 20 }}>
-                <Divider />
-              </div>
-            </Grid>
-          </Grid>
-          <Grid container spacing={0}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={11}
-              lg={11}
-              style={{ backgroundColor: "#fff" }}
-            >
-              <div style={{ height: 20 }}></div>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={0}>
-            <Grid
-              xs={12}
-              sm={12}
-              md={10}
-              lg={10}
-              style={{ backgroundColor: "#fff" }}
-            >
-              <div style={{ marginTop: 5, marginLeft: 15 }}>
-                <h4 style={{ color: "#000000" }}>Statistics</h4>
-              </div>
-              <TableContainer>
-                <Table
-                  stickyHeader
-                  size="small"
-                  className="accordion-table"
-                  aria-label="table"
-                >
-                  <TableBody className="tableBody">
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        Balance
-                      </TableCell>
-                      <TableCell align="right" className="no-border-table">
-                        000
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        <span className="inside-table-cell-bold">Sales</span>
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        className="no-border-table"
-                      ></TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        Balance
-                      </TableCell>
-                      <TableCell align="right" className="no-border-table">
-                        000
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        Balance
-                      </TableCell>
-                      <TableCell align="right" className="no-border-table">
-                        000
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        Balance
-                      </TableCell>
-                      <TableCell align="right" className="no-border-table">
-                        000
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        <span className="inside-table-cell-bold">Payments</span>
-                      </TableCell>
-                      <TableCell
-                        align="right"
-                        className="no-border-table"
-                      ></TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        Balance
-                      </TableCell>
-                      <TableCell align="right" className="no-border-table">
-                        000
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        Balance
-                      </TableCell>
-                      <TableCell align="right" className="no-border-table">
-                        000
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align="left" className="no-border-table">
-                        Balance
-                      </TableCell>
-                      <TableCell align="right" className="no-border-table">
-                        000
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </Grid>
-        </div>
+        </Grid>
       </Fragment>
     );
 
@@ -1455,8 +1351,8 @@ class supplieractivity extends React.Component {
           <Grid
             xs={12}
             sm={12}
-            md={12}
-            lg={12}
+            md={11}
+            lg={11}
             style={{ backgroundColor: "#fff" }}
           >
             <Dualtabcomponent
@@ -2105,8 +2001,13 @@ class supplieractivity extends React.Component {
           </Grid>
           <Grid item xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
               <Grid item xs={12} sm={12} md={11} lg={11}>
-                <div style={{ marginLeft: 10 }}>{sideDataNavigation}</div>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                   {sideDataNavigation}
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
