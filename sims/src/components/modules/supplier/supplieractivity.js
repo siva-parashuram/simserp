@@ -472,9 +472,11 @@ class supplieractivity extends React.Component {
     try{
       let itemDataList=this.state.SupplierData;
       for(let i=0;i<itemDataList.length;i++){
-        if((itemDataList[i].Name).trim().toUpperCase()===input.toUpperCase()){
-          duplicatePresent=true;
-        }
+        if(parseInt(itemDataList[i].SuplID)===parseInt(this.state.SuplID)){}else{
+          if((itemDataList[i].Name).trim().toUpperCase()===input.toUpperCase()){
+            duplicatePresent=true;
+          }
+        }        
       }
 
     }catch(err){
