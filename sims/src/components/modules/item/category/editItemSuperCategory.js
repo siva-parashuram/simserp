@@ -138,8 +138,8 @@ class editItemSuperCategory extends React.Component {
 
         for (let i = 0; i < data.length; i++) {
           companies.push({
-            CompanyId: data[i].company.CompanyId,
-            CompanyName: data[i].company.CompanyName,
+            CompanyId: data[i].CompanyID,
+            CompanyName: data[i].CompanyName,
             branchList: []
           });
         }
@@ -154,7 +154,7 @@ class editItemSuperCategory extends React.Component {
             isSelected:false
           };
           for (let j = 0; j < companies.length; j++) {
-            if(data[i].company.CompanyId===companies[j].CompanyId){             
+            if(data[i].CompanyID===companies[j].CompanyId){             
               companies[j].branchList.push(obj);
             }
           }
@@ -289,7 +289,7 @@ class editItemSuperCategory extends React.Component {
     axios
       .post(Url, reqData, { headers })
       .then((response) => {
-          if(response.status===200 && response.data===true){
+          if(response.status===200){
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           }else{
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
@@ -440,19 +440,15 @@ class editItemSuperCategory extends React.Component {
       axios
         .post(Url, ReqData, { headers })
         .then((response) => {
-          let data = response.data;
-          if (
-            response.status === 200 ||
-            response.status === 201 ||
-            response.status === true ||
-            response.status === "true"
-          ) {
+          console.log("----> response > ",response); 
+          if ( response.status === 200 ) {
             this.setState({ ProgressLoader: true, SuccessPrompt: true });
           } else {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
         .catch((error) => {
+          console.log("----> error > ",error);
           this.setState({ ProgressLoader: true, ErrorPrompt: true });
         });
     };

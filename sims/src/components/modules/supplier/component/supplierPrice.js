@@ -182,16 +182,21 @@ class supplierPrice extends React.Component {
     const headers = {
       "Content-Type": "application/json",
     };
+
+    let reqData={
+      ValidUser:ValidUser,
+      BranchID:parseInt(this.state.BranchID)
+    };
     axios
-      .post(Url, ValidUser, { headers })
+      .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
         console.log("data > ", data);
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].code,
-            value: data[i].itemId,
+            name: data[i].Code,
+            value: data[i].ItemID,
           };
           newD.push(o);
         }
@@ -825,13 +830,11 @@ class supplierPrice extends React.Component {
                <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
                <Grid item xs={11} sm={11} md={11} lg={11}>
                <div
-               style={{  marginTop: 15 }}
+               style={{  marginTop: -15 }}
               >
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <div style={{  marginLeft: 1 }}>
-                      <h4>Detail</h4>
-                    </div>
+                    
                   </Grid>
                   <Grid item xs={12} sm={12} md={4} lg={4}>
                     <div style={{marginTop:12}}>
@@ -858,12 +861,13 @@ class supplierPrice extends React.Component {
                     </div>
                   </Grid>
                 </Grid>
+                <div style={{height:20}}></div>
                 <Grid container spacing={0}>
                   <Grid item xs={12} sm={12} md={12} lg={12}>
                     <div
                       style={{
                         height: 470,
-                        marginTop: -1,
+                        marginTop: -6,
                         overflowX: "hidden",
                         overflowY: "scroll",
                         width: "100%",
