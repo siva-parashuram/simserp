@@ -1877,7 +1877,7 @@ class addresses extends React.Component {
 
                                   <SIB
                                     id="EmailID"
-                                    label="Email ID"
+                                    label="Email"
                                     onChange={(e) =>
                                       this.updateFormValue("EmailID", e, "EDIT")
                                     }
@@ -1892,7 +1892,7 @@ class addresses extends React.Component {
                                   />
                                   <SIB
                                     id="VATNo"
-                                    label="VATNo"
+                                    label="VAT No."
                                     onChange={(e) =>
                                       this.updateFormValue("VATNo", e, "EDIT")
                                     }
@@ -1907,7 +1907,7 @@ class addresses extends React.Component {
                                   />
                                   <SIB
                                     id="GSTNo"
-                                    label="GSTNo"
+                                    label="GST No."
                                     onChange={(e) =>
                                       this.updateFormValue("GSTNo", e, "EDIT")
                                     }

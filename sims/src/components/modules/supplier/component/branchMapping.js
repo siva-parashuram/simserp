@@ -632,16 +632,14 @@ class branchMapping extends React.Component {
               <Grid item xs={1} sm={1} md={1} lg={1}></Grid>
                 <Grid item xs={11} sm={11} md={11} lg={11}>
                   <div
-                    style={{ marginTop: 20 }}
+                    style={{ marginTop: -15 }}
                   >
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={8} lg={8}>
-                        <div style={{  marginLeft: 1 }}>
-                          <h4>Detail</h4>
-                        </div>
+                         
                       </Grid>
                       <Grid item xs={12} sm={12} md={4} lg={4}>
-                        <div style={{marginTop:15}}>
+                        <div style={{marginTop:10}}>
                           {this.state.createNewBtn === true ? (
                             <Button
                             startIcon={APIURLS.buttonTitle.save.icon}
@@ -666,6 +664,7 @@ class branchMapping extends React.Component {
                         </div>
                       </Grid>
                     </Grid>
+                    <div style={{height:20}}></div>
                     <Grid container spacing={0}>
                       <Grid item xs={12} sm={12} md={12} lg={12}>
                         <div
