@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
  
 import Grid from "@material-ui/core/Grid";
 import { Button, Divider } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -13,6 +13,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
+
+import AddIcon from '@mui/icons-material/Add';
+import FolderIcon from '@mui/icons-material/Folder';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
@@ -149,8 +153,16 @@ export default function Fms() {
                                 <Grid item xs={12} sm={12} md={12} lg={12}>
                                     <div style={{ marginLeft: 10, marginRight: 10, marginTop: 20, width: '100%', height: 450, overflowY: 'scroll', overflowX: 'hidden' }}>
                                         <Grid container spacing={0}>
-                                            <Button variant="outlined">
+                                            <Button variant="outlined" startIcon={<FolderIcon />}  style={{fontStyle:''}}>
                                                 Folder Name
+                                            </Button>
+                                            &nbsp;
+                                            <Button variant="outlined" startIcon={<FolderIcon />} style={{fontStyle:'initial'}}>
+                                                Folder Name
+                                            </Button>
+                                            &nbsp;
+                                            <Button variant="outlined" startIcon={<InsertDriveFileIcon />} style={{fontStyle:'initial'}}>
+                                                Siva_Inv.pdf
                                             </Button>
                                         </Grid>
                                     </div>
