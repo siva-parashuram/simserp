@@ -1528,39 +1528,7 @@ class addresses extends React.Component {
         />
 
         <div style={{ marginTop: 0 }}>
-          {/* <Grid container spacing={0}>
-            <Grid item xs={11} sm={11} md={11} lg={11}>
-              &nbsp;
-            </Grid>
-            <Grid item xs={1} sm={1} md={1} lg={1}>
-              {this.state.FullSmallBtnArea === true ? (
-                <div>
-                  {this.state.hideSidePanel === false ? (
-                    <IconButton
-                      aria-label="OpenInFullIcon"
-                      onClick={(e) => this.expandFull(e)}
-                    >
-                      <OpenInFullIcon
-                        className="openfullbtn"
-                        fontSize="small"
-                      />
-                    </IconButton>
-                  ) : null}
-                  {this.state.hideSidePanel === true ? (
-                    <IconButton
-                      aria-label="CloseFullscreenIcon"
-                      onClick={(e) => this.closeExpandFull(e)}
-                    >
-                      <CloseFullscreenIcon
-                        className="openfullbtn"
-                        fontSize="small"
-                      />
-                    </IconButton>
-                  ) : null}
-                </div>
-              ) : null}
-            </Grid>
-          </Grid> */}
+       
           <BackdropLoader open={!this.state.ProgressLoader} />
 
           <div style={{ height: 15 }}>&nbsp;</div>
@@ -1578,13 +1546,7 @@ class addresses extends React.Component {
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12} lg={12}>
 
-                  {/* <Dualtabcomponent
-                    customStyle={{ backgroundColor: 'none' }}
-                    tab1name="List"
-                    tab2name={this.state.type === "EDIT" ? "Edit" : "Add"}
-                    tab1Html={this.state.listStateSupplierAddresses}
-                    tab2Html={this.state.stateForm}
-                  /> */}
+                  
 
                   <div style={{ marginLeft: 14 }}>
                     <Fragment>
@@ -1732,6 +1694,8 @@ class addresses extends React.Component {
 
                       {this.state.showForm === true ? (
                         <Fragment>
+                          <div style={{backgroundColor:'#fff'}}>
+                            <div style={{marginLeft:10,marginRight:10}}>
                           <div style={{height:20}}>&nbsp;</div>
                           <Grid container spacing={0}>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -1985,6 +1949,8 @@ class addresses extends React.Component {
                             </Grid>
                           </Grid>
                           <div style={{height:100}}>&nbsp;</div>
+                          </div>
+                          </div>
                         </Fragment>
                       ) : null}
 
