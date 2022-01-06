@@ -3613,7 +3613,6 @@ class gitactivity extends React.Component {
                                         </TableCell>
                                         <TableCell align="left" style={disabledStyle}>
                                           <SCADI
-
                                             style={{ width: '100%' }}
                                             id={"TypeID_" + i}
                                             onChange={(e, value) => this.updateLineDetail(i, "TypeID", value)}

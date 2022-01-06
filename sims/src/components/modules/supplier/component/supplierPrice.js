@@ -21,6 +21,7 @@ import BackdropLoader from "../../../compo/backdrop";
 
 import TextboxInput from "../../../compo/tablerowcelltextboxinput";
 import DateTextboxInput from "../../../compo/tablerowcelldateinput";
+import Autocomplete from "../../../compo/tablerowcellautocompleteinput";
 
 
 class supplierPrice extends React.Component {
@@ -51,6 +52,7 @@ class supplierPrice extends React.Component {
       selectedOldItem: null,
       currencyList: [],
       itemDataList: [],
+      itemDataListSorted:[],
       UOMList: [],
       SupplierPriceList: [],
       SupplierPriceHistory: [],
@@ -74,6 +76,10 @@ class supplierPrice extends React.Component {
         UnitPrice: { errorState: false, errorMssg: "" },
         EmailID: { errorState: false, errorMssg: "" },
       },
+      selectedItem:null,
+      ItemCategoryData:[],
+      CategoryID:0,
+      BranchID:0,
     };
   }
 
@@ -84,12 +90,14 @@ class supplierPrice extends React.Component {
     this.getSupplierPrice();
     this.getBranchMapping();
     this.getAllDropdowns();
+    this.setState({BranchID:parseInt(branchId)});
   }
 
   getAllDropdowns = () => {
     this.getCurrencyList();
     this.getItems();
     this.getUOMList();
+    this.getItemCategoryData();
   };
 
   getBranchMapping = () => {
@@ -173,6 +181,37 @@ class supplierPrice extends React.Component {
       .catch((error) => {});
   };
 
+  getItemCategoryData() {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+
+    let Url = APIURLS.APIURL.GetItemCategories;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(Url, ValidUser, { headers })
+      .then((response) => {
+        let data = response.data;
+       
+        let newData=[];
+        for(let i=0;i<data.length;i++){
+          if(data[i].IsCategoryBranchActive===true){
+            let obj={
+              name:data[i].Code,
+              value:data[i].CatID
+            };
+            newData.push(obj);
+          }
+        }        
+        this.setState({ ItemCategoryData: newData,ProgressLoader: true });
+      })
+      .catch((error) => {
+        this.setState({ ProgressLoader: true });
+      });
+  }
+
   getItems() {
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
@@ -194,13 +233,16 @@ class supplierPrice extends React.Component {
         console.log("data > ", data);
         let newD = [];
         for (let i = 0; i < data.length; i++) {
-          let o = {
-            name: data[i].Code,
-            value: data[i].ItemID,
-          };
-          newD.push(o);
+          if(data[i].IsItemBranchActive===true){
+            let o = {
+              name: data[i].Code,
+              value: data[i].ItemID,
+              CatID:data[i].CatID
+            };
+            newD.push(o);
+          }
         }
-        this.setState({ itemDataList: newD });
+        this.setState({ itemDataList: newD,itemDataListSorted:newD });
         this.setState({ ProgressLoader: true });
       })
       .catch((error) => {});
@@ -287,39 +329,53 @@ class supplierPrice extends React.Component {
   };
 
   handleRowClick = (e, item, id, i) => {
-    let SupplierPrice = {
-      SuplID: item.SuplID,
-      StartDate: moment(item.StartDate).format("YYYY-MM-DD"),
-      EndDate: moment(item.EndDate).format("YYYY-MM-DD"),
-      ItemID: item.ItemID,
-      UOM: item.UOM,
-      CurrID: item.CurrID,
-      MinQty: item.MinQty,
-      MaxQty: item.MaxQty,
-      UnitPrice: item.UnitPrice,
-      EmailID: item.EmailID,
-      SupplierCode: item.SupplierCode,
-      BranchID: item.BranchID,
-    };
-
-    console.log("item > ", item);
-    console.log("SupplierPrice > ", SupplierPrice);
-
-    try {
-      this.setState({
-        SupplierPrice: SupplierPrice,
-        FullSmallBtnArea: true,
-        mainframeW: 8,
-        hideSidePanel: false,
-        updateBtn: true,
-        createNewBtn: false,
-        selectedOldItem: item,
-        selectedOldItemIndex: i,
-      });
-
-      this.removeIsSelectedRowClasses();
-      document.getElementById(id).classList.add("selectedRow");
-    } catch (ex) {}
+    this.removeIsSelectedRowClasses();
+    try{
+      let SupplierPrice = {
+        SuplID: item.SuplID,
+        StartDate: moment(item.StartDate).format("YYYY-MM-DD"),
+        EndDate: moment(item.EndDate).format("YYYY-MM-DD"),
+        ItemID: item.ItemID,
+        UOM: item.UOM,
+        CurrID: item.CurrID,
+        MinQty: item.MinQty,
+        MaxQty: item.MaxQty,
+        UnitPrice: item.UnitPrice,
+        EmailID: item.EmailID,
+        SupplierCode: item.SupplierCode,
+        BranchID: item.BranchID,
+      };
+  
+      console.log("item > ", item);
+      console.log("SupplierPrice > ", SupplierPrice);
+  
+      let selectedItem=null;
+      for(let i=0;i<this.state.itemDataList.length;i++){
+        if(parseInt(item.ItemID)===parseInt(this.state.itemDataList[i].value)){
+          selectedItem=this.state.itemDataList[i];
+          this.setState({selectedItem:selectedItem});
+          break;
+        }
+      }
+  
+      try {
+        this.setState({
+          
+          SupplierPrice: SupplierPrice,
+          FullSmallBtnArea: true,
+          mainframeW: 8,
+          hideSidePanel: false,
+          updateBtn: true,
+          createNewBtn: false,
+          selectedOldItem: item,
+          selectedOldItemIndex: i,
+        });
+  
+       
+        document.getElementById(id).classList.add("selectedRow");
+      } catch (ex) {}
+    }catch(error){}
+   
   };
 
   removeIsSelectedRowClasses = () => {
@@ -347,8 +403,10 @@ class supplierPrice extends React.Component {
       MaxQty: 0,
       UnitPrice: 0,
       EmailID: "",
-      SupplierCode:""
+      SupplierCode:"",
+      BranchID:parseInt(this.state.BranchID)
     };
+    
 
     this.setState({
       SupplierPrice: SupplierPriceTemplate,
@@ -467,12 +525,30 @@ class supplierPrice extends React.Component {
     return o;
   };
 
+  updateItemDropdrown=(CategoryID)=>{
+    this.setState({ ProgressLoader: false });
+    let newD=[];
+    for(let i=0;i<this.state.itemDataList.length;i++){
+      if(parseInt(CategoryID)===parseInt(this.state.itemDataList[i].CatID)){
+        newD.push(this.state.itemDataList[i]);
+      }
+    }
+    this.setState({itemDataListSorted:newD,selectedItem:null,ProgressLoader:true});
+  }
+
   updateFormValue = (param, e) => {
     let SupplierPrice = this.state.SupplierPrice;
     switch (param) {
+      case "CategoryID":
+        this.setState({CategoryID:CF.toInt(e.target.value)});
+        this.updateItemDropdrown(CF.toInt(e.target.value));
+        break;
       case "ItemID":
-        SupplierPrice[param] = CF.toInt(e.target.value);
+        if(e){         
+        this.setState({selectedItem:e});
+        SupplierPrice[param] = CF.toInt(e.value);
         this.setParams(SupplierPrice);
+        }        
         break;
       case "UOM":
         SupplierPrice[param] = CF.toInt(e.target.value);
@@ -769,40 +845,10 @@ class supplierPrice extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-        {/* <Grid container spacing={6}>
-          <Grid item xs={12} sm={12} md={11} lg={11}>
-            &nbsp;
-          </Grid>
-          <Grid item xs={12} sm={12} md={1} lg={1}>
-            {this.state.FullSmallBtnArea === true ? (
-              <div>
-                {this.state.hideSidePanel === false ? (
-                  <IconButton
-                    aria-label="OpenInFullIcon"
-                    onClick={(e) => this.expandFull(e)}
-                  >
-                    <OpenInFullIcon className="openfullbtn" fontSize="small" />
-                  </IconButton>
-                ) : null}
-                {this.state.hideSidePanel === true ? (
-                  <IconButton
-                    aria-label="CloseFullscreenIcon"
-                    onClick={(e) => this.closeExpandFull(e)}
-                  >
-                    <CloseFullscreenIcon
-                      className="openfullbtn"
-                      fontSize="small"
-                    />
-                  </IconButton>
-                ) : null}
-              </div>
-            ) : null}
-          </Grid>
-        </Grid> */}
+       
 
-        {/* <div style={{ height: 10 }}>&nbsp;</div> */}
+        
         <BackdropLoader open={!this.state.ProgressLoader} />
-        {/* <div style={{ height: 10 }}>&nbsp;</div> */}
 
         <div style={{marginLeft:-10}}>
         <Grid container spacing={0}>
@@ -882,6 +928,8 @@ class supplierPrice extends React.Component {
                         aria-label="SupplierPrice  table"
                       >
                         <TableBody className="tableBody">
+
+                          {console.log("----------------> this.state.BranchMappingData > ",this.state.BranchMappingData)}
                             <DropdownInput
                               id="BranchID"
                               label="Branch"
@@ -916,14 +964,40 @@ class supplierPrice extends React.Component {
                               this.state.SupplierPrice.EndDate
                             ).format("YYYY-MM-DD")}
                           />
-                          <DropdownInput
+                          {/* <DropdownInput
                             id="ItemID"
                             label="Item"
                             onChange={(e) => this.updateFormValue("ItemID", e)}
                             value={this.state.SupplierPrice.ItemID}
                             options={this.state.itemDataList}
                             isMandatory={true}
-                          />
+                          /> */}
+
+                                <DropdownInput
+                                  id="CategoryID"
+                                  label="Category"
+                                  onChange={(e) => this.updateFormValue("CategoryID", e)}
+                                  value={this.state.CategoryID}
+                                  options={this.state.ItemCategoryData}
+                                  isMandatory={true}
+                                />
+
+
+
+
+                                <Autocomplete
+                                  id="ItemID"
+                                  label="Item"
+                                  onChange={(e, value) => this.updateFormValue("ItemID", value)}
+                                  value={this.state.selectedItem}
+                                  options={this.state.itemDataListSorted}
+                                  isMandatory={true}
+                                />
+
+
+
+
+
                           <DropdownInput
                             id="UOM"
                             label="UOM"

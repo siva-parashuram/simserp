@@ -830,9 +830,9 @@ cursor: pointer;
   /* height: 30px !important; */
 }
 
-/* .MuiInputBase-input{
-  height: 30px !important;
-} */
+  .MuiInputBase-input{
+font-size: 14 !important;
+}  
 
 .texbox-font-css{
   font-size: 15px !important;
