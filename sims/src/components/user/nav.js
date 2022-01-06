@@ -237,12 +237,13 @@ export default function ButtonAppBar({ navBranchNameTitle }) {
         >
           <DialogTitle id="fms-dialog-title" className="dialog-area">
             <Grid container spacing={0}>
-              <Grid item xs={12} sm={12} md={1} lg={1}>
+              <Grid item xs={12} sm={12} md={8} lg={8}>
                 <IconButton
                   aria-label="ArrowBackIcon"
                 >
                   <ArrowBackIcon onClick={(e) => setFMSDialog(false)} />
-                </IconButton>
+                </IconButton> 
+                Siva File Repository
               </Grid>
             </Grid>
 
