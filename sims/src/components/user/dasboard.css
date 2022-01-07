@@ -107,7 +107,23 @@ body{
   outline: 'none' !important;
 }
 
+.MuiInput-underline:before {
+  left: initial !important;
+  right: initial !important;
+  content:"" !important;
+}
 
+.MuiInput-root{
+  font-size: 14 !important;
+} 
+
+.MuiInputBase-root{
+  font-size: 14 !important;
+} 
+
+.AutocompletetextFieldCss.MuiInputBase-root{
+  font-size: 14 !important;
+}
 
 .css-19qh8xo-MuiInputBase-input-MuiOutlinedInput-input {
   height: 27.81px !important;

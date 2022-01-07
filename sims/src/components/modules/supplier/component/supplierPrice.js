@@ -236,7 +236,6 @@ class supplierPrice extends React.Component {
       .post(Url, reqData, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("data > ", data);
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           if(data[i].IsItemBranchActive===true){
@@ -287,7 +286,6 @@ class supplierPrice extends React.Component {
   };
 
   getSupplierPrice = () => {
-    console.log("-----Price----");
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -352,14 +350,21 @@ class supplierPrice extends React.Component {
         BranchID: item.BranchID,
       };
   
-      console.log("item > ", item);
-      console.log("SupplierPrice > ", SupplierPrice);
+     
   
       let selectedItem=null;
       for(let i=0;i<this.state.itemDataList.length;i++){
         if(parseInt(item.ItemID)===parseInt(this.state.itemDataList[i].value)){
           selectedItem=this.state.itemDataList[i];
           this.setState({selectedItem:selectedItem});
+          break;
+        }
+      }
+
+      let ItemCategoryData=this.state.ItemCategoryData;
+      for(let i=0;i<ItemCategoryData.length;i++){        
+        if(parseInt(ItemCategoryData[i].value)===parseInt(item.CatID)){
+          this.setState({CategoryID:CF.toInt(item.CatID)});
           break;
         }
       }
@@ -435,8 +440,9 @@ class supplierPrice extends React.Component {
           break;
         }
       }
-        
       this.setState({
+        CategoryID:null,
+        selectedItem:null,
         SupplierPrice: SupplierPriceTemplate,
         FullSmallBtnArea: true,
         mainframeW: 8,
@@ -538,7 +544,7 @@ class supplierPrice extends React.Component {
                         <TableCell align="left">
                           {moment(item.EndDate).format("MM/DD/YYYY")}
                         </TableCell>
-                        <TableCell align="left">{item.No}</TableCell>
+                        <TableCell align="left">{item.Code}</TableCell>
                         <TableCell align="left">{item.UOMCode}</TableCell>
                         <TableCell align="left">{item.CurrCode}</TableCell>
                         <TableCell align="left">{item.MinQty}</TableCell>
@@ -583,6 +589,10 @@ class supplierPrice extends React.Component {
         this.setState({selectedItem:e});
         SupplierPrice[param] = CF.toInt(e.value);
         this.setParams(SupplierPrice);
+        }else{
+          this.setState({selectedItem:null});
+          SupplierPrice[param] = 0;
+          this.setParams(SupplierPrice);
         }        
         break;
       case "UOM":
@@ -728,10 +738,7 @@ class supplierPrice extends React.Component {
   };
 
   processSupplierPriceList = (SupplierPriceList) => {
-    console.log(
-      "processlistSupplierPrice > listSupplierPrice > ",
-      SupplierPriceList
-    );
+    
     let newCPL = [];
     for (let i = 0; i < SupplierPriceList.length; i++) {
       let item = SupplierPriceList[i];
@@ -755,83 +762,131 @@ class supplierPrice extends React.Component {
     return newCPL;
   };
 
-  createSupplierPrice = (param) => {
-    let ValidUser = APIURLS.ValidUser;
-    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-    ValidUser.Token = getCookie(COOKIE.TOKEN);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    let Url = APIURLS.APIURL.Add_UpdateSupplierPrice;
-    let SupplierPriceList = this.state.SupplierPriceList;
-    let SupplierPriceHistory = this.state.SupplierPriceHistory;
 
-    switch (param) {
-      case "NEW":
-        let SupplierPrice=this.state.SupplierPrice;
-        SupplierPrice.BranchID= this.state.BranchID;       
-        SupplierPriceList.push(SupplierPrice);
-        SupplierPriceHistory = [];
-        break;
-      case "UPDATE":
-        let selectedOldItem = this.state.selectedOldItem;
-        let index = this.state.selectedOldItemIndex;
-        console.log("IN UPDATE > selectedOldItem > ", selectedOldItem);
-        console.log("IN UPDATE > index > ", index);
-        SupplierPriceList[index] = this.state.SupplierPrice;
-        SupplierPriceHistory.push(selectedOldItem);
-        break;
-      default:
-        break;
+  isProperData=()=>{
+    let isProperData=false;
+    let SupplierPrice=this.state.SupplierPrice;
+    if(
+      parseFloat(SupplierPrice.MinQty)>0 &&
+      parseFloat(SupplierPrice.MaxQty)>0 &&
+      parseFloat(SupplierPrice.UnitPrice)>0 &&
+      parseFloat(SupplierPrice.ItemID)>0 &&
+      parseFloat(SupplierPrice.UOM)>0 &&
+      parseFloat(SupplierPrice.CurrID)>0 
+      //StartDate  EndDate
+    ){
+      isProperData=true;
+    }else{
+      isProperData=false;
+      if(parseFloat(SupplierPrice.MinQty)<=0){
+        this.setState({ErrorPrompt:true,ErrorMessageProps:"Invalid Minimum Quantity"});
+        return false;
+      }
+      if(parseFloat(SupplierPrice.MaxQty)<=0){
+        this.setState({ErrorPrompt:true,ErrorMessageProps:"Invalid Maximum Quantity"});
+        return false;
+      }
+      if(parseFloat(SupplierPrice.UnitPrice)<=0){
+        this.setState({ErrorPrompt:true,ErrorMessageProps:"Invalid Unit Price"});
+        return false;
+      }
+      if(parseFloat(SupplierPrice.ItemID)===0 || parseFloat(SupplierPrice.ItemID)===null){
+        this.setState({ErrorPrompt:true,ErrorMessageProps:"Invalid Item"});
+        return false;
+      }
+      if(parseFloat(SupplierPrice.UOM)===0 || parseFloat(SupplierPrice.UOM)===null){
+        this.setState({ErrorPrompt:true,ErrorMessageProps:"Invalid UOM"});
+        return false;
+      }
+      if(parseFloat(SupplierPrice.CurrID)===0 || parseFloat(SupplierPrice.CurrID)===null){
+        this.setState({ErrorPrompt:true,ErrorMessageProps:"Invalid Currency"});
+        return false;
+      }
+      
+    }
+  return isProperData;
+  }
+
+  createSupplierPrice = (param) => {
+
+    let isProperData=false;
+    isProperData=this.isProperData();
+    if(isProperData===true){
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.Add_UpdateSupplierPrice;
+      let SupplierPriceList = this.state.SupplierPriceList;
+      let SupplierPriceHistory = this.state.SupplierPriceHistory;
+  
+      switch (param) {
+        case "NEW":
+          let SupplierPrice=this.state.SupplierPrice;
+          SupplierPrice.BranchID= this.state.BranchID;       
+          SupplierPriceList.push(SupplierPrice);
+          SupplierPriceHistory = [];
+          break;
+        case "UPDATE":
+          let selectedOldItem = this.state.selectedOldItem;
+          let index = this.state.selectedOldItemIndex;
+          SupplierPriceList[index] = this.state.SupplierPrice;
+          SupplierPriceHistory.push(selectedOldItem);
+          break;
+        default:
+          break;
+      }
+  
+      SupplierPriceList = this.formatDate(SupplierPriceList);
+      SupplierPriceList = this.processSupplierPriceList(SupplierPriceList);
+      SupplierPriceHistory = this.formatDate(SupplierPriceHistory);
+      SupplierPriceHistory = this.processSupplierPriceList(SupplierPriceHistory);
+  
+      let reqData = {
+        ValidUser: ValidUser,
+        SupplierPriceList: SupplierPriceList,
+        SupplierPriceHistoryList: SupplierPriceHistory,
+      };
+  
+      axios
+        .post(Url, reqData, { headers })
+        .then((response) => {
+          if (response.status === 200 || response.status === 201) {
+            let SupplierPriceTemplate = {
+              SuplID: this.props.SuplID,
+              StartDate: null,
+              EndDate: null,
+              ItemID: 0,
+              UOM: 0,
+              CurrID: 0,
+              MinQty: 0,
+              MaxQty: 0,
+              UnitPrice: 0,
+              EmailID: "",
+            };
+            this.setState(
+              {
+                SupplierPrice: SupplierPriceTemplate,
+                SuccessPrompt: true,
+                SupplierPriceHistory: [],
+              },
+              () => {
+                this.getSupplierPrice();
+                this.expandFull();
+                this.removeIsSelectedRowClasses();
+              }
+            );
+          } else {
+            this.setState({ ErrorPrompt: true, SuccessPrompt: false });
+          }
+        })
+        .catch((error) => {
+          this.setState({ ErrorPrompt: true });
+        });
     }
 
-    SupplierPriceList = this.formatDate(SupplierPriceList);
-    SupplierPriceList = this.processSupplierPriceList(SupplierPriceList);
-    SupplierPriceHistory = this.formatDate(SupplierPriceHistory);
-    SupplierPriceHistory = this.processSupplierPriceList(SupplierPriceHistory);
-
-    let reqData = {
-      ValidUser: ValidUser,
-      SupplierPriceList: SupplierPriceList,
-      SupplierPriceHistoryList: SupplierPriceHistory,
-    };
-    console.log("createSupplierPrice > reqData > ", reqData);
-
-    axios
-      .post(Url, reqData, { headers })
-      .then((response) => {
-        if (response.status === 200 || response.status === 201) {
-          let SupplierPriceTemplate = {
-            SuplID: this.props.SuplID,
-            StartDate: null,
-            EndDate: null,
-            ItemID: 0,
-            UOM: 0,
-            CurrID: 0,
-            MinQty: 0,
-            MaxQty: 0,
-            UnitPrice: 0,
-            EmailID: "",
-          };
-          this.setState(
-            {
-              SupplierPrice: SupplierPriceTemplate,
-              SuccessPrompt: true,
-              SupplierPriceHistory: [],
-            },
-            () => {
-              this.getSupplierPrice();
-              this.expandFull();
-              this.removeIsSelectedRowClasses();
-            }
-          );
-        } else {
-          this.setState({ ErrorPrompt: true, SuccessPrompt: false });
-        }
-      })
-      .catch((error) => {
-        this.setState({ ErrorPrompt: true });
-      });
   };
 
   setParams = (object) => {
@@ -975,6 +1030,7 @@ class supplierPrice extends React.Component {
                             />
 
                           <DateTextboxInput
+                          isMandatory={true}
                             id="StartDate"
                             label="Start Date"
                             variant="outlined"
@@ -987,6 +1043,7 @@ class supplierPrice extends React.Component {
                             ).format("YYYY-MM-DD")}
                           />
                           <DateTextboxInput
+                          isMandatory={true}
                             id="EndDate"
                             label="End Date"
                             variant="outlined"
@@ -996,26 +1053,15 @@ class supplierPrice extends React.Component {
                               this.state.SupplierPrice.EndDate
                             ).format("YYYY-MM-DD")}
                           />
-                          {/* <DropdownInput
-                            id="ItemID"
-                            label="Item"
-                            onChange={(e) => this.updateFormValue("ItemID", e)}
-                            value={this.state.SupplierPrice.ItemID}
-                            options={this.state.itemDataList}
-                            isMandatory={true}
-                          /> */}
-
+                     
                                 <DropdownInput
                                   id="CategoryID"
                                   label="Category"
                                   onChange={(e) => this.updateFormValue("CategoryID", e)}
                                   value={this.state.CategoryID}
                                   options={this.state.ItemCategoryData}
-                                  isMandatory={true}
+
                                 />
-
-
-
 
                                 <Autocomplete
                                   id="ItemID"
@@ -1025,10 +1071,6 @@ class supplierPrice extends React.Component {
                                   options={this.state.itemDataListSorted}
                                   isMandatory={true}
                                 />
-
-
-
-
 
                           <DropdownInput
                             id="UOM"
