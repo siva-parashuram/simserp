@@ -1249,6 +1249,9 @@ class piactivity extends React.Component {
     switch (param) {
       case "SuplID":
         if (e) {
+          if(this.state.PurchaseOrderLine.length>0){
+            this.setState({ErrorMessageProps:'Delete the Lines before changing supplier',ErrorPrompt:true});            
+          }else{
           this.setState({ SADIB_VALUE: e, isDataFetched: true }, () => {
             console.log("e > ", e);
             let CurrencyCode = "";
@@ -1264,6 +1267,8 @@ class piactivity extends React.Component {
             this.setFieldValuesOnSuplierChange(CF.toInt(e.id), "dropdownChange");
             this.setParams(PO);
           });
+        }
+
         }
 
         break;
