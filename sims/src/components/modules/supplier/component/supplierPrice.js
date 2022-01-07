@@ -33,6 +33,7 @@ class supplierPrice extends React.Component {
         page: 0,
         rowsPerPage: 10,
       },
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       ProgressLoader: true,
@@ -79,18 +80,18 @@ class supplierPrice extends React.Component {
       selectedItem:null,
       ItemCategoryData:[],
       CategoryID:0,
-      BranchID:0,
+       
     };
   }
 
   componentDidMount() {
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
-    this.setState({BranchID:branchId});
-    this.getSupplierPrice();
-    this.getBranchMapping();
-    this.getAllDropdowns();
-    this.setState({BranchID:parseInt(branchId)});
+    this.setState({BranchID:parseInt(branchId)},()=>{
+      this.getSupplierPrice();
+      this.getBranchMapping();
+      this.getAllDropdowns();
+    });
   }
 
   getAllDropdowns = () => {
@@ -119,10 +120,15 @@ class supplierPrice extends React.Component {
       .then((response) => {
         let data = response.data;
         let newD = [];
+
+        
+        
         for (let i = 0; i < data.length; i++) {
+          
           let o = {
             name: data[i].Name,
             value: data[i].BranchID,
+            CurrID:data[i].CurrID
           };
           newD.push(o);
         }
@@ -386,36 +392,65 @@ class supplierPrice extends React.Component {
     } catch (ex) {}
   };
 
+  isCurrentBranchMapped=()=>{
+    let isCurrentBranchMapped=false;
+    for(let i=0;i<this.state.BranchMappingData.length;i++){
+      if(parseInt(this.state.BranchMappingData[i].value)===parseInt(this.state.BranchID)){
+        isCurrentBranchMapped=true;
+        break;
+      }
+    }
+    return isCurrentBranchMapped;
+  }
+
   showAddNewPanel = (e) => {
+     let isCurrentBranchMapped=false;
+     isCurrentBranchMapped=this.isCurrentBranchMapped();
+    if(isCurrentBranchMapped===true){
+      this.setState({ErrorMessageProps:""});
+      const today = moment().format(
+        "YYYY-MM-DD"
+      );
+      this.removeIsSelectedRowClasses();
+      let SupplierPriceTemplate = {
+        SuplID: this.props.SuplID,
+        StartDate: today,
+        EndDate: today,
+        ItemID: 0,
+        UOM: 0,
+        CurrID: 0,
+        MinQty: 0,
+        MaxQty: 0,
+        UnitPrice: 0,
+        EmailID: "",
+        SupplierCode:"",
+        BranchID:parseInt(this.state.BranchID)
+      };
 
-    const today = moment().format(
-      "YYYY-MM-DD"
-    );
-    this.removeIsSelectedRowClasses();
-    let SupplierPriceTemplate = {
-      SuplID: this.props.SuplID,
-      StartDate: today,
-      EndDate: today,
-      ItemID: 0,
-      UOM: 0,
-      CurrID: 0,
-      MinQty: 0,
-      MaxQty: 0,
-      UnitPrice: 0,
-      EmailID: "",
-      SupplierCode:"",
-      BranchID:parseInt(this.state.BranchID)
-    };
-    
+      let BranchMappingData=this.state.BranchMappingData;
+      for(let i=0;i<BranchMappingData.length;i++){
+        if(parseInt(BranchMappingData[i].value)===parseInt(this.state.BranchID)){
+          SupplierPriceTemplate.CurrID=parseInt(BranchMappingData[i].CurrID);
+          this.setState({SupplierPrice:SupplierPriceTemplate});//preset the currency as per the mapped branch
+          break;
+        }
+      }
+        
+      this.setState({
+        SupplierPrice: SupplierPriceTemplate,
+        FullSmallBtnArea: true,
+        mainframeW: 8,
+        hideSidePanel: false,
+        createNewBtn: true,
+        updateBtn: false,
+      });
+    }else{
+       this.setState({ErrorMessageProps:"Kindly Map Branch For this Supplier",ErrorPrompt:true});
+    }
 
-    this.setState({
-      SupplierPrice: SupplierPriceTemplate,
-      FullSmallBtnArea: true,
-      mainframeW: 8,
-      hideSidePanel: false,
-      createNewBtn: true,
-      updateBtn: false,
-    });
+   
+
+
   };
 
   getPageData = (data) => {
@@ -837,6 +872,7 @@ class supplierPrice extends React.Component {
         <BackdropLoader open={!this.state.ProgressLoader} />
 
         <ErrorSnackBar
+        ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />
