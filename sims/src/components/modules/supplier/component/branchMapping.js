@@ -139,7 +139,6 @@ class branchMapping extends React.Component {
       .post(Url, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("data > ", data);
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
@@ -197,7 +196,6 @@ class branchMapping extends React.Component {
       .post(Url, ValidUser, { headers })
       .then((response) => {
         let data = response.data;
-        console.log("data > ", data);
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
@@ -487,14 +485,11 @@ class branchMapping extends React.Component {
   };
 
   getNameByID = (type, id) => {
-    console.log("getNameByID > type > ", type);
-    console.log("getNameByID > id > ", id);
     let name = "";
     let array = [];
     switch (type) {
       case "Branch":
         array = this.state.branchData;
-        console.log("In Branch > array > ", array);
         for (let i = 0; i < array.length; i++) {
           if (array[i].value === CF.toInt(id)) {
             name = array[i].name;
@@ -504,7 +499,6 @@ class branchMapping extends React.Component {
         break;
       case "SupplierPostingGroup":
         array = this.state.SupplierPostingGroupList;
-        console.log("In SupplierPostingGroup > array > ", array);
         for (let i = 0; i < array.length; i++) {
           if (array[i].value === CF.toInt(id)) {
             name = array[i].name;
@@ -514,7 +508,6 @@ class branchMapping extends React.Component {
         break;
       case "GeneralPostingGroup":
         array = this.state.GeneralPostingGroupList;
-        console.log("In GeneralPostingGroup > array > ", array);
         for (let i = 0; i < array.length; i++) {
           if (array[i].value === CF.toInt(id)) {
             name = array[i].name;
@@ -525,7 +518,6 @@ class branchMapping extends React.Component {
       default:
         break;
     }
-    console.log("getNameByID > name > ", name);
     return name;
   };
 
