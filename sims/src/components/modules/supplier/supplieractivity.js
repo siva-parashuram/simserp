@@ -891,18 +891,19 @@ class supplieractivity extends React.Component {
       case "GSTNo":
         let v17 = this.state.Validations;
         Supplier[param] = e.target.value;
-        if (e.target.value.length > 20) {
+        if (e.target.value.length > 0) {
+          v17.GSTNo = { errorState: false, errorMssg: "" };        
+          Supplier.GSTSupplierType=1;
+          this.setState({ Validations: v17 });
+          this.setParams(Supplier);
+        } else {
+
           v17.GSTNo = {
             errorState: true,
-            errorMssg: "Maximum 20 Characters allowed!",
-          };
-
+            errorMssg: "",
+          }; 
           this.setState({ Validations: v17 });
-        } else {
-          v17.GSTNo = { errorState: false, errorMssg: "" };
-
-          this.setState({ Validations: v17 });
-
+          Supplier.GSTSupplierType=0;
           this.setParams(Supplier);
         }
 
