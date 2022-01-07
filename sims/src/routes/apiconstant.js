@@ -30,8 +30,8 @@ import Link from "@material-ui/core/Link";
 import * as CF from "../services/functions/customfunctions";
 import * as URLS from "../routes/constants";
 
-// const domain = "http://192.168.10.200:8080/";
- const domain = "http://49.248.147.178:8082/";
+const domain = "http://192.168.10.200:8080/";
+//  const domain = "http://49.248.147.178:8082/";
 
 export const APIURL = {
   FileDownload: domain + "api/Common/FileDownload",
@@ -1014,8 +1014,9 @@ export const GITMasterColumn=[
     headerClassName: 'table-header-font',
     renderCell:(params) => (
       <Fragment>
-       {params.value===1?(<Chip label="Open" size="small"/>):null}
-       {params.value===2?(<Chip label="Released"  color="success"  size="small"/>):null}
+         {params.value===0?(<Chip label="Open" size="small"/>):null}
+       {params.value===1?(<Chip label="Released"  color="success"  size="small"/>):null}
+       {params.value===2?(<Chip label="Finish"  color="primary"  size="small"/>):null}
       </Fragment>
     ),
   }

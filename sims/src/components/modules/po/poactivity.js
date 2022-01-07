@@ -1130,21 +1130,28 @@ class poactivity extends React.Component {
     switch (param) {
       case "SuplID":
         if (e) {
-          this.setState({ SADIB_VALUE: e, isDataFetched: true }, () => {
-            console.log("e > ", e);
-            let CurrencyCode = "";
-            for (let i = 0; i < this.state.CurrencyList.length; i++) {
-              if (this.state.CurrencyList[i].value === CF.toInt(e.CurrID)) {
-                PO.ExchRate = this.state.CurrencyList[i].ExchRate;
-                CurrencyCode = " (" + this.state.CurrencyList[i].name + ")";
-                break;
+           
+          if(this.state.PurchaseOrderLine.length>0){
+            this.setState({ErrorMessageProps:'Delete the Lines before changing supplier',ErrorPrompt:true});            
+          }else{
+            this.setState({ SADIB_VALUE: e, isDataFetched: true ,ErrorMessageProps:''}, () => {
+              console.log("e > ", e);
+              let CurrencyCode = "";
+              for (let i = 0; i < this.state.CurrencyList.length; i++) {
+                if (this.state.CurrencyList[i].value === CF.toInt(e.CurrID)) {
+                  PO.ExchRate = this.state.CurrencyList[i].ExchRate;
+                  CurrencyCode = " (" + this.state.CurrencyList[i].name + ")";
+                  break;
+                }
               }
-            }
-            this.setState({ CurrencyCode: CurrencyCode });
-            PO.SuplID = CF.toInt(e.id);
-            this.setFieldValuesOnSuplierChange(CF.toInt(e.id), "dropdownChange");
-            this.setParams(PO);
-          });
+              this.setState({ CurrencyCode: CurrencyCode });
+              PO.SuplID = CF.toInt(e.id);
+              this.setFieldValuesOnSuplierChange(CF.toInt(e.id), "dropdownChange");
+              this.setParams(PO);
+            });
+          }
+
+          
         }
 
         break;

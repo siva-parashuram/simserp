@@ -947,7 +947,8 @@ font-size: 14 !important;
   border-radius: 0px !important;   
   -webkit-border-radius: 0px;
   background-color: '#ffffff' !important;
- 
+  text-decoration: 'none';
+  outline: none !important;
 }
 
 .autocomplete-css:focus{
@@ -962,6 +963,7 @@ font-size: 14 !important;
    border-width: 1px !important;
   border-radius: 0px !important;    
    -webkit-border-radius: 0px;
+   text-decoration: 'none';
 }
 
 .css-ghsjzk-MuiInputBase-root-MuiInput-root::before,::after {

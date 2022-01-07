@@ -845,9 +845,6 @@ class supplierPrice extends React.Component {
           closeSuccessPrompt={closeSuccessPrompt}
         />
 
-       
-
-        
         <BackdropLoader open={!this.state.ProgressLoader} />
 
         <div style={{marginLeft:-10}}>
@@ -929,7 +926,6 @@ class supplierPrice extends React.Component {
                       >
                         <TableBody className="tableBody">
 
-                          {console.log("----------------> this.state.BranchMappingData > ",this.state.BranchMappingData)}
                             <DropdownInput
                               id="BranchID"
                               label="Branch"
