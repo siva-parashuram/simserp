@@ -248,8 +248,9 @@ export default function ButtonAppBar({ navBranchNameTitle }) {
             </Grid>
 
           </DialogTitle>
-          <DialogContent className="dialog-area">            
-            <Fms/>
+          <DialogContent className="dialog-area">  
+                    
+            <Fms />
           </DialogContent>
         </Dialog>
 

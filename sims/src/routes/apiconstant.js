@@ -34,6 +34,8 @@ const domain = "http://192.168.10.200:8080/";
 //  const domain = "http://49.248.147.178:8082/";
 
 export const APIURL = {
+  ListOfDirectoryFromFTP:domain+"api/Common/ListOfDirectoryFromFTP", 
+  ListOfFilesFromFTP:domain+"api/Common/ListOfFilesFromFTP",
   FileDownload: domain + "api/Common/FileDownload",
   FTPUPLOAD: domain + "api/Common/FileUpload",
   FTPFILELIST: domain + "api/Common/ListOfFilesFromFTP",
