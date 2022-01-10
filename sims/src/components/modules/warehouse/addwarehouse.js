@@ -72,6 +72,7 @@ class addwarehouse extends React.Component {
         PhoneNo: 0,
         IsActive: true,
         IsDefault: false,
+        IsTrading:false,
       },
       WareHouseId: 0,
       BranchID: 0,
@@ -251,6 +252,11 @@ class addwarehouse extends React.Component {
           this.setState({ warehouse: warehouse });
         }
       }
+      if (id === "IsTrading") {
+        warehouse.IsTrading = e.target.checked;
+        this.setState({ warehouse: warehouse });
+      }
+
 
       if (id === "Code") {
         let duplicateExist = CF.chkDuplicateName(
@@ -591,7 +597,7 @@ class addwarehouse extends React.Component {
           linkTitle="Dashboard"
           masterHref={URLS.URLS.warehouseMaster + this.state.urlparams}
           masterLinkTitle="Warehouse"
-          typoTitle="Add Warehouse"
+          typoTitle="Add"
           level={2}
         />
       </Fragment>
@@ -803,43 +809,31 @@ class addwarehouse extends React.Component {
                               <SSIB
                                 key="IsDefault"
                                 id="IsDefault"
-                                label="Is Default?"
+                                label="Default ?"
                                 param={this.state.warehouse.IsDefault}
                                 onChange={(e) =>
                                   updateFormValue("IsDefault", e)
                                 }
                               />
 
-
-
+                              <SSIB
+                                key="IsTrading"
+                                id="IsTrading"
+                                label="Trading ?"
+                                param={this.state.warehouse.IsTrading}
+                                onChange={(e) =>
+                                  updateFormValue("IsTrading", e)
+                                }
+                              />
 
                               <SSIB
                                 key="IsActive"
                                 id="IsActive"
-                                label="IsActive"
+                                label="Active ?"
                                 param={this.state.IsActive}
                                 onChange={(e) => updateFormValue("IsActive", e)}
                               />
-
-                              {/* <TableRow>
-                                <TableCell
-                                  align="left"
-                                  className="no-border-table"
-                                >
-                                  is Active?
-                                </TableCell>
-                                <TableCell
-                                  align="left"
-                                  className="no-border-table"
-                                >
-                                  <Switch
-                                    size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("isActive", e)
-                                    }
-                                  />
-                                </TableCell>
-                              </TableRow> */}
+                              
                             </Grid>
                           </Grid>
                         </div>
@@ -880,7 +874,7 @@ class addwarehouse extends React.Component {
                               <SSIB
                                 key="IsEdi"
                                 id="IsEdi"
-                                label="Is EDI?"
+                                label="EDI ?"
                                 param={this.state.IsEdi}
                                 onChange={(e) => updateFormValue("IsEdi", e)}
                               />

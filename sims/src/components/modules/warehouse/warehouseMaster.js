@@ -18,6 +18,7 @@ import Button from "@material-ui/core/Button";
 import CheckIcon from "@mui/icons-material/Check";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
+import ErrorSnackBar from "../../compo/errorSnackbar";
 
 
 import axios from "axios";
@@ -34,6 +35,9 @@ class warehouseMaster extends React.Component {
     super(props);
     this.state = {
       urlparams: "",
+      ErrorPrompt: false,
+      ErrorMessageProps: "",
+      editButtonDisable:true,
       allotBranch: false,
       allotModule: false,
       ProgressLoader: false,
@@ -103,7 +107,9 @@ class warehouseMaster extends React.Component {
           this.setState({ branchData: [], ProgressLoader: true });
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        this.setState({ branchData: [], ProgressLoader: true });
+      });
   }
 
   InitialhandleRowClick(e, item, id) {
@@ -113,7 +119,7 @@ class warehouseMaster extends React.Component {
       "&editwareHouseId=" +
       item.WareHouseID;
 
-    this.setState({ editurl: editUrl });
+    this.setState({ editurl: editUrl,editButtonDisable:false });
     this.InitialremoveIsSelectedRowClasses();
     document.getElementById(id).classList.add("selectedRow");
   }
@@ -131,7 +137,7 @@ class warehouseMaster extends React.Component {
         this.state.urlparams +
         "&editwareHouseId=" +
         item.WareHouseID;
-      this.setState({ editurl: editUrl });
+      this.setState({ editurl: editUrl,editButtonDisable:false });
       removeIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     };
@@ -145,6 +151,13 @@ class warehouseMaster extends React.Component {
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
       window.location = url;
+    };
+
+    const closeErrorPrompt = (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      this.setState({ ErrorPrompt: false });
     };
 
     const breadcrumbHtml = (
@@ -177,6 +190,7 @@ class warehouseMaster extends React.Component {
             {APIURLS.buttonTitle.add.name}
           </Button>
           <Button
+            disabled={this.state.editButtonDisable}
             startIcon={APIURLS.buttonTitle.edit.icon}
             className="action-btns"
             onClick={(e) => openPage(this.state.editurl)}
@@ -190,6 +204,12 @@ class warehouseMaster extends React.Component {
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
+
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+          ErrorMessageProps={this.state.ErrorMessageProps}
+        />
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}

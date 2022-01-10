@@ -72,6 +72,7 @@ class editwarehouse extends React.Component {
         EmailId: "",
         PhoneNo: 0,
         IsActive: false,
+        IsTrading: false,
       },
       WareHouseId: 0,
       BranchID: 0,
@@ -202,7 +203,8 @@ class editwarehouse extends React.Component {
           EmailId: response.data.EmailID,
           PhoneNo: response.data.PhoneNo,
           IsActive: response.data.IsActive,
-          IsDefault: response.data.IsDefault
+          IsDefault: response.data.IsDefault,
+          IsTrading: response.data.IsTrading
         };
         this.setState({
           oldCode: response.data.Code,
@@ -294,7 +296,10 @@ class editwarehouse extends React.Component {
 
 
       }
-
+      if (id === "IsTrading") {
+        warehouse.IsTrading = e.target.checked;
+        this.setState({ warehouse: warehouse });
+      }
 
 
 
@@ -617,7 +622,7 @@ class editwarehouse extends React.Component {
           linkTitle="Dashboard"
           masterHref={URLS.URLS.warehouseMaster + this.state.urlparams}
           masterLinkTitle="Warehouse"
-          typoTitle="Edit Warehouse"
+          typoTitle="Edit"
           level={2}
         />
       </Fragment>
@@ -837,7 +842,7 @@ class editwarehouse extends React.Component {
                               <SSIB
                                 key="IsDefault"
                                 id="IsDefault"
-                                label="Is Default?"
+                                label="Default ?"
                                 param={this.state.warehouse.IsDefault}
                                 onChange={(e) =>
                                   updateFormValue("IsDefault", e)
@@ -845,14 +850,26 @@ class editwarehouse extends React.Component {
                               />
 
                               <SSIB
+                                key="IsTrading"
+                                id="IsTrading"
+                                label="Trading ?"
+                                param={this.state.warehouse.IsTrading}
+                                onChange={(e) =>
+                                  updateFormValue("IsTrading", e)
+                                }
+                              />
+
+                              <SSIB
                                 key="IsActive"
                                 id="IsActive"
-                                label="Is Active?"
+                                label="Active ?"
                                 param={this.state.warehouse.IsActive}
                                 onChange={(e) =>
                                   updateFormValue("IsActive", e)
                                 }
                               />
+
+                              
 
 
                             </Grid>
@@ -895,31 +912,13 @@ class editwarehouse extends React.Component {
                               <SSIB
                                 key="IsEdi"
                                 id="IsEdi"
-                                label="Is EDI?"
+                                label="EDI ?"
                                 param={this.state.warehouse.IsEdi}
                                 onChange={(e) =>
                                   this.updateFormValue("IsEdi", e)
                                 }
                               />
-                              {/* <TableRow>
-                                <TableCell
-                                  align="left"
-                                  className="no-border-table"
-                                >
-                                  isEDI?
-                                </TableCell>
-                                <TableCell
-                                  align="left"
-                                  className="no-border-table"
-                                >
-                                  <Switch
-                                    size="small"
-                                    onChange={(e) =>
-                                      updateFormValue("isEDI", e)
-                                    }
-                                  />
-                                </TableCell>
-                              </TableRow> */}
+                             
                               <SIB
                                 id="ediurl"
                                 label="EDI Url"
