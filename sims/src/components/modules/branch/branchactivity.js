@@ -40,12 +40,22 @@ import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 import SDBIB from "../../compo/griddropdowninputwithbutton";
 import SDTI from "../../compo/griddateinput";
+import BranchQuickDetails from "./branchquickdetails";
+import DialogCustom from "../../compo/dialogcomponent";
 
 class editbranch extends React.Component {
   constructor(props) {
     super(props);   
    
     this.state = {
+      DeleteAttachment: {
+        e: null,
+        item: null
+      },
+      Dialog: {
+        open: false
+      },
+      filelist: [],
       isLoggedIn: false,
       ProgressLoader: false,
       urlparams: null,
@@ -55,7 +65,7 @@ class editbranch extends React.Component {
       TaxationDetailsExpanded: false,
       NumberingExpanded: false,
       LogoExpanded:false,
-      disabledUpdatebtn: false,
+      disabledUpdatebtn: true,
       disabledCreatebtn: true,
       numberSeries: [],
       companyData: [],
@@ -103,6 +113,7 @@ class editbranch extends React.Component {
         CINNo: "",
         IECNo: "",
         ARNNo: "",
+        IsCustomExchange:false,
         IsSEZ: true,
         IsExportUnit: true,
         CurrID: 0,
@@ -132,6 +143,7 @@ class editbranch extends React.Component {
         LPONo: 0,
         IPONo: 0,
         PurInvNo: 0,
+        MRNNo:0,
         GITNo: 0,
         SRNo: 0,
         SIssueNo: 0,
@@ -327,26 +339,7 @@ class editbranch extends React.Component {
       .catch((error) => { });
   }
 
-  // getStateList() {
-  //   let rows = [];
-  //   let ValidUser = APIURLS.ValidUser;
-  //   ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-  //   ValidUser.Token = getCookie(COOKIE.TOKEN);
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-  //   let GetStatesUrl = APIURLS.APIURL.GetStates;
-
-  //   axios
-  //     .post(GetStatesUrl, ValidUser, { headers })
-  //     .then((response) => {
-  //       let data = response.data;
-
-  //       rows = data;
-  //       this.processStateData(data);
-  //     })
-  //     .catch((error) => { });
-  // }
+ 
 
   getCountryList() {
     let rows = [];
@@ -454,13 +447,19 @@ class editbranch extends React.Component {
       axios
         .post(GetBranchUrl, data, { headers })
         .then((response) => {
-          let data = response.data;
-          this.setState({ branch: data }, () => {
-            this.setInitialParamsForEdit();
-          });
+          if (response.status === 200) {
+            let data = response.data;
+            this.setState({ branch: data,disabledUpdatebtn:false }, () => {
+              this.setInitialParamsForEdit();
+              this.refreshFileLists();
+            });
+          } else {
+            this.setState({ErrorPrompt:true, ProgressLoader: true });
+          }
+          
         })
         .catch((error) => {
-          this.setState({ branch: null, ProgressLoader: true });
+          this.setState({ErrorPrompt:true, ProgressLoader: true });
         });
     } catch (ex) {
       console.log("ex");
@@ -717,6 +716,156 @@ class editbranch extends React.Component {
       .catch((error) => { });
   };
   
+  /*******************FILEUPLOAD STARTS************************** */
+
+  processUpload = (e) => {
+    this.setState({ ShowLoader: true });
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const formData = CF.FILE_UPLOAD_FORMDATA(ValidUser, e, "branch", CF.toInt(this.state.branch.CompanyID), CF.toInt(this.state.branch.BranchID));
+
+    const FTPUploadUrl = APIURLS.APIURL.FTPUPLOAD;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(FTPUploadUrl, formData, { headers })
+      .then((response) => {
+        if (response.status === 200 || response.status === 201) {
+          this.refreshFileLists();
+        }
+        if (response.status === 403) {
+          this.setState({ ErrorPrompt: true, ShowLoader: false });
+        }
+
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ ErrorPrompt: true, ShowLoader: false });
+
+      });
+
+  }
+
+  refreshFileLists = () => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const FTPFILELIST = APIURLS.APIURL.FTPFILELIST;
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const fd = new FormData();
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+    fd.append('CompanyId', this.state.branch.CompanyID);
+    fd.append('BranchID', this.state.branch.BranchID);
+    fd.append('Transaction', APIURLS.TrasactionType.default);
+    fd.append('TransactionNo', "");
+    fd.append('FileData', "");
+
+    console.log("getCompanyFileList > fd > ", fd);
+    axios
+      .post(FTPFILELIST, fd, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          this.setState({
+            filelist: response.data,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ filelist: [] });
+      });
+  }
+
+  downloadThisFile = (e, item) => {
+    let ValidUser = APIURLS.ValidUser;
+    ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+    ValidUser.Token = getCookie(COOKIE.TOKEN);
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.FileDownload;
+
+    const fd = new FormData();
+    fd.append('FileName', item.fileName);
+    fd.append('companyId', this.state.branch.CompanyID);
+    fd.append('BranchID', this.state.branch.BranchID);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+
+    axios({
+      method: 'post',
+      url: Url,
+      responseType: 'blob',
+      data: fd
+    })
+      .then(function (response) {
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        let link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", item.fileName);
+        document.body.appendChild(link);
+        console.log("link > ", link);
+        link.click();
+      });
+  }
+
+  handleDelete = (e, item) => {
+    let Dialog = this.state.Dialog;
+    Dialog.open = true;
+    let DeleteAttachment = this.state.DeleteAttachment;
+    DeleteAttachment.e = e;
+    DeleteAttachment.item = item;
+    this.setState({
+      DeleteAttachment: DeleteAttachment,
+      Dialog: Dialog
+    });
+  }
+
+  processDelete = () => {
+    let e = this.state.DeleteAttachment.e;
+    let item = this.state.DeleteAttachment.item;
+
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    let Url = APIURLS.APIURL.DELETEFTPFILE;
+
+    const fd = new FormData();
+    fd.append('FileName', item.fileName);
+    fd.append('companyId', this.state.branch.CompanyID);
+    fd.append('BranchID', this.state.branch.BranchID);
+    fd.append('UserID', parseInt(getCookie(COOKIE.USERID)));
+    fd.append('Token', getCookie(COOKIE.TOKEN));
+
+    axios
+      .post(Url, fd, { headers })
+      .then((response) => {
+        if (response.status === 200) {
+          this.refreshFileLists();
+          let Dialog = this.state.Dialog;
+          Dialog.open = false;
+          this.setState({ Dialog: Dialog });
+        }
+      })
+      .catch((error) => {
+        console.log("error > ", error);
+        this.setState({ filelist: [] });
+      });
+  }
+
+  closeDialog = () => {
+    let Dialog = this.state.Dialog;
+    Dialog.open = false;
+    this.setState({ Dialog: Dialog });
+  }
+
+  /*******************FILEUPLOAD ENDS************************** */
 
 
   render() {
@@ -1102,7 +1251,7 @@ class editbranch extends React.Component {
             setParams(branch);
           }
           break;
-
+        
         case "EffectiveDate":
           branch[param] = moment(e.target.value).format("YYYY-MM-DD");
           setParams(branch);
@@ -1403,6 +1552,11 @@ class editbranch extends React.Component {
           branch[param] = CF.toInt(e.target.value);
           setParams(branch);
           break;
+          case "MRNNo":
+            branch[param] = CF.toInt(e.target.value);
+            setParams(branch);
+            break;
+          
         case "GITNo":
           branch[param] = CF.toInt(e.target.value);
           setParams(branch);
@@ -1571,7 +1725,9 @@ class editbranch extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => { });
+        .catch((error) => { 
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
     };
 
     const handleupdate = () => {
@@ -1582,7 +1738,7 @@ class editbranch extends React.Component {
       ValidUser.Token = getCookie(COOKIE.TOKEN);
 
       let branch = this.state.branch;
-
+       
       branch.EffectiveDate = moment(branch.EffectiveDate).format("MM/DD/YYYY");
       branch.VATRegistationDate = moment(branch.VATRegistationDate).format(
         "MM/DD/YYYY"
@@ -1625,7 +1781,9 @@ class editbranch extends React.Component {
 
           this.setState({ branch: branch });
         })
-        .catch((error) => { });
+        .catch((error) => { 
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -1704,6 +1862,14 @@ class editbranch extends React.Component {
         <TopFixedRow3
           breadcrumb={breadcrumbHtml}
           buttongroup={buttongroupHtml}
+        />
+
+<DialogCustom
+          MessageHeader="Delete Attachment!"
+          MessageText="Do you want to delete this attachment?"
+          open={this.state.Dialog.open}
+          onClose={(e) => this.closeDialog()}
+          onOK={(e) => this.processDelete()}
         />
 
         <Grid className="table-adjust" container spacing={0}>
@@ -2067,7 +2233,6 @@ class editbranch extends React.Component {
                                           />
                                         </Grid>
                                       </Grid>
-                                       
                                       
 
 
@@ -2216,7 +2381,7 @@ class editbranch extends React.Component {
                                       <SSIB
                                         key="IsExportUnit"
                                         id="IsExportUnit"
-                                        label="Is Export Unit?"
+                                        label="Export Unit?"
                                         param={this.state.branch.IsExportUnit}
                                         onChange={(e) =>
                                           updateFormValue("IsExportUnit", e)
@@ -2244,7 +2409,7 @@ class editbranch extends React.Component {
                               <SSIB
                                 key="IsVAT"
                                 id="IsVAT"
-                                label="Is VAT?"
+                                label="VAT?"
                                 param={this.state.branch.IsVAT}
                                 onChange={(e) => updateFormValue("IsVAT", e)}
                               />
@@ -2260,6 +2425,7 @@ class editbranch extends React.Component {
                                   updateFormValue("VATRegistationDate", e)
                                 }
                                 value={this.state.branch.VATRegistationDate}
+                                disabled={!this.state.branch.IsVAT}
                               />
 
                               <SIB
@@ -2278,7 +2444,7 @@ class editbranch extends React.Component {
                               />
                               <SIB
                                 id="VATPercentage"
-                                label="VAT Percentage"
+                                label="VAT %"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
@@ -2289,17 +2455,18 @@ class editbranch extends React.Component {
                                   maxlength: 8,
                                 }}
                                 value={this.state.branch.VATPercentage}
-                                disabled={this.state.VATPercentageDisabled}
+                                // disabled={this.state.VATPercentageDisabled}
                                 error={
                                   this.state.Validations.VATPercentage
                                     .errorState
                                 }
+                                disabled={!this.state.branch.IsVAT}
                               />
 
                               <SSIB
                                 key="IsGST"
                                 id="IsGST"
-                                label="Is GST?"
+                                label="GST?"
                                 param={this.state.branch.IsGST}
                                 onChange={(e) => updateFormValue("IsGST", e)}
                               />
@@ -2331,7 +2498,18 @@ class editbranch extends React.Component {
                                 value={this.state.branch.GSTRegistationDate}
                                 error={null}
                                 helperText={null}
+                                disabled={!this.state.branch.IsGST}
                               />
+
+<SSIB
+                                            key="IsCustomExchange"
+                                            id="IsCustomExchange"
+                                            label="Custom Exchange?"
+                                            param={this.state.branch.IsCustomExchange}
+                                            onChange={(e) =>
+                                              updateFormValue("IsCustomExchange", e)
+                                            }
+                                          />
                             </Grid>
                           </Grid>
                         </div>
@@ -2372,28 +2550,28 @@ class editbranch extends React.Component {
                               {console.log("this.state.numberSeries > ", this.state.numberSeries)}
                               <SDIB
                                 id="LPINo"
-                                label="Local Proforma Invoice"
+                                label="Local PI"
                                 value={this.state.branch.LPINo}
                                 onChange={(e) => updateFormValue("LPINo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="EPINo"
-                                label="Export Proforma Invoice"
+                                label="Export PI"
                                 value={this.state.branch.EPINo}
                                 onChange={(e) => updateFormValue("EPINo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="SPINo"
-                                label="Sample Proforma Invoice"
+                                label="Sample PI"
                                 value={this.state.branch.SPINo}
                                 onChange={(e) => updateFormValue("SPINo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="TPINo"
-                                label="Trading Proforma Invoice"
+                                label="Trading PI"
                                 value={this.state.branch.TPINo}
                                 onChange={(e) => updateFormValue("TPINo", e)}
                                 param={this.state.numberSeries}
@@ -2401,28 +2579,28 @@ class editbranch extends React.Component {
 
                               <SDIB
                                 id="LSONo"
-                                label="Local Sales Order"
+                                label="Local SO"
                                 value={this.state.branch.LSONo}
                                 onChange={(e) => updateFormValue("LSONo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="ESONo"
-                                label="Export Sales Order"
+                                label="Export SO"
                                 value={this.state.branch.ESONo}
                                 onChange={(e) => updateFormValue("ESONo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="SSONo"
-                                label="Sample Sales Order"
+                                label="Sample SO"
                                 value={this.state.branch.SSONo}
                                 onChange={(e) => updateFormValue("SSONo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="TSONo"
-                                label="Trading Sales Order"
+                                label="Trading SO"
                                 value={this.state.branch.TSONo}
                                 onChange={(e) => updateFormValue("TSONo", e)}
                                 param={this.state.numberSeries}
@@ -2430,28 +2608,28 @@ class editbranch extends React.Component {
 
                               <SDIB
                                 id="LSINo"
-                                label="Local Sales Invoice"
+                                label="Local SI"
                                 value={this.state.LSINo}
                                 onChange={(e) => updateFormValue("LSINo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="ESINo"
-                                label="Export Sales Invoice"
+                                label="Export SI"
                                 value={this.state.branch.ESINo}
                                 onChange={(e) => updateFormValue("ESINo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="SSINo"
-                                label="Sample Sales Invoice"
+                                label="Sample SI"
                                 value={this.state.branch.SSINo}
                                 onChange={(e) => updateFormValue("SSINo", e)}
                                 param={this.state.numberSeries}
                               />
                               <SDIB
                                 id="TSINo"
-                                label="Trading Sales Invoice"
+                                label="Trading SI"
                                 value={this.state.branch.TSINo}
                                 onChange={(e) => updateFormValue("TSINo", e)}
                                 param={this.state.numberSeries}
@@ -2497,7 +2675,7 @@ class editbranch extends React.Component {
                               />
                               <SDIB
                                 id="LPONo"
-                                label="Local Purchase Order"
+                                label="Local PO"
                                 value={this.state.branch.LPONo}
                                 onChange={(e) => updateFormValue("LPONo", e)}
                                 param={this.state.numberSeries}
@@ -2505,7 +2683,7 @@ class editbranch extends React.Component {
 
                               <SDIB
                                 id="IPONo"
-                                label="Import Purchase Order"
+                                label="Import PO"
                                 value={this.state.branch.IPONo}
                                 onChange={(e) => updateFormValue("IPONo", e)}
                                 param={this.state.numberSeries}
@@ -2518,6 +2696,15 @@ class editbranch extends React.Component {
                                 onChange={(e) => updateFormValue("PurInvNo", e)}
                                 param={this.state.numberSeries}
                               />
+
+                              <SDIB
+                                id="MRNNo"
+                                label="MRN"
+                                value={this.state.branch.MRNNo}
+                                onChange={(e) => updateFormValue("MRNNo", e)}
+                                param={this.state.numberSeries}
+                              />
+
                               <SDIB
                                 id="GITNo"
                                 label="GIT"
@@ -2699,7 +2886,44 @@ class editbranch extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-          <Grid xs={12} sm={12} md={4} lg={4}></Grid>
+          <Grid xs={12} sm={12} md={4} lg={4}>
+          <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={1} lg={1}>
+                &nbsp;
+              </Grid>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                {this.state.branch &&
+                  Object.keys(this.state.branch).length === 0 &&
+                  Object.getPrototypeOf(this.state.branch) ===
+                  Object.prototype ? null : (
+                  <Fragment>
+                    <BranchQuickDetails
+                      new={URLS.URLS.addBranch + this.state.urlparams}
+                      edit={this.state.editUrl}
+                      branchItem={this.state.branch}
+                      filelist={this.state.filelist.map((item, i) => (
+                        <TableRow id={"fileRow_" + item.fileName}>
+                          <TableCell align="left" className="no-border-table">
+                            <span className="avatar-hover" onClick={(e) => this.downloadThisFile(e, item)}> {item.fileName} </span> <br />
+                            <span style={{ color: '#b0bec5' }}>{"Uploaded on " + item.modifiedDateTime}</span>
+                          </TableCell>
+                          <TableCell align="left" className="no-border-table">
+                            <IconButton size="small" edge="end" aria-label="delete">
+                              <DeleteIcon role={item} fontSize="small" style={{ color: '#f44336' }}
+                                onClick={(e) => this.handleDelete(e, item)}
+                              />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                      rowClicked={this.state.rowClicked}
+                      fileUploadonChange={(e) => this.processUpload(e)}
+                    />
+                  </Fragment>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
       </Fragment>
     );
