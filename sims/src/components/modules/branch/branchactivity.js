@@ -26,6 +26,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import TableRow from "@material-ui/core/TableRow";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import InputAdornment from '@mui/material/InputAdornment';
 
 
 import * as CF from "../../../services/functions/customfunctions";
@@ -1305,27 +1306,32 @@ class editbranch extends React.Component {
           setParams(branch);
           break;
         case "VATPercentage":
-          branch[param] = CF.toFloat(e.target.value);
-          let v15 = this.state.Validations;
-
-          if (e.target.value.length > 8) {
-            v15.VATPercentage = {
-              errorState: true,
-              errorMsg: "Only 20 characters  allowed",
-            };
-            this.setState({
-              Validations: v15,
-              // disabledCreatebtn: true,
-            });
-          } else {
-            v15.VATPercentage = { errorState: false, errorMsg: "" };
-            this.setState({
-              Validations: v15,
-              // disabledCreatebtn: false,
-            });
+          if(e.target.value===""){
+            branch[param] = 0;
+          }else{
+            branch[param] = CF.toFloat(e.target.value);
+            let v15 = this.state.Validations;
+  
+            if (e.target.value.length > 8) {
+              v15.VATPercentage = {
+                errorState: true,
+                errorMsg: "Only 20 characters  allowed",
+              };
+              this.setState({
+                Validations: v15,
+                // disabledCreatebtn: true,
+              });
+            } else {
+              v15.VATPercentage = { errorState: false, errorMsg: "" };
+              this.setState({
+                Validations: v15,
+                // disabledCreatebtn: false,
+              });
+              setParams(branch);
+            }
+  
             setParams(branch);
           }
-
           setParams(branch);
           break;
         case "GSTNo":
@@ -2443,16 +2449,20 @@ class editbranch extends React.Component {
                                 error={this.state.Validations.VATNo.errorState}
                               />
                               <SIB
+                             
                                 id="VATPercentage"
-                                label="VAT %"
+                                label="VAT"
                                 variant="outlined"
                                 size="small"
                                 onChange={(e) =>
-                                  updateFormValue("VATPercentage", e)
+                                  updateFormValue("VATPercentage", e) 
                                 }
+                                
                                 InputProps={{
                                   className: "textFieldCss",
                                   maxlength: 8,
+                                  endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                   
                                 }}
                                 value={this.state.branch.VATPercentage}
                                 // disabled={this.state.VATPercentageDisabled}
