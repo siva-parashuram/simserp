@@ -44,6 +44,7 @@ class editdestination extends React.Component {
       GeneralDetailsExpanded: true,
       ProgressLoader: true,
       destinations: [],
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       destinationId: 0,
@@ -144,8 +145,8 @@ class editdestination extends React.Component {
         let newData=[];
         for (let i = 0; i < data.length; i++) {
           let d = {
-            name: data[i].name,
-            value: data[i].stateId,
+            name: data[i].Name,
+            value: data[i].StateID,
           };
           newData.push(d);
         }
@@ -166,8 +167,8 @@ class editdestination extends React.Component {
       Destination: {
         DestinationId: parseInt(this.state.destinationId),
         CountryId: parseInt(this.state.countryId),
-        DestinationName: null,
-        Postcode: null,
+        DestinationName: "",
+        Postcode: "",
       },
       validUser: ValidUser,
     };
@@ -183,12 +184,13 @@ class editdestination extends React.Component {
         let data = response.data;
 
         this.setState({
-          oldName: data.destinationName,
-          destinationId: data.destinationId,
-          countryId: data.countryId,
-          destinationName: data.destinationName,
-          stateId: data.stateId,
-          postcode: data.postcode,
+          oldName: data.DestinationName,
+          destinationId: data.DestinationID,
+          countryId: data.CountryID,
+          destinationName: data.DestinationName,
+          stateId: data.StateID,
+          postcode: data.Postcode,
+          StateName:data.StateName,
           ProgressLoader: true,
         });
       })
@@ -215,6 +217,22 @@ class editdestination extends React.Component {
       })
       .catch((error) => {});
   };
+
+  isProperData = () => {
+    let isProperData = false;
+
+    if (
+      this.state.destinationName != "" &&
+      this.state.postcode != "" &&
+      parseInt(this.state.countryId) > 0
+    ) {
+      isProperData = true;
+    } else {
+      isProperData = false;
+      this.setState({ErrorPrompt:true,ErrorMessageProps:"Improper Data"});
+    }
+    return isProperData;
+  }
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -337,41 +355,49 @@ class editdestination extends React.Component {
     };
 
     const updateDestination = () => {
-      this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      let isProperData = false;
+      isProperData = this.isProperData();
+      if (isProperData === true) {
+        this.setState({ ProgressLoader: false });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-      let data = {
-        Destination: {
-          DestinationId: parseInt(this.state.destinationId),
-          CountryId: parseInt(this.state.countryId),
-          DestinationName: this.state.destinationName,
-          Postcode: this.state.postcode,
-          StateID: parseInt(this.state.stateId),
-        },
-        validUser: ValidUser,
-      };
+        let data = {
+          Destination: {
+            DestinationId: parseInt(this.state.destinationId),
+            CountryId: parseInt(this.state.countryId),
+            DestinationName: this.state.destinationName,
+            Postcode: this.state.postcode,
+            StateID: parseInt(this.state.stateId),
+          },
+          validUser: ValidUser,
+        };
 
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let UpdateDestinationUrl = APIURLS.APIURL.UpdateDestination;
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let UpdateDestinationUrl = APIURLS.APIURL.UpdateDestination;
 
-      axios
-        .post(UpdateDestinationUrl, data, { headers })
-        .then((response) => {
-          let data = response.data;
+        axios
+          .post(UpdateDestinationUrl, data, { headers })
+          .then((response) => {
+            let data = response.data;
 
-          if (response.status === 200) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-            this.getAllDestinations();
-          } else {
+            if (response.status === 200) {
+              this.setState({ ProgressLoader: true, SuccessPrompt: true });
+              this.getAllDestinations();
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+              this.getAllDestinations();
+            }
+          })
+          .catch((error) => {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
-            this.getAllDestinations();
-          }
-        })
-        .catch((error) => {});
+          });
+      }
+
+
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -423,6 +449,7 @@ class editdestination extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />
@@ -480,6 +507,7 @@ class editdestination extends React.Component {
                                 }
                               />
                               <SIB
+                               isMandatory={true}
                                 id="PostCode"
                                 label="Postcode"
                                 variant="outlined"
@@ -494,6 +522,7 @@ class editdestination extends React.Component {
                         <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                         <Grid item xs={12} sm={12} md={5} lg={5}>
                                <SDIB
+                                isMandatory={true}
                             id="CountryID"
                             label="Country"
                             size="small"

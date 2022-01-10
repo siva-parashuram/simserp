@@ -50,6 +50,7 @@ class adddestination extends React.Component {
       GeneralDetailsExpanded: true,
       ProgressLoader: true,
       destinations: [],
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       countryData: [],
@@ -175,6 +176,23 @@ class adddestination extends React.Component {
       .catch((error) => {});
   };
 
+  isProperData = () => {
+    let isProperData = false;
+
+    if (
+      this.state.destinationName != "" &&
+      this.state.postcode != "" &&
+      parseInt(this.state.countryId) > 0
+    ) {
+      isProperData = true;
+    } else {
+      isProperData = false;
+      this.setState({ErrorPrompt:true,ErrorMessageProps:"Improper Data"});
+      
+    }
+    return isProperData;
+  }
+
   render() {
     const handleAccordionClick = (val, e) => {
       if (val === "GeneralDetailsExpanded") {
@@ -281,41 +299,52 @@ class adddestination extends React.Component {
     };
 
     const addDestination = () => {
-      this.setState({ ProgressLoader: false });
-      let ValidUser = APIURLS.ValidUser;
-      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-      ValidUser.Token = getCookie(COOKIE.TOKEN);
 
-      let data = {
-        Destination: {
-          DestinationId: 0,
-          CountryId: parseInt(this.state.countryId),
-          DestinationName: this.state.destinationName,
-          stateId: parseInt(this.state.stateId),
-          Postcode: this.state.postcode,
-        },
-        validUser: ValidUser,
-      };
-
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      let CreateDestinationUrl = APIURLS.APIURL.CreateDestination;
-
-      axios
-        .post(CreateDestinationUrl, data, { headers })
-        .then((response) => {
-          let data = response.data;
-
-          if (response.status === 200 || response.status === 201) {
-            this.setState({ ProgressLoader: true, SuccessPrompt: true });
-            this.getAllDestinations();
-          } else {
+      let isProperData=false;
+      isProperData=this.isProperData();
+      
+      if(isProperData===true){
+        this.setState({ ProgressLoader: false });
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+  
+        let data = {
+          Destination: {
+            DestinationId: 0,
+            CountryId: parseInt(this.state.countryId),
+            DestinationName: this.state.destinationName,
+            stateId: parseInt(this.state.stateId),
+            Postcode: this.state.postcode,
+          },
+          validUser: ValidUser,
+        };
+  
+        const headers = {
+          "Content-Type": "application/json",
+        };
+        let CreateDestinationUrl = APIURLS.APIURL.CreateDestination;
+  
+        axios
+          .post(CreateDestinationUrl, data, { headers })
+          .then((response) => {
+            let data = response.data;
+  
+            if (response.status === 200 || response.status === 201) {
+              this.setState({ ProgressLoader: true, SuccessPrompt: true });
+              this.getAllDestinations();
+            } else {
+              this.setState({ ProgressLoader: true, ErrorPrompt: true });
+              this.getAllDestinations();
+            }
+          })
+          .catch((error) => {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
-            this.getAllDestinations();
-          }
-        })
-        .catch((error) => {});
+          });
+      }
+
+
+     
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -366,6 +395,7 @@ class adddestination extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />

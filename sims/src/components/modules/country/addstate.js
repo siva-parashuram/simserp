@@ -40,11 +40,11 @@ class addstate extends React.Component {
       state: {
         StateId: 0,
         CountryId: 0,
-        CreationDate: null,
-        Name: null,
-        Code: null,
-        Gstcode: null,
-        UserId: null,
+        CreationDate: "",
+        Name: "",
+        Code: "",
+        Gstcode: "",
+        UserId: 0,
       },
       code: null,
       country: null,
@@ -55,6 +55,7 @@ class addstate extends React.Component {
       StateId: null,
       countryData: [],
       CountryID: 0,
+      ErrorMessageProps:"",
       ErrorPrompt: false,
       SuccessPrompt: false,
       disableCreateBtn: true,
@@ -67,6 +68,7 @@ class addstate extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getStateList();
     this.getCountryList();
     var url = new URL(window.location.href);
@@ -74,13 +76,13 @@ class addstate extends React.Component {
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
     let CountryID=url.searchParams.get("CountryID");
-    let urlparams =
-      "?branchId=" +
-      branchId +
-      "&compName=" +
-      compName +
-      "&branchName=" +
-      branchName;
+    let urlparams =params;
+      // "?branchId=" +
+      // branchId +
+      // "&compName=" +
+      // compName +
+      // "&branchName=" +
+      // branchName;
 
       let state=this.state.state;
       state.CountryId=parseInt(CountryID);
@@ -151,6 +153,32 @@ class addstate extends React.Component {
     this.setState({ ProgressLoader: false });
     window.location = url;
   };
+
+   
+
+  isProperData = () => {
+    let state = this.state.state;
+    let isProperData = false;
+
+
+
+
+    if (
+      state.Name != "" &&
+      state.Code != "" &&
+      
+      
+      parseInt(state.CountryId) > 0
+
+    ) {
+      isProperData = true;
+    } else {
+      isProperData = false;
+      this.setState({ ErrorMessageProps: "Incomplete Data", ErrorPrompt: true });
+      return false;
+    }
+    return isProperData;
+  }
 
   render() {
     const handleAccordionClick = (val, e) => {
@@ -303,8 +331,10 @@ class addstate extends React.Component {
     };
 
     const handleCreate = () => {
-      // checkName();
-      let ValidUser = APIURLS.ValidUser;
+      let isProperData=false;
+       isProperData=this.isProperData();
+      if(isProperData===true){
+        let ValidUser = APIURLS.ValidUser;
       ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
       ValidUser.Token = getCookie(COOKIE.TOKEN);
       let state = this.state.state;
@@ -331,7 +361,11 @@ class addstate extends React.Component {
             this.setState({ ProgressLoader: true, ErrorPrompt: true });
           }
         })
-        .catch((error) => {});
+        .catch((error) => {
+          this.setState({ ProgressLoader: true, ErrorPrompt: true });
+        });
+      }
+      
     };
 
     const closeErrorPrompt = (event, reason) => {
@@ -356,7 +390,7 @@ class addstate extends React.Component {
           linkTitle="Dashboard"
           masterHref={URLS.URLS.stateMaster + this.state.urlparams}
           masterLinkTitle="State"
-          typoTitle="Add State"
+          typoTitle="Add"
           level={2}
         />
       </Fragment>
@@ -385,6 +419,7 @@ class addstate extends React.Component {
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
         <ErrorSnackBar
+          ErrorMessageProps={this.state.ErrorMessageProps}
           ErrorPrompt={this.state.ErrorPrompt}
           closeErrorPrompt={closeErrorPrompt}
         />
@@ -430,7 +465,7 @@ class addstate extends React.Component {
                           <SIB
                             isMandatory={true}
                             id="Name"
-                            label="State Name"
+                            label="Name"
                             variant="outlined"
                             size="small"
                             onChange={(e) => updateFormValue("Name", e)}
@@ -438,7 +473,7 @@ class addstate extends React.Component {
                             error={this.state.Validations.Name.errorState}
                           />
                           <SIB
-                           
+                           isMandatory={true}
                             id="Code"
                             label="Code"
                             variant="outlined"
@@ -451,7 +486,8 @@ class addstate extends React.Component {
                         <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                         <Grid item xs={12} sm={12} md={5} lg={5}>
                           <SIB
-                           
+                            onKeyDown={ e => ( e.keyCode === 69 || e.keyCode === 190 || e.key == "." || e.key == "-" ) && e.preventDefault() }
+                            type="number"
                             id="GSTCode"
                             label="GST Code"
                             variant="outlined"
@@ -461,6 +497,7 @@ class addstate extends React.Component {
                             error={this.state.Validations.Gstcode.errorState}
                           />
                           <SDIB
+                            isMandatory={true}
                             id="CountryID"
                             label="Country"
                             size="small"

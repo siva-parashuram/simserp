@@ -15,6 +15,7 @@ import TablePagination from "@mui/material/TablePagination";
 
 import EditIcon from "@mui/icons-material/Edit";
 import "../../user/dasboard.css";
+import * as CF from "../../../services/functions/customfunctions";
 
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -52,20 +53,20 @@ class statemaster extends React.Component {
     };
   }
   componentDidMount() {
-    // this.setState({ ProgressLoader: false });
+    let params = CF.GET_URL_PARAMS();
     this.getStateList();
 
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
-    let urlparams =
-      "?branchId=" +
-      branchId +
-      "&compName=" +
-      compName +
-      "&branchName=" +
-      branchName;
+    let urlparams =params;
+      // "?branchId=" +
+      // branchId +
+      // "&compName=" +
+      // compName +
+      // "&branchName=" +
+      // branchName;
     this.setState({
       urlparams: urlparams,
     });
@@ -84,7 +85,8 @@ class statemaster extends React.Component {
     axios
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
-        let data = response.data;
+        if(response.status===200){
+          let data = response.data;
         console.log("data > ", data);
         for(let i=0;i<data.length;i++){
           data[i].id=i+1;
@@ -96,8 +98,14 @@ class statemaster extends React.Component {
             this.handleRowClick([this.state.selectionModel]);
           }
         });
+        }else{
+          this.setState({ErrorPrompt:true, ProgressLoader: true});
+        }
+        
       })
-      .catch((error) => {});
+      .catch((error) => {
+        this.setState({ErrorPrompt:true, ProgressLoader: true});
+      });
   }
 
    
@@ -109,7 +117,7 @@ class statemaster extends React.Component {
       let editUrl =
         URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
       this.setState({ editurl: editUrl,selectionModel:index });     
-      this.getDestinationsByState(item); 
+      // this.getDestinationsByState(item); 
     } catch (e) {
       console.log("Error : ", e);
     }

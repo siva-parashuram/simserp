@@ -67,6 +67,7 @@ class editstate extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getStateList();
     this.getCountryList();
     var url = new URL(window.location.href);
@@ -75,13 +76,13 @@ class editstate extends React.Component {
     let compName = url.searchParams.get("compName");
     let StateId = url.searchParams.get("StateId");
 
-    let urlparams =
-      "?branchId=" +
-      branchId +
-      "&compName=" +
-      compName +
-      "&branchName=" +
-      branchName;
+    let urlparams =params;
+      // "?branchId=" +
+      // branchId +
+      // "&compName=" +
+      // compName +
+      // "&branchName=" +
+      // branchName;
     this.setState(
       {
         urlparams: urlparams,
@@ -391,7 +392,7 @@ class editstate extends React.Component {
           linkTitle="Dashboard"
           masterHref={URLS.URLS.stateMaster + this.state.urlparams}
           masterLinkTitle="State"
-          typoTitle="Edit State"
+          typoTitle="Edit"
           level={2}
         />
       </Fragment>
@@ -484,6 +485,8 @@ class editstate extends React.Component {
                         <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                         <Grid item xs={12} sm={12} md={5} lg={5}>
                           <SIB
+                           onKeyDown={ e => ( e.keyCode === 69 || e.keyCode === 190 || e.key == "." || e.key == "-" ) && e.preventDefault() }
+                           type="number"
                             id="GSTCode"
                             label="GST Code"
                             variant="outlined"
