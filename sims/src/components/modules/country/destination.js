@@ -33,6 +33,7 @@ class destination extends React.Component {
       urlparams: "",
       ProgressLoader: false,
       destinations: [],
+      CountryID:0,
     };
   }
 
@@ -42,6 +43,8 @@ class destination extends React.Component {
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
+    let CountryID=this.props.CountryID?parseInt(this.props.CountryID):0; 
+    console.log("Destination > this.props.CountryID > ",this.props.CountryID);
     let urlparams =
       "?branchId=" +
       branchId +
@@ -51,6 +54,7 @@ class destination extends React.Component {
       branchName;
     this.setState({
       urlparams: params,
+      CountryID:CountryID
     });
   }
 
@@ -74,7 +78,8 @@ class destination extends React.Component {
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
-      window.location = url;
+      console.log("openPage > url > ",url)
+       window.location = url;
     };
 
     return (
@@ -96,7 +101,7 @@ class destination extends React.Component {
                 <Button
                   startIcon={APIURLS.buttonTitle.add.icon}
                   className="action-btns"
-                  onClick={(e) => openPage(URLS.URLS.addDestination + this.state.urlparams)}
+                  onClick={(e) => openPage(URLS.URLS.addDestination + this.state.urlparams+"&CountryID="+this.props.CountryID)}
                 >
                   {APIURLS.buttonTitle.add.name}
                 </Button>
@@ -142,19 +147,7 @@ class destination extends React.Component {
                                 (item, i) => (
                                   <TableRow>
                                     <TableCell>
-                                      <a
-                                        className="LINK tableLink"
-                                        href={
-                                          URLS.URLS.editDestination +
-                                          this.state.urlparams +
-                                          "&&destinationId=" +
-                                          item.destinationId +
-                                          "&&countryId=" +
-                                          item.countryId
-                                        }
-                                      >
-                                        {i + 1}
-                                      </a>
+                                    {i + 1}
                                     </TableCell>
                                     <TableCell>
                                       <a
@@ -163,16 +156,16 @@ class destination extends React.Component {
                                           URLS.URLS.editDestination +
                                           this.state.urlparams +
                                           "&&destinationId=" +
-                                          item.destinationId +
+                                          item.DestinationID +
                                           "&&countryId=" +
-                                          item.countryId
+                                          this.props.CountryID
                                         }
                                       >
-                                        {item.destinationName}{" "}
+                                        {item.DestinationName} 
                                       </a>
                                     </TableCell>
                                     <TableCell>
-                                      {item.postcode}
+                                      {item.Postcode}
                                     </TableCell>
                                   </TableRow>
                                 )

@@ -70,6 +70,7 @@ class editcountry extends React.Component {
       countryData: [],
       duplicate: false,
       oldName: "",
+      countryID:0
     };
   }
 
@@ -95,6 +96,7 @@ class editcountry extends React.Component {
       {
         urlparams: params,
         country: country,
+        countryID:parseInt(countryID)
       },
       () => {
         this.getCountry();
@@ -179,12 +181,29 @@ class editcountry extends React.Component {
       .catch((error) => {});
   }
 
+  isDuplicatepresent = (input, key) => {
+    let isDuplicatepresent = false;
+    let countryData = this.state.countryData;
+    for (let i = 0; i < countryData.length; i++) {
+      console.log("countryData[i].CountryID > ", parseInt(countryData[i].CountryID));
+      console.log("this.state.countryID > ", parseInt(this.state.countryID));
+      if (parseInt(countryData[i].CountryID) !== parseInt(this.state.countryID)) {
+        if (countryData[i][key].toUpperCase() === input.trim().toUpperCase()) {
+          isDuplicatepresent = true;
+          break;
+        }
+      }
+    }
+    return isDuplicatepresent;
+  }
+
   processZones(data) {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].description,
-        value: data[i].zoneId,
+        name: data[i].Description,
+        value: data[i].ZoneID,
+        Code:data[i].Code
       };
       newData.push(d);
     }
@@ -205,26 +224,32 @@ class editcountry extends React.Component {
     };
 
     const CheckName = () => {
-      if (
-        this.state.Name === "" ||
-        this.state.Name === null ||
-        this.state.Name.length > 50 ||
-        this.state.duplicate === true
-      ) {
-        this.setState({ DisableUpdatebtn: true });
-      } else {
-        this.setState({ DisableUpdatebtn: false });
-      }
+      try{
+        if (
+          this.state.Name === "" ||
+          this.state.Name === null ||
+          this.state.Name.length > 50 ||
+          this.state.duplicate === true
+        ) {
+          this.setState({ DisableUpdatebtn: true });
+        } else {
+          this.setState({ DisableUpdatebtn: false });
+        }
+      }catch(ex){}
+      
     };
 
     const updateFormValue = (id, e) => {
       if (id === "Name") {
-        let duplicateExist = CF.chkDuplicateButExcludeName(
-          this.state.countryData,
-          "name",
-          this.state.oldName,
-          e.target.value
-        );
+        let duplicateExist=false;
+        duplicateExist=this.isDuplicatepresent(e.target.value,"Name");
+        console.log("duplicateExist > ",duplicateExist);
+        // let duplicateExist = CF.chkDuplicateButExcludeName(
+        //   this.state.countryData,
+        //   "name",
+        //   this.state.oldName,
+        //   e.target.value
+        // );
         let country = this.state.country;
         country.Name = e.target.value;
         if (
@@ -276,7 +301,7 @@ class editcountry extends React.Component {
       }
       if (id === "TwoDitgitCode") {
         let country = this.state.country;
-        country.TwoDitgitCode = e.target.value;
+        country.TwoDitgitCode = e.target.value.trim().toUpperCase();
         if (e.target.value.length > 2) {
           let v = this.state.Validations;
           v.TwoDitgitCode = {
@@ -294,7 +319,7 @@ class editcountry extends React.Component {
           };
           this.setState({
             Validations: v,
-            TwoDitgitCode: e.target.value,
+            TwoDitgitCode: e.target.value.trim().toUpperCase(),
             country: country,
           });
         }
@@ -302,7 +327,7 @@ class editcountry extends React.Component {
       }
       if (id === "ThreeDitgitCode") {
         let country = this.state.country;
-        country.ThreeDitgitCode = e.target.value;
+        country.ThreeDitgitCode = e.target.value.trim().toUpperCase();
         if (e.target.value.length > 3) {
           let v = this.state.Validations;
           v.ThreeDitgitCode = {
@@ -320,7 +345,7 @@ class editcountry extends React.Component {
           };
           this.setState({
             Validations: v,
-            ThreeDitgitCode: e.target.value,
+            ThreeDitgitCode: e.target.value.trim().toUpperCase(),
             country: country,
           });
         }
@@ -384,8 +409,8 @@ class editcountry extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.countryMaster + this.state.urlparams}
-          masterLinkTitle="Country Master"
-          typoTitle="Edit Country"
+          masterLinkTitle="Country"
+          typoTitle="Edit"
           level={2}
         />
       </Fragment>
@@ -467,6 +492,7 @@ class editcountry extends React.Component {
                             }}
                             value={this.state.Name}
                             error={this.state.Validations.Name.errorState}
+                            isMandatory={true}
                           />
 
                           <SIB
@@ -485,6 +511,7 @@ class editcountry extends React.Component {
                             error={
                               this.state.Validations.TwoDitgitCode.errorState
                             }
+                            isMandatory={true}
                           />
                         </Grid>
                         <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
@@ -505,7 +532,7 @@ class editcountry extends React.Component {
                             error={
                               this.state.Validations.ThreeDitgitCode.errorState
                             }
-                           
+                            isMandatory={true}
                           />
                           <SDIB
                             id="ZoneID"

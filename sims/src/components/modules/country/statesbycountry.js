@@ -74,9 +74,9 @@ class statesbycountry extends React.Component {
           <Grid xs={12} sm={12} md={6} lg={6}>
             <a
               className="LINK tableLink"
-              href={URLS.URLS.addState + this.state.urlparams}
+              href={URLS.URLS.addState + this.state.urlparams+"&CountryID="+this.props.CountryID}
             >
-              + Add New
+              + Add
             </a>
           </Grid>
         </Grid>
@@ -110,17 +110,7 @@ class statesbycountry extends React.Component {
                         ? getPageData(this.props.states).map((item, i) => (
                             <TableRow>
                               <TableCell>
-                                <a
-                                  className="LINK tableLink"
-                                  href={
-                                    URLS.URLS.editState +
-                                    this.state.urlparams +
-                                    "&StateId=" +
-                                    item.stateId
-                                  }
-                                >
-                                  {URLS.PREFIX.stateID + item.stateId}
-                                </a>
+                                {i+1}
                               </TableCell>
                               <TableCell>
                                 <a
@@ -129,14 +119,14 @@ class statesbycountry extends React.Component {
                                     URLS.URLS.editState +
                                     this.state.urlparams +
                                     "&StateId=" +
-                                    item.stateId
+                                    item.StateID
                                   }
                                 >
-                                  {item.name}
+                                  {item.Name}
                                 </a>
                               </TableCell>
-                              <TableCell> {item.code} </TableCell>
-                              <TableCell> {item.gstcode} </TableCell>
+                              <TableCell> {item.Code} </TableCell>
+                              <TableCell> {item.GSTCode} </TableCell>
                             </TableRow>
                           ))
                         : null}

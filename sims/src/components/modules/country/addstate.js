@@ -54,7 +54,7 @@ class addstate extends React.Component {
       name: null,
       StateId: null,
       countryData: [],
-      CountryID: null,
+      CountryID: 0,
       ErrorPrompt: false,
       SuccessPrompt: false,
       disableCreateBtn: true,
@@ -73,6 +73,7 @@ class addstate extends React.Component {
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
+    let CountryID=url.searchParams.get("CountryID");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -80,8 +81,13 @@ class addstate extends React.Component {
       compName +
       "&branchName=" +
       branchName;
+
+      let state=this.state.state;
+      state.CountryId=parseInt(CountryID);
     this.setState({
       urlparams: urlparams,
+      state:state,
+      CountryID:parseInt(CountryID)
     });
   }
 

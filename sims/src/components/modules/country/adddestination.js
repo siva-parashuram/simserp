@@ -75,6 +75,7 @@ class adddestination extends React.Component {
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
+    let CountryID=url.searchParams.get("CountryID");
     let urlparams =
       "?branchId=" +
       branchId +
@@ -84,6 +85,7 @@ class adddestination extends React.Component {
       branchName;
     this.setState({
       urlparams: params,
+      countryId:parseInt(CountryID)
     });
   }
 
@@ -456,70 +458,7 @@ class adddestination extends React.Component {
                       </Grid>
                     </Grid>
 
-                    {/* <Grid container spacing={0}>
-                      <Grid xs={12} sm={12} md={12} lg={12}>
-                        <Table
-                          stickyHeader
-                          size="small"
-                          className="accordion-table"
-                          aria-label="destination add table"
-                        >
-                          <TableBody className="tableBody">
-                            <Tablerowcelltextboxinput
-                              id="Name"
-                              label="Destination"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("Name", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
-                              value={this.state.destinationName}
-                              error={
-                                this.state.Validations.destinationName
-                                  .errorState
-                              }
-                              helperText={
-                                this.state.Validations.destinationName.errorMssg
-                              }
-                            />
-
-                            <Tablerowcelltextboxinput
-                              id="PostCode"
-                              label="Post Code"
-                              variant="outlined"
-                              size="small"
-                              onChange={(e) => updateFormValue("PostCode", e)}
-                              InputProps={{
-                                className: "textFieldCss",
-                                maxlength: 50,
-                              }}
-                              value={this.state.postcode}
-                              error={this.state.Validations.postcode.errorState}
-                              helperText={
-                                this.state.Validations.postcode.errorMssg
-                              }
-                            />
-                            <DropdownInput
-                              id="CountryID"
-                              label="Country"
-                              onChange={(e) => updateFormValue("CountryID", e)}
-                              options={this.state.countryData}
-                              value={this.state.countryId}
-                            />
-
-                            <DropdownInput
-                              id="stateID"
-                              label="State"
-                              onChange={(e) => updateFormValue("stateID", e)}
-                              options={this.state.stateData}
-                              value={this.state.stateId}
-                            />
-                          </TableBody>
-                        </Table>
-                      </Grid>
-                    </Grid> */}
+                    
                   </AccordionDetails>
                 </Accordion>
               </Grid>

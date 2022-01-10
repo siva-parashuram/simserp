@@ -49,6 +49,8 @@ class countryMaster extends React.Component {
       destinations: [],
       states: [],
       editurl: null,
+      item:{},
+      CountryID:0,
     };
   }
 
@@ -153,7 +155,7 @@ class countryMaster extends React.Component {
         this.state.urlparams +
         "&countryID=" +
         item.CountryID;
-      this.setState({ editurl: editUrl, destinations: item.destinations });
+      this.setState({ editurl: editUrl, destinations: item.Destinations,states:item.State,CountryID:parseInt(item.CountryID) });
       this.InitialremoveIsSelectedRowClasses();
       document.getElementById(id).classList.add("selectedRow");
     } catch (e) {}
@@ -169,6 +171,7 @@ class countryMaster extends React.Component {
 
   render() {
     const handleRowClick = (e, item, id) => {
+      
       try {
         //  getDestinationsByState(item);
         let editUrl =
@@ -176,8 +179,13 @@ class countryMaster extends React.Component {
           this.state.urlparams +
           "&countryID=" +
           item.CountryID;
-        this.setState({ editurl: editUrl, destinations: item.destinations });
-        getStatesByCountry(item);
+
+          console.log("editUrl > ",editUrl);
+          console.log("destinations > ",item.Destinations);
+          console.log("states > ",item.State);
+          console.log("item > ",item);
+        this.setState({ editurl: editUrl, destinations: item.Destinations,states:item.State,CountryID:parseInt(item.CountryID)});
+       // getStatesByCountry(item);
         removeIsSelectedRowClasses();
         document.getElementById(id).classList.add("selectedRow");
       } catch (e) {}
@@ -289,7 +297,7 @@ class countryMaster extends React.Component {
           backOnClick={this.props.history.goBack}
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
-          typoTitle="Country Master"
+          typoTitle="Country"
           level={1}
         />
       </Fragment>
@@ -350,6 +358,12 @@ class countryMaster extends React.Component {
                           <TableCell className="table-header-font" align="left">
                             Country Name
                           </TableCell>
+                          <TableCell className="table-header-font" align="left">
+                            Two Digit Code
+                          </TableCell>
+                          <TableCell className="table-header-font" align="left">
+                            Three Digit Code
+                          </TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody className="tableBody">
@@ -373,10 +387,12 @@ class countryMaster extends React.Component {
                                   item.CountryID
                                 }
                               >
-                                {URLS.PREFIX.countryID + item.CountryID}
+                                {i+1}
                               </a>
                             </TableCell>
                             <TableCell align="left">{item.Name}</TableCell>
+                            <TableCell align="left">{item.TwoDitgitCode}</TableCell>
+                            <TableCell align="left">{item.ThreeDitgitCode}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -397,7 +413,7 @@ class countryMaster extends React.Component {
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={1}>
               <Grid xs={12} sm={12} md={10} lg={11}>
-                <Destination destinations={this.state.destinations} />
+                <Destination destinations={this.state.destinations} CountryID={this.state.CountryID} />
               </Grid>
             </Grid>
 
@@ -409,7 +425,7 @@ class countryMaster extends React.Component {
 
             <Grid container spacing={1}>
               <Grid xs={12} sm={12} md={10} lg={11}>
-                <Statesbycountry states={this.state.states} />
+                <Statesbycountry states={this.state.states} CountryID={this.state.CountryID}/>
               </Grid>
             </Grid>
             <Grid container spacing={1}>

@@ -147,8 +147,9 @@ class addcountry extends React.Component {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].description,
-        value: data[i].zoneId,
+        name: data[i].Description,
+        value: data[i].ZoneID,
+        Code:data[i].Code
       };
       newData.push(d);
     }
@@ -170,16 +171,19 @@ class addcountry extends React.Component {
     };
 
     const CheckName = () => {
-      if (
-        this.state.Name === "" ||
-        this.state.Name === null ||
-        this.state.Name.length > 50 ||
-        this.state.duplicate === true
-      ) {
-        this.setState({ DisableCreatebtn: true });
-      } else {
-        this.setState({ DisableCreatebtn: false });
-      }
+      try{
+        if (
+          this.state.Name === "" ||
+          this.state.Name === null ||
+          this.state.Name.length > 50 ||
+          this.state.duplicate === true
+        ) {
+          this.setState({ DisableCreatebtn: true });
+        } else {
+          this.setState({ DisableCreatebtn: false });
+        }
+      }catch(ex){}
+      
     };
 
     const updateFormValue = (id, e) => {
@@ -244,7 +248,7 @@ class addcountry extends React.Component {
       }
       if (id === "TwoDitgitCode") {
         let country = this.state.country;
-        country.TwoDitgitCode = e.target.value;
+        country.TwoDitgitCode = e.target.value.trim().toUpperCase();
         if (e.target.value.length > 2) {
           let v = this.state.Validations;
           v.TwoDitgitCode = {
@@ -262,7 +266,7 @@ class addcountry extends React.Component {
           };
           this.setState({
             Validations: v,
-            TwoDitgitCode: e.target.value,
+            TwoDitgitCode: e.target.value.trim().toUpperCase(),
             country: country,
           });
         }
@@ -270,7 +274,7 @@ class addcountry extends React.Component {
       }
       if (id === "ThreeDitgitCode") {
         let country = this.state.country;
-        country.ThreeDitgitCode = e.target.value;
+        country.ThreeDitgitCode = e.target.value.trim().toUpperCase();
         if (e.target.value.length > 3) {
           let v = this.state.Validations;
           v.ThreeDitgitCode = {
@@ -288,7 +292,7 @@ class addcountry extends React.Component {
           };
           this.setState({
             Validations: v,
-            ThreeDitgitCode: e.target.value,
+            ThreeDitgitCode: e.target.value.trim().toUpperCase(),
             country: country,
           });
         }
@@ -353,8 +357,8 @@ class addcountry extends React.Component {
           linkHref={URLS.URLS.userDashboard + this.state.urlparams}
           linkTitle="Dashboard"
           masterHref={URLS.URLS.countryMaster + this.state.urlparams}
-          masterLinkTitle="Country Master"
-          typoTitle="Add Country"
+          masterLinkTitle="Country"
+          typoTitle="Add"
           level={2}
         />
       </Fragment>
@@ -396,7 +400,7 @@ class addcountry extends React.Component {
         />
 
         <Grid className="table-adjust" container spacing={0}>
-          <Grid xs={12} sm={6} md={6} lg={6}>
+          <Grid xs={12} sm={12} md={8} lg={8}>
             <Accordion
               key="country-General-Details"
               expanded={this.state.GeneralDetailsExpanded}
@@ -426,7 +430,7 @@ class addcountry extends React.Component {
                         <Grid item xs={12} sm={12} md={5} lg={5}>
                           <SIB
                             id="Name"
-                            label="Country Name"
+                            label="Name"
                             variant="outlined"
                             size="small"
                             onChange={(e) => updateFormValue("Name", e)}
@@ -436,6 +440,7 @@ class addcountry extends React.Component {
                             }}
                             value={this.state.Name}
                             error={this.state.Validations.Name.errorState}
+                            isMandatory={true}
                           />
 
                           <SIB
@@ -454,6 +459,7 @@ class addcountry extends React.Component {
                             error={
                               this.state.Validations.TwoDitgitCode.errorState
                             }
+                            isMandatory={true}
                           />
                         </Grid>
                         <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
@@ -467,14 +473,14 @@ class addcountry extends React.Component {
                               updateFormValue("ThreeDitgitCode", e)
                             }
                             InputProps={{
-                              className: "textFieldCss",
-                              maxlength: 20,
+                              className: "textFieldCss",                             
                             }}
+                            
                             value={this.state.ThreeDitgitCode}
                             error={
                               this.state.Validations.ThreeDitgitCode.errorState
                             }
-                           
+                            isMandatory={true}
                           />
                           <SDIB
                             id="ZoneID"

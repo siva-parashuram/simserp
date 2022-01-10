@@ -54,9 +54,10 @@ class gridtextboxinput extends React.Component {
                   multiline={this.props.multiline}
                   rows={this.props.rows}
                   inputProps={this.props.inputProps}
+                  InputProps={this.props.InputProps}
                   onBlur={this.props.onBlur}
                   onKeyDown={this.props.onKeyDown}
-
+                  
                 />
               </Grid>
             </Grid>
