@@ -44,12 +44,13 @@ class statemaster extends React.Component {
       rowsPerPage: 10,
       urlparams: "",
       ProgressLoader: false,
-      ErrorPrompt:false,
+      ErrorPrompt: false,
       stateData: [],
       destinations: [],
       editurl: null,
-      columns:APIURLS.stateMasterColumn,
-      selectionModel:1,
+      columns: APIURLS.stateMasterColumn,
+      selectionModel: 1,
+      item: {}
     };
   }
   componentDidMount() {
@@ -60,20 +61,20 @@ class statemaster extends React.Component {
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
-    let urlparams =params;
-      // "?branchId=" +
-      // branchId +
-      // "&compName=" +
-      // compName +
-      // "&branchName=" +
-      // branchName;
+    let urlparams = params;
+    // "?branchId=" +
+    // branchId +
+    // "&compName=" +
+    // compName +
+    // "&branchName=" +
+    // branchName;
     this.setState({
       urlparams: urlparams,
     });
   }
 
   getStateList() {
-     
+
     let ValidUser = APIURLS.ValidUser;
     ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
     ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -85,38 +86,32 @@ class statemaster extends React.Component {
     axios
       .post(GetStatesUrl, ValidUser, { headers })
       .then((response) => {
-        if(response.status===200){
+        if (response.status === 200) {
           let data = response.data;
-        console.log("data > ", data);
-        for(let i=0;i<data.length;i++){
-          data[i].id=i+1;
+          this.setState({ stateData: data, ProgressLoader: true }, () => {
+            if (data.length > 0) {
+              this.handleRowClick([this.state.selectionModel]);
+            }
+          });
+        } else {
+          this.setState({ ErrorPrompt: true, ProgressLoader: true });
         }
-        console.log("data > ",data);
 
-        this.setState({ stateData: data, ProgressLoader: true },()=>{
-          if(data.length>0){
-            this.handleRowClick([this.state.selectionModel]);
-          }
-        });
-        }else{
-          this.setState({ErrorPrompt:true, ProgressLoader: true});
-        }
-        
       })
       .catch((error) => {
-        this.setState({ErrorPrompt:true, ProgressLoader: true});
+        this.setState({ ErrorPrompt: true, ProgressLoader: true });
       });
   }
 
-   
 
-  handleRowClick=(e)=> {
+
+  handleRowClick = (e) => {
     try {
       let index = e[0];
-      let item = this.state.stateData[index - 1]; 
+      let item = this.state.stateData[index - 1];
       let editUrl =
-        URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.stateId;
-      this.setState({ editurl: editUrl,selectionModel:index });     
+        URLS.URLS.editState + this.state.urlparams + "&StateId=" + item.StateID;
+      this.setState({ editurl: editUrl, selectionModel: index, item: item });
       // this.getDestinationsByState(item); 
     } catch (e) {
       console.log("Error : ", e);
@@ -150,27 +145,27 @@ class statemaster extends React.Component {
       .post(GetDestinationByCountryIdAndStateIdUrl, data, { headers })
       .then((response) => {
         console.log("getDestinationsByState > Fetching.....Fetched.....");
-        if(response.status===200){
+        if (response.status === 200) {
           let data = response.data;
           if (Object.prototype.toString.call(data) === "[object Array]") {
             this.setState({ destinations: data, ProgressLoader: true });
           } else {
-            this.setState({ destinations: [], ProgressLoader: true,ErrorPrompt:true });
+            this.setState({ destinations: [], ProgressLoader: true, ErrorPrompt: true });
           }
-        }else{
-          this.setState({ destinations: [], ProgressLoader: true,ErrorPrompt:true });
+        } else {
+          this.setState({ destinations: [], ProgressLoader: true, ErrorPrompt: true });
         }
-      
+
       })
       .catch((error) => {
-        this.setState({ destinations: [], ProgressLoader: true,ErrorPrompt:true });
+        this.setState({ destinations: [], ProgressLoader: true, ErrorPrompt: true });
       });
   };
 
- 
+
 
   render() {
-    
+
 
     const openPage = (url) => {
       this.setState({ ProgressLoader: false });
@@ -185,7 +180,7 @@ class statemaster extends React.Component {
       this.setState({ pagination: pagination });
     };
 
-     
+
 
     const breadcrumbHtml = (
       <Fragment>
@@ -254,16 +249,16 @@ class statemaster extends React.Component {
                 {this.state.stateData.length > 0 ? (
                   <Fragment>
 
-                <MasterDataGrid
-                 selectionModel={this.state.selectionModel}
-                 rows={this.state.stateData}
-                 columns={this.state.columns}
-                 pagination={this.state.pagination}
-                 onSelectionModelChange={(e) => this.handleRowClick(e)}
-                 onPageChange={handlePageChange}
-                />  
+                    <MasterDataGrid
+                      selectionModel={this.state.selectionModel}
+                      rows={this.state.stateData}
+                      columns={this.state.columns}
+                      pagination={this.state.pagination}
+                      onSelectionModelChange={(e) => this.handleRowClick(e)}
+                      onPageChange={handlePageChange}
+                    />
 
-                  
+
                   </Fragment>
                 ) : (
                   <Tableskeleton />
@@ -273,11 +268,13 @@ class statemaster extends React.Component {
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
             <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={1} lg={1}></Grid>
               <Grid xs={12} sm={12} md={11} lg={11}>
-                <div style={{marginLeft:10}}>
-                <Destination destinations={this.state.destinations} />
-                </div>
-                
+                <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={11} lg={11}>
+                    <Destination destinations={this.state.item.Destinations} CountryID={this.state.item.CountryID} />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

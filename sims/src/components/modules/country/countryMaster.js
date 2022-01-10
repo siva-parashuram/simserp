@@ -343,7 +343,7 @@ class countryMaster extends React.Component {
         <Grid className="table-adjust" container spacing={0}>
           <Grid xs={12} sm={12} md={8} lg={8}>
             <Grid container spacing={0}>
-              <Grid xs={12} sm={12} md={10} lg={10}>
+              <Grid xs={12} sm={12} md={12} lg={12}>
                 {this.state.countryData.length > 0 ? (
                   <Fragment>
                     <Table
@@ -411,26 +411,33 @@ class countryMaster extends React.Component {
             </Grid>
           </Grid>
           <Grid xs={12} sm={12} md={4} lg={4}>
-            <Grid container spacing={1}>
-              <Grid xs={12} sm={12} md={10} lg={11}>
-                <Destination destinations={this.state.destinations} CountryID={this.state.CountryID} />
-              </Grid>
-            </Grid>
+            <Grid container spacing={0}>
+              <Grid xs={12} sm={12} md={1} lg={1}></Grid>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={11} lg={11}>
+                    <Destination destinations={this.state.destinations} CountryID={this.state.CountryID} />
+                  </Grid>
+                </Grid>
 
-            <Grid container spacing={1}>
-              <Grid xs={12} sm={12} md={10} lg={11}>
-                <Divider className="divider-custom" />
-              </Grid>
-            </Grid>
+                <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={11} lg={11}>
+                     
+                    <Divider className="divider-custom" />
+                   
+                  </Grid>
+                </Grid>
 
-            <Grid container spacing={1}>
-              <Grid xs={12} sm={12} md={10} lg={11}>
-                <Statesbycountry states={this.state.states} CountryID={this.state.CountryID}/>
-              </Grid>
-            </Grid>
-            <Grid container spacing={1}>
-              <Grid xs={12} sm={12} md={10} lg={11}>
-                &nbsp;
+                <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={11} lg={11}>
+                    <Statesbycountry states={this.state.states} CountryID={this.state.CountryID} />
+                  </Grid>
+                </Grid>
+                <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={11} lg={11}>
+                    &nbsp;
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

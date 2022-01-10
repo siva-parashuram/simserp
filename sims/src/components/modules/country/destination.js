@@ -85,19 +85,19 @@ class destination extends React.Component {
     return (
       <Fragment>
 
-        <div style={{marginTop:-20}}>
+        <div style={{marginTop:-10}}>
           <Grid container spacing={0}>
-            <Grid xs={12} sm={12} md={12} lg={12}>
+            <Grid xs={12} sm={12} md={4} lg={4}>
               <h5 className="destination-title">Destinations</h5>
             </Grid>
-          </Grid>
-          <Grid container spacing={0}>
-            <Grid xs={12} sm={12} md={6} lg={6}>
-              <ButtonGroup
+           
+            <Grid xs={12} sm={12} md={2} lg={2}>   
+            <div  style={{marginTop:16}}>
+            <ButtonGroup
                 size="small"
                 variant="text"
                 aria-label="Action Menu Button group"
-              >
+              >               
                 <Button
                   startIcon={APIURLS.buttonTitle.add.icon}
                   className="action-btns"
@@ -107,13 +107,15 @@ class destination extends React.Component {
                 </Button>
 
               </ButtonGroup>
+              </div>
             </Grid>
+            <Grid xs={12} sm={12} md={6} lg={6}>  </Grid>
           </Grid>
-          <div style={{ marginTop: 10 }}>
+          
+          
             <Grid container spacing={0}>
               <Grid xs={12} sm={12} md={12} lg={12}>
-                {this.props.destinations ? (
-                  this.props.destinations.length > 0 ? (
+                 
                     <Fragment>
                       <TableContainer sx={{ maxHeight: 400 }}>
                         <Table
@@ -175,19 +177,20 @@ class destination extends React.Component {
                         </Table>
                       </TableContainer>
 
-                      <Pagination
-                        data={this.props.destinations}
-                        pagination={this.state.pagination}
-                        onPageChange={handlePageChange}
-                      />
+                  {this.props.destinations ? (
+                    <Pagination
+                      data={this.props.destinations}
+                      pagination={this.state.pagination}
+                      onPageChange={handlePageChange}
+                    />
+                  ) : null}
+                     
                     </Fragment>
-                  ) : (
-                    <h5>No Destinations!</h5>
-                  )
-                ) : null}
+                  
+             
               </Grid>
             </Grid>
-          </div>
+           
         </div>
       </Fragment>
     );

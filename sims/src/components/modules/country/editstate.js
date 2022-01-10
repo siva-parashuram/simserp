@@ -26,6 +26,8 @@ import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import SIB from "../../compo/gridtextboxinput";
 import SDIB from "../../compo/griddropdowninput";
 
+import Destination from "./destination";
+
 class editstate extends React.Component {
   constructor(props) {
     super(props);
@@ -54,6 +56,7 @@ class editstate extends React.Component {
       StateId: 0,
       countryData: [],
       CountryID: 0,
+      Destinations:[],
       ErrorPrompt: false,
       SuccessPrompt: false,
       disableUpdateBtn: false,
@@ -136,14 +139,15 @@ class editstate extends React.Component {
         let data = response.data;
         console.log("StateData>>", data);
         this.setState({
-          oldName: data.name,
+          oldName: data.Name,
           state: data,
-          code: data.code,
+          code: data.Code,
           country: data.country,
-          countryId: data.countryId,
-          creationDate: data.creationDate,
-          gstcode: data.gstcode,
-          name: data.name,
+          countryId: data.CountryID,
+          creationDate: data.CreationDate,
+          gstcode: data.GSTCode,
+          name: data.Name,
+          Destinations:data.Destinations,
           ProgressLoader: true,
         });
       })
@@ -342,8 +346,8 @@ class editstate extends React.Component {
       const handleUpdateData = {
         validUser: ValidUser,
         state: {
-          stateId:state.stateId,
-          countryId:this.state.countryId,
+          stateId:parseInt(this.state.StateId),
+          countryId:parseInt(this.state.countryId),
           name:this.state.name,
           code:this.state.code,
           gstcode:this.state.gstcode,
@@ -510,6 +514,18 @@ class editstate extends React.Component {
                 </Grid>
               </AccordionDetails>
             </Accordion>
+          </Grid>
+          <Grid xs={12} sm={12} md={4} lg={4}>
+            <Grid container spacing={0}>
+            <Grid xs={12} sm={12} md={1} lg={1}></Grid>
+              <Grid xs={12} sm={12} md={11} lg={11}>
+                <Grid container spacing={0}>
+                  <Grid xs={12} sm={12} md={11} lg={11}>
+                    <Destination destinations={this.state.Destinations} CountryID={this.state.countryId} />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Fragment>

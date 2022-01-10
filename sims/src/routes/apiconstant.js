@@ -657,21 +657,21 @@ export const  stateMasterColumn=[
     headerClassName: 'table-header-font'
   },
   {
-    field: 'name',
+    field: 'Name',
     headerName: 'Name',
     width: 160,
     editable: false,
     headerClassName: 'table-header-font'
   },
   {
-    field: 'code',
+    field: 'Code',
     headerName: 'Code',
     width: 160,
     editable: false,
     headerClassName: 'table-header-font'
   },
   {
-    field: 'gstcode',
+    field: 'GSTCode',
     headerName: 'GST Code',
     width: 160,
     editable: false,

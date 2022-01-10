@@ -7,6 +7,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@mui/material/TablePagination";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@material-ui/core/Button";
 
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
@@ -63,23 +65,40 @@ class statesbycountry extends React.Component {
       this.setState({ pagination: pagination });
     };
 
+    const openPage = (url) => {
+      this.setState({ ProgressLoader: false });
+      console.log("openPage > url > ",url)
+       window.location = url;
+    };
+
     return (
       <Fragment>
         <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={12} lg={12}>
-            <h5 className="destination-title">States</h5>
-          </Grid>
+        <Grid xs={12} sm={12} md={4} lg={4}>
+        <h5 className="destination-title">States</h5>
         </Grid>
-        <Grid container spacing={0}>
-          <Grid xs={12} sm={12} md={6} lg={6}>
-            <a
-              className="LINK tableLink"
-              href={URLS.URLS.addState + this.state.urlparams+"&CountryID="+this.props.CountryID}
-            >
-              + Add
-            </a>
-          </Grid>
+        <Grid xs={12} sm={12} md={2} lg={2}>
+            <div style={{ marginTop: 16 }}>
+              <ButtonGroup
+                size="small"
+                variant="text"
+                aria-label="Action Menu Button group"
+              >
+                <Button
+                  startIcon={APIURLS.buttonTitle.add.icon}
+                  className="action-btns"
+                  onClick={(e) => openPage(URLS.URLS.addState + this.state.urlparams + "&CountryID=" + this.props.CountryID)}
+                >
+                  {APIURLS.buttonTitle.add.name}
+                </Button>
+
+              </ButtonGroup>
+            </div>
         </Grid>
+        <Grid xs={12} sm={12} md={6} lg={6}></Grid>
+
+        </Grid>
+         
         <Grid container spacing={0}>
           <Grid xs={12} sm={12} md={12} lg={12}>
             {this.props.states ? (
