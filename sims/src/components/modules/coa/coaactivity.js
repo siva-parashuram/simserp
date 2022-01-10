@@ -62,6 +62,7 @@ class coaactivity extends React.Component {
         DebitCredit: "-",
         IsBlock: false,
         DirectPosting: false,
+        IsRestrictNegativeBal:false,
         Indentation: 0,
         Totaling: "",
         ModifyDate: today,
@@ -80,6 +81,7 @@ class coaactivity extends React.Component {
   };
 
   urlprocess = () => {
+    let params = CF.GET_URL_PARAMS();
     let urlparams = "";
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
@@ -89,13 +91,13 @@ class coaactivity extends React.Component {
     let CAcID = type === "edit" ? url.searchParams.get("editCAcID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
-    urlparams =
-      "?branchId=" +
-      branchId +
-      "&compName=" +
-      compName +
-      "&branchName=" +
-      branchName;
+    urlparams =params;
+      // "?branchId=" +
+      // branchId +
+      // "&compName=" +
+      // compName +
+      // "&branchName=" +
+      // branchName;
 
     let ChartOfAccount = this.state.ChartOfAccount;
     if (type === "edit") {
@@ -114,6 +116,7 @@ class coaactivity extends React.Component {
   };
 
   componentDidMount() {
+    
     this.urlprocess();
     this.getCOAList();
     this.getACSubCategory(this.state.ChartOfAccount.ACCategory);
@@ -136,7 +139,7 @@ class coaactivity extends React.Component {
         this.setState({ COAList: data });
         this.setState({ ProgressLoader: true });
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   GetChartOfAccount = (CAcID) => {
@@ -157,7 +160,7 @@ class coaactivity extends React.Component {
     axios
       .post(url, reqData, { headers })
       .then((response) => {
-        this.setState({ ChartOfAccount: response.data, ProgressLoader: true });
+        this.setState({ ChartOfAccount: response.data, ProgressLoader: true,DisableUpdatebtn:false });
       })
       .catch((error) => {
         this.setState({ ProgressLoader: true });
@@ -203,6 +206,20 @@ class coaactivity extends React.Component {
       }
     }
     this.setState({ ACSubCategory: ACSubCategory });
+  }
+
+  
+
+  isDuplicatePresent=(input)=>{
+    let isDuplicatePresent=false;
+    let COAList=this.state.COAList;
+    for(let i=0;i<COAList.length;i++){
+      if(COAList[i].Name===input){
+        isDuplicatePresent=true;
+        break;
+      }
+    }
+    return isDuplicatePresent;
   }
 
   render() {
@@ -289,62 +306,66 @@ class coaactivity extends React.Component {
       switch (param) {
         case "ACNo":
           let v1 = this.state.Validations;
-          if (e.target.value === "" || e.target.value.length > 10) {
-            if (e.target.value === "") {
-              v1.ACNo = {
-                errorState: true,
-                errorMssg: "Blank inputs not allowed",
-              };
+            if (e.target.value === "" || e.target.value.length > 10) {
+              if (e.target.value === "") {
+                v1.ACNo = {
+                  errorState: true,
+                  errorMssg: "Blank inputs not allowed",
+                };
+                if (this.state.type === "add") {
+                  this.setState({
+                    Validations: v1,
+                    DisableCreatebtn: true,
+                  });
+                } else {
+                  this.setState({
+                    Validations: v1,
+                    DisableUpdatebtn: true,
+                  });
+                }
+                COA.ACNo = e.target.value;
+              }
+              if (e.target.value.length > 10) {
+                v1.ACNo = {
+                  errorState: true,
+                  errorMssg: "Maximum 10 characters allowed",
+                };
+                if (this.state.type === "add") {
+                  this.setState({
+                    Validations: v1,
+                    DisableCreatebtn: true,
+                  });
+                } else {
+                  this.setState({
+                    Validations: v1,
+                    DisableUpdatebtn: true,
+                  });
+                }
+              }
+            } else {
+              v1.ACNo = { errorState: false, errorMssg: "" };
               if (this.state.type === "add") {
                 this.setState({
                   Validations: v1,
-                  DisableCreatebtn: true,
+                  DisableCreatebtn: false,
                 });
               } else {
                 this.setState({
                   Validations: v1,
-                  DisableUpdatebtn: true,
+                  DisableUpdatebtn: false,
                 });
               }
               COA.ACNo = e.target.value;
+              setParams(COA);
             }
-            if (e.target.value.length > 10) {
-              v1.ACNo = {
-                errorState: true,
-                errorMssg: "Maximum 10 characters allowed",
-              };
-              if (this.state.type === "add") {
-                this.setState({
-                  Validations: v1,
-                  DisableCreatebtn: true,
-                });
-              } else {
-                this.setState({
-                  Validations: v1,
-                  DisableUpdatebtn: true,
-                });
-              }
-            }
-          } else {
-            v1.ACNo = { errorState: false, errorMssg: "" };
-            if (this.state.type === "add") {
-              this.setState({
-                Validations: v1,
-                DisableCreatebtn: false,
-              });
-            } else {
-              this.setState({
-                Validations: v1,
-                DisableUpdatebtn: false,
-              });
-            }
-            COA.ACNo = e.target.value;
-            setParams(COA);
-          }
-          check();
+            check();       
           break;
         case "Name":
           let v2 = this.state.Validations;
+          let isDuplicatePresent=false;
+          isDuplicatePresent=this.isDuplicatePresent(e.target.value.trim());
+          if(isDuplicatePresent===false){
+            
           if (e.target.value === "" || e.target.value.length > 50) {
             if (e.target.value === "") {
               v2.Name = {
@@ -398,6 +419,26 @@ class coaactivity extends React.Component {
             setParams(COA);
           }
           check();
+          }else{
+            v2.Name = {
+              errorState: true,
+              errorMssg: "",
+            };
+            if (this.state.type === "add") {
+              this.setState({
+                Validations: v2,
+                DisableCreatebtn: true,
+              });
+            } else {
+              this.setState({
+                Validations: v2,
+                DisableUpdatebtn: true,
+              });
+            }
+            COA.Name = e.target.value;
+            setParams(COA);
+          }
+          
           break;
         case "ACType":
           COA.ACType = CF.toInt(e.target.value);
@@ -435,6 +476,12 @@ class coaactivity extends React.Component {
           setParams(COA);
           check();
           break;
+        case "IsRestrictNegativeBal":
+          COA.IsRestrictNegativeBal = e.target.checked;
+          setParams(COA);
+          check();
+          break;
+
         case "Indentation":
           COA.Indentation = CF.toInt(e.target.value);
           setParams(COA);
@@ -462,127 +509,7 @@ class coaactivity extends React.Component {
       }
     };
 
-    // const form1 = (
-    //   <Fragment>
-    //     <Grid container spacing={0}>
-    //       <Grid item xs={12} sm={12} md={12} lg={12}>
-    //         <div>
-    //           <Grid container spacing={0}>
-    //             <Grid item xs={12} sm={12} md={5} lg={5}>
-    //               {/* <Grid container spacing={0}>
-    //               <Grid item xs={12} sm={12} md={12} lg={12}> */}
-
-    //               <SIB
-    //                 id="ACNo"
-    //                 label="ACNo"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => updateFormValue("ACNo", e)}
-    //                 value={this.state.ChartOfAccount.ACNo}
-    //                 error={this.state.Validations.ACNo.errorState}
-    //                 isMandatory={true}
-    //               />
-    //               <SIB
-    //                 id="Name"
-    //                 label="Name"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => updateFormValue("Name", e)}
-    //                 value={this.state.ChartOfAccount.Name}
-    //                 error={this.state.Validations.Name.errorState}
-    //                 isMandatory={true}
-    //               />
-
-    //               <SIB
-    //                 id="Indentation"
-    //                 label="Indentation"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => updateFormValue("Indentation", e)}
-    //                 value={this.state.ChartOfAccount.Indentation}
-    //               />
-    //               <SIB
-    //                 id="Totaling"
-    //                 label="Totaling"
-    //                 variant="outlined"
-    //                 size="small"
-    //                 onChange={(e) => updateFormValue("Totaling", e)}
-    //                 value={this.state.ChartOfAccount.Totaling}
-    //                 error={this.state.Validations.Totaling.errorState}
-    //               />
-
-    //               {/* </Grid>
-    //             </Grid> */}
-    //             </Grid>
-    //             <Grid item xs={12} sm={12} md={1} lg={1}>
-    //               {" "}
-    //             </Grid>
-    //             {/* <Grid container spacing={0}> */}
-    //             <Grid item xs={12} sm={12} md={5} lg={5}>
-    //               <SDIB
-    //                 id="ACType"
-    //                 label="ACType"
-    //                 onChange={(e) => updateFormValue("ACType", e)}
-    //                 value={this.state.ChartOfAccount.ACType}
-    //                 param={APIURLS.ACType}
-    //                 isMandatory={true}
-    //               />
-    //               <SDIB
-    //                 id="IncomeBalance"
-    //                 label="IncomeBalance"
-    //                 onChange={(e) => updateFormValue("IncomeBalance", e)}
-    //                 value={this.state.ChartOfAccount.IncomeBalance}
-    //                 param={APIURLS.IncomeBalance}
-    //                 isMandatory={true}
-    //               />
-    //               <SDIB
-    //                 id="ACCategory"
-    //                 label="ACCategory"
-    //                 onChange={(e) => updateFormValue("ACCategory", e)}
-    //                 value={this.state.ChartOfAccount.ACCategory}
-    //                 param={APIURLS.ACCategory}
-    //                 isMandatory={true}
-    //               />
-    //               <SDIB
-    //                 id="ACSubCategory"
-    //                 label="ACSubCategory"
-    //                 onChange={(e) => updateFormValue("ACSubCategory", e)}
-    //                 value={this.state.ChartOfAccount.ACSubCategory}
-    //                 param={this.state.ACSubCategory}
-    //               />
-    //               <SDIB
-    //                 id="DebitCredit"
-    //                 label="DebitCredit"
-    //                 onChange={(e) => updateFormValue("DebitCredit", e)}
-    //                 value={this.state.ChartOfAccount.DebitCredit}
-    //                 param={APIURLS.DebitCredit}
-    //                 isMandatory={true}
-    //               />
-    //               <SSIB
-    //                 key="IsBlock"
-    //                 id="IsBlock"
-    //                 label="IsBlock"
-    //                 param={this.state.ChartOfAccount.IsBlock}
-    //                 onChange={(e) => updateFormValue("IsBlock", e)}
-    //               />
-    //               <SSIB
-    //                 key="DirectPosting"
-    //                 id="DirectPosting"
-    //                 label="DirectPosting"
-    //                 param={this.state.ChartOfAccount.DirectPosting}
-    //                 onChange={(e) => updateFormValue("DirectPosting", e)}
-    //               />
-
-    //               {/* </Grid>
-    //             </Grid> */}
-    //             </Grid>
-    //           </Grid>
-    //         </div>
-    //       </Grid>
-    //     </Grid>
-    //   </Fragment>
-    // );
-
+    
     const handleAccordionClick = (val, e) => {
       if (val === "accordion1") {
         this.state.accordion1 === true
@@ -701,13 +628,15 @@ class coaactivity extends React.Component {
 
                                 <SIB
                                   id="ACNo"
-                                  label="ACNo"
+                                  label="No."
                                   variant="outlined"
                                   size="small"
                                   onChange={(e) => updateFormValue("ACNo", e)}
                                   value={this.state.ChartOfAccount.ACNo}
                                   error={this.state.Validations.ACNo.errorState}
                                   isMandatory={true}
+                                  onKeyDown={ e => ( e.keyCode === 69 || e.keyCode === 190 || e.key == "." || e.key == "-" ) && e.preventDefault() }
+                                  type="number"
                                 />
                                 <SIB
                                   id="Name"
@@ -744,25 +673,18 @@ class coaactivity extends React.Component {
                                   }
                                 />
 
-                                {/* </Grid>
-                </Grid> */}
-                              </Grid>
-                              <Grid item xs={12} sm={12} md={1} lg={1}>
-                                {" "}
-                              </Grid>
-                              {/* <Grid container spacing={0}> */}
-                              <Grid item xs={12} sm={12} md={5} lg={5}>
                                 <SDIB
                                   id="ACType"
-                                  label="ACType"
+                                  label="Account Type"
                                   onChange={(e) => updateFormValue("ACType", e)}
                                   value={this.state.ChartOfAccount.ACType}
                                   param={APIURLS.ACType}
                                   isMandatory={true}
                                 />
-                                <SDIB
+
+<SDIB
                                   id="IncomeBalance"
-                                  label="IncomeBalance"
+                                  label="Income/Balance"
                                   onChange={(e) =>
                                     updateFormValue("IncomeBalance", e)
                                   }
@@ -772,9 +694,18 @@ class coaactivity extends React.Component {
                                   param={APIURLS.IncomeBalance}
                                   isMandatory={true}
                                 />
+
+                              </Grid>
+                              <Grid item xs={12} sm={12} md={1} lg={1}>
+                                {" "}
+                              </Grid>
+                              {/* <Grid container spacing={0}> */}
+                              <Grid item xs={12} sm={12} md={5} lg={5}>
+
+                               
                                 <SDIB
                                   id="ACCategory"
-                                  label="ACCategory"
+                                  label="Category"
                                   onChange={(e) =>
                                     updateFormValue("ACCategory", e)
                                   }
@@ -784,7 +715,7 @@ class coaactivity extends React.Component {
                                 />
                                 <SDIB
                                   id="ACSubCategory"
-                                  label="ACSubCategory"
+                                  label="Sub Category"
                                   onChange={(e) =>
                                     updateFormValue("ACSubCategory", e)
                                   }
@@ -795,7 +726,7 @@ class coaactivity extends React.Component {
                                 />
                                 <SDIB
                                   id="DebitCredit"
-                                  label="DebitCredit"
+                                  label="Debit/Credit"
                                   onChange={(e) =>
                                     updateFormValue("DebitCredit", e)
                                   }
@@ -803,19 +734,11 @@ class coaactivity extends React.Component {
                                   param={APIURLS.DebitCredit}
                                   isMandatory={true}
                                 />
-                                <SSIB
-                                  key="IsBlock"
-                                  id="IsBlock"
-                                  label="IsBlock"
-                                  param={this.state.ChartOfAccount.IsBlock}
-                                  onChange={(e) =>
-                                    updateFormValue("IsBlock", e)
-                                  }
-                                />
+
                                 <SSIB
                                   key="DirectPosting"
                                   id="DirectPosting"
-                                  label="DirectPosting"
+                                  label="Direct Posting ?"
                                   param={
                                     this.state.ChartOfAccount.DirectPosting
                                   }
@@ -823,6 +746,31 @@ class coaactivity extends React.Component {
                                     updateFormValue("DirectPosting", e)
                                   }
                                 />
+
+<SSIB
+                                  key="IsRestrictNegativeBal"
+                                  id="IsRestrictNegativeBal"
+                                  label="Negative Balance ?"
+                                  param={
+                                    this.state.ChartOfAccount.IsRestrictNegativeBal
+                                  }
+                                  onChange={(e) =>
+                                    updateFormValue("IsRestrictNegativeBal", e)
+                                  }
+                                />
+
+
+
+                                <SSIB
+                                  key="IsBlock"
+                                  id="IsBlock"
+                                  label="Block ?"
+                                  param={this.state.ChartOfAccount.IsBlock}
+                                  onChange={(e) =>
+                                    updateFormValue("IsBlock", e)
+                                  }
+                                />
+
                               </Grid>
                             </Grid>
                           </div>
@@ -831,7 +779,7 @@ class coaactivity extends React.Component {
                     </Fragment>
                   </AccordionDetails>
                 </Accordion>
-                
+
               </Grid>
             </Grid>
           </Grid>

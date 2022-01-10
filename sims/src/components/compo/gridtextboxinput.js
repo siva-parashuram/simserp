@@ -55,6 +55,7 @@ class gridtextboxinput extends React.Component {
                   rows={this.props.rows}
                   inputProps={this.props.inputProps}
                   onBlur={this.props.onBlur}
+                  onKeyDown={this.props.onKeyDown}
 
                 />
               </Grid>

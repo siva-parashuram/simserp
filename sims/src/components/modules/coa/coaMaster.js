@@ -29,7 +29,7 @@ import Tableskeleton from "../../compo/tableskeleton";
 import Pagination from "../../compo/pagination";
 import TopFixedRow3 from "../../compo/breadcrumbbtngrouprow";
 import BackdropLoader from "../../compo/backdrop";
-
+import ErrorSnackBar from "../../compo/errorSnackbar";
 
 
 class coaMaster extends React.Component {
@@ -37,6 +37,7 @@ class coaMaster extends React.Component {
     super(props);
     this.state = {
       pagination: APIURLS.pagination,
+      ErrorPrompt: false,
       ProgressLoader: false,
       editBtnDisable: true,
       initialCss: "",
@@ -50,17 +51,18 @@ class coaMaster extends React.Component {
   }
 
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
-    let urlparams =
-      "?branchId=" +
-      branchId +
-      "&compName=" +
-      compName +
-      "&branchName=" +
-      branchName;
+    let urlparams =params;
+      // "?branchId=" +
+      // branchId +
+      // "&compName=" +
+      // compName +
+      // "&branchName=" +
+      // branchName;
     this.setState({ urlparams: urlparams });
     this.getCOAList();
   }
@@ -77,17 +79,26 @@ class coaMaster extends React.Component {
     axios
       .post(Url, ValidUser, { headers })
       .then((response) => {
-        let data = response.data;
-        console.log("data > ", data);
-        this.setState({ COAList: data }, () => {
-          if (data.length > 0) {
-            this.handleRowClick(null, data[0], "row_0", "row_arrow_0");
-            this.performDoubleClickOperation(data[0].CAcID);
-          }
-        });
-        this.setState({ ProgressLoader: true });
+        if (response.status === 200) {
+          let data = response.data;
+          console.log("data > ", data);
+          this.setState({ COAList: data }, () => {
+            if (data.length > 0) {
+              this.handleRowClick(null, data[0], "row_0", "row_arrow_0");
+              this.performDoubleClickOperation(data[0].CAcID);
+            }
+          });
+          this.setState({ ProgressLoader: true });
+        } else {
+          this.setState({ ProgressLoader: true,ErrorPrompt:true });
+        }
+        
       })
-      .catch((error) => {});
+      .catch((error) => {
+        this.setState({ ProgressLoader: true,ErrorPrompt:true });
+
+         
+      });
   }
 
   handleRowClick = (e, item, id) => {
@@ -167,6 +178,18 @@ class coaMaster extends React.Component {
       return name;
     };
 
+    const getIncomeBalanceValue = (IB) => {
+      let IncomeBalance = APIURLS.IncomeBalance;
+      let name = "";
+      for (let i = 0; i < IncomeBalance.length; i++) {
+        if (IncomeBalance[i].value === IB) {
+          name = IncomeBalance[i].name;
+          break;
+        }
+      }
+      return name;
+    };
+
     const getPageData = (data) => {
       let rows = data;
       let page = parseInt(this.state.pagination.page);
@@ -212,6 +235,7 @@ class coaMaster extends React.Component {
             {APIURLS.buttonTitle.add.name}
           </Button>
           <Button
+          disabled={this.state.editBtnDisable}
             startIcon={APIURLS.buttonTitle.edit.icon}
             className="action-btns"
             onClick={(e) => this.openPage(this.state.editurl)}
@@ -234,9 +258,22 @@ class coaMaster extends React.Component {
         </ButtonGroup>
       </Fragment>
     );
+
+    const closeErrorPrompt = (event, reason) => {
+      if (reason === "clickaway") {
+        return;
+      }
+      this.setState({ ErrorPrompt: false });
+    };
+
     return (
       <Fragment>
         <BackdropLoader open={!this.state.ProgressLoader} />
+        <ErrorSnackBar
+          ErrorPrompt={this.state.ErrorPrompt}
+          closeErrorPrompt={closeErrorPrompt}
+        />
+
         <TopFixedRow3 breadcrumb={breadcrumbHtml} buttongroup={buttongroupHtml} />
 
         <Grid className="table-adjust" container spacing={0}>
@@ -308,16 +345,16 @@ class coaMaster extends React.Component {
                                 className="table-header-font"
                                 align="left"
                               >
-                                {item.ACNo}{" "}
+                                {item.ACNo} 
                               </TableCell>
                               <TableCell align="left">
                                 {i % 2 === 0 ? (
                                   <fragment>&nbsp;&nbsp;</fragment>
                                 ) : null}
-                                {item.Name}{" "}
+                                {item.Name} 
                               </TableCell>
                               <TableCell align="left">
-                                {item.IncomeBalance}{" "}
+                                {getIncomeBalanceValue(item.IncomeBalance)}
                               </TableCell>
                               <TableCell align="left">
                                 {getAccoutTypeValue(item.ACType)}

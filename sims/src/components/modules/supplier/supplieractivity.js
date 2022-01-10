@@ -2231,6 +2231,7 @@ closeDialog = () => {
                                   error={
                                     this.state.Validations.Reason.errorState
                                   }
+                                  disabled={!this.state.Supplier.IsTaxExempt}
                                 />
                               </Grid>
                             </Grid>
