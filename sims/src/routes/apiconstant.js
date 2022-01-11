@@ -752,7 +752,45 @@ export const userMasterColumn=[
   
 ];
 
-
+export const branchLicenseColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 50,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'LicenseNo',
+    headerName: 'LicenseNo',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }, {
+    field: 'BondNo',
+    headerName: 'BondNo',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'StartDate',
+    headerName: 'StartDate',
+    width: 250,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },{
+    field: 'EndDate',
+    headerName: 'EndDate',
+    width: 250,
+    editable: false,
+    headerClassName: 'table-header-font'
+  },,{
+    field: 'Description',
+    headerName: 'Description',
+    width: 250,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }
+];
 
 export const branchMasterColumn=[
   {

@@ -10,6 +10,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 
 import BackdropLoader from "../../compo/backdrop";
+import SuccessSnackBar from "../../compo/successSnackbar";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import MasterDataGrid from "../../compo/masterdatagrid";
 import Tableskeleton from "../../compo/tableskeleton";
@@ -36,25 +37,29 @@ export default function License({ BranchID }) {
 
     
     const [ProgressLoader, setProgressLoader] = React.useState(false);
+
+     const [SuccessPrompt, setSuccessPrompt] = React.useState(false);
     const [ErrorPrompt, setErrorPrompt] = React.useState(false);
     const [ErrorMessageProps, setErrorMessageProps] = React.useState("");
     const [selectionModel, setselectionModel] = React.useState(1);
-    const [columns, setcolumns] = React.useState(APIURLS.branchMasterColumn);
+    const [columns, setcolumns] = React.useState(APIURLS.branchLicenseColumn);
     const [pagination, setpagination] = React.useState(PG);
     const [LicenseList, setLicenseList] = React.useState([]);
 
     
     const [ID, setID] = React.useState(0);
+    const [BID, setBID] = React.useState(0);
     const [StartDate, setStartDate] = React.useState("");
     const [EndDate, setEndDate] = React.useState("");
     const [BondNo, setBondNo] = React.useState("");
     const [LicenseNo, setLicenseNo] = React.useState("");
     const [Description, setDescription] = React.useState("");
 
-
+   
 
     useEffect(() => {
         getLicenseDetailList();
+       
     }, []);
 
     const getLicenseDetailList = () => {
@@ -73,33 +78,61 @@ export default function License({ BranchID }) {
         axios
             .post(Url, Data, { headers })
             .then((response) => {
+                if (response.status === 200) {
+                    setLicenseList(response.data,()=>{
+                        handleRowClick([1]);
+                    });
+                    // handleRowClick([1]);
+                    setProgressLoader(true);
+                } else {
+                    setErrorPrompt(true);
+                    setProgressLoader(true);
+                }
 
             }).catch((error) => {
                 setErrorPrompt(true);
                 setProgressLoader(true);
             });
     }
-
-
     const handleRowClick = (e) => {
+        console.log("----------handleRowClick--------> ");
         try {
             let index = e[0];
-            let item = this.state.branchData[index - 1];
-            this.setState({
-                item: item,
-                selectionModel: index
-            });
-        } catch (e) { }
+            let item = LicenseList[index - 1];
+            console.log("handleRowClick > item > ", item);
+            if (item) {
+                setID(item.ID);
+                setBID(item.BID);
+                setStartDate(moment(item.StartDate).format("YYYY-MM-DD"));
+                setEndDate(moment(item.EndDate).format("YYYY-MM-DD"));
+                setBondNo(item.BondNo);
+                setLicenseNo(item.LicenseNo);
+                setDescription(item.Description);
+                setselectionModel(index);
+            }
+
+
+        } catch (e) {
+            console.log("handleRowClick > error > ", e);
+        }
     }
 
+    const handleCreate = () => {
+        setID(0);
+        setBID(BranchID);
+        setStartDate(moment().format("YYYY-MM-DD"));
+        setEndDate(moment().format("YYYY-MM-DD"));
+        setBondNo("");
+        setLicenseNo("");
+        setDescription("");
+        setselectionModel(0);
+    }
 
     const handlePageChange = (event, newPage) => {
         let pagination = this.state.pagination;
         pagination.page = newPage;
         this.setState({ pagination: pagination });
     };
-
-
 
     const handleSave = () => {
         let ValidUser = APIURLS.ValidUser;
@@ -122,7 +155,7 @@ export default function License({ BranchID }) {
         let Url ="";
         let Data={};
 
-        if (parseInt(ID) > 0) {
+        if (parseInt(ID) === 0) {
             Data = {
                 ValidUser: ValidUser,
                 BranchLicenseDetail: BLD
@@ -132,7 +165,9 @@ export default function License({ BranchID }) {
                 .post(Url, Data, { headers })
                 .then((response) => {
                     if (response.status === 200 || response.status === 201) {
-
+                        getLicenseDetailList();
+                        setSuccessPrompt(true);
+                        setProgressLoader(true);
                     } else {
                         setErrorPrompt(true);
                         setProgressLoader(true);
@@ -147,7 +182,6 @@ export default function License({ BranchID }) {
         }
     }
 
-
     return (
         <Fragment>
             <BackdropLoader open={!ProgressLoader} />
@@ -156,7 +190,11 @@ export default function License({ BranchID }) {
                 closeErrorPrompt={() => setErrorPrompt(false)}
                 ErrorMessageProps={ErrorMessageProps}
             />
-
+            <SuccessSnackBar
+                SuccessPrompt={SuccessPrompt}
+                closeSuccessPrompt={(e)=>setSuccessPrompt(false)}
+            />
+           
             <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={8} lg={8}>
                     <Grid container spacing={0}>
@@ -170,7 +208,7 @@ export default function License({ BranchID }) {
                                 <Button
                                     startIcon={APIURLS.buttonTitle.add.icon}
                                     className="action-btns"
-                                // onClick={handleCreate}
+                                    onClick={(e)=>handleCreate()}
                                 // disabled={this.state.disabledCreatebtn}
                                 >
                                     {APIURLS.buttonTitle.add.name}
@@ -263,6 +301,8 @@ export default function License({ BranchID }) {
                                         onChange={(e) => setLicenseNo(e.target.value)}
                                     />
                                     <SIB
+                                        multiline={true}
+                                        rows={4}
                                         id="Description"
                                         label="Description"
                                         variant="outlined"
