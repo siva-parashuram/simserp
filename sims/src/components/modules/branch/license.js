@@ -1,4 +1,6 @@
 import React, { Fragment, useEffect, useMemo } from "react";
+import moment from "moment";
+import axios from "axios";
 import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
@@ -7,30 +9,33 @@ import Grid from "@material-ui/core/Grid";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 
+import BackdropLoader from "../../compo/backdrop";
 import ErrorSnackBar from "../../compo/errorSnackbar";
 import MasterDataGrid from "../../compo/masterdatagrid";
 import Tableskeleton from "../../compo/tableskeleton";
 import SIB from "../../compo/gridtextboxinput";
 import SDTI from "../../compo/griddateinput";
 
-const PG = {
+let PG = {
     page: 0,
     rowsPerPage: 10,
 };
 
-const BLD = {
+let BLD = {
     ID: 0,
     BranchID: 0,
     StartDate: "",
     EndDate: "",
-    BondNo: "bond no",
-    LicenseNo: "License No",
-    Description: "Description",
-    ModifyDate: "",
-    UserID: 0
+    BondNo: "",
+    LicenseNo: "",
+    Description: ""
+   
 };
 
 export default function License({ BranchID }) {
+
+    
+    const [ProgressLoader, setProgressLoader] = React.useState(false);
     const [ErrorPrompt, setErrorPrompt] = React.useState(false);
     const [ErrorMessageProps, setErrorMessageProps] = React.useState("");
     const [selectionModel, setselectionModel] = React.useState(1);
@@ -38,6 +43,8 @@ export default function License({ BranchID }) {
     const [pagination, setpagination] = React.useState(PG);
     const [LicenseList, setLicenseList] = React.useState([]);
 
+    
+    const [ID, setID] = React.useState(0);
     const [StartDate, setStartDate] = React.useState("");
     const [EndDate, setEndDate] = React.useState("");
     const [BondNo, setBondNo] = React.useState("");
@@ -47,9 +54,31 @@ export default function License({ BranchID }) {
 
 
     useEffect(() => {
-         
-
+        getLicenseDetailList();
     }, []);
+
+    const getLicenseDetailList = () => {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        let Url = APIURLS.APIURL.GetBranchLicenseDetail;
+
+        let Data = {
+            ValidUser: ValidUser,
+            BranchID: BranchID
+        };
+        axios
+            .post(Url, Data, { headers })
+            .then((response) => {
+
+            }).catch((error) => {
+                setErrorPrompt(true);
+                setProgressLoader(true);
+            });
+    }
 
 
     const handleRowClick = (e) => {
@@ -72,36 +101,56 @@ export default function License({ BranchID }) {
 
 
 
-    const updateFormData = (key, e) => {
+    const handleSave = () => {
+        let ValidUser = APIURLS.ValidUser;
+        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+        ValidUser.Token = getCookie(COOKIE.TOKEN);
+        const headers = {
+            "Content-Type": "application/json",
+          };
 
-         
-       
-        // let BLDobj=BranchLicenseDetail;
-        // BLDobj[key]=e.target.value;
-        
+        let BLD = {
+            ID: parseInt(ID),
+            BranchID: parseInt(BranchID),
+            StartDate: moment(StartDate).format("MM/DD/YYYY"),
+            EndDate: moment(EndDate).format("MM/DD/YYYY"),
+            BondNo: BondNo,
+            LicenseNo: LicenseNo,
+            Description: Description,
+        };
 
-        // console.log("updateFormData > BLD > ",BLDobj);
-        
-        // switch (e) {
-        //     case "StartDate":
-                
-        //         break;
-        //     case "EndDate":
-        //         break;
-        //     case "BondNo":
-        //         break;
-        //     case "LicenseNo":
-        //         break;
-        //     case "Description":
-        //         break;
-        //     default:
-        //         break;
-        // }
+        let Url ="";
+        let Data={};
+
+        if (parseInt(ID) > 0) {
+            Data = {
+                ValidUser: ValidUser,
+                BranchLicenseDetail: BLD
+            };
+            Url = APIURLS.APIURL.CreateBranchLicenseDetail;
+            axios
+                .post(Url, Data, { headers })
+                .then((response) => {
+                    if (response.status === 200 || response.status === 201) {
+
+                    } else {
+                        setErrorPrompt(true);
+                        setProgressLoader(true);
+                    }
+                }).catch((error) => {
+                    setErrorPrompt(true);
+                    setProgressLoader(true);
+                });
+
+        } else {
+            // update
+        }
     }
 
 
     return (
         <Fragment>
+            <BackdropLoader open={!ProgressLoader} />
             <ErrorSnackBar
                 ErrorPrompt={ErrorPrompt}
                 closeErrorPrompt={() => setErrorPrompt(false)}
@@ -164,15 +213,15 @@ export default function License({ BranchID }) {
                                         <Button
                                             startIcon={APIURLS.buttonTitle.save.icon}
                                             className="action-btns"
-                                        // onClick={handleCreate}
-                                        // disabled={this.state.disabledCreatebtn}
+                                            onClick={() => handleSave()}
+
                                         >
                                             {APIURLS.buttonTitle.save.name}
                                         </Button>
                                     </ButtonGroup>
                                 </Grid>
                             </Grid>
-                            <br/>
+                            <br />
                             <Grid container spacing={0}>
                                 <Grid xs={12} sm={12} md={12} lg={12}>
                                     <SDTI
@@ -180,9 +229,9 @@ export default function License({ BranchID }) {
                                         id="StartDate"
                                         label="Start Date"
                                         variant="outlined"
-                                        size="small"                                       
+                                        size="small"
                                         value={StartDate}
-                                        onChange={(e)=>setStartDate(e.target.value)}
+                                        onChange={(e) => setStartDate(e.target.value)}
                                     />
 
                                     <SDTI
@@ -190,9 +239,9 @@ export default function License({ BranchID }) {
                                         id="EndDate"
                                         label="End Date"
                                         variant="outlined"
-                                        size="small"                                        
+                                        size="small"
                                         value={EndDate}
-                                        onChange={(e)=>setEndDate(e.target.value)}
+                                        onChange={(e) => setEndDate(e.target.value)}
                                     />
 
                                     <SIB
@@ -202,7 +251,7 @@ export default function License({ BranchID }) {
                                         size="small"
                                         value={BondNo}
                                         isMandatory={true}
-                                        onChange={(e)=>setBondNo(e.target.value)}
+                                        onChange={(e) => setBondNo(e.target.value)}
                                     />
                                     <SIB
                                         id="LicenseNo"
@@ -211,7 +260,7 @@ export default function License({ BranchID }) {
                                         size="small"
                                         value={LicenseNo}
                                         isMandatory={true}
-                                        onChange={(e)=>setLicenseNo(e.target.value)}
+                                        onChange={(e) => setLicenseNo(e.target.value)}
                                     />
                                     <SIB
                                         id="Description"
@@ -219,8 +268,8 @@ export default function License({ BranchID }) {
                                         variant="outlined"
                                         size="small"
                                         value={Description}
-                                        isMandatory={true}   
-                                        onChange={(e)=>setDescription(e.target.value)}                                     
+                                        isMandatory={true}
+                                        onChange={(e) => setDescription(e.target.value)}
                                     />
 
                                 </Grid>

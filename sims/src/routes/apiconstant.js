@@ -32,8 +32,8 @@ import Link from "@material-ui/core/Link";
 import * as CF from "../services/functions/customfunctions";
 import * as URLS from "../routes/constants";
 
-const domain = "http://192.168.10.200:8080/";
-//  const domain = "http://49.248.147.178:8082/";
+// const domain = "http://192.168.10.200:8080/";
+ const domain = "http://49.248.147.178:8082/";
 
 export const APIURL = {
   ListOfDirectoryFromFTP:domain+"api/Common/ListOfDirectoryFromFTP", 
@@ -75,6 +75,8 @@ export const APIURL = {
   GetBranch: domain + "api/Branch/GetBranch",
   UpdateBranch: domain + "api/Branch/UpdateBranch",
   CreateBranch: domain + "api/Branch/CreateBranch",
+  CreateBranchLicenseDetail:domain+"api/BranchLicenseDetail/CreateBranchLicenseDetail",
+  GetBranchLicenseDetail:domain+"api/BranchLicenseDetail/GetBranchLicenseDetail",
   CreateUserBranchMapping: domain + "api/UserBranchMapping/CreateUserBranchMapping",
   GetUserBranchMappedByUserID: domain + "api/UserBranchMapping/GetUserBranchMappedByUserID",
   CreateModule: domain + "api/Module/CreateModule",
