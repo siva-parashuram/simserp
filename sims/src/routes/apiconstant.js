@@ -761,33 +761,38 @@ export const branchLicenseColumn=[
     headerClassName: 'table-header-font'
   },
   {
-    field: 'LicenseNo',
-    headerName: 'LicenseNo',
+    field: 'StartDate',
+    headerName: 'Start Date',
+    width:120,
+    editable: false,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {moment(params.value).format("MM/DD/YYYY")}
+      </Fragment>
+    )
+  },{
+    field: 'EndDate',
+    headerName: 'End Date',
     width: 120,
+    editable: false,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {moment(params.value).format("MM/DD/YYYY")}
+      </Fragment>
+    )
+  },
+  {
+    field: 'LicenseNo',
+    headerName: 'License No.',
+    width: 200,
     editable: false,
     headerClassName: 'table-header-font'
   }, {
     field: 'BondNo',
-    headerName: 'BondNo',
-    width: 120,
-    editable: false,
-    headerClassName: 'table-header-font'
-  },{
-    field: 'StartDate',
-    headerName: 'StartDate',
-    width: 250,
-    editable: false,
-    headerClassName: 'table-header-font'
-  },{
-    field: 'EndDate',
-    headerName: 'EndDate',
-    width: 250,
-    editable: false,
-    headerClassName: 'table-header-font'
-  },,{
-    field: 'Description',
-    headerName: 'Description',
-    width: 250,
+    headerName: 'Bond No.',
+    width: 200,
     editable: false,
     headerClassName: 'table-header-font'
   }
