@@ -2215,26 +2215,31 @@ class editbranch extends React.Component {
                                           />
                                         </Grid>
                                         <Grid item xs={6} sm={6} md={6} lg={6}>
+                                          
                                           <SSIB
-                                            key="IsTrading"
-                                            id="IsTrading"
-                                            label="Trading?"
-                                            param={this.state.branch.IsTrading}
-                                            onChange={(e) =>
-                                              updateFormValue("IsTrading", e)
-                                            }
-                                          />
-                                        </Grid>
-                                      </Grid>
-                                      <Grid container spacing={0}>
-                                        <Grid item xs={8} sm={8} md={8} lg={8}>
-                                          <SSIB
+                                          isSpacing={true}
+                                          space={5}
                                             key="AllowRounding"
                                             id="AllowRounding"
                                             label="Rounding?"
                                             param={this.state.branch.AllowRounding}
                                             onChange={(e) =>
                                               updateFormValue("AllowRounding", e)
+                                            }
+                                          />
+                                        </Grid>
+                                      </Grid>
+                                      <Grid container spacing={0}>
+                                        <Grid item xs={8} sm={8} md={8} lg={8}>
+                                        <SSIB
+                                           isSpacing={true}
+                                           space={1}
+                                            key="IsTrading"
+                                            id="IsTrading"
+                                            label="Trading?"
+                                            param={this.state.branch.IsTrading}
+                                            onChange={(e) =>
+                                              updateFormValue("IsTrading", e)
                                             }
                                           />
                                         </Grid>
