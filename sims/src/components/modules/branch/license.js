@@ -30,23 +30,23 @@ let BLD = {
     BondNo: "",
     LicenseNo: "",
     Description: ""
-   
+
 };
 
 export default function License({ BranchID }) {
 
-    
+
     const [ProgressLoader, setProgressLoader] = React.useState(false);
 
-     const [SuccessPrompt, setSuccessPrompt] = React.useState(false);
+    const [SuccessPrompt, setSuccessPrompt] = React.useState(false);
     const [ErrorPrompt, setErrorPrompt] = React.useState(false);
     const [ErrorMessageProps, setErrorMessageProps] = React.useState("");
-    const [selectionModel, setselectionModel] = React.useState(1);
+    const [selectionModel, setselectionModel] = React.useState(0);
     const [columns, setcolumns] = React.useState(APIURLS.branchLicenseColumn);
     const [pagination, setpagination] = React.useState(PG);
     const [LicenseList, setLicenseList] = React.useState([]);
 
-    
+
     const [ID, setID] = React.useState(0);
     const [BID, setBID] = React.useState(0);
     const [StartDate, setStartDate] = React.useState("");
@@ -55,11 +55,11 @@ export default function License({ BranchID }) {
     const [LicenseNo, setLicenseNo] = React.useState("");
     const [Description, setDescription] = React.useState("");
 
-   
+
 
     useEffect(() => {
         getLicenseDetailList();
-       
+
     }, []);
 
     const getLicenseDetailList = () => {
@@ -79,10 +79,7 @@ export default function License({ BranchID }) {
             .post(Url, Data, { headers })
             .then((response) => {
                 if (response.status === 200) {
-                    setLicenseList(response.data,()=>{
-                        handleRowClick([1]);
-                    });
-                    // handleRowClick([1]);
+                    setLicenseList(response.data);
                     setProgressLoader(true);
                 } else {
                     setErrorPrompt(true);
@@ -134,13 +131,36 @@ export default function License({ BranchID }) {
         this.setState({ pagination: pagination });
     };
 
+    const CHKisProperData=()=>{
+        let isProperData=false;
+
+        console.log("StartDate > ",StartDate);
+        console.log("EndDate > ",EndDate);
+        console.log("BondNo > ",BondNo);
+        console.log("LicenseNo > ",LicenseNo);
+        console.log("Description > ",Description);
+
+        if(
+            StartDate!=""&&
+            BondNo!="" && 
+            LicenseNo!=""
+        ){
+            isProperData=true;
+        }else{
+            isProperData=false;
+        }
+
+        return isProperData;
+    }
+
     const handleSave = () => {
+        console.log("---------------HEYYYYYYYY----------"); 
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
             "Content-Type": "application/json",
-          };
+        };
 
         let BLD = {
             ID: parseInt(ID),
@@ -151,35 +171,65 @@ export default function License({ BranchID }) {
             LicenseNo: LicenseNo,
             Description: Description,
         };
+        console.log("BLD > ",BLD);
 
-        let Url ="";
-        let Data={};
+        let Url = "";
+        let Data = {};
 
-        if (parseInt(ID) === 0) {
-            Data = {
-                ValidUser: ValidUser,
-                BranchLicenseDetail: BLD
-            };
-            Url = APIURLS.APIURL.CreateBranchLicenseDetail;
-            axios
-                .post(Url, Data, { headers })
-                .then((response) => {
-                    if (response.status === 200 || response.status === 201) {
-                        getLicenseDetailList();
-                        setSuccessPrompt(true);
-                        setProgressLoader(true);
-                    } else {
+        let isProperData=false;
+        isProperData=CHKisProperData();
+
+        if (isProperData === true) {
+
+            if (parseInt(ID) === 0) {
+                Data = {
+                    ValidUser: ValidUser,
+                    BranchLicenseDetail: BLD
+                };
+                Url = APIURLS.APIURL.CreateBranchLicenseDetail;
+                axios
+                    .post(Url, Data, { headers })
+                    .then((response) => {
+                        if (response.status === 200 || response.status === 201) {
+                            getLicenseDetailList();
+                            setSuccessPrompt(true);
+                            setProgressLoader(true);
+                        } else {
+                            setErrorPrompt(true);
+                            setProgressLoader(true);
+                        }
+                    }).catch((error) => {
                         setErrorPrompt(true);
                         setProgressLoader(true);
-                    }
-                }).catch((error) => {
-                    setErrorPrompt(true);
-                    setProgressLoader(true);
-                });
+                    });
 
+            } else {
+                Data = {
+                    ValidUser: ValidUser,
+                    BranchLicenseDetail: BLD
+                };
+                Url = APIURLS.APIURL.UpdateBranchLicenseDetail;
+                axios
+                    .post(Url, Data, { headers })
+                    .then((response) => {
+                        if (response.status === 200 || response.status === 201) {
+                            getLicenseDetailList();
+                            setSuccessPrompt(true);
+                            setProgressLoader(true);
+                        } else {
+                            setErrorPrompt(true);
+                            setProgressLoader(true);
+                        }
+                    }).catch((error) => {
+                        setErrorPrompt(true);
+                        setProgressLoader(true);
+                    });
+            }
         } else {
-            // update
+            setErrorPrompt(true);
+            setErrorMessageProps("Improper Data");
         }
+
     }
 
     return (
@@ -192,9 +242,9 @@ export default function License({ BranchID }) {
             />
             <SuccessSnackBar
                 SuccessPrompt={SuccessPrompt}
-                closeSuccessPrompt={(e)=>setSuccessPrompt(false)}
+                closeSuccessPrompt={(e) => setSuccessPrompt(false)}
             />
-           
+
             <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={8} lg={8}>
                     <Grid container spacing={0}>
@@ -208,7 +258,7 @@ export default function License({ BranchID }) {
                                 <Button
                                     startIcon={APIURLS.buttonTitle.add.icon}
                                     className="action-btns"
-                                    onClick={(e)=>handleCreate()}
+                                    onClick={(e) => handleCreate()}
                                 // disabled={this.state.disabledCreatebtn}
                                 >
                                     {APIURLS.buttonTitle.add.name}
@@ -251,7 +301,8 @@ export default function License({ BranchID }) {
                                         <Button
                                             startIcon={APIURLS.buttonTitle.save.icon}
                                             className="action-btns"
-                                            onClick={() => handleSave()}
+                                            onClick={(e) => handleSave(e)}
+                                            // onClick={(e) => alert("Hiii")}
 
                                         >
                                             {APIURLS.buttonTitle.save.name}

@@ -76,6 +76,7 @@ export const APIURL = {
   UpdateBranch: domain + "api/Branch/UpdateBranch",
   CreateBranch: domain + "api/Branch/CreateBranch",
   CreateBranchLicenseDetail:domain+"api/BranchLicenseDetail/CreateBranchLicenseDetail",
+  UpdateBranchLicenseDetail:domain+"api/BranchLicenseDetail/UpdateBranchLicenseDetail",
   GetBranchLicenseDetail:domain+"api/BranchLicenseDetail/GetBranchLicenseDetail",
   CreateUserBranchMapping: domain + "api/UserBranchMapping/CreateUserBranchMapping",
   GetUserBranchMappedByUserID: domain + "api/UserBranchMapping/GetUserBranchMappedByUserID",
