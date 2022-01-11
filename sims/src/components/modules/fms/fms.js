@@ -92,8 +92,7 @@ export default function Fms() {
         isDragReject,
         isDragAccept
     ]);
-
-     
+    
 
     useEffect(() => {
         let ROOT_DIRECTORY = "";
@@ -220,7 +219,7 @@ export default function Fms() {
     const initializePreviewItem = (item, isDirectory) => {
         let obj = {
             isDirectory: isDirectory,
-            name: isDirectory === true ? item.directory : item.fileName,
+            name: item.name,
             modifiedDateTime: item.modifiedDateTime
         };
         console.log("initializePreviewItem > obj > ", obj);
@@ -380,14 +379,18 @@ export default function Fms() {
                                                         <Grid item xs={12} sm={12} md={12} lg={12}>
                                                             {DirectoryList.map((item, i) => (
                                                                 <Fragment>
-                                                                    <Button
+                                                                    {item.isDir===true?(
+                                                                        <Fragment>
+                                                                            <Button
                                                                         variant="outlined"
                                                                         startIcon={<FolderIcon />}
                                                                         style={{ marginBottom: 10, marginRight: 2, textTransform: 'initial' }}
                                                                         onClick={(e) => initializePreviewItem(item, true)}
                                                                     >
-                                                                        {item.directory}
+                                                                        {item.name}
                                                                     </Button> &nbsp;
+                                                                        </Fragment>
+                                                                    ):null}                                                                    
                                                                 </Fragment>
                                                             ))}
                                                         </Grid>
@@ -405,14 +408,19 @@ export default function Fms() {
                                                         <Grid item xs={12} sm={12} md={12} lg={12}>
                                                             {DirectoryFileList.map((item, i) => (
                                                                 <Fragment>
-                                                                    <Button
+                                                                    {item.isDir===false?(
+                                                                        <Fragment>
+<Button
                                                                         // variant="outlined" 
                                                                         startIcon={<InsertDriveFileIcon />}
                                                                         style={{ marginBottom: 10, marginRight: 2, textTransform: 'initial' }}
                                                                         onClick={(e) => initializePreviewItem(item, false)}
                                                                     >
-                                                                        {item.fileName}
+                                                                        {item.name}
                                                                     </Button>
+                                                                        </Fragment>
+                                                                    ):null}
+                                                                    
                                                                 </Fragment>
                                                             ))}
                                                         </Grid>

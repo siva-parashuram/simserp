@@ -15,6 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -25,8 +26,12 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import TableRow from "@material-ui/core/TableRow";
-import ButtonGroup from "@mui/material/ButtonGroup";
+
 import InputAdornment from '@mui/material/InputAdornment';
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 
 import * as CF from "../../../services/functions/customfunctions";
@@ -44,11 +49,18 @@ import SDTI from "../../compo/griddateinput";
 import BranchQuickDetails from "./branchquickdetails";
 import DialogCustom from "../../compo/dialogcomponent";
 
+import License from "./license";
+
 class editbranch extends React.Component {
   constructor(props) {
     super(props);   
    
     this.state = {
+      ActivityDialog: {
+        DialogTitle: "",
+        DialogStatus: false,
+        DialogContent: null,
+      },
       DeleteAttachment: {
         e: null,
         item: null
@@ -1806,6 +1818,34 @@ class editbranch extends React.Component {
       this.setState({ SuccessPrompt: false });
     };
 
+    const handleClose = () => {
+      let Dialog = this.state.ActivityDialog;
+      Dialog.DialogStatus = false;
+      this.setState({ ActivityDialog: Dialog });
+       
+    };
+
+     
+
+    const openActivityDialog=(param)=>{
+      let ActivityDialog = this.state.ActivityDialog;
+      switch (param) {
+        case "license":
+          ActivityDialog.DialogTitle = "License";
+          ActivityDialog.DialogStatus = true;
+          ActivityDialog.DialogContent=<License BranchID={parseInt(this.state.branch.BranchID)}/>;
+          break;
+        case "charges":
+          ActivityDialog.DialogTitle = "Charges";
+          ActivityDialog.DialogStatus = true;
+          ActivityDialog.DialogContent="HI Charges";
+          break;
+        default:
+          break;
+      }
+      this.setState({ActivityDialog:ActivityDialog});
+    }
+
     const breadcrumbHtml = (
       <Fragment>
         <Breadcrumb
@@ -1827,7 +1867,18 @@ class editbranch extends React.Component {
           variant="text"
           aria-label="Action Menu Button group"
         >
-          {console.log("++++++++++++++++++++++++++++this.state > ",this.state)}
+
+          {(this.state.PageType === "add" || this.state.type === "add") ? (
+            <Button
+              startIcon={APIURLS.buttonTitle.save.icon}
+              className="action-btns"
+              onClick={handleCreate}
+              disabled={this.state.disabledCreatebtn}
+            >
+              {APIURLS.buttonTitle.save.name}
+            </Button>
+          ) : null}
+          
           {(this.state.PageType === "edit"|| this.state.type==="edit") ? (
             <Button
               className="action-btns"
@@ -1839,19 +1890,32 @@ class editbranch extends React.Component {
             </Button>
           ) : null}
 
-          {(this.state.PageType === "add" || this.state.type==="add")? (
-            <Button
-              startIcon={APIURLS.buttonTitle.save.icon}
+          {(this.state.PageType === "edit" || this.state.type === "edit") ? (
+            <Fragment>
+              <Button
               className="action-btns"
-              onClick={handleCreate}
-              disabled={this.state.disabledCreatebtn}
+              startIcon={APIURLS.buttonTitle.license.icon}
+              onClick={(e)=>openActivityDialog("license")}               
             >
-              {APIURLS.buttonTitle.save.name}
+              {APIURLS.buttonTitle.license.name}
             </Button>
+            <Button
+              className="action-btns"
+              startIcon={APIURLS.buttonTitle.charges.icon}
+              onClick={(e)=>openActivityDialog("charges")}               
+            >
+              {APIURLS.buttonTitle.charges.name}
+            </Button>
+            </Fragment>
           ) : null}
+
+
         </ButtonGroup>
       </Fragment>
     );
+
+     
+  
 
     return (
       <Fragment>
@@ -1870,7 +1934,7 @@ class editbranch extends React.Component {
           buttongroup={buttongroupHtml}
         />
 
-<DialogCustom
+        <DialogCustom
           MessageHeader="Delete Attachment!"
           MessageText="Do you want to delete this attachment?"
           open={this.state.Dialog.open}
@@ -2940,6 +3004,54 @@ class editbranch extends React.Component {
             </Grid>
           </Grid>
         </Grid>
+
+
+        <Fragment>
+        <Dialog
+          fullWidth={true}
+          maxWidth="lg"
+          open={this.state.ActivityDialog.DialogStatus}
+          aria-labelledby="dialog-title"
+          aria-describedby="dialog-description"
+          className="dialog-prompt-activity"
+        >
+          <DialogTitle
+            id="dialog-title"
+            className="dialog-area"
+            style={{ maxHeight: 50 }}
+          >
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={1} lg={1}>
+                <IconButton
+                  aria-label="ArrowBackIcon"
+                
+                >
+                  <ArrowBackIcon onClick={(e) => handleClose()} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12} sm={12} md={2} lg={2}>
+                <div style={{ marginLeft: -50 }}>
+                  {" "}
+                  <span style={{ fontSize: 18, color: "rgb(80, 92, 109)" }}>
+                    {" "}
+                    {this.state.ActivityDialog.DialogTitle}{" "}
+                  </span>{" "}
+                </div>
+              </Grid>
+            </Grid>
+          </DialogTitle>
+          <DialogContent className="dialog-area">
+            <Grid container spacing={0}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                {this.state.ActivityDialog.DialogContent}
+              </Grid>
+            </Grid>
+
+          </DialogContent>
+        </Dialog>
+      </Fragment>
+
+
       </Fragment>
     );
   }

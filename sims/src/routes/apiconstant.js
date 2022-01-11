@@ -23,6 +23,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
 import KeyIcon from '@mui/icons-material/Key';
+import PolicyIcon from '@mui/icons-material/Policy';
+import PaymentsIcon from '@mui/icons-material/Payments';
 
 import Chip from '@mui/material/Chip';
 import Link from "@material-ui/core/Link";
@@ -310,6 +312,14 @@ export const buttonTitle = {
   voucher:{
     name: "Voucher",
     icon: <PrintIcon />,
+  },
+  license: {
+    name: "License",
+    icon: <PolicyIcon />,
+  },
+  charges: {
+    name: "Charges",
+    icon: <PaymentsIcon />,
   },
 };
 
