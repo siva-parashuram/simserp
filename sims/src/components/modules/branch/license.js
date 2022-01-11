@@ -141,9 +141,8 @@ export default function License({ BranchID }) {
         console.log("Description > ",Description);
 
         if(
-            StartDate!=""&&
-            BondNo!="" && 
-            LicenseNo!=""
+            StartDate!="" &&            
+            Description!=""
         ){
             isProperData=true;
         }else{
@@ -324,7 +323,6 @@ export default function License({ BranchID }) {
                                     />
 
                                     <SDTI
-                                        isMandatory={true}
                                         id="EndDate"
                                         label="End Date"
                                         variant="outlined"
@@ -339,7 +337,7 @@ export default function License({ BranchID }) {
                                         variant="outlined"
                                         size="small"
                                         value={BondNo}
-                                        isMandatory={true}
+                                        // isMandatory={true}
                                         onChange={(e) => setBondNo(e.target.value)}
                                     />
                                     <SIB
@@ -348,7 +346,7 @@ export default function License({ BranchID }) {
                                         variant="outlined"
                                         size="small"
                                         value={LicenseNo}
-                                        isMandatory={true}
+                                        // isMandatory={true}
                                         onChange={(e) => setLicenseNo(e.target.value)}
                                     />
                                     <SIB
