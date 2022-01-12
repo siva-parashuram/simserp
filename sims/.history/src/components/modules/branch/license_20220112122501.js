@@ -18,6 +18,7 @@ import SIB from "../../compo/gridtextboxinput";
 import SDTI from "../../compo/griddateinput";
 import SDIB from "../../compo/griddropdowninput";
 
+
 let PG = {
     page: 0,
     rowsPerPage: 10,
@@ -46,7 +47,6 @@ export default function License({ BranchID }) {
     const [columns, setcolumns] = React.useState(APIURLS.branchLicenseColumn);
     const [pagination, setpagination] = React.useState(PG);
     const [LicenseList, setLicenseList] = React.useState([]);
-    const [BranchList, setBranchList] = React.useState([]);
 
 
     const [ID, setID] = React.useState(0);

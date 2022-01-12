@@ -46,7 +46,6 @@ export default function License({ BranchID }) {
     const [columns, setcolumns] = React.useState(APIURLS.branchLicenseColumn);
     const [pagination, setpagination] = React.useState(PG);
     const [LicenseList, setLicenseList] = React.useState([]);
-    const [BranchList, setBranchList] = React.useState([]);
 
 
     const [ID, setID] = React.useState(0);

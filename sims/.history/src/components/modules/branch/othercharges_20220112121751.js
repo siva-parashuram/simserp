@@ -15,7 +15,7 @@ import ErrorSnackBar from "../../compo/errorSnackbar";
 import MasterDataGrid from "../../compo/masterdatagrid";
 import Tableskeleton from "../../compo/tableskeleton";
 import SIB from "../../compo/gridtextboxinput";
-import SDTI from "../../compo/griddateinput";
+import SSIB from "../../compo/gridswitchinput";
 import SDIB from "../../compo/griddropdowninput";
 
 let PG = {
@@ -23,18 +23,12 @@ let PG = {
     rowsPerPage: 10,
 };
 
-let BLD = {
-    ID: 0,
-    BranchID: 0,
-    StartDate: "",
-    EndDate: "",
-    BondNo: "",
-    LicenseNo: "",
-    Description: ""
+let TypeList = [
+    { name: "Sales", value: 0 },
+    { name: "Purchase", value: 1 }
+];
 
-};
-
-export default function License({ BranchID }) {
+export default function Othercharges({ BranchID }) {
 
 
     const [ProgressLoader, setProgressLoader] = React.useState(false);
@@ -43,59 +37,70 @@ export default function License({ BranchID }) {
     const [ErrorPrompt, setErrorPrompt] = React.useState(false);
     const [ErrorMessageProps, setErrorMessageProps] = React.useState("");
     const [selectionModel, setselectionModel] = React.useState(0);
-    const [columns, setcolumns] = React.useState(APIURLS.branchLicenseColumn);
+    const [columns, setcolumns] = React.useState(APIURLS.branchOtherChargesColumn);
     const [pagination, setpagination] = React.useState(PG);
-    const [LicenseList, setLicenseList] = React.useState([]);
-    const [BranchList, setBranchList] = React.useState([]);
+    const [ChargesList, setChargesList] = React.useState([]);
+    const [COAList, setCOAList] = React.useState([]);
 
 
-    const [ID, setID] = React.useState(0);
+    const [ChargeID, setChargeID] = React.useState(0);
     const [BID, setBID] = React.useState(0);
-    const [StartDate, setStartDate] = React.useState("");
-    const [EndDate, setEndDate] = React.useState("");
-    const [BondNo, setBondNo] = React.useState("");
-    const [LicenseNo, setLicenseNo] = React.useState("");
+    const [Type, setType] = React.useState("");
+    const [Code, setCode] = React.useState("");
+    const [CAcID, setCAcID] = React.useState(0);
+    const [DebitOrCredit, setDebitOrCredit] = React.useState(false);
+    const [IsActive, setIsActive] = React.useState(true);
     const [Description, setDescription] = React.useState("");
 
 
 
+
     useEffect(() => {
-        getLicenseDetailList();
-        getBranches();
+        getChargesDetailList();
+        getCOAList();
     }, []);
 
-    const getBranches=() =>{
+    const getCOAList = () => {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
-        const headers = {
-          "Content-Type": "application/json",
-        };
-        let GetBrachesUrl = APIURLS.APIURL.GetBraches;
-    
-        axios
-          .post(GetBrachesUrl, ValidUser, { headers })
-          .then((response) => {
-            let data = response.data;
-            for(let i=0;i<data.length;i++){
-                data[i].value=data[i].BranchID;
-                data[i].name=data[i].Name;
-            }
-            setBranchList(data);  
-          })
-          .catch((error) => {
-             
-          });
-      }
 
-    const getLicenseDetailList = () => {
+        let Url = APIURLS.APIURL.GetChartOfAccounts;
+        const headers = {
+            "Content-Type": "application/json",
+        };
+        axios
+            .post(Url, ValidUser, { headers })
+            .then((response) => {
+                if (response.status === 200) {
+                    let data = response.data;
+                    console.log("data > ", data);
+                    for (let i = 0; i < data.length; i++) {
+                        data[i].value = data[i].CAcID;
+                        data[i].name = data[i].Name;
+                    }
+                    setCOAList(data);
+
+                } else {
+                    setErrorPrompt(true);
+                    setProgressLoader(true);
+                }
+
+            })
+            .catch((error) => {
+                setErrorPrompt(true);
+                setProgressLoader(true);
+            });
+    }
+
+    const getChargesDetailList = () => {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
         const headers = {
             "Content-Type": "application/json",
         };
-        let Url = APIURLS.APIURL.GetBranchLicenseDetail;
+        let Url = APIURLS.APIURL.GetBranchOtherChargesByBranchID;
 
         let Data = {
             ValidUser: ValidUser,
@@ -104,8 +109,9 @@ export default function License({ BranchID }) {
         axios
             .post(Url, Data, { headers })
             .then((response) => {
+                console.log("response > ", response);
                 if (response.status === 200) {
-                    setLicenseList(response.data);
+                    setChargesList(response.data);
                     setProgressLoader(true);
                 } else {
                     setErrorPrompt(true);
@@ -121,15 +127,16 @@ export default function License({ BranchID }) {
         console.log("----------handleRowClick--------> ");
         try {
             let index = e[0];
-            let item = LicenseList[index - 1];
+            let item = ChargesList[index - 1];
             console.log("handleRowClick > item > ", item);
             if (item) {
-                setID(item.ID);
-                setBID(item.BID);
-                setStartDate(moment(item.StartDate).format("YYYY-MM-DD"));
-                setEndDate(moment(item.EndDate).format("YYYY-MM-DD"));
-                setBondNo(item.BondNo);
-                setLicenseNo(item.LicenseNo);
+                setChargeID(item.ChargeID);
+                setBID(parseInt(BranchID));
+                setType(item.Type);
+                setCode(item.Code);
+                setCAcID(item.CAcID);
+                setDebitOrCredit(item.DebitOrCredit);
+                setIsActive(item.IsActive);
                 setDescription(item.Description);
                 setselectionModel(index);
             }
@@ -141,12 +148,13 @@ export default function License({ BranchID }) {
     }
 
     const handleCreate = () => {
-        setID(0);
-        setBID(BranchID);
-        setStartDate(moment().format("YYYY-MM-DD"));
-        setEndDate(moment().format("YYYY-MM-DD"));
-        setBondNo("");
-        setLicenseNo("");
+        setChargeID(0);
+        setBID(parseInt(BranchID));
+        setType("");
+        setCode("");
+        setCAcID("");
+        setDebitOrCredit(false);
+        setIsActive(true);
         setDescription("");
         setselectionModel(0);
     }
@@ -157,26 +165,26 @@ export default function License({ BranchID }) {
         this.setState({ pagination: pagination });
     };
 
-    const CHKisProperData=()=>{
-        let isProperData=false;
+    const CHKisProperData = () => {
+        let isProperData = false;
 
-       
 
-        if(
-            StartDate!="" &&            
-            Description!="" &&
-            LicenseNo!=""
-        ){
-            isProperData=true;
-        }else{
-            isProperData=false;
+        if (
+            Type != "" &&
+            Code != "" &&
+            CAcID != "" &&
+            Description != ""
+        ) {
+            isProperData = true;
+        } else {
+            isProperData = false;
         }
 
         return isProperData;
     }
 
     const handleSave = () => {
-        console.log("---------------HEYYYYYYYY----------"); 
+        console.log("---------------HEYYYYYYYY----------");
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -185,35 +193,39 @@ export default function License({ BranchID }) {
         };
 
         let BLD = {
-            ID: parseInt(ID),
+            ChargeID: parseInt(ChargeID),
             BranchID: parseInt(BranchID),
-            StartDate: moment(StartDate).format("MM/DD/YYYY"),
-            EndDate: moment(EndDate).format("MM/DD/YYYY"),
-            BondNo: BondNo,
-            LicenseNo: LicenseNo,
+            Type: parseInt(Type),
+            Code: Code,
+            CAcID: parseInt(CAcID),
+            DebitOrCredit: DebitOrCredit,
+            IsActive: IsActive,
             Description: Description,
         };
-        console.log("BLD > ",BLD);
+
+
+        console.log("BLD > ", BLD);
 
         let Url = "";
         let Data = {};
 
-        let isProperData=false;
-        isProperData=CHKisProperData();
+        let isProperData = false;
+        isProperData = CHKisProperData();
 
         if (isProperData === true) {
 
-            if (parseInt(ID) === 0) {
+            if (parseInt(ChargeID) === 0) {
                 Data = {
                     ValidUser: ValidUser,
-                    BranchLicenseDetail: BLD
+                    BranchOtherCharges: BLD
                 };
-                Url = APIURLS.APIURL.CreateBranchLicenseDetail;
+                Url = APIURLS.APIURL.CreateBranchOtherCharges;
                 axios
                     .post(Url, Data, { headers })
                     .then((response) => {
                         if (response.status === 200 || response.status === 201) {
-                            getLicenseDetailList();
+                            handleCreate();
+                            getChargesDetailList();
                             setSuccessPrompt(true);
                             setProgressLoader(true);
                         } else {
@@ -228,14 +240,14 @@ export default function License({ BranchID }) {
             } else {
                 Data = {
                     ValidUser: ValidUser,
-                    BranchLicenseDetail: BLD
+                    BranchOtherCharges: BLD
                 };
-                Url = APIURLS.APIURL.UpdateBranchLicenseDetail;
+                Url = APIURLS.APIURL.UpdateBranchOtherCharges;
                 axios
                     .post(Url, Data, { headers })
                     .then((response) => {
                         if (response.status === 200 || response.status === 201) {
-                            getLicenseDetailList();
+                            getChargesDetailList();
                             setSuccessPrompt(true);
                             setProgressLoader(true);
                         } else {
@@ -292,11 +304,11 @@ export default function License({ BranchID }) {
                     </Grid>
                     <Grid container spacing={0}>
                         <Grid xs={12} sm={12} md={12} lg={12}>
-                            {LicenseList.length > 0 ? (
+                            {ChargesList.length > 0 ? (
                                 <Fragment>
                                     <MasterDataGrid
                                         selectionModel={selectionModel}
-                                        rows={LicenseList}
+                                        rows={ChargesList}
                                         columns={columns}
                                         pagination={pagination}
                                         onSelectionModelChange={(e) => handleRowClick(e)}
@@ -324,78 +336,75 @@ export default function License({ BranchID }) {
                                             startIcon={APIURLS.buttonTitle.save.icon}
                                             className="action-btns"
                                             onClick={(e) => handleSave(e)}
-                                            // onClick={(e) => alert("Hiii")}
-
                                         >
                                             {APIURLS.buttonTitle.save.name}
                                         </Button>
                                     </ButtonGroup>
                                 </Grid>
                             </Grid>
-                            
                             <Grid container spacing={0} style={{ backgroundColor: '#fff' }}>
                                 <Grid xs={12} sm={12} md={12} lg={12}>
 
-                                <div style={{marginLeft:5,marginRight:5,marginTop:10}}>
-                                <SDIB
-                                            disabled={true}
-                                            id="BranchList"
-                                            label="Branch"
-                                            param={BranchList}
-                                            value={BranchID}
+                                    <div style={{ marginLeft: 5, marginRight: 5, marginTop: 10 }}>
+                                        <SDIB
+                                            isMandatory={true}
+                                            id="Type"
+                                            label="Type"
+                                            onChange={(e) => setType(e.target.value)}
+                                            param={TypeList}
+                                            value={Type}
+                                        />
+                                        <SIB
+                                            isMandatory={true}
+                                            id="Code"
+                                            label="Code"
+                                            variant="outlined"
+                                            size="small"
+                                            value={Code}
+                                            onChange={(e) => setCode(e.target.value)}
                                         />
 
-                                    <SDTI
-                                        isMandatory={true}
-                                        id="StartDate"
-                                        label="Start Date"
-                                        variant="outlined"
-                                        size="small"
-                                        value={StartDate}
-                                        onChange={(e) => setStartDate(e.target.value)}
-                                    />
 
-                                    <SDTI
-                                        id="EndDate"
-                                        label="End Date"
-                                        variant="outlined"
-                                        size="small"
-                                        value={EndDate}
-                                        onChange={(e) => setEndDate(e.target.value)}
-                                    />
 
-                                    <SIB
-                                        id="BondNo"
-                                        label="Bond No."
-                                        variant="outlined"
-                                        size="small"
-                                        value={BondNo}
-                                        // isMandatory={true}
-                                        onChange={(e) => setBondNo(e.target.value)}
-                                    />
-                                    <SIB
-                                        id="LicenseNo"
-                                        label="License No."
-                                        variant="outlined"
-                                        size="small"
-                                        value={LicenseNo}
-                                        isMandatory={true}
-                                        onChange={(e) => setLicenseNo(e.target.value)}
-                                    />
-                                    <SIB
-                                        multiline={true}
-                                        rows={4}
-                                        id="Description"
-                                        label="Description"
-                                        variant="outlined"
-                                        size="small"
-                                        value={Description}
-                                        isMandatory={true}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                    />
+                                        <SDIB
+                                            isMandatory={true}
+                                            id="CAcID"
+                                            label="Chart of Account"
+                                            onChange={(e) => setCAcID(e.target.value)}
+                                            param={COAList}
+                                            value={CAcID}
+                                        />
+
+                                        <SIB
+                                            isMandatory={true}
+                                            rows={4}
+                                            id="Description"
+                                            label="Description"
+                                            variant="outlined"
+                                            size="small"
+                                            value={Description}
+
+                                            onChange={(e) => setDescription(e.target.value)}
+                                        />
+
+
+                                        <SSIB
+                                            isMandatory={true}
+                                            key="DebitOrCredit"
+                                            id="DebitOrCredit"
+                                            label="Debit/Credit"
+                                            param={DebitOrCredit}
+                                            onChange={(e) => setDebitOrCredit(e.target.checked)}
+                                        />
+                                        <SSIB
+                                            isMandatory={true}
+                                            key="IsActive"
+                                            id="IsActive"
+                                            label="Active?"
+                                            param={IsActive}
+                                            onChange={(e) => setIsActive(e.target.checked)}
+                                        />
                                     </div>
-                                    <br/> <br/> <br/> <br/> <br/>
-
                                 </Grid>
                             </Grid>
                         </Grid>

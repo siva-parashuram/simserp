@@ -16,7 +16,6 @@ import MasterDataGrid from "../../compo/masterdatagrid";
 import Tableskeleton from "../../compo/tableskeleton";
 import SIB from "../../compo/gridtextboxinput";
 import SDTI from "../../compo/griddateinput";
-import SDIB from "../../compo/griddropdowninput";
 
 let PG = {
     page: 0,
@@ -46,7 +45,6 @@ export default function License({ BranchID }) {
     const [columns, setcolumns] = React.useState(APIURLS.branchLicenseColumn);
     const [pagination, setpagination] = React.useState(PG);
     const [LicenseList, setLicenseList] = React.useState([]);
-    const [BranchList, setBranchList] = React.useState([]);
 
 
     const [ID, setID] = React.useState(0);
@@ -61,32 +59,8 @@ export default function License({ BranchID }) {
 
     useEffect(() => {
         getLicenseDetailList();
-        getBranches();
-    }, []);
 
-    const getBranches=() =>{
-        let ValidUser = APIURLS.ValidUser;
-        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-        ValidUser.Token = getCookie(COOKIE.TOKEN);
-        const headers = {
-          "Content-Type": "application/json",
-        };
-        let GetBrachesUrl = APIURLS.APIURL.GetBraches;
-    
-        axios
-          .post(GetBrachesUrl, ValidUser, { headers })
-          .then((response) => {
-            let data = response.data;
-            for(let i=0;i<data.length;i++){
-                data[i].value=data[i].BranchID;
-                data[i].name=data[i].Name;
-            }
-            setBranchList(data);  
-          })
-          .catch((error) => {
-             
-          });
-      }
+    }, []);
 
     const getLicenseDetailList = () => {
         let ValidUser = APIURLS.ValidUser;
@@ -337,14 +311,6 @@ export default function License({ BranchID }) {
                                 <Grid xs={12} sm={12} md={12} lg={12}>
 
                                 <div style={{marginLeft:5,marginRight:5,marginTop:10}}>
-                                <SDIB
-                                            disabled={true}
-                                            id="BranchList"
-                                            label="Branch"
-                                            param={BranchList}
-                                            value={BranchID}
-                                        />
-
                                     <SDTI
                                         isMandatory={true}
                                         id="StartDate"
