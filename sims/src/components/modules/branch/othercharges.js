@@ -348,65 +348,66 @@ export default function Othercharges({ BranchID }) {
                             <Grid container spacing={0} style={{ backgroundColor: '#fff' }}>
                                 <Grid xs={12} sm={12} md={12} lg={12}>
 
-                                <div style={{marginLeft:5,marginRight:5,marginTop:10}}>
-                                            <SIB
-                                                isMandatory={true}
-                                                id="Code"
-                                                label="Code"
-                                                variant="outlined"
-                                                size="small"
-                                                value={Code}
-                                                onChange={(e) => setCode(e.target.value)}
-                                            />
+                                    <div style={{ marginLeft: 5, marginRight: 5, marginTop: 10 }}>
+                                        <SDIB
+                                            isMandatory={true}
+                                            id="Type"
+                                            label="Type"
+                                            onChange={(e) => setType(e.target.value)}
+                                            param={TypeList}
+                                            value={Type}
+                                        />
+                                        <SIB
+                                            isMandatory={true}
+                                            id="Code"
+                                            label="Code"
+                                            variant="outlined"
+                                            size="small"
+                                            value={Code}
+                                            onChange={(e) => setCode(e.target.value)}
+                                        />
 
-                                            <SDIB
-                                                isMandatory={true}
-                                                id="Type"
-                                                label="Type"
-                                                onChange={(e) => setType(e.target.value)}
-                                                param={TypeList}
-                                                value={Type}
-                                            />
 
-                                            <SDIB
-                                                isMandatory={true}
-                                                id="CAcID"
-                                                label="CAcID"
-                                                onChange={(e) => setCAcID(e.target.value)}
-                                                param={COAList}
-                                                value={CAcID}
-                                            />
 
-                                            <SIB
-                                                isMandatory={true}
-                                                rows={4}
-                                                id="Description"
-                                                label="Description"
-                                                variant="outlined"
-                                                size="small"
-                                                value={Description}
+                                        <SDIB
+                                            isMandatory={true}
+                                            id="CAcID"
+                                            label="Chart of Account"
+                                            onChange={(e) => setCAcID(e.target.value)}
+                                            param={COAList}
+                                            value={CAcID}
+                                        />
 
-                                                onChange={(e) => setDescription(e.target.value)}
-                                            />
+                                        <SIB
+                                            isMandatory={true}
+                                            rows={4}
+                                            id="Description"
+                                            label="Description"
+                                            variant="outlined"
+                                            size="small"
+                                            value={Description}
 
-                                             
-                                            <SSIB
-                                                isMandatory={true}
-                                                key="DebitOrCredit"
-                                                id="DebitOrCredit"
-                                                label="Debit/Credit"
-                                                param={DebitOrCredit}
-                                                onChange={(e) => setDebitOrCredit(e.target.checked)}
-                                            />
-                                            <SSIB
-                                                isMandatory={true}
-                                                key="IsActive"
-                                                id="IsActive"
-                                                label="Active?"
-                                                param={IsActive}
-                                                onChange={(e) => setIsActive(e.target.checked)}
-                                            />
-                                        </div>
+                                            onChange={(e) => setDescription(e.target.value)}
+                                        />
+
+
+                                        <SSIB
+                                            isMandatory={true}
+                                            key="DebitOrCredit"
+                                            id="DebitOrCredit"
+                                            label="Debit/Credit"
+                                            param={DebitOrCredit}
+                                            onChange={(e) => setDebitOrCredit(e.target.checked)}
+                                        />
+                                        <SSIB
+                                            isMandatory={true}
+                                            key="IsActive"
+                                            id="IsActive"
+                                            label="Active?"
+                                            param={IsActive}
+                                            onChange={(e) => setIsActive(e.target.checked)}
+                                        />
+                                    </div>
                                 </Grid>
                             </Grid>
                         </Grid>

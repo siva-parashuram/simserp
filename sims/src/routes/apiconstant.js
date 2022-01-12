@@ -25,6 +25,8 @@ import MergeTypeIcon from '@mui/icons-material/MergeType';
 import KeyIcon from '@mui/icons-material/Key';
 import PolicyIcon from '@mui/icons-material/Policy';
 import PaymentsIcon from '@mui/icons-material/Payments';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 
 import Chip from '@mui/material/Chip';
 import Link from "@material-ui/core/Link";
@@ -809,40 +811,78 @@ export const branchOtherChargesColumn=[
     width: 50,
     headerClassName: 'table-header-font'
   },
-  
+  {
+    field: 'Type',
+    headerName: 'Type',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {params.value===0?(
+        <span>Sales</span>
+       ):(
+         <span>Purchase</span>
+       )}
+      </Fragment>
+    )
+  },
   {
     field: 'Code',
     headerName: 'Code',
-    width: 200,
+    width: 120,
     editable: false,
     headerClassName: 'table-header-font'
-  }, {
-    field: 'DebitOrCredit',
-    headerName: 'Debit/Credit',
-    width: 200,
-    editable: false,
-    headerClassName: 'table-header-font'
-  }, {
+  }, 
+  {
     field: 'Description',
     headerName: 'Description',
-    width: 200,
+    width: 250,
     editable: false,
     headerClassName: 'table-header-font'
-  } , {
+  }, 
+  {
+    field: 'DebitOrCredit',
+    headerName: 'Debit/Credit',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {params.value===true?(
+        <span>Credit</span>
+       ):(
+         <span>Debit</span>
+       )}
+      </Fragment>
+    )
+  } , 
+  {
     field: 'Name',
-    headerName: 'Category',
+    headerName: 'Chart of Account',
     width: 200,
     editable: false,
     headerClassName: 'table-header-font'
   }  
   , {
     field: 'IsActive',
-    headerName: 'IsActive',
-    width: 200,
+    headerName: 'Status',
+    width: 120,
     editable: false,
-    headerClassName: 'table-header-font'
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {params.value===true?(
+         <ToggleOnIcon color="success"/>
+       ):(
+         <ToggleOffIcon color="disabled"/>
+       )}
+      </Fragment>
+    ),
   }
 ];
+
+
 
 export const branchMasterColumn=[
   {
