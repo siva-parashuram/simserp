@@ -94,7 +94,7 @@ class itemSuperCategoryMaster extends React.Component {
       "&editsuperCatId=" +
       item.SuperCatID;
       this.setState({
-        itemDeptId: item.SuperCatID,
+        itemDeptId: item.superCatId,
         editurl: editUrl,
         selectionModel:index
       });

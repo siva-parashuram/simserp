@@ -108,7 +108,7 @@ class addItemSuperCategory extends React.Component {
     let duplicateExist=false;
     let DataList=this.state.DataList;
     for(let i=0;i<DataList.length;i++){
-      if(DataList[i].Code.toUpperCase()===value.toUpperCase()){
+      if(DataList[i].code.toUpperCase()===value.toUpperCase()){
         duplicateExist=true;
         break;
       }

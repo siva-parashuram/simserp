@@ -69,6 +69,9 @@ class itemSuperCategoryMaster extends React.Component {
       .then((response) => {
         let data = response.data;
         
+        for(let i=0;i<data.length;i++){
+          data[i]['id']=i+1;
+        }
         console.log("data > ", data);
         this.setState({ DataList: data }, () => {
           this.handleRowClick([1]);
@@ -92,9 +95,9 @@ class itemSuperCategoryMaster extends React.Component {
       URLS.URLS.editItemSuperCategory +
       this.state.urlparams +
       "&editsuperCatId=" +
-      item.SuperCatID;
+      item.superCatId;
       this.setState({
-        itemDeptId: item.SuperCatID,
+        itemDeptId: item.superCatId,
         editurl: editUrl,
         selectionModel:index
       });

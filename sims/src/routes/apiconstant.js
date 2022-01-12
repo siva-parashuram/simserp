@@ -1246,18 +1246,18 @@ export const superCategoryMasterColumn=[
     width: 10,
     headerClassName: 'table-header-font'
   },{
-    field: 'code',
+    field: 'Code',
     headerName: 'Code',
     width: 150,
     headerClassName: 'table-header-font'
   },
   {
-    field: 'description',
+    field: 'Description',
     headerName: 'Description',
     width: 180,
     headerClassName: 'table-header-font'
   },{
-    field: 'itemType',
+    field: 'ItemType',
     headerName: 'Type',
     width: 150,
     headerClassName: 'table-header-font',
@@ -1269,12 +1269,12 @@ export const superCategoryMasterColumn=[
   }
   ,
   {
-    field: 'hsncode',
+    field: 'HSNCode',
     headerName: 'HSN',
     width: 120,
     headerClassName: 'table-header-font'
   },{
-    field: 'isActive',
+    field: 'IsActive',
     headerName: 'Status',
     width: 120,
     headerClassName: 'table-header-font',
