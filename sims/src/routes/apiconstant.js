@@ -30,6 +30,7 @@ import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 
 import Chip from '@mui/material/Chip';
 import Link from "@material-ui/core/Link";
+import Tooltip from '@mui/material/Tooltip';
 
 import * as CF from "../services/functions/customfunctions";
 import * as URLS from "../routes/constants";
@@ -839,7 +840,16 @@ export const branchOtherChargesColumn=[
     headerName: 'Description',
     width: 250,
     editable: false,
-    headerClassName: 'table-header-font'
+    headerClassName: 'table-header-font',
+    renderCell:(params)=>(
+      <Fragment>
+        <Tooltip placement="top" title={params.value}>
+          <span>
+            {params.value}
+          </span>
+        </Tooltip>
+      </Fragment>
+    )
   }, 
   {
     field: 'DebitOrCredit',
@@ -860,9 +870,19 @@ export const branchOtherChargesColumn=[
   {
     field: 'Name',
     headerName: 'Chart of Account',
-    width: 200,
+    width: '200',
     editable: false,
-    headerClassName: 'table-header-font'
+    headerClassName: 'table-header-font',
+    renderCell:(params)=>(
+      <Fragment>
+        <Tooltip placement="top" title={params.value}>
+          <span>
+            {params.value}
+          </span>
+        </Tooltip>
+      </Fragment>
+    )
+     
   }  
   , {
     field: 'IsActive',
