@@ -50,6 +50,7 @@ import BranchQuickDetails from "./branchquickdetails";
 import DialogCustom from "../../compo/dialogcomponent";
 
 import License from "./license";
+import Othercharges from "./othercharges";
 
 class editbranch extends React.Component {
   constructor(props) {
@@ -1838,7 +1839,7 @@ class editbranch extends React.Component {
         case "charges":
           ActivityDialog.DialogTitle = "Charges";
           ActivityDialog.DialogStatus = true;
-          ActivityDialog.DialogContent="HI Charges";
+          ActivityDialog.DialogContent=<Othercharges BranchID={parseInt(this.state.branch.BranchID)}/>;
           break;
         default:
           break;
@@ -3041,12 +3042,13 @@ class editbranch extends React.Component {
             </Grid>
           </DialogTitle>
           <DialogContent className="dialog-area">
-            <Grid container spacing={0}>
+           <div style={{marginTop:10}}>
+           <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 {this.state.ActivityDialog.DialogContent}
               </Grid>
             </Grid>
-
+           </div>
           </DialogContent>
         </Dialog>
       </Fragment>

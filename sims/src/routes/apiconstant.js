@@ -77,7 +77,11 @@ export const APIURL = {
   CreateBranch: domain + "api/Branch/CreateBranch",
   CreateBranchLicenseDetail:domain+"api/BranchLicenseDetail/CreateBranchLicenseDetail",
   UpdateBranchLicenseDetail:domain+"api/BranchLicenseDetail/UpdateBranchLicenseDetail",
+  CreateBranchOtherCharges:domain+"api/Branch/CreateBranchOtherCharges",
+  UpdateBranchOtherCharges:domain+"api/Branch/UpdateBranchOtherCharges",
   GetBranchLicenseDetail:domain+"api/BranchLicenseDetail/GetBranchLicenseDetail",
+  GetBranchOtherChargesByBranchID:domain+"api/Branch/GetBranchOtherChargesByBranchID",
+  GetBranchOtherChargesByID:domain+"api/Branch/GetBranchOtherChargesByID",
   CreateUserBranchMapping: domain + "api/UserBranchMapping/CreateUserBranchMapping",
   GetUserBranchMappedByUserID: domain + "api/UserBranchMapping/GetUserBranchMappedByUserID",
   CreateModule: domain + "api/Module/CreateModule",
@@ -792,6 +796,48 @@ export const branchLicenseColumn=[
   }, {
     field: 'BondNo',
     headerName: 'Bond No.',
+    width: 200,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }
+];
+
+export const branchOtherChargesColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 50,
+    headerClassName: 'table-header-font'
+  },
+  
+  {
+    field: 'Code',
+    headerName: 'Code',
+    width: 200,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }, {
+    field: 'DebitOrCredit',
+    headerName: 'Debit/Credit',
+    width: 200,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }, {
+    field: 'Description',
+    headerName: 'Description',
+    width: 200,
+    editable: false,
+    headerClassName: 'table-header-font'
+  } , {
+    field: 'Name',
+    headerName: 'Category',
+    width: 200,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }  
+  , {
+    field: 'IsActive',
+    headerName: 'IsActive',
     width: 200,
     editable: false,
     headerClassName: 'table-header-font'
