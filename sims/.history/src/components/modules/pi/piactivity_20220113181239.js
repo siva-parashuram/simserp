@@ -2642,23 +2642,8 @@ class piactivity extends React.Component {
     for(let i=0;i<MRNList.length;i++){
       if(parseInt(MRNList[i].MRNID)===parseInt(item.MRNID)){
         MRNList[i].isChecked=!item.isChecked;
-        break;
       }      
     }
-
-    if (MRNList.length > 0) {
-      let isDefaultInfoChecked = false;
-      for (let i = 0; i < MRNList.length; i++) {
-        if (MRNList[i].isDefaultInfo === true) {
-          isDefaultInfoChecked = true;
-          break;
-        }
-      }
-      if (isDefaultInfoChecked === false) {
-        MRNList[0].isDefaultInfo = true;
-      }
-    }
-
     this.setState({MRNList:MRNList});
 
     let selectedLineMRNList = this.state.selectedLineMRNList;

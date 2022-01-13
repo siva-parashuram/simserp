@@ -410,7 +410,7 @@ class pi extends React.Component {
                     <Grid container spacing={0} style={{ marginLeft: 15 }}>
                         <Grid item xs={12} sm={12} md={11} lg={11} style={{ backgroundColor: '#fff' }}>
                             <Grid container spacing={1} >
-                                <Grid item xs={12} sm={12} md={4} lg={4}  >
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
                                     <div key="paymentPendingLink" to="#" className="card-link">
                                         <Card className="dash-activity-card2" raised={false}>
                                             <CardContent>
@@ -424,7 +424,7 @@ class pi extends React.Component {
                                         </Card>
                                     </div>
                                 </Grid>
-                                <Grid item xs={12} sm={12} md={4} lg={4}  >
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
                                     <div key="paymentPendingLink" to="#" className="card-link">
                                         <Card className="dash-activity-card2" raised={false}>
                                             <CardContent>
@@ -438,7 +438,7 @@ class pi extends React.Component {
                                         </Card>
                                     </div>
                                 </Grid>
-                                <Grid item xs={12} sm={12} md={4} lg={4}  >
+                                <Grid item xs={12} sm={12} md={3} lg={3}  >
                                     <div key="paymentPendingLink" to="#" className="card-link">
                                         <Card className="dash-activity-card2" raised={false}>
                                             <CardContent>

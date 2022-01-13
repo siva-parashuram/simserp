@@ -2611,27 +2611,24 @@ class piactivity extends React.Component {
   }
 
   MRNDefaultInfo = (item, e) => {
-      let input = e.target.checked;
-      console.log("MRNDefaultInfo > input > ", input);
-      let MRNList = this.state.MRNList;
-      for (let i = 0; i < MRNList.length; i++) {
-       
-        if (parseInt(item.MRNID) === parseInt(MRNList[i].MRNID)) {
-          if (input === true) {
+    let input = e.target.checked;
+    console.log("MRNDefaultInfo > input > ", input);
+    let MRNList = this.state.MRNList;
+    for (let i = 0; i < MRNList.length; i++) {
+     
+      if (parseInt(item.MRNID) === parseInt(MRNList[i].MRNID)) {
+        if (input === true) {
+          if(MRNList[i].isChecked===true){
             MRNList[i].isDefaultInfo = true;
-                     
-          } else {
-            MRNList[i].isDefaultInfo = false;
-          }
+          }          
         } else {
           MRNList[i].isDefaultInfo = false;
         }
+      } else {
+        MRNList[i].isDefaultInfo = false;
       }
-      this.setState({ MRNList: MRNList });   
-     
-      
-     
-   
+    }
+    this.setState({ MRNList: MRNList });
   }
 
   chooseMRNList = (item, e) => {
@@ -2642,23 +2639,8 @@ class piactivity extends React.Component {
     for(let i=0;i<MRNList.length;i++){
       if(parseInt(MRNList[i].MRNID)===parseInt(item.MRNID)){
         MRNList[i].isChecked=!item.isChecked;
-        break;
       }      
     }
-
-    if (MRNList.length > 0) {
-      let isDefaultInfoChecked = false;
-      for (let i = 0; i < MRNList.length; i++) {
-        if (MRNList[i].isDefaultInfo === true) {
-          isDefaultInfoChecked = true;
-          break;
-        }
-      }
-      if (isDefaultInfoChecked === false) {
-        MRNList[0].isDefaultInfo = true;
-      }
-    }
-
     this.setState({MRNList:MRNList});
 
     let selectedLineMRNList = this.state.selectedLineMRNList;
@@ -4960,7 +4942,6 @@ class piactivity extends React.Component {
                                   <Fragment>
                                     <FormControlLabel
                                       control={<Switch label="Set Default" size="small"
-                                        disabled={!item.isChecked}   
                                         onClick={(e) => this.MRNDefaultInfo(item, e)}
                                         defaultChecked />}
                                       label={<span style={{ color: '#009688' }}>Default</span>} />
@@ -4970,7 +4951,7 @@ class piactivity extends React.Component {
                               {
                                 item.isDefaultInfo === false ? (
                                   <Fragment>
-                                    <Switch  disabled={!item.isChecked}   size="small" onClick={(e) => this.MRNDefaultInfo(item, e)} label="" />
+                                    <Switch size="small" onClick={(e) => this.MRNDefaultInfo(item, e)} label="" />
                                   </Fragment>
                                 ) : null
                               }

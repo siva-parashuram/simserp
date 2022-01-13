@@ -2646,6 +2646,8 @@ class piactivity extends React.Component {
       }      
     }
 
+    
+
     if (MRNList.length > 0) {
       let isDefaultInfoChecked = false;
       for (let i = 0; i < MRNList.length; i++) {
@@ -2658,6 +2660,9 @@ class piactivity extends React.Component {
         MRNList[0].isDefaultInfo = true;
       }
     }
+    
+  
+
 
     this.setState({MRNList:MRNList});
 

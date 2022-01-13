@@ -2590,7 +2590,6 @@ class piactivity extends React.Component {
             let data = response.data;
             for (let i = 0; i < data.length; i++) {
               data[i].isDefaultInfo = false;
-              data[i].isChecked = false;
             }
             let Dialog = this.state.Dialog;
             Dialog.DialogTitle = "Merge MRN";
@@ -2611,56 +2610,24 @@ class piactivity extends React.Component {
   }
 
   MRNDefaultInfo = (item, e) => {
-      let input = e.target.checked;
-      console.log("MRNDefaultInfo > input > ", input);
-      let MRNList = this.state.MRNList;
-      for (let i = 0; i < MRNList.length; i++) {
-       
-        if (parseInt(item.MRNID) === parseInt(MRNList[i].MRNID)) {
-          if (input === true) {
-            MRNList[i].isDefaultInfo = true;
-                     
-          } else {
-            MRNList[i].isDefaultInfo = false;
-          }
+    let input = e.target.checked;
+    console.log("MRNDefaultInfo > input > ", input);
+    let MRNList = this.state.MRNList;
+    for (let i = 0; i < MRNList.length; i++) {
+      if (parseInt(item.MRNID) === parseInt(MRNList[i].MRNID)) {
+        if (input === true) {
+          MRNList[i].isDefaultInfo = true;
         } else {
           MRNList[i].isDefaultInfo = false;
         }
+      } else {
+        MRNList[i].isDefaultInfo = false;
       }
-      this.setState({ MRNList: MRNList });   
-     
-      
-     
-   
+    }
+    this.setState({ MRNList: MRNList });
   }
 
   chooseMRNList = (item, e) => {
-
-    // let isChecked
-
-    let MRNList=this.state.MRNList;
-    for(let i=0;i<MRNList.length;i++){
-      if(parseInt(MRNList[i].MRNID)===parseInt(item.MRNID)){
-        MRNList[i].isChecked=!item.isChecked;
-        break;
-      }      
-    }
-
-    if (MRNList.length > 0) {
-      let isDefaultInfoChecked = false;
-      for (let i = 0; i < MRNList.length; i++) {
-        if (MRNList[i].isDefaultInfo === true) {
-          isDefaultInfoChecked = true;
-          break;
-        }
-      }
-      if (isDefaultInfoChecked === false) {
-        MRNList[0].isDefaultInfo = true;
-      }
-    }
-
-    this.setState({MRNList:MRNList});
-
     let selectedLineMRNList = this.state.selectedLineMRNList;
     let MRNLineList = item.MRNLineList;
 
@@ -4960,7 +4927,6 @@ class piactivity extends React.Component {
                                   <Fragment>
                                     <FormControlLabel
                                       control={<Switch label="Set Default" size="small"
-                                        disabled={!item.isChecked}   
                                         onClick={(e) => this.MRNDefaultInfo(item, e)}
                                         defaultChecked />}
                                       label={<span style={{ color: '#009688' }}>Default</span>} />
@@ -4970,7 +4936,7 @@ class piactivity extends React.Component {
                               {
                                 item.isDefaultInfo === false ? (
                                   <Fragment>
-                                    <Switch  disabled={!item.isChecked}   size="small" onClick={(e) => this.MRNDefaultInfo(item, e)} label="" />
+                                    <Switch size="small" onClick={(e) => this.MRNDefaultInfo(item, e)} label="" />
                                   </Fragment>
                                 ) : null
                               }
@@ -4991,10 +4957,7 @@ class piactivity extends React.Component {
                         <CardActions >
                           <Checkbox
                             onClick={(e) => this.chooseMRNList(item, e)}
-                            // defaultChecked={false} 
-                            checked={item.isChecked}
-                            
-                            />
+                            defaultChecked={false} />
                         </CardActions>
                       </Card>
                     </Grid>
