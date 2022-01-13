@@ -100,7 +100,7 @@ class poactivity extends React.Component {
       isDataFetched: false,
       BranchID: 0,
       accordion1: true,
-      accordion2: false,
+      accordion2: true,
       accordion3: false,
       accordion4: false,
       accordion5: false,
@@ -887,6 +887,8 @@ class poactivity extends React.Component {
       if (this.state.type === "add" || event === "dropdownChange") {
         PO.BillingID = data.SupplierAdressList[0].value;
         BillingID = data.SupplierAdressList[0].value;
+        PO.EmailID= data.SupplierAdressList[0].EmailID;
+        PO.ContactPerson= data.SupplierAdressList[0].ContactPerson;
         PO.CurrID = data.CurrID;
         PO.PaymentTermID = data.PaymentTermID;
         PO.PaymentTerm = this.getPaymentTermsDescriptionByID(data.PaymentTermID);
@@ -987,7 +989,7 @@ class poactivity extends React.Component {
 
 
     for (let i = 0; i < Address.length; i++) {
-      let o = { name: Address[i].Code, value: Address[i].AddressID };
+      let o = { name: Address[i].Code, value: Address[i].AddressID,EmailID:Address[i].EmailID,PhoneNo:Address[i].PhoneNo };
       dropdownData.push(o);
     }
 
@@ -1125,13 +1127,27 @@ class poactivity extends React.Component {
     }
   }
 
+  chkisDataProper=()=>{
+    let isDataProper=false;
+    let PurchaseOrderLine=this.state.PurchaseOrderLine;
+    for(let i=0;i<PurchaseOrderLine.length;i++){
+      if(PurchaseOrderLine[i].isDataProper===true){
+        isDataProper=true;
+        break;
+      }
+    }
+    return isDataProper;
+  }
+
   updateFormValue = (param, e) => {
     let PO = this.state.PO;
     switch (param) {
       case "SuplID":
         if (e) {
            
-          if(this.state.PurchaseOrderLine.length>0){
+          let isDataProper=false;
+          isDataProper=this.chkisDataProper();
+          if(isDataProper===true){
             this.setState({ErrorMessageProps:'Delete the Lines before changing supplier',ErrorPrompt:true});            
           }else{
             this.setState({ SADIB_VALUE: e, isDataFetched: true ,ErrorMessageProps:''}, () => {
@@ -1146,9 +1162,19 @@ class poactivity extends React.Component {
               }
               this.setState({ CurrencyCode: CurrencyCode });
               PO.SuplID = CF.toInt(e.id);
+              PO.SupplierName=e.Name;
+              
               this.setFieldValuesOnSuplierChange(CF.toInt(e.id), "dropdownChange");
               this.setParams(PO);
-              this.createNewBlankLine();//added blank line once supplier is selected [changed on 13-01-2021 for removing Key shortcuts]
+
+              console.log("-----------------------------------------------------------------");
+              console.log("parseInt(PO.SuplID) > ",parseInt(PO.SuplID));
+              console.log("-----------------------------------------------------------------");
+
+              if(parseInt(PO.SuplID)===0 || PO.SuplID==="" || this.state.PurchaseOrderLine.length===0){                
+                this.createNewBlankLine();//added blank line once supplier is selected [changed on 13-01-2021 for removing Key shortcuts]
+              }
+              
             });
           }
 
