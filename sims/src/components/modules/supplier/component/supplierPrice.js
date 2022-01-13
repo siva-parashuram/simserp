@@ -308,17 +308,19 @@ class supplierPrice extends React.Component {
     axios
       .post(Url, data, { headers })
       .then((response) => {
-        let data = response.data;
+        let data=response.data;
+        let newD=[];
+        for(let i=0;i<data.length;i++){
+          if(parseInt(this.state.BranchID)===parseInt(data[i].BranchID)){
+            newD.push(data[i]);
+          }
+        }
         this.setState(
           {
-            SupplierPriceList: data,
-            SupplierPriceData: data,
+            SupplierPriceList: newD,
+            SupplierPriceData: newD,
             ProgressLoader: true,
-          },
-          () => {
-            // this.handleRowClick([1]);
-          }
-        );
+          });
       })
       .catch((error) => {
         this.setState(
@@ -445,6 +447,8 @@ class supplierPrice extends React.Component {
           break;
         }
       }
+
+      
       this.setState({
         CategoryID: null,
         selectedItem: null,

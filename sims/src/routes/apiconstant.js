@@ -33,10 +33,12 @@ import Link from "@material-ui/core/Link";
 import Tooltip from '@mui/material/Tooltip';
 
 import * as CF from "../services/functions/customfunctions";
-import * as URLS from "../routes/constants";
+import * as URLS from "../routes/constants"; 
+let domain="";
 
 // const domain = "http://192.168.10.200:8080/";
- const domain = "http://49.248.147.178:8082/";
+  domain = "http://49.248.147.178:8082/";
+  
 
 export const APIURL = {
   ListOfDirectoryFromFTP:domain+"api/Common/ListOfDirectoryFromFTP", 
