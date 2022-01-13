@@ -868,7 +868,7 @@ class poactivity extends React.Component {
     let newD = [];
     for (let i = 0; i < data.length; i++) {
       let o = {
-        name: data[i].Code + "-" + data[i].Description,
+        name: data[i].Code ,//+ "-" + data[i].Description,
         value: data[i].GeneralPostingGroupID,
       };
       newD.push(o);

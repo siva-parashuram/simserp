@@ -4,6 +4,7 @@ import "../../user/dasboard.css";
 import { COOKIE, getCookie } from "../../../services/cookie";
 import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
+import * as CF from "../../../services/functions/customfunctions";
 
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
@@ -41,18 +42,19 @@ class customerMaster extends React.Component {
     };
   }
   componentDidMount() {
+    let params = CF.GET_URL_PARAMS();
     this.getCustomerList();
     var url = new URL(window.location.href);
     let branchId = url.searchParams.get("branchId");
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
-    let urlparams =
-      "?branchId=" +
-      branchId +
-      "&compName=" +
-      compName +
-      "&branchName=" +
-      branchName;
+    let urlparams =params;
+      // "?branchId=" +
+      // branchId +
+      // "&compName=" +
+      // compName +
+      // "&branchName=" +
+      // branchName;
     this.setState({ urlparams: urlparams });
   }
 

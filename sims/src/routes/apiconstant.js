@@ -760,6 +760,80 @@ export const userMasterColumn=[
   
 ];
 
+export const supplierPriceColumn=[
+  {
+    field: 'id',
+    headerName: '#',
+    width: 50,
+    headerClassName: 'table-header-font'
+  },
+  {
+    field: 'StartDate',
+    headerName: 'Start Date',
+    width:120,
+    editable: false,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {moment(params.value).format("MM/DD/YYYY")}
+      </Fragment>
+    )
+  },{
+    field: 'EndDate',
+    headerName: 'End Date',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font',
+    renderCell:(params) => (
+      <Fragment>
+       {moment(params.value).format("MM/DD/YYYY")}
+      </Fragment>
+    )
+  },
+  {
+    field: 'Code',
+    headerName: 'Code',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }, 
+  {
+    field: 'UOMCode',
+    headerName: 'UOM Code',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }, 
+  {
+    field: 'CurrCode',
+    headerName: 'Currency',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }, 
+  {
+    field: 'MinQty',
+    headerName: 'Min Qty',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }, 
+  {
+    field: 'MaxQty',
+    headerName: 'Max Qty',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }, 
+  {
+    field: 'UnitPrice',
+    headerName: 'Unit Price',
+    width: 120,
+    editable: false,
+    headerClassName: 'table-header-font'
+  }
+];
+
 export const branchLicenseColumn=[
   {
     field: 'id',
