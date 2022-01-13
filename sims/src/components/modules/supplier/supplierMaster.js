@@ -61,6 +61,7 @@ class supplierMaster extends React.Component {
       selectedItem:{},
       filelist: [],
       compID:0,
+      BranchID:0,
     };
   }
   componentDidMount() {
@@ -78,7 +79,7 @@ class supplierMaster extends React.Component {
       compName +
       "&branchName=" +
       branchName;
-    this.setState({ urlparams: params,compID:parseInt(compID) });
+    this.setState({ urlparams: params,compID:parseInt(compID),BranchID:parseInt(branchId) });
   }
 
   getSupplierList = () => {
@@ -115,6 +116,28 @@ class supplierMaster extends React.Component {
       this.state.urlparams +
       "&editSuplID=" +
       item.SuplID+"&type=edit";
+
+      item.DetailsInfo = {
+        Balance: 0,
+        BalanceLCY: 0,
+        BranchID: 0,
+        DebitNote: 0,
+        Invoices: 0,
+        Orders: 0,
+        OverdueAmountLCY: 0,
+        PaymentLCY: 0,
+        LastPaymentDate:moment().format("MM/DD/YYYY")
+      };
+
+      for(let i=0;i<item.Details.length;i++){
+        if(parseInt(this.state.BranchID)===parseInt(item.Details[i].BranchID)){
+         item.DetailsInfo=item.Details[i];
+         break;
+        }
+      }
+
+      
+
       this.setState({
         SuplID: item.SuplID,
         editUrl: editUrl,
@@ -345,7 +368,7 @@ closeDialog = () => {
                       Balance
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      000
+                      {this.state.selectedItem.DetailsInfo?this.state.selectedItem.DetailsInfo.Balance:0}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -353,7 +376,7 @@ closeDialog = () => {
                       Balance(LCY)
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      000
+                    {this.state.selectedItem.DetailsInfo?this.state.selectedItem.DetailsInfo.BalanceLCY:0}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -361,7 +384,7 @@ closeDialog = () => {
                       Overdue Amount(LCY)
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      000
+                    {this.state.selectedItem.DetailsInfo?this.state.selectedItem.DetailsInfo.OverdueAmountLCY:0}
                     </TableCell>
                   </TableRow>                
                   <TableRow>
@@ -369,7 +392,7 @@ closeDialog = () => {
                       Payment(LCY)
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      000
+                    {this.state.selectedItem.DetailsInfo?this.state.selectedItem.DetailsInfo.PaymentLCY:0}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -377,7 +400,8 @@ closeDialog = () => {
                       Last Payment Date
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      {moment().format("MM/DD/YYYY")}
+                    {this.state.selectedItem.DetailsInfo?moment(this.state.selectedItem.DetailsInfo.LastPaymentDate).format("MM/DD/YYYY"):"-"}
+                    
                     </TableCell>
                   </TableRow>
                   
@@ -402,7 +426,7 @@ closeDialog = () => {
                         Orders
                       </Typography>
                       <Typography >
-                        000
+                      {this.state.selectedItem.DetailsInfo?this.state.selectedItem.DetailsInfo.Orders:0}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -416,7 +440,7 @@ closeDialog = () => {
                         Invoices
                       </Typography>
                       <Typography>
-                        0000
+                      {this.state.selectedItem.DetailsInfo?this.state.selectedItem.DetailsInfo.Invoices:0}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -430,7 +454,7 @@ closeDialog = () => {
                         Debit Note
                       </Typography>
                       <Typography>
-                        0000
+                      {this.state.selectedItem.DetailsInfo?this.state.selectedItem.DetailsInfo.DebitNote:0}
                       </Typography>
                     </CardContent>
                   </Card>

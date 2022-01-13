@@ -113,7 +113,7 @@ class poMaster extends React.Component {
                     newData.push(data[i]);
                 }
                 this.setState({ PODataList: newData, ProgressLoader: true }, () => {
-                    if (newData.length > 0) {
+                    if (this.state.PODataList.length > 0) {
                         this.handleRowClick([1]);
                     }
                 });
@@ -127,7 +127,9 @@ class poMaster extends React.Component {
 
     handleRowClick = (e) => {
         try {
-            console.log("handleRowClick > e > ", e);
+
+            if(e){
+                console.log("handleRowClick > e > ", e);
             let index = e[0];
             console.log("handleRowClick > index > ", index);
             let item = this.state.PODataList[index - 1];
@@ -144,6 +146,8 @@ class poMaster extends React.Component {
             }, () => {
                 this.getAttachedFileList();
             });
+            }
+            
 
         } catch (e) {
             console.log("Error : ", e);

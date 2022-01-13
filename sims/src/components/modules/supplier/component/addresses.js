@@ -299,8 +299,8 @@ class addresses extends React.Component {
         let newData = [];
         for (let i = 0; i < data.length; i++) {
           let d = {
-            name: data[i].name,
-            value: data[i].stateId,
+            name: data[i].Name,
+            value: data[i].StateID,
           };
           newData.push(d);
         }

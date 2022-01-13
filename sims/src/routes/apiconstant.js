@@ -1047,7 +1047,7 @@ export const poMasterColumn=[
     renderCell:(params) => (
       <Fragment>
           {params.value === 0 ? (<Chip label="Open" color="success"  size="small" />) : null}
-            {/* {params.value === 1 ? (<Chip label="Open" size="small" />) : null} */}
+            {params.value === 1 ? (<Chip label="Open" size="small" />) : null}
             {params.value === 2 ? (<Chip label="Released" color="primary" size="small" />) : null}
             {params.value === 3 ? (<Chip label="Complete MRN" color="secondary" size="small" />) : null}
             {params.value === 4 ? (<Chip label="Partial MRN" color="warning" size="small" />) : null}

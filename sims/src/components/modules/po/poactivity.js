@@ -463,7 +463,7 @@ class poactivity extends React.Component {
           if (PO.AmendmentNo > 0) {
             PO.AmendmentDate = moment(PO.AmendmentDate).format("YYYY-MM-DD");
           } else {
-            PO.AmendmentDate = "";
+            PO.AmendmentDate = moment().format("YYYY-MM-DD");
           }
 
           let newPOL = [];//this.getProcessedPurchaseOrderLineList(PurchaseOrderLine);
@@ -1148,6 +1148,7 @@ class poactivity extends React.Component {
               PO.SuplID = CF.toInt(e.id);
               this.setFieldValuesOnSuplierChange(CF.toInt(e.id), "dropdownChange");
               this.setParams(PO);
+              this.createNewBlankLine();//added blank line once supplier is selected [changed on 13-01-2021 for removing Key shortcuts]
             });
           }
 
@@ -1420,7 +1421,9 @@ class poactivity extends React.Component {
           let ItemPrice = o.ItemList[i]['ItemPrice'];
           for (let j = 0; j < ItemPrice.length; j++) {
             let UOM_j = ItemPrice[j]['UOM'];
-            if (UOMID_i === UOM_j) {
+            console.log("#######################  fetchPrice > parseInt(UOMID_i) > ", parseInt(UOMID_i));
+            console.log("#######################  fetchPrice > parseInt(UOM_j) > ", parseInt(UOM_j));
+            if (parseInt(UOMID_i) === parseInt(UOM_j)) {
               let jo = ItemPrice[j];
               console.log("#######################  fetchPrice > jo > ", jo);
               if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
@@ -1556,7 +1559,7 @@ class poactivity extends React.Component {
             o.IsLot = e.IsLot;
             o.IsQuality = e.IsQuality;
             o.Quantity = 1.00;
-            let Price = this.fetchPrice(1, o);
+            let Price = this.fetchPrice(1.00, o);
             o.Price = parseFloat(Price);
           } else {
 
@@ -2367,17 +2370,34 @@ class poactivity extends React.Component {
               .then((response) => {
                 console.log("response > ", response);
                 if (response.status === 201 || response.status === 200) {
+                  PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("YYYY-MM-DD");
+                  PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("YYYY-MM-DD");
+                  PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("YYYY-MM-DD");
+                  PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("YYYY-MM-DD");
                   this.setState({ SuccessPrompt: true });
                   //change to Edit mode
                   this.openEditMode(response.data.ID);
+                }else{
+                  PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("YYYY-MM-DD");
+                  PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("YYYY-MM-DD");
+                  PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("YYYY-MM-DD");
+                  PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("YYYY-MM-DD");
                 }
 
               })
               .catch((error) => {
                 console.log("Main API Error");
+                PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("YYYY-MM-DD");
+                  PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("YYYY-MM-DD");
+                  PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("YYYY-MM-DD");
+                  PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("YYYY-MM-DD");
                 this.setState({ ErrorPrompt: true, ProgressLoader: true });
               });
           } else {
+            PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("YYYY-MM-DD");
+                  PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("YYYY-MM-DD");
+                  PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("YYYY-MM-DD");
+                  PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("YYYY-MM-DD");
             this.setState({
               ErrorMessageProps: "No. Series Not defined.",
               ErrorPrompt: true,
@@ -2387,6 +2407,10 @@ class poactivity extends React.Component {
         })
         .catch((error) => {
           console.log("No series Error");
+          PurchaseOrder.AmendmentDate = moment(PurchaseOrder.AmendmentDate).format("YYYY-MM-DD");
+                  PurchaseOrder.PODate = moment(PurchaseOrder.PODate).format("YYYY-MM-DD");
+                  PurchaseOrder.DeliveryDate = moment(PurchaseOrder.DeliveryDate).format("YYYY-MM-DD");
+                  PurchaseOrder.DispachDate = moment(PurchaseOrder.DispachDate).format("YYYY-MM-DD");
           this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not defined.", });
         });
     };

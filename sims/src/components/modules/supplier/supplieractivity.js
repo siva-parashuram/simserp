@@ -447,6 +447,26 @@ class supplieractivity extends React.Component {
         let data = response.data;
         if (response.status === 200 || response.status === 201) {
           console.log("getSupplierDetails > Supplier >", data);
+
+          data.DetailsInfo = {
+            Balance: 0,
+            BalanceLCY: 0,
+            BranchID: 0,
+            DebitNote: 0,
+            Invoices: 0,
+            Orders: 0,
+            OverdueAmountLCY: 0,
+            PaymentLCY: 0,
+            LastPaymentDate:moment().format("MM/DD/YYYY")
+          };
+    
+          for(let i=0;i<data.Details.length;i++){
+            if(parseInt(this.state.BranchID)===parseInt(data.Details[i].BranchID)){
+              data.DetailsInfo=data.Details[i];
+             break;
+            }
+          }
+
           this.setState({ Supplier: data, ProgressLoader: true });
           this.setInitialParamsForEdit();
         } else {
@@ -1419,7 +1439,7 @@ closeDialog = () => {
                       Balance
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      000
+                    {this.state.Supplier.DetailsInfo?this.state.Supplier.DetailsInfo.Balance:0}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -1427,7 +1447,7 @@ closeDialog = () => {
                       Balance(LCY)
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      000
+                    {this.state.Supplier.DetailsInfo?this.state.Supplier.DetailsInfo.BalanceLCY:0}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -1435,7 +1455,7 @@ closeDialog = () => {
                       Overdue Amount(LCY)
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      000
+                    {this.state.Supplier.DetailsInfo?this.state.Supplier.DetailsInfo.OverdueAmountLCY:0}
                     </TableCell>
                   </TableRow>                
                   <TableRow>
@@ -1443,7 +1463,7 @@ closeDialog = () => {
                       Payment(LCY)
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      000
+                    {this.state.Supplier.DetailsInfo?this.state.Supplier.DetailsInfo.PaymentLCY:0}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -1451,7 +1471,8 @@ closeDialog = () => {
                       Last Payment Date
                     </TableCell>
                     <TableCell align="right" className="no-border-table">
-                      {moment().format("MM/DD/YYYY")}
+                    {this.state.Supplier.DetailsInfo?moment(this.state.Supplier.DetailsInfo.LastPaymentDate).format("MM/DD/YYYY"):"-"}
+                    
                     </TableCell>
                   </TableRow>
                   
@@ -1476,7 +1497,7 @@ closeDialog = () => {
                         Orders
                       </Typography>
                       <Typography >
-                        000
+                      {this.state.Supplier.DetailsInfo?this.state.Supplier.DetailsInfo.Orders:0}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -1490,7 +1511,7 @@ closeDialog = () => {
                         Invoices
                       </Typography>
                       <Typography>
-                        0000
+                      {this.state.Supplier.DetailsInfo?this.state.Supplier.DetailsInfo.Invoices:0}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -1504,7 +1525,7 @@ closeDialog = () => {
                         Debit Note
                       </Typography>
                       <Typography>
-                        0000
+                      {this.state.Supplier.DetailsInfo?this.state.Supplier.DetailsInfo.DebitNote:0}
                       </Typography>
                     </CardContent>
                   </Card>
