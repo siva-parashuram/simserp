@@ -4185,25 +4185,26 @@ class poactivity extends React.Component {
                 <div style={{ height: 50 }}></div>
               </Grid>
               <Grid item xs={12} sm={12} md={4} lg={4}>
-                <Grid container spacing={0}>
-                  <Grid item xs={12} sm={12} md={11} lg={11}>
+                <Grid container spacing={0} >
+                  <Grid item xs={12} sm={12} md={1} lg={1}>&nbsp;</Grid>
+                  <Grid item xs={12} sm={12} md={11} lg={11} >
                     <Grid container spacing={0}>
-                      <Grid
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        style={{ backgroundColor: "#fff" }}
-                      >
-                        {this.state.type === "add"?null:(
+                      <Grid xs={12} sm={12} md={12} lg={12} style={{ backgroundColor: "#fff" }} >
+                        {this.state.type === "add" ? (
                           <Dualtabcomponent
-                          tab1name="Details"
-                          tab2name="Attachments"
-                          tab1Html={tab1Html}
-                          tab2Html={tab2Html}
-                        />
+                            tab1name="Details"
+                            tab2name="Attachments"
+                            tab1Html={tab1Html}
+                            tab2Html={tab2Html}
+                          />
+                        ) : (
+                          <Dualtabcomponent
+                            tab1name="Details"
+                            tab2name="Attachments"
+                            tab1Html={tab1Html}
+                            tab2Html={tab2Html}
+                          />
                         )}
-                        
                       </Grid>
                     </Grid>
                   </Grid>
