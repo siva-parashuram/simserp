@@ -4916,7 +4916,6 @@ class piactivity extends React.Component {
             <Grid container spacing={0}>
               <Grid item xs={8} sm={8} md={8} lg={8}>
                 <Grid container spacing={1}>
-                  {console.log("this.state.MRNList > ",this.state.MRNList)}
                   {this.state.MRNList.map((item, i) => (
                     <Grid item xs={4} sm={4} md={4} lg={4}>
                       <Card sx={{ minWidth: 150 }}>
