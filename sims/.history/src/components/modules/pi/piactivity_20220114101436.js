@@ -2812,7 +2812,7 @@ class piactivity extends React.Component {
     //----------------------COMBINE LINE LIST OBJECT------------------
 
     let selectedLineMRNList = this.state.selectedLineMRNList;
-    console.log("selectedLineMRNList > ",selectedLineMRNList); 
+    console.log("selectedLineMRNList > ",selectedLineMRNList); return false;
     let LotList = [];
     for (let i = 0; i < selectedLineMRNList.length; i++) {
       if (selectedLineMRNList[i].isSelected === true) {
@@ -2829,7 +2829,6 @@ class piactivity extends React.Component {
             let new_Price = (parseFloat(selectedLineMRNList_Price) + parseFloat(LotList_Price)) / 2;
 
             LotList[j].MRNQuantity = new_MRNQuantity;
-            LotList[j].POQuantity= new_MRNQuantity;
             LotList[j].Price = new_Price;
           } else {
 
@@ -2842,7 +2841,6 @@ class piactivity extends React.Component {
       }
 
     }
-    console.log("LotList > ",LotList); 
 
     let PO = this.state.PO;
     let PurchaseOrderLine = LotList;

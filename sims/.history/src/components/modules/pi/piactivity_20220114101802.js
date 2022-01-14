@@ -2829,7 +2829,6 @@ class piactivity extends React.Component {
             let new_Price = (parseFloat(selectedLineMRNList_Price) + parseFloat(LotList_Price)) / 2;
 
             LotList[j].MRNQuantity = new_MRNQuantity;
-            LotList[j].POQuantity= new_MRNQuantity;
             LotList[j].Price = new_Price;
           } else {
 
@@ -2843,6 +2842,7 @@ class piactivity extends React.Component {
 
     }
     console.log("LotList > ",LotList); 
+    return false;
 
     let PO = this.state.PO;
     let PurchaseOrderLine = LotList;
