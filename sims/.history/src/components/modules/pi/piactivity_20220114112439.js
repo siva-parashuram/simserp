@@ -5002,8 +5002,8 @@ class piactivity extends React.Component {
                                     <FormControlLabel
                                       control={<Switch label="Set Default" size="small"
                                         disabled={!item.isChecked}   
-                                        // onClick={(e) => this.MRNDefaultInfo(item, e)}
-                                        checked={true} />}
+                                        onClick={(e) => this.MRNDefaultInfo(item, e)}
+                                        defaultChecked />}
                                       label={<span style={{ color: '#009688' }}>Default</span>} />
                                   </Fragment>
                                 ) : null
@@ -5012,8 +5012,7 @@ class piactivity extends React.Component {
                                 item.isDefaultInfo === false ? (
                                   <Fragment>
                                     <Switch  disabled={!item.isChecked}   size="small" 
-                                    onClick={(e) => this.MRNDefaultInfo(item, e)} 
-                                    checked={false}
+                                    // onClick={(e) => this.MRNDefaultInfo(item, e)} 
                                     label="" />
                                   </Fragment>
                                 ) : null

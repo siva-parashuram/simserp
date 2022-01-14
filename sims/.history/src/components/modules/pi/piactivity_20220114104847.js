@@ -2679,12 +2679,7 @@ class piactivity extends React.Component {
         }
       }
       if (isDefaultInfoChecked === false) {
-        // MRNList[0].isDefaultInfo = true;
-        for (let i = 0; i < MRNList.length; i++) {
-          if(parseInt(MRNList[i].MRNID)===parseInt(item.MRNID)){
-            MRNList[i].isDefaultInfo = true;
-          }
-        }
+        MRNList[0].isDefaultInfo = true;
       }
     }
 
@@ -2774,7 +2769,7 @@ class piactivity extends React.Component {
 
     let MRN = this.state.MRN;
     MRN.MRNID = NewData.MRNID;
-    MRN.No = this.state.type === "edit" ? NewData.No:"";
+    MRN.No = NewData.No;
     // MRN.Status = NewData.Status; //commented to not consider the status...
     MRN.SuplInvNo = NewData.SuplInvNo;
     MRN.EWayBillNo = NewData.EWayBillNo;
@@ -2834,18 +2829,15 @@ class piactivity extends React.Component {
             let new_Price = (parseFloat(selectedLineMRNList_Price) + parseFloat(LotList_Price)) / 2;
 
             LotList[j].MRNQuantity = new_MRNQuantity;
-            // LotList[j].POQuantity= new_MRNQuantity;
+            LotList[j].POQuantity= new_MRNQuantity;
             LotList[j].Price = new_Price;
           } else {
 
           }
         }
         if (isPresent === true) { } else {
-          if (selectedLineMRNList[i].isSelected === false) {}else{
-            LotList.push(selectedLineMRNList[i]);
-            PIMRNID.push({ MRNID: selectedLineMRNList[i].MRNID });
-          }
-          
+          LotList.push(selectedLineMRNList[i]);
+          PIMRNID.push({ MRNID: selectedLineMRNList[i].MRNID });
         }
       }
 
@@ -2877,7 +2869,7 @@ class piactivity extends React.Component {
           Narration: PurchaseOrderLine[i].Narration,
           UOMID: PurchaseOrderLine[i].UOMID,
           TolerancePercentage: PurchaseOrderLine[i].TolerancePercentage,
-          Quantity: PurchaseOrderLine[i].MRNQuantity,
+          Quantity: PurchaseOrderLine[i].POQuantity,
           MRNQuantity: PurchaseOrderLine[i].MRNQuantity,
           LotDetails: [],
           Price: PurchaseOrderLine[i].Price,
@@ -5002,8 +4994,8 @@ class piactivity extends React.Component {
                                     <FormControlLabel
                                       control={<Switch label="Set Default" size="small"
                                         disabled={!item.isChecked}   
-                                        // onClick={(e) => this.MRNDefaultInfo(item, e)}
-                                        checked={true} />}
+                                        onClick={(e) => this.MRNDefaultInfo(item, e)}
+                                        defaultChecked />}
                                       label={<span style={{ color: '#009688' }}>Default</span>} />
                                   </Fragment>
                                 ) : null
@@ -5011,10 +5003,7 @@ class piactivity extends React.Component {
                               {
                                 item.isDefaultInfo === false ? (
                                   <Fragment>
-                                    <Switch  disabled={!item.isChecked}   size="small" 
-                                    onClick={(e) => this.MRNDefaultInfo(item, e)} 
-                                    checked={false}
-                                    label="" />
+                                    <Switch  disabled={!item.isChecked}   size="small" onClick={(e) => this.MRNDefaultInfo(item, e)} label="" />
                                   </Fragment>
                                 ) : null
                               }
@@ -5048,6 +5037,7 @@ class piactivity extends React.Component {
               </Grid>
               <Grid item xs={4} sm={4} md={4} lg={4}>
                 <div style={{ marginLeft: 5 }}>
+                  {console.log(">>>>>>>>>>>>>>>>>>>>>>>>> selectedLineMRNList >>>>>>>>>>", this.state.selectedLineMRNList)}
                   <Table
                     stickyHeader
                     size="small"

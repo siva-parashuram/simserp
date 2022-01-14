@@ -2679,12 +2679,7 @@ class piactivity extends React.Component {
         }
       }
       if (isDefaultInfoChecked === false) {
-        // MRNList[0].isDefaultInfo = true;
-        for (let i = 0; i < MRNList.length; i++) {
-          if(parseInt(MRNList[i].MRNID)===parseInt(item.MRNID)){
-            MRNList[i].isDefaultInfo = true;
-          }
-        }
+        MRNList[0].isDefaultInfo = true;
       }
     }
 
@@ -5002,8 +4997,8 @@ class piactivity extends React.Component {
                                     <FormControlLabel
                                       control={<Switch label="Set Default" size="small"
                                         disabled={!item.isChecked}   
-                                        // onClick={(e) => this.MRNDefaultInfo(item, e)}
-                                        checked={true} />}
+                                        onClick={(e) => this.MRNDefaultInfo(item, e)}
+                                        defaultChecked />}
                                       label={<span style={{ color: '#009688' }}>Default</span>} />
                                   </Fragment>
                                 ) : null
@@ -5011,10 +5006,7 @@ class piactivity extends React.Component {
                               {
                                 item.isDefaultInfo === false ? (
                                   <Fragment>
-                                    <Switch  disabled={!item.isChecked}   size="small" 
-                                    onClick={(e) => this.MRNDefaultInfo(item, e)} 
-                                    checked={false}
-                                    label="" />
+                                    <Switch  disabled={!item.isChecked}   size="small" onClick={(e) => this.MRNDefaultInfo(item, e)} label="" />
                                   </Fragment>
                                 ) : null
                               }
@@ -5048,6 +5040,7 @@ class piactivity extends React.Component {
               </Grid>
               <Grid item xs={4} sm={4} md={4} lg={4}>
                 <div style={{ marginLeft: 5 }}>
+                  {console.log(">>>>>>>>>>>>>>>>>>>>>>>>> selectedLineMRNList >>>>>>>>>>", this.state.selectedLineMRNList)}
                   <Table
                     stickyHeader
                     size="small"

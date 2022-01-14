@@ -5013,7 +5013,6 @@ class piactivity extends React.Component {
                                   <Fragment>
                                     <Switch  disabled={!item.isChecked}   size="small" 
                                     onClick={(e) => this.MRNDefaultInfo(item, e)} 
-                                    checked={false}
                                     label="" />
                                   </Fragment>
                                 ) : null
