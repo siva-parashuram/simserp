@@ -82,7 +82,6 @@ import piactivity from "../components/modules/pi/piactivity";
 import gstMaster from "../components/modules/gst/gstmaster";
 import gstactivity from "../components/modules/gst/gstactivity";
 import profi from "../components/modules/profi/profi";
-import profactivity from "../components/modules/profi/profactivity";
 
 import pageNotFound from "../../src/pagenotfound";
 import testformat from "../components/modules/accounts/reports/testformat";
@@ -220,8 +219,6 @@ let routes = ({ location, ...rest }) => {
 
           {/* Proforma Invoice */}
           <Route path={URLS.URLS.proformaMaster} component={profi} />
-          <Route path={URLS.URLS.addProfInv} component={profactivity} />
-          <Route path={URLS.URLS.editProfInv} component={profactivity} />
 
 
           <Route path={URLS.URLS.testformat} component={testformat} />

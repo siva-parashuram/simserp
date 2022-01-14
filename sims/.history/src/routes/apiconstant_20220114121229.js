@@ -533,7 +533,6 @@ export const TrasactionType = {
   GIT:"GIT",
   PI:"PI",
   SO: "SO",
-  ProfInv:"ProfInv",
   Supplier:"Supplier",
   default: ""
 };

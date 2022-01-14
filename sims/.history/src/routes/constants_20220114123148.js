@@ -91,7 +91,6 @@ export const URLS = {
   addPI:"/addPI",
   editPI:"/editPI",
   proformaMaster:"/proformaMaster",
-  addProfInv:"/addProfInv",
   editProfInv:"/editProfInv",
 };
 

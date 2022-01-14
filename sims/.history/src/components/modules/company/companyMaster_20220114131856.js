@@ -206,7 +206,7 @@ class companyMaster extends React.Component {
       let editUrl =
         URLS.URLS.editCompany +
         this.state.urlparams +
-        "&CompanyID=" +
+        "&compID=" +
         item.CompanyID+ "&type=edit";
         console.log("editUrl > ",editUrl);
       this.setParams(item,branches,editUrl,index);      

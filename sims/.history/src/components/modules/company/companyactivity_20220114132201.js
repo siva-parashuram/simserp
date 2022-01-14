@@ -117,7 +117,7 @@ class addnewcompany extends React.Component {
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
     let type = url.searchParams.get("type");
-    let CompanyID = type === "edit" ? url.searchParams.get("CompanyID") : 0;
+    let CompanyID = type === "edit" ? url.searchParams.get("compID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
     let urlparams =

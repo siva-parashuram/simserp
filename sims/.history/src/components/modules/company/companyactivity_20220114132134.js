@@ -117,7 +117,7 @@ class addnewcompany extends React.Component {
     let branchName = url.searchParams.get("branchName");
     let compName = url.searchParams.get("compName");
     let type = url.searchParams.get("type");
-    let CompanyID = type === "edit" ? url.searchParams.get("CompanyID") : 0;
+    let CompanyID = type === "edit" ? url.searchParams.get("compID") : 0;
     let typoTitle = "";
     type === "add" ? (typoTitle = "Add") : (typoTitle = "Edit");
     let urlparams =
@@ -131,7 +131,7 @@ class addnewcompany extends React.Component {
     let company = this.state.company;
     company.CompanyID = CF.toInt(CompanyID);
 
-    if (type === "edit") {  console.log("CompanyID > ",CompanyID);
+    if (type === "edit") {  alert("CompanyID > ",);
       company.CompanyID = CF.toInt(CompanyID);
       this.getCompanyDetails(CompanyID);
       this.setState({ BtnDisable: false });
