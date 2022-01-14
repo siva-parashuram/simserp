@@ -140,8 +140,9 @@ class editItemMainCategory extends React.Component {
     let newData = [];
     for (let i = 0; i < data.length; i++) {
       let d = {
-        name: data[i].code + "-" + data[i].hsncode,
-        value: data[i].superCatId,
+        name: data[i].Code ,//+ "-" + data[i].HSNCode
+        value: data[i].SuperCatID,
+        HSNCode: data[i].HSNCode,
       };
       newData.push(d);
     }
@@ -271,11 +272,17 @@ class editItemMainCategory extends React.Component {
           }
           break;
         case "SuperCatID":
-          if(e.target.options[e.target.selectedIndex].text){
-            let text=e.target.options[e.target.selectedIndex].text;
-            let A=text.split("-");
-            let HSNCode=A[1];
-            this.setState({ HSNCode: HSNCode });
+          // if(e.target.options[e.target.selectedIndex].text){
+          //   let text=e.target.options[e.target.selectedIndex].text;
+          //   let A=text.split("-");
+          //   let HSNCode=A[1];
+          //   this.setState({ HSNCode: HSNCode });
+          // }
+          for (let i = 0; i < this.state.SuperCategoryDataList.length; i++) {
+            if(parseInt(e.target.value)===parseInt(this.state.SuperCategoryDataList[i].value)){
+              this.setState({ HSNCode: this.state.SuperCategoryDataList[i].HSNCode });
+              break;
+            }
           }
           this.setState({ SuperCatID: e.target.value });
           break;
