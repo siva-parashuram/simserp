@@ -271,19 +271,7 @@ export default function License({ }) {
             }
         }
 
-        return paymentTerm;
-    }
-
-    const getExchRate=(id)=>{
-        let exchRate=0;
-
-        for(let i=0;i<CurrencyList.length;i++){
-            if(parseInt(id)===parseInt(CurrencyList[i].value)){
-                exchRate=parseFloat(CurrencyList[i].ExchRate);
-            }
-        }
-
-        return exchRate;
+        return paymentTerm
     }
 
     const updateFormValue = (key, e) => {
@@ -300,11 +288,13 @@ export default function License({ }) {
                     setCustID(CF.toInt(e.id));
                     
                     setCurrID(CF.toInt(e.CurrID));
-                    setExchRate(getExchRate(CF.toInt(e.CurrID)));                   
+                    setExchRate(CF.toInt(e.SalesPersonID));                   
                     setPaymentTermID(CF.toInt(e.PaymentTermID));                   
                     setPaymentTerm(getPaymentTerm(CF.toInt(e.PaymentTermID)));
 
                   
+                    //setSupplierPostingGroupID(); 
+                    //setSalesPersonID();
                     
                     if(e.BillingAddress){
                         if(e.BillingAddress.length>0){
@@ -756,11 +746,7 @@ export default function License({ }) {
                                                                     <SDIB
                                     id="CurrID"
                                     label="Currency"
-                                    onChange={(e) => {
-                                        setCurrID(e.target.value);                                         
-                                        setExchRate(getExchRate(CF.toInt(e.target.value)));     
-                                    }
-                                    }
+                                    onChange={(e) => setCurrID(e.target.value)}
                                     value={CurrID}
                                     param={CurrencyList}
                                     isMandatory={true}
@@ -804,10 +790,7 @@ export default function License({ }) {
                                                                     <SDIB
                                     id="PaymentTermID"
                                     label="Payment Term"
-                                    onChange={(e) => {
-                                        setPaymentTermID(e.target.value);
-                                        setPaymentTerm(getPaymentTerm(CF.toInt(e.target.value)));
-                                    }}
+                                    onChange={(e) => setPaymentTermID(e.target.value)}
                                     value={PaymentTermID}
                                     param={PaymentTermsList}
                                     isMandatory={true}
@@ -823,8 +806,8 @@ export default function License({ }) {
                                     isMandatory={true}
                                   />
                                   <SDIB
-                                    id="CustomerPostingGroupID"
-                                    label="Cust.Posting Group"
+                                    id="SupplierPostingGroupID"
+                                    label="Sup.Posting Group"
                                     value={CustomerPostingGroupID}
                                     param={CustomerPostingGroupList}
                                     isMandatory={true}

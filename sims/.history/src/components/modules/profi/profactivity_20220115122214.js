@@ -56,19 +56,11 @@ export default function License({ }) {
     const [selectedCustomerObj, setselectedCustomerObj] = React.useState(null);
     const [CustomerBillingAddress, setCustomerBillingAddress] = React.useState([]);
     const [CustomerShippingAddress, setCustomerShippingAddress] = React.useState([]);
-    const [NotifyAddress, setNotifyAddress] = React.useState([]);
-    
     
     const [CountryList, setCountryList] = React.useState([]);
     const [StateList, setStateList] = React.useState([]);
     const [WarehouseList, setWarehouseList] = React.useState([]);  
-    const [CurrencyList, setCurrencyList] = React.useState([]);
-    const [GeneralPostingGroupList, setGeneralPostingGroupList] = React.useState([]);
-    const [PaymentTermsList, setPaymentTermsList] = React.useState([]);    
-    const [CustomerPostingGroupList, setCustomerPostingGroupList] = React.useState([]);
-    
-    
-   
+
 
     
     //--------------------ProformaInvoice----------------------------------------------------
@@ -111,25 +103,8 @@ export default function License({ }) {
     const [IsDeleted, setIsDeleted] = React.useState(false);
     
     
-    const [NotifyID, setNotifyID] = React.useState(0);
-    const [ShipperID, setShipperID] = React.useState(0);
-
-    const [CurrID, setCurrID] = React.useState(0);
-    const [ExchRate, setExchRate] = React.useState(0);
-    const [GeneralPostingGroupID, setGeneralPostingGroupID] = React.useState(0);
-    const [PaymentTermID, setPaymentTermID] = React.useState(0);
-    const [PaymentTerm, setPaymentTerm] = React.useState([]);
-    const [CustomerPostingGroupID, setCustomerPostingGroupID] = React.useState(0);
+    const [NotifyID, setNotifyIDD] = React.useState(0);
     
-   
-
-   
-   
-    
-
-    
-
-                                  
     
 
     //-------------------------------------------------------------------------
@@ -252,38 +227,10 @@ export default function License({ }) {
                 setCountryList(data.Country);
                 setStateList(data.State);
                 setWarehouseList(data.WareHouse);
-                setCurrencyList(data.Currency);
-                setGeneralPostingGroupList(data.GeneralPostingGroup);
-                setPaymentTermsList(data.PaymentTerms);
-                setCustomerPostingGroupList(data.CustomerPostingGroup);
             })
             .catch((error) => {
 
             });
-    }
-
-    const getPaymentTerm=(id)=>{
-        let paymentTerm="";
-
-        for(let i=0;i<PaymentTermsList.length;i++){
-            if(parseInt(id)===parseInt(PaymentTermsList[i].value)){
-                paymentTerm=PaymentTermsList[i].Description;
-            }
-        }
-
-        return paymentTerm;
-    }
-
-    const getExchRate=(id)=>{
-        let exchRate=0;
-
-        for(let i=0;i<CurrencyList.length;i++){
-            if(parseInt(id)===parseInt(CurrencyList[i].value)){
-                exchRate=parseFloat(CurrencyList[i].ExchRate);
-            }
-        }
-
-        return exchRate;
     }
 
     const updateFormValue = (key, e) => {
@@ -296,16 +243,7 @@ export default function License({ }) {
                     setselectedCustomerObj(e);
                     setCustomerBillingAddress(e.BillingAddress);
                     setCustomerShippingAddress(e.ShippingAddress);
-                    setNotifyAddress(e.NotifyAddress);
                     setCustID(CF.toInt(e.id));
-                    
-                    setCurrID(CF.toInt(e.CurrID));
-                    setExchRate(getExchRate(CF.toInt(e.CurrID)));                   
-                    setPaymentTermID(CF.toInt(e.PaymentTermID));                   
-                    setPaymentTerm(getPaymentTerm(CF.toInt(e.PaymentTermID)));
-
-                  
-                    
                     if(e.BillingAddress){
                         if(e.BillingAddress.length>0){
                             setBillingID(e.BillingAddress[0].value);
@@ -316,10 +254,7 @@ export default function License({ }) {
                             setBillingCity(e.BillingAddress[0].City);
                             setBillingPostCode(e.BillingAddress[0].PostCode);
                             setBillingCountryID(e.BillingAddress[0].CountryID);
-                            setBillingStateID(e.BillingAddress[0].StateID);  
-                            setGeneralPostingGroupID(e.BillingAddress[0].GeneralPostingGroupID);
-                            setCustomerPostingGroupID(e.BillingAddress[0].CustomerPostingGroupID);
-                                                      
+                            setBillingStateID(e.BillingAddress[0].StateID);                            
                         }
                     }
                     if(e.ShippingAddress){
@@ -332,8 +267,7 @@ export default function License({ }) {
                             setShippingCity(e.ShippingAddress[0].City);
                             setShippingPostCode(e.ShippingAddress[0].PostCode);
                             setShippingCountryID(e.ShippingAddress[0].CountryID);
-                            setShippingStateID(e.ShippingAddress[0].StateID);  
-                                                    
+                            setShippingStateID(e.ShippingAddress[0].StateID);                            
                         }
                     }
                 } else {
@@ -753,83 +687,12 @@ export default function License({ }) {
                                                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                 <Grid container spacing={0}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                    <SDIB
-                                    id="CurrID"
-                                    label="Currency"
-                                    onChange={(e) => {
-                                        setCurrID(e.target.value);                                         
-                                        setExchRate(getExchRate(CF.toInt(e.target.value)));     
-                                    }
-                                    }
-                                    value={CurrID}
-                                    param={CurrencyList}
-                                    isMandatory={true}
-                                  />
-
-                                  <SIB
-                                  type="number"
-                                    id="ExchRate"
-                                    label="Exchange Rate"
-                                    variant="outlined"
-                                    size="small"
-                                    value={ExchRate}
-                                    onChange={(e) => setExchRate(e.target.value)}
-                                    isMandatory={true}
-                                  />
-
-                                  <SDIB
-                                    id="GeneralPostingGroupID"
-                                    label="Gen.Posting Group"
-                                    value={GeneralPostingGroupID}
-                                    param={GeneralPostingGroupList}
-                                    isMandatory={true}
-                                    disabled={true}
-                                     
-                                  />
-
-
-
-
-
-
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
                                                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                 <Grid container spacing={0}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                                                                    
-
-                                                                    <SDIB
-                                    id="PaymentTermID"
-                                    label="Payment Term"
-                                    onChange={(e) => {
-                                        setPaymentTermID(e.target.value);
-                                        setPaymentTerm(getPaymentTerm(CF.toInt(e.target.value)));
-                                    }}
-                                    value={PaymentTermID}
-                                    param={PaymentTermsList}
-                                    isMandatory={true}
-
-                                  />
-                                  <SIB
-                                    id="PaymentTerm"
-                                    label="Pay..Term..Details"
-                                    onChange={(e) => setPaymentTerm(e.target.value)}
-                                    variant="outlined"
-                                    size="small"
-                                    value={PaymentTerm}
-                                    isMandatory={true}
-                                  />
-                                  <SDIB
-                                    id="CustomerPostingGroupID"
-                                    label="Cust.Posting Group"
-                                    value={CustomerPostingGroupID}
-                                    param={CustomerPostingGroupList}
-                                    isMandatory={true}
-                                    disabled={true}
-                                  />
 
                                                                     </Grid>
                                                                 </Grid>
@@ -875,7 +738,19 @@ export default function License({ }) {
                                                                 <Grid container spacing={0}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
 
-                                                                        <SDIB
+                                                                    
+
+                                                                    <SDIB
+                                                                            id="NotifyID"
+                                                                            label="Notify"
+                                                                            onChange={(e) => updateFormValue("NotifyID", e.target.value)}
+                                                                            value={NotifyID}
+                                                                            param={[]}
+                                                                            isMandatory={true}
+
+                                                                        />
+
+                                                                    <SDIB
                                                                             id="ShippingID"
                                                                             label="Shipping"
                                                                             onChange={(e) => updateFormValue("ShippingID", e.target.value)}
@@ -955,23 +830,6 @@ export default function License({ }) {
                                                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                 <Grid container spacing={0}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                        <SDIB
-                                                                            id="NotifyID"
-                                                                            label="Notify"
-                                                                            onChange={(e) => setNotifyID(e.target.value)}
-                                                                            value={NotifyID}
-                                                                            param={[]}
-                                                                        />
-
-                                                                        <SDIB
-                                                                            id="ShipperID"
-                                                                            label="Shipper"
-                                                                            onChange={(e) => setShipperID(e.target.value)}
-                                                                            value={ShipperID}
-                                                                            param={[]}
-                                                                        />
-
-
 
                                                                     </Grid>
                                                                 </Grid>

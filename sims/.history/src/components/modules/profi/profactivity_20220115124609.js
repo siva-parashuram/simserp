@@ -56,16 +56,15 @@ export default function License({ }) {
     const [selectedCustomerObj, setselectedCustomerObj] = React.useState(null);
     const [CustomerBillingAddress, setCustomerBillingAddress] = React.useState([]);
     const [CustomerShippingAddress, setCustomerShippingAddress] = React.useState([]);
-    const [NotifyAddress, setNotifyAddress] = React.useState([]);
-    
     
     const [CountryList, setCountryList] = React.useState([]);
     const [StateList, setStateList] = React.useState([]);
     const [WarehouseList, setWarehouseList] = React.useState([]);  
     const [CurrencyList, setCurrencyList] = React.useState([]);
     const [GeneralPostingGroupList, setGeneralPostingGroupList] = React.useState([]);
-    const [PaymentTermsList, setPaymentTermsList] = React.useState([]);    
-    const [CustomerPostingGroupList, setCustomerPostingGroupList] = React.useState([]);
+    const [PaymentTermsList, setPaymentTermsList] = React.useState([]);
+    
+    const [SupplierPostingGroupList, setSupplierPostingGroupList] = React.useState([]);
     
     
    
@@ -119,9 +118,15 @@ export default function License({ }) {
     const [GeneralPostingGroupID, setGeneralPostingGroupID] = React.useState(0);
     const [PaymentTermID, setPaymentTermID] = React.useState(0);
     const [PaymentTerm, setPaymentTerm] = React.useState([]);
-    const [CustomerPostingGroupID, setCustomerPostingGroupID] = React.useState(0);
+    const [SupplierPostingGroupID, setSupplierPostingGroupID] = React.useState(0);
     
-   
+    // setCurrID();
+    // setExchRate();
+    // setGeneralPostingGroupID();
+    // setPaymentTermID();
+    // setPaymentTermID();
+    // setPaymentTerm();
+    // setSupplierPostingGroupID();
 
    
    
@@ -255,35 +260,11 @@ export default function License({ }) {
                 setCurrencyList(data.Currency);
                 setGeneralPostingGroupList(data.GeneralPostingGroup);
                 setPaymentTermsList(data.PaymentTerms);
-                setCustomerPostingGroupList(data.CustomerPostingGroup);
+                setSupplierPostingGroupList(data.SupplierPostingGroup);
             })
             .catch((error) => {
 
             });
-    }
-
-    const getPaymentTerm=(id)=>{
-        let paymentTerm="";
-
-        for(let i=0;i<PaymentTermsList.length;i++){
-            if(parseInt(id)===parseInt(PaymentTermsList[i].value)){
-                paymentTerm=PaymentTermsList[i].Description;
-            }
-        }
-
-        return paymentTerm;
-    }
-
-    const getExchRate=(id)=>{
-        let exchRate=0;
-
-        for(let i=0;i<CurrencyList.length;i++){
-            if(parseInt(id)===parseInt(CurrencyList[i].value)){
-                exchRate=parseFloat(CurrencyList[i].ExchRate);
-            }
-        }
-
-        return exchRate;
     }
 
     const updateFormValue = (key, e) => {
@@ -296,16 +277,7 @@ export default function License({ }) {
                     setselectedCustomerObj(e);
                     setCustomerBillingAddress(e.BillingAddress);
                     setCustomerShippingAddress(e.ShippingAddress);
-                    setNotifyAddress(e.NotifyAddress);
                     setCustID(CF.toInt(e.id));
-                    
-                    setCurrID(CF.toInt(e.CurrID));
-                    setExchRate(getExchRate(CF.toInt(e.CurrID)));                   
-                    setPaymentTermID(CF.toInt(e.PaymentTermID));                   
-                    setPaymentTerm(getPaymentTerm(CF.toInt(e.PaymentTermID)));
-
-                  
-                    
                     if(e.BillingAddress){
                         if(e.BillingAddress.length>0){
                             setBillingID(e.BillingAddress[0].value);
@@ -316,10 +288,7 @@ export default function License({ }) {
                             setBillingCity(e.BillingAddress[0].City);
                             setBillingPostCode(e.BillingAddress[0].PostCode);
                             setBillingCountryID(e.BillingAddress[0].CountryID);
-                            setBillingStateID(e.BillingAddress[0].StateID);  
-                            setGeneralPostingGroupID(e.BillingAddress[0].GeneralPostingGroupID);
-                            setCustomerPostingGroupID(e.BillingAddress[0].CustomerPostingGroupID);
-                                                      
+                            setBillingStateID(e.BillingAddress[0].StateID);                            
                         }
                     }
                     if(e.ShippingAddress){
@@ -332,8 +301,7 @@ export default function License({ }) {
                             setShippingCity(e.ShippingAddress[0].City);
                             setShippingPostCode(e.ShippingAddress[0].PostCode);
                             setShippingCountryID(e.ShippingAddress[0].CountryID);
-                            setShippingStateID(e.ShippingAddress[0].StateID);  
-                                                    
+                            setShippingStateID(e.ShippingAddress[0].StateID);                            
                         }
                     }
                 } else {
@@ -756,11 +724,7 @@ export default function License({ }) {
                                                                     <SDIB
                                     id="CurrID"
                                     label="Currency"
-                                    onChange={(e) => {
-                                        setCurrID(e.target.value);                                         
-                                        setExchRate(getExchRate(CF.toInt(e.target.value)));     
-                                    }
-                                    }
+                                    onChange={(e) => setCurrID(e.target.value)}
                                     value={CurrID}
                                     param={CurrencyList}
                                     isMandatory={true}
@@ -804,10 +768,7 @@ export default function License({ }) {
                                                                     <SDIB
                                     id="PaymentTermID"
                                     label="Payment Term"
-                                    onChange={(e) => {
-                                        setPaymentTermID(e.target.value);
-                                        setPaymentTerm(getPaymentTerm(CF.toInt(e.target.value)));
-                                    }}
+                                    onChange={(e) => setPaymentTermID(e.target.value)}
                                     value={PaymentTermID}
                                     param={PaymentTermsList}
                                     isMandatory={true}
@@ -823,10 +784,10 @@ export default function License({ }) {
                                     isMandatory={true}
                                   />
                                   <SDIB
-                                    id="CustomerPostingGroupID"
-                                    label="Cust.Posting Group"
-                                    value={CustomerPostingGroupID}
-                                    param={CustomerPostingGroupList}
+                                    id="SupplierPostingGroupID"
+                                    label="Sup.Posting Group"
+                                    value={SupplierPostingGroupID}
+                                    param={SupplierPostingGroupList}
                                     isMandatory={true}
                                     disabled={true}
                                   />

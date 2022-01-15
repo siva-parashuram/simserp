@@ -54,9 +54,9 @@ class gridtextboxinput extends React.Component {
                   size={this.props.size}
                   // onChange={this.props.onChange}
                   onChange={(e)=>this.updateValue(e)}
-                  defaultValue={this.state.value}
+                  defaultValue={this.props.defaultValue}
                   // value={this.props.value}      
-                  value={this.props.value}                
+                  // value={this.state.value}                  
                   error={this.props.error}
                   helperText={this.props.helperText}
                   disabled={this.props.disabled}

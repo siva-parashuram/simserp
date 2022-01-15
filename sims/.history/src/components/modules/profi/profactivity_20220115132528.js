@@ -305,6 +305,8 @@ export default function License({ }) {
                     setPaymentTerm(getPaymentTerm(CF.toInt(e.PaymentTermID)));
 
                   
+                    //setSupplierPostingGroupID(); 
+                    //setSalesPersonID();
                     
                     if(e.BillingAddress){
                         if(e.BillingAddress.length>0){
@@ -756,11 +758,7 @@ export default function License({ }) {
                                                                     <SDIB
                                     id="CurrID"
                                     label="Currency"
-                                    onChange={(e) => {
-                                        setCurrID(e.target.value);                                         
-                                        setExchRate(getExchRate(CF.toInt(e.target.value)));     
-                                    }
-                                    }
+                                    onChange={(e) => setCurrID(e.target.value)}
                                     value={CurrID}
                                     param={CurrencyList}
                                     isMandatory={true}
