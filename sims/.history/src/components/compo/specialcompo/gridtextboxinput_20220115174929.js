@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import _ from 'lodash';
 
 export default (props) => {
-  const [value, setValue] = useState(props.defaultValue);
+  const [value, setValue] = useState(props.value);
   const prop = _.omit(props, ['onChange', 'value', 'defaultValue']);
 
   return (
@@ -31,6 +31,8 @@ export default (props) => {
         <Grid item xs={5} sm={5} md={8} lg={8}>
           <Grid container spacing={0}>
             <Grid item xs={12} sm={12} md={12} lg={12}>
+              
+
               <TextField
                 style={
                   props.disabled === true ?
@@ -51,11 +53,14 @@ export default (props) => {
                 multiline={props.multiline}
                 rows={props.rows}
                 InputProps={props.InputProps}
-                value={value}
+                value={value ? value : props.value}
                 onChange={e => { setValue(e.target.value); }}
                 onBlur={props.onChange}
 
               />
+
+
+
             </Grid>
           </Grid>
         </Grid>

@@ -571,7 +571,7 @@ export default function License({ }) {
                                                                             variant="outlined"
                                                                             size="small"
                                                                             onChange={(e) => {
-                                                                                document.getElementById("BillingAddress").value=e.target.value;
+                                                                                document.getElementById("BillingName").value=e.target.value;
                                                                             }}
                                                                             onBlur={(e)=>setBillingName(e.target.value)} 
                                                                         />
@@ -580,9 +580,7 @@ export default function License({ }) {
                                                                             label="Billing Address 2"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingAddress2").value=e.target.value;
-                                                                            }}
+                                                                            onChange={(e) => setBillingAddress2(e.target.value)}
                                                                             onBlur={(e)=>setBillingName(e.target.value)} 
                                                                         />
                                                                         <SIB
@@ -590,9 +588,7 @@ export default function License({ }) {
                                                                             label="Billing Address 3"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingAddress3").value=e.target.value;
-                                                                            }}
+                                                                            onChange={(e) => setBillingAddress3(e.target.value)}
                                                                             onBlur={(e)=>setBillingName(e.target.value)} 
                                                                         />
                                                                         <SIB
@@ -600,9 +596,7 @@ export default function License({ }) {
                                                                             label="Billing City"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingCity").value=e.target.value;
-                                                                            }}
+                                                                            onChange={(e) => setBillingCity(e.target.value)}
                                                                             onBlur={(e)=>setBillingName(e.target.value)} 
                                                                         />
                                                                         <SIB
@@ -610,9 +604,7 @@ export default function License({ }) {
                                                                             label="Billing Postcode"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingPostcode").value=e.target.value;
-                                                                            }}
+                                                                            onChange={(e) => setBillingPostCode(e.target.value)}
                                                                             onBlur={(e)=>setBillingName(e.target.value)} 
                                                                         />
 

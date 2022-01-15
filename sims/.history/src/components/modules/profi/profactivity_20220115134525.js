@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect,useRef } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
@@ -124,7 +124,7 @@ export default function License({ }) {
 
 
 
-    let textInput = useRef(null);
+
 
 
 
@@ -256,13 +256,6 @@ export default function License({ }) {
                 setGeneralPostingGroupList(data.GeneralPostingGroup);
                 setPaymentTermsList(data.PaymentTerms);
                 setCustomerPostingGroupList(data.CustomerPostingGroup);
-                for(let i=0;i<data.WareHouse.length;i++){
-                    if(data.WareHouse[i].IsDefault===true){
-                        setWareHouseID(data.WareHouse[i].value);
-                        break;
-                    }
-                }
-                
             })
             .catch((error) => {
 
@@ -316,7 +309,7 @@ export default function License({ }) {
                     if (e.BillingAddress) {
                         if (e.BillingAddress.length > 0) {
                             setBillingID(e.BillingAddress[0].value);
-                            setBillingName(e.BillingAddress[0].Name);                                                       
+                            setBillingName(e.BillingAddress[0].Name);
                             setBillingAddress(e.BillingAddress[0].Address);
                             setBillingAddress2(e.BillingAddress[0].Address2);
                             setBillingAddress3(e.BillingAddress[0].Address3);
@@ -327,13 +320,6 @@ export default function License({ }) {
                             setGeneralPostingGroupID(e.BillingAddress[0].GeneralPostingGroupID);
                             setCustomerPostingGroupID(e.BillingAddress[0].CustomerPostingGroupID);
 
-                            //-----setting textboxes-----------
-                            updateTextField("BillingName",e.BillingAddress[0].Name); 
-                            updateTextField("BillingAddress",e.BillingAddress[0].Address); 
-                            updateTextField("BillingAddress2",e.BillingAddress[0].Address2); 
-                            updateTextField("BillingAddress3",e.BillingAddress[0].Address3); 
-                            updateTextField("BillingCity",e.BillingAddress[0].City);
-                            updateTextField("BillingPostCode",e.BillingAddress[0].PostCode);
                         }
                     }
                     if (e.ShippingAddress) {
@@ -348,14 +334,6 @@ export default function License({ }) {
                             setShippingCountryID(e.ShippingAddress[0].CountryID);
                             setShippingStateID(e.ShippingAddress[0].StateID);
 
-                             //-----setting textboxes-----------
-                             updateTextField("ShippingName",e.ShippingAddress[0].Name); 
-                             updateTextField("ShippingAddress",e.ShippingAddress[0].Address); 
-                             updateTextField("ShippingAddress2",e.ShippingAddress[0].Address2); 
-                             updateTextField("ShippingAddress3",e.ShippingAddress[0].Address3); 
-                             updateTextField("ShippingCity",e.ShippingAddress[0].City);
-                             updateTextField("ShippingPostCode",e.ShippingAddress[0].PostCode);
-
                         }
                     }
                 } else {
@@ -368,30 +346,12 @@ export default function License({ }) {
             case "ShippingCountryID":
                 setShippingCountryID(CF.toInt(e));
                 break;
-            case "BillingName":
-                try {
-                   
-                    let input = document.querySelector('#BillingName');
-                    input.value=e;
-                } catch (err) {
-                    console.log("BillingName > err > ", err);
-                }
-
-                break;
-
             default:
                 break;
         }
     }
 
     //-----------------------------------------------------------------------------------------------------------
-
-    const updateTextField=(id,value)=>{
-        try{
-            document.getElementById(id).value=value;
-        }catch(err){}
-        
-    }
 
 
     const handleAccordionClick = (val, e) => {
@@ -517,6 +477,19 @@ export default function License({ }) {
                                                                 <Grid container spacing={0}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
 
+                                                                    
+                                                                    <SIBSP
+                                                                            id="BillingName"
+                                                                            label="Billing Name"
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                            value={BillingName}
+                                                                            defaultValue={BillingName}
+                                                                            // onBlur={(e) => setBillingName(e.target.value)}
+                                                                            onChange={(e) => setBillingName(e.target.value)}
+                                                                        />
+
+
                                                                         <SIB
                                                                             id="No"
                                                                             label="No"
@@ -553,67 +526,56 @@ export default function License({ }) {
                                                                             param={CustomerBillingAddress}
                                                                             isMandatory={true}
                                                                         />
-                                                                      
-                                                                        <SIB     
+
+
+                                                                        {/* <SIB
                                                                             id="BillingName"
                                                                             label="Billing Name"
                                                                             variant="outlined"
-                                                                            size="small"   
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingName").value=e.target.value;
-                                                                            }}  
-                                                                            onBlur={(e)=>setBillingName(e.target.value)}  
-                                                                        />
+                                                                            size="small"
+                                                                            value={BillingName}
+                                                                            onChange={(e) => setBillingName(e.target.value)}
+                                                                        /> */}
 
                                                                         <SIB
                                                                             id="BillingAddress"
                                                                             label="Billing Address"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingAddress").value=e.target.value;
-                                                                            }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            value={BillingAddress}
+                                                                            onChange={(e) => setBillingAddress(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingAddress2"
                                                                             label="Billing Address 2"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingAddress2").value=e.target.value;
-                                                                            }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            value={BillingAddress2}
+                                                                            onChange={(e) => setBillingAddress2(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingAddress3"
                                                                             label="Billing Address 3"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingAddress3").value=e.target.value;
-                                                                            }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            value={BillingAddress3}
+                                                                            onChange={(e) => setBillingAddress3(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingCity"
                                                                             label="Billing City"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingCity").value=e.target.value;
-                                                                            }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            value={BillingCity}
+                                                                            onChange={(e) => setBillingCity(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingPostcode"
                                                                             label="Billing Postcode"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingPostcode").value=e.target.value;
-                                                                            }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            value={BillingPostCode}
+                                                                            onChange={(e) => setBillingPostCode(e.target.value)}
                                                                         />
 
                                                                         <SDIB
