@@ -29,7 +29,7 @@ import SADIB from "../../compo/gridautocompletedropdowninput";
 import SIB from "../../compo/gridtextboxinput";
 import SDTI from "../../compo/griddateinput";
 import SDIB from "../../compo/griddropdowninput";
-import SSIB from "../../compo/gridswitchinput";
+
 
 
 
@@ -49,52 +49,10 @@ export default function License({ }) {
 
     const [customerList, setcustomerList] = React.useState([]);
     const [selectedCustomerObj, setselectedCustomerObj] = React.useState(null);
-    const [CustomerBillingAddress, setCustomerBillingAddress] = React.useState([]);
-    const [CustomerShippingAddress, setCustomerShippingAddress] = React.useState([]);
-    
+    const [SupplierAdressList, setSupplierAdressList] = React.useState([]);
     const [CountryList, setCountryList] = React.useState([]);
-    const [StateList, setStateList] = React.useState([]);
-    const [WarehouseList, setWarehouseList] = React.useState([]);  
     
     
-    //--------------------ProformaInvoice----------------------------------------------------
-    const [No, setNo] = React.useState("");
-    const [ProformaDate, setProformaDate] = React.useState(moment().format("YYYY-MM-DD"));
-    const [CustID, setCustID] = React.useState(0);    
-    const [BillingID, setBillingID] = React.useState(0);
-    const [BillingName, setBillingName] = React.useState("");
-    const [BillingAddress, setBillingAddress] = React.useState("");
-    const [BillingAddress2, setBillingAddress2] = React.useState("");
-    const [BillingAddress3, setBillingAddress3] = React.useState("");
-    const [BillingCity, setBillingCity] = React.useState("");
-    const [BillingPostCode, setBillingPostCode] = React.useState("");
-    const [BillingCountryID, setBillingCountryID] = React.useState(0);
-    const [BillingStateID, setBillingStateID] = React.useState(0);
-
-    const [ShippingID, setShippingID] = React.useState(0);
-    const [ShippingName, setShippingName] = React.useState("");
-    const [ShippingAddress, setShippingAddress] = React.useState("");
-    const [ShippingAddress2, setShippingAddress2] = React.useState("");
-    const [ShippingAddress3, setShippingAddress3] = React.useState("");
-    const [ShippingCity, setShippingCity] = React.useState("");
-    const [ShippingPostCode, setShippingPostCode] = React.useState("");
-    const [ShippingCountryID, setShippingCountryID] = React.useState(0);
-    const [ShippingStateID, setShippingStateID] = React.useState(0);
-
-    const [DispatchDate, setDispatchDate] = React.useState(moment().format("YYYY-MM-DD"));
-    const [DeliveryDate, setDeliveryDate] = React.useState(moment().format("YYYY-MM-DD"));
-    const [CustomerOrderDate, setCustomerOrderDate] = React.useState(moment().format("YYYY-MM-DD"));
-    const [Reference, setReference] = React.useState("");
-    const [IsSEZSale, setIsSEZSale] = React.useState(false);
-    const [IsRounding, setIsRounding] = React.useState(false);
-    const [IsExport, setIsExport] = React.useState(false);
-    const [WareHouseID, setWareHouseID] = React.useState(0);
-    
-    
-    
-    
-
-    //-------------------------------------------------------------------------
 
     const [ProformaInvoice, setProformaInvoice] = React.useState({
         ProformaID: 0,
@@ -104,7 +62,7 @@ export default function License({ }) {
         IsExport: false,
         CustID: 0,
         BillingID: 0,
-        BillingName: "asasasas",
+        BillingName: "",
         BillingAddress: "",
         BillingAddress2: "",
         BillingAddress3: "",
@@ -212,59 +170,46 @@ export default function License({ }) {
                 let data = response.data;
                 setcustomerList(data.Customer);
                 setCountryList(data.Country);
-                setStateList(data.State);
-                setWarehouseList(data.WareHouse);
             })
             .catch((error) => {
 
             });
     }
 
+   
+
     const updateFormValue = (key, e) => {
         console.log("key > ",key);
         console.log("e > ",e);
-        
+        let proformaInvoice = ProformaInvoice;
         switch (key) {
-            case "CustID":   
+            case "CustID":
                 if (e) {
                     setselectedCustomerObj(e);
-                    setCustomerBillingAddress(e.BillingAddress);
-                    setCustomerShippingAddress(e.ShippingAddress);
-                    setCustID(CF.toInt(e.id));
-                    if(e.BillingAddress){
-                        if(e.BillingAddress.length>0){
-                            setBillingID(e.BillingAddress[0].AddressID);
-                            setBillingName(e.BillingAddress[0].Name);
-                            setBillingAddress(e.BillingAddress[0].Address);
-                            setBillingAddress2(e.BillingAddress[0].Address2);
-                            setBillingAddress3(e.BillingAddress[0].Address3);
-                            setBillingCity(e.BillingAddress[0].City);
-                            setBillingPostCode(e.BillingAddress[0].PostCode);
-                            setBillingCountryID(e.BillingAddress[0].CountryID);
-                            setBillingStateID(e.BillingAddress[0].StateID);                            
-                        }
-                    }
+                    proformaInvoice.CustID = CF.toInt(e.id);
                     if(e.ShippingAddress){
                         if(e.ShippingAddress.length>0){
-                            setShippingID(e.ShippingAddress[0].AddressID);
-                            setShippingName(e.ShippingAddress[0].Name);
-                            setShippingAddress(e.ShippingAddress[0].Address);
-                            setShippingAddress2(e.ShippingAddress[0].Address2);
-                            setShippingAddress3(e.ShippingAddress[0].Address3);
-                            setShippingCity(e.ShippingAddress[0].City);
-                            setShippingPostCode(e.ShippingAddress[0].PostCode);
-                            setShippingCountryID(e.ShippingAddress[0].CountryID);
-                            setShippingStateID(e.ShippingAddress[0].StateID);                            
+                            proformaInvoice.BillingID=e.ShippingAddress[0].AddressID;
+                            proformaInvoice.BillingName=e.ShippingAddress[0].Name;
+                            proformaInvoice.BillingAddress=e.ShippingAddress[0].Address;
+                            proformaInvoice.BillingAddress2=e.ShippingAddress[0].Address2;
+                            proformaInvoice.BillingAddress3=e.ShippingAddress[0].Address3;
+                            proformaInvoice.BillingCity=e.ShippingAddress[0].City;
+                            proformaInvoice.BillingPostCode=e.ShippingAddress[0].PostCode;
+                            proformaInvoice.BillingCountryID=e.ShippingAddress[0].CountryID;
+                            proformaInvoice.BillingStateID=e.ShippingAddress[0].StateID;
                         }
                     }
+                    setProformaInvoice(proformaInvoice);
                 } else {
                     setselectedCustomerObj(null);
                 }
-                break;               
-                case "BillingCountryID":
-                    setBillingCountryID(CF.toInt(e));
-                break;                
-                default:     
+                break;
+            default:
+                console.log("IN default > ");
+                console.log("proformaInvoice[key] > ",proformaInvoice[key]);
+                // proformaInvoice[key]=e;
+                setProformaInvoice(proformaInvoice);
                 break;
         }
     }
@@ -399,20 +344,9 @@ export default function License({ }) {
                                                                             label="No"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={No}
+                                                                            value={ProformaInvoice.No}
                                                                             disabled={true}
                                                                         />
-
-<SDTI
-                                                                            isMandatory={true}
-                                                                            id="ProformaDate"
-                                                                            label="Proforma Date"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) =>setProformaDate(moment(e.target.value).format("YYYY-MM-DD"))}
-                                                                            value={ProformaDate}
-                                                                        />
-
                                                                         <SADIB
                                                                             id="CustID"
                                                                             label="Customer"
@@ -426,76 +360,68 @@ export default function License({ }) {
                                                                             id="BillingID"
                                                                             label="Billing"
                                                                             onChange={(e) => updateFormValue("BillingID", e.target.value)}
-                                                                            value={BillingID}
-                                                                            param={CustomerBillingAddress}
+                                                                            value={ProformaInvoice.BillingID}
+                                                                            param={SupplierAdressList}
                                                                             isMandatory={true}
 
                                                                         />
 
-                                                                      
                                                                         <SIB
                                                                             id="BillingName"
-                                                                            label="Billing Name"
+                                                                            label="Name"
                                                                             variant="outlined"
-                                                                            size="small"                 
-                                                                            value={BillingName}
-                                                                            onChange={(e) =>  setBillingName(e.target.value)}
+                                                                            size="small"
+                                                                            value={ProformaInvoice.BillingName}
+                                                                            onChange={(e) => updateFormValue("BillingName", e.target.value)}
                                                                         />
 
                                                                         <SIB
                                                                             id="BillingAddress"
-                                                                            label="Billing Address"
+                                                                            label="Address"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={BillingAddress}
-                                                                            onChange={(e) => setBillingAddress(e.target.value)}
+                                                                            value={ProformaInvoice.BillingAddress}
+                                                                            onChange={(e) => updateFormValue("BillingAddress", e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingAddress2"
-                                                                            label="Billing Address 2"
+                                                                            label="Address 2"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={BillingAddress2}
-                                                                            onChange={(e) => setBillingAddress2(e.target.value)}
+                                                                            value={ProformaInvoice.BillingAddress2}
+                                                                            onChange={(e) => updateFormValue("BillingAddress2", e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingAddress3"
-                                                                            label="Billing Address 3"
+                                                                            label="Address 3"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={BillingAddress3}
-                                                                            onChange={(e) => setBillingAddress3(e.target.value)}
+                                                                            value={ProformaInvoice.BillingAddress3}
+                                                                            onChange={(e) => updateFormValue("BillingAddress3", e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingCity"
-                                                                            label="Billing City"
+                                                                            label="City"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={BillingCity}
-                                                                            onChange={(e) => setBillingCity(e.target.value)}
+                                                                            value={ProformaInvoice.BillingCity}
+                                                                            onChange={(e) => updateFormValue("BillingCity", e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingPostcode"
-                                                                            label="Billing Postcode"
+                                                                            label="Postcode"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={BillingPostCode}
-                                                                            onChange={(e) => setBillingPostCode(e.target.value)}
+                                                                            value={ProformaInvoice.BillingPostCode}
+                                                                            onChange={(e) => updateFormValue("BillingPostCode", e.target.value)}
                                                                         />
 
                                                                         <SDIB
                                                                             id="BillingCountry"
-                                                                            label="Billing Country"
-                                                                            value={BillingCountryID}
+                                                                            label="Country"
+                                                                            value={ProformaInvoice.BillingCountryID}
                                                                             param={CountryList}
                                                                             onChange={(e) => updateFormValue("BillingCountryID", e.target.value)}
-                                                                        />
-                                                                        <SDIB
-                                                                            id="BillingState"
-                                                                            label="Billing State"
-                                                                            value={BillingStateID}
-                                                                            param={StateList}
-                                                                            onChange={(e) => setBillingStateID(e.target.value)}
                                                                         />
 
 
@@ -506,76 +432,6 @@ export default function License({ }) {
                                                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                 <Grid container spacing={0}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                        <SDTI
-                                                                            isMandatory={true}
-                                                                            id="DispatchDate"
-                                                                            label="Dispatch Date"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) =>setDispatchDate(moment(e.target.value).format("YYYY-MM-DD"))}
-                                                                            value={DispatchDate}
-                                                                        />
-                                                                        <SDTI
-                                                                            isMandatory={true}
-                                                                            id="DeliveryDate"
-                                                                            label="Delivery Date"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) =>setDeliveryDate(moment(e.target.value).format("YYYY-MM-DD"))}
-                                                                            value={DeliveryDate}
-                                                                        />
-
-                                                                        <SDTI
-                                                                            isMandatory={true}
-                                                                            id="CustomerOrderDate"
-                                                                            label="Customer Order Date"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => setCustomerOrderDate(moment(e.target.value).format("YYYY-MM-DD"))}
-                                                                            value={CustomerOrderDate}
-                                                                        />
-
-
-
-                                                                        <SIB
-                                                                            id="Reference"
-                                                                            label="Reference"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            defaultValue={Reference}
-                                                                            onBlur={(e) => setReference(e.target.value)}
-                                                                        />
-
-                                                                        <SDIB
-                                                                            id="WareHouseID"
-                                                                            label="Warehouse"
-                                                                            onChange={(e) => setWareHouseID(e.target.value)}
-                                                                            value={WareHouseID}
-                                                                            param={WarehouseList}
-                                                                            isMandatory={true}
-
-                                                                        />
-
-                                                                        <SSIB
-                                                                            key="IsSEZSale"
-                                                                            id="IsSEZSale"
-                                                                            label="SEZ Sale?"
-                                                                            param={IsSEZSale}
-                                                                        />
-
-                                                                        <SSIB
-                                                                            key="IsRounding"
-                                                                            id="IsRounding"
-                                                                            label="Rounding?"
-                                                                            param={IsRounding}
-                                                                        />
-
-                                                                        <SSIB
-                                                                            key="IsExport"
-                                                                            id="IsExport"
-                                                                            label="Export?"
-                                                                            param={IsExport}
-                                                                        />
 
                                                                     </Grid>
                                                                 </Grid>
@@ -720,81 +576,6 @@ export default function License({ }) {
                                                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                 <Grid container spacing={0}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                                                                    <SDIB
-                                                                            id="ShippingID"
-                                                                            label="Shipping"
-                                                                            onChange={(e) => updateFormValue("ShippingID", e.target.value)}
-                                                                            value={ShippingID}
-                                                                            param={CustomerShippingAddress}
-                                                                            isMandatory={true}
-
-                                                                        />
-                                                                        
-                                                                    <SIB
-                                                                            id="ShippingName"
-                                                                            label="Shipping Name"
-                                                                            variant="outlined"
-                                                                            size="small"                 
-                                                                            value={ShippingName}
-                                                                            onChange={(e) =>  setShippingName(e.target.value)}
-                                                                        />
-
-                                                                        <SIB
-                                                                            id="ShippingAddress"
-                                                                            label="Shipping Address"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={ShippingAddress}
-                                                                            onChange={(e) => setShippingAddress(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="ShippingAddress2"
-                                                                            label="Shipping Address 2"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={ShippingAddress2}
-                                                                            onChange={(e) => setShippingAddress2(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="ShippingAddress3"
-                                                                            label="Shipping Address 3"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={ShippingAddress3}
-                                                                            onChange={(e) => setShippingAddress3(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="ShippingCity"
-                                                                            label="Shipping City"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={ShippingCity}
-                                                                            onChange={(e) => setShippingCity(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="ShippingPostcode"
-                                                                            label="Shipping Postcode"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={ShippingPostCode}
-                                                                            onChange={(e) => setShippingPostCode(e.target.value)}
-                                                                        />
-
-                                                                        <SDIB
-                                                                            id="ShippingCountry"
-                                                                            label="Shipping Country"
-                                                                            value={ShippingCountryID}
-                                                                            param={CountryList}
-                                                                            onChange={(e) => updateFormValue("ShippingCountryID", e.target.value)}
-                                                                        />
-                                                                        <SDIB
-                                                                            id="ShippingState"
-                                                                            label="Shipping State"
-                                                                            value={ShippingStateID}
-                                                                            param={StateList}
-                                                                            onChange={(e) => setShippingStateID(e.target.value)}
-                                                                        />
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
