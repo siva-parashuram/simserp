@@ -8,6 +8,9 @@ import * as APIURLS from "../../../routes/apiconstant";
 import * as URLS from "../../../routes/constants";
 import * as CF from "../../../services/functions/customfunctions";
 
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 import Grid from "@material-ui/core/Grid";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@material-ui/core/Button";
@@ -19,6 +22,11 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Divider } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import TableBody from "@material-ui/core/TableBody";
 
 import BackdropLoader from "../../compo/backdrop";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -33,227 +41,139 @@ import SDTI from "../../compo/griddateinput";
 import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 
+const today=moment().format("YYYY-MM-DD");
 
-
-
-export default function License({ }) {
-    let history = useHistory();
-    const [ProgressLoader, setProgressLoader] = React.useState(false);
-    const [SuccessPrompt, setSuccessPrompt] = React.useState(false);
-    const [ErrorPrompt, setErrorPrompt] = React.useState(false);
-    const [ErrorMessageProps, setErrorMessageProps] = React.useState("");
-    const [typoTitle, settypoTitle] = React.useState("");
-    const [urlparams, seturlparams] = React.useState("");
-
-    const [accordion1, setaccordion1] = React.useState(true);
-    const [accordion2, setaccordion2] = React.useState(false);
-    const [accordion3, setaccordion3] = React.useState(false);
-    const [accordion4, setaccordion4] = React.useState(true);
-    const [accordion5, setaccordion5] = React.useState(true);
-    const [accordion6, setaccordion6] = React.useState(true);
-
-
-    const [Branch, setBranch] = React.useState({});
-    const [customerList, setcustomerList] = React.useState([]);
-    const [selectedCustomerObj, setselectedCustomerObj] = React.useState(null);
-    const [CustomerBillingAddress, setCustomerBillingAddress] = React.useState([]);
-    const [CustomerShippingAddress, setCustomerShippingAddress] = React.useState([]);
-    const [NotifyAddress, setNotifyAddress] = React.useState([]);
-    const [BankList, setBankList] = React.useState([]);
-    const [CountryList, setCountryList] = React.useState([]);
-    const [StateList, setStateList] = React.useState([]);
-    const [WarehouseList, setWarehouseList] = React.useState([]);
-    const [CurrencyList, setCurrencyList] = React.useState([]);
-    const [GeneralPostingGroupList, setGeneralPostingGroupList] = React.useState([]);
-    const [PaymentTermsList, setPaymentTermsList] = React.useState([]);
-    const [CustomerPostingGroupList, setCustomerPostingGroupList] = React.useState([]);
-    const [MODTaxList, setMODTaxList] = React.useState([]);
-    const [PackingTypeList, setPackingTypeList] = React.useState(APIURLS.PackingType);
-    const [ServiceTypeList, setServiceTypeList] = React.useState(APIURLS.ServiceType);
-    const [PackingSpecificationList, setPackingSpecificationList] = React.useState(APIURLS.PackingSpecification);
-
-
-
-
-
-
-
-
-
-    //--------------------ProformaInvoice----------------------------------------------------
-
-    const [ProformaID, setProformaID] = React.useState(0);
-    const [BranchID, setBranchID] = React.useState(0);
-    const [Status, setStatus] = React.useState(0);
-    const [No, setNo] = React.useState("");
-    const [ProformaDate, setProformaDate] = React.useState(moment().format("YYYY-MM-DD"));
-    const [CustID, setCustID] = React.useState(0);
-    const [BillingID, setBillingID] = React.useState(0);
-    const [BillingName, setBillingName] = React.useState("");
-    const [BillingAddress, setBillingAddress] = React.useState("");
-    const [BillingAddress2, setBillingAddress2] = React.useState("");
-    const [BillingAddress3, setBillingAddress3] = React.useState("");
-    const [BillingCity, setBillingCity] = React.useState("");
-    const [BillingPostCode, setBillingPostCode] = React.useState("");
-    const [BillingCountryID, setBillingCountryID] = React.useState(0);
-    const [BillingStateID, setBillingStateID] = React.useState(0);
-
-    const [ShippingID, setShippingID] = React.useState(0);
-    const [ShippingName, setShippingName] = React.useState("");
-    const [ShippingAddress, setShippingAddress] = React.useState("");
-    const [ShippingAddress2, setShippingAddress2] = React.useState("");
-    const [ShippingAddress3, setShippingAddress3] = React.useState("");
-    const [ShippingCity, setShippingCity] = React.useState("");
-    const [ShippingPostCode, setShippingPostCode] = React.useState("");
-    const [ShippingCountryID, setShippingCountryID] = React.useState(0);
-    const [ShippingStateID, setShippingStateID] = React.useState(0);
-
-    const [DispatchDate, setDispatchDate] = React.useState(moment().format("YYYY-MM-DD"));
-    const [DeliveryDate, setDeliveryDate] = React.useState(moment().format("YYYY-MM-DD"));
-    const [CustomerOrderDate, setCustomerOrderDate] = React.useState(moment().format("YYYY-MM-DD"));
-    const [Reference, setReference] = React.useState("");
-    const [IsSEZSale, setIsSEZSale] = React.useState(false);
-    const [IsRounding, setIsRounding] = React.useState(false);
-    const [IsExport, setIsExport] = React.useState(false);
-    const [WareHouseID, setWareHouseID] = React.useState(0);
-    const [SalesPersonID, setSalesPersonID] = React.useState(0);
-    const [IsDeleted, setIsDeleted] = React.useState(false);
-
-    const [NotifyID, setNotifyID] = React.useState(0);
-    const [ShipperID, setShipperID] = React.useState(0);
-    const [CountryOfOrigin, setCountryOfOrigin] = React.useState(0);
-    const [ExitPortID, setExitPortID] = React.useState(0);
-    const [Destination, setDestination] = React.useState("");
-    const [FinalDestination, setFinalDestination] = React.useState("");
-
-    const [CurrID, setCurrID] = React.useState(0);
-    const [ExchRate, setExchRate] = React.useState(0);
-    const [FCValue, setFCValue] = React.useState(0);
-    const [BaseValue, setBaseValue] = React.useState(0);
-    const [PaymentTermID, setPaymentTermID] = React.useState(0);
-    const [PaymentTerm, setPaymentTerm] = React.useState([]);
-    const [GeneralPostingGroupID, setGeneralPostingGroupID] = React.useState(0);
-    const [CustomerPostingGroupID, setCustomerPostingGroupID] = React.useState(0);
-    const [BankID, setBankID] = React.useState(0);
-    const [Amount, setAmount] = React.useState(0);
-    const [DiscountAmount, setDiscountAmount] = React.useState(0);
-    const [TotalTax, setTotalTax] = React.useState(0);
-
-    const [GSTNo, setGSTNo] = React.useState("");
-    const [VATNo, setVATNo] = React.useState("");
-    const [Reason, setReason] = React.useState("");
-    const [IsTaxExempt, setIsTaxExempt] = React.useState(false);
-    const [MODTaxID, setMODTaxID] = React.useState(0);
-
-    const [PackingType, setPackingType] = React.useState(0);
-    const [PackingSpecification, setPackingSpecification] = React.useState(0);
-    const [NoOfPacket, setNoOfPacket] = React.useState("");
-    const [ServiceType, setServiceType] = React.useState(0);
-
-
-
-
-
-
-    //-------------------------------------------------------------------------
-
-    const [ProformaInvoice, setProformaInvoice] = React.useState({
-        ProformaID: 0,
-        BranchID: 0,
-        No: "",
-        ProformaDate: "",
-        IsExport: false,
-        CustID: 0,
-        BillingID: 0,
-        BillingName: "asasasas",
-        BillingAddress: "",
-        BillingAddress2: "",
-        BillingAddress3: "",
-        BillingCity: "",
-        BillingPostCode: "",
-        BillingCountryID: 0,
-        BillingStateID: 0,
-        ShippingID: 0,
-        ShippingName: "",
-        ShippingAddress: "",
-        ShippingAddress2: "",
-        ShippingAddress3: "",
-        ShippingCity: "",
-        ShippingPostCode: "",
-        ShippingCountryID: 0,
-        ShippingStateID: 0,
-        CurrID: 0,
-        ExchRate: 0,
-        FCValue: 0,
-        BaseValue: 0,
-        PaymentTermID: 0,
-        PaymentTerm: 0,
-        Status: 0,
-        WareHouseID: 0,
-        MODTaxID: 0,
-        IsRegistedCustomer: false,
-        GSTNo: "",
-        VATNo: "",
-        IsRounding: false,
-        IncoID: 0,
-        ShipmentModeID: 0,
-        Notes: "",
-        IsSEZSale: false,
-        IsTaxExempt: false,
-        Reason: "",
-        GeneralPostingGroupID: 0,
-        CustomerPostingGroupID: 0,
-        NotifyID: 0,
-        Reference: "",
-        CustomerOrderDate: "",
-        ShipperID: 0,
-        DispatchDate: "",
-        DeliveryDate: "",
-        PackingType: 0,
-        PackingSpecification: "",
-        NoOfPacket: "",
-        ServiceType: 0,
-        CountryOfOrigin: "",
-        ExitPortID: 0,
-        Destination: "",
-        FinalDestination: "",
-        BankID: 0,
-        SalesPersonID: 0,
-        IsDeleted: false,
-        UserID: 0,
-        ModifyDate: "",
-
-
-    });
-
-    //to disable screen if Status is not Open
-    let disableEvents = false;
-    // disableEvents = CF.toInt() ===1 ? true : false;
-    const disabledStyle = {
-        "pointer-events": disableEvents ? "none" : "unset"
-    };
-
-
-    useEffect(() => {
+class profactivity extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            ProgressLoader: false,
+            SuccessPrompt: false,
+            ErrorPrompt: false,
+            ErrorMessageProps: "",
+            typoTitle: "",
+            urlparams: "",
+            accordion1: true,
+            accordion2: true,
+            accordion3: true,
+            accordion4: true,
+            accordion5: true,
+            accordion6: true,
+            accordion7: true,
+            Branch: {},
+            customerList: [],
+            CustomerBillingAddress: [],
+            CustomerShippingAddress: [],
+            NotifyAddress: [],
+            BankList: [],
+            CountryList: [],
+            StateList: [],
+            WarehouseList: [],
+            CurrencyList: [],
+            GeneralPostingGroupList: [],
+            PaymentTermsList: [],
+            CustomerPostingGroupList: [],
+            PaymentTermsList: [],
+            CustomerPostingGroupList: [],
+            MODTaxList: [],
+            IncoTermList: [],
+            ShipmentModeList: [],
+            PackingTypeList: APIURLS.PackingType,
+            ServiceTypeList: APIURLS.ServiceType,
+            PackingSpecificationList: APIURLS.PackingSpecification,
+            selectedCustomerObj: null,
+            //-----------------ProformaInvoice---------------------
+            ProformaID: 0,
+            BranchID: 0,
+            Status: "",
+            No: "",
+            ProformaDate: today,
+            CustID: 0,
+            BillingID: 0,
+            BillingName: "",
+            BillingAddress: "",
+            BillingAddress2: "",
+            BillingAddress3: "",
+            BillingCity: "",
+            BillingPostCode: "",
+            BillingCountryID: 0,
+            BillingStateID: 0,
+            ShippingID: 0,
+            ShippingName: "",
+            ShippingAddress: "",
+            ShippingAddress2: "",
+            ShippingAddress3: "",
+            ShippingCity: "",
+            ShippingPostCode: "",
+            ShippingCountryID: 0,
+            ShippingStateID: 0,
+            DispatchDate: today,
+            DeliveryDate:today,
+            CustomerOrderDate: today,
+            Reference: "",
+            IsSEZSale: false,
+            IsRounding: false,
+            IsExport: false,
+            GSTPlaceOfSold: false,
+            WareHouseID: 0,
+            SalesPersonID: 0,
+            IsDeleted: false,
+            NotifyID: 0,
+            ShipperID: 0,
+            CountryOfOrigin: 0,
+            ExitPortID: 0,
+            Destination: "",
+            FinalDestination: "",
+            CurrID: 0,
+            ExchRate: 0,
+            FCValue: 0,
+            BaseValue: 0,
+            PaymentTermID: 0,
+            PaymentTerm: "",
+            GeneralPostingGroupID: 0,
+            CustomerPostingGroupID: 0,
+            BankID: 0,
+            Amount: 0,
+            DiscountAmount: 0,
+            TotalTax: 0,
+            GSTNo: "",
+            VATNo: "",
+            Reason: "",
+            IsTaxExempt: 0,
+            IsRegistedSupplier: 0,
+            MODTaxID: 0,
+            PackingType: 0,
+            PackingSpecification: 0,
+            NoOfPacket: 0,
+            ServiceType: 0,
+            IncoID: 0,
+            ShipmentModeID: 0,
+            Notes: "",
+            //-------------------------------------------
+            ProformaInvoiceLine: [],
+        };
+    }
+    componentDidMount() {
         let params = CF.GET_URL_PARAMS();
-        seturlparams(params);
+        this.setState({ urlparams: params });
         var url = new URL(window.location.href);
         const type = url.searchParams.get("type");
         let branchId = url.searchParams.get("branchId");
         if (type === "add") {
-            settypoTitle("Add");
-            setProgressLoader(true);
+            this.setState({
+                typoTitle: "Add",
+                ProgressLoader: true
+            });
         } else {
-            settypoTitle("Edit");
+            this.setState({
+                typoTitle: "Edit"
+            });
         }
 
-        getCustomersByBranchID(branchId);
+        this.getCustomersByBranchID(branchId);
+    }
 
-
-    }, []);
-
-
-    const getCustomersByBranchID = (branchId) => {
+    getCustomersByBranchID = (branchId) => {
         let ValidUser = APIURLS.ValidUser;
         ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
         ValidUser.Token = getCookie(COOKIE.TOKEN);
@@ -271,20 +191,25 @@ export default function License({ }) {
             .post(Url, reqObj, { headers })
             .then((response) => {
                 let data = response.data;
-                setBranch(data.Branch[0]);
-                setcustomerList(data.Customer);
-                setCountryList(data.Country);
-                setStateList(data.State);
-                setWarehouseList(data.WareHouse);
-                setCurrencyList(data.Currency);
-                setGeneralPostingGroupList(data.GeneralPostingGroup);
-                setPaymentTermsList(data.PaymentTerms);
-                setCustomerPostingGroupList(data.CustomerPostingGroup);
-                setMODTaxList(data.MODTax);
-
+                this.setState({
+                    Branch: data.Branch[0],
+                    customerList: data.Customer,
+                    CountryList: data.Country,
+                    StateList: data.State,
+                    CurrencyList: data.Currency,
+                    GeneralPostingGroupList: data.GeneralPostingGroup,
+                    PaymentTermsList: data.PaymentTerms,
+                    CustomerPostingGroupList: data.CustomerPostingGroup,
+                    MODTaxList: data.MODTax,
+                    IncoTermList: data.IncoTerms,
+                    ShipmentModeList: data.ShipmentMode,
+                    WarehouseList: data.WareHouse
+                });
                 for (let i = 0; i < data.WareHouse.length; i++) {
                     if (data.WareHouse[i].IsDefault === true) {
-                        setWareHouseID(data.WareHouse[i].value);
+                        this.setState({
+                            WareHouseID: data.WareHouse[i].value
+                        });
                         break;
                     }
                 }
@@ -295,907 +220,925 @@ export default function License({ }) {
             });
     }
 
-    const getPaymentTerm = (id) => {
-        let paymentTerm = "";
+    createBlankLine = () => {
+        let PILobj = {
+            ProformaID: 0,
+            Type: 0,
+            LNo: 0,
+            TypeID: 0,
+            CustomerCode: "",
+            UOMID: 0,
+            TolerancePercentage: 0,
+            Quantity: 0,
+            Price: 0,
+            LineDiscPercentage: 0,
+            LineDiscAmount: 0,
+            ItemPostingGroupID: 0,
+            GeneralPostingGroupID: 0,
+            VATPercentage: 0,
+            VATAmount: 0,
+            HSNCode: "",
+            GSTGroupID: 0,
+            SupplyStateID: 0,
+            GSTPercentage: 0,
+            GSTJurisdiction: "",
+            GSTGroupType: 0,
+            GSTPlaceOfSold: 0,
+            SoldToGSTN: "",
+            NatureOfSupply: 0,
+            GSTBaseAmount: 0,
+            IGSTRate: 0,
+            IGSTAmt: 0,
+            CGSTRate: 0,
+            CGSTAmt: 0,
+            SGSTRate: 0,
+            SGSTAmt: 0,
+            IsLot: false,
+            isDataProper: false,
+        };
+        let oldProformaInvoiceLine = this.state.ProformaInvoiceLine;
+        oldProformaInvoiceLine.push(PILobj);
+        this.setState({
+            ProformaInvoiceLine: oldProformaInvoiceLine
+        });
+    }
 
+    getPaymentTerm = (id) => {
+        let paymentTerm = "";
+        let PaymentTermsList = this.state.PaymentTermsList;
         for (let i = 0; i < PaymentTermsList.length; i++) {
             if (parseInt(id) === parseInt(PaymentTermsList[i].value)) {
                 paymentTerm = PaymentTermsList[i].Description;
             }
         }
-
         return paymentTerm;
     }
 
-    const getExchRate = (id) => {
+    getExchRate = (id) => {
         let exchRate = 0;
-
+        let CurrencyList = this.state.CurrencyList;
         for (let i = 0; i < CurrencyList.length; i++) {
             if (parseInt(id) === parseInt(CurrencyList[i].value)) {
                 exchRate = parseFloat(CurrencyList[i].ExchRate);
             }
         }
-
         return exchRate;
     }
 
-    const updateFormValue = (key, e) => {
+    updateFormValue = (key, e) => {
         console.log("key > ", key);
         console.log("e > ", e);
 
         switch (key) {
             case "CustID":
                 if (e) {
-                    setselectedCustomerObj(e);
-                    setCustomerBillingAddress(e.BillingAddress);
-                    setCustomerShippingAddress(e.ShippingAddress);
-                    setNotifyAddress(e.NotifyAddress);
-                    setCustID(CF.toInt(e.id));
-                    setCurrID(CF.toInt(e.CurrID));
-                    setExchRate(getExchRate(CF.toInt(e.CurrID)));
-                    setPaymentTermID(CF.toInt(e.PaymentTermID));
-                    setPaymentTerm(getPaymentTerm(CF.toInt(e.PaymentTermID)));
-
-
+                    this.setState({
+                        selectedCustomerObj: e,
+                        CustomerBillingAddress: e.BillingAddress,
+                        CustomerShippingAddress: e.ShippingAddress,
+                        NotifyAddress: e.NotifyAddress,
+                        CustID: CF.toInt(e.id),
+                        CurrID: CF.toInt(e.CurrID),
+                        ExchRate: this.getExchRate(CF.toInt(e.CurrID)),
+                        PaymentTermID: CF.toInt(e.PaymentTermID),
+                        PaymentTerm: this.getPaymentTerm(CF.toInt(e.PaymentTermID))
+                    });
 
                     if (e.BillingAddress) {
                         if (e.BillingAddress.length > 0) {
-                            setIsTaxExempt(e.BillingAddress[0].IsTaxExempt);
-                            setGSTNo(e.BillingAddress[0].GSTNo);
-                            setVATNo(e.BillingAddress[0].VATNo);
-                            setReason(e.BillingAddress[0].Reason);
-                            setBillingID(e.BillingAddress[0].value);
-                            setBillingName(e.BillingAddress[0].Name);
-                            setBillingAddress(e.BillingAddress[0].Address);
-                            setBillingAddress2(e.BillingAddress[0].Address2);
-                            setBillingAddress3(e.BillingAddress[0].Address3);
-                            setBillingCity(e.BillingAddress[0].City);
-                            setBillingPostCode(e.BillingAddress[0].PostCode);
-                            setBillingCountryID(e.BillingAddress[0].CountryID);
-                            setBillingStateID(e.BillingAddress[0].StateID);
-                            setGeneralPostingGroupID(e.BillingAddress[0].GeneralPostingGroupID);
-                            setCustomerPostingGroupID(e.BillingAddress[0].CustomerPostingGroupID);
+                            this.setState({
+                                IsRegistedSupplier: e.BillingAddress[0].IsRegistedSupplier,
+                                IsTaxExempt: e.BillingAddress[0].IsTaxExempt,
+                                GSTNo: e.BillingAddress[0].GSTNo,
+                                VATNo: e.BillingAddress[0].VATNo,
+                                Reason: e.BillingAddress[0].Reason,
+                                BillingID: e.BillingAddress[0].value,
+                                BillingName: e.BillingAddress[0].Name,
+                                BillingAddress: e.BillingAddress[0].Address,
+                                BillingAddress2: e.BillingAddress[0].Address2,
+                                BillingAddress3: e.BillingAddress[0].Address3,
+                                BillingCity: e.BillingAddress[0].City,
+                                BillingPostCode: e.BillingAddress[0].PostCode,
+                                BillingCountryID: e.BillingAddress[0].CountryID,
+                                BillingStateID: e.BillingAddress[0].StateID,
+                                GeneralPostingGroupID: e.BillingAddress[0].GeneralPostingGroupID,
+                                CustomerPostingGroupID: e.BillingAddress[0].CustomerPostingGroupID
+                            });
 
                             //-----setting textboxes-----------
-                            updateTextField("BillingName", e.BillingAddress[0].Name);
-                            updateTextField("BillingAddress", e.BillingAddress[0].Address);
-                            updateTextField("BillingAddress2", e.BillingAddress[0].Address2);
-                            updateTextField("BillingAddress3", e.BillingAddress[0].Address3);
-                            updateTextField("BillingCity", e.BillingAddress[0].City);
-                            updateTextField("BillingPostCode", e.BillingAddress[0].PostCode);
+                            this.updateTextField("BillingName", e.BillingAddress[0].Name);
+                            this.updateTextField("BillingAddress", e.BillingAddress[0].Address);
+                            this.updateTextField("BillingAddress2", e.BillingAddress[0].Address2);
+                            this.updateTextField("BillingAddress3", e.BillingAddress[0].Address3);
+                            this.updateTextField("BillingCity", e.BillingAddress[0].City);
+                            this.updateTextField("BillingPostCode", e.BillingAddress[0].PostCode);
+                            this.updateTextField("GSTNo", e.BillingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", e.BillingAddress[0].VATNo);
+                            this.updateTextField("Reason", e.BillingAddress[0].Reason);
                         }
                     }
                     if (e.ShippingAddress) {
                         if (e.ShippingAddress.length > 0) {
-                            setShippingID(e.ShippingAddress[0].value);
-                            setShippingName(e.ShippingAddress[0].Name);
-                            setShippingAddress(e.ShippingAddress[0].Address);
-                            setShippingAddress2(e.ShippingAddress[0].Address2);
-                            setShippingAddress3(e.ShippingAddress[0].Address3);
-                            setShippingCity(e.ShippingAddress[0].City);
-                            setShippingPostCode(e.ShippingAddress[0].PostCode);
-                            setShippingCountryID(e.ShippingAddress[0].CountryID);
-                            setShippingStateID(e.ShippingAddress[0].StateID);
-
+                            this.setState({
+                                ShippingID: e.ShippingAddress[0].value,
+                                ShippingName: e.ShippingAddress[0].Name,
+                                ShippingAddress: e.ShippingAddress[0].Address,
+                                ShippingAddress2: e.ShippingAddress[0].Address2,
+                                ShippingAddress3: e.ShippingAddress[0].Address3,
+                                ShippingCity: e.ShippingAddress[0].City,
+                                ShippingPostCode: e.ShippingAddress[0].PostCode,
+                                ShippingCountryID: e.ShippingAddress[0].CountryID,
+                                ShippingStateID: e.ShippingAddress[0].StateID
+                            });
                             //-----setting textboxes-----------
-                            updateTextField("ShippingName", e.ShippingAddress[0].Name);
-                            updateTextField("ShippingAddress", e.ShippingAddress[0].Address);
-                            updateTextField("ShippingAddress2", e.ShippingAddress[0].Address2);
-                            updateTextField("ShippingAddress3", e.ShippingAddress[0].Address3);
-                            updateTextField("ShippingCity", e.ShippingAddress[0].City);
-                            updateTextField("ShippingPostCode", e.ShippingAddress[0].PostCode);
-
+                            this.updateTextField("ShippingName", e.ShippingAddress[0].Name);
+                            this.updateTextField("ShippingAddress", e.ShippingAddress[0].Address);
+                            this.updateTextField("ShippingAddress2", e.ShippingAddress[0].Address2);
+                            this.updateTextField("ShippingAddress3", e.ShippingAddress[0].Address3);
+                            this.updateTextField("ShippingCity", e.ShippingAddress[0].City);
+                            this.updateTextField("ShippingPostCode", e.ShippingAddress[0].PostCode);
+                            this.updateTextField("GSTNo", e.ShippingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", e.ShippingAddress[0].VATNo);
+                            this.updateTextField("Reason", e.ShippingAddress[0].Reason);
                         }
                     }
+
+                    this.createBlankLine();
                 } else {
-                    setselectedCustomerObj(null);
+                    this.setState({ selectedCustomerObj: null });
                 }
                 break;
             case "BillingCountryID":
-                setBillingCountryID(CF.toInt(e));
+                this.setState({ BillingCountryID: CF.toInt(e) });
                 break;
             case "ShippingCountryID":
-                setShippingCountryID(CF.toInt(e));
+                this.setState({ ShippingCountryID: CF.toInt(e) });
                 break;
             case "BillingName":
                 try {
-
                     let input = document.querySelector('#BillingName');
                     input.value = e;
                 } catch (err) {
                     console.log("BillingName > err > ", err);
                 }
-
                 break;
+            case "GSTPlaceOfSold":
+               
+                if (this.state.selectedCustomerObj) {
+                    if (e === false) {
+                        try {
+                            this.setState({
+                                IsRegistedSupplier:this.state.selectedCustomerObj.BillingAddress[0].IsRegistedSupplier,
+                                IsTaxExempt:this.state.selectedCustomerObj.BillingAddress[0].IsTaxExempt,
+                                GSTNo:this.state.selectedCustomerObj.BillingAddress[0].GSTNo,
+                                VATNo:this.state.selectedCustomerObj.BillingAddress[0].VATNo,
+                                Reason:this.state.selectedCustomerObj.BillingAddress[0].Reason
+                            });
 
+                            this.updateTextField("GSTNo", this.state.selectedCustomerObj.BillingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", this.state.selectedCustomerObj.BillingAddress[0].VATNo);
+                            this.updateTextField("Reason", this.state.selectedCustomerObj.BillingAddress[0].Reason);
+
+                        } catch (err) {
+                            console.log("GSTPlaceOfSold > False > err > ", err);
+                        }
+                    }
+                    if (e === true) {
+                        try {
+                            this.setState({
+                                IsRegistedSupplier: this.state.selectedCustomerObj.ShippingAddress[0].IsRegistedSupplier,
+                                IsTaxExempt:this.state.selectedCustomerObj.ShippingAddress[0].IsTaxExempt,
+                                GSTNo:this.state.selectedCustomerObj.ShippingAddress[0].GSTNo,
+                                VATNo:this.state.selectedCustomerObj.ShippingAddress[0].VATNo,
+                                Reason:this.state.selectedCustomerObj.ShippingAddress[0].Reason
+                            });
+
+                            this.updateTextField("GSTNo", this.state.selectedCustomerObj.ShippingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", this.state.selectedCustomerObj.ShippingAddress[0].VATNo);
+                            this.updateTextField("Reason", this.state.selectedCustomerObj.ShippingAddress[0].Reason);
+                        } catch (err) {
+                            console.log("GSTPlaceOfSold > True > err > ", err);
+                        }
+                    }
+                }
+                break;
             default:
                 break;
         }
     }
 
-    //-----------------------------------------------------------------------------------------------------------
-
-    const updateTextField = (id, value) => {
+    updateTextField = (id, value) => {
         try {
             document.getElementById(id).value = value;
         } catch (err) { }
 
     }
 
+    render() {
 
-    const handleAccordionClick = (val, e) => {
-        if (val === "accordion1") {
-            accordion1 === true ? setaccordion1(false) : setaccordion1(true);
-        }
-        if (val === "accordion2") {
-            accordion2 === true ? setaccordion2(false) : setaccordion2(true);
-        }
-        if (val === "accordion3") {
-            accordion3 === true ? setaccordion3(false) : setaccordion3(true);
-        }
-        if (val === "accordion4") {
-            accordion4 === true ? setaccordion4(false) : setaccordion4(true);
-        }
-        if (val === "accordion5") {
-            accordion5 === true ? setaccordion5(false) : setaccordion5(true);
-        }
-        if (val === "accordion6") {
-            accordion6 === true ? setaccordion6(false) : setaccordion6(true);
-        }
+        let disableEvents = false;
+        disableEvents = CF.toInt(this.state.Status) > 1 ? true : false;
+        const disabledStyle = {
+            "pointer-events": disableEvents ? "none" : "unset"
+        };
 
 
+        const handleAccordionClick = (val, e) => {
+            if (val === "accordion1") {
+                this.state.accordion1 === true ? this.setState({ accordion1: false }) : this.setState({ accordion1: true });
+            }
+            if (val === "accordion2") {
+                this.state.accordion2 === true ? this.setState({ accordion2: false }) : this.setState({ accordion2: true });
+            }
+            if (val === "accordion3") {
+                this.state.accordion3 === true ? this.setState({ accordion3: false }) : this.setState({ accordion3: true });
+            }
+            if (val === "accordion4") {
+                this.state.accordion4 === true ? this.setState({ accordion4: false }) : this.setState({ accordion4: true });
+            }
+            if (val === "accordion5") {
+                this.state.accordion5 === true ? this.setState({ accordion5: false }) : this.setState({ accordion5: true });
+            }
+            if (val === "accordion6") {
+                this.state.accordion6 === true ? this.setState({ accordion6: false }) : this.setState({ accordion6: true });
+            }
+            if (val === "accordion7") {
+                this.state.accordion7 === true ? this.setState({ accordion7: false }) : this.setState({ accordion7: true });
+            }
+        };
 
-    };
+        const breadcrumbHtml = (
+            <Fragment>
+                <Breadcrumb
+                    backOnClick={this.props.history.goBack}
+                    linkHref={URLS.URLS.userDashboard + this.state.urlparams}
+                    linkTitle="Dashboard"
+                    masterHref={URLS.URLS.proformaMaster + this.state.urlparams}
+                    masterLinkTitle="Purchase Invoice"
+                    typoTitle={this.state.typoTitle}
+                    level={2}
+                />
+            </Fragment>
+        );
 
-    const breadcrumbHtml = (
-        <Fragment>
-            <Breadcrumb
-                backOnClick={history.goBack}
-                linkHref={URLS.URLS.userDashboard + urlparams}
-                linkTitle="Dashboard"
-                masterHref={URLS.URLS.proformaMaster + urlparams}
-                masterLinkTitle="Purchase Invoice"
-                typoTitle={typoTitle}
-                level={2}
-            />
-        </Fragment>
-    );
-
-    const buttongroupHtml = (
-        <Fragment>
-            <ButtonGroup
-                size="small"
-                variant="text"
-                aria-label="Action Menu Button group"
-            >
-
-                <Button
-                    style={disabledStyle}
-                    startIcon={APIURLS.buttonTitle.save.icon}
-                    className="action-btns"
-                //   onClick={(e) => Add_Update(e)}
-
+        const buttongroupHtml = (
+            <Fragment>
+                <ButtonGroup
+                    size="small"
+                    variant="text"
+                    aria-label="Action Menu Button group"
                 >
-                    {APIURLS.buttonTitle.save.name}
-                </Button>
 
-            </ButtonGroup>
-        </Fragment>
-    );
+                    <Button
+                        style={disabledStyle}
+                        startIcon={APIURLS.buttonTitle.save.icon}
+                        className="action-btns"
+                    //   onClick={(e) => Add_Update(e)}
 
-    const closeErrorPrompt = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        this.setState({ ErrorPrompt: false });
-    };
+                    >
+                        {APIURLS.buttonTitle.save.name}
+                    </Button>
 
-    const closeSuccessPrompt = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        this.setState({ SuccessPrompt: false });
-    };
+                </ButtonGroup>
+            </Fragment>
+        );
 
-    return (
-        <Fragment>
-            <BackdropLoader open={!ProgressLoader} />
-            <ErrorSnackBar
-                ErrorPrompt={ErrorPrompt}
-                closeErrorPrompt={closeErrorPrompt}
-                ErrorMessageProps={ErrorMessageProps}
-            />
-            <SuccessSnackBar
-                SuccessPrompt={SuccessPrompt}
-                closeSuccessPrompt={closeSuccessPrompt}
-            />
+        const closeErrorPrompt = (event, reason) => {
+            if (reason === "clickaway") {
+                return;
+            }
+            this.setState({ ErrorPrompt: false });
+        };
 
-            <TopFixedRow3
-                breadcrumb={breadcrumbHtml}
-                buttongroup={buttongroupHtml}
-            />
+        const closeSuccessPrompt = (event, reason) => {
+            if (reason === "clickaway") {
+                return;
+            }
+            this.setState({ SuccessPrompt: false });
+        };
 
-            <Grid container spacing={0} >
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                    <Grid className="table-adjust" container spacing={0}>
-                        <Grid item xs={12} sm={12} md={8} lg={8}>
-                            <Grid container spacing={0} >
-                                <Grid item xs={12} sm={12} md={12} lg={12}>
-                                    <Accordion
-                                        style={disabledStyle}
-                                        key="a-1"
-                                        expanded={accordion1}
-                                        className="accordionD"
-                                    >
-                                        <AccordionSummary
-                                            className="accordion-Header-Design"
-                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion1", e)} />}
-                                            aria-controls="panel1a-content"
-                                            id="accordion1"
-                                            style={{ minHeight: "40px", maxHeight: "40px" }}
-                                            onClick={(e) => handleAccordionClick("accordion1", e)}
+
+        return (
+            <Fragment>
+                <BackdropLoader open={!this.state.ProgressLoader} />
+                <ErrorSnackBar
+                    ErrorPrompt={this.state.ErrorPrompt}
+                    closeErrorPrompt={closeErrorPrompt}
+                    ErrorMessageProps={this.state.ErrorMessageProps}
+                />
+                <SuccessSnackBar
+                    SuccessPrompt={this.state.SuccessPrompt}
+                    closeSuccessPrompt={closeSuccessPrompt}
+                />
+
+                <TopFixedRow3
+                    breadcrumb={breadcrumbHtml}
+                    buttongroup={buttongroupHtml}
+                />
+
+                <Grid container spacing={0} >
+                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                        <Grid className="table-adjust" container spacing={0}>
+                            <Grid item xs={12} sm={12} md={8} lg={8}>
+                                <Grid container spacing={0} >
+                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                        <Accordion
+                                            style={disabledStyle}
+                                            key="a-1"
+                                            expanded={this.state.accordion1}
+                                            className="accordionD"
                                         >
-                                            <Typography
-                                                key="GD-Activity"
-                                                className="accordion-Header-Title"
-                                            >General</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails
-                                            key="accordion1" className="AccordionDetails-css">
-                                            <Fragment>
-                                                <Grid container spacing={0}>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Grid container spacing={0}>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion1", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="accordion1"
+                                                style={{ minHeight: "40px", maxHeight: "40px" }}
+                                                onClick={(e) => handleAccordionClick("accordion1", e)}
+                                            >
+                                                <Typography
+                                                    key="GD-Activity"
+                                                    className="accordion-Header-Title"
+                                                >General</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails
+                                                key="accordion1" className="AccordionDetails-css">
+                                                <Fragment>
+                                                    <Grid container spacing={0}>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <Grid container spacing={0}>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
 
-                                                                        <SIB
-                                                                            id="No"
-                                                                            label="No"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={No}
-                                                                            disabled={true}
-                                                                        />
+                                                                            <SIB
+                                                                                id="No"
+                                                                                label="No"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                value={this.state.No}
+                                                                                disabled={true}
+                                                                            />
 
-                                                                        <SDTI
-                                                                            isMandatory={true}
-                                                                            id="ProformaDate"
-                                                                            label="Proforma Date"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => setProformaDate(moment(e.target.value).format("YYYY-MM-DD"))}
-                                                                            value={ProformaDate}
-                                                                        />
+                                                                            <SDTI
+                                                                                isMandatory={true}
+                                                                                id="ProformaDate"
+                                                                                label="Proforma Date"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => this.setState({ ProformaDate: moment(e.target.value).format("YYYY-MM-DD") })}
+                                                                                value={this.state.ProformaDate}
+                                                                            />
 
-                                                                        <SADIB
-                                                                            id="CustID"
-                                                                            label="Customer"
-                                                                            onChange={(e, value) => updateFormValue("CustID", value)}
-                                                                            value={selectedCustomerObj}
-                                                                            options={customerList}
-                                                                            isMandatory={true}
+                                                                            <SADIB
+                                                                                id="CustID"
+                                                                                label="Customer"
+                                                                                onChange={(e, value) => this.updateFormValue("CustID", value)}
+                                                                                value={this.state.selectedCustomerObj}
+                                                                                options={this.state.customerList}
+                                                                                isMandatory={true}
 
-                                                                        />
-                                                                        <SDIB
-                                                                            id="BillingID"
-                                                                            label="Billing"
-                                                                            onChange={(e) => updateFormValue("BillingID", e.target.value)}
-                                                                            value={BillingID}
-                                                                            param={CustomerBillingAddress}
-                                                                            isMandatory={true}
-                                                                        />
+                                                                            />
+                                                                            <SDIB
+                                                                                id="BillingID"
+                                                                                label="Billing"
+                                                                                onChange={(e) => this.updateFormValue("BillingID", e.target.value)}
+                                                                                value={this.state.BillingID}
+                                                                                param={this.state.CustomerBillingAddress}
+                                                                                isMandatory={true}
+                                                                            />
 
-                                                                        <SIB
-                                                                            id="BillingName"
-                                                                            label="Billing Name"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingName").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setBillingName(e.target.value)}
-                                                                        />
+                                                                            <SIB
+                                                                                id="BillingName"
+                                                                                label="Billing Name"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                isMandatory={true}
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("BillingName").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ BillingName: e.target.value })}
+                                                                            />
 
-                                                                        <SIB
-                                                                            id="BillingAddress"
-                                                                            label="Billing Address"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingAddress").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setBillingName(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="BillingAddress2"
-                                                                            label="Billing Address 2"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingAddress2").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setBillingName(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="BillingAddress3"
-                                                                            label="Billing Address 3"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingAddress3").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setBillingName(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="BillingCity"
-                                                                            label="Billing City"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingCity").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setBillingName(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="BillingPostcode"
-                                                                            label="Billing Postcode"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("BillingPostcode").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setBillingName(e.target.value)}
-                                                                        />
+                                                                            <SIB
+                                                                                id="BillingAddress"
+                                                                                label="Billing Address"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("BillingAddress").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ BillingAddress: e.target.value })}
+                                                                            />
+                                                                            <SIB
+                                                                                id="BillingAddress2"
+                                                                                label="Billing Address 2"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("BillingAddress2").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ BillingAddress2: e.target.value })}
+                                                                            />
+                                                                            <SIB
+                                                                                id="BillingAddress3"
+                                                                                label="Billing Address 3"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("BillingAddress3").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ BillingAddress3: e.target.value })}
+                                                                            />
+                                                                            <SIB
+                                                                                id="BillingCity"
+                                                                                label="Billing City"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("BillingCity").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ BillingCity: e.target.value })}
+                                                                            />
+                                                                            <SIB
+                                                                                id="BillingPostcode"
+                                                                                label="Billing Postcode"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("BillingPostcode").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ BillingPostcode: e.target.value })}
+                                                                            />
 
-                                                                        <SDIB
-                                                                            id="BillingCountry"
-                                                                            label="Billing Country"
-                                                                            value={BillingCountryID}
-                                                                            param={CountryList}
-                                                                            onChange={(e) => updateFormValue("BillingCountryID", e.target.value)}
-                                                                        />
-                                                                        <SDIB
-                                                                            id="BillingState"
-                                                                            label="Billing State"
-                                                                            value={BillingStateID}
-                                                                            param={StateList}
-                                                                            onChange={(e) => setBillingStateID(e.target.value)}
-                                                                        />
+                                                                            <SDIB
+                                                                                id="BillingCountry"
+                                                                                label="Billing Country"
+                                                                                value={this.state.BillingCountryID}
+                                                                                param={this.state.CountryList}
+                                                                                isMandatory={true}
+                                                                                onChange={(e) => this.updateFormValue("BillingCountryID", e.target.value)}
+                                                                            />
+                                                                            <SDIB
+                                                                                id="BillingState"
+                                                                                label="Billing State"
+                                                                                value={this.state.BillingStateID}
+                                                                                param={this.state.StateList}
+                                                                                onChange={(e) => this.setState({ BillingStateID: e.target.value })}
+                                                                            />
 
 
 
+                                                                        </Grid>
                                                                     </Grid>
                                                                 </Grid>
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                        <SDTI
-                                                                            isMandatory={true}
-                                                                            id="DispatchDate"
-                                                                            label="Dispatch Date"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => setDispatchDate(moment(e.target.value).format("YYYY-MM-DD"))}
-                                                                            value={DispatchDate}
-                                                                        />
-                                                                        <SDTI
-                                                                            isMandatory={true}
-                                                                            id="DeliveryDate"
-                                                                            label="Delivery Date"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => setDeliveryDate(moment(e.target.value).format("YYYY-MM-DD"))}
-                                                                            value={DeliveryDate}
-                                                                        />
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                            <SDTI
+                                                                                isMandatory={true}
+                                                                                id="DispatchDate"
+                                                                                label="Dispatch Date"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => this.setState({ DispatchDate: moment(e.target.value).format("YYYY-MM-DD") })}
+                                                                                value={this.state.DispatchDate}
+                                                                            />
+                                                                            <SDTI
+                                                                                isMandatory={true}
+                                                                                id="DeliveryDate"
+                                                                                label="Delivery Date"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => this.setState({ DeliveryDate: moment(e.target.value).format("YYYY-MM-DD") })}
+                                                                                value={this.state.DeliveryDate}
+                                                                            />
 
-                                                                        <SDTI
-                                                                            isMandatory={true}
-                                                                            id="CustomerOrderDate"
-                                                                            label="Customer Order Date"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => setCustomerOrderDate(moment(e.target.value).format("YYYY-MM-DD"))}
-                                                                            value={CustomerOrderDate}
-                                                                        />
+                                                                            <SDTI
+                                                                                isMandatory={true}
+                                                                                id="CustomerOrderDate"
+                                                                                label="Customer Order Date"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => this.setState({ CustomerOrderDate: moment(e.target.value).format("YYYY-MM-DD") })}
+                                                                                value={this.state.CustomerOrderDate}
+                                                                            />
 
-                                                                        <SIB
-                                                                            id="Reference"
-                                                                            label="Reference"
-                                                                            variant="outlined"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("Reference").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setReference(e.target.value)}
-                                                                        />
+                                                                            <SIB
+                                                                                id="Reference"
+                                                                                label="Reference"
+                                                                                variant="outlined"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("Reference").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ Reference: e.target.value })}
+                                                                            />
 
-                                                                        <SDIB
-                                                                            id="WareHouseID"
-                                                                            label="Warehouse"
-                                                                            onChange={(e) => setWareHouseID(e.target.value)}
-                                                                            param={WarehouseList}
-                                                                            isMandatory={true}
-                                                                        />
+                                                                            <SDIB
+                                                                                id="WareHouseID"
+                                                                                label="Warehouse"
+                                                                                onChange={(e) => this.setState({ WareHouseID: e.target.value })}
+                                                                                param={this.state.WarehouseList}
+                                                                                isMandatory={true}
+                                                                                value={this.state.WareHouseID}
+                                                                            />
 
-                                                                        <SSIB
-                                                                            key="IsSEZSale"
-                                                                            id="IsSEZSale"
-                                                                            label="SEZ Sale?"
-                                                                            param={IsSEZSale}
-                                                                            onChange={(e) => setIsSEZSale(e.target.checked)}
-                                                                        />
+                                                                            <SSIB
+                                                                                key="IsSEZSale"
+                                                                                id="IsSEZSale"
+                                                                                label="SEZ Sale?"
+                                                                                param={this.state.IsSEZSale}
+                                                                                onChange={(e) => this.setState({ IsSEZSale: e.target.checked })}
+                                                                            />
 
-                                                                        <SSIB
-                                                                            key="IsRounding"
-                                                                            id="IsRounding"
-                                                                            label="Rounding?"
-                                                                            param={IsRounding}
-                                                                            onChange={(e) => setIsRounding(e.target.checked)}
-                                                                        />
+                                                                            <SSIB
+                                                                                key="IsRounding"
+                                                                                id="IsRounding"
+                                                                                label="Rounding?"
+                                                                                param={this.state.IsRounding}
+                                                                                onChange={(e) => this.setState({ IsRounding: e.target.checked })}
+                                                                            />
 
-                                                                        <SSIB
-                                                                            key="IsExport"
-                                                                            id="IsExport"
-                                                                            label="Export?"
-                                                                            param={IsExport}
-                                                                            onChange={(e) => setIsExport(e.target.checked)}
-                                                                        />
+                                                                            <SSIB
+                                                                                key="IsExport"
+                                                                                id="IsExport"
+                                                                                label="Export?"
+                                                                                param={this.state.IsExport}
+                                                                                onChange={(e) => this.setState({ IsExport: e.target.checked })}
+                                                                            />
 
+                                                                            <SSIB
+                                                                                key="GSTPlaceOfSold"
+                                                                                id="GSTPlaceOfSold"
+                                                                                label="Shipping Address?"
+                                                                                param={this.state.GSTPlaceOfSold}
+                                                                                onChange={(e) => {
+                                                                                    if (this.state.selectedCustomerObj) {
+                                                                                        this.setState({ GSTPlaceOfSold: e.target.checked });
+                                                                                        this.updateFormValue("GSTPlaceOfSold", e.target.checked);
+                                                                                    } else {
+                                                                                        this.setState({
+                                                                                            ErrorMessageProps: "Customer Not selected",
+                                                                                            ErrorPrompt: true
+                                                                                        });
+                                                                                    }
+                                                                                }}
+                                                                            />
+
+                                                                        </Grid>
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
                                                         </Grid>
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                </Grid>
-                                            </Fragment>
-                                        </AccordionDetails>
-                                    </Accordion>
-                                    <Accordion
-                                        style={disabledStyle}
-                                        key="a-4"
-                                        expanded={accordion4}
-                                        className="accordionD"
-                                    >
-                                        <AccordionSummary
-                                            className="accordion-Header-Design"
-                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion4", e)} />}
-                                            aria-controls="panel1a-content"
-                                            id="accordion4"
-                                            style={{ minHeight: "40px", maxHeight: "40px" }}
-                                            onClick={(e) => handleAccordionClick("accordion4", e)}
-                                        >
-                                            <Typography
-                                                key="GD-Activity"
-                                                className="accordion-Header-Title"
-                                            >Lines</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails
-                                            key="accordion4" className="AccordionDetails-css">
-                                            <Fragment>
-                                                <Grid container spacing={0}>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Grid container spacing={0}>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
                                                         </Grid>
                                                     </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                </Grid>
-                                            </Fragment>
-                                        </AccordionDetails>
-                                    </Accordion>
-                                    <Accordion
-                                        style={disabledStyle}
-                                        key="a-2"
-                                        expanded={accordion2}
-                                        className="accordionD"
-                                    >
-                                        <AccordionSummary
-                                            className="accordion-Header-Design"
-                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion2", e)} />}
-                                            aria-controls="panel1a-content"
-                                            id="accordion2"
-                                            style={{ minHeight: "40px", maxHeight: "40px" }}
-                                            onClick={(e) => handleAccordionClick("accordion2", e)}
+                                                </Fragment>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion
+                                            style={disabledStyle}
+                                            key="a-4"
+                                            expanded={this.state.accordion4}
+                                            className="accordionD"
                                         >
-                                            <Typography
-                                                key="GD-Activity"
-                                                className="accordion-Header-Title"
-                                            >Invoice Details</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails
-                                            key="accordion2" className="AccordionDetails-css">
-                                            <Fragment>
-                                                <Grid container spacing={0}>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Grid container spacing={0}>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                        <SDIB
-                                                                            id="CurrID"
-                                                                            label="Currency"
-                                                                            onChange={(e) => {
-                                                                                setCurrID(e.target.value);
-                                                                                setExchRate(getExchRate(CF.toInt(e.target.value)));
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion4", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="accordion4"
+                                                style={{ minHeight: "40px", maxHeight: "40px" }}
+                                                onClick={(e) => handleAccordionClick("accordion4", e)}
+                                            >
+                                                <Typography
+                                                    key="GD-Activity"
+                                                    className="accordion-Header-Title"
+                                                >Lines</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails
+                                                key="accordion4" className="AccordionDetails-css">
+                                                <div style={{ height: 250, width: '100%', overflowY: 'scroll', overflowX: 'scroll' }}>
+                                                    <Grid container spacing={0}>
+                                                        <Grid xs={12} sm={12} md={12} lg={12}>
+                                                            <div style={{ marginRight: 20 }}>
+                                                                <Table
+                                                                    style={disabledStyle}
+                                                                    stickyHeader
+                                                                    size="small"
+                                                                    className=""
+                                                                    aria-label="Lines List table">
+                                                                    <TableHead className="table-header-background">
+                                                                        <TableRow>
+                                                                            <TableCell style={{ maxWidth: 50, minWidth: 50 }} className="line-table-header-font" align="left">&nbsp;</TableCell>
+                                                                            <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">Type</TableCell>
+                                                                            <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Category</TableCell>
+                                                                            <TableCell style={{ maxWidth: 350, minWidth: 350 }} className="line-table-header-font" align="left">Item</TableCell>
+                                                                            <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Desc</TableCell>
+                                                                            <TableCell style={{ maxWidth: 250, minWidth: 250 }} className="line-table-header-font" align="left">Pack.Desc</TableCell>
+                                                                            <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Cust.Code</TableCell>
+                                                                            <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">UOM</TableCell>
+                                                                            <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="right">Tolerance %</TableCell>
+                                                                            <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Quantity </TableCell>
+                                                                            <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Unit Price </TableCell>
+                                                                            <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">Disc %</TableCell>
+                                                                            <TableCell style={{ maxWidth: 200, minWidth: 200 }} className="line-table-header-font" align="left">Item Posting Group </TableCell>
+                                                                            <TableCell style={{ maxWidth: 120, minWidth: 120 }} className="line-table-header-font" align="left">HSN </TableCell>
+                                                                            {this.state.Branch.IsVAT === true ? (
+                                                                                <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right">VAT % </TableCell>
+                                                                            ) : null}
+                                                                            {
+                                                                                this.state.Branch.IsGST === true ? (
+                                                                                    <Fragment>
+                                                                                        <TableCell style={{ maxWidth: 150, minWidth: 150 }} className="line-table-header-font" align="left">GST Group </TableCell>
+                                                                                        <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="right"> GST %</TableCell>
+                                                                                    </Fragment>
+                                                                                ) : null
                                                                             }
-                                                                            }
-                                                                            value={CurrID}
-                                                                            param={CurrencyList}
-                                                                            isMandatory={true}
-                                                                        />
+                                                                            {this.state.Branch.IsLot === true ? (
+                                                                                <TableCell style={{ maxWidth: 100, minWidth: 100 }} className="line-table-header-font" align="left">Is Lot? </TableCell>
+                                                                            ) : null}
 
-                                                                        <SIB
-                                                                            type="number"
-                                                                            id="ExchRate"
-                                                                            label="Exchange Rate"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("ExchRate").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setExchRate(e.target.value)}
-                                                                            isMandatory={true}
-                                                                        />
+                                                                        </TableRow>
+                                                                    </TableHead>
+                                                                    <TableBody className="tableBody">
 
-                                                                        <SDIB
-                                                                            id="GeneralPostingGroupID"
-                                                                            label="Gen.Posting Group"
-                                                                            value={GeneralPostingGroupID}
-                                                                            param={GeneralPostingGroupList}
-                                                                            isMandatory={true}
-                                                                            disabled={true}
+                                                                        {this.state.ProformaInvoiceLine.map((item, i) => (
+                                                                            <Fragment>
+                                                                                <TableRow className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
+                                                                                    <TableCell align="left" style={{ maxWidth: 80, minWidth: 80 }}>
+                                                                                        <ButtonGroup
+                                                                                            size="small"
+                                                                                            variant="text"
+                                                                                            aria-label="Action Menu Button group"
+                                                                                        >
+                                                                                            <DeleteForeverIcon
+                                                                                                fontSize="small"
+                                                                                                style={{
+                                                                                                    color: '#e53935'
+                                                                                                }}
+                                                                                            // onClick={(e) => this.itemDelete(i, item)}
+                                                                                            />
 
-                                                                        />
-                                                                        <SDIB
-                                                                            id="BankID"
-                                                                            label="Bank"
-                                                                            value={BankID}
-                                                                            param={BankList}
-                                                                            isMandatory={true}
-                                                                            disabled={true}
-                                                                        />
+                                                                                            {
+                                                                                                (i + 1) === this.state.ProformaInvoiceLine.length ? (
+                                                                                                    <Fragment>
+                                                                                                        <AddCircleOutlineIcon
+                                                                                                            fontSize="small"
+                                                                                                            style={{
+                                                                                                                color: '#00897b',
+                                                                                                                marginLeft: 10
+                                                                                                            }}
+                                                                                                            onClick={(e) => this.createBlankLine()}
+                                                                                                        />
+                                                                                                    </Fragment>
+                                                                                                ) : null
+                                                                                            }
 
-
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                                                                        <SDIB
-                                                                            id="PaymentTermID"
-                                                                            label="Payment Term"
-                                                                            onChange={(e) => {
-                                                                                setPaymentTermID(e.target.value);
-                                                                                document.getElementById("PaymentTerm").value = getPaymentTerm(CF.toInt(e.target.value));
-                                                                                setPaymentTerm(getPaymentTerm(CF.toInt(e.target.value)));
-                                                                            }}
-                                                                            value={PaymentTermID}
-                                                                            param={PaymentTermsList}
-                                                                            isMandatory={true}
-
-                                                                        />
-                                                                        <SIB
-                                                                            id="PaymentTerm"
-                                                                            label="Pay..Term..Details"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("PaymentTerm").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setPaymentTerm(e.target.value)}
-                                                                            isMandatory={true}
-                                                                        />
-                                                                        <SDIB
-                                                                            id="CustomerPostingGroupID"
-                                                                            label="Cust.Posting Group"
-                                                                            value={CustomerPostingGroupID}
-                                                                            param={CustomerPostingGroupList}
-                                                                            isMandatory={true}
-                                                                            disabled={true}
-                                                                        />
+                                                                                        </ButtonGroup>
+                                                                                    </TableCell>
+                                                                                    <TableCell align="left">Type </TableCell>
+                                                                                    <TableCell align="left">Category </TableCell>
+                                                                                    <TableCell align="left">Item </TableCell>
+                                                                                    <TableCell align="left">Desc </TableCell>
+                                                                                    <TableCell align="left">Pack.Desc </TableCell>
+                                                                                    <TableCell align="left">Cust.Code </TableCell>
+                                                                                    <TableCell align="left">UOM </TableCell>
+                                                                                    <TableCell align="left">Tolerance % </TableCell>
+                                                                                    <TableCell align="left">Quantity</TableCell>
+                                                                                    <TableCell align="left">Unit Price</TableCell>
+                                                                                    <TableCell align="left">Disc %</TableCell>
+                                                                                    <TableCell align="left">Item Posting Group</TableCell>
+                                                                                    <TableCell align="left">HSN</TableCell>
 
 
+                                                                                    {this.state.Branch.IsVAT === true ? (
+                                                                                        <TableCell align="left">- </TableCell>
+                                                                                    ) : null}
 
+                                                                                    {
+                                                                                        this.state.Branch.IsGST === true ? (
+                                                                                            <Fragment>
+                                                                                                <TableCell align="left">- </TableCell>
+                                                                                                <TableCell align="left">- </TableCell>
 
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
+                                                                                            </Fragment>
+                                                                                        ) : null
+                                                                                    }
+
+                                                                                    {this.state.Branch.IsLot === true ? (
+                                                                                        <TableCell align="left">- </TableCell>
+                                                                                    ) : null}
+
+                                                                                </TableRow>
+                                                                            </Fragment>
+                                                                        ))}
+                                                                    </TableBody>
+                                                                </Table>
+                                                            </div>
                                                         </Grid>
                                                     </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Divider />
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Grid container spacing={0}>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                    {
-                                                                        CurrencyList.map((item, i) => (
-                                                                            parseInt(CurrID) === parseInt(item.value) ? (
-                                                                                <Fragment>
-                                                                                    <SSDV
-
-                                                                                        label={"Amount" + "(" + item.name + ")"}
-                                                                                        value={Amount}
-                                                                                    />
-                                                                                </Fragment>
-                                                                            )
-                                                                                : null
-                                                                        ))
-                                                                    }
-                                                                    <SSDV
-                                                                        label="Discount Amount"
-                                                                        value={DiscountAmount}
-                                                                    />
-                                                                    {
-                                                                        CurrencyList.map((item, i) => (
-                                                                            parseInt(CurrID) === parseInt(item.value) ? (
-                                                                                <Fragment>
-                                                                                    <SSDV
-                                                                                        label={"Total " + (Branch.IsGST === true ? "GST" : "VAT") + "(" + item.name + ")"}
-                                                                                        value={TotalTax}
-                                                                                    />
-                                                                                </Fragment>
-                                                                            )
-                                                                                : null
-                                                                        ))
-                                                                    }
-                                                                </Grid>
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                    {
-                                                                        CurrencyList.map((item, i) => (
-                                                                            parseInt(CurrID) === parseInt(item.value) ? (
-                                                                                <Fragment>
-                                                                                    <SSDV
-                                                                                        label={"Total FC.Value " + "(" + item.name + ")"}
-                                                                                        value={FCValue}
-                                                                                    />
-                                                                                </Fragment>
-                                                                            )
-                                                                                : null
-                                                                        ))
-                                                                    }
-
-
-                                                                    <SSDV
-                                                                        label={"Total Base.Value (" + Branch.CurrencyCode + ")"}
-                                                                        value={BaseValue}
-                                                                    />
-
-
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Grid>
-                                                </Grid>
-                                            </Fragment>
-                                        </AccordionDetails>
-                                    </Accordion>
-                                    <Accordion
-                                        style={disabledStyle}
-                                        key="a-3"
-                                        expanded={accordion3}
-                                        className="accordionD"
-                                    >
-                                        <AccordionSummary
-                                            className="accordion-Header-Design"
-                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion3", e)} />}
-                                            aria-controls="panel1a-content"
-                                            id="accordion3"
-                                            style={{ minHeight: "40px", maxHeight: "40px" }}
-                                            onClick={(e) => handleAccordionClick("accordion3", e)}
+                                                </div>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion
+                                            style={disabledStyle}
+                                            key="a-2"
+                                            expanded={this.state.accordion2}
+                                            className="accordionD"
                                         >
-                                            <Typography
-                                                key="GD-Activity"
-                                                className="accordion-Header-Title"
-                                            >Shipping Info</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails
-                                            key="accordion3" className="AccordionDetails-css">
-                                            <Fragment>
-                                                <Grid container spacing={0}>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Grid container spacing={0}>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion2", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="accordion2"
+                                                style={{ minHeight: "40px", maxHeight: "40px" }}
+                                                onClick={(e) => handleAccordionClick("accordion2", e)}
+                                            >
+                                                <Typography
+                                                    key="GD-Activity"
+                                                    className="accordion-Header-Title"
+                                                >Invoice Details</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails
+                                                key="accordion2" className="AccordionDetails-css">
+                                                <Fragment>
+                                                    <Grid container spacing={0}>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <Grid container spacing={0}>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                            <SDIB
+                                                                                id="CurrID"
+                                                                                label="Currency"
+                                                                                onChange={(e) => {
+                                                                                    this.setState({
+                                                                                        CurrID: e.target.value,
+                                                                                        ExchRate: this.getExchRate(CF.toInt(e.target.value))
+                                                                                    })
+                                                                                }
+                                                                                }
+                                                                                value={this.state.CurrID}
+                                                                                param={this.state.CurrencyList}
+                                                                                isMandatory={true}
+                                                                            />
 
-                                                                        <SDIB
-                                                                            id="ShippingID"
-                                                                            label="Shipping"
-                                                                            onChange={(e) => updateFormValue("ShippingID", e.target.value)}
-                                                                            value={ShippingID}
-                                                                            param={CustomerShippingAddress}
-                                                                            isMandatory={true}
+                                                                            <SIB
+                                                                                type="number"
+                                                                                id="ExchRate"
+                                                                                label="Exchange Rate"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("ExchRate").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ ExchRate: e.target.value })}
+                                                                                isMandatory={true}
+                                                                            />
 
-                                                                        />
+                                                                            <SDIB
+                                                                                id="GeneralPostingGroupID"
+                                                                                label="Gen.Posting Group"
+                                                                                value={this.state.GeneralPostingGroupID}
+                                                                                param={this.state.GeneralPostingGroupList}
+                                                                                isMandatory={true}
+                                                                                disabled={true}
 
-                                                                        <SIB
-                                                                            id="ShippingName"
-                                                                            label="Shipping Name"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("ShippingName").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setShippingName(e.target.value)}
-                                                                        />
+                                                                            />
+                                                                            <SDIB
+                                                                                id="BankID"
+                                                                                label="Bank"
+                                                                                value={this.state.BankID}
+                                                                                param={this.state.BankList}
+                                                                                isMandatory={true}
+                                                                                disabled={true}
+                                                                            />
 
-                                                                        <SIB
-                                                                            id="ShippingAddress"
-                                                                            label="Shipping Address"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("ShippingAddress").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setShippingAddress(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="ShippingAddress2"
-                                                                            label="Shipping Address 2"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("ShippingAddress2").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setShippingAddress2(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="ShippingAddress3"
-                                                                            label="Shipping Address 3"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("ShippingAddress3").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setShippingAddress3(e.target.value)}
-                                                                        />
-                                                                        <SIB
-                                                                            id="ShippingCity"
-                                                                            label="Shipping City"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("ShippingCity").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setShippingCity(e.target.value)}
-                                                                        />
 
-                                                                        <SIB
-                                                                            id="ShippingPostcode"
-                                                                            label="Shipping Postcode"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("ShippingPostcode").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setShippingPostCode(e.target.value)}
-                                                                        />
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
 
-                                                                        <SDIB
-                                                                            id="ShippingCountry"
-                                                                            label="Shipping Country"
-                                                                            value={ShippingCountryID}
-                                                                            param={CountryList}
-                                                                            onChange={(e) => updateFormValue("ShippingCountryID", e.target.value)}
-                                                                        />
-                                                                        <SDIB
-                                                                            id="ShippingState"
-                                                                            label="Shipping State"
-                                                                            value={ShippingStateID}
-                                                                            param={StateList}
-                                                                            onChange={(e) => setShippingStateID(e.target.value)}
-                                                                        />
+                                                                            <SDIB
+                                                                                id="PaymentTermID"
+                                                                                label="Payment Term"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("PaymentTerm").value = this.getPaymentTerm(CF.toInt(e.target.value));
+                                                                                    this.setState({
+                                                                                        PaymentTermID: e.target.value,
+                                                                                        PaymentTerm: this.getPaymentTerm(CF.toInt(e.target.value))
+                                                                                    });
+                                                                                }}
+                                                                                value={this.state.PaymentTermID}
+                                                                                param={this.state.PaymentTermsList}
+                                                                                isMandatory={true}
 
+                                                                            />
+                                                                            <SIB
+                                                                                id="PaymentTerm"
+                                                                                label="Pay..Term..Details"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("PaymentTerm").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ PaymentTerm: e.target.value })}
+                                                                                isMandatory={true}
+                                                                            />
+                                                                            <SDIB
+                                                                                id="CustomerPostingGroupID"
+                                                                                label="Cust.Posting Group"
+                                                                                value={this.state.CustomerPostingGroupID}
+                                                                                param={this.state.CustomerPostingGroupList}
+                                                                                isMandatory={true}
+                                                                                disabled={true}
+                                                                            />
+
+
+
+
+                                                                        </Grid>
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <Divider />
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <Grid container spacing={0}>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                        {
+                                                                            this.state.CurrencyList.map((item, i) => (
+                                                                                parseInt(this.state.CurrID) === parseInt(item.value) ? (
+                                                                                    <Fragment>
+                                                                                        <SSDV
 
-
-
-
-                                                                        <SDIB
-                                                                            id="NotifyID"
-                                                                            label="Notify"
-                                                                            onChange={(e) => setNotifyID(e.target.value)}
-                                                                            value={NotifyID}
-                                                                            param={[]}
+                                                                                            label={"Amount" + "(" + item.name + ")"}
+                                                                                            value={this.state.Amount}
+                                                                                        />
+                                                                                    </Fragment>
+                                                                                )
+                                                                                    : null
+                                                                            ))
+                                                                        }
+                                                                        <SSDV
+                                                                            label="Discount Amount"
+                                                                            value={this.state.DiscountAmount}
                                                                         />
+                                                                        {
+                                                                            this.state.CurrencyList.map((item, i) => (
+                                                                                parseInt(this.state.CurrID) === parseInt(item.value) ? (
+                                                                                    <Fragment>
+                                                                                        <SSDV
+                                                                                            label={"Total " + (this.state.Branch.IsGST === true ? "GST" : "VAT") + "(" + item.name + ")"}
+                                                                                            value={this.state.TotalTax}
+                                                                                        />
+                                                                                    </Fragment>
+                                                                                )
+                                                                                    : null
+                                                                            ))
+                                                                        }
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                        {
+                                                                            this.state.CurrencyList.map((item, i) => (
+                                                                                parseInt(this.state.CurrID) === parseInt(item.value) ? (
+                                                                                    <Fragment>
+                                                                                        <SSDV
+                                                                                            label={"Total FC.Value " + "(" + item.name + ")"}
+                                                                                            value={this.state.FCValue}
+                                                                                        />
+                                                                                    </Fragment>
+                                                                                )
+                                                                                    : null
+                                                                            ))
+                                                                        }
 
-                                                                        <SDIB
-                                                                            id="ShipperID"
-                                                                            label="Shipper"
-                                                                            onChange={(e) => setShipperID(e.target.value)}
-                                                                            value={ShipperID}
-                                                                            param={[]}
+
+                                                                        <SSDV
+                                                                            label={"Total Base.Value (" + this.state.Branch.CurrencyCode + ")"}
+                                                                            value={this.state.BaseValue}
                                                                         />
-
-                                                                        <SDIB
-                                                                            id="CountryOfOrigin"
-                                                                            label="Country Of Origin"
-                                                                            onChange={(e) => setCountryOfOrigin(e.target.value)}
-                                                                            value={CountryOfOrigin}
-                                                                            param={CountryList}
-                                                                        />
-
-                                                                        <SDIB
-                                                                            id="ExitPortID"
-                                                                            label="Exit Port"
-                                                                            onChange={(e) => setExitPortID(e.target.value)}
-                                                                            value={ExitPortID}
-                                                                            param={[]}
-                                                                        />
-
-
-                                                                        <SIB
-                                                                            id="Destination"
-                                                                            label="Destination"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("Destination").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setDestination(e.target.value)}
-                                                                        />
-
-                                                                        <SIB
-                                                                            id="FinalDestination"
-                                                                            label="Final Destination"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("FinalDestination").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setFinalDestination(e.target.value)}
-                                                                        />
-
-
-
 
 
                                                                     </Grid>
@@ -1203,195 +1146,394 @@ export default function License({ }) {
                                                             </Grid>
                                                         </Grid>
                                                     </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                </Grid>
-                                            </Fragment>
-                                        </AccordionDetails>
-                                    </Accordion>
-
-
-                                    <Accordion
-                                        style={disabledStyle}
-                                        key="a-6"
-                                        expanded={accordion6}
-                                        className="accordionD"
-                                    >
-                                        <AccordionSummary
-                                            className="accordion-Header-Design"
-                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion6", e)} />}
-                                            aria-controls="panel1a-content"
-                                            id="accordion6"
-                                            style={{ minHeight: "40px", maxHeight: "40px" }}
-                                            onClick={(e) => handleAccordionClick("accordion6", e)}
+                                                </Fragment>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion
+                                            style={disabledStyle}
+                                            key="a-3"
+                                            expanded={this.state.accordion3}
+                                            className="accordionD"
                                         >
-                                            <Typography
-                                                key="GD-Activity"
-                                                className="accordion-Header-Title"
-                                            >Tax Information</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails
-                                            key="accordion6" className="AccordionDetails-css">
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion3", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="accordion3"
+                                                style={{ minHeight: "40px", maxHeight: "40px" }}
+                                                onClick={(e) => handleAccordionClick("accordion3", e)}
+                                            >
+                                                <Typography
+                                                    key="GD-Activity"
+                                                    className="accordion-Header-Title"
+                                                >Shipping Info</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails
+                                                key="accordion3" className="AccordionDetails-css">
+                                                <Fragment>
+                                                    <Grid container spacing={0}>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <Grid container spacing={0}>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
 
-                                            <Fragment>
-                                                <Grid container spacing={0}>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Grid container spacing={0}>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                            <SDIB
+                                                                                id="ShippingID"
+                                                                                label="Shipping"
+                                                                                onChange={(e) => this.updateFormValue("ShippingID", e.target.value)}
+                                                                                value={this.state.ShippingID}
+                                                                                param={this.state.CustomerShippingAddress}
+                                                                                isMandatory={true}
 
+                                                                            />
 
-                                                                        <SSIB
-                                                                            key="IsTaxExempt"
-                                                                            id="IsTaxExempt"
-                                                                            label="Is TaxExempt?"
-                                                                            param={IsTaxExempt}
-                                                                            onChange={(e) => setIsTaxExempt(e.target.checked)}
-                                                                        />
+                                                                            <SIB
+                                                                                id="ShippingName"
+                                                                                label="Shipping Name"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                isMandatory={true}
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("ShippingName").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ ShippingName: e.target.value })}
+                                                                            />
 
-                                                                        <SIB
-                                                                            id="GSTNo"
-                                                                            label="GST No"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={GSTNo}
-                                                                            disabled={true}
-                                                                        />
+                                                                            <SIB
+                                                                                id="ShippingAddress"
+                                                                                label="Shipping Address"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("ShippingAddress").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ ShippingAddress: e.target.value })}
+                                                                            />
+                                                                            <SIB
+                                                                                id="ShippingAddress2"
+                                                                                label="Shipping Address 2"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("ShippingAddress2").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ ShippingAddress2: e.target.value })}
+                                                                            />
+                                                                            <SIB
+                                                                                id="ShippingAddress3"
+                                                                                label="Shipping Address 3"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("ShippingAddress3").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ ShippingAddress3: e.target.value })}
+                                                                            />
+                                                                            <SIB
+                                                                                id="ShippingCity"
+                                                                                label="Shipping City"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("ShippingCity").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ ShippingCity: e.target.value })}
+                                                                            />
 
-                                                                        <SIB
-                                                                            id="VATNo"
-                                                                            label="VAT No"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={VATNo}
-                                                                            disabled={true}
-                                                                        />
+                                                                            <SIB
+                                                                                id="ShippingPostcode"
+                                                                                label="Shipping Postcode"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("ShippingPostcode").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ ShippingPostcode: e.target.value })}
+                                                                            />
+
+                                                                            <SDIB
+                                                                                id="ShippingCountry"
+                                                                                label="Shipping Country"
+                                                                                value={this.state.ShippingCountryID}
+                                                                                param={this.state.CountryList}
+                                                                                isMandatory={true}
+                                                                                onChange={(e) => this.updateFormValue("ShippingCountryID", e.target.value)}
+                                                                            />
+                                                                            <SDIB
+                                                                                id="ShippingStateID"
+                                                                                label="Shipping State"
+                                                                                value={this.state.ShippingStateID}
+                                                                                param={this.state.StateList}
+                                                                                onChange={(e) => this.setState({ ShippingStateID: e.target.value })}
+                                                                            />
+
+                                                                        </Grid>
                                                                     </Grid>
                                                                 </Grid>
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+
+                                                                            <SDIB
+                                                                                id="NotifyID"
+                                                                                label="Notify"
+                                                                                onChange={(e) => this.setState({ NotifyID: e.target.value })}
+                                                                                value={this.state.NotifyID}
+                                                                                param={[]}
+                                                                            />
+
+                                                                            <SDIB
+                                                                                id="ShipperID"
+                                                                                label="Shipper"
+                                                                                onChange={(e) => this.setState({ ShipperID: e.target.value })}
+                                                                                value={this.state.ShipperID}
+                                                                                param={[]}
+                                                                            />
+
+                                                                            <SDIB
+                                                                                id="CountryOfOrigin"
+                                                                                label="Country Of Origin"
+                                                                                onChange={(e) => this.setState({ CountryOfOrigin: e.target.value })}
+                                                                                value={this.state.CountryOfOrigin}
+                                                                                param={this.state.CountryList}
+                                                                            />
+
+                                                                            <SDIB
+                                                                                id="ExitPortID"
+                                                                                label="Exit Port"
+                                                                                onChange={(e) => this.setState({ ExitPortID: e.target.value })}
+                                                                                value={this.state.ExitPortID}
+                                                                                param={[]}
+                                                                            />
+
+
+                                                                            <SIB
+                                                                                id="Destination"
+                                                                                label="Destination"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("Destination").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ Destination: e.target.value })}
+                                                                            />
+
+                                                                            <SIB
+                                                                                id="FinalDestination"
+                                                                                label="Final Destination"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("FinalDestination").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ FinalDestination: e.target.value })}
+                                                                            />
 
 
 
-                                                                        <SIB
-                                                                            id="Reason"
-                                                                            label="Reason"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            value={Reason}
-                                                                            disabled={true}
-                                                                        />
 
-                                                                        <SDIB
-                                                                            id="MODTaxID"
-                                                                            label="Mode of Tax"
-                                                                            onChange={(e) => setMODTaxID("MODTaxID", e)}
-                                                                            value={MODTaxID}
-                                                                            param={MODTaxList}
-                                                                            isMandatory={true}
-                                                                        />
 
+                                                                        </Grid>
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
                                                         </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
                                                     </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                </Grid>
-                                            </Fragment>
+                                                </Fragment>
+                                            </AccordionDetails>
+                                        </Accordion>
 
-                                        </AccordionDetails>
-                                    </Accordion>
 
-                                    <Accordion
-                                        style={disabledStyle}
-                                        key="a-5"
-                                        expanded={accordion5}
-                                        className="accordionD"
-                                    >
-                                        <AccordionSummary
-                                            className="accordion-Header-Design"
-                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion5", e)} />}
-                                            aria-controls="panel1a-content"
-                                            id="accordion5"
-                                            style={{ minHeight: "40px", maxHeight: "40px" }}
-                                            onClick={(e) => handleAccordionClick("accordion5", e)}
+                                        <Accordion
+                                            style={disabledStyle}
+                                            key="a-6"
+                                            expanded={this.state.accordion6}
+                                            className="accordionD"
                                         >
-                                            <Typography
-                                                key="GD-Activity"
-                                                className="accordion-Header-Title"
-                                            >Packing</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails
-                                            key="accordion5" className="AccordionDetails-css">
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion6", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="accordion6"
+                                                style={{ minHeight: "40px", maxHeight: "40px" }}
+                                                onClick={(e) => handleAccordionClick("accordion6", e)}
+                                            >
+                                                <Typography
+                                                    key="GD-Activity"
+                                                    className="accordion-Header-Title"
+                                                >Tax Information</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails
+                                                key="accordion6" className="AccordionDetails-css">
 
-                                            <Fragment>
-                                                <Grid container spacing={0}>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        &nbsp;
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Grid container spacing={0}>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                        <SDIB
-                                                                            id="PackingType"
-                                                                            label="Packing Type"
-                                                                            onChange={(e) => setPackingType(e.target.value)}
-                                                                            value={PackingType}
-                                                                            param={PackingTypeList}
-                                                                            isMandatory={true}
-                                                                        />
-                                                                        <SDIB
-                                                                            id="PackingSpecification"
-                                                                            label="Packing Specification"
-                                                                            onChange={(e) => setPackingSpecification(e.target.value)}
-                                                                            value={PackingSpecification}
-                                                                            param={PackingSpecificationList}
-                                                                            isMandatory={true}
-                                                                        />
+                                                <Fragment>
+                                                    <Grid container spacing={0}>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <Grid container spacing={0}>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+
+                                                                            <SSIB
+                                                                                key="IsRegistedSupplier"
+                                                                                id="IsRegistedSupplier"
+                                                                                label="Registed Supplier?"
+                                                                                param={this.state.IsRegistedSupplier}
+                                                                            />
+
+                                                                            <SSIB
+                                                                                key="IsTaxExempt"
+                                                                                id="IsTaxExempt"
+                                                                                label="Is TaxExempt?"
+                                                                                param={this.state.IsTaxExempt}
+
+                                                                            />
+
+                                                                            <SIB
+                                                                                id="GSTNo"
+                                                                                label="GST No"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                disabled={true}
+                                                                            />
+
+                                                                            <SIB
+                                                                                id="VATNo"
+                                                                                label="VAT No"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                disabled={true}
+                                                                            />
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+
+
+
+                                                                            <SIB
+                                                                                id="Reason"
+                                                                                label="Reason"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                disabled={true}
+                                                                            />
+
+                                                                            <SDIB
+                                                                                id="MODTaxID"
+                                                                                label="Mode of Tax"
+                                                                                onChange={(e) => this.setState({ MODTaxID: e.target.value })}
+                                                                                value={this.state.MODTaxID}
+                                                                                param={this.state.MODTaxList}
+                                                                                isMandatory={true}
+                                                                            />
+
+                                                                        </Grid>
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
-                                                                        <SIB
-                                                                            type="number"
-                                                                            id="NoOfPacket"
-                                                                            label="No Of Packet"
-                                                                            variant="outlined"
-                                                                            size="small"
-                                                                            onChange={(e) => {
-                                                                                document.getElementById("NoOfPacket").value = e.target.value;
-                                                                            }}
-                                                                            onBlur={(e) => setNoOfPacket(e.target.value)}
-                                                                        />
-                                                                        <SDIB
-                                                                            id="ServiceType"
-                                                                            label="ServiceType"
-                                                                            onChange={(e) => setServiceType(e.target.value)}
-                                                                            value={ServiceType}
-                                                                            param={ServiceTypeList}
-                                                                            isMandatory={true}
-                                                                        />
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                    </Grid>
+                                                </Fragment>
+
+                                            </AccordionDetails>
+                                        </Accordion>
+
+                                        <Accordion
+                                            style={disabledStyle}
+                                            key="a-5"
+                                            expanded={this.state.accordion5}
+                                            className="accordionD"
+                                        >
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion5", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="accordion5"
+                                                style={{ minHeight: "40px", maxHeight: "40px" }}
+                                                onClick={(e) => handleAccordionClick("accordion5", e)}
+                                            >
+                                                <Typography
+                                                    key="GD-Activity"
+                                                    className="accordion-Header-Title"
+                                                >Packing</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails
+                                                key="accordion5" className="AccordionDetails-css">
+
+                                                <Fragment>
+                                                    <Grid container spacing={0}>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <Grid container spacing={0}>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                            <SDIB
+                                                                                id="PackingType"
+                                                                                label="Packing Type"
+                                                                                onChange={(e) => this.setState({ PackingType: e.target.value })}
+                                                                                value={this.state.PackingType}
+                                                                                param={this.state.PackingTypeList}
+                                                                                isMandatory={true}
+                                                                            />
+                                                                            <SDIB
+                                                                                id="PackingSpecification"
+                                                                                label="Packing Specification"
+                                                                                onChange={(e) => this.setState({ PackingSpecification: e.target.value })}
+                                                                                value={this.state.PackingSpecification}
+                                                                                param={this.state.PackingSpecificationList}
+                                                                                isMandatory={true}
+                                                                            />
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                            <SIB
+                                                                                type="number"
+                                                                                id="NoOfPacket"
+                                                                                label="No Of Packet"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("NoOfPacket").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ NoOfPacket: e.target.value })}
+                                                                            />
+                                                                            <SDIB
+                                                                                id="ServiceType"
+                                                                                label="ServiceType"
+                                                                                onChange={(e) => this.setState({ ServiceType: e.target.value })}
+                                                                                value={this.state.ServiceType}
+                                                                                param={this.state.ServiceTypeList}
+                                                                                isMandatory={true}
+                                                                            />
+                                                                        </Grid>
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
                                                         </Grid>
                                                     </Grid>
-                                                </Grid>
-                                            </Fragment>
+                                                </Fragment>
 
 
 
@@ -1399,20 +1541,110 @@ export default function License({ }) {
 
 
 
-                                        </AccordionDetails>
-                                    </Accordion>
+                                            </AccordionDetails>
+                                        </Accordion>
+
+                                        <Accordion
+                                            style={disabledStyle}
+                                            key="a-7"
+                                            expanded={this.state.accordion7}
+                                            className="accordionD"
+                                        >
+                                            <AccordionSummary
+                                                className="accordion-Header-Design"
+                                                expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion7", e)} />}
+                                                aria-controls="panel1a-content"
+                                                id="accordion7"
+                                                style={{ minHeight: "40px", maxHeight: "40px" }}
+                                                onClick={(e) => handleAccordionClick("accordion7", e)}
+                                            >
+                                                <Typography
+                                                    key="GD-Activity"
+                                                    className="accordion-Header-Title"
+                                                >Terms</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails
+                                                key="accordion7" className="AccordionDetails-css">
+
+                                                <Fragment>
+                                                    <Grid container spacing={0}>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            <Grid container spacing={0}>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                            <SDIB
+                                                                                id="IncoID"
+                                                                                label="Inco Term"
+                                                                                onChange={(e) => this.setState({ IncoID: e.target.value })}
+                                                                                value={this.state.IncoID}
+                                                                                param={this.state.IncoTermList}
+
+                                                                            />
+                                                                            <SDIB
+                                                                                id="ShipmentModeID"
+                                                                                label="Shipment Mode"
+                                                                                onChange={(e) => this.setState({ ShipmentModeID: e.target.value })}
+                                                                                value={this.state.ShipmentModeID}
+                                                                                param={this.state.ShipmentModeList}
+                                                                            />
 
 
+
+
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                            <SIB
+                                                                                multiline={true}
+                                                                                rows={2}
+                                                                                id="Notes"
+                                                                                label="Notes"
+                                                                                variant="outlined"
+                                                                                size="small"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("Notes").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ Notes: e.target.value })}
+
+                                                                            />
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                            &nbsp;
+                                                        </Grid>
+                                                    </Grid>
+                                                </Fragment>
+
+
+                                            </AccordionDetails>
+                                        </Accordion>
+
+
+                                    </Grid>
                                 </Grid>
+                                <br />
                             </Grid>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={4} lg={4}>
+                            <Grid item xs={12} sm={12} md={4} lg={4}>
 
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
 
-        </Fragment>
-    )
+            </Fragment>
+        )
+    }
+
+
 }
+export default profactivity;
