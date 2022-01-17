@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect,useRef } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
@@ -18,6 +18,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Divider } from "@material-ui/core";
 
 import BackdropLoader from "../../compo/backdrop";
 import SuccessSnackBar from "../../compo/successSnackbar";
@@ -27,14 +28,11 @@ import Breadcrumb from "../../compo/breadcrumb";
 
 import SADIB from "../../compo/gridautocompletedropdowninput";
 import SIB from "../../compo/gridtextboxinput";
-import SIBSP from "../../compo/specialcompo/gridtextboxinput";
+import SSDV from "../../compo/grid2sectiondisplayview";
 import SDTI from "../../compo/griddateinput";
 import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
 
-
-
-import TextField from '@mui/material/TextField';
 
 
 
@@ -51,14 +49,17 @@ export default function License({ }) {
     const [accordion2, setaccordion2] = React.useState(false);
     const [accordion3, setaccordion3] = React.useState(false);
     const [accordion4, setaccordion4] = React.useState(true);
+    const [accordion5, setaccordion5] = React.useState(true);
+    const [accordion6, setaccordion6] = React.useState(true);
 
+
+    const [Branch, setBranch] = React.useState({});
     const [customerList, setcustomerList] = React.useState([]);
     const [selectedCustomerObj, setselectedCustomerObj] = React.useState(null);
     const [CustomerBillingAddress, setCustomerBillingAddress] = React.useState([]);
     const [CustomerShippingAddress, setCustomerShippingAddress] = React.useState([]);
     const [NotifyAddress, setNotifyAddress] = React.useState([]);
-
-
+    const [BankList, setBankList] = React.useState([]);
     const [CountryList, setCountryList] = React.useState([]);
     const [StateList, setStateList] = React.useState([]);
     const [WarehouseList, setWarehouseList] = React.useState([]);
@@ -66,6 +67,14 @@ export default function License({ }) {
     const [GeneralPostingGroupList, setGeneralPostingGroupList] = React.useState([]);
     const [PaymentTermsList, setPaymentTermsList] = React.useState([]);
     const [CustomerPostingGroupList, setCustomerPostingGroupList] = React.useState([]);
+    const [MODTaxList, setMODTaxList] = React.useState([]);
+    const [PackingTypeList, setPackingTypeList] = React.useState(APIURLS.PackingType);
+    const [ServiceTypeList, setServiceTypeList] = React.useState(APIURLS.ServiceType);
+    const [PackingSpecificationList, setPackingSpecificationList] = React.useState(APIURLS.PackingSpecification);
+
+
+
+
 
 
 
@@ -110,22 +119,36 @@ export default function License({ }) {
     const [SalesPersonID, setSalesPersonID] = React.useState(0);
     const [IsDeleted, setIsDeleted] = React.useState(false);
 
-
     const [NotifyID, setNotifyID] = React.useState(0);
     const [ShipperID, setShipperID] = React.useState(0);
+    const [CountryOfOrigin, setCountryOfOrigin] = React.useState(0);
+    const [ExitPortID, setExitPortID] = React.useState(0);
+    const [Destination, setDestination] = React.useState("");
+    const [FinalDestination, setFinalDestination] = React.useState("");
 
     const [CurrID, setCurrID] = React.useState(0);
     const [ExchRate, setExchRate] = React.useState(0);
-    const [GeneralPostingGroupID, setGeneralPostingGroupID] = React.useState(0);
+    const [FCValue, setFCValue] = React.useState(0);
+    const [BaseValue, setBaseValue] = React.useState(0);
     const [PaymentTermID, setPaymentTermID] = React.useState(0);
     const [PaymentTerm, setPaymentTerm] = React.useState([]);
+    const [GeneralPostingGroupID, setGeneralPostingGroupID] = React.useState(0);
     const [CustomerPostingGroupID, setCustomerPostingGroupID] = React.useState(0);
+    const [BankID, setBankID] = React.useState(0);
+    const [Amount, setAmount] = React.useState(0);
+    const [DiscountAmount, setDiscountAmount] = React.useState(0);
+    const [TotalTax, setTotalTax] = React.useState(0);
 
+    const [GSTNo, setGSTNo] = React.useState("");
+    const [VATNo, setVATNo] = React.useState("");
+    const [Reason, setReason] = React.useState("");
+    const [IsTaxExempt, setIsTaxExempt] = React.useState(false);
+    const [MODTaxID, setMODTaxID] = React.useState(0);
 
-
-
-    let textInput = useRef(null);
-
+    const [PackingType, setPackingType] = React.useState(0);
+    const [PackingSpecification, setPackingSpecification] = React.useState(0);
+    const [NoOfPacket, setNoOfPacket] = React.useState("");
+    const [ServiceType, setServiceType] = React.useState(0);
 
 
 
@@ -248,6 +271,7 @@ export default function License({ }) {
             .post(Url, reqObj, { headers })
             .then((response) => {
                 let data = response.data;
+                setBranch(data.Branch[0]);
                 setcustomerList(data.Customer);
                 setCountryList(data.Country);
                 setStateList(data.State);
@@ -256,13 +280,15 @@ export default function License({ }) {
                 setGeneralPostingGroupList(data.GeneralPostingGroup);
                 setPaymentTermsList(data.PaymentTerms);
                 setCustomerPostingGroupList(data.CustomerPostingGroup);
-                for(let i=0;i<data.WareHouse.length;i++){
-                    if(data.WareHouse[i].IsDefault===true){
+                setMODTaxList(data.MODTax);
+
+                for (let i = 0; i < data.WareHouse.length; i++) {
+                    if (data.WareHouse[i].IsDefault === true) {
                         setWareHouseID(data.WareHouse[i].value);
                         break;
                     }
                 }
-                
+
             })
             .catch((error) => {
 
@@ -305,7 +331,6 @@ export default function License({ }) {
                     setCustomerShippingAddress(e.ShippingAddress);
                     setNotifyAddress(e.NotifyAddress);
                     setCustID(CF.toInt(e.id));
-
                     setCurrID(CF.toInt(e.CurrID));
                     setExchRate(getExchRate(CF.toInt(e.CurrID)));
                     setPaymentTermID(CF.toInt(e.PaymentTermID));
@@ -315,8 +340,12 @@ export default function License({ }) {
 
                     if (e.BillingAddress) {
                         if (e.BillingAddress.length > 0) {
+                            setIsTaxExempt(e.BillingAddress[0].IsTaxExempt);
+                            setGSTNo(e.BillingAddress[0].GSTNo);
+                            setVATNo(e.BillingAddress[0].VATNo);
+                            setReason(e.BillingAddress[0].Reason);
                             setBillingID(e.BillingAddress[0].value);
-                            setBillingName(e.BillingAddress[0].Name);                                                       
+                            setBillingName(e.BillingAddress[0].Name);
                             setBillingAddress(e.BillingAddress[0].Address);
                             setBillingAddress2(e.BillingAddress[0].Address2);
                             setBillingAddress3(e.BillingAddress[0].Address3);
@@ -328,12 +357,12 @@ export default function License({ }) {
                             setCustomerPostingGroupID(e.BillingAddress[0].CustomerPostingGroupID);
 
                             //-----setting textboxes-----------
-                            updateTextField("BillingName",e.BillingAddress[0].Name); 
-                            updateTextField("BillingAddress",e.BillingAddress[0].Address); 
-                            updateTextField("BillingAddress2",e.BillingAddress[0].Address2); 
-                            updateTextField("BillingAddress3",e.BillingAddress[0].Address3); 
-                            updateTextField("BillingCity",e.BillingAddress[0].City);
-                            updateTextField("BillingPostCode",e.BillingAddress[0].PostCode);
+                            updateTextField("BillingName", e.BillingAddress[0].Name);
+                            updateTextField("BillingAddress", e.BillingAddress[0].Address);
+                            updateTextField("BillingAddress2", e.BillingAddress[0].Address2);
+                            updateTextField("BillingAddress3", e.BillingAddress[0].Address3);
+                            updateTextField("BillingCity", e.BillingAddress[0].City);
+                            updateTextField("BillingPostCode", e.BillingAddress[0].PostCode);
                         }
                     }
                     if (e.ShippingAddress) {
@@ -348,13 +377,13 @@ export default function License({ }) {
                             setShippingCountryID(e.ShippingAddress[0].CountryID);
                             setShippingStateID(e.ShippingAddress[0].StateID);
 
-                             //-----setting textboxes-----------
-                             updateTextField("ShippingName",e.ShippingAddress[0].Name); 
-                             updateTextField("ShippingAddress",e.ShippingAddress[0].Address); 
-                             updateTextField("ShippingAddress2",e.ShippingAddress[0].Address2); 
-                             updateTextField("ShippingAddress3",e.ShippingAddress[0].Address3); 
-                             updateTextField("ShippingCity",e.ShippingAddress[0].City);
-                             updateTextField("ShippingPostCode",e.ShippingAddress[0].PostCode);
+                            //-----setting textboxes-----------
+                            updateTextField("ShippingName", e.ShippingAddress[0].Name);
+                            updateTextField("ShippingAddress", e.ShippingAddress[0].Address);
+                            updateTextField("ShippingAddress2", e.ShippingAddress[0].Address2);
+                            updateTextField("ShippingAddress3", e.ShippingAddress[0].Address3);
+                            updateTextField("ShippingCity", e.ShippingAddress[0].City);
+                            updateTextField("ShippingPostCode", e.ShippingAddress[0].PostCode);
 
                         }
                     }
@@ -370,9 +399,9 @@ export default function License({ }) {
                 break;
             case "BillingName":
                 try {
-                   
+
                     let input = document.querySelector('#BillingName');
-                    input.value=e;
+                    input.value = e;
                 } catch (err) {
                     console.log("BillingName > err > ", err);
                 }
@@ -386,11 +415,11 @@ export default function License({ }) {
 
     //-----------------------------------------------------------------------------------------------------------
 
-    const updateTextField=(id,value)=>{
-        try{
-            document.getElementById(id).value=value;
-        }catch(err){}
-        
+    const updateTextField = (id, value) => {
+        try {
+            document.getElementById(id).value = value;
+        } catch (err) { }
+
     }
 
 
@@ -407,6 +436,13 @@ export default function License({ }) {
         if (val === "accordion4") {
             accordion4 === true ? setaccordion4(false) : setaccordion4(true);
         }
+        if (val === "accordion5") {
+            accordion5 === true ? setaccordion5(false) : setaccordion5(true);
+        }
+        if (val === "accordion6") {
+            accordion6 === true ? setaccordion6(false) : setaccordion6(true);
+        }
+
 
 
     };
@@ -553,16 +589,16 @@ export default function License({ }) {
                                                                             param={CustomerBillingAddress}
                                                                             isMandatory={true}
                                                                         />
-                                                                      
-                                                                        <SIB     
+
+                                                                        <SIB
                                                                             id="BillingName"
                                                                             label="Billing Name"
                                                                             variant="outlined"
-                                                                            size="small"   
+                                                                            size="small"
                                                                             onChange={(e) => {
-                                                                                document.getElementById("BillingName").value=e.target.value;
-                                                                            }}  
-                                                                            onBlur={(e)=>setBillingName(e.target.value)}  
+                                                                                document.getElementById("BillingName").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setBillingName(e.target.value)}
                                                                         />
 
                                                                         <SIB
@@ -571,9 +607,9 @@ export default function License({ }) {
                                                                             variant="outlined"
                                                                             size="small"
                                                                             onChange={(e) => {
-                                                                                document.getElementById("BillingAddress").value=e.target.value;
+                                                                                document.getElementById("BillingAddress").value = e.target.value;
                                                                             }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            onBlur={(e) => setBillingName(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingAddress2"
@@ -581,9 +617,9 @@ export default function License({ }) {
                                                                             variant="outlined"
                                                                             size="small"
                                                                             onChange={(e) => {
-                                                                                document.getElementById("BillingAddress2").value=e.target.value;
+                                                                                document.getElementById("BillingAddress2").value = e.target.value;
                                                                             }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            onBlur={(e) => setBillingName(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingAddress3"
@@ -591,9 +627,9 @@ export default function License({ }) {
                                                                             variant="outlined"
                                                                             size="small"
                                                                             onChange={(e) => {
-                                                                                document.getElementById("BillingAddress3").value=e.target.value;
+                                                                                document.getElementById("BillingAddress3").value = e.target.value;
                                                                             }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            onBlur={(e) => setBillingName(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingCity"
@@ -601,9 +637,9 @@ export default function License({ }) {
                                                                             variant="outlined"
                                                                             size="small"
                                                                             onChange={(e) => {
-                                                                                document.getElementById("BillingCity").value=e.target.value;
+                                                                                document.getElementById("BillingCity").value = e.target.value;
                                                                             }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            onBlur={(e) => setBillingName(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="BillingPostcode"
@@ -611,9 +647,9 @@ export default function License({ }) {
                                                                             variant="outlined"
                                                                             size="small"
                                                                             onChange={(e) => {
-                                                                                document.getElementById("BillingPostcode").value=e.target.value;
+                                                                                document.getElementById("BillingPostcode").value = e.target.value;
                                                                             }}
-                                                                            onBlur={(e)=>setBillingName(e.target.value)} 
+                                                                            onBlur={(e) => setBillingName(e.target.value)}
                                                                         />
 
                                                                         <SDIB
@@ -672,8 +708,9 @@ export default function License({ }) {
                                                                             id="Reference"
                                                                             label="Reference"
                                                                             variant="outlined"
-                                                                            size="small"
-                                                                            defaultValue={Reference}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("Reference").value = e.target.value;
+                                                                            }}
                                                                             onBlur={(e) => setReference(e.target.value)}
                                                                         />
 
@@ -681,10 +718,8 @@ export default function License({ }) {
                                                                             id="WareHouseID"
                                                                             label="Warehouse"
                                                                             onChange={(e) => setWareHouseID(e.target.value)}
-                                                                            value={WareHouseID}
                                                                             param={WarehouseList}
                                                                             isMandatory={true}
-
                                                                         />
 
                                                                         <SSIB
@@ -692,6 +727,7 @@ export default function License({ }) {
                                                                             id="IsSEZSale"
                                                                             label="SEZ Sale?"
                                                                             param={IsSEZSale}
+                                                                            onChange={(e) => setIsSEZSale(e.target.checked)}
                                                                         />
 
                                                                         <SSIB
@@ -699,6 +735,7 @@ export default function License({ }) {
                                                                             id="IsRounding"
                                                                             label="Rounding?"
                                                                             param={IsRounding}
+                                                                            onChange={(e) => setIsRounding(e.target.checked)}
                                                                         />
 
                                                                         <SSIB
@@ -706,6 +743,7 @@ export default function License({ }) {
                                                                             id="IsExport"
                                                                             label="Export?"
                                                                             param={IsExport}
+                                                                            onChange={(e) => setIsExport(e.target.checked)}
                                                                         />
 
                                                                     </Grid>
@@ -820,8 +858,10 @@ export default function License({ }) {
                                                                             label="Exchange Rate"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={ExchRate}
-                                                                            onChange={(e) => setExchRate(e.target.value)}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("ExchRate").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setExchRate(e.target.value)}
                                                                             isMandatory={true}
                                                                         />
 
@@ -834,10 +874,14 @@ export default function License({ }) {
                                                                             disabled={true}
 
                                                                         />
-
-
-
-
+                                                                        <SDIB
+                                                                            id="BankID"
+                                                                            label="Bank"
+                                                                            value={BankID}
+                                                                            param={BankList}
+                                                                            isMandatory={true}
+                                                                            disabled={true}
+                                                                        />
 
 
                                                                     </Grid>
@@ -847,13 +891,12 @@ export default function License({ }) {
                                                                 <Grid container spacing={0}>
                                                                     <Grid item xs={12} sm={12} md={11} lg={11}>
 
-
-
                                                                         <SDIB
                                                                             id="PaymentTermID"
                                                                             label="Payment Term"
                                                                             onChange={(e) => {
                                                                                 setPaymentTermID(e.target.value);
+                                                                                document.getElementById("PaymentTerm").value = getPaymentTerm(CF.toInt(e.target.value));
                                                                                 setPaymentTerm(getPaymentTerm(CF.toInt(e.target.value)));
                                                                             }}
                                                                             value={PaymentTermID}
@@ -864,10 +907,12 @@ export default function License({ }) {
                                                                         <SIB
                                                                             id="PaymentTerm"
                                                                             label="Pay..Term..Details"
-                                                                            onChange={(e) => setPaymentTerm(e.target.value)}
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={PaymentTerm}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("PaymentTerm").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setPaymentTerm(e.target.value)}
                                                                             isMandatory={true}
                                                                         />
                                                                         <SDIB
@@ -879,6 +924,9 @@ export default function License({ }) {
                                                                             disabled={true}
                                                                         />
 
+
+
+
                                                                     </Grid>
                                                                 </Grid>
                                                             </Grid>
@@ -886,6 +934,76 @@ export default function License({ }) {
                                                     </Grid>
                                                     <Grid item xs={12} sm={12} md={12} lg={12}>
                                                         &nbsp;
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        <Divider />
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        &nbsp;
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        <Grid container spacing={0}>
+                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                    {
+                                                                        CurrencyList.map((item, i) => (
+                                                                            parseInt(CurrID) === parseInt(item.value) ? (
+                                                                                <Fragment>
+                                                                                    <SSDV
+
+                                                                                        label={"Amount" + "(" + item.name + ")"}
+                                                                                        value={Amount}
+                                                                                    />
+                                                                                </Fragment>
+                                                                            )
+                                                                                : null
+                                                                        ))
+                                                                    }
+                                                                    <SSDV
+                                                                        label="Discount Amount"
+                                                                        value={DiscountAmount}
+                                                                    />
+                                                                    {
+                                                                        CurrencyList.map((item, i) => (
+                                                                            parseInt(CurrID) === parseInt(item.value) ? (
+                                                                                <Fragment>
+                                                                                    <SSDV
+                                                                                        label={"Total " + (Branch.IsGST === true ? "GST" : "VAT") + "(" + item.name + ")"}
+                                                                                        value={TotalTax}
+                                                                                    />
+                                                                                </Fragment>
+                                                                            )
+                                                                                : null
+                                                                        ))
+                                                                    }
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                    {
+                                                                        CurrencyList.map((item, i) => (
+                                                                            parseInt(CurrID) === parseInt(item.value) ? (
+                                                                                <Fragment>
+                                                                                    <SSDV
+                                                                                        label={"Total FC.Value " + "(" + item.name + ")"}
+                                                                                        value={FCValue}
+                                                                                    />
+                                                                                </Fragment>
+                                                                            )
+                                                                                : null
+                                                                        ))
+                                                                    }
+
+
+                                                                    <SSDV
+                                                                        label={"Total Base.Value (" + Branch.CurrencyCode + ")"}
+                                                                        value={BaseValue}
+                                                                    />
+
+
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
                                                     </Grid>
                                                 </Grid>
                                             </Fragment>
@@ -938,8 +1056,10 @@ export default function License({ }) {
                                                                             label="Shipping Name"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={ShippingName}
-                                                                            onChange={(e) => setShippingName(e.target.value)}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("ShippingName").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setShippingName(e.target.value)}
                                                                         />
 
                                                                         <SIB
@@ -947,49 +1067,51 @@ export default function License({ }) {
                                                                             label="Shipping Address"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={ShippingAddress}
-                                                                            onChange={(e) => setShippingAddress(e.target.value)}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("ShippingAddress").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setShippingAddress(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="ShippingAddress2"
                                                                             label="Shipping Address 2"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={ShippingAddress2}
-                                                                            onChange={(e) => setShippingAddress2(e.target.value)}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("ShippingAddress2").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setShippingAddress2(e.target.value)}
                                                                         />
                                                                         <SIB
                                                                             id="ShippingAddress3"
                                                                             label="Shipping Address 3"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={ShippingAddress3}
-                                                                            onChange={(e) => setShippingAddress3(e.target.value)}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("ShippingAddress3").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setShippingAddress3(e.target.value)}
                                                                         />
-                                                                         <SIB
+                                                                        <SIB
                                                                             id="ShippingCity"
                                                                             label="Shipping City"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={ShippingCity}
-                                                                            onChange={(e) => setShippingCity(e.target.value)}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("ShippingCity").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setShippingCity(e.target.value)}
                                                                         />
 
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                <Grid container spacing={0}>
-                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                                                                       
                                                                         <SIB
                                                                             id="ShippingPostcode"
                                                                             label="Shipping Postcode"
                                                                             variant="outlined"
                                                                             size="small"
-                                                                            value={ShippingPostCode}
-                                                                            onChange={(e) => setShippingPostCode(e.target.value)}
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("ShippingPostcode").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setShippingPostCode(e.target.value)}
                                                                         />
 
                                                                         <SDIB
@@ -1007,6 +1129,16 @@ export default function License({ }) {
                                                                             onChange={(e) => setShippingStateID(e.target.value)}
                                                                         />
 
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                <Grid container spacing={0}>
+                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+
+
+
+
                                                                         <SDIB
                                                                             id="NotifyID"
                                                                             label="Notify"
@@ -1023,6 +1155,47 @@ export default function License({ }) {
                                                                             param={[]}
                                                                         />
 
+                                                                        <SDIB
+                                                                            id="CountryOfOrigin"
+                                                                            label="Country Of Origin"
+                                                                            onChange={(e) => setCountryOfOrigin(e.target.value)}
+                                                                            value={CountryOfOrigin}
+                                                                            param={CountryList}
+                                                                        />
+
+                                                                        <SDIB
+                                                                            id="ExitPortID"
+                                                                            label="Exit Port"
+                                                                            onChange={(e) => setExitPortID(e.target.value)}
+                                                                            value={ExitPortID}
+                                                                            param={[]}
+                                                                        />
+
+
+                                                                        <SIB
+                                                                            id="Destination"
+                                                                            label="Destination"
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("Destination").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setDestination(e.target.value)}
+                                                                        />
+
+                                                                        <SIB
+                                                                            id="FinalDestination"
+                                                                            label="Final Destination"
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("FinalDestination").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setFinalDestination(e.target.value)}
+                                                                        />
+
+
+
 
 
                                                                     </Grid>
@@ -1037,6 +1210,199 @@ export default function License({ }) {
                                             </Fragment>
                                         </AccordionDetails>
                                     </Accordion>
+
+
+                                    <Accordion
+                                        style={disabledStyle}
+                                        key="a-6"
+                                        expanded={accordion6}
+                                        className="accordionD"
+                                    >
+                                        <AccordionSummary
+                                            className="accordion-Header-Design"
+                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion6", e)} />}
+                                            aria-controls="panel1a-content"
+                                            id="accordion6"
+                                            style={{ minHeight: "40px", maxHeight: "40px" }}
+                                            onClick={(e) => handleAccordionClick("accordion6", e)}
+                                        >
+                                            <Typography
+                                                key="GD-Activity"
+                                                className="accordion-Header-Title"
+                                            >Tax Information</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails
+                                            key="accordion6" className="AccordionDetails-css">
+
+                                            <Fragment>
+                                                <Grid container spacing={0}>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        &nbsp;
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        <Grid container spacing={0}>
+                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                <Grid container spacing={0}>
+                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+
+
+                                                                        <SSIB
+                                                                            key="IsTaxExempt"
+                                                                            id="IsTaxExempt"
+                                                                            label="Is TaxExempt?"
+                                                                            param={IsTaxExempt}
+                                                                            onChange={(e) => setIsTaxExempt(e.target.checked)}
+                                                                        />
+
+                                                                        <SIB
+                                                                            id="GSTNo"
+                                                                            label="GST No"
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                            value={GSTNo}
+                                                                            disabled={true}
+                                                                        />
+
+                                                                        <SIB
+                                                                            id="VATNo"
+                                                                            label="VAT No"
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                            value={VATNo}
+                                                                            disabled={true}
+                                                                        />
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                <Grid container spacing={0}>
+                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+
+
+
+                                                                        <SIB
+                                                                            id="Reason"
+                                                                            label="Reason"
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                            value={Reason}
+                                                                            disabled={true}
+                                                                        />
+
+                                                                        <SDIB
+                                                                            id="MODTaxID"
+                                                                            label="Mode of Tax"
+                                                                            onChange={(e) => setMODTaxID("MODTaxID", e)}
+                                                                            value={MODTaxID}
+                                                                            param={MODTaxList}
+                                                                            isMandatory={true}
+                                                                        />
+
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        &nbsp;
+                                                    </Grid>
+                                                </Grid>
+                                            </Fragment>
+
+                                        </AccordionDetails>
+                                    </Accordion>
+
+                                    <Accordion
+                                        style={disabledStyle}
+                                        key="a-5"
+                                        expanded={accordion5}
+                                        className="accordionD"
+                                    >
+                                        <AccordionSummary
+                                            className="accordion-Header-Design"
+                                            expandIcon={<ExpandMoreIcon onClick={(e) => handleAccordionClick("accordion5", e)} />}
+                                            aria-controls="panel1a-content"
+                                            id="accordion5"
+                                            style={{ minHeight: "40px", maxHeight: "40px" }}
+                                            onClick={(e) => handleAccordionClick("accordion5", e)}
+                                        >
+                                            <Typography
+                                                key="GD-Activity"
+                                                className="accordion-Header-Title"
+                                            >Packing</Typography>
+                                        </AccordionSummary>
+                                        <AccordionDetails
+                                            key="accordion5" className="AccordionDetails-css">
+
+                                            <Fragment>
+                                                <Grid container spacing={0}>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        &nbsp;
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                        <Grid container spacing={0}>
+                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                <Grid container spacing={0}>
+                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                        <SDIB
+                                                                            id="PackingType"
+                                                                            label="Packing Type"
+                                                                            onChange={(e) => setPackingType(e.target.value)}
+                                                                            value={PackingType}
+                                                                            param={PackingTypeList}
+                                                                            isMandatory={true}
+                                                                        />
+                                                                        <SDIB
+                                                                            id="PackingSpecification"
+                                                                            label="Packing Specification"
+                                                                            onChange={(e) => setPackingSpecification(e.target.value)}
+                                                                            value={PackingSpecification}
+                                                                            param={PackingSpecificationList}
+                                                                            isMandatory={true}
+                                                                        />
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                <Grid container spacing={0}>
+                                                                    <Grid item xs={12} sm={12} md={11} lg={11}>
+                                                                        <SIB
+                                                                            type="number"
+                                                                            id="NoOfPacket"
+                                                                            label="No Of Packet"
+                                                                            variant="outlined"
+                                                                            size="small"
+                                                                            onChange={(e) => {
+                                                                                document.getElementById("NoOfPacket").value = e.target.value;
+                                                                            }}
+                                                                            onBlur={(e) => setNoOfPacket(e.target.value)}
+                                                                        />
+                                                                        <SDIB
+                                                                            id="ServiceType"
+                                                                            label="ServiceType"
+                                                                            onChange={(e) => setServiceType(e.target.value)}
+                                                                            value={ServiceType}
+                                                                            param={ServiceTypeList}
+                                                                            isMandatory={true}
+                                                                        />
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Fragment>
+
+
+
+
+
+
+
+                                        </AccordionDetails>
+                                    </Accordion>
+
+
                                 </Grid>
                             </Grid>
                         </Grid>

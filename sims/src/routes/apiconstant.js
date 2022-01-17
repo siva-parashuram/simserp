@@ -36,8 +36,8 @@ import * as CF from "../services/functions/customfunctions";
 import * as URLS from "../routes/constants"; 
 let domain="";
 
-// const domain = "http://192.168.10.200:8080/";
-  domain = "http://49.248.147.178:8082/";
+domain = "http://192.168.10.200:8080/";
+  // domain = "http://49.248.147.178:8082/";
   
 
 export const APIURL = {
@@ -338,6 +338,22 @@ export const buttonTitle = {
 };
 
 
+export const PackingType = [
+  { name: "Parcel", value: 1 },
+  { name: "Pallet", value: 2 }
+];
+export const PackingSpecification = [
+  { name: "Quarter", value: 1 },
+  { name: "Half", value: 2 },
+  { name: "Full", value: 3 },
+  { name: "Oversize", value: 4 }
+];
+export const ServiceType = [
+  { name: "Next Day", value: 1 },
+  { name: "Economy", value: 2 },
+  { name: "Booked In", value: 3 },
+  { name: "Collection", value: 4 }
+];
 
 export const PackingUOM = [
   { name: "Kgs", value: 0 },
