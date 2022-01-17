@@ -40,8 +40,11 @@ import SSDV from "../../compo/grid2sectiondisplayview";
 import SDTI from "../../compo/griddateinput";
 import SDIB from "../../compo/griddropdowninput";
 import SSIB from "../../compo/gridswitchinput";
+import SCSI from "../../compo/customswitchinput";
 
-const today=moment().format("YYYY-MM-DD");
+import CGINPUT from "../../compo/specialcompo/custominputbox";
+
+const today = moment().format("YYYY-MM-DD");
 
 class profactivity extends React.Component {
     constructor(props) {
@@ -108,7 +111,7 @@ class profactivity extends React.Component {
             ShippingCountryID: 0,
             ShippingStateID: 0,
             DispatchDate: today,
-            DeliveryDate:today,
+            DeliveryDate: today,
             CustomerOrderDate: today,
             Reference: "",
             IsSEZSale: false,
@@ -285,6 +288,17 @@ class profactivity extends React.Component {
         return exchRate;
     }
 
+    validateProformaInvoiceLineBeforeCustomkerChange = () => {
+        let promptDeleteLine = false;
+        for (let i = 0; i < this.state.ProformaInvoiceLine.length; i++) {
+            if (this.state.ProformaInvoiceLine[i].isDataProper === true) {
+                promptDeleteLine = true;
+                break;
+            }
+        }
+        return promptDeleteLine;
+    }
+
     updateFormValue = (key, e) => {
         console.log("key > ", key);
         console.log("e > ", e);
@@ -292,78 +306,92 @@ class profactivity extends React.Component {
         switch (key) {
             case "CustID":
                 if (e) {
-                    this.setState({
-                        selectedCustomerObj: e,
-                        CustomerBillingAddress: e.BillingAddress,
-                        CustomerShippingAddress: e.ShippingAddress,
-                        NotifyAddress: e.NotifyAddress,
-                        CustID: CF.toInt(e.id),
-                        CurrID: CF.toInt(e.CurrID),
-                        ExchRate: this.getExchRate(CF.toInt(e.CurrID)),
-                        PaymentTermID: CF.toInt(e.PaymentTermID),
-                        PaymentTerm: this.getPaymentTerm(CF.toInt(e.PaymentTermID))
-                    });
+                    let promptDeleteLine = false;
+                    promptDeleteLine = this.validateProformaInvoiceLineBeforeCustomkerChange();
+                    if (promptDeleteLine === true) {
+                        this.setState({
+                            ErrorPrompt: true,
+                            ErrorMessageProps: "Please Delete Line"
+                        });
+                    } else {
+                        this.setState({
+                            selectedCustomerObj: e,
+                            CustomerBillingAddress: e.BillingAddress,
+                            CustomerShippingAddress: e.ShippingAddress,
+                            NotifyAddress: e.NotifyAddress,
+                            CustID: CF.toInt(e.id),
+                            CurrID: CF.toInt(e.CurrID),
+                            ExchRate: this.getExchRate(CF.toInt(e.CurrID)),
+                            PaymentTermID: CF.toInt(e.PaymentTermID),
+                            PaymentTerm: this.getPaymentTerm(CF.toInt(e.PaymentTermID))
+                        });
 
-                    if (e.BillingAddress) {
-                        if (e.BillingAddress.length > 0) {
-                            this.setState({
-                                IsRegistedSupplier: e.BillingAddress[0].IsRegistedSupplier,
-                                IsTaxExempt: e.BillingAddress[0].IsTaxExempt,
-                                GSTNo: e.BillingAddress[0].GSTNo,
-                                VATNo: e.BillingAddress[0].VATNo,
-                                Reason: e.BillingAddress[0].Reason,
-                                BillingID: e.BillingAddress[0].value,
-                                BillingName: e.BillingAddress[0].Name,
-                                BillingAddress: e.BillingAddress[0].Address,
-                                BillingAddress2: e.BillingAddress[0].Address2,
-                                BillingAddress3: e.BillingAddress[0].Address3,
-                                BillingCity: e.BillingAddress[0].City,
-                                BillingPostCode: e.BillingAddress[0].PostCode,
-                                BillingCountryID: e.BillingAddress[0].CountryID,
-                                BillingStateID: e.BillingAddress[0].StateID,
-                                GeneralPostingGroupID: e.BillingAddress[0].GeneralPostingGroupID,
-                                CustomerPostingGroupID: e.BillingAddress[0].CustomerPostingGroupID
-                            });
+                        if (e.BillingAddress) {
+                            if (e.BillingAddress.length > 0) {
+                                this.setState({
+                                    IsRegistedSupplier: e.BillingAddress[0].IsRegistedSupplier,
+                                    IsTaxExempt: e.BillingAddress[0].IsTaxExempt,
+                                    GSTNo: e.BillingAddress[0].GSTNo,
+                                    VATNo: e.BillingAddress[0].VATNo,
+                                    Reason: e.BillingAddress[0].Reason,
+                                    BillingID: e.BillingAddress[0].value,
+                                    BillingName: e.BillingAddress[0].Name,
+                                    BillingAddress: e.BillingAddress[0].Address,
+                                    BillingAddress2: e.BillingAddress[0].Address2,
+                                    BillingAddress3: e.BillingAddress[0].Address3,
+                                    BillingCity: e.BillingAddress[0].City,
+                                    BillingPostCode: e.BillingAddress[0].PostCode,
+                                    BillingCountryID: e.BillingAddress[0].CountryID,
+                                    BillingStateID: e.BillingAddress[0].StateID,
+                                    GeneralPostingGroupID: e.BillingAddress[0].GeneralPostingGroupID,
+                                    CustomerPostingGroupID: e.BillingAddress[0].CustomerPostingGroupID
+                                });
 
-                            //-----setting textboxes-----------
-                            this.updateTextField("BillingName", e.BillingAddress[0].Name);
-                            this.updateTextField("BillingAddress", e.BillingAddress[0].Address);
-                            this.updateTextField("BillingAddress2", e.BillingAddress[0].Address2);
-                            this.updateTextField("BillingAddress3", e.BillingAddress[0].Address3);
-                            this.updateTextField("BillingCity", e.BillingAddress[0].City);
-                            this.updateTextField("BillingPostCode", e.BillingAddress[0].PostCode);
-                            this.updateTextField("GSTNo", e.BillingAddress[0].GSTNo);
-                            this.updateTextField("VATNo", e.BillingAddress[0].VATNo);
-                            this.updateTextField("Reason", e.BillingAddress[0].Reason);
+                                //-----setting textboxes-----------
+                                this.updateTextField("BillingName", e.BillingAddress[0].Name);
+                                this.updateTextField("BillingAddress", e.BillingAddress[0].Address);
+                                this.updateTextField("BillingAddress2", e.BillingAddress[0].Address2);
+                                this.updateTextField("BillingAddress3", e.BillingAddress[0].Address3);
+                                this.updateTextField("BillingCity", e.BillingAddress[0].City);
+                                this.updateTextField("BillingPostCode", e.BillingAddress[0].PostCode);
+                                this.updateTextField("GSTNo", e.BillingAddress[0].GSTNo);
+                                this.updateTextField("VATNo", e.BillingAddress[0].VATNo);
+                                this.updateTextField("Reason", e.BillingAddress[0].Reason);
+                            }
                         }
-                    }
-                    if (e.ShippingAddress) {
-                        if (e.ShippingAddress.length > 0) {
-                            this.setState({
-                                ShippingID: e.ShippingAddress[0].value,
-                                ShippingName: e.ShippingAddress[0].Name,
-                                ShippingAddress: e.ShippingAddress[0].Address,
-                                ShippingAddress2: e.ShippingAddress[0].Address2,
-                                ShippingAddress3: e.ShippingAddress[0].Address3,
-                                ShippingCity: e.ShippingAddress[0].City,
-                                ShippingPostCode: e.ShippingAddress[0].PostCode,
-                                ShippingCountryID: e.ShippingAddress[0].CountryID,
-                                ShippingStateID: e.ShippingAddress[0].StateID
-                            });
-                            //-----setting textboxes-----------
-                            this.updateTextField("ShippingName", e.ShippingAddress[0].Name);
-                            this.updateTextField("ShippingAddress", e.ShippingAddress[0].Address);
-                            this.updateTextField("ShippingAddress2", e.ShippingAddress[0].Address2);
-                            this.updateTextField("ShippingAddress3", e.ShippingAddress[0].Address3);
-                            this.updateTextField("ShippingCity", e.ShippingAddress[0].City);
-                            this.updateTextField("ShippingPostCode", e.ShippingAddress[0].PostCode);
-                            this.updateTextField("GSTNo", e.ShippingAddress[0].GSTNo);
-                            this.updateTextField("VATNo", e.ShippingAddress[0].VATNo);
-                            this.updateTextField("Reason", e.ShippingAddress[0].Reason);
+                        if (e.ShippingAddress) {
+                            if (e.ShippingAddress.length > 0) {
+                                this.setState({
+                                    ShippingID: e.ShippingAddress[0].value,
+                                    ShippingName: e.ShippingAddress[0].Name,
+                                    ShippingAddress: e.ShippingAddress[0].Address,
+                                    ShippingAddress2: e.ShippingAddress[0].Address2,
+                                    ShippingAddress3: e.ShippingAddress[0].Address3,
+                                    ShippingCity: e.ShippingAddress[0].City,
+                                    ShippingPostCode: e.ShippingAddress[0].PostCode,
+                                    ShippingCountryID: e.ShippingAddress[0].CountryID,
+                                    ShippingStateID: e.ShippingAddress[0].StateID
+                                });
+                                //-----setting textboxes-----------
+                                this.updateTextField("ShippingName", e.ShippingAddress[0].Name);
+                                this.updateTextField("ShippingAddress", e.ShippingAddress[0].Address);
+                                this.updateTextField("ShippingAddress2", e.ShippingAddress[0].Address2);
+                                this.updateTextField("ShippingAddress3", e.ShippingAddress[0].Address3);
+                                this.updateTextField("ShippingCity", e.ShippingAddress[0].City);
+                                this.updateTextField("ShippingPostCode", e.ShippingAddress[0].PostCode);
+                                this.updateTextField("GSTNo", e.ShippingAddress[0].GSTNo);
+                                this.updateTextField("VATNo", e.ShippingAddress[0].VATNo);
+                                this.updateTextField("Reason", e.ShippingAddress[0].Reason);
+                            }
                         }
+
+                        // will add line only if nothing is present...
+                        if (this.state.ProformaInvoiceLine.length === 0) {
+                            this.createBlankLine();
+                        }
+
                     }
 
-                    this.createBlankLine();
                 } else {
                     this.setState({ selectedCustomerObj: null });
                 }
@@ -383,16 +411,16 @@ class profactivity extends React.Component {
                 }
                 break;
             case "GSTPlaceOfSold":
-               
+
                 if (this.state.selectedCustomerObj) {
                     if (e === false) {
                         try {
                             this.setState({
-                                IsRegistedSupplier:this.state.selectedCustomerObj.BillingAddress[0].IsRegistedSupplier,
-                                IsTaxExempt:this.state.selectedCustomerObj.BillingAddress[0].IsTaxExempt,
-                                GSTNo:this.state.selectedCustomerObj.BillingAddress[0].GSTNo,
-                                VATNo:this.state.selectedCustomerObj.BillingAddress[0].VATNo,
-                                Reason:this.state.selectedCustomerObj.BillingAddress[0].Reason
+                                IsRegistedSupplier: this.state.selectedCustomerObj.BillingAddress[0].IsRegistedSupplier,
+                                IsTaxExempt: this.state.selectedCustomerObj.BillingAddress[0].IsTaxExempt,
+                                GSTNo: this.state.selectedCustomerObj.BillingAddress[0].GSTNo,
+                                VATNo: this.state.selectedCustomerObj.BillingAddress[0].VATNo,
+                                Reason: this.state.selectedCustomerObj.BillingAddress[0].Reason
                             });
 
                             this.updateTextField("GSTNo", this.state.selectedCustomerObj.BillingAddress[0].GSTNo);
@@ -407,10 +435,10 @@ class profactivity extends React.Component {
                         try {
                             this.setState({
                                 IsRegistedSupplier: this.state.selectedCustomerObj.ShippingAddress[0].IsRegistedSupplier,
-                                IsTaxExempt:this.state.selectedCustomerObj.ShippingAddress[0].IsTaxExempt,
-                                GSTNo:this.state.selectedCustomerObj.ShippingAddress[0].GSTNo,
-                                VATNo:this.state.selectedCustomerObj.ShippingAddress[0].VATNo,
-                                Reason:this.state.selectedCustomerObj.ShippingAddress[0].Reason
+                                IsTaxExempt: this.state.selectedCustomerObj.ShippingAddress[0].IsTaxExempt,
+                                GSTNo: this.state.selectedCustomerObj.ShippingAddress[0].GSTNo,
+                                VATNo: this.state.selectedCustomerObj.ShippingAddress[0].VATNo,
+                                Reason: this.state.selectedCustomerObj.ShippingAddress[0].Reason
                             });
 
                             this.updateTextField("GSTNo", this.state.selectedCustomerObj.ShippingAddress[0].GSTNo);
@@ -939,6 +967,43 @@ class profactivity extends React.Component {
                                                                     </TableBody>
                                                                 </Table>
                                                             </div>
+
+                                                            <table id="no-space-table">
+                                                                <tr>
+                                                                    <td>
+                                                                        <CGINPUT
+                                                                            type="text"
+                                                                            style={{
+                                                                                borderRightStyle: 'none'
+                                                                            }}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <CGINPUT
+                                                                            type="text"
+                                                                            style={{
+                                                                                borderRightStyle: 'none'
+                                                                            }}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <CGINPUT
+                                                                            type="text"
+                                                                            disabled={true}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        <SCSI
+                                                                            key={"sw"}
+                                                                            id={"sw"}
+                                                                            param={true}
+                                                                        />
+                                                                    </td>
+
+                                                                </tr>
+                                                            </table>
+
+                                                          
                                                         </Grid>
                                                     </Grid>
                                                 </div>
