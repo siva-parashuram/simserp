@@ -703,6 +703,8 @@ cursor: pointer;
   background-color: #fff !important;
 }
 
+
+
  
 
 .table-header-font{
@@ -827,18 +829,47 @@ cursor: pointer;
   height: 30px !important;
 }
 
-#no-space-table{
-  border-collapse: collapse !important;
+.line-table-header2-font{
+  text-align: left !important;
+  color:#009688 !important;
+  font-weight: bold !important;
+  text-transform: initial !important;
+  background-color: #e0f7fa !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  padding-left: 5px !important;
 }
 
-#no-space-table tr td{ padding:0px; margin:0px; border:0px; }
+
+#no-space-table{
+  border-collapse: collapse !important; 
+
+}
+
+#no-space-table tr td{
+   padding:0px; 
+   margin:0px; 
+   border:0px; 
+   border: solid !important;
+   border-width: 1px !important;
+   border-color: #009688 !important;
+  }
+
+.td-width{
+  width:100px !important;
+  min-width: 100px !important;  
+  max-width: 100px !important;
+}
 
 .CGINPUTBOXCSS{
+  background-color: initial !important;
+  height: 28px !important;
   font-family: Calibri !important;
   font-size: 14px !important;
   border-radius: 0px !important;
-  border-width: 1px !important;
-  border-color: rgba(224, 224, 224, 1) !important; 
+  border-width: 0px !important;
+  border-color: initial !important; 
+  /* border-color: rgba(224, 224, 224, 1) !important;  */
   outline-style: initial !important;
   outline-color: none !important;
   -webkit-border-radius: 0px;
@@ -868,6 +899,23 @@ cursor: pointer;
   outline-color: none !important;
   -webkit-border-radius: 0px;
 }
+
+.CGSELECTCSS{
+  height: 27.81px !important;
+  line-height: 27.81px !important;
+  font-size: 13px !important;
+  border-radius: 0px !important;
+  box-sizing:border-box;
+  border-color: rgba(224, 224, 224, 1) !important;
+  border-width: 1px !important;
+  border-radius: 0px !important;   
+  -webkit-border-radius: 0px;
+  background: inherit !important;
+  outline-style: initial !important;
+  outline-color: none !important;
+}
+
+/*---------------------------------------------------------------------------------------*/
 
 .textFieldCss{
   font-family: Calibri !important;

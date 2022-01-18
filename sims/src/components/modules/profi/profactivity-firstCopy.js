@@ -46,9 +46,6 @@ import SCADI from "../../compo/customautocompletecomponent";
 import CGINPUT from "../../compo/specialcompo/custominputbox";
 import CGSELECT from "../../compo/specialcompo/customselectbox";
 
-
-import POL from "./POL";
-
 const today = moment().format("YYYY-MM-DD");
 
 class profactivity extends React.Component {
@@ -166,6 +163,7 @@ class profactivity extends React.Component {
             //-------------------------------------------
             ProformaInvoiceLine: [],
         };
+        this.handler = this.handler.bind(this)
     }
     componentDidMount() {
         let params = CF.GET_URL_PARAMS();
@@ -244,11 +242,9 @@ class profactivity extends React.Component {
         let PILobj = {
             categoryList:[],
             itemList:[],
-            ItemPrice:[],
             selectitemListObj:null,
             ProformaID: 0,
             Type: 0,
-            CategoryID:"",
             LNo: 0,
             TypeID: 0,
             desc:"",
@@ -282,6 +278,7 @@ class profactivity extends React.Component {
             SGSTAmt: 0,
             IsLot: false,
             isDataProper: false,
+            isCategoryDisabled:true,
         };
         let oldProformaInvoiceLine = this.state.ProformaInvoiceLine;
         oldProformaInvoiceLine.push(PILobj);
@@ -483,9 +480,7 @@ class profactivity extends React.Component {
         try {
             let ProformaInvoiceLine = this.state.ProformaInvoiceLine;
             if(parseInt(Type)===0){
-                ProformaInvoiceLine[index].selectitemListObj = null;
                 ProformaInvoiceLine[index].itemList = [];   
-                ProformaInvoiceLine[index].categoryList=this.state.selectedCustomerObj.Category;
             }
             if(parseInt(Type)===1){
                 ProformaInvoiceLine[index].itemList = this.state.GLAccountList;   
@@ -520,75 +515,28 @@ class profactivity extends React.Component {
         return GSTPercentage;
     }
 
-    getCategoryITEM = (value) => {
-        let Item = [];
-        try {
-            let Category = this.state.selectedCustomerObj.Category;
-            for (let i = 0; i < Category.length; i++) {
-                if (parseInt(Category[i].value) === parseInt(value)) {
-                    Item = Category[i].Item;
-                    break;
-                }
-            }
-        } catch (err) { }
-        return Item;
-    }
-
     updatePILStateOnBlur = (key, index, value,LineItem) => {
         try {
             let ProformaInvoiceLine = this.state.ProformaInvoiceLine;
             switch (key) {
                 case "Type":
                     this.resetLineItemList(value, index);
-                    ProformaInvoiceLine[index][key] = parseInt(value);
+                    ProformaInvoiceLine[index][key] = value;
                     ProformaInvoiceLine[index].selectitemListObj = null;
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });                    
                     break;
-                case "CategoryID":
-                    console.log("LineItem > ",LineItem);
-                    ProformaInvoiceLine[index].itemList = this.getCategoryITEM(value);
-                    this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });   
-                    break;
+                
                 case "TypeID":
-                    console.log("LineItem > ",LineItem); 
                     console.log("key > ",key); 
                     console.log("index > ",index); 
                     console.log("value > ",value);
-                    if(parseInt(LineItem.Type>0)){
-                        ProformaInvoiceLine[index].selectitemListObj = value;
-                        ProformaInvoiceLine[index].desc = value.Description1;
-                        ProformaInvoiceLine[index].TypeID= parseInt(value.value);
+                    if(parseInt(LineItem.Type===0)){
 
                     } 
-                    else{                         
-                        let obj=ProformaInvoiceLine[index];
-                        console.log("ProformaInvoiceLine > obj > ",obj);
-                        ProformaInvoiceLine[index].TypeID= parseInt(value.value);                        
+                    else{ 
+                        ProformaInvoiceLine[index].selectitemListObj = value;
                         ProformaInvoiceLine[index].desc = value.Description1;
-                        ProformaInvoiceLine[index].packDesc = value.PackingDesc1;
-                        ProformaInvoiceLine[index].VATPercentage=parseFloat(value.VATPercentage);
-                        ProformaInvoiceLine[index].GSTGroupID = parseInt(value.GSTGroupID);
-                        ProformaInvoiceLine[index].GSTPercentage = parseFloat(value.GSTPercentage);
-                        ProformaInvoiceLine[index].HSNCode = value.HSNCode;
-                        ProformaInvoiceLine[index].IsLot = value.IsLot;
-                        ProformaInvoiceLine[index].IsQuality = value.IsQuality;
-                        ProformaInvoiceLine[index].ItemPostingGroupID = parseInt(value.ItemPostingGroupID);
-                        ProformaInvoiceLine[index].Quantity=1;
-                        ProformaInvoiceLine[index].Price=parseFloat(value.ItemPrice);
-                        ProformaInvoiceLine[index].UOMID = parseInt(value.PurchaseUOM);
-                        ProformaInvoiceLine[index].TolerancePercentage = parseFloat(value.TolerancePercentage);
-                       
-                        try{
-                            document.getElementById("VATPercentage" + index).value = parseFloat(value.VATPercentage);
-                            document.getElementById("GSTGroupID" + index).value = parseFloat(value.GSTGroupID);
-                            document.getElementById("GSTPercentage" + index).value = parseFloat(value.GSTPercentage);
-                            document.getElementById("HSNCode" + index).value = parseFloat(value.HSNCode);
-                            document.getElementById("ItemPostingGroupID" + index).value = parseFloat(value.ItemPostingGroupID);
-                            document.getElementById("Quantity" + index).value = 1;
-                            document.getElementById("Price" + index).value = parseFloat(value.ItemPrice);
-                            document.getElementById("TolerancePercentage" + index).value = parseFloat(value.TolerancePercentage);
 
-                        }catch(err){console.log("err > ",err);}
                     }
 
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });                     
@@ -629,10 +577,6 @@ class profactivity extends React.Component {
         } catch (err) {
             console.log("triggeronKeyDown > err > ", err);
         }
-    }
-
-    Add=()=>{
-        console.log("----------- > Add > ProformaInvoiceLine > ",this.state.ProformaInvoiceLine);
     }
 
 
@@ -695,7 +639,7 @@ class profactivity extends React.Component {
                         style={disabledStyle}
                         startIcon={APIURLS.buttonTitle.save.icon}
                         className="action-btns"
-                        onClick={(e) => this.Add(e)}
+                    //   onClick={(e) => Add_Update(e)}
 
                     >
                         {APIURLS.buttonTitle.save.name}
@@ -1028,11 +972,264 @@ class profactivity extends React.Component {
                                             <AccordionDetails
                                                 key="accordion4" className="AccordionDetails-css">
                                                 <div style={{ height: 250, width: '100%', overflowY: 'scroll', overflowX: 'scroll' }}>
-                                                   <POL 
-                                                   state={this.state} 
-                                                   updatePILStateOnBlur={this.updatePILStateOnBlur}
-                                                   createBlankLine={this.createBlankLine}
-                                                   />
+                                                    <Grid container spacing={0}>
+                                                        <Grid xs={12} sm={12} md={12} lg={12}>
+                                                            <table id="no-space-table" className="table">
+
+
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th className="line-table-header2-font td-width" align="left">&nbsp;</th>
+                                                                        <th className="line-table-header2-font td-width" align="left">Type</th>
+                                                                        <th className="line-table-header2-font td-width" align="left">Category</th>
+                                                                        <th className="line-table-header2-font" style={{ width: 150, minWidth: 150 }} align="left">Item</th>
+                                                                        <th className="line-table-header2-font td-width" align="left">Desc</th>
+                                                                        <th className="line-table-header2-font td-width" align="left">Pack.Desc</th>
+                                                                        <th className="line-table-header2-font td-width" align="left">Cust.Code</th>
+                                                                        <th className="line-table-header2-font td-width" align="left">UOM</th>
+                                                                        <th className="line-table-header2-font td-width" align="right">Tolerance %</th>
+                                                                        <th className="line-table-header2-font td-width" align="right">Quantity </th>
+                                                                        <th className="line-table-header2-font td-width" align="right">Unit Price </th>
+                                                                        <th className="line-table-header2-font td-width" align="right">Disc %</th>
+                                                                        <th className="line-table-header2-font " style={{ width: 150, minWidth: 150 }} align="left">Item Posting Group </th>
+                                                                        <th className="line-table-header2-font td-width" align="left">HSN </th>
+                                                                        {this.state.Branch.IsVAT === true ? (
+                                                                            <th className="line-table-header2-font td-width" align="right">VAT % </th>
+                                                                        ) : null}
+                                                                        {
+                                                                            this.state.Branch.IsGST === true ? (
+                                                                                <Fragment>
+                                                                                    <th className="line-table-header2-font td-width" align="left">GST Group </th>
+                                                                                    <th className="line-table-header2-font td-width" align="right"> GST %</th>
+                                                                                </Fragment>
+                                                                            ) : null
+                                                                        }
+                                                                        {this.state.Branch.IsLot === true ? (
+                                                                            <th className="line-table-header2-font td-width" align="right">Is Lot? </th>
+                                                                        ) : null}
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {this.state.ProformaInvoiceLine.map((item, i) => (
+                                                                        <tr className={item.isDataProper === true ? "lineSelectedRow" : "selectedRowError"}>
+                                                                            <td>
+                                                                                <ButtonGroup
+                                                                                    size="small"
+                                                                                    variant="text"
+                                                                                    aria-label="Action Menu Button group"
+                                                                                >
+                                                                                    <DeleteForeverIcon
+                                                                                        fontSize="small"
+                                                                                        style={{
+                                                                                            color: '#e53935'
+                                                                                        }}
+                                                                                    // onClick={(e) => this.itemDelete(i, item)}
+                                                                                    />
+
+                                                                                    {
+                                                                                        (i + 1) === this.state.ProformaInvoiceLine.length ? (
+                                                                                            <Fragment>
+                                                                                                <AddCircleOutlineIcon
+                                                                                                    fontSize="small"
+                                                                                                    style={{
+                                                                                                        color: '#00897b',
+                                                                                                        marginLeft: 10
+                                                                                                    }}
+                                                                                                    onClick={(e) => this.createBlankLine()}
+                                                                                                />
+                                                                                            </Fragment>
+                                                                                        ) : null
+                                                                                    }
+
+                                                                                </ButtonGroup>
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGSELECT
+                                                                                    id={"td1_r_" + i}
+                                                                                    options={APIURLS.POItemType}
+                                                                                    onChange={(e) => {
+                                                                                        document.getElementById("td1_r_" + i).value = e.target.value;
+                                                                                        this.updatePILStateOnBlur("Type", i, e.target.value);
+                                                                                    }}
+                                                                                    
+                                                                                     
+                                                                                />
+                                                                            </td>
+
+                                                                            <td>
+                                                                                <CGSELECT
+                                                                                    id={"td2_r_" + i}
+                                                                                    options={item.categoryList}
+                                                                                    disabled={parseInt(item.Type)===0?false:true}
+                                                                                    onChange={(e) => {
+                                                                                        document.getElementById("td2_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <SCADI
+                                                                                    style={{ width: '100%' }}
+                                                                                    id={"td3_r_" + i}
+                                                                                    value={item.selectitemListObj}
+                                                                                    options={item.itemList}
+                                                                                    isMandatory={true}
+                                                                                    onChange={(e, value) => {
+                                                                                       // this.updatePILStateOnBlur("selectitemListObj", i, value); 
+                                                                                       this.updatePILStateOnBlur("TypeID", i, value,item);
+                                                                                       
+
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td4_r_" + i}
+                                                                                    type="text"
+                                                                                    value={item.desc}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td5_r_" + i}
+                                                                                    type="text"
+                                                                                    value={item.packDesc}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td6_r_" + i}
+                                                                                    type="text"    
+                                                                                    onChange={(e) => {
+                                                                                    document.getElementById("td6_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                    onBlur={(e) => {
+                                                                                        this.updatePILStateOnBlur("CustomerCode",i,e.target.value);
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGSELECT
+                                                                                    id={"td7_r_" + i}
+                                                                                    onChange={(e)=>{
+                                                                                        document.getElementById("td12_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                    onBlur={(e) => {
+                                                                                        this.updatePILStateOnBlur("UOMID",i,e.target.value);
+                                                                                    }}
+                                                                                    options={this.state.UOMList}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td8_r_" + i}
+                                                                                    type="number"
+                                                                                    onChange={(e)=>{
+                                                                                        document.getElementById("td8_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                    onBlur={(e) => {
+                                                                                        this.updatePILStateOnBlur("TolerancePercentage",i,e.target.value);
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td9_r_" + i}
+                                                                                    type="number"
+                                                                                    onChange={(e)=>{
+                                                                                        document.getElementById("td9_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                    onBlur={(e) => {
+                                                                                        this.updatePILStateOnBlur("Quantity",i,e.target.value);
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td10_r_" + i}
+                                                                                    type="number"
+                                                                                    onChange={(e)=>{
+                                                                                        document.getElementById("td10_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                    onBlur={(e) => {
+                                                                                        this.updatePILStateOnBlur("Price",i,e.target.value);
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td11_r_" + i}
+                                                                                    type="number"
+                                                                                    onChange={(e)=>{
+                                                                                        document.getElementById("td11_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                    onBlur={(e) => {
+                                                                                        this.updatePILStateOnBlur("LineDiscPercentage",i,e.target.value);
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGSELECT
+                                                                                    id={"td12_r_" + i}
+                                                                                    onChange={(e)=>{
+                                                                                        document.getElementById("td12_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                    onBlur={(e) => {
+                                                                                        this.updatePILStateOnBlur("ItemPostingGroupID",i,e.target.value);
+                                                                                    }}
+                                                                                    options={this.state.ItemPostingGroupList}
+                                                                                    
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td13_r_" + i}
+                                                                                    type="text"
+                                                                                    onChange={(e)=>{
+                                                                                        document.getElementById("td13_r_"+i).value=e.target.value;
+                                                                                    }}
+                                                                                    onBlur={(e) => {
+                                                                                        this.updatePILStateOnBlur("HSNCode",i,e.target.value);
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGSELECT
+                                                                                    id={"td14_r_" + i}
+                                                                                    onChange={(e)=>{
+                                                                                        document.getElementById("td14_r_"+i).value=e.target.value;
+                                                                                        this.updatePILStateOnBlur("GSTGroupID",i,e.target.value);
+                                                                                    }}
+                                                                                    
+                                                                                    options={this.state.GSTGROUPList}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <CGINPUT
+                                                                                    id={"td15_r_" + i}
+                                                                                    type="number"
+                                                                                    value={item.GSTPercentage}
+                                                                                    disabled={true}
+                                                                                />
+                                                                            </td>
+                                                                            <td>
+                                                                                <SCSI
+                                                                                    key={"td16_r_" + i}
+                                                                                    id={"td16_r_" + i}
+                                                                                    param={item.IsLot}
+                                                                                    onChange={(e)=>{
+                                                                                        this.updatePILStateOnBlur("IsLot",i,e.target.checked);
+                                                                                    }}
+                                                                                />
+                                                                            </td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+
+
+                                                        </Grid>
+                                                    </Grid>
                                                 </div>
                                             </AccordionDetails>
                                         </Accordion>
