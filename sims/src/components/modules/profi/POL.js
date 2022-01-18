@@ -125,7 +125,6 @@ class POL extends React.Component {
                                                 onChange={(e, value) => {
                                                     this.props.updatePILStateOnBlur("TypeID", i, value, item);
 
-
                                                 }}
                                             />
                                         </td>

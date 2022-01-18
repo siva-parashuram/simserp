@@ -533,6 +533,32 @@ class profactivity extends React.Component {
         } catch (err) { }
         return Item;
     }
+    getPrice = (Quantity, o) => {
+        console.log("getPrice > o > ",o)
+        let UnitPrice = 0.00;
+        try {
+          let UOMID_i = o.UOMID;
+          for (let i = 0; i < o.ItemList.length; i++) {
+            if (o.ItemList[i].value === o.TypeID) {
+              let ItemPrice = o.ItemList[i]['ItemPrice'];
+              for (let j = 0; j < ItemPrice.length; j++) {
+                let UOM_j = ItemPrice[j]['UOM'];
+                if (parseInt(UOMID_i) === parseInt(UOM_j)) {
+                  let jo = ItemPrice[j];
+                  if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
+                    UnitPrice = jo.UnitPrice;
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.log("getPrice > err > ", err)
+          UnitPrice = 0.00;
+        }
+        return UnitPrice;
+      }
 
     updatePILStateOnBlur = (key, index, value,LineItem) => {
         try {
@@ -574,18 +600,21 @@ class profactivity extends React.Component {
                         ProformaInvoiceLine[index].IsQuality = value.IsQuality;
                         ProformaInvoiceLine[index].ItemPostingGroupID = parseInt(value.ItemPostingGroupID);
                         ProformaInvoiceLine[index].Quantity=1;
-                        ProformaInvoiceLine[index].Price=parseFloat(value.ItemPrice);
+                        ProformaInvoiceLine[index].Price=parseFloat(this.getPrice(1.00,obj));
                         ProformaInvoiceLine[index].UOMID = parseInt(value.PurchaseUOM);
                         ProformaInvoiceLine[index].TolerancePercentage = parseFloat(value.TolerancePercentage);
+
+
                        
                         try{
-                            document.getElementById("VATPercentage" + index).value = parseFloat(value.VATPercentage);
+                            // document.getElementById("VATPercentage" + index).value = parseFloat(value.VATPercentage);
+                            document.getElementById("UOMID" + index).value = parseFloat(value.PurchaseUOM);
                             document.getElementById("GSTGroupID" + index).value = parseFloat(value.GSTGroupID);
                             document.getElementById("GSTPercentage" + index).value = parseFloat(value.GSTPercentage);
                             document.getElementById("HSNCode" + index).value = parseFloat(value.HSNCode);
                             document.getElementById("ItemPostingGroupID" + index).value = parseFloat(value.ItemPostingGroupID);
                             document.getElementById("Quantity" + index).value = 1;
-                            document.getElementById("Price" + index).value = parseFloat(value.ItemPrice);
+                            document.getElementById("Price" + index).value = parseFloat(this.getPrice(1.00,obj));
                             document.getElementById("TolerancePercentage" + index).value = parseFloat(value.TolerancePercentage);
 
                         }catch(err){console.log("err > ",err);}
