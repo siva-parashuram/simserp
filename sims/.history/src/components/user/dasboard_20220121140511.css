@@ -920,9 +920,9 @@ cursor: pointer;
   font-size: 13px !important;
   border-radius: 0px !important;
   box-sizing:border-box;
-  border-color: rgba(224, 224, 224, 1) !important;
+  /* border-color: rgba(224, 224, 224, 1) !important; */
   outline-style: initial !important;
-  border-width: 0px !important;
+  border-width: 1px !important;
   border-radius: 0px !important;   
   -webkit-border-radius: 0px;
   background: inherit !important;
