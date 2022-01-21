@@ -1247,7 +1247,6 @@ class profactivity extends React.Component {
                 if (response.status === 200) {
                     if(response.data!=""){
                         ProformaInvoice.No = response.data;
-                        
                         let reqData = {
                             ValidUser:ValidUser,
                             ProformaInvoice:ProformaInvoice,
@@ -1402,9 +1401,6 @@ class profactivity extends React.Component {
                     IsLot: ProformaInvoiceLine[i].IsLot,
                 });
             }
-            const headers = {
-                "Content-Type": "application/json",
-              };
             let reqData = {
                 ValidUser:ValidUser,
                 ProformaInvoice:ProformaInvoice,

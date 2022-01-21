@@ -1247,7 +1247,6 @@ class profactivity extends React.Component {
                 if (response.status === 200) {
                     if(response.data!=""){
                         ProformaInvoice.No = response.data;
-                        
                         let reqData = {
                             ValidUser:ValidUser,
                             ProformaInvoice:ProformaInvoice,
@@ -1307,133 +1306,8 @@ class profactivity extends React.Component {
 
     }
 
-    Update = () => {
-        let validData = false;
-        validData = this.validateFormData();
-        if (validData === true) {
-            let ValidUser = APIURLS.ValidUser;
-            ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
-            ValidUser.Token = getCookie(COOKIE.TOKEN);
-    
-            let ProformaInvoice= {
-                ProformaID: parseInt(this.state.ProformaID),
-                ProformaDate: moment(this.state.ProformaDate).format("MM/DD/YYYY"),
-                BranchID: parseInt(this.state.BranchID),
-                No: this.state.No,
-                IsExport: this.state.IsExport,
-                CustID: parseInt(this.state.CustID),
-                BillingID: parseInt(this.state.BillingID),
-                BillingName: this.state.BillingName,
-                BillingAddress: this.state.BillingAddress,
-                BillingAddress2: this.state.BillingAddress2,
-                BillingAddress3: this.state.BillingAddress3,
-                BillingCity: this.state.BillingCity,
-                BillingPostCode: this.state.BillingPostCode,
-                BillingCountryID: parseInt(this.state.BillingCountryID),
-                BillingStateID: (this.state.BillingStateID===null || this.state.BillingStateID==="")?0:parseInt(this.state.BillingStateID),
-                ShippingID: parseInt(this.state.ShippingID),
-                ShippingName: this.state.ShippingName,
-                ShippingAddress: this.state.ShippingAddress,
-                ShippingAddress2: this.state.ShippingAddress2,
-                ShippingAddress3: this.state.ShippingAddress3,
-                ShippingCity: this.state.ShippingCity,
-                ShippingPostCode: this.state.ShippingPostCode,
-                ShippingCountryID: parseInt(this.state.ShippingCountryID),
-                ShippingStateID: (this.state.ShippingStateID===null || this.state.ShippingStateID==="")?0:parseInt(this.state.ShippingStateID),
-                CurrID: parseInt(this.state.CurrID),
-                ExchRate: parseFloat(this.state.ExchRate),
-                FCValue: parseFloat(this.state.FCValue),
-                BaseValue: parseFloat(this.state.BaseValue),
-                PaymentTermID: parseInt(this.state.PaymentTermID),
-                PaymentTerm: this.state.PaymentTerm,
-                Status: parseInt(this.state.Status),
-                WareHouseID: parseInt(this.state.WareHouseID),
-                MODTaxID: parseInt(this.state.MODTaxID),
-                IsRegistedCustomer: this.state.IsRegistedCustomer,
-                GSTNo: this.state.GSTNo,
-                VATNo: this.state.VATNo,
-                IsRounding: this.state.IsRounding,
-                IncoID: parseInt(this.state.IncoID),
-                ShipmentModeID: parseInt(this.state.ShipmentModeID),
-                Notes: this.state.Notes,
-                IsSEZSale: this.state.IsSEZSale,
-                IsTaxExempt: this.state.IsTaxExempt,
-                Reason: this.state.Reason,
-                GeneralPostingGroupID: parseInt(this.state.GeneralPostingGroupID),
-                CustomerPostingGroupID: parseInt(this.state.CustomerPostingGroupID),
-                NotifyID: parseInt(this.state.NotifyID),
-                Reference: this.state.Reference,
-                CustomerOrderDate: moment(this.state.CustomerOrderDate).format("MM/DD/YYYY"),
-                ShipperID: parseInt(this.state.ShipperID),
-                DispatchDate: moment(this.state.DispatchDate).format("MM/DD/YYYY"),
-                DeliveryDate: moment(this.state.DeliveryDate).format("MM/DD/YYYY"),
-                PackingType: parseInt(this.state.PackingType),
-                PackingSpecification: parseInt(this.state.PackingSpecification),
-                NoOfPacket: parseFloat(this.state.NoOfPacket),
-                ServiceType: parseInt(this.state.ServiceType),
-                CountryOfOrigin: parseInt(this.state.CountryOfOrigin),
-                ExitPortID: parseInt(this.state.ExitPortID),
-                Destination: this.state.Destination,
-                FinalDestination: this.state.FinalDestination,
-                BankID: parseInt(this.state.BankID),
-                SalesPersonID: parseInt(this.state.SalesPersonID),
-                UserID: CF.toInt(getCookie(COOKIE.USERID))
-            }
-            let ProformaInvoiceLineList=[];
-            let ProformaInvoiceLine=this.state.ProformaInvoiceLine;
-            console.log("ProformaInvoiceLine > ",ProformaInvoiceLine);
-            for (let i = 0; i < ProformaInvoiceLine.length; i++) {
-                ProformaInvoiceLineList.push({
-                    Type: parseInt(ProformaInvoiceLine[i].Type),
-                    LNo: (i + 1),
-                    TypeID: parseInt(ProformaInvoiceLine[i].TypeID),
-                    CustomerCode: ProformaInvoiceLine[i].CustomerCode,
-                    UOMID: parseInt(ProformaInvoiceLine[i].UOMID),
-                    TolerancePercentage: parseFloat(ProformaInvoiceLine[i].TolerancePercentage),
-                    Quantity: parseFloat(ProformaInvoiceLine[i].Quantity),
-                    Price: parseFloat(ProformaInvoiceLine[i].Price),
-                    LineDiscPercentage: parseFloat(ProformaInvoiceLine[i].LineDiscPercentage),
-                    ItemPostingGroupID: parseInt(ProformaInvoiceLine[i].ItemPostingGroupID),
-                    VATPercentage: parseFloat(ProformaInvoiceLine[i].VATPercentage),
-                    HSNCode: ProformaInvoiceLine[i].HSNCode,
-                    GSTGroupID: parseInt(ProformaInvoiceLine[i].GSTGroupID),
-                    GSTPercentage: parseFloat(ProformaInvoiceLine[i].GSTPercentage),
-                    GSTPlaceOfSold: ProformaInvoiceLine[i].GSTPlaceOfSold,
-                    IsLot: ProformaInvoiceLine[i].IsLot,
-                });
-            }
-            const headers = {
-                "Content-Type": "application/json",
-              };
-            let reqData = {
-                ValidUser:ValidUser,
-                ProformaInvoice:ProformaInvoice,
-                ProformaInvoiceLineList:ProformaInvoiceLineList
-            };
-            console.log("reqData > ",reqData);
-            let Url = APIURLS.APIURL.Add_Update_ProformaInvoice;
-            axios
-            .post(Url, reqData, { headers })
-            .then((response) => { 
-                if (response.status === 201 || response.status === 200) {
-                    this.setState({ SuccessPrompt: true });
-                    
-                }else{
-                    this.setState({ ErrorPrompt: true, ErrorMessageProps: "Data Error",ProgressLoader: true });
-                }
-            })
-            .catch((error) => {
-              console.log("Main API Error");                           
-              this.setState({ ErrorPrompt: true, ErrorMessageProps: "API Error",ProgressLoader: true });
-            });
+    Update=()=>{
 
-
-        } else {
-            this.setState({
-                ErrorMessageProps: "Improper Data",
-                ErrorPrompt: true
-            });
-        }
     }
 
 

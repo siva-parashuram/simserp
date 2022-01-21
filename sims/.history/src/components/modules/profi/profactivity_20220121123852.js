@@ -1247,7 +1247,6 @@ class profactivity extends React.Component {
                 if (response.status === 200) {
                     if(response.data!=""){
                         ProformaInvoice.No = response.data;
-                        
                         let reqData = {
                             ValidUser:ValidUser,
                             ProformaInvoice:ProformaInvoice,
@@ -1402,18 +1401,15 @@ class profactivity extends React.Component {
                     IsLot: ProformaInvoiceLine[i].IsLot,
                 });
             }
-            const headers = {
-                "Content-Type": "application/json",
-              };
             let reqData = {
                 ValidUser:ValidUser,
                 ProformaInvoice:ProformaInvoice,
                 ProformaInvoiceLineList:ProformaInvoiceLineList
             };
             console.log("reqData > ",reqData);
-            let Url = APIURLS.APIURL.Add_Update_ProformaInvoice;
+            let Url2 = APIURLS.APIURL.Add_Update_ProformaInvoice;
             axios
-            .post(Url, reqData, { headers })
+            .post(Url2, reqData, { headers })
             .then((response) => { 
                 if (response.status === 201 || response.status === 200) {
                     this.setState({ SuccessPrompt: true });

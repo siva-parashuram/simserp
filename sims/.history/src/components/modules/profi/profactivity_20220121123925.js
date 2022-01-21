@@ -1402,9 +1402,6 @@ class profactivity extends React.Component {
                     IsLot: ProformaInvoiceLine[i].IsLot,
                 });
             }
-            const headers = {
-                "Content-Type": "application/json",
-              };
             let reqData = {
                 ValidUser:ValidUser,
                 ProformaInvoice:ProformaInvoice,
