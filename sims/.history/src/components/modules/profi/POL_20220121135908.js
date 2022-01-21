@@ -103,10 +103,10 @@ class POL extends React.Component {
                                                 id={"Type" + i}
                                                 options={APIURLS.POItemType}
                                                 onChange={(e) => {
-                                                    // document.getElementById("Type" + i).value = e.target.value;
+                                                    document.getElementById("Type" + i).value = e.target.value;
                                                     this.props.updatePILStateOnBlur("Type", i, parseInt(e.target.value));
                                                 }}
-                                                value={item.Type}
+
 
                                             />
                                         </td>

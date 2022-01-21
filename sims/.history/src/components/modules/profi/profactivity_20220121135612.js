@@ -322,19 +322,6 @@ class profactivity extends React.Component {
                         selectitemListObj = null;
                         itemList = [];
                         categoryList = CustomerData.Category;
-                        for(let j=0;j<categoryList.length;j++){
-                            if(parseInt(categoryList[i].value)===parseInt(PIL[i].CatID)){
-                                itemList=categoryList[i].Item;
-                                break;
-                            }
-                        }
-                        for(let j=0;j<itemList.length;j++){
-                            if(parseInt(itemList[j].value)===parseInt(PIL[i].TypeID)){
-                                selectitemListObj=itemList[j];
-                                break;
-                            }
-                        }
-
                       
                     }
                     if (parseInt(PIL[i].Type) === 1) {
