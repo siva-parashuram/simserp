@@ -105,6 +105,10 @@ class POL extends React.Component {
                                                 onChange={(e) => {
                                                     // document.getElementById("Type" + i).value = e.target.value;
                                                     this.props.updatePILStateOnBlur("Type", i, parseInt(e.target.value));
+                                                    if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
+                                                        alert("Enter Typed");
+                                                    }
+
                                                     try{
                                                         if(parseInt(e.target.value)===0){
                                                             document.getElementById("CategoryID" + i).focus();
@@ -147,11 +151,7 @@ class POL extends React.Component {
                                                 isMandatory={true}
                                                 onChange={(e, value) => {
                                                     this.props.updatePILStateOnBlur("TypeID", i, value, item);
-                                                    try{
-                                                        document.getElementById("CustomerCode" + i).focus();
-                                                    }catch(err){
-                                                        console.log("Enter Clicked err > ",err);
-                                                    }
+
                                                 }}
                                                 
                                             />
@@ -180,16 +180,15 @@ class POL extends React.Component {
                                                 onBlur={(e) => {
                                                     this.props.updatePILStateOnBlur("CustomerCode", i, e.target.value);
                                                 }}
-                                                onKeyDown={(e) => {
+                                                onKeyDown={(e)=>{
                                                     if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
                                                         console.log("Enter Clicked > ");
-                                                        try {
+                                                        try{
                                                             document.getElementById("UOMID" + i).focus();
-                                                            
-                                                        } catch (err) {
-                                                            console.log("Enter Clicked err > ", err);
+                                                        }catch(err){
+                                                            console.log("Enter Clicked err > ",err);
                                                         }
-
+                                                        
                                                     }
                                                 }}
 

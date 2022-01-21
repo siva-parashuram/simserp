@@ -180,16 +180,15 @@ class POL extends React.Component {
                                                 onBlur={(e) => {
                                                     this.props.updatePILStateOnBlur("CustomerCode", i, e.target.value);
                                                 }}
-                                                onKeyDown={(e) => {
+                                                onKeyDown={(e)=>{
                                                     if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
                                                         console.log("Enter Clicked > ");
-                                                        try {
+                                                        try{
                                                             document.getElementById("UOMID" + i).focus();
-                                                            
-                                                        } catch (err) {
-                                                            console.log("Enter Clicked err > ", err);
+                                                        }catch(err){
+                                                            console.log("Enter Clicked err > ",err);
                                                         }
-
+                                                        
                                                     }
                                                 }}
 
