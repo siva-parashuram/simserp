@@ -134,7 +134,7 @@ class profactivity extends React.Component {
             IsSEZSale: false,
             IsRounding: false,
             IsExport: false,
-            GSTPlaceOfSold: true,
+            GSTPlaceOfSold: false,
             WareHouseID: 0,
             SalesPersonID: 0,
             IsDeleted: false,
@@ -288,6 +288,7 @@ class profactivity extends React.Component {
                     let data = response.data;
                     console.log("data > ", data);
 
+
                     let CustomerData = this.getCustomerDataCustID(data.CustID);
 
 
@@ -316,12 +317,10 @@ class profactivity extends React.Component {
                     this.updateTextField("NoOfPacket", data.NoOfPacket);
                     this.updateTextField("PaymentTerm", data.PaymentTerm);
 
-                    let GSTPlaceOfSold=0;
                     let ProformaInvoiceLine = [];
                     let PIL = data.ProformaInvoiceLine;
                     try {
                         for (let i = 0; i < PIL.length; i++) {
-                            GSTPlaceOfSold=PIL[i].GSTPlaceOfSold;
                             let selectitemListObj = null;
                             let itemList = [];
                             let categoryList = [];
@@ -449,7 +448,7 @@ class profactivity extends React.Component {
                             IsSEZSale: data.IsSEZSale,
                             IsRounding: data.IsRounding,
                             IsExport: data.IsExport,
-                            GSTPlaceOfSold:GSTPlaceOfSold===0?true:false,
+                            GSTPlaceOfSold: data.GSTPlaceOfSold,
                             WareHouseID: data.WareHouseID,
                             SalesPersonID: data.SalesPersonID,
                             IsDeleted: data.IsDeleted,
@@ -1287,7 +1286,7 @@ class profactivity extends React.Component {
                     HSNCode: ProformaInvoiceLine[i].HSNCode,
                     GSTGroupID: parseInt(ProformaInvoiceLine[i].GSTGroupID),
                     GSTPercentage: parseFloat(ProformaInvoiceLine[i].GSTPercentage),
-                    GSTPlaceOfSold: this.state.GSTPlaceOfSold === true ? 0 : 1,
+                    GSTPlaceOfSold: ProformaInvoiceLine[i].GSTPlaceOfSold,
                     IsLot: ProformaInvoiceLine[i].IsLot,
                 });
             }
@@ -1462,7 +1461,7 @@ class profactivity extends React.Component {
                     HSNCode: ProformaInvoiceLine[i].HSNCode,
                     GSTGroupID: parseInt(ProformaInvoiceLine[i].GSTGroupID),
                     GSTPercentage: parseFloat(ProformaInvoiceLine[i].GSTPercentage),
-                    GSTPlaceOfSold: this.state.GSTPlaceOfSold === true ? 0 : 1,
+                    GSTPlaceOfSold: ProformaInvoiceLine[i].GSTPlaceOfSold,
                     IsLot: ProformaInvoiceLine[i].IsLot,
                 });
             }
@@ -1736,7 +1735,7 @@ class profactivity extends React.Component {
                                                                                 onBlur={(e) => this.setState({ Reference: e.target.value })}
                                                                             />
 
-
+                                                                          
 
                                                                         </Grid>
                                                                     </Grid>
@@ -1745,7 +1744,7 @@ class profactivity extends React.Component {
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
 
-                                                                            <SDIB
+                                                                        <SDIB
                                                                                 id="WareHouseID"
                                                                                 label="Warehouse"
                                                                                 onChange={(e) => this.setState({ WareHouseID: e.target.value })}
@@ -1797,7 +1796,7 @@ class profactivity extends React.Component {
                                                                                 onChange={(e) => this.setState({ IsExport: e.target.checked })}
                                                                             />
 
-
+                                                                            
 
                                                                         </Grid>
                                                                     </Grid>
@@ -2171,11 +2170,10 @@ class profactivity extends React.Component {
                                                                                 onChange={(e) => this.setState({ BillingStateID: e.target.value })}
                                                                             />
 
-
                                                                             <SSIB
                                                                                 key="GSTPlaceOfSold"
                                                                                 id="GSTPlaceOfSold"
-                                                                                label="GST Billing Address?"
+                                                                                label="GST Shipping Address?"
                                                                                 param={this.state.GSTPlaceOfSold}
                                                                                 onChange={(e) => {
                                                                                     if (this.state.selectedCustomerObj) {
@@ -2291,12 +2289,11 @@ class profactivity extends React.Component {
                                                                                 onChange={(e) => this.setState({ ShippingStateID: e.target.value })}
                                                                             />
 
-
                                                                             <SSIB
                                                                                 key="GSTPlaceOfSold"
                                                                                 id="GSTPlaceOfSold"
-                                                                                label="GST Shipping Address?"
-                                                                                param={!this.state.GSTPlaceOfSold}
+                                                                                label="GST Billing Address?"
+                                                                                param={this.state.GSTPlaceOfSold}
                                                                                 onChange={(e) => {
                                                                                     if (this.state.selectedCustomerObj) {
                                                                                         this.setState({ GSTPlaceOfSold: e.target.checked });
@@ -2475,7 +2472,7 @@ class profactivity extends React.Component {
                                                                             <SSIB
                                                                                 key="IsRegistedSupplier"
                                                                                 id="IsRegistedSupplier"
-                                                                                label="Registed Cutomer?"
+                                                                                label="Registed Supplier?"
                                                                                 param={this.state.IsRegistedSupplier}
                                                                             />
 

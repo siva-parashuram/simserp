@@ -288,6 +288,7 @@ class profactivity extends React.Component {
                     let data = response.data;
                     console.log("data > ", data);
 
+
                     let CustomerData = this.getCustomerDataCustID(data.CustID);
 
 
@@ -316,12 +317,10 @@ class profactivity extends React.Component {
                     this.updateTextField("NoOfPacket", data.NoOfPacket);
                     this.updateTextField("PaymentTerm", data.PaymentTerm);
 
-                    let GSTPlaceOfSold=0;
                     let ProformaInvoiceLine = [];
                     let PIL = data.ProformaInvoiceLine;
                     try {
                         for (let i = 0; i < PIL.length; i++) {
-                            GSTPlaceOfSold=PIL[i].GSTPlaceOfSold;
                             let selectitemListObj = null;
                             let itemList = [];
                             let categoryList = [];
@@ -449,7 +448,7 @@ class profactivity extends React.Component {
                             IsSEZSale: data.IsSEZSale,
                             IsRounding: data.IsRounding,
                             IsExport: data.IsExport,
-                            GSTPlaceOfSold:GSTPlaceOfSold===0?true:false,
+                            GSTPlaceOfSold: data.GSTPlaceOfSold,
                             WareHouseID: data.WareHouseID,
                             SalesPersonID: data.SalesPersonID,
                             IsDeleted: data.IsDeleted,
