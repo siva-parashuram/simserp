@@ -105,16 +105,6 @@ class POL extends React.Component {
                                                 onChange={(e) => {
                                                     // document.getElementById("Type" + i).value = e.target.value;
                                                     this.props.updatePILStateOnBlur("Type", i, parseInt(e.target.value));
-                                                    try{
-                                                        if(parseInt(e.target.value)===0){
-                                                            document.getElementById("CategoryID" + i).focus();
-                                                        }else{
-                                                            document.getElementById("TypeID" + i).focus();
-                                                        }
-                                                        
-                                                    }catch(err){
-                                                        console.log("Enter Clicked err > ",err);
-                                                    }
                                                 }}
                                                 value={item.Type}
 
@@ -129,11 +119,6 @@ class POL extends React.Component {
                                                 onChange={(e) => {
                                                    // document.getElementById("CategoryID" + i).value = e.target.value;
                                                     this.props.updatePILStateOnBlur("CategoryID", i, parseInt(e.target.value), item);
-                                                    try{
-                                                        document.getElementById("TypeID" + i).focus();
-                                                    }catch(err){
-                                                        console.log("Enter Clicked err > ",err);
-                                                    }
                                                 }}
                                                 value={item.CategoryID}
                                             />
@@ -179,12 +164,7 @@ class POL extends React.Component {
                                                 onKeyDown={(e)=>{
                                                     if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
                                                         console.log("Enter Clicked > ");
-                                                        try{
-                                                            document.getElementById("UOMID" + i).focus();
-                                                        }catch(err){
-                                                            console.log("Enter Clicked err > ",err);
-                                                        }
-                                                        
+                                                        document.getElementById("UOMID" + i).click();
                                                     }
                                                 }}
 
@@ -196,14 +176,9 @@ class POL extends React.Component {
                                                 onChange={(e) => {
                                                     document.getElementById("UOMID" + i).value = e.target.value;
                                                     this.props.updatePILStateOnBlur("UOMID", i, e.target.value);
-                                                    try{
-                                                        document.getElementById("TolerancePercentage" + i).focus();
-                                                    }catch(err){
-                                                        console.log("Enter Clicked err > ",err);
-                                                    }
-                                                }}                                               
+                                                }}
+                                               
                                                 options={this.props.state.UOMList}
-                                              
                                             />
                                         </td>
                                         <td>
@@ -215,17 +190,6 @@ class POL extends React.Component {
                                                 }}
                                                 onBlur={(e) => {
                                                     this.props.updatePILStateOnBlur("TolerancePercentage", i, e.target.value);
-                                                }}
-                                                onKeyDown={(e)=>{
-                                                    if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
-                                                        console.log("Enter Clicked > ");
-                                                        try{
-                                                            document.getElementById("Quantity" + i).focus();
-                                                        }catch(err){
-                                                            console.log("Enter Clicked err > ",err);
-                                                        }
-                                                        
-                                                    }
                                                 }}
                                             />
                                         </td>
@@ -239,17 +203,6 @@ class POL extends React.Component {
                                                 onBlur={(e) => {
                                                     this.props.updatePILStateOnBlur("Quantity", i, e.target.value);
                                                 }}
-                                                onKeyDown={(e)=>{
-                                                    if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
-                                                        console.log("Enter Clicked > ");
-                                                        try{
-                                                            document.getElementById("Price" + i).focus();
-                                                        }catch(err){
-                                                            console.log("Enter Clicked err > ",err);
-                                                        }
-                                                        
-                                                    }
-                                                }}
                                             />
                                         </td>
                                         <td>
@@ -261,17 +214,6 @@ class POL extends React.Component {
                                                 }}
                                                 onBlur={(e) => {
                                                     this.props.updatePILStateOnBlur("Price", i, e.target.value);
-                                                }}
-                                                onKeyDown={(e)=>{
-                                                    if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
-                                                        console.log("Enter Clicked > ");
-                                                        try{
-                                                            document.getElementById("LineDiscPercentage" + i).focus();
-                                                        }catch(err){
-                                                            console.log("Enter Clicked err > ",err);
-                                                        }
-                                                        
-                                                    }
                                                 }}
                                             />
                                         </td>
@@ -285,17 +227,6 @@ class POL extends React.Component {
                                                 onBlur={(e) => {
                                                     this.props.updatePILStateOnBlur("LineDiscPercentage", i, e.target.value);
                                                 }}
-                                                onKeyDown={(e)=>{
-                                                    if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
-                                                        console.log("Enter Clicked > ");
-                                                        try{
-                                                            document.getElementById("ItemPostingGroupID" + i).focus();
-                                                        }catch(err){
-                                                            console.log("Enter Clicked err > ",err);
-                                                        }
-                                                        
-                                                    }
-                                                }}
                                             />
                                         </td>
                                         <td>
@@ -304,11 +235,6 @@ class POL extends React.Component {
                                                 onChange={(e) => {
                                                     document.getElementById("ItemPostingGroupID" + i).value = e.target.value;
                                                     this.props.updatePILStateOnBlur("ItemPostingGroupID", i, e.target.value);
-                                                    try{
-                                                        document.getElementById("HSNCode" + i).focus();
-                                                    }catch(err){
-                                                        console.log("Enter Clicked err > ",err);
-                                                    }
                                                 }}
                                                
                                                 options={this.props.state.ItemPostingGroupList}
@@ -325,8 +251,7 @@ class POL extends React.Component {
                                                 onBlur={(e) => {
                                                     this.props.updatePILStateOnBlur("HSNCode", i, e.target.value);
                                                 }}
-                                                
-                                             
+                                            // value={item.HSNCode}
                                             />
                                         </td>
                                         {this.props.state.Branch.IsVAT === true ? (
