@@ -55,7 +55,7 @@ class profactivity extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            type: "",
+            type:"",
             ProgressLoader: false,
             SuccessPrompt: false,
             ErrorPrompt: false,
@@ -93,11 +93,10 @@ class profactivity extends React.Component {
             MODTaxList: [],
             IncoTermList: [],
             ShipmentModeList: [],
-            FixedAssetList: [],
-            GLAccountList: [],
-            ChargesList: [],
-            ShipperList: [],
-            SalesPersonList: [],
+            FixedAssetList:[],
+            GLAccountList:[],
+            ChargesList:[],
+            ShipperList:[],
             PackingTypeList: APIURLS.PackingType,
             ServiceTypeList: APIURLS.ServiceType,
             PackingSpecificationList: APIURLS.PackingSpecification,
@@ -179,28 +178,28 @@ class profactivity extends React.Component {
         var url = new URL(window.location.href);
         const type = url.searchParams.get("type");
         let branchId = url.searchParams.get("branchId");
-        let ProformaID = type === "edit" ? url.searchParams.get("editPIID") : 0;
+        let ProformaID= type === "edit" ? url.searchParams.get("editPIID") : 0;
         if (type === "add") {
             this.setState({
-                type: type,
-                BranchID: parseInt(branchId),
+                type:type,
+                BranchID:parseInt(branchId),
                 typoTitle: "Add",
                 ProgressLoader: true
-            }, () => {
+            },()=>{
                 this.getCustomersByBranchID(branchId);
             });
         } else {
             this.setState({
-                type: type,
-                BranchID: parseInt(branchId),
+                type:type,
+                BranchID:parseInt(branchId),
                 typoTitle: "Edit",
-                ProformaID: parseInt(ProformaID)
-            }, () => {
+                ProformaID:parseInt(ProformaID)
+            },()=>{
                 this.getCustomersByBranchID(branchId);
             });
         }
 
-
+        
     }
 
     getCustomersByBranchID = (branchId) => {
@@ -237,15 +236,12 @@ class profactivity extends React.Component {
                     UOMList: data.UOM,
                     ItemPostingGroupList: data.ItemPostingGroup,
                     GSTGROUPList: data.GSTGROUP,
-                    FixedAssetList: data.FixedAsset,
-                    GLAccountList: data.GLAccount,
-                    ChargesList: data.Charges,
-                    ShipperList: data.Shipper,
-                    SalesPersonList: data.SalesPerson
-                }, () => {
-                    if (this.state.type === "edit") {
-                        this.GetProformaInvoiceByProformaID();
-                    }
+                    FixedAssetList:data.FixedAsset,
+                    GLAccountList:data.GLAccount,
+                    ChargesList:data.Charges,
+                    ShipperList:data.Shipper
+                },()=>{
+                 this.GetProformaInvoiceByProformaID();
                 });
                 for (let i = 0; i < data.WareHouse.length; i++) {
                     if (data.WareHouse[i].IsDefault === true) {
@@ -262,288 +258,289 @@ class profactivity extends React.Component {
             });
     }
 
-    GetProformaInvoiceByProformaID = () => {
-        let ProformaID = parseInt(this.state.ProformaID);
-        console.log("GetProformaInvoiceByProformaID > ProformaID > ", ProformaID);
+    GetProformaInvoiceByProformaID=()=>{
+      let ProformaID=parseInt(this.state.ProformaID);
+      console.log("GetProformaInvoiceByProformaID > ProformaID > ",ProformaID);
+     
+      let ValidUser = APIURLS.ValidUser;
+      ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
+      ValidUser.Token = getCookie(COOKIE.TOKEN);
+      const headers = {
+          "Content-Type": "application/json",
+      };
+      let Url = APIURLS.APIURL.GetProformaInvoiceByProformaID;
 
-        let ValidUser = APIURLS.ValidUser;
-        ValidUser.UserID = parseInt(getCookie(COOKIE.USERID));
-        ValidUser.Token = getCookie(COOKIE.TOKEN);
-        const headers = {
-            "Content-Type": "application/json",
-        };
-        let Url = APIURLS.APIURL.GetProformaInvoiceByProformaID;
+      let reqObj = {
+          ValidUser: ValidUser,
+          ProformaInvoice:{
+            ProformaID: parseInt(ProformaID)
+          }          
+      };
 
-        let reqObj = {
-            ValidUser: ValidUser,
-            ProformaInvoice: {
-                ProformaID: parseInt(ProformaID)
-            }
-        };
+      axios
+      .post(Url, reqObj, { headers })
+      .then((response) => { 
+          if(response.status===200){
+            let data=response.data;
+            console.log("data > ",data);
 
-        axios
-            .post(Url, reqObj, { headers })
-            .then((response) => {
-                if (response.status === 200) {
-                    let data = response.data;
-                    console.log("data > ", data);
+            let CustomerData=this.getCustomerDataCustID(data.CustID);
 
+            this.updateTextField("BillingName",data.BillingName);
+            this.updateTextField("BillingAddress",data.BillingAddress);
+            this.updateTextField("BillingAddress2",data.BillingAddress2);
+            this.updateTextField("BillingAddress3",data.BillingAddress3);
+            this.updateTextField("BillingCity",data.BillingCity);
+            this.updateTextField("BillingPostCode",data.BillingPostCode);
+            this.updateTextField("Reference",data.Reference);
 
-                    let CustomerData = this.getCustomerDataCustID(data.CustID);
+            this.updateTextField("ShippingName",data.ShippingName);
+            this.updateTextField("ShippingAddress",data.ShippingAddress);
+            this.updateTextField("ShippingAddress2",data.ShippingAddress2);
+            this.updateTextField("ShippingAddress3",data.ShippingAddress3);
+            this.updateTextField("ShippingCity",data.ShippingCity);
+            this.updateTextField("ShippingPostCode",data.ShippingPostCode);
 
-
-                    this.updateTextField("BillingName", data.BillingName);
-                    this.updateTextField("BillingAddress", data.BillingAddress);
-                    this.updateTextField("BillingAddress2", data.BillingAddress2);
-                    this.updateTextField("BillingAddress3", data.BillingAddress3);
-                    this.updateTextField("BillingCity", data.BillingCity);
-                    this.updateTextField("BillingPostCode", data.BillingPostCode);
-                    this.updateTextField("Reference", data.Reference);
-
-
-
-                    this.updateTextField("ShippingName", data.ShippingName);
-                    this.updateTextField("ShippingAddress", data.ShippingAddress);
-                    this.updateTextField("ShippingAddress2", data.ShippingAddress2);
-                    this.updateTextField("ShippingAddress3", data.ShippingAddress3);
-                    this.updateTextField("ShippingCity", data.ShippingCity);
-                    this.updateTextField("ShippingPostCode", data.ShippingPostCode);
-
-                    this.updateTextField("ExchRate", data.ExchRate);
+            this.updateTextField("ExchRate",data.ExchRate);
+            
 
 
-
-                    this.updateTextField("Notes", data.Notes);
-                    this.updateTextField("NoOfPacket", data.NoOfPacket);
-                    this.updateTextField("PaymentTerm", data.PaymentTerm);
-
-                    let ProformaInvoiceLine = [];
-                    let PIL = data.ProformaInvoiceLine;
-                    try {
-                        for (let i = 0; i < PIL.length; i++) {
-                            let selectitemListObj = null;
-                            let itemList = [];
-                            let categoryList = [];
-                            if (parseInt(PIL[i].Type) === 0) {
-                                selectitemListObj = null;
-                                itemList = [];
-                                categoryList = CustomerData.Category;
-                                for (let j = 0; j < categoryList.length; j++) {
-                                    if (parseInt(categoryList[i].value) === parseInt(PIL[i].CatID)) {
-                                        itemList = categoryList[i].Item;
-                                        break;
-                                    }
-                                }
-                                for (let j = 0; j < itemList.length; j++) {
-                                    if (parseInt(itemList[j].value) === parseInt(PIL[i].TypeID)) {
-                                        selectitemListObj = itemList[j];
-                                        break;
-                                    }
-                                }
+            
 
 
+            this.updateTextField("Notes",data.Notes);
+            this.updateTextField("NoOfPacket",data.NoOfPacket);
+            this.updateTextField("PaymentTerm",data.PaymentTerm);
+
+            let ProformaInvoiceLine=[];
+            let PIL=data.ProformaInvoiceLine;
+            try{
+                for(let i=0;i<PIL.length;i++){
+                    let selectitemListObj=null;
+                    let itemList=[];
+                    let categoryList=[];
+                    if (parseInt(PIL[i].Type) === 0) {
+                        selectitemListObj = null;
+                        itemList = [];
+                        categoryList = CustomerData.Category;
+                        for(let j=0;j<categoryList.length;j++){
+                            if(parseInt(categoryList[i].value)===parseInt(PIL[i].CatID)){
+                                itemList=categoryList[i].Item;
+                                break;
                             }
-                            if (parseInt(PIL[i].Type) === 1) {
-                                itemList = this.state.GLAccountList;
-
-                            }
-                            if (parseInt(PIL[i].Type) === 2) {
-                                itemList = this.state.FixedAssetList;
-
-                            }
-                            if (parseInt(PIL[i].Type) === 3) {
-                                itemList = this.state.ChargesList;
-                                for (let j = 0; j < itemList.length; j++) {
-                                    if (parseInt(itemList[j].value) === parseInt(PIL[i].TypeID)) {
-                                        selectitemListObj = itemList[j];
-                                        break;
-                                    }
-                                }
-                            }
-                            let PILobj = {
-                                categoryList: categoryList,
-                                ItemList: itemList,
-                                ItemPrice: [],
-                                selectitemListObj: selectitemListObj,
-                                ProformaID: data.ProformaID,
-                                Type: parseInt(PIL[i].Type),
-                                CategoryID: PIL[i].CatID,
-                                LNo: i + 1,
-                                TypeID: PIL[i].TypeID,
-                                desc: PIL[i].Description1,
-                                packDesc: PIL[i].PackingDesc1,
-                                CustomerCode: PIL[i].CustomerCode,
-                                UOMID: PIL[i].UOMID,
-                                TolerancePercentage: PIL[i].TolerancePercentage,
-                                Quantity: PIL[i].Quantity,
-                                Price: PIL[i].Price,
-                                LineDiscPercentage: PIL[i].LineDiscPercentage,
-                                LineDiscAmount: PIL[i].LineDiscAmount,
-                                ItemPostingGroupID: PIL[i].ItemPostingGroupID,
-                                GeneralPostingGroupID: PIL[i].GeneralPostingGroupID,
-                                VATPercentage: PIL[i].VATPercentage,
-                                VATAmount: PIL[i].VATAmount,
-                                HSNCode: PIL[i].HSNCode,
-                                GSTGroupID: PIL[i].GSTGroupID,
-                                SupplyStateID: PIL[i].SupplyStateID,
-                                GSTPercentage: PIL[i].GSTPercentage,
-                                GSTJurisdiction: PIL[i].GSTJurisdiction,
-                                GSTGroupType: PIL[i].GSTGroupType,
-                                GSTPlaceOfSold: PIL[i].GSTPlaceOfSold,
-                                SoldToGSTN: PIL[i].SoldToGSTN,
-                                NatureOfSupply: PIL[i].NatureOfSupply,
-                                GSTBaseAmount: PIL[i].GSTBaseAmount,
-                                IGSTRate: PIL[i].IGSTRate,
-                                IGSTAmt: PIL[i].IGSTAmt,
-                                CGSTRate: PIL[i].CGSTRate,
-                                CGSTAmt: PIL[i].CGSTAmt,
-                                SGSTRate: PIL[i].SGSTRate,
-                                SGSTAmt: PIL[i].SGSTAmt,
-                                IsLot: PIL[i].IsLot,
-                                isDataProper: true,
-                            };
-
-                            ProformaInvoiceLine.push(PILobj);
                         }
-                    } catch (er) {
-                        console.log("Error PIL for loop > er > ", er);
-                    }
-
-
-
-                    this.setState(
-                        {
-                            CustomerBillingAddress: CustomerData.BillingAddress,
-                            CustomerShippingAddress: CustomerData.ShippingAddress,
-                            //-----------------ProformaInvoice---------------------
-                            selectedCustomerObj: CustomerData.selectedCustomerObj,
-                            ProformaID: data.ProformaID,
-                            BranchID: data.BranchID,
-                            Status: data.Status,
-                            No: data.No,
-                            ProformaDate: moment(data.ProformaDate).format("YYYY-MM-DD"),
-                            CustID: data.CustID,
-                            BillingID: data.BillingID,
-                            BillingName: data.BillingName,
-                            BillingAddress: data.BillingAddress,
-                            BillingAddress2: data.BillingAddress2,
-                            BillingAddress3: data.BillingAddress3,
-                            BillingCity: data.BillingCity,
-                            BillingPostCode: data.BillingPostCode,
-                            BillingCountryID: data.BillingCountryID,
-                            BillingStateID: data.BillingStateID,
-                            ShippingID: data.ShippingID,
-                            ShippingName: data.ShippingName,
-                            ShippingAddress: data.ShippingAddress,
-                            ShippingAddress2: data.ShippingAddress2,
-                            ShippingAddress3: data.ShippingAddress3,
-                            ShippingCity: data.ShippingCity,
-                            ShippingPostCode: data.ShippingPostCode,
-                            ShippingCountryID: data.ShippingCountryID,
-                            ShippingStateID: data.ShippingStateID,
-                            DispatchDate: moment(data.DispatchDate).format("YYYY-MM-DD"),
-                            DeliveryDate: moment(data.DeliveryDate).format("YYYY-MM-DD"),
-                            CustomerOrderDate: moment(data.CustomerOrderDate).format("YYYY-MM-DD"),
-                            Reference: data.Reference,
-                            IsSEZSale: data.IsSEZSale,
-                            IsRounding: data.IsRounding,
-                            IsExport: data.IsExport,
-                            GSTPlaceOfSold: data.GSTPlaceOfSold,
-                            WareHouseID: data.WareHouseID,
-                            SalesPersonID: data.SalesPersonID,
-                            IsDeleted: data.IsDeleted,
-                            NotifyID: data.NotifyID,
-                            ShipperID: data.ShipperID,
-                            CountryOfOrigin: data.CountryOfOrigin,
-                            ExitPortID: data.ExitPortID,
-                            Destination: data.Destination,
-                            FinalDestination: data.FinalDestination,
-                            CurrID: data.CurrID,
-                            ExchRate: data.ExchRate,
-                            FCValue: data.FCValue,
-                            BaseValue: data.BaseValue,
-                            PaymentTermID: data.PaymentTermID,
-                            PaymentTerm: data.PaymentTerm,
-                            GeneralPostingGroupID: data.GeneralPostingGroupID,
-                            CustomerPostingGroupID: data.CustomerPostingGroupID,
-                            BankID: data.BankID,
-                            Amount: data.Amount,
-                            DiscountAmount: data.DiscountAmount,
-                            TotalTax: data.TotalTax,
-                            GSTNo: data.GSTNo,
-                            VATNo: data.VATNo,
-                            Reason: data.Reason,
-                            IsTaxExempt: data.IsTaxExempt,
-                            IsRegistedSupplier: data.IsRegistedSupplier,
-                            MODTaxID: data.MODTaxID,
-                            PackingType: data.PackingType,
-                            PackingSpecification: data.PackingSpecification,
-                            NoOfPacket: data.NoOfPacket,
-                            ServiceType: data.ServiceType,
-                            IncoID: data.IncoID,
-                            ShipmentModeID: data.ShipmentModeID,
-                            Notes: data.Notes,
-                            //-------------------------------------------
-                            ProformaInvoiceLine: ProformaInvoiceLine,
-                            ProgressLoader: true
-                        }, () => {
-                            this.calculateInvoiceDetails();
-                            let PIL = data.ProformaInvoiceLine;
-                            for (let i = 0; i < PIL.length; i++) {
-                                this.updateTextField("Type" + i, PIL[i].Type);
-                                this.updateTextField("CategoryID" + i, PIL[i].CategoryID);
-                                this.updateTextField("CustomerCode" + i, PIL[i].CustomerCode);
-                                this.updateTextField("UOMID" + i, PIL[i].UOMID);
-                                this.updateTextField("TolerancePercentage" + i, PIL[i].TolerancePercentage);
-                                this.updateTextField("Quantity" + i, PIL[i].Quantity);
-                                this.updateTextField("Price" + i, PIL[i].Price);
-                                this.updateTextField("LineDiscPercentage" + i, PIL[i].LineDiscPercentage);
-                                this.updateTextField("ItemPostingGroupID" + i, PIL[i].ItemPostingGroupID);
-                                this.updateTextField("HSNCode" + i, PIL[i].HSNCode);
-                                this.updateTextField("GSTGroupID" + i, PIL[i].GSTGroupID);
+                        for(let j=0;j<itemList.length;j++){
+                            if(parseInt(itemList[j].value)===parseInt(PIL[i].TypeID)){
+                                selectitemListObj=itemList[j];
+                                break;
                             }
-                        });
+                        }
+
+                      
+                    }
+                    if (parseInt(PIL[i].Type) === 1) {
+                        itemList = this.state.GLAccountList;
+                       
+                    }
+                    if (parseInt(PIL[i].Type) === 2) {
+                        itemList = this.state.FixedAssetList;
+                      
+                    }
+                    if (parseInt(PIL[i].Type) === 3) {
+                        itemList = this.state.ChargesList;
+                        for(let j=0;j<itemList.length;j++){
+                            if(parseInt(itemList[j].value)===parseInt(PIL[i].TypeID)){
+                                selectitemListObj=itemList[j];
+                                break;
+                            }
+                        }
+                    }
+                    let PILobj = {
+                        categoryList:categoryList,
+                        ItemList:itemList,
+                        ItemPrice:[],
+                        selectitemListObj:selectitemListObj,
+                        ProformaID: data.ProformaID,
+                        Type: parseInt(PIL[i].Type),
+                        CategoryID:PIL[i].CatID,
+                        LNo: i+1,
+                        TypeID: PIL[i].TypeID,
+                        desc:PIL[i].Description1,
+                        packDesc:PIL[i].PackingDesc1,
+                        CustomerCode: PIL[i].CustomerCode,
+                        UOMID: PIL[i].UOMID,
+                        TolerancePercentage:PIL[i].TolerancePercentage,
+                        Quantity: PIL[i].Quantity,
+                        Price: PIL[i].Price,
+                        LineDiscPercentage: PIL[i].LineDiscPercentage,
+                        LineDiscAmount: PIL[i].LineDiscAmount,
+                        ItemPostingGroupID: PIL[i].ItemPostingGroupID,
+                        GeneralPostingGroupID: PIL[i].GeneralPostingGroupID,
+                        VATPercentage: PIL[i].VATPercentage,
+                        VATAmount: PIL[i].VATAmount,
+                        HSNCode: PIL[i].HSNCode,
+                        GSTGroupID: PIL[i].GSTGroupID,
+                        SupplyStateID: PIL[i].SupplyStateID,
+                        GSTPercentage: PIL[i].GSTPercentage,
+                        GSTJurisdiction: PIL[i].GSTJurisdiction,
+                        GSTGroupType: PIL[i].GSTGroupType,
+                        GSTPlaceOfSold: PIL[i].GSTPlaceOfSold,
+                        SoldToGSTN: PIL[i].SoldToGSTN,
+                        NatureOfSupply: PIL[i].NatureOfSupply,
+                        GSTBaseAmount: PIL[i].GSTBaseAmount,
+                        IGSTRate: PIL[i].IGSTRate,
+                        IGSTAmt:PIL[i].IGSTAmt,
+                        CGSTRate: PIL[i].CGSTRate,
+                        CGSTAmt: PIL[i].CGSTAmt,
+                        SGSTRate:PIL[i].SGSTRate,
+                        SGSTAmt: PIL[i].SGSTAmt,
+                        IsLot: PIL[i].IsLot,
+                        isDataProper: true,
+                    };
+                    
+                    ProformaInvoiceLine.push(PILobj);
                 }
-            })
-            .catch((error) => {
-                console.log("GetProformaInvoiceByProformaID > error > ", error);
+            }catch(er){
+                console.log("Error PIL for loop > er > ",er);
+            }
+           
+            
+
+            this.setState(
+                {
+            CustomerBillingAddress:CustomerData.BillingAddress,
+            CustomerShippingAddress:CustomerData.ShippingAddress,
+                //-----------------ProformaInvoice---------------------
+            selectedCustomerObj:CustomerData.selectedCustomerObj,
+            ProformaID: data.ProformaID,
+            BranchID: data.BranchID,
+            Status: data.Status,
+            No: data.No,
+            ProformaDate: moment(data.ProformaDate).format("YYYY-MM-DD"),
+            CustID: data.CustID,
+            BillingID: data.BillingID,
+            BillingName: data.BillingName,
+            BillingAddress: data.BillingAddress,
+            BillingAddress2: data.BillingAddress2,
+            BillingAddress3: data.BillingAddress3,
+            BillingCity: data.BillingCity,
+            BillingPostCode: data.BillingPostCode,
+            BillingCountryID: data.BillingCountryID,
+            BillingStateID: data.BillingStateID,
+            ShippingID: data.ShippingID,
+            ShippingName: data.ShippingName,
+            ShippingAddress: data.ShippingAddress,
+            ShippingAddress2: data.ShippingAddress2,
+            ShippingAddress3: data.ShippingAddress3,
+            ShippingCity: data.ShippingCity,
+            ShippingPostCode: data.ShippingPostCode,
+            ShippingCountryID: data.ShippingCountryID,
+            ShippingStateID: data.ShippingStateID,
+            DispatchDate: moment(data.DispatchDate).format("YYYY-MM-DD"),
+            DeliveryDate: moment(data.DeliveryDate).format("YYYY-MM-DD"),
+            CustomerOrderDate: moment(data.CustomerOrderDate).format("YYYY-MM-DD"),
+            Reference: data.Reference,
+            IsSEZSale: data.IsSEZSale,
+            IsRounding: data.IsRounding,
+            IsExport: data.IsExport,
+            GSTPlaceOfSold: data.GSTPlaceOfSold,
+            WareHouseID: data.WareHouseID,
+            SalesPersonID: data.SalesPersonID,
+            IsDeleted: data.IsDeleted,
+            NotifyID: data.NotifyID,
+            ShipperID: data.ShipperID,
+            CountryOfOrigin: data.CountryOfOrigin,
+            ExitPortID: data.ExitPortID,
+            Destination: data.Destination,
+            FinalDestination: data.FinalDestination,
+            CurrID: data.CurrID,
+            ExchRate: data.ExchRate,
+            FCValue: data.FCValue,
+            BaseValue: data.BaseValue,
+            PaymentTermID: data.PaymentTermID,
+            PaymentTerm: data.PaymentTerm,
+            GeneralPostingGroupID: data.GeneralPostingGroupID,
+            CustomerPostingGroupID: data.CustomerPostingGroupID,
+            BankID: data.BankID,
+            Amount: data.Amount,
+            DiscountAmount: data.DiscountAmount,
+            TotalTax: data.TotalTax,
+            GSTNo: data.GSTNo,
+            VATNo: data.VATNo,
+            Reason: data.Reason,
+            IsTaxExempt: data.IsTaxExempt,
+            IsRegistedSupplier: data.IsRegistedSupplier,
+            MODTaxID: data.MODTaxID,
+            PackingType: data.PackingType,
+            PackingSpecification: data.PackingSpecification,
+            NoOfPacket: data.NoOfPacket,
+            ServiceType: data.ServiceType,
+            IncoID: data.IncoID,
+            ShipmentModeID: data.ShipmentModeID,
+            Notes:data.Notes,
+            //-------------------------------------------
+            ProformaInvoiceLine:ProformaInvoiceLine,
+                ProgressLoader:true
+            },()=>{
+                this.calculateInvoiceDetails();
+                let PIL=data.ProformaInvoiceLine;
+                for(let i=0;i<PIL.length;i++){
+                    this.updateTextField("Type"+i,PIL[i].Type);
+                    this.updateTextField("CategoryID"+i,PIL[i].CategoryID);
+                    this.updateTextField("CustomerCode"+i,PIL[i].CustomerCode);
+                    this.updateTextField("UOMID"+i,PIL[i].UOMID);
+                    this.updateTextField("TolerancePercentage"+i,PIL[i].TolerancePercentage);
+                    this.updateTextField("Quantity"+i,PIL[i].Quantity);
+                    this.updateTextField("Price"+i,PIL[i].Price);
+                    this.updateTextField("LineDiscPercentage"+i,PIL[i].LineDiscPercentage);
+                    this.updateTextField("ItemPostingGroupID"+i,PIL[i].ItemPostingGroupID);
+                    this.updateTextField("HSNCode"+i,PIL[i].HSNCode);
+                    this.updateTextField("GSTGroupID"+i,PIL[i].GSTGroupID);
+                }
             });
+          }
+    })
+    .catch((error) => {
+      console.log("GetProformaInvoiceByProformaID > error > ",error);
+    });
 
     }
 
-    getCustomerDataCustID = (CustID) => {
-        let DATA = {
-            selectedCustomerObj: null,
-            BillingAddress: [],
-            ShippingAddress: [],
-            Category: []
+    getCustomerDataCustID=(CustID)=>{
+        let DATA={
+            selectedCustomerObj:null,
+            BillingAddress:[],
+            ShippingAddress:[],
+            Category:[]
         };
         let customerList = this.state.customerList;
         for (let i = 0; i < customerList.length; i++) {
             if (parseInt(customerList[i].value) === parseInt(CustID)) {
-                DATA.selectedCustomerObj = customerList[i];
-                DATA.BillingAddress = customerList[i].BillingAddress;
-                DATA.ShippingAddress = customerList[i].ShippingAddress;
-                DATA.Category = customerList[i].Category;
+                DATA.selectedCustomerObj=customerList[i];
+                DATA.BillingAddress=customerList[i].BillingAddress;
+                DATA.ShippingAddress=customerList[i].ShippingAddress;
+                DATA.Category=customerList[i].Category;
                 break;
             }
         }
         return DATA;
     }
 
+   
+
     createBlankLine = () => {
         let PILobj = {
-            categoryList: [],
-            ItemList: [],
-            ItemPrice: [],
-            selectitemListObj: null,
+            categoryList:[],
+            ItemList:[],
+            ItemPrice:[],
+            selectitemListObj:null,
             ProformaID: 0,
             Type: 0,
-            CategoryID: "",
+            CategoryID:"",
             LNo: 0,
             TypeID: 0,
-            desc: "",
-            packDesc: "",
+            desc:"",
+            packDesc:"",
             CustomerCode: "",
             UOMID: 0,
             TolerancePercentage: 0,
@@ -765,72 +762,29 @@ class profactivity extends React.Component {
                     }
                 }
                 break;
-            case "ShippingID":
-                this.setState({ ShippingID: CF.toInt(e) });
-                let CustomerShippingAddress = this.state.CustomerShippingAddress;
-                console.log("CustomerShippingAddress > ", CustomerShippingAddress);
-                for (let i = 0; i < CustomerShippingAddress.length; i++) {
-                    if (parseInt(CustomerShippingAddress[i].value) === parseInt(e)) {
-                        this.updateTextField("ShippingName", CustomerShippingAddress[i].Name);
-                        this.updateTextField("ShippingAddress", CustomerShippingAddress[i].Address);
-                        this.updateTextField("ShippingAddress2", CustomerShippingAddress[i].Address2);
-                        this.updateTextField("ShippingAddress3", CustomerShippingAddress[i].Address3);
-                        this.updateTextField("ShippingCity", CustomerShippingAddress[i].City);
-                        this.updateTextField("ShippingPostCode", CustomerShippingAddress[i].PostCode);
-                        this.updateTextField("ShippingCountryID", CustomerShippingAddress[i].CountryID);
-                        this.updateTextField("ShippingStateID", CustomerShippingAddress[i].StateID);
-                        this.setState({
-                            ShippingCountryID: CustomerShippingAddress[i].CountryID,
-                            ShippingStateID: CustomerShippingAddress[i].StateID
-                        });
-                        break;
-                    }
-                }
-                break;
-            case "BillingID":
-                this.setState({ BillingID: CF.toInt(e) });
-                let CustomerBillingAddress = this.state.CustomerBillingAddress;
-                for (let i = 0; i < CustomerBillingAddress.length; i++) {
-                    if (parseInt(CustomerBillingAddress[i].value) === parseInt(e)) {
-                        this.updateTextField("BillingName", CustomerBillingAddress[i].Name);
-                        this.updateTextField("BillingAddress", CustomerBillingAddress[i].Address);
-                        this.updateTextField("BillingAddress2", CustomerBillingAddress[i].Address2);
-                        this.updateTextField("BillingAddress3", CustomerBillingAddress[i].Address3);
-                        this.updateTextField("BillingCity", CustomerBillingAddress[i].City);
-                        this.updateTextField("BillingPostCode", CustomerBillingAddress[i].PostCode);
-                        this.updateTextField("BillingCountryID", CustomerBillingAddress[i].CountryID);
-                        this.updateTextField("BillingStateID", CustomerBillingAddress[i].StateID);
-                        this.setState({
-                            BillingCountryID: CustomerBillingAddress[i].CountryID,
-                            BillingStateID: CustomerBillingAddress[i].StateID
-                        });
-                        break;
-                    }
-                }
-                break;
             default:
                 break;
         }
     }
 
-    resetLineItemList = (Type, index) => {
+    resetLineItemList=(Type,index)=>{
         try {
             let ProformaInvoiceLine = this.state.ProformaInvoiceLine;
-            if (parseInt(Type) === 0) {
+            if(parseInt(Type)===0){
                 ProformaInvoiceLine[index].selectitemListObj = null;
-                ProformaInvoiceLine[index].ItemList = [];
-                ProformaInvoiceLine[index].categoryList = this.state.selectedCustomerObj.Category;
+                ProformaInvoiceLine[index].ItemList = [];   
+                ProformaInvoiceLine[index].categoryList=this.state.selectedCustomerObj.Category;
             }
-            if (parseInt(Type) === 1) {
-                ProformaInvoiceLine[index].ItemList = this.state.GLAccountList;
+            if(parseInt(Type)===1){
+                ProformaInvoiceLine[index].ItemList = this.state.GLAccountList;   
             }
-            if (parseInt(Type) === 2) {
-                ProformaInvoiceLine[index].ItemList = this.state.FixedAssetList;
+            if(parseInt(Type)===2){
+                ProformaInvoiceLine[index].ItemList = this.state.FixedAssetList;   
             }
-            if (parseInt(Type) === 3) {
-                ProformaInvoiceLine[index].ItemList = this.state.ChargesList;
+            if(parseInt(Type)===3){
+                ProformaInvoiceLine[index].ItemList = this.state.ChargesList;   
             }
-
+                     
             this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
         } catch (err) { }
     }
@@ -842,12 +796,12 @@ class profactivity extends React.Component {
 
     }
 
-    getGSTPercentage = (value) => {
-        let GSTPercentage = 0;
-        for (let i = 0; i < this.state.GSTGROUPList.length; i++) {
-            if (parseInt(this.state.GSTGROUPList[i].value) === parseInt(value)) {
-                GSTPercentage = parseFloat(this.state.GSTGROUPList[i].GSTPercentage);
-
+    getGSTPercentage=(value)=>{
+        let GSTPercentage=0;
+        for(let i=0;i< this.state.GSTGROUPList.length;i++){
+            if( parseInt(this.state.GSTGROUPList[i].value)===parseInt(value)){
+                GSTPercentage=parseFloat(this.state.GSTGROUPList[i].GSTPercentage);
+                
                 break;
             }
         }
@@ -868,33 +822,33 @@ class profactivity extends React.Component {
         return Item;
     }
     getPrice = (Quantity, o) => {
-        console.log("getPrice > o > ", o);
+        console.log("getPrice > o > ",o);
         let UnitPrice = 0.00;
         try {
-            let UOMID_i = o.UOMID;
-            console.log("getPrice > UOMID_i > ", UOMID_i);
-            for (let i = 0; i < o.ItemList.length; i++) {
-                if (o.ItemList[i].value === o.TypeID) {
-                    let ItemPrice = o.ItemList[i]['ItemPrice'];
-                    console.log("getPrice > ItemPrice > ", ItemPrice);
-                    for (let j = 0; j < ItemPrice.length; j++) {
-                        let UOM_j = ItemPrice[j]['UOM'];
-                        if (parseInt(UOMID_i) === parseInt(UOM_j)) {
-                            let jo = ItemPrice[j];
-                            if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
-                                UnitPrice = jo.UnitPrice;
-                                break;
-                            }
-                        }
-                    }
+          let UOMID_i = o.UOMID;
+          console.log("getPrice > UOMID_i > ",UOMID_i);
+          for (let i = 0; i < o.ItemList.length; i++) {
+            if (o.ItemList[i].value === o.TypeID) {
+              let ItemPrice = o.ItemList[i]['ItemPrice'];
+              console.log("getPrice > ItemPrice > ",ItemPrice);
+              for (let j = 0; j < ItemPrice.length; j++) {
+                let UOM_j = ItemPrice[j]['UOM'];
+                if (parseInt(UOMID_i) === parseInt(UOM_j)) {
+                  let jo = ItemPrice[j];
+                  if (parseFloat(Quantity) >= parseFloat(jo.MinQty) && parseFloat(Quantity) <= parseFloat(jo.MaxQty)) {
+                    UnitPrice = jo.UnitPrice;
+                    break;
+                  }
                 }
+              }
             }
+          }
         } catch (err) {
-            console.log("getPrice > err > ", err)
-            UnitPrice = 0.00;
+          console.log("getPrice > err > ", err)
+          UnitPrice = 0.00;
         }
         return UnitPrice;
-    }
+      }
 
     updatePILStateOnBlur = (key, index, value, LineItem) => {
         try {
@@ -916,7 +870,7 @@ class profactivity extends React.Component {
                     console.log("key > ", key);
                     console.log("index > ", index);
                     console.log("value > ", value);
-                    let Type = parseInt(LineItem.Type);
+                    let Type=parseInt(LineItem.Type);
                     console.log("Type > ", Type);
                     switch (Type) {
                         case 0:
@@ -926,7 +880,7 @@ class profactivity extends React.Component {
                                 ProformaInvoiceLine[index].TypeID = parseInt(value.value);
                                 ProformaInvoiceLine[index].desc = value.Description1;
                                 ProformaInvoiceLine[index].packDesc = value.PackingDesc1;
-                                ProformaInvoiceLine[index].VATPercentage = value.VATPercentage ? parseFloat(value.VATPercentage) : 0;
+                                ProformaInvoiceLine[index].VATPercentage = value.VATPercentage?parseFloat(value.VATPercentage):0;
                                 ProformaInvoiceLine[index].GSTGroupID = parseInt(value.GSTGroupID);
                                 ProformaInvoiceLine[index].GSTPercentage = parseFloat(value.GSTPercentage);
                                 ProformaInvoiceLine[index].HSNCode = value.HSNCode;
@@ -938,7 +892,7 @@ class profactivity extends React.Component {
                                 ProformaInvoiceLine[index].UOMID = parseInt(value.PurchaseUOM);
                                 ProformaInvoiceLine[index].TolerancePercentage = parseFloat(value.TolerancePercentage);
                                 ProformaInvoiceLine[index].LineDiscPercentage = 0;
-
+                                
                             } catch (err) {
                                 console.log("Error > err > ", err);
                             }
@@ -954,7 +908,7 @@ class profactivity extends React.Component {
                                 document.getElementById("Price" + index).value = parseFloat(this.getPrice(1.00, obj));
                                 document.getElementById("TolerancePercentage" + index).value = parseFloat(value.TolerancePercentage);
                                 document.getElementById("LineDiscPercentage" + index).value = 0;
-
+                                
 
                             } catch (err) { console.log("err > ", err); }
                             break;
@@ -982,11 +936,11 @@ class profactivity extends React.Component {
                     ProformaInvoiceLine[index].ItemPostingGroupID = value;
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
-                case "UOMID":
-                    console.log("IN  UOMID > ", value);
+                case "UOMID": 
+                    console.log("IN  UOMID > ",value);
                     ProformaInvoiceLine[index]["UOMID"] = parseInt(value);
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
-                    console.log("ProformaInvoiceLine > ", ProformaInvoiceLine);
+                    console.log("ProformaInvoiceLine > ",ProformaInvoiceLine);
                     break;
                 case "Quantity":
                     ProformaInvoiceLine[index].Quantity = parseFloat(value);
@@ -1001,17 +955,17 @@ class profactivity extends React.Component {
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
                 case "HSNCode":
-                    ProformaInvoiceLine[index].HSNCode = value;
+                    ProformaInvoiceLine[index].HSNCode =value;
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
-                    break;
+                    break;  
                 case "CustomerCode":
-                    ProformaInvoiceLine[index].CustomerCode = value;
+                    ProformaInvoiceLine[index].CustomerCode =value;
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
-                    break;
+                    break;      
                 case "LineDiscPercentage":
-                    break;
+                break;
                 default:
-                    break;
+                break;
             }
             let isDataProper = this.validateLine(ProformaInvoiceLine[index]);
             ProformaInvoiceLine[index].isDataProper = isDataProper;
@@ -1044,24 +998,24 @@ class profactivity extends React.Component {
 
     validateLine = (o) => {
         let validLine = false;
-
+    
         if (
-            o.Type === "" || o.Type === null ||
-            o.TypeID === "" || o.TypeID === null ||
-            o.Quantity === 0 ||
-            o.Price === 0
+          o.Type === "" || o.Type === null ||
+          o.TypeID === "" || o.TypeID === null ||
+          o.Quantity === 0 ||
+          o.Price === 0
         ) {
-            validLine = false;
+          validLine = false;
         } else {
-            if (o.HSNCode) {
-                if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { validLine = true; }
-            } else {
-                validLine = false;
-            }
+          if (o.HSNCode) {
+            if ((o.HSNCode.length < 6 || o.HSNCode.length > 8)) { validLine = false; } else { validLine = true; }
+          } else {
+            validLine = false;
+          }
         }
-
-
-
+    
+       
+    
         return validLine;
     }
 
@@ -1189,20 +1143,20 @@ class profactivity extends React.Component {
     }
 
     validateFormData = () => {
-        let validData = true;
+     let validData=true;
 
-        return validData;
+     return validData;
     }
 
-    Add = () => {
-        let validData = false;
-        validData = this.validateFormData();
-        if (validData === true) {
+    Add=()=>{
+        let validData=false;
+        validData=this.validateFormData();
+        if(validData===true){
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
-
-            let ProformaInvoice = {
+    
+            let ProformaInvoice= {
                 ProformaID: parseInt(this.state.ProformaID),
                 ProformaDate: moment(this.state.ProformaDate).format("MM/DD/YYYY"),
                 BranchID: parseInt(this.state.BranchID),
@@ -1217,7 +1171,7 @@ class profactivity extends React.Component {
                 BillingCity: this.state.BillingCity,
                 BillingPostCode: this.state.BillingPostCode,
                 BillingCountryID: parseInt(this.state.BillingCountryID),
-                BillingStateID: (this.state.BillingStateID === null || this.state.BillingStateID === "") ? 0 : parseInt(this.state.BillingStateID),
+                BillingStateID: (this.state.BillingStateID===null || this.state.BillingStateID==="")?0:parseInt(this.state.BillingStateID),
                 ShippingID: parseInt(this.state.ShippingID),
                 ShippingName: this.state.ShippingName,
                 ShippingAddress: this.state.ShippingAddress,
@@ -1226,7 +1180,7 @@ class profactivity extends React.Component {
                 ShippingCity: this.state.ShippingCity,
                 ShippingPostCode: this.state.ShippingPostCode,
                 ShippingCountryID: parseInt(this.state.ShippingCountryID),
-                ShippingStateID: (this.state.ShippingStateID === null || this.state.ShippingStateID === "") ? 0 : parseInt(this.state.ShippingStateID),
+                ShippingStateID: (this.state.ShippingStateID===null || this.state.ShippingStateID==="")?0:parseInt(this.state.ShippingStateID),
                 CurrID: parseInt(this.state.CurrID),
                 ExchRate: parseFloat(this.state.ExchRate),
                 FCValue: parseFloat(this.state.FCValue),
@@ -1266,10 +1220,10 @@ class profactivity extends React.Component {
                 SalesPersonID: parseInt(this.state.SalesPersonID),
                 UserID: CF.toInt(getCookie(COOKIE.USERID))
             }
-
-            let ProformaInvoiceLineList = [];
-            let ProformaInvoiceLine = this.state.ProformaInvoiceLine;
-            console.log("ProformaInvoiceLine > ", ProformaInvoiceLine);
+     
+            let ProformaInvoiceLineList=[];
+            let ProformaInvoiceLine=this.state.ProformaInvoiceLine;
+            console.log("ProformaInvoiceLine > ",ProformaInvoiceLine);
             for (let i = 0; i < ProformaInvoiceLine.length; i++) {
                 ProformaInvoiceLineList.push({
                     Type: parseInt(ProformaInvoiceLine[i].Type),
@@ -1294,79 +1248,79 @@ class profactivity extends React.Component {
             let NoSeriesReqData = {
                 ValidUser: ValidUser,
                 DocumentNumber: {
-                    NoSeriesID: this.state.IsExport === true ? CF.toInt(this.state.Branch.EPINo) : CF.toInt(this.state.Branch.LPINo),
-                    TransDate: moment().format("MM-DD-YYYY"),
+                  NoSeriesID: this.state.IsExport === true ? CF.toInt(this.state.Branch.EPINo) : CF.toInt(this.state.Branch.LPINo),
+                  TransDate: moment().format("MM-DD-YYYY"),
                 },
-            };
+              };
 
-            const headers = {
+              const headers = {
                 "Content-Type": "application/json",
-            };
+              };
 
-            let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
-            axios
-                .post(Url1, NoSeriesReqData, { headers })
-                .then((response) => {
-                    if (response.status === 200) {
-                        if (response.data != "") {
-                            ProformaInvoice.No = response.data;
+              let Url1 = APIURLS.APIURL.GetMasterDocumentNumber;
+              axios
+              .post(Url1, NoSeriesReqData, { headers })
+              .then((response) => {
+                if (response.status === 200) {
+                    if(response.data!=""){
+                        ProformaInvoice.No = response.data;
+                        
+                        let reqData = {
+                            ValidUser:ValidUser,
+                            ProformaInvoice:ProformaInvoice,
+                            ProformaInvoiceLineList:ProformaInvoiceLineList
+                        };
+                        console.log("reqData > ",reqData);
+                        let Url2 = APIURLS.APIURL.Add_Update_ProformaInvoice;
+                        axios
+                        .post(Url2, reqData, { headers })
+                        .then((response) => { 
+                            if (response.status === 201 || response.status === 200) {
+                                this.setState({ SuccessPrompt: true });
+                                this.openEditMode(response.data.ID);
+                            }else{
+                                this.setState({ ErrorPrompt: true, ErrorMessageProps: "Data Error",ProgressLoader: true });
+                            }
+                        })
+                        .catch((error) => {
+                          console.log("Main API Error");                           
+                          this.setState({ ErrorPrompt: true, ErrorMessageProps: "API Error",ProgressLoader: true });
+                        });
 
-                            let reqData = {
-                                ValidUser: ValidUser,
-                                ProformaInvoice: ProformaInvoice,
-                                ProformaInvoiceLineList: ProformaInvoiceLineList
-                            };
-                            console.log("reqData > ", reqData);
-                            let Url2 = APIURLS.APIURL.Add_Update_ProformaInvoice;
-                            axios
-                                .post(Url2, reqData, { headers })
-                                .then((response) => {
-                                    if (response.status === 201 || response.status === 200) {
-                                        this.setState({ SuccessPrompt: true });
-                                        this.openEditMode(response.data.ID);
-                                    } else {
-                                        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Data Error", ProgressLoader: true });
-                                    }
-                                })
-                                .catch((error) => {
-                                    console.log("Main API Error");
-                                    this.setState({ ErrorPrompt: true, ErrorMessageProps: "API Error", ProgressLoader: true });
-                                });
-
-                        } else {
-                            this.setState({
-                                ErrorMessageProps: "No. Series Not Found",
-                                ErrorPrompt: true,
-                                ProgressLoader: true
-                            });
-                        }
-
-                    } else {
+                    }else{
                         this.setState({
-                            ErrorMessageProps: "No. Series Not defined.",
+                            ErrorMessageProps: "No. Series Not Found",
                             ErrorPrompt: true,
                             ProgressLoader: true
-                        });
+                          });
                     }
+                    
+                }else{
+                    this.setState({
+                        ErrorMessageProps: "No. Series Not defined.",
+                        ErrorPrompt: true,
+                        ProgressLoader: true
+                      });
+                }  
 
+               
 
-
-                })
-                .catch((error) => {
-                    this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not defined.", });
-                });
-
-
-
-
-        } else {
+              })
+              .catch((error) => {
+                this.setState({ ErrorPrompt: true, ProgressLoader: true, ErrorMessageProps: "No. Series Not defined.", });
+              });
+             
+            
+    
+            
+        }else{
             this.setState({
-                ErrorMessageProps: "Improper Data",
-                ErrorPrompt: true
+                ErrorMessageProps:"Improper Data",
+                ErrorPrompt:true
             });
         }
 
-
+  
 
     }
 
@@ -1377,8 +1331,8 @@ class profactivity extends React.Component {
             let ValidUser = APIURLS.ValidUser;
             ValidUser.UserID = CF.toInt(getCookie(COOKIE.USERID));
             ValidUser.Token = getCookie(COOKIE.TOKEN);
-
-            let ProformaInvoice = {
+    
+            let ProformaInvoice= {
                 ProformaID: parseInt(this.state.ProformaID),
                 ProformaDate: moment(this.state.ProformaDate).format("MM/DD/YYYY"),
                 BranchID: parseInt(this.state.BranchID),
@@ -1393,7 +1347,7 @@ class profactivity extends React.Component {
                 BillingCity: this.state.BillingCity,
                 BillingPostCode: this.state.BillingPostCode,
                 BillingCountryID: parseInt(this.state.BillingCountryID),
-                BillingStateID: (this.state.BillingStateID === null || this.state.BillingStateID === "") ? 0 : parseInt(this.state.BillingStateID),
+                BillingStateID: (this.state.BillingStateID===null || this.state.BillingStateID==="")?0:parseInt(this.state.BillingStateID),
                 ShippingID: parseInt(this.state.ShippingID),
                 ShippingName: this.state.ShippingName,
                 ShippingAddress: this.state.ShippingAddress,
@@ -1402,7 +1356,7 @@ class profactivity extends React.Component {
                 ShippingCity: this.state.ShippingCity,
                 ShippingPostCode: this.state.ShippingPostCode,
                 ShippingCountryID: parseInt(this.state.ShippingCountryID),
-                ShippingStateID: (this.state.ShippingStateID === null || this.state.ShippingStateID === "") ? 0 : parseInt(this.state.ShippingStateID),
+                ShippingStateID: (this.state.ShippingStateID===null || this.state.ShippingStateID==="")?0:parseInt(this.state.ShippingStateID),
                 CurrID: parseInt(this.state.CurrID),
                 ExchRate: parseFloat(this.state.ExchRate),
                 FCValue: parseFloat(this.state.FCValue),
@@ -1442,9 +1396,9 @@ class profactivity extends React.Component {
                 SalesPersonID: parseInt(this.state.SalesPersonID),
                 UserID: CF.toInt(getCookie(COOKIE.USERID))
             }
-            let ProformaInvoiceLineList = [];
-            let ProformaInvoiceLine = this.state.ProformaInvoiceLine;
-            console.log("ProformaInvoiceLine > ", ProformaInvoiceLine);
+            let ProformaInvoiceLineList=[];
+            let ProformaInvoiceLine=this.state.ProformaInvoiceLine;
+            console.log("ProformaInvoiceLine > ",ProformaInvoiceLine);
             for (let i = 0; i < ProformaInvoiceLine.length; i++) {
                 ProformaInvoiceLineList.push({
                     Type: parseInt(ProformaInvoiceLine[i].Type),
@@ -1467,28 +1421,28 @@ class profactivity extends React.Component {
             }
             const headers = {
                 "Content-Type": "application/json",
-            };
+              };
             let reqData = {
-                ValidUser: ValidUser,
-                ProformaInvoice: ProformaInvoice,
-                ProformaInvoiceLineList: ProformaInvoiceLineList
+                ValidUser:ValidUser,
+                ProformaInvoice:ProformaInvoice,
+                ProformaInvoiceLineList:ProformaInvoiceLineList
             };
-            console.log("reqData > ", reqData);
+            console.log("reqData > ",reqData);
             let Url = APIURLS.APIURL.Add_Update_ProformaInvoice;
             axios
-                .post(Url, reqData, { headers })
-                .then((response) => {
-                    if (response.status === 201 || response.status === 200) {
-                        this.setState({ SuccessPrompt: true });
-
-                    } else {
-                        this.setState({ ErrorPrompt: true, ErrorMessageProps: "Data Error", ProgressLoader: true });
-                    }
-                })
-                .catch((error) => {
-                    console.log("Main API Error");
-                    this.setState({ ErrorPrompt: true, ErrorMessageProps: "API Error", ProgressLoader: true });
-                });
+            .post(Url, reqData, { headers })
+            .then((response) => { 
+                if (response.status === 201 || response.status === 200) {
+                    this.setState({ SuccessPrompt: true });
+                    
+                }else{
+                    this.setState({ ErrorPrompt: true, ErrorMessageProps: "Data Error",ProgressLoader: true });
+                }
+            })
+            .catch((error) => {
+              console.log("Main API Error");                           
+              this.setState({ ErrorPrompt: true, ErrorMessageProps: "API Error",ProgressLoader: true });
+            });
 
 
         } else {
@@ -1547,7 +1501,7 @@ class profactivity extends React.Component {
                 this.state.accordion8 === true ? this.setState({ accordion8: false }) : this.setState({ accordion8: true });
             }
 
-
+            
         };
 
         const breadcrumbHtml = (
@@ -1598,7 +1552,7 @@ class profactivity extends React.Component {
                             </Button>
                         </Fragment>
                     ) : null}
-
+                    
 
                 </ButtonGroup>
             </Fragment>
@@ -1704,7 +1658,7 @@ class profactivity extends React.Component {
                                                                                 isMandatory={true}
 
                                                                             />
-                                                                            <SDTI
+                                                                             <SDTI
                                                                                 isMandatory={true}
                                                                                 id="CustomerOrderDate"
                                                                                 label="Customer Order Date"
@@ -1724,33 +1678,13 @@ class profactivity extends React.Component {
                                                                                 isMandatory={true}
                                                                                 value={this.state.SalesPersonID}
                                                                             />
-
-                                                                            <SIB
-                                                                                id="Reference"
-                                                                                label="Reference"
-                                                                                variant="outlined"
-                                                                                onChange={(e) => {
-                                                                                    document.getElementById("Reference").value = e.target.value;
-                                                                                }}
-                                                                                onBlur={(e) => this.setState({ Reference: e.target.value })}
-                                                                            />
-
-                                                                            <SDIB
-                                                                                id="WareHouseID"
-                                                                                label="Warehouse"
-                                                                                onChange={(e) => this.setState({ WareHouseID: e.target.value })}
-                                                                                param={this.state.WarehouseList}
-                                                                                isMandatory={true}
-                                                                                value={this.state.WareHouseID}
-                                                                            />
-
+                                                                          
                                                                         </Grid>
                                                                     </Grid>
                                                                 </Grid>
                                                                 <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
-
                                                                             <SDTI
                                                                                 isMandatory={true}
                                                                                 id="DispatchDate"
@@ -1770,10 +1704,26 @@ class profactivity extends React.Component {
                                                                                 value={this.state.DeliveryDate}
                                                                             />
 
+                                                                           
 
+                                                                            <SIB
+                                                                                id="Reference"
+                                                                                label="Reference"
+                                                                                variant="outlined"
+                                                                                onChange={(e) => {
+                                                                                    document.getElementById("Reference").value = e.target.value;
+                                                                                }}
+                                                                                onBlur={(e) => this.setState({ Reference: e.target.value })}
+                                                                            />
 
-
-
+                                                                            <SDIB
+                                                                                id="WareHouseID"
+                                                                                label="Warehouse"
+                                                                                onChange={(e) => this.setState({ WareHouseID: e.target.value })}
+                                                                                param={this.state.WarehouseList}
+                                                                                isMandatory={true}
+                                                                                value={this.state.WareHouseID}
+                                                                            />
 
                                                                             <SSIB
                                                                                 key="IsSEZSale"
@@ -1851,15 +1801,15 @@ class profactivity extends React.Component {
                                             <AccordionDetails
                                                 key="accordion4" className="AccordionDetails-css">
                                                 <div style={{ height: 250, width: '100%', overflowY: 'scroll', overflowX: 'scroll' }}>
-                                                    <POL
-                                                        state={this.state}
-                                                        updatePILStateOnBlur={this.updatePILStateOnBlur}
-                                                        createBlankLine={this.createBlankLine}
-                                                        itemDelete={this.itemDelete}
-                                                        handleDialogClose={this.handleDialogClose}
-                                                        deleteSelectedItem={this.deleteSelectedItem}
-
-                                                    />
+                                                   <POL 
+                                                   state={this.state} 
+                                                   updatePILStateOnBlur={this.updatePILStateOnBlur}
+                                                   createBlankLine={this.createBlankLine}
+                                                   itemDelete={this.itemDelete}
+                                                   handleDialogClose={this.handleDialogClose}
+                                                   deleteSelectedItem={this.deleteSelectedItem}
+                                                   
+                                                   />
                                                 </div>
                                             </AccordionDetails>
                                         </Accordion>
@@ -1918,7 +1868,7 @@ class profactivity extends React.Component {
                                                                                 onChange={(e) => {
                                                                                     document.getElementById("ExchRate").value = e.target.value;
                                                                                 }}
-                                                                                onBlur={(e) => this.setState({ ExchRate: e.target.value }, () => {
+                                                                                onBlur={(e) => this.setState({ ExchRate: e.target.value },()=>{
                                                                                     this.calculateInvoiceDetails();
                                                                                 })}
                                                                                 isMandatory={true}
@@ -2097,11 +2047,11 @@ class profactivity extends React.Component {
                                                         </Grid>
                                                         <Grid item xs={12} sm={12} md={12} lg={12}>
                                                             <Grid container spacing={0}>
-                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                                                                            <SDIB
+ 
+                                                                        <SDIB
                                                                                 id="BillingID"
                                                                                 label="Billing"
                                                                                 onChange={(e) => this.updateFormValue("BillingID", e.target.value)}
@@ -2199,6 +2149,7 @@ class profactivity extends React.Component {
                                                                 <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
+
                                                                             <SDIB
                                                                                 id="ShippingID"
                                                                                 label="Shipping"
@@ -2220,7 +2171,6 @@ class profactivity extends React.Component {
                                                                                 }}
                                                                                 onBlur={(e) => this.setState({ ShippingName: e.target.value })}
                                                                             />
-
 
                                                                             <SIB
                                                                                 id="ShippingAddress"
@@ -2274,8 +2224,6 @@ class profactivity extends React.Component {
                                                                                 onBlur={(e) => this.setState({ ShippingPostCode: e.target.value })}
                                                                             />
 
-
-
                                                                             <SDIB
                                                                                 id="ShippingCountry"
                                                                                 label="Shipping Country"
@@ -2295,7 +2243,7 @@ class profactivity extends React.Component {
                                                                         </Grid>
                                                                     </Grid>
                                                                 </Grid>
-
+                                                               
                                                             </Grid>
                                                         </Grid>
                                                         <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -2305,7 +2253,7 @@ class profactivity extends React.Component {
                                                 </Fragment>
                                             </AccordionDetails>
                                         </Accordion>
-
+                                       
                                         <Accordion
                                             style={disabledStyle}
                                             key="a-3"
@@ -2338,6 +2286,15 @@ class profactivity extends React.Component {
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
 
+                                                                           
+
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                                                    <Grid container spacing={0}>
+                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
+
                                                                             <SDIB
                                                                                 id="NotifyID"
                                                                                 label="Notify"
@@ -2353,7 +2310,7 @@ class profactivity extends React.Component {
                                                                                 value={this.state.ShipperID}
                                                                                 param={this.state.ShipperList}
                                                                                 isMandatory={true}
-
+                                                                                
                                                                             />
 
                                                                             <SDIB
@@ -2363,15 +2320,6 @@ class profactivity extends React.Component {
                                                                                 value={this.state.CountryOfOrigin}
                                                                                 param={this.state.CountryList}
                                                                             />
-
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                </Grid>
-                                                                <Grid item xs={12} sm={12} md={6} lg={6}>
-                                                                    <Grid container spacing={0}>
-                                                                        <Grid item xs={12} sm={12} md={11} lg={11}>
-
-
 
                                                                             <SDIB
                                                                                 id="ExitPortID"

@@ -243,9 +243,9 @@ class profactivity extends React.Component {
                     ShipperList: data.Shipper,
                     SalesPersonList: data.SalesPerson
                 }, () => {
-                    if (this.state.type === "edit") {
+                    if(this.state.type === "edit"){
                         this.GetProformaInvoiceByProformaID();
-                    }
+                    }                    
                 });
                 for (let i = 0; i < data.WareHouse.length; i++) {
                     if (data.WareHouse[i].IsDefault === true) {
@@ -291,7 +291,7 @@ class profactivity extends React.Component {
 
                     let CustomerData = this.getCustomerDataCustID(data.CustID);
 
-
+                    
                     this.updateTextField("BillingName", data.BillingName);
                     this.updateTextField("BillingAddress", data.BillingAddress);
                     this.updateTextField("BillingAddress2", data.BillingAddress2);
@@ -300,7 +300,7 @@ class profactivity extends React.Component {
                     this.updateTextField("BillingPostCode", data.BillingPostCode);
                     this.updateTextField("Reference", data.Reference);
 
-
+                     
 
                     this.updateTextField("ShippingName", data.ShippingName);
                     this.updateTextField("ShippingAddress", data.ShippingAddress);
@@ -766,49 +766,49 @@ class profactivity extends React.Component {
                 }
                 break;
             case "ShippingID":
-                this.setState({ ShippingID: CF.toInt(e) });
-                let CustomerShippingAddress = this.state.CustomerShippingAddress;
-                console.log("CustomerShippingAddress > ", CustomerShippingAddress);
-                for (let i = 0; i < CustomerShippingAddress.length; i++) {
-                    if (parseInt(CustomerShippingAddress[i].value) === parseInt(e)) {
-                        this.updateTextField("ShippingName", CustomerShippingAddress[i].Name);
-                        this.updateTextField("ShippingAddress", CustomerShippingAddress[i].Address);
-                        this.updateTextField("ShippingAddress2", CustomerShippingAddress[i].Address2);
-                        this.updateTextField("ShippingAddress3", CustomerShippingAddress[i].Address3);
-                        this.updateTextField("ShippingCity", CustomerShippingAddress[i].City);
-                        this.updateTextField("ShippingPostCode", CustomerShippingAddress[i].PostCode);
-                        this.updateTextField("ShippingCountryID", CustomerShippingAddress[i].CountryID);
-                        this.updateTextField("ShippingStateID", CustomerShippingAddress[i].StateID);
+                 this.setState({ShippingID:CF.toInt(e)});
+                 let CustomerShippingAddress=this.state.CustomerShippingAddress;
+                 console.log("CustomerShippingAddress > ",CustomerShippingAddress);
+                 for(let i=0;i<CustomerShippingAddress.length;i++){
+                     if(parseInt(CustomerShippingAddress[i].value)===parseInt(e)){
+                        this.updateTextField("ShippingName",CustomerShippingAddress[i].Name);
+                        this.updateTextField("ShippingAddress",CustomerShippingAddress[i].Address);
+                        this.updateTextField("ShippingAddress2",CustomerShippingAddress[i].Address2);
+                        this.updateTextField("ShippingAddress3",CustomerShippingAddress[i].Address3);
+                        this.updateTextField("ShippingCity",CustomerShippingAddress[i].City);
+                        this.updateTextField("ShippingPostCode",CustomerShippingAddress[i].PostCode);
+                        this.updateTextField("ShippingCountryID",CustomerShippingAddress[i].CountryID);
+                        this.updateTextField("ShippingStateID",CustomerShippingAddress[i].StateID);
                         this.setState({
-                            ShippingCountryID: CustomerShippingAddress[i].CountryID,
-                            ShippingStateID: CustomerShippingAddress[i].StateID
+                            ShippingCountryID:CustomerShippingAddress[i].CountryID,
+                            ShippingStateID:CustomerShippingAddress[i].StateID
                         });
                         break;
-                    }
-                }
+                     }
+                 }
                 break;
             case "BillingID":
-                this.setState({ BillingID: CF.toInt(e) });
-                let CustomerBillingAddress = this.state.CustomerBillingAddress;
-                for (let i = 0; i < CustomerBillingAddress.length; i++) {
-                    if (parseInt(CustomerBillingAddress[i].value) === parseInt(e)) {
-                        this.updateTextField("BillingName", CustomerBillingAddress[i].Name);
-                        this.updateTextField("BillingAddress", CustomerBillingAddress[i].Address);
-                        this.updateTextField("BillingAddress2", CustomerBillingAddress[i].Address2);
-                        this.updateTextField("BillingAddress3", CustomerBillingAddress[i].Address3);
-                        this.updateTextField("BillingCity", CustomerBillingAddress[i].City);
-                        this.updateTextField("BillingPostCode", CustomerBillingAddress[i].PostCode);
-                        this.updateTextField("BillingCountryID", CustomerBillingAddress[i].CountryID);
-                        this.updateTextField("BillingStateID", CustomerBillingAddress[i].StateID);
-                        this.setState({
-                            BillingCountryID: CustomerBillingAddress[i].CountryID,
-                            BillingStateID: CustomerBillingAddress[i].StateID
-                        });
-                        break;
+                this.setState({BillingID:CF.toInt(e)});
+                let CustomerBillingAddress=this.state.CustomerBillingAddress;
+                for(let i=0;i<CustomerBillingAddress.length;i++){
+                    if(parseInt(CustomerBillingAddress[i].value)===parseInt(e)){
+                       this.updateTextField("BillingName",CustomerBillingAddress[i].Name);
+                       this.updateTextField("BillingAddress",CustomerBillingAddress[i].Address);
+                       this.updateTextField("BillingAddress2",CustomerBillingAddress[i].Address2);
+                       this.updateTextField("BillingAddress3",CustomerBillingAddress[i].Address3);
+                       this.updateTextField("BillingCity",CustomerBillingAddress[i].City);
+                       this.updateTextField("BillingPostCode",CustomerBillingAddress[i].PostCode);
+                       this.updateTextField("BillingCountryID",CustomerBillingAddress[i].CountryID);
+                       this.updateTextField("BillingStateID",CustomerBillingAddress[i].StateID);
+                       this.setState({
+                        BillingCountryID:CustomerBillingAddress[i].CountryID,
+                        BillingStateID:CustomerBillingAddress[i].StateID
+                       });
+                       break;
                     }
                 }
-                break;
-            default:
+                break;    
+             default:
                 break;
         }
     }
@@ -1735,7 +1735,7 @@ class profactivity extends React.Component {
                                                                                 onBlur={(e) => this.setState({ Reference: e.target.value })}
                                                                             />
 
-                                                                            <SDIB
+<SDIB
                                                                                 id="WareHouseID"
                                                                                 label="Warehouse"
                                                                                 onChange={(e) => this.setState({ WareHouseID: e.target.value })}
@@ -1750,8 +1750,8 @@ class profactivity extends React.Component {
                                                                 <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
-
-                                                                            <SDTI
+                                                                          
+                                                                        <SDTI
                                                                                 isMandatory={true}
                                                                                 id="DispatchDate"
                                                                                 label="Dispatch Date"
@@ -1771,9 +1771,9 @@ class profactivity extends React.Component {
                                                                             />
 
 
+                                                                           
 
-
-
+                                                                           
 
                                                                             <SSIB
                                                                                 key="IsSEZSale"
@@ -2100,7 +2100,7 @@ class profactivity extends React.Component {
                                                                 <Grid item xs={12} sm={12} md={6} lg={6}>
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
-
+                                                                           
                                                                             <SDIB
                                                                                 id="BillingID"
                                                                                 label="Billing"
@@ -2208,7 +2208,7 @@ class profactivity extends React.Component {
                                                                                 isMandatory={true}
 
                                                                             />
-
+                                                                          
                                                                             <SIB
                                                                                 id="ShippingName"
                                                                                 label="Shipping Name"
@@ -2220,7 +2220,7 @@ class profactivity extends React.Component {
                                                                                 }}
                                                                                 onBlur={(e) => this.setState({ ShippingName: e.target.value })}
                                                                             />
-
+                                                                          
 
                                                                             <SIB
                                                                                 id="ShippingAddress"
@@ -2274,7 +2274,7 @@ class profactivity extends React.Component {
                                                                                 onBlur={(e) => this.setState({ ShippingPostCode: e.target.value })}
                                                                             />
 
-
+                                                                           
 
                                                                             <SDIB
                                                                                 id="ShippingCountry"
@@ -2338,7 +2338,7 @@ class profactivity extends React.Component {
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
 
-                                                                            <SDIB
+                                                                        <SDIB
                                                                                 id="NotifyID"
                                                                                 label="Notify"
                                                                                 onChange={(e) => this.setState({ NotifyID: e.target.value })}
@@ -2371,7 +2371,7 @@ class profactivity extends React.Component {
                                                                     <Grid container spacing={0}>
                                                                         <Grid item xs={12} sm={12} md={11} lg={11}>
 
-
+                                                                           
 
                                                                             <SDIB
                                                                                 id="ExitPortID"
