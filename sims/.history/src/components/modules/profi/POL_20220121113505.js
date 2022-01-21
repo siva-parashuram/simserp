@@ -127,7 +127,7 @@ class POL extends React.Component {
                                                 style={{ width: '100%' }}
                                                 id={"TypeID" + i}
                                                 value={item.selectitemListObj?item.selectitemListObj:null}
-                                                options={item.ItemList?item.ItemList:[]}
+                                                options={item.itemList?item.itemList:[]}
                                                 isMandatory={true}
                                                 onChange={(e, value) => {
                                                     this.props.updatePILStateOnBlur("TypeID", i, value, item);

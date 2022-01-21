@@ -752,17 +752,17 @@ class profactivity extends React.Component {
             let ProformaInvoiceLine = this.state.ProformaInvoiceLine;
             if(parseInt(Type)===0){
                 ProformaInvoiceLine[index].selectitemListObj = null;
-                ProformaInvoiceLine[index].ItemList = [];   
+                ProformaInvoiceLine[index].itemList = [];   
                 ProformaInvoiceLine[index].categoryList=this.state.selectedCustomerObj.Category;
             }
             if(parseInt(Type)===1){
-                ProformaInvoiceLine[index].ItemList = this.state.GLAccountList;   
+                ProformaInvoiceLine[index].itemList = this.state.GLAccountList;   
             }
             if(parseInt(Type)===2){
-                ProformaInvoiceLine[index].ItemList = this.state.FixedAssetList;   
+                ProformaInvoiceLine[index].itemList = this.state.FixedAssetList;   
             }
             if(parseInt(Type)===3){
-                ProformaInvoiceLine[index].ItemList = this.state.ChargesList;   
+                ProformaInvoiceLine[index].itemList = this.state.ChargesList;   
             }
                      
             this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
@@ -842,7 +842,7 @@ class profactivity extends React.Component {
                     break;
                 case "CategoryID":
                     console.log("LineItem > ", LineItem);
-                    ProformaInvoiceLine[index].ItemList = this.getCategoryITEM(value);
+                    ProformaInvoiceLine[index].itemList = this.getCategoryITEM(value);
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
                 case "TypeID":

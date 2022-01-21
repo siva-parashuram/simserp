@@ -72,7 +72,6 @@ class POL extends React.Component {
                                                 aria-label="Action Menu Button group"
                                             >
                                                 <DeleteForeverIcon
-                                                    className="onhoverPointer"
                                                     fontSize="small"
                                                     style={{
                                                         color: '#e53935'
@@ -84,7 +83,6 @@ class POL extends React.Component {
                                                     (i + 1) === this.props.state.ProformaInvoiceLine.length ? (
                                                         <Fragment>
                                                             <AddCircleOutlineIcon
-                                                                className="onhoverPointer"
                                                                 fontSize="small"
                                                                 style={{
                                                                     color: '#00897b',
@@ -127,7 +125,7 @@ class POL extends React.Component {
                                                 style={{ width: '100%' }}
                                                 id={"TypeID" + i}
                                                 value={item.selectitemListObj?item.selectitemListObj:null}
-                                                options={item.ItemList?item.ItemList:[]}
+                                                options={item.itemList}
                                                 isMandatory={true}
                                                 onChange={(e, value) => {
                                                     this.props.updatePILStateOnBlur("TypeID", i, value, item);

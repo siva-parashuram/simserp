@@ -842,7 +842,7 @@ class profactivity extends React.Component {
                     break;
                 case "CategoryID":
                     console.log("LineItem > ", LineItem);
-                    ProformaInvoiceLine[index].ItemList = this.getCategoryITEM(value);
+                    ProformaInvoiceLine[index].itemList = this.getCategoryITEM(value);
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
                 case "TypeID":

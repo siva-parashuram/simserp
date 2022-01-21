@@ -337,7 +337,7 @@ class profactivity extends React.Component {
                     }
                     let PILobj = {
                         categoryList:categoryList,
-                        ItemList:itemList,
+                        itemList:itemList,
                         ItemPrice:[],
                         selectitemListObj:selectitemListObj,
                         ProformaID: data.ProformaID,
@@ -511,7 +511,7 @@ class profactivity extends React.Component {
     createBlankLine = () => {
         let PILobj = {
             categoryList:[],
-            ItemList:[],
+            itemList:[],
             ItemPrice:[],
             selectitemListObj:null,
             ProformaID: 0,
@@ -752,17 +752,17 @@ class profactivity extends React.Component {
             let ProformaInvoiceLine = this.state.ProformaInvoiceLine;
             if(parseInt(Type)===0){
                 ProformaInvoiceLine[index].selectitemListObj = null;
-                ProformaInvoiceLine[index].ItemList = [];   
+                ProformaInvoiceLine[index].itemList = [];   
                 ProformaInvoiceLine[index].categoryList=this.state.selectedCustomerObj.Category;
             }
             if(parseInt(Type)===1){
-                ProformaInvoiceLine[index].ItemList = this.state.GLAccountList;   
+                ProformaInvoiceLine[index].itemList = this.state.GLAccountList;   
             }
             if(parseInt(Type)===2){
-                ProformaInvoiceLine[index].ItemList = this.state.FixedAssetList;   
+                ProformaInvoiceLine[index].itemList = this.state.FixedAssetList;   
             }
             if(parseInt(Type)===3){
-                ProformaInvoiceLine[index].ItemList = this.state.ChargesList;   
+                ProformaInvoiceLine[index].itemList = this.state.ChargesList;   
             }
                      
             this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
@@ -802,15 +802,13 @@ class profactivity extends React.Component {
         return Item;
     }
     getPrice = (Quantity, o) => {
-        console.log("getPrice > o > ",o);
+        console.log("getPrice > o > ",o)
         let UnitPrice = 0.00;
         try {
           let UOMID_i = o.UOMID;
-          console.log("getPrice > UOMID_i > ",UOMID_i);
           for (let i = 0; i < o.ItemList.length; i++) {
             if (o.ItemList[i].value === o.TypeID) {
               let ItemPrice = o.ItemList[i]['ItemPrice'];
-              console.log("getPrice > ItemPrice > ",ItemPrice);
               for (let j = 0; j < ItemPrice.length; j++) {
                 let UOM_j = ItemPrice[j]['UOM'];
                 if (parseInt(UOMID_i) === parseInt(UOM_j)) {
@@ -842,7 +840,7 @@ class profactivity extends React.Component {
                     break;
                 case "CategoryID":
                     console.log("LineItem > ", LineItem);
-                    ProformaInvoiceLine[index].ItemList = this.getCategoryITEM(value);
+                    ProformaInvoiceLine[index].itemList = this.getCategoryITEM(value);
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
                 case "TypeID":
@@ -854,51 +852,55 @@ class profactivity extends React.Component {
                     console.log("Type > ", Type);
                     switch (Type) {
                         case 0:
-                            let obj = ProformaInvoiceLine[index];
-                            console.log("ProformaInvoiceLine > obj > ", obj);
-                            try {
-                                ProformaInvoiceLine[index].TypeID = parseInt(value.value);
-                                ProformaInvoiceLine[index].desc = value.Description1;
-                                ProformaInvoiceLine[index].packDesc = value.PackingDesc1;
-                                ProformaInvoiceLine[index].VATPercentage = parseFloat(value.VATPercentage);
-                                ProformaInvoiceLine[index].GSTGroupID = parseInt(value.GSTGroupID);
-                                ProformaInvoiceLine[index].GSTPercentage = parseFloat(value.GSTPercentage);
-                                ProformaInvoiceLine[index].HSNCode = value.HSNCode;
-                                ProformaInvoiceLine[index].IsLot = value.IsLot;
-                                ProformaInvoiceLine[index].IsQuality = value.IsQuality;
-                                ProformaInvoiceLine[index].ItemPostingGroupID = parseInt(value.ItemPostingGroupID);
-                                ProformaInvoiceLine[index].Quantity = 1;
-                                ProformaInvoiceLine[index].Price = parseFloat(this.getPrice(1.00, obj));
-                                ProformaInvoiceLine[index].UOMID = parseInt(value.PurchaseUOM);
-                                ProformaInvoiceLine[index].TolerancePercentage = parseFloat(value.TolerancePercentage);
-                                ProformaInvoiceLine[index].LineDiscPercentage = 0;
-                                
-                            } catch (err) {
-                                console.log("Error > err > ", err);
-                            }
-
-                            try {
-                                // document.getElementById("VATPercentage" + index).value = parseFloat(value.VATPercentage);
-                                document.getElementById("UOMID" + index).value = parseInt(value.PurchaseUOM);
-                                document.getElementById("GSTGroupID" + index).value = parseInt(value.GSTGroupID);
-                                document.getElementById("GSTPercentage" + index).value = parseFloat(value.GSTPercentage);
-                                document.getElementById("HSNCode" + index).value = value.HSNCode;
-                                document.getElementById("ItemPostingGroupID" + index).value = parseInt(value.ItemPostingGroupID);
-                                document.getElementById("Quantity" + index).value = 1;
-                                document.getElementById("Price" + index).value = parseFloat(this.getPrice(1.00, obj));
-                                document.getElementById("TolerancePercentage" + index).value = parseFloat(value.TolerancePercentage);
-                                document.getElementById("LineDiscPercentage" + index).value = 0;
-                                
-
-                            } catch (err) { console.log("err > ", err); }
+                            console.log("---------------Hey ZEROOOOOOOOOOOOOO-----------------------");
                             break;
-
                         default:
-                            console.log("---------------Hey DEFAULT-----------------------");
-                            ProformaInvoiceLine[index].selectitemListObj = value;
-                            ProformaInvoiceLine[index].desc = value.Description1;
-                            ProformaInvoiceLine[index].TypeID = parseInt(value.value);
                             break;
+                    }
+                    if (parseInt(Type === 0)) {
+                        
+                        let obj = ProformaInvoiceLine[index];
+                        console.log("ProformaInvoiceLine > obj > ", obj);
+                        try {
+
+
+                            ProformaInvoiceLine[index].TypeID = parseInt(value.value);
+                            ProformaInvoiceLine[index].desc = value.Description1;
+                            ProformaInvoiceLine[index].packDesc = value.PackingDesc1;
+                            ProformaInvoiceLine[index].VATPercentage = parseFloat(value.VATPercentage);
+                            ProformaInvoiceLine[index].GSTGroupID = parseInt(value.GSTGroupID);
+                            ProformaInvoiceLine[index].GSTPercentage = parseFloat(value.GSTPercentage);
+                            ProformaInvoiceLine[index].HSNCode = value.HSNCode;
+                            ProformaInvoiceLine[index].IsLot = value.IsLot;
+                            ProformaInvoiceLine[index].IsQuality = value.IsQuality;
+                            ProformaInvoiceLine[index].ItemPostingGroupID = parseInt(value.ItemPostingGroupID);
+                            ProformaInvoiceLine[index].Quantity = 1;
+                            ProformaInvoiceLine[index].Price = parseFloat(this.getPrice(1.00, obj));
+                            ProformaInvoiceLine[index].UOMID = parseInt(value.PurchaseUOM);
+                            ProformaInvoiceLine[index].TolerancePercentage = parseFloat(value.TolerancePercentage);
+                        } catch (err) {
+                            console.log("Error > err > ", err);
+                        }
+
+                        try {
+                            // document.getElementById("VATPercentage" + index).value = parseFloat(value.VATPercentage);
+                            document.getElementById("UOMID" + index).value = parseInt(value.PurchaseUOM);
+                            document.getElementById("GSTGroupID" + index).value = parseInt(value.GSTGroupID);
+                            document.getElementById("GSTPercentage" + index).value = parseFloat(value.GSTPercentage);
+                            document.getElementById("HSNCode" + index).value = value.HSNCode;
+                            document.getElementById("ItemPostingGroupID" + index).value = parseInt(value.ItemPostingGroupID);
+                            document.getElementById("Quantity" + index).value = 1;
+                            document.getElementById("Price" + index).value = parseFloat(this.getPrice(1.00, obj));
+                            document.getElementById("TolerancePercentage" + index).value = parseFloat(value.TolerancePercentage);
+
+                        } catch (err) { console.log("err > ", err); }
+
+
+                    }
+                    else {
+                        ProformaInvoiceLine[index].selectitemListObj = value;
+                        ProformaInvoiceLine[index].desc = value.Description1;
+                        ProformaInvoiceLine[index].TypeID = parseInt(value.value);
                     }
 
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });

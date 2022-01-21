@@ -849,10 +849,10 @@ cursor: pointer;
 #no-space-table tr td{
    padding:0px; 
    margin:0px; 
-   border:0px;   
-   border: solid !important;
-   border-width: 1px !important;  
-   border-color: #d3f1f5 !important;
+   border:0px;  */
+   /* border: solid !important; */
+   /* border-width: 1px !important;
+   border-color: #e0f7fa !important;
   }
 
 .td-width{

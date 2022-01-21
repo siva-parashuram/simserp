@@ -835,7 +835,7 @@ cursor: pointer;
   font-weight: bold !important;
   text-transform: initial !important;
   /* background-color: #e0f7fa !important; */
-  /* border-style: solid !important; */
+  border-style: solid !important;
   border-width: 1px !important;
   padding-left: 5px !important;
 }
@@ -849,10 +849,10 @@ cursor: pointer;
 #no-space-table tr td{
    padding:0px; 
    margin:0px; 
-   border:0px;   
+   border:0px; 
    border: solid !important;
-   border-width: 1px !important;  
-   border-color: #d3f1f5 !important;
+   border-width: 1px !important;
+   border-color: #009688 !important;
   }
 
 .td-width{
