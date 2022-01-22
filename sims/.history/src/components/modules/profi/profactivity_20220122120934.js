@@ -649,26 +649,6 @@ class profactivity extends React.Component {
         }
         return promptDeleteLine;
     }
-    getBillingAddressByBillingID=(BillingID)=>{
-        let Obj={};
-        let BillingAddress=this.state.selectedCustomerObj.BillingAddress;
-        for(let i=0;i<BillingAddress.length;i++){
-          if(parseInt(BillingAddress[i].value)===parseInt(BillingID)){
-            Obj=BillingAddress[i];
-          }
-        }
-        return Obj;
-    }
-    getShippingAddressByShippingID=(ShippingID)=>{
-        let Obj={};
-        let ShippingAddress=this.state.selectedCustomerObj.ShippingAddress;
-        for(let i=0;i<ShippingAddress.length;i++){
-          if(parseInt(ShippingAddress[i].value)===parseInt(ShippingID)){
-            Obj=ShippingAddress[i];
-          }
-        }
-        return Obj;
-    }
 
     updateFormValue = (key, e) => {
         console.log("key > ", key);
@@ -783,35 +763,21 @@ class profactivity extends React.Component {
                 break;
             case "GSTPlaceOfSold":
                 console.log("this.state.selectedCustomerObj > ", this.state.selectedCustomerObj);
-                let BillingAddressObj=this.getBillingAddressByBillingID(this.state.BillingID);
-                let ShippingAddressObj=this.getShippingAddressByShippingID(this.state.ShippingID);
                 if (this.state.selectedCustomerObj) {
                     if (e === false) {
                         try {
                             this.setState({
-                                IsRegistedSupplier: BillingAddressObj.IsRegistedSupplier,
-                                IsTaxExempt: BillingAddressObj.IsTaxExempt,
-                                GSTNo: BillingAddressObj.GSTNo,
-                                VATNo: BillingAddressObj.VATNo,
-                                Reason: BillingAddressObj.Reason,
+                                IsRegistedSupplier: this.state.selectedCustomerObj.BillingAddress[0].IsRegistedSupplier,
+                                IsTaxExempt: this.state.selectedCustomerObj.BillingAddress[0].IsTaxExempt,
+                                GSTNo: this.state.selectedCustomerObj.BillingAddress[0].GSTNo,
+                                VATNo: this.state.selectedCustomerObj.BillingAddress[0].VATNo,
+                                Reason: this.state.selectedCustomerObj.BillingAddress[0].Reason,
                                 GSTPlaceOfSold: true,
                             });
 
-                            this.updateTextField("GSTNo", BillingAddressObj.GSTNo);
-                            this.updateTextField("VATNo", BillingAddressObj.VATNo);
-                            this.updateTextField("Reason", BillingAddressObj.Reason);
-                            // this.setState({
-                            //     IsRegistedSupplier: this.state.selectedCustomerObj.BillingAddress[0].IsRegistedSupplier,
-                            //     IsTaxExempt: this.state.selectedCustomerObj.BillingAddress[0].IsTaxExempt,
-                            //     GSTNo: this.state.selectedCustomerObj.BillingAddress[0].GSTNo,
-                            //     VATNo: this.state.selectedCustomerObj.BillingAddress[0].VATNo,
-                            //     Reason: this.state.selectedCustomerObj.BillingAddress[0].Reason,
-                            //     GSTPlaceOfSold: true,
-                            // });
-
-                            // this.updateTextField("GSTNo", this.state.selectedCustomerObj.BillingAddress[0].GSTNo);
-                            // this.updateTextField("VATNo", this.state.selectedCustomerObj.BillingAddress[0].VATNo);
-                            // this.updateTextField("Reason", this.state.selectedCustomerObj.BillingAddress[0].Reason);
+                            this.updateTextField("GSTNo", this.state.selectedCustomerObj.BillingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", this.state.selectedCustomerObj.BillingAddress[0].VATNo);
+                            this.updateTextField("Reason", this.state.selectedCustomerObj.BillingAddress[0].Reason);
 
                         } catch (err) {
                             console.log("GSTPlaceOfSold > False > err > ", err);
@@ -820,29 +786,17 @@ class profactivity extends React.Component {
                     if (e === true) {
                         try {
                             this.setState({
-                                IsRegistedSupplier: ShippingAddressObj.IsRegistedSupplier,
-                                IsTaxExempt: ShippingAddressObj.IsTaxExempt,
-                                GSTNo: ShippingAddressObj.GSTNo,
-                                VATNo: ShippingAddressObj.VATNo,
-                                Reason: ShippingAddressObj.Reason,
+                                IsRegistedSupplier: this.state.selectedCustomerObj.ShippingAddress[0].IsRegistedSupplier,
+                                IsTaxExempt: this.state.selectedCustomerObj.ShippingAddress[0].IsTaxExempt,
+                                GSTNo: this.state.selectedCustomerObj.ShippingAddress[0].GSTNo,
+                                VATNo: this.state.selectedCustomerObj.ShippingAddress[0].VATNo,
+                                Reason: this.state.selectedCustomerObj.ShippingAddress[0].Reason,
                                 GSTPlaceOfSold: false,
                             });
 
-                            this.updateTextField("GSTNo", ShippingAddressObj.GSTNo);
-                            this.updateTextField("VATNo", ShippingAddressObj.VATNo);
-                            this.updateTextField("Reason", ShippingAddressObj.Reason);
-                            // this.setState({
-                            //     IsRegistedSupplier: this.state.selectedCustomerObj.ShippingAddress[0].IsRegistedSupplier,
-                            //     IsTaxExempt: this.state.selectedCustomerObj.ShippingAddress[0].IsTaxExempt,
-                            //     GSTNo: this.state.selectedCustomerObj.ShippingAddress[0].GSTNo,
-                            //     VATNo: this.state.selectedCustomerObj.ShippingAddress[0].VATNo,
-                            //     Reason: this.state.selectedCustomerObj.ShippingAddress[0].Reason,
-                            //     GSTPlaceOfSold: false,
-                            // });
-
-                            // this.updateTextField("GSTNo", this.state.selectedCustomerObj.ShippingAddress[0].GSTNo);
-                            // this.updateTextField("VATNo", this.state.selectedCustomerObj.ShippingAddress[0].VATNo);
-                            // this.updateTextField("Reason", this.state.selectedCustomerObj.ShippingAddress[0].Reason);
+                            this.updateTextField("GSTNo", this.state.selectedCustomerObj.ShippingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", this.state.selectedCustomerObj.ShippingAddress[0].VATNo);
+                            this.updateTextField("Reason", this.state.selectedCustomerObj.ShippingAddress[0].Reason);
                         } catch (err) {
                             console.log("GSTPlaceOfSold > True > err > ", err);
                         }
@@ -866,17 +820,9 @@ class profactivity extends React.Component {
                         this.setState({
                             ShippingCountryID: CustomerShippingAddress[i].CountryID,
                             ShippingStateID: CustomerShippingAddress[i].StateID,
-                            // GSTNo: CustomerShippingAddress[i].GSTNo,
-                            // VATNo: CustomerShippingAddress[i].VATNo,
+                            GSTNo: CustomerShippingAddress[i].GSTNo,
+                            VATNo: CustomerShippingAddress[i].VATNo,
                         });
-
-                        if(this.state.GSTPlaceOfSold===false){
-                            this.setState({                               
-                                GSTNo: CustomerShippingAddress[i].GSTNo,
-                                VATNo: CustomerShippingAddress[i].VATNo,
-                            }); 
-                        }
-
                         break;
                     }
                 }
@@ -884,35 +830,26 @@ class profactivity extends React.Component {
             case "BillingID":
                 this.setState({ BillingID: CF.toInt(e) });
                 let CustomerBillingAddress = this.state.CustomerBillingAddress;
-                try{
-                    for (let i = 0; i < CustomerBillingAddress.length; i++) {
-                        if (parseInt(CustomerBillingAddress[i].value) === parseInt(e)) {
-                            this.updateTextField("BillingName", CustomerBillingAddress[i].Name);
-                            this.updateTextField("BillingAddress", CustomerBillingAddress[i].Address);
-                            this.updateTextField("BillingAddress2", CustomerBillingAddress[i].Address2);
-                            this.updateTextField("BillingAddress3", CustomerBillingAddress[i].Address3);
-                            this.updateTextField("BillingCity", CustomerBillingAddress[i].City);
-                            this.updateTextField("BillingPostCode", CustomerBillingAddress[i].PostCode);
-                            this.updateTextField("BillingCountryID", CustomerBillingAddress[i].CountryID);
-                            this.updateTextField("BillingStateID", CustomerBillingAddress[i].StateID);
-                            // this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
-                            this.setState({
-                                BillingCountryID: CustomerBillingAddress[i].CountryID,
-                                BillingStateID: CustomerBillingAddress[i].StateID,
-                                // GSTNo: CustomerShippingAddress[i].GSTNo,
-                                // VATNo: CustomerShippingAddress[i].VATNo,
-                            });
-                            if(this.state.GSTPlaceOfSold===true){
-                                this.setState({
-                                    GSTNo: CustomerShippingAddress[i].GSTNo,
-                                    VATNo: CustomerShippingAddress[i].VATNo,
-                                });
-                            }
-                            break;
-                        }
+                for (let i = 0; i < CustomerBillingAddress.length; i++) {
+                    if (parseInt(CustomerBillingAddress[i].value) === parseInt(e)) {
+                        this.updateTextField("BillingName", CustomerBillingAddress[i].Name);
+                        this.updateTextField("BillingAddress", CustomerBillingAddress[i].Address);
+                        this.updateTextField("BillingAddress2", CustomerBillingAddress[i].Address2);
+                        this.updateTextField("BillingAddress3", CustomerBillingAddress[i].Address3);
+                        this.updateTextField("BillingCity", CustomerBillingAddress[i].City);
+                        this.updateTextField("BillingPostCode", CustomerBillingAddress[i].PostCode);
+                        this.updateTextField("BillingCountryID", CustomerBillingAddress[i].CountryID);
+                        this.updateTextField("BillingStateID", CustomerBillingAddress[i].StateID);
+                        // this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
+                        this.setState({
+                            BillingCountryID: CustomerBillingAddress[i].CountryID,
+                            BillingStateID: CustomerBillingAddress[i].StateID,
+                            GSTNo: CustomerShippingAddress[i].GSTNo,
+                            VATNo: CustomerShippingAddress[i].VATNo,
+                        });
+                        break;
                     }
-                }catch(e){}
-                
+                }
                 break;
             default:
                 break;

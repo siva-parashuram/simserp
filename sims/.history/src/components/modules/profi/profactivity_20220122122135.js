@@ -828,9 +828,9 @@ class profactivity extends React.Component {
                                 GSTPlaceOfSold: false,
                             });
 
-                            this.updateTextField("GSTNo", ShippingAddressObj.GSTNo);
-                            this.updateTextField("VATNo", ShippingAddressObj.VATNo);
-                            this.updateTextField("Reason", ShippingAddressObj.Reason);
+                            this.updateTextField("GSTNo", this.state.selectedCustomerObj.ShippingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", this.state.selectedCustomerObj.ShippingAddress[0].VATNo);
+                            this.updateTextField("Reason", this.state.selectedCustomerObj.ShippingAddress[0].Reason);
                             // this.setState({
                             //     IsRegistedSupplier: this.state.selectedCustomerObj.ShippingAddress[0].IsRegistedSupplier,
                             //     IsTaxExempt: this.state.selectedCustomerObj.ShippingAddress[0].IsTaxExempt,
@@ -866,17 +866,9 @@ class profactivity extends React.Component {
                         this.setState({
                             ShippingCountryID: CustomerShippingAddress[i].CountryID,
                             ShippingStateID: CustomerShippingAddress[i].StateID,
-                            // GSTNo: CustomerShippingAddress[i].GSTNo,
-                            // VATNo: CustomerShippingAddress[i].VATNo,
+                            GSTNo: CustomerShippingAddress[i].GSTNo,
+                            VATNo: CustomerShippingAddress[i].VATNo,
                         });
-
-                        if(this.state.GSTPlaceOfSold===false){
-                            this.setState({                               
-                                GSTNo: CustomerShippingAddress[i].GSTNo,
-                                VATNo: CustomerShippingAddress[i].VATNo,
-                            }); 
-                        }
-
                         break;
                     }
                 }
@@ -899,15 +891,9 @@ class profactivity extends React.Component {
                             this.setState({
                                 BillingCountryID: CustomerBillingAddress[i].CountryID,
                                 BillingStateID: CustomerBillingAddress[i].StateID,
-                                // GSTNo: CustomerShippingAddress[i].GSTNo,
-                                // VATNo: CustomerShippingAddress[i].VATNo,
+                                GSTNo: CustomerShippingAddress[i].GSTNo,
+                                VATNo: CustomerShippingAddress[i].VATNo,
                             });
-                            if(this.state.GSTPlaceOfSold===true){
-                                this.setState({
-                                    GSTNo: CustomerShippingAddress[i].GSTNo,
-                                    VATNo: CustomerShippingAddress[i].VATNo,
-                                });
-                            }
                             break;
                         }
                     }

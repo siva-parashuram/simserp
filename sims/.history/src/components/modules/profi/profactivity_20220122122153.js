@@ -866,17 +866,9 @@ class profactivity extends React.Component {
                         this.setState({
                             ShippingCountryID: CustomerShippingAddress[i].CountryID,
                             ShippingStateID: CustomerShippingAddress[i].StateID,
-                            // GSTNo: CustomerShippingAddress[i].GSTNo,
-                            // VATNo: CustomerShippingAddress[i].VATNo,
+                            GSTNo: CustomerShippingAddress[i].GSTNo,
+                            VATNo: CustomerShippingAddress[i].VATNo,
                         });
-
-                        if(this.state.GSTPlaceOfSold===false){
-                            this.setState({                               
-                                GSTNo: CustomerShippingAddress[i].GSTNo,
-                                VATNo: CustomerShippingAddress[i].VATNo,
-                            }); 
-                        }
-
                         break;
                     }
                 }
@@ -899,15 +891,9 @@ class profactivity extends React.Component {
                             this.setState({
                                 BillingCountryID: CustomerBillingAddress[i].CountryID,
                                 BillingStateID: CustomerBillingAddress[i].StateID,
-                                // GSTNo: CustomerShippingAddress[i].GSTNo,
-                                // VATNo: CustomerShippingAddress[i].VATNo,
+                                GSTNo: CustomerShippingAddress[i].GSTNo,
+                                VATNo: CustomerShippingAddress[i].VATNo,
                             });
-                            if(this.state.GSTPlaceOfSold===true){
-                                this.setState({
-                                    GSTNo: CustomerShippingAddress[i].GSTNo,
-                                    VATNo: CustomerShippingAddress[i].VATNo,
-                                });
-                            }
                             break;
                         }
                     }
