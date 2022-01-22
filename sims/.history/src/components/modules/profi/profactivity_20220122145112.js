@@ -1904,7 +1904,7 @@ class profactivity extends React.Component {
                                         </TableRow>
                                         <TableRow>
                                             <TableCell align="left" className="no-border-table">Customer Name</TableCell>
-                                            <TableCell align="right" className="no-border-table">{this.state.selectedCustomerObj?this.state.selectedCustomerObj.name:null}</TableCell>
+                                            <TableCell align="right" className="no-border-table">{this.state.selectedCustomerObj.name}</TableCell>
                                         </TableRow>
                                        
                                     </TableBody>
