@@ -62,7 +62,6 @@ class profactivity extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            filelist: [],
             DeleteAttachment: {
                 e: null,
                 item: null
@@ -115,7 +114,6 @@ class profactivity extends React.Component {
             ServiceTypeList: APIURLS.ServiceType,
             PackingSpecificationList: APIURLS.PackingSpecification,
             selectedCustomerObj: null,
-            CustomerName:"",
             //-----------------ProformaInvoice---------------------
             ProformaID: 0,
             BranchID: 0,
@@ -445,7 +443,6 @@ class profactivity extends React.Component {
 
                     this.setState(
                         {
-                            CustomerName:data.CustomerName,
                             CustomerBillingAddress: CustomerData.BillingAddress,
                             CustomerShippingAddress: CustomerData.ShippingAddress,
                             //-----------------ProformaInvoice---------------------
@@ -1836,7 +1833,11 @@ class profactivity extends React.Component {
                                             <TableCell align="left" className="no-border-table">Customer Name</TableCell>
                                             <TableCell align="right" className="no-border-table">{this.state.CustomerName}</TableCell>
                                         </TableRow>
-                                       
+                                        <TableRow>
+                                            <TableCell align="left" className="no-border-table">Country</TableCell>
+                                            <TableCell align="right" className="no-border-table">{this.state.CountryName}</TableCell>
+                                        </TableRow>
+
                                     </TableBody>
                                 </Table>
                             </TableContainer>
