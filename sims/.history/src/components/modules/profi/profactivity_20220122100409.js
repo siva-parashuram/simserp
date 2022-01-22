@@ -330,15 +330,12 @@ class profactivity extends React.Component {
                                 selectitemListObj = null;
                                 itemList = [];
                                 categoryList = CustomerData.Category;
-                                try{
-                                    for (let j = 0; j < categoryList.length; j++) {
-                                        if (parseInt(categoryList[i].value) === parseInt(PIL[i].CatID)) {
-                                            itemList = categoryList[i].Item;
-                                            break;
-                                        }
+                                for (let j = 0; j < categoryList.length; j++) {
+                                    if (parseInt(categoryList[i].value) === parseInt(PIL[i].CatID)) {
+                                        itemList = categoryList[i].Item;
+                                        break;
                                     }
-                                }catch(e1){console.log("error > e1 > ",e1);}
-                                
+                                }
                                 for (let j = 0; j < itemList.length; j++) {
                                     if (parseInt(itemList[j].value) === parseInt(PIL[i].TypeID)) {
                                         selectitemListObj = itemList[j];
@@ -350,21 +347,11 @@ class profactivity extends React.Component {
                             }
                             if (parseInt(PIL[i].Type) === 1) {
                                 itemList = this.state.GLAccountList;
-                                for (let j = 0; j < itemList.length; j++) {
-                                    if (parseInt(itemList[j].value) === parseInt(PIL[i].TypeID)) {
-                                        selectitemListObj = itemList[j];
-                                        break;
-                                    }
-                                }
+
                             }
                             if (parseInt(PIL[i].Type) === 2) {
                                 itemList = this.state.FixedAssetList;
-                                for (let j = 0; j < itemList.length; j++) {
-                                    if (parseInt(itemList[j].value) === parseInt(PIL[i].TypeID)) {
-                                        selectitemListObj = itemList[j];
-                                        break;
-                                    }
-                                }
+
                             }
                             if (parseInt(PIL[i].Type) === 3) {
                                 itemList = this.state.ChargesList;
@@ -553,7 +540,7 @@ class profactivity extends React.Component {
             ItemPrice: [],
             selectitemListObj: null,
             ProformaID: 0,
-            Type: null,
+            Type: 0,
             CategoryID: "",
             LNo: 0,
             TypeID: 0,
@@ -741,7 +728,7 @@ class profactivity extends React.Component {
                 }
                 break;
             case "GSTPlaceOfSold":
-                console.log("this.state.selectedCustomerObj > ",this.state.selectedCustomerObj);
+
                 if (this.state.selectedCustomerObj) {
                     if (e === false) {
                         try {
@@ -750,12 +737,11 @@ class profactivity extends React.Component {
                                 IsTaxExempt: this.state.selectedCustomerObj.BillingAddress[0].IsTaxExempt,
                                 GSTNo: this.state.selectedCustomerObj.BillingAddress[0].GSTNo,
                                 VATNo: this.state.selectedCustomerObj.BillingAddress[0].VATNo,
-                                Reason: this.state.selectedCustomerObj.BillingAddress[0].Reason,
-                                GSTPlaceOfSold:true,
+                                Reason: this.state.selectedCustomerObj.BillingAddress[0].Reason
                             });
 
-                            // this.updateTextField("GSTNo", this.state.selectedCustomerObj.BillingAddress[0].GSTNo);
-                            // this.updateTextField("VATNo", this.state.selectedCustomerObj.BillingAddress[0].VATNo);
+                            this.updateTextField("GSTNo", this.state.selectedCustomerObj.BillingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", this.state.selectedCustomerObj.BillingAddress[0].VATNo);
                             this.updateTextField("Reason", this.state.selectedCustomerObj.BillingAddress[0].Reason);
 
                         } catch (err) {
@@ -769,12 +755,11 @@ class profactivity extends React.Component {
                                 IsTaxExempt: this.state.selectedCustomerObj.ShippingAddress[0].IsTaxExempt,
                                 GSTNo: this.state.selectedCustomerObj.ShippingAddress[0].GSTNo,
                                 VATNo: this.state.selectedCustomerObj.ShippingAddress[0].VATNo,
-                                Reason: this.state.selectedCustomerObj.ShippingAddress[0].Reason,
-                                GSTPlaceOfSold:false,
+                                Reason: this.state.selectedCustomerObj.ShippingAddress[0].Reason
                             });
 
-                            // this.updateTextField("GSTNo", this.state.selectedCustomerObj.ShippingAddress[0].GSTNo);
-                            // this.updateTextField("VATNo", this.state.selectedCustomerObj.ShippingAddress[0].VATNo);
+                            this.updateTextField("GSTNo", this.state.selectedCustomerObj.ShippingAddress[0].GSTNo);
+                            this.updateTextField("VATNo", this.state.selectedCustomerObj.ShippingAddress[0].VATNo);
                             this.updateTextField("Reason", this.state.selectedCustomerObj.ShippingAddress[0].Reason);
                         } catch (err) {
                             console.log("GSTPlaceOfSold > True > err > ", err);
@@ -798,9 +783,7 @@ class profactivity extends React.Component {
                         this.updateTextField("ShippingStateID", CustomerShippingAddress[i].StateID);
                         this.setState({
                             ShippingCountryID: CustomerShippingAddress[i].CountryID,
-                            ShippingStateID: CustomerShippingAddress[i].StateID,
-                            GSTNo:CustomerShippingAddress[i].GSTNo,
-                            VATNo:CustomerShippingAddress[i].VATNo,
+                            ShippingStateID: CustomerShippingAddress[i].StateID
                         });
                         break;
                     }
@@ -819,12 +802,10 @@ class profactivity extends React.Component {
                         this.updateTextField("BillingPostCode", CustomerBillingAddress[i].PostCode);
                         this.updateTextField("BillingCountryID", CustomerBillingAddress[i].CountryID);
                         this.updateTextField("BillingStateID", CustomerBillingAddress[i].StateID);
-                        // this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
+                        this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
                         this.setState({
                             BillingCountryID: CustomerBillingAddress[i].CountryID,
-                            BillingStateID: CustomerBillingAddress[i].StateID,
-                            GSTNo:CustomerShippingAddress[i].GSTNo,
-                            VATNo:CustomerShippingAddress[i].VATNo,
+                            BillingStateID: CustomerBillingAddress[i].StateID
                         });
                         break;
                     }
@@ -926,22 +907,10 @@ class profactivity extends React.Component {
                     this.resetLineItemList(value, index);
                     ProformaInvoiceLine[index][key] = parseInt(value);
                     ProformaInvoiceLine[index].selectitemListObj = null;
-                    this.setState({ ProformaInvoiceLine: ProformaInvoiceLine },()=>{
-                        try {
-                            if (parseInt(value) === 0) {
-                                document.getElementById("CategoryID" + index).focus();
-                            } 
-                            if (parseInt(value) > 0)  {
-                                document.getElementById("TypeID" + index).focus();
-                            }
-                        } catch (err) {
-                            console.log("Enter Clicked err > ", err);
-                        }
-                    });
+                    this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
                 case "CategoryID":
                     console.log("LineItem > ", LineItem);
-                    ProformaInvoiceLine[index].CategoryID = parseInt(value);
                     ProformaInvoiceLine[index].ItemList = this.getCategoryITEM(value);
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
@@ -2216,7 +2185,7 @@ class profactivity extends React.Component {
                                                                                 param={this.state.GSTPlaceOfSold}
                                                                                 onChange={(e) => {
                                                                                     if (this.state.selectedCustomerObj) {
-                                                                                       // this.setState({ GSTPlaceOfSold: e.target.checked });
+                                                                                        this.setState({ GSTPlaceOfSold: e.target.checked });
                                                                                         this.updateFormValue("GSTPlaceOfSold", e.target.checked);
                                                                                     } else {
                                                                                         this.setState({
@@ -2513,7 +2482,7 @@ class profactivity extends React.Component {
                                                                                 key="IsRegistedSupplier"
                                                                                 id="IsRegistedSupplier"
                                                                                 label="Registed Cutomer?"
-                                                                                param={(this.state.GSTNo!="" || this.state.VATNo!="")?true:this.state.IsRegistedSupplier}
+                                                                                param={this.state.IsRegistedSupplier}
                                                                             />
 
                                                                          
@@ -2524,7 +2493,6 @@ class profactivity extends React.Component {
                                                                                 variant="outlined"
                                                                                 size="small"
                                                                                 disabled={true}
-                                                                                value={this.state.GSTNo}
                                                                             />
 
                                                                             <SIB
@@ -2533,7 +2501,6 @@ class profactivity extends React.Component {
                                                                                 variant="outlined"
                                                                                 size="small"
                                                                                 disabled={true}
-                                                                                value={this.state.VATNo}
                                                                             />
                                                                         </Grid>
                                                                     </Grid>

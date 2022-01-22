@@ -104,16 +104,15 @@ class POL extends React.Component {
                                                 options={APIURLS.POItemType}
                                                 onChange={(e) => {
                                                     this.props.updatePILStateOnBlur("Type", i, parseInt(e.target.value));
-                                                    // try {
-                                                    //     if (parseInt(e.target.value) === 0) {
-                                                    //         document.getElementById("CategoryID" + i).focus();
-                                                    //     } 
-                                                    //     if (parseInt(e.target.value) > 0)  {
-                                                    //         document.getElementById("TypeID" + i).focus();
-                                                    //     }
-                                                    // } catch (err) {
-                                                    //     console.log("Enter Clicked err > ", err);
-                                                    // }
+                                                    try {
+                                                        if (parseInt(e.target.value) === 0) {
+                                                            document.getElementById("CategoryID" + i).focus();
+                                                        } else {
+                                                            document.getElementById("TypeID" + i).focus();
+                                                        }
+                                                    } catch (err) {
+                                                        console.log("Enter Clicked err > ", err);
+                                                    }
                                                 }}
                                                 value={item.Type}
                                             />

@@ -330,15 +330,12 @@ class profactivity extends React.Component {
                                 selectitemListObj = null;
                                 itemList = [];
                                 categoryList = CustomerData.Category;
-                                try{
-                                    for (let j = 0; j < categoryList.length; j++) {
-                                        if (parseInt(categoryList[i].value) === parseInt(PIL[i].CatID)) {
-                                            itemList = categoryList[i].Item;
-                                            break;
-                                        }
+                                for (let j = 0; j < categoryList.length; j++) {
+                                    if (parseInt(categoryList[i].value) === parseInt(PIL[i].CatID)) {
+                                        itemList = categoryList[i].Item;
+                                        break;
                                     }
-                                }catch(e1){console.log("error > e1 > ",e1);}
-                                
+                                }
                                 for (let j = 0; j < itemList.length; j++) {
                                     if (parseInt(itemList[j].value) === parseInt(PIL[i].TypeID)) {
                                         selectitemListObj = itemList[j];
@@ -350,21 +347,11 @@ class profactivity extends React.Component {
                             }
                             if (parseInt(PIL[i].Type) === 1) {
                                 itemList = this.state.GLAccountList;
-                                for (let j = 0; j < itemList.length; j++) {
-                                    if (parseInt(itemList[j].value) === parseInt(PIL[i].TypeID)) {
-                                        selectitemListObj = itemList[j];
-                                        break;
-                                    }
-                                }
+
                             }
                             if (parseInt(PIL[i].Type) === 2) {
                                 itemList = this.state.FixedAssetList;
-                                for (let j = 0; j < itemList.length; j++) {
-                                    if (parseInt(itemList[j].value) === parseInt(PIL[i].TypeID)) {
-                                        selectitemListObj = itemList[j];
-                                        break;
-                                    }
-                                }
+
                             }
                             if (parseInt(PIL[i].Type) === 3) {
                                 itemList = this.state.ChargesList;
@@ -553,7 +540,7 @@ class profactivity extends React.Component {
             ItemPrice: [],
             selectitemListObj: null,
             ProformaID: 0,
-            Type: null,
+            Type: 0,
             CategoryID: "",
             LNo: 0,
             TypeID: 0,
@@ -819,7 +806,7 @@ class profactivity extends React.Component {
                         this.updateTextField("BillingPostCode", CustomerBillingAddress[i].PostCode);
                         this.updateTextField("BillingCountryID", CustomerBillingAddress[i].CountryID);
                         this.updateTextField("BillingStateID", CustomerBillingAddress[i].StateID);
-                        // this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
+                        this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
                         this.setState({
                             BillingCountryID: CustomerBillingAddress[i].CountryID,
                             BillingStateID: CustomerBillingAddress[i].StateID,
@@ -926,22 +913,10 @@ class profactivity extends React.Component {
                     this.resetLineItemList(value, index);
                     ProformaInvoiceLine[index][key] = parseInt(value);
                     ProformaInvoiceLine[index].selectitemListObj = null;
-                    this.setState({ ProformaInvoiceLine: ProformaInvoiceLine },()=>{
-                        try {
-                            if (parseInt(value) === 0) {
-                                document.getElementById("CategoryID" + index).focus();
-                            } 
-                            if (parseInt(value) > 0)  {
-                                document.getElementById("TypeID" + index).focus();
-                            }
-                        } catch (err) {
-                            console.log("Enter Clicked err > ", err);
-                        }
-                    });
+                    this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
                 case "CategoryID":
                     console.log("LineItem > ", LineItem);
-                    ProformaInvoiceLine[index].CategoryID = parseInt(value);
                     ProformaInvoiceLine[index].ItemList = this.getCategoryITEM(value);
                     this.setState({ ProformaInvoiceLine: ProformaInvoiceLine });
                     break;
