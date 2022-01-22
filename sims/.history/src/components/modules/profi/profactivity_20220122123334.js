@@ -887,7 +887,6 @@ class profactivity extends React.Component {
                 try{
                     for (let i = 0; i < CustomerBillingAddress.length; i++) {
                         if (parseInt(CustomerBillingAddress[i].value) === parseInt(e)) {
-                            console.log("this.state.GSTPlaceOfSold ---------> ",CustomerBillingAddress[i]);
                             this.updateTextField("BillingName", CustomerBillingAddress[i].Name);
                             this.updateTextField("BillingAddress", CustomerBillingAddress[i].Address);
                             this.updateTextField("BillingAddress2", CustomerBillingAddress[i].Address2);
@@ -896,7 +895,7 @@ class profactivity extends React.Component {
                             this.updateTextField("BillingPostCode", CustomerBillingAddress[i].PostCode);
                             this.updateTextField("BillingCountryID", CustomerBillingAddress[i].CountryID);
                             this.updateTextField("BillingStateID", CustomerBillingAddress[i].StateID);
-                           
+                            // this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
                             this.setState({
                                 BillingCountryID: CustomerBillingAddress[i].CountryID,
                                 BillingStateID: CustomerBillingAddress[i].StateID,
@@ -905,10 +904,9 @@ class profactivity extends React.Component {
                             });
                             console.log("this.state.GSTPlaceOfSold ---------> ",this.state.GSTPlaceOfSold);
                             if(this.state.GSTPlaceOfSold===true){
-                                this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
                                 this.setState({
-                                    GSTNo: CustomerBillingAddress[i].GSTNo,
-                                    VATNo: CustomerBillingAddress[i].VATNo,
+                                    GSTNo: CustomerShippingAddress[i].GSTNo,
+                                    VATNo: CustomerShippingAddress[i].VATNo,
                                 });
                             }
                             break;

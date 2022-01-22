@@ -907,8 +907,8 @@ class profactivity extends React.Component {
                             if(this.state.GSTPlaceOfSold===true){
                                 this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
                                 this.setState({
-                                    GSTNo: CustomerBillingAddress[i].GSTNo,
-                                    VATNo: CustomerBillingAddress[i].VATNo,
+                                    GSTNo: CustomerShippingAddress[i].GSTNo,
+                                    VATNo: CustomerShippingAddress[i].VATNo,
                                 });
                             }
                             break;

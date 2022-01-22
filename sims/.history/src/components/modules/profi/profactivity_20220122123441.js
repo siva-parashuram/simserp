@@ -896,7 +896,7 @@ class profactivity extends React.Component {
                             this.updateTextField("BillingPostCode", CustomerBillingAddress[i].PostCode);
                             this.updateTextField("BillingCountryID", CustomerBillingAddress[i].CountryID);
                             this.updateTextField("BillingStateID", CustomerBillingAddress[i].StateID);
-                           
+                            // this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
                             this.setState({
                                 BillingCountryID: CustomerBillingAddress[i].CountryID,
                                 BillingStateID: CustomerBillingAddress[i].StateID,
@@ -905,10 +905,9 @@ class profactivity extends React.Component {
                             });
                             console.log("this.state.GSTPlaceOfSold ---------> ",this.state.GSTPlaceOfSold);
                             if(this.state.GSTPlaceOfSold===true){
-                                this.updateTextField("GSTNo", CustomerBillingAddress[i].GSTNo);
                                 this.setState({
-                                    GSTNo: CustomerBillingAddress[i].GSTNo,
-                                    VATNo: CustomerBillingAddress[i].VATNo,
+                                    GSTNo: CustomerShippingAddress[i].GSTNo,
+                                    VATNo: CustomerShippingAddress[i].VATNo,
                                 });
                             }
                             break;
