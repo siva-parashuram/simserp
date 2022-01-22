@@ -333,8 +333,6 @@ class profactivity extends React.Component {
                     this.updateTextField("Notes", data.Notes);
                     this.updateTextField("NoOfPacket", data.NoOfPacket);
                     this.updateTextField("PaymentTerm", data.PaymentTerm);
-                    this.updateTextField("Destination", data.Destination);
-                    this.updateTextField("FinalDestination", data.FinalDestination);
 
                     let GSTPlaceOfSold = 0;
                     let ProformaInvoiceLine = [];
@@ -443,7 +441,7 @@ class profactivity extends React.Component {
                         console.log("Error PIL for loop > er > ", er);
                     }
 
-                   
+                    
 
                     this.setState(
                         {
@@ -536,7 +534,6 @@ class profactivity extends React.Component {
                                 this.updateTextField("ItemPostingGroupID" + i, PIL[i].ItemPostingGroupID);
                                 this.updateTextField("HSNCode" + i, PIL[i].HSNCode);
                                 this.updateTextField("GSTGroupID" + i, PIL[i].GSTGroupID);
-                               
                             }
                         });
                 }
