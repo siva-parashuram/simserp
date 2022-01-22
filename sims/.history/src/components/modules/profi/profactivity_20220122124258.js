@@ -2163,6 +2163,7 @@ class profactivity extends React.Component {
                                                                                 label="Sales Person"
                                                                                 onChange={(e) => this.setState({ SalesPersonID: e.target.value })}
                                                                                 param={this.state.SalesPersonList}
+                                                                                isMandatory={true}
                                                                                 value={this.state.SalesPersonID}
                                                                             />
 
@@ -2630,7 +2631,7 @@ class profactivity extends React.Component {
                                                                                 id="ShippingID"
                                                                                 label="Shipping"
                                                                                 onChange={(e) => this.updateFormValue("ShippingID", e.target.value)}
-                                                                                value={this.state.ShippingID}
+                                                                                value={1}
                                                                                 param={this.state.CustomerShippingAddress}
                                                                                 isMandatory={true}
 
