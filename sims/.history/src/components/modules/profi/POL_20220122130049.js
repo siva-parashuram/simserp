@@ -251,7 +251,8 @@ class POL extends React.Component {
                                                 }}
                                                 onKeyDown={(e) => {
                                                     if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
-                                                        
+                                                        console.log("i > ",i);
+                                                        console.log("this.props.state.ProformaInvoiceLine.length > ",this.props.state.ProformaInvoiceLine.length);
                                                         if(parseInt(i)+1===parseInt(this.props.state.ProformaInvoiceLine.length)){
                                                             this.props.createBlankLine();
                                                         }

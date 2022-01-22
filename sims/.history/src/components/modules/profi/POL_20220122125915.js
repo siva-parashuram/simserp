@@ -251,10 +251,8 @@ class POL extends React.Component {
                                                 }}
                                                 onKeyDown={(e) => {
                                                     if (e.key === 'Enter' || e.keyCode === 13 || e.keyCode === 39) {
-                                                        
-                                                        if(parseInt(i)+1===parseInt(this.props.state.ProformaInvoiceLine.length)){
-                                                            this.props.createBlankLine();
-                                                        }
+                                                        console.log("i > ",i);
+                                                        console.log("this.props.state.ProformaInvoiceLine.length > ",this.props.state.ProformaInvoiceLine.length);
                                                         console.log("Enter Clicked > ");
                                                         try {
                                                             document.getElementById("Price" + i).focus();
