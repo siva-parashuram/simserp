@@ -448,7 +448,6 @@ class profactivity extends React.Component {
 
                     this.setState(
                         {
-                            CountryName:data.CountryName,
                             CustomerName:data.CustomerName,
                             CustomerBillingAddress: CustomerData.BillingAddress,
                             CustomerShippingAddress: CustomerData.ShippingAddress,
@@ -688,7 +687,7 @@ class profactivity extends React.Component {
                         });
                     } else {
                         this.setState({
-                            CountryName:e.CountryName,
+                            
                             selectedCustomerObj: e,
                             CustomerBillingAddress: e.BillingAddress,
                             CustomerShippingAddress: e.ShippingAddress,
@@ -1902,7 +1901,7 @@ class profactivity extends React.Component {
 
                                         <TableRow>
                                             <TableCell align="left" className="no-border-table">Date.</TableCell>
-                                            <TableCell align="right" className="no-border-table">{moment(this.state.ProformaDate).format("MM/DD/YYYY")}</TableCell>
+                                            <TableCell align="right" className="no-border-table">{moment(this.state.PIDate).format("MM/DD/YYYY")}</TableCell>
                                         </TableRow>
                                         <TableRow>
                                             <TableCell align="left" className="no-border-table">Customer Name</TableCell>

@@ -448,7 +448,6 @@ class profactivity extends React.Component {
 
                     this.setState(
                         {
-                            CountryName:data.CountryName,
                             CustomerName:data.CustomerName,
                             CustomerBillingAddress: CustomerData.BillingAddress,
                             CustomerShippingAddress: CustomerData.ShippingAddress,
@@ -688,7 +687,7 @@ class profactivity extends React.Component {
                         });
                     } else {
                         this.setState({
-                            CountryName:e.CountryName,
+                            
                             selectedCustomerObj: e,
                             CustomerBillingAddress: e.BillingAddress,
                             CustomerShippingAddress: e.ShippingAddress,
