@@ -231,6 +231,7 @@ class poactivity extends React.Component {
         GeneralPostingGroupID: 0,
         SupplierPostingGroupID: 0,
         NotifyTo: "",
+        IsLUT:false,//-----Parshu 24-1-22
 
       },
       PurchaseOrderLine: [],
@@ -1280,6 +1281,12 @@ class poactivity extends React.Component {
         PO.IsRounding = e.target.checked;
         this.setParams(PO);
         break;
+        //Parshu -- 24-01-2022
+      case "IsLUT":
+        PO.IsLUT = e.target.checked;
+        this.setParams(PO);
+        break;
+        //------------
       case "AmendmentInput":
         let AmendmentInput = this.state.AmendmentInput;
         AmendmentInput.status = e.target.checked;
@@ -3337,7 +3344,7 @@ class poactivity extends React.Component {
                                   {/* Start */}
 
                                   <Grid container spacing={0}>
-                                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                                    <Grid item xs={12} sm={12} md={7} lg={7}>
                                       <Grid container spacing={0}>
                                         <Grid item xs={12} sm={12} md={12} lg={12}>
                                           <SSIB
@@ -3347,6 +3354,31 @@ class poactivity extends React.Component {
                                             param={this.state.PO.IsSEZPurchase}
                                             onChange={(e) => this.updateFormValue("IsSEZPurchase", e)}
                                             disabled={this.state.Branch.IsSEZ === true ? false : true}
+                                          />
+                                        </Grid>
+                                      </Grid>
+                                      
+                                      <Grid container spacing={0}>
+                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                          <SSIB
+                                            key="IsLUT"
+                                            id=" IsLUT"
+                                            label="LUT Bond?"
+                                            param={this.state.PO.IsLUT}
+                                            onChange={(e) => this.updateFormValue("IsLUT", e)}
+                                          />
+                                        </Grid>
+                                        </Grid>
+
+                                    </Grid>
+                                    <Grid  item xs={12} sm={12} md={5} lg={5}>
+                                      <Grid container spacing={0}>
+                                        <Grid item xs={12} sm={12} md={12} lg={12}>
+                                          <SSIB
+                                            key="IsImport"
+                                            id="IsImport"
+                                            label="Import?"
+                                            param={this.state.PO.IsImport}
                                           />
                                         </Grid>
                                       </Grid>
@@ -3362,20 +3394,8 @@ class poactivity extends React.Component {
                                           />
                                         </Grid>
                                       </Grid>
-
                                     </Grid>
-                                    <Grid item xs={12} sm={12} md={4} lg={4}>
-                                      <Grid container spacing={0}>
-                                        <Grid item xs={12} sm={12} md={12} lg={12}>
-                                          <SSIB
-                                            key="IsImport"
-                                            id="IsImport"
-                                            label="Import?"
-                                            param={this.state.PO.IsImport}
-                                          />
-                                        </Grid>
-                                      </Grid>
-                                    </Grid>
+                                    
                                   </Grid>
 
                                   
