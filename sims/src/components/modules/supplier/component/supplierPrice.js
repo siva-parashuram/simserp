@@ -248,7 +248,8 @@ class supplierPrice extends React.Component {
             let o = {
               name: data[i].Code,
               value: data[i].ItemID,
-              CatID: data[i].CatID
+              CatID: data[i].CatID,
+              BaseUOM: data[i].BaseUOM
             };
             newD.push(o);
           }
@@ -493,13 +494,16 @@ class supplierPrice extends React.Component {
     let SupplierPrice = this.state.SupplierPrice;
     switch (param) {
       case "CategoryID":
-        this.setState({ CategoryID: CF.toInt(e.target.value) });
+        this.setState({ CategoryID: CF.toInt(e.target.value) });        
         this.updateItemDropdrown(CF.toInt(e.target.value));
+        SupplierPrice.UOM = null;
+        this.setParams(SupplierPrice);
         break;
       case "ItemID":
         if (e) {
           this.setState({ selectedItem: e });
           SupplierPrice[param] = CF.toInt(e.value);
+          SupplierPrice.UOM = CF.toInt(e.BaseUOM);
           this.setParams(SupplierPrice);
         } else {
           this.setState({ selectedItem: null });

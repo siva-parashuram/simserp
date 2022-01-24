@@ -168,7 +168,7 @@ class branchMapping extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name: data[i].Name,
+            name: data[i].Name+ " - " + data[i].ShortName,
             value: data[i].BranchID,
           };
           newD.push(o);

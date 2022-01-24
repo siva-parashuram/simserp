@@ -36,8 +36,8 @@ import * as CF from "../services/functions/customfunctions";
 import * as URLS from "../routes/constants"; 
 let domain="";
 
-// domain = "http://192.168.10.200:8080/";
-  domain = "http://49.248.147.178:8082/";
+ domain = "http://192.168.10.200:8080/";
+// domain = "http://49.248.147.178:8082/";
   
 
 export const APIURL = {

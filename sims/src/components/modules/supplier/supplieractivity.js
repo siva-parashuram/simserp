@@ -69,8 +69,8 @@ class supplieractivity extends React.Component {
       },
       BranchID: 0,
       accordion1: true,
-      accordion2: false,
-      accordion3: false,
+      accordion2: true,
+      accordion3: true,
       ProgressLoader: false,
       ErrorMessageProps:"",
       ErrorPrompt: false,
@@ -131,6 +131,7 @@ class supplieractivity extends React.Component {
         EmailID: "",
         UserID: CF.toInt(getCookie(COOKIE.USERID)),
         BranchID: 0,
+        UAMNo:"",
       },
       Validations: {
         Name: { errorState: false, errorMssg: "" },
@@ -150,6 +151,7 @@ class supplieractivity extends React.Component {
         VATNo: { errorState: false, errorMssg: "" },
         ContactPerson: { errorState: false, errorMssg: "" },
         EmailID: { errorState: false, errorMssg: "" },
+        UAMNo: { errorState: false, errorMssg: "" },
       },
       filelist: [],
       compID:0,
@@ -292,7 +294,7 @@ class supplieractivity extends React.Component {
         let newD = [];
         for (let i = 0; i < data.length; i++) {
           let o = {
-            name:data[i].Code,
+            name:data[i].Code + " - " + data[i].Description,
             value: data[i].PaymentTermID,
             DueDays:data[i].DueDays
           };
@@ -961,6 +963,25 @@ class supplieractivity extends React.Component {
           v19.VATNo = { errorState: false, errorMssg: "" };
 
           this.setState({ Validations: v19 });
+
+          this.setParams(Supplier);
+        }
+        break;
+
+      case "UANNo":
+        let v20 = this.state.Validations;
+        Supplier[param] = e.target.value;
+        if (e.target.value.length > 20) {
+          v20.UAMNo = {
+            errorState: true,
+            errorMssg: "Maximum 20 Characters allowed!",
+          };
+
+          this.setState({ Validations: v20 });
+        } else {
+          v20.UAMNo = { errorState: false, errorMssg: "" };
+
+          this.setState({ Validations: v20 });
 
           this.setParams(Supplier);
         }
@@ -2165,6 +2186,19 @@ closeDialog = () => {
                                   }
                                   param={APIURLS.SupplierClasification}
                                 />
+                                 <SIB
+                                  id="UAMNo"
+                                  label="UAM No."
+                                  variant="outlined"
+                                  size="small"
+                                  onChange={(e) =>
+                                    this.updateFormValue("UAMNo", e)
+                                  }
+                                  value={this.state.Supplier.UAMNo}
+                                  error={
+                                    this.state.Validations.UAMNo.errorState
+                                  }
+                                />
                                 <SDIB
                                   id="TypeOfEnterprise"
                                   label="Enterprise Type"
@@ -2199,6 +2233,7 @@ closeDialog = () => {
                                   value={this.state.Supplier.GSTSupplierType}
                                   param={this.state.GSTSupplierType}
                                 />
+                                
                               </Grid>
                               <Grid item xs={12} sm={12} md={1} lg={1}></Grid>
                               <Grid item xs={12} sm={12} md={5} lg={5}>
